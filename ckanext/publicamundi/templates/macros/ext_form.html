@@ -1,0 +1,51 @@
+{% import "macros/form.html" as ckan_form %}
+
+{#
+Creates all the markup required for an custom key/value input. 
+It creates a new macro to be called as an alternative to the CKAN-defined one.
+
+The arguments for this macro are nearly all tuples containing values for the
+(key, value, delete) fields respectively.
+
+name        - A tuple of names for the three fields.
+id          - An id string to be used for each input.
+label       - The human readable label for the main label.
+values      - A tuple of values for the (key, value, delete) fields. If delete
+              is truthy the checkbox will be checked.
+placeholder - A tuple of placeholder text for the (key, value) fields.
+error       - A list of error strings for the field or just true to highlight the field.
+classes     - An array of classes to apply to the control-group.
+
+Example:
+
+  {{ f.custom(
+    names=('custom_key', 'custom_value', 'custom_deleted'),
+    id='field-custom',
+    label=_('Custom Field'),
+    values=(extra.key, extra.value, extra.deleted),
+    error=''
+  ) }}
+
+#}
+
+{% macro custom(names=(), id="", label="", values=(), placeholders=(), error="", classes=[], attrs={}) %}
+  {%- set classes = (classes|list) -%}
+  {%- set label_id = (id or names[0]) ~ "-key" -%}
+  {%- set extra_html = caller() if caller -%}
+  {%- do classes.append('control-custom') -%}
+
+  {% call ckan_form.input_block(label_id, label or name, error, classes, control_classes=["editor"], extra_html=extra_html) %}
+    <div class="input-prepend" {{ ckan_form.attributes(attrs) }}>
+      <label for="{{ label_id }}" class="add-on">Key</label>
+      <input id="{{ id or names[0] }}-key" type="text" name="{{ names[0] }}" value="{{ values[0] | empty_and_escape }}" placeholder="{{ placeholders[0] }}" />
+      <label for="{{ id or names[1] }}-value" class="add-on">Value</label>
+      <input id="{{ id or names[1] }}-value" type="text" name="{{ names[1] }}" value="{{ values[1] | empty_and_escape }}" placeholder="{{ placeholders[1] }}" />
+      {% if values[0] or values[1] or error %}
+      <label class="checkbox inline" for="{{ id or names[2] }}-remove">
+        <input type="checkbox" id="{{ id or names[2] }}-remove" name="{{ names[2] }}"{% if values[2] %} checked{% endif %} />
+      </label>
+      {% endif %}
+    </div>
+  {% endcall %}
+{% endmacro %}
+

@@ -1,0 +1,29 @@
+{% ckan_extends %}
+
+{% import "macros/form.html" as form %}
+
+{# Note: 
+ Remove 'free extras' from the package form. If you're using convert_{to/from}_extras() as we are 
+ with our 'music_description' field below then you need to remove free extras from the form, or editing 
+ your custom field won't work!! 
+#}
+
+{% block custom_fields %}
+{% endblock %}
+
+
+{% block package_metadata_fields %}
+
+  {#
+  {% set music_genres = data.get('foo', [None]) %}
+  {{ form.select('foo', 
+        label = _('Foo'), 
+        options = h.foo_options(), 
+        selected = foo.0, 
+        attrs = { 'data-module': 'no-autocomplete' }) 
+  }}
+  #}
+  
+  {{ super() }}
+
+{% endblock %}

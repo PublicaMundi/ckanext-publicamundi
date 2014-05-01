@@ -1,0 +1,17 @@
+{% ckan_extends %}
+
+{# Note: The parent template has aliased c.pkg_dict as pkg #}
+
+{% block package_description %}
+  {{ super() }}
+
+  {# Add our custom "foo" field to the dataset read page. #}
+  {#
+  {% if pkg.get('foo') %}
+    <section id="dataset-foo" class="resources module-content">
+    <p><strong>{{ _('Foo') }}</strong>: {{ pkg.foo.0 }}</p>
+    </section>
+  {% endif %}
+  #}
+
+{% endblock %}
