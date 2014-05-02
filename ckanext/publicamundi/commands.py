@@ -43,13 +43,8 @@ class Greet(CkanCommand):
         print 'Hello (' + self.options.target + ')'
 
 class Test1(CkanCommand):
-    '''
-    This is an example of a publicamundi-specific paster command:
-
-    The command should be invoked as below:
-
-    paster [PASTER-OPTIONS] publicamundi-test --config=../ckan/development.ini [COMMAND-OPTIONS]
-
+    '''This is an example of a publicamundi-specific paster command:
+    >>> paster [PASTER-OPTIONS] publicamundi-test --config=../ckan/development.ini [COMMAND-OPTIONS]
     '''
 
     summary = 'This is an example of a publicamundi-specific paster command'
@@ -86,4 +81,53 @@ class Test1(CkanCommand):
 
         print json.dumps(pkg, indent=4)
 
+class Setup(CkanCommand):
+    '''Setup publicamundi extension (create tables, populate with initial data).
+    >>> paster [PASTER-OPTIONS] publicamundi-setup --config=../ckan/development.ini [COMMAND-OPTIONS]
+    '''
+
+    summary = 'Setup publicamundi extension'
+    usage = __doc__
+    group_name = 'ckanext-publicamundi'
+    max_args = 10
+    min_args = 0
+
+    def __init__(self, name):
+        CkanCommand.__init__(self, name)
+
+    def command(self):
+        self._load_config()
+        self.log = logging.getLogger(__name__)
+
+        import ckan.model.meta as meta
+        import ckanext.publicamundi.model as publicamundi_model
+
+        publicamundi_model.Base.metadata.create_all(bind=meta.engine)
+
+        self.log.info('Setup complete')
+
+class Cleanup(CkanCommand):
+    '''Cleanup publicamundi extension.
+    >>> paster [PASTER-OPTIONS] publicamundi-cleanup --config=../ckan/development.ini [COMMAND-OPTIONS]
+    '''
+
+    summary = 'Cleanup publicamundi extension'
+    usage = __doc__
+    group_name = 'ckanext-publicamundi'
+    max_args = 10
+    min_args = 0
+
+    def __init__(self, name):
+        CkanCommand.__init__(self, name)
+
+    def command(self):
+        self._load_config()
+        self.log = logging.getLogger(__name__)
+
+        import ckan.model.meta as meta
+        import ckanext.publicamundi.model as publicamundi_model
+
+        publicamundi_model.Base.metadata.drop_all(bind=meta.engine)
+
+        self.log.info('Cleanup complete')
 

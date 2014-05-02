@@ -268,6 +268,7 @@ class PackageController(p.SingletonPlugin):
         But, we can interact with the object model (through typical ORM) to modify package's properties.
         '''
         #raise Exception('Breakpoint')
+        log1.info('A package has been created: %s', pkg_dict)
         pass
 
     def after_update(self, context, pkg_dict):
@@ -275,12 +276,15 @@ class PackageController(p.SingletonPlugin):
         Extensions will receive the validated data dict after the package has been updated
         (Note that the edit method will return a package domain object, which may not include all fields).
         '''
+        #raise Exception('Breakpoint')
+        log1.info('A package has been updated: context=%r %s', context, pkg_dict)
         pass
 
     def after_delete(self, context, pkg_dict):
         '''
         Extensions will receive the data dict (typically containing just the package id) after the package has been deleted.
         '''
+        log1.info('A package has been deleted: %s', pkg_dict)
         pass
 
     def after_show(self, context, pkg_dict):
@@ -288,7 +292,7 @@ class PackageController(p.SingletonPlugin):
         Extensions will receive the validated data dict after the package is ready for display
         (Note that the read method will return a package domain object, which may not include all fields).
         '''
-        #raise Exception('Breakpoint')
+        #log1.info('A package is shown: %s', pkg_dict)
         pass
 
     def before_search(self, search_params):
