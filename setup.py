@@ -21,7 +21,7 @@ setup(
 	zip_safe=False,
 	install_requires=[
 		# -*- Extra requirements: -*-
-        "jsonpickle",
+        # Note: Moved under pip-requirements.txt
 	],
 	entry_points=\
 	"""
