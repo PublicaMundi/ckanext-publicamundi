@@ -1,15 +1,18 @@
 # Plugins for ckanext-publicamundi
 
-import json, jsonpickle, time
-
+import time
+import datetime
+import json
+import jsonpickle
+import weberror
 import logging
 
-import ckan.model           as model
-import ckan.plugins         as p
+import ckan.model as model
+import ckan.plugins as p
 import ckan.plugins.toolkit as toolkit
-import ckan.logic           as logic
+import ckan.logic as logic
 
-import weberror
+import ckanext.publicamundi.model as publicamundi_model
 
 _t = toolkit._
 
@@ -262,13 +265,13 @@ class PackageController(p.SingletonPlugin):
     def after_create(self, context, pkg_dict):
         '''
         Extensions will receive the validated data dict after the package has been created
-        (Note that the create method will return a package domain object, which may not include all fields).
+        Note that the create method will return a package domain object, which may not include all fields.
         Also the newly created package id will be added to the dict.
-        At this point the package is possibly in 'draft' state so most action-api calls should fail.
-        But, we can interact with the object model (through typical ORM) to modify package's properties.
+        At this point, the package is possibly in 'draft' state so most Action-API (targeting on the
+        package itself) calls will fail.
         '''
-        #raise Exception('Breakpoint')
-        log1.info('A package has been created: %s', pkg_dict)
+        log1.debug('A package was created: %s', json.dumps(pkg_dict, indent=3))
+        self._create_csw_record(context['session'], pkg_dict)
         pass
 
     def after_update(self, context, pkg_dict):
@@ -276,15 +279,16 @@ class PackageController(p.SingletonPlugin):
         Extensions will receive the validated data dict after the package has been updated
         (Note that the edit method will return a package domain object, which may not include all fields).
         '''
-        #raise Exception('Breakpoint')
-        log1.info('A package has been updated: context=%r %s', context, pkg_dict)
+        log1.debug('A package was updated: %s', json.dumps(pkg_dict, indent=3))
+        self._update_csw_record(context['session'], pkg_dict)
         pass
 
     def after_delete(self, context, pkg_dict):
         '''
         Extensions will receive the data dict (typically containing just the package id) after the package has been deleted.
         '''
-        log1.info('A package has been deleted: %s', pkg_dict)
+        log1.debug('A package was deleted: %s', json.dumps(pkg_dict, indent=3))
+        self._delete_csw_record(context['session'], pkg_dict)
         pass
 
     def after_show(self, context, pkg_dict):
@@ -345,6 +349,21 @@ class PackageController(p.SingletonPlugin):
             k = item.get('key')
             item['key'] = field_key_map.get(k, k)
         return pkg_dict
+
+    def _update_csw_record(self, session, pkg_dict):
+        # Todo
+        r = session.query(publicamundi_model.CswRecord).get(pkg_dict['id'])
+        
+        #raise Exception('Breakpoint')
+        pass
+
+    def _create_csw_record(self, session, pkg_dict):
+        # Todo
+        pass
+
+    def _delete_csw_record(self, session, pkg_dict):
+        # Todo
+        pass
 
 class ErrorHandler(p.SingletonPlugin):
     ''' Fixes CKAN's buggy errorware configuration '''
