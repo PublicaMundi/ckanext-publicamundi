@@ -5,12 +5,14 @@ from sqlalchemy import Table, Column, Integer, String, DateTime, MetaData, Forei
 from sqlalchemy.orm import relation, relationship, backref
 from geoalchemy import Geometry, GeometryColumn, GeometryDDL, Polygon, Point
 
+from ckan.model import Package
+
 from ckanext.publicamundi.model import Base
 
 class CswRecord(Base):
     __tablename__ = 'csw_record'
 
-    id = Column('id', String(32), primary_key=True)
+    id = Column('id', String(64), ForeignKey(Package.id), primary_key=True)
     title = Column('title', String(256), nullable=True)
     name = Column('name', String(64), nullable=False, index=True)
     created_at = Column('created_at', DateTime(), nullable=False)
@@ -18,8 +20,9 @@ class CswRecord(Base):
 
     uniq_name = UniqueConstraint('name')
 
-    def __init__(self, name):
-        self.name  = name
+    def __init__(self, id, name, created_at=None):
+        self.id = id
+        self.name = name
         self.created_at = created_at or datetime.now();
 
     def __unicode__(self):

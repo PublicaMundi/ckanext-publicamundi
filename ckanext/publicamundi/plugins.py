@@ -6,6 +6,7 @@ import json
 import jsonpickle
 import weberror
 import logging
+import geoalchemy
 
 import ckan.model as model
 import ckan.plugins as p
@@ -271,7 +272,7 @@ class PackageController(p.SingletonPlugin):
         package itself) calls will fail.
         '''
         log1.debug('A package was created: %s', json.dumps(pkg_dict, indent=3))
-        self._create_csw_record(context['session'], pkg_dict)
+        self._create_or_update_csw_record(context['session'], pkg_dict)
         pass
 
     def after_update(self, context, pkg_dict):
@@ -280,7 +281,7 @@ class PackageController(p.SingletonPlugin):
         (Note that the edit method will return a package domain object, which may not include all fields).
         '''
         log1.debug('A package was updated: %s', json.dumps(pkg_dict, indent=3))
-        self._update_csw_record(context['session'], pkg_dict)
+        self._create_or_update_csw_record(context['session'], pkg_dict)
         pass
 
     def after_delete(self, context, pkg_dict):
@@ -350,19 +351,30 @@ class PackageController(p.SingletonPlugin):
             item['key'] = field_key_map.get(k, k)
         return pkg_dict
 
-    def _update_csw_record(self, session, pkg_dict):
-        # Todo
-        r = session.query(publicamundi_model.CswRecord).get(pkg_dict['id'])
-        
-        #raise Exception('Breakpoint')
-        pass
-
-    def _create_csw_record(self, session, pkg_dict):
-        # Todo
+    def _create_or_update_csw_record(self, session, pkg_dict):
+        ''' Sync dataset fields to CswRecord fields '''
+        from geoalchemy import WKTSpatialElement
+        from ckanext.publicamundi.lib.util import geojson_to_wkt
+        # Populate record fields
+        record = session.query(publicamundi_model.CswRecord).get(pkg_dict['id'])
+        if not record:
+            log1.info('Creating CswRecord: name="%s"', pkg_dict.get('name'))
+            record = publicamundi_model.CswRecord(pkg_dict.get('id'), name=pkg_dict.get('name'))
+            session.add(record)
+        else:
+            log1.info('Updating CswRecord: name="%s"', pkg_dict.get('name'))
+        extras = { item['key']: item['value'] for item in pkg_dict.get('extras') }
+        record.title = pkg_dict.get('title')
+        if 'spatial' in extras:
+            record.geom = WKTSpatialElement(geojson_to_wkt(extras.get('spatial')))
+        # Persist object
+        session.commit()
+        log1.info('Saved CswRecord: name="%s"', record.name)
         pass
 
     def _delete_csw_record(self, session, pkg_dict):
         # Todo
+        #raise Exception('Breakpoint')
         pass
 
 class ErrorHandler(p.SingletonPlugin):

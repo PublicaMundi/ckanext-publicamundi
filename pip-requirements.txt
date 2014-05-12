@@ -1,4 +1,6 @@
 jsonpickle
+geojson
+shapely
 GeoAlchemy>=0.6
 requests==1.1.0
 -e git+https://github.com/ckan/ckanext-spatial.git#egg=ckanext_spatial
