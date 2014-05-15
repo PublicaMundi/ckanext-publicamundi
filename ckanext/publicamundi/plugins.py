@@ -14,6 +14,8 @@ import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
 
 import ckanext.publicamundi.model as publicamundi_model
+import ckanext.publicamundi.lib.util as publicamundi_util
+from ckanext.publicamundi.lib.util import object_to_json
 
 _t = toolkit._
 
@@ -271,7 +273,7 @@ class PackageController(p.SingletonPlugin):
         At this point, the package is possibly in 'draft' state so most Action-API (targeting on the
         package itself) calls will fail.
         '''
-        log1.debug('A package was created: %s', json.dumps(pkg_dict, indent=3))
+        log1.debug('A package was created: %s', object_to_json(pkg_dict, indent=4))
         self._create_or_update_csw_record(context['session'], pkg_dict)
         pass
 
@@ -280,7 +282,7 @@ class PackageController(p.SingletonPlugin):
         Extensions will receive the validated data dict after the package has been updated
         (Note that the edit method will return a package domain object, which may not include all fields).
         '''
-        log1.debug('A package was updated: %s', json.dumps(pkg_dict, indent=3))
+        log1.debug('A package was updated: %s', object_to_json(pkg_dict, indent=4))
         self._create_or_update_csw_record(context['session'], pkg_dict)
         pass
 
@@ -363,7 +365,7 @@ class PackageController(p.SingletonPlugin):
             session.add(record)
         else:
             log1.info('Updating CswRecord: name="%s"', pkg_dict.get('name'))
-        extras = { item['key']: item['value'] for item in pkg_dict.get('extras') }
+        extras = { item['key']: item['value'] for item in pkg_dict.get('extras', []) }
         record.title = pkg_dict.get('title')
         if 'spatial' in extras:
             record.geom = WKTSpatialElement(geojson_to_wkt(extras.get('spatial')))

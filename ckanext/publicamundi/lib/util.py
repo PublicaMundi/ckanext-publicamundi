@@ -1,5 +1,20 @@
+import datetime
+import json
 import geojson
 import shapely
+
+class JsonEncoder(json.JSONEncoder):
+    '''Override default json.JSONEncoder behaviour so that it can serialize
+    datetime objects
+    '''
+    def default(self, o):
+        if isinstance(o, datetime.datetime):
+            return o.isoformat()
+        else:
+            return json.JSONEncoder.default(self, o)
+
+def object_to_json(o, indent=None):
+    return json.dumps(o, cls=JsonEncoder, indent=indent)
 
 def geojson_to_wkt(s):
     from shapely.geometry import shape
