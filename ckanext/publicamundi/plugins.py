@@ -21,6 +21,12 @@ _t = toolkit._
 
 log1 = logging.getLogger(__name__)
 
+dataset_types = {
+    'ckan': 'CKAN (minimal)',
+    'inspire': 'INSPIRE',
+    'fgdc': 'FGDC'
+}
+
 class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     ''' A plugin that overrides the default dataset form '''
     p.implements(p.ITemplateHelpers)
@@ -92,6 +98,12 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     def dump_jsonpickle(cls, obj):
         return jsonpickle.encode(obj)
 
+    @classmethod
+    def dataset_type_options(cls):
+        '''Provide options for dataset-type (needed for select boxes)'''
+        for name, description in dataset_types.items():
+            yield { 'value': name, 'text': description }
+
     ## ITemplateHelpers interface ##
 
     def get_helpers(self):
@@ -100,6 +112,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         '''
         return {
             # define externsion-specific helpers
+            'dataset_type_options': self.dataset_type_options,
             'publicamundi_helloworld': self.publicamundi_helloworld,
             'organization_list_objects': self.organization_list_objects,
             'organization_dict_objects': self.organization_dict_objects,
@@ -152,11 +165,12 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             ## Stop further processing on this key, but not an error
             #raise StopOnError
             pass
-        
+
         def after_validation_processor(key, data, errors, context):
             assert key[0] == '__after', 'This validator can only be invoked in the __after stage'
+            raise Exception('Break')
             pass
-        
+
         def before_validation_processor(key, data, errors, context):
             assert key[0] == '__before', 'This validator can only be invoked in the __before stage'
             pass
@@ -164,6 +178,10 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         # Update default validation schema (inherited from DefaultDatasetForm)
 
         schema.update({
+            'dataset_type': [
+                toolkit.get_validator('ignore_missing'),
+                toolkit.get_converter('convert_to_extras'),
+            ],
             'foo': [
                 toolkit.get_validator('ignore_missing'),
                 toolkit.get_converter('convert_to_tags')('foo'),
@@ -208,6 +226,10 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         schema['tags']['__extras'].append(toolkit.get_converter('free_tags_only'))
 
         schema.update({
+            'dataset_type': [
+                toolkit.get_converter('convert_from_extras'),
+                toolkit.get_validator('ignore_missing')
+            ],
             'foo': [
                 toolkit.get_converter('convert_from_tags')('foo'),
                 toolkit.get_validator('ignore_missing')
@@ -355,6 +377,7 @@ class PackageController(p.SingletonPlugin):
 
     def _create_or_update_csw_record(self, session, pkg_dict):
         ''' Sync dataset fields to CswRecord fields '''
+        raise Exception('Break')
         from geoalchemy import WKTSpatialElement
         from ckanext.publicamundi.lib.util import geojson_to_wkt
         # Populate record fields

@@ -8,6 +8,14 @@ Add widgets for our basic extension-specific fields
 
 {% block package_basic_fields_custom %}
 
+  {% set dataset_type = data.get('dataset_type', 'ckan') %}
+  {{ form.select('dataset_type', 
+        label = _('Dataset Type'), 
+        options = h.dataset_type_options(), 
+        selected = dataset_type, 
+        attrs = { 'data-module': 'no-autocomplete' }) 
+  }}
+
   {#
   {{ form.input('baz', 
         label=_('Baz'), id='field-baz', 
