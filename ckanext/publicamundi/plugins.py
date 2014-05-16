@@ -156,7 +156,12 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         from ckan.lib.navl.dictization_functions import missing, StopOnError, Invalid
 
-        def baz_converter_1(key, data, errors, context):
+        def dataset_type_validate(value, context):
+            log1.info('Checking dataset_type (%s)', value)
+            if not value in dataset_types:
+                raise Invalid('Unknown dataset_type (%s)' %(value))
+
+        def baz_convert(key, data, errors, context):
             ''' Some typical behaviour inside a validator/converter '''
 
             ## Stop processing on this key and signal the validator with another error (an instance of Invalid) 
@@ -168,7 +173,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         def after_validation_processor(key, data, errors, context):
             assert key[0] == '__after', 'This validator can only be invoked in the __after stage'
-            raise Exception('Break')
+            #raise Exception('Break')
             pass
 
         def before_validation_processor(key, data, errors, context):
@@ -179,8 +184,9 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         schema.update({
             'dataset_type': [
-                toolkit.get_validator('ignore_missing'),
+                toolkit.get_validator('default')('ckan'),
                 toolkit.get_converter('convert_to_extras'),
+                dataset_type_validate,
             ],
             'foo': [
                 toolkit.get_validator('ignore_missing'),
@@ -189,7 +195,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'baz': [
                 toolkit.get_validator('ignore_missing'),
                 toolkit.get_converter('convert_to_extras'),
-                baz_converter_1,
+                baz_convert,
             ],
         })
 
@@ -228,7 +234,6 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         schema.update({
             'dataset_type': [
                 toolkit.get_converter('convert_from_extras'),
-                toolkit.get_validator('ignore_missing')
             ],
             'foo': [
                 toolkit.get_converter('convert_from_tags')('foo'),
@@ -377,7 +382,7 @@ class PackageController(p.SingletonPlugin):
 
     def _create_or_update_csw_record(self, session, pkg_dict):
         ''' Sync dataset fields to CswRecord fields '''
-        raise Exception('Break')
+        #raise Exception('Break')
         from geoalchemy import WKTSpatialElement
         from ckanext.publicamundi.lib.util import geojson_to_wkt
         # Populate record fields

@@ -13,6 +13,19 @@
 
 
 {% block package_metadata_fields %}
+ 
+  
+  {% if data.get('state') == 'draft' %}
+  {{ form.select('dataset_type', 
+        label = _('Dataset Type'), 
+        options = h.dataset_type_options(), 
+        selected = data.get('dataset_type', 'ckan'), 
+        attrs = { 'data-module': 'no-autocomplete' }) 
+  }}
+  {% else %}
+  {{ form.hidden('dataset_type', data.get('dataset_type')) }}
+  <div><dt>Dataset Type:</dt><dd>{{ data.get('dataset_type') }}</dd></div>
+  {% endif %}
 
   {#
   {% set music_genres = data.get('foo', [None]) %}
