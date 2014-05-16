@@ -360,24 +360,27 @@ class PackageController(p.SingletonPlugin):
         # Populate record fields
         record = session.query(publicamundi_model.CswRecord).get(pkg_dict['id'])
         if not record:
-            log1.info('Creating CswRecord: name="%s"', pkg_dict.get('name'))
+            log1.info('Creating CswRecord %s', pkg_dict.get('id'))
             record = publicamundi_model.CswRecord(pkg_dict.get('id'), name=pkg_dict.get('name'))
             session.add(record)
         else:
-            log1.info('Updating CswRecord: name="%s"', pkg_dict.get('name'))
+            log1.info('Updating CswRecord %s', pkg_dict.get('id'))
         extras = { item['key']: item['value'] for item in pkg_dict.get('extras', []) }
         record.title = pkg_dict.get('title')
         if 'spatial' in extras:
             record.geom = WKTSpatialElement(geojson_to_wkt(extras.get('spatial')))
         # Persist object
         session.commit()
-        log1.info('Saved CswRecord: name="%s"', record.name)
-        pass
+        log1.info('Saved CswRecord %s (%s)', record.id, record.name)
+        return
 
     def _delete_csw_record(self, session, pkg_dict):
-        # Todo
-        #raise Exception('Breakpoint')
-        pass
+        record = session.query(publicamundi_model.CswRecord).get(pkg_dict['id'])
+        if record:
+            session.delete(record)
+            session.commit()
+            log1.info('Deleted CswRecord %s', pkg_dict['id'])
+        return
 
 class ErrorHandler(p.SingletonPlugin):
     ''' Fixes CKAN's buggy errorware configuration '''

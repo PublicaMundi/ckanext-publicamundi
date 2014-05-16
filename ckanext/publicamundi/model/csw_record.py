@@ -12,7 +12,7 @@ from ckanext.publicamundi.model import Base
 class CswRecord(Base):
     __tablename__ = 'csw_record'
 
-    id = Column('id', String(64), ForeignKey(Package.id), primary_key=True)
+    id = Column('id', String(64), ForeignKey(Package.id, ondelete='cascade'), primary_key=True)
     title = Column('title', String(256), nullable=True)
     name = Column('name', String(64), nullable=False, index=True)
     created_at = Column('created_at', DateTime(), nullable=False)
