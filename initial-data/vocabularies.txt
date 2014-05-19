@@ -1,4 +1,4 @@
-﻿resource_language :{
+resource_language :{
             "Bulgarian",
             "Czech",
             "Danish",
@@ -222,7 +222,7 @@ responsible_party_role_gr = {
 
 keywords_from_repositories = 
 {
-GEMET INSPIRE Data Themes" : {
+“GEMET INSPIRE Data Themes" : {
             "Addresses",
             "Administrative units",
             "Agricultural and aquaculture facilities",
