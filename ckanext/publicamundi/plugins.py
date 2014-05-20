@@ -16,16 +16,11 @@ import ckan.logic as logic
 import ckanext.publicamundi.model as publicamundi_model
 import ckanext.publicamundi.lib.util as publicamundi_util
 from ckanext.publicamundi.lib.util import object_to_json
+from ckanext.publicamundi.lib.metadata import dataset_types
 
 _t = toolkit._
 
 log1 = logging.getLogger(__name__)
-
-dataset_types = {
-    'ckan': 'CKAN (minimal)',
-    'inspire': 'INSPIRE',
-    'fgdc': 'FGDC'
-}
 
 class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     ''' A plugin that overrides the default dataset form '''
@@ -39,8 +34,9 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     @classmethod
     def publicamundi_helloworld(cls):
         ''' This is our simple helper function. '''
-        html = '<span>Hello (PublicaMundi) World</span>'
-        return p.toolkit.literal(html)
+        markup = p.toolkit.render_snippet('snippets/hello.html', data={ 'name': 'PublicaMundi' })
+        #markup = '<span>Hello (PublicaMundi) World</span>'
+        return p.toolkit.literal(markup)
 
     @classmethod
     def organization_list_objects(cls, org_names = []):
@@ -101,8 +97,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     @classmethod
     def dataset_type_options(cls):
         '''Provide options for dataset-type (needed for select boxes)'''
-        for name, description in dataset_types.items():
-            yield { 'value': name, 'text': description }
+        for name, spec in dataset_types.items():
+            yield { 'value': name, 'text': spec['title'] }
 
     ## ITemplateHelpers interface ##
 
@@ -154,6 +150,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     def _modify_package_schema(self, schema):
         ''' Override CKAN's create/update schema '''
 
+        log1.info('_modify_package_schema(): Building schema ...')
         from ckan.lib.navl.dictization_functions import missing, StopOnError, Invalid
 
         def dataset_type_validate(value, context):
@@ -161,7 +158,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             if not value in dataset_types:
                 raise Invalid('Unknown dataset_type (%s)' %(value))
 
-        def baz_convert(key, data, errors, context):
+        def baz_convert_1(key, data, errors, context):
             ''' Some typical behaviour inside a validator/converter '''
 
             ## Stop processing on this key and signal the validator with another error (an instance of Invalid) 
@@ -170,6 +167,10 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             ## Stop further processing on this key, but not an error
             #raise StopOnError
             pass
+
+        def baz_convert_2(value, context):
+            from string import capitalize
+            return capitalize(value)
 
         def after_validation_processor(key, data, errors, context):
             assert key[0] == '__after', 'This validator can only be invoked in the __after stage'
@@ -194,8 +195,9 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             ],
             'baz': [
                 toolkit.get_validator('ignore_missing'),
+                baz_convert_1,
+                baz_convert_2,
                 toolkit.get_converter('convert_to_extras'),
-                baz_convert,
             ],
         })
 
@@ -227,10 +229,13 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     def show_package_schema(self):
         schema = super(DatasetForm, self).show_package_schema()
 
+        log1.info(' ** show_package_schema(): Building schema ...')
+
         # Don't show vocab tags mixed in with normal 'free' tags
         # (e.g. on dataset pages, or on the search page)
         schema['tags']['__extras'].append(toolkit.get_converter('free_tags_only'))
 
+        
         schema.update({
             'dataset_type': [
                 toolkit.get_converter('convert_from_extras'),
@@ -244,6 +249,19 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
                 toolkit.get_validator('ignore_missing')
             ],
         })
+
+        log1.info(' ** show_package_schema(): Adding an __after processor ...')
+        
+        def f(k, data, errors, context):
+            #raise Exception('Break (f)')
+            data[('baz_view',)] = u'I am a read-only Baz'
+            pass
+
+        if not schema.get('__after'):
+            schema['__after'] = []
+        
+        #schema['__before'].insert(-1, f)
+        schema['__after'].append(f)
 
         return schema
 
