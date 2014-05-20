@@ -15,6 +15,8 @@ import ckan.logic as logic
 
 import ckanext.publicamundi.model as publicamundi_model
 import ckanext.publicamundi.lib.util as publicamundi_util
+import ckanext.publicamundi.lib.metadata as publicamundi_metadata
+
 from ckanext.publicamundi.lib.util import object_to_json
 from ckanext.publicamundi.lib.metadata import dataset_types
 
@@ -149,71 +151,38 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
     def _modify_package_schema(self, schema):
         ''' Override CKAN's create/update schema '''
-
         log1.info('_modify_package_schema(): Building schema ...')
-        from ckan.lib.navl.dictization_functions import missing, StopOnError, Invalid
 
-        def dataset_type_validate(value, context):
-            log1.info('Checking dataset_type (%s)', value)
-            if not value in dataset_types:
-                raise Invalid('Unknown dataset_type (%s)' %(value))
+        import ckanext.publicamundi.lib.metadata.validators as publicamundi_validators
+        
+        schema['dataset_type'] = [
+            toolkit.get_validator('default')('ckan'),
+            toolkit.get_converter('convert_to_extras'),
+            publicamundi_validators.is_dataset_type,
+        ];
+ 
+        field_name = 'baz'
+        field = publicamundi_metadata.IInspireMetadata.get(field_name)
+        #raise Exception('Break')
+        
+        if field.default:
+            x1 = toolkit.get_validator('default')(field.default)
+        elif field.defaultFactory:
+            x1 = toolkit.get_validator('default')(field.defaultFactory())
+        elif not field.required:
+            x1 = toolkit.get_validator('ignore_missing')
+        else:
+            x1 = toolkit.get_validator('not_empty')
 
-        def baz_convert_1(key, data, errors, context):
-            ''' Some typical behaviour inside a validator/converter '''
-
-            ## Stop processing on this key and signal the validator with another error (an instance of Invalid) 
-            #raise Invalid('The baz value (%s) is invalid' %(data.get(key,'<none>')))
-
-            ## Stop further processing on this key, but not an error
-            #raise StopOnError
-            pass
-
-        def baz_convert_2(value, context):
-            from string import capitalize
-            return capitalize(value)
-
-        def after_validation_processor(key, data, errors, context):
-            assert key[0] == '__after', 'This validator can only be invoked in the __after stage'
-            #raise Exception('Break')
-            pass
-
-        def before_validation_processor(key, data, errors, context):
-            assert key[0] == '__before', 'This validator can only be invoked in the __before stage'
-            pass
-
-        # Update default validation schema (inherited from DefaultDatasetForm)
-
-        schema.update({
-            'dataset_type': [
-                toolkit.get_validator('default')('ckan'),
-                toolkit.get_converter('convert_to_extras'),
-                dataset_type_validate,
-            ],
-            'foo': [
-                toolkit.get_validator('ignore_missing'),
-                toolkit.get_converter('convert_to_tags')('foo'),
-            ],
-            'baz': [
-                toolkit.get_validator('ignore_missing'),
-                baz_convert_1,
-                baz_convert_2,
-                toolkit.get_converter('convert_to_extras'),
-            ],
-        })
-
-        # Add callbacks to the '__after' pseudo-key to be invoked after all key-based validators/converters
+        x2 = publicamundi_validators.get_field_validator(field)
+        x3 = toolkit.get_converter('convert_to_extras')
+        
+        schema[field_name] = [x1, x2, x3]
 
         if not schema.get('__after'):
             schema['__after'] = []
-        schema['__after'].append(after_validation_processor)
-
-        # A similar hook is also provided by the '__before' pseudo-key with obvious functionality.
-
-        if not schema.get('__before'):
-            schema['__before'] = []
-        # any additional validator must be inserted before the default 'ignore' one. 
-        schema['__before'].insert(-1, before_validation_processor) # insert as second-to-last
-
+        schema['__after'].append(publicamundi_validators.validate_dataset)
+        
         return schema
 
     def create_package_schema(self):
