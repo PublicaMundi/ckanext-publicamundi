@@ -16,9 +16,13 @@ def is_dataset_type(value, context):
     if not value in dataset_types:
         raise Invalid('Unknown dataset_type (%s)' %(value))
 
-def validate_dataset(key, data, errors, context):
+def validate_updated_dataset(key, data, errors, context):
     assert key[0] == '__after', 'This validator can only be invoked in the __after stage'
-    baz = data.get(('baz',))
+    raise Exception('Break')
+    pass
+
+def preprocess_updated_dataset(key, data, errors, context):
+    assert key[0] == '__before', 'This validator can only be invoked in the __before stage'
     #raise Exception('Break')
     pass
 

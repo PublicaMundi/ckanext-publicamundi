@@ -150,7 +150,6 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         return []
 
     def _modify_package_schema(self, schema):
-        ''' Override CKAN's create/update schema '''
         log1.info('_modify_package_schema(): Building schema ...')
 
         import ckanext.publicamundi.lib.metadata.validators as publicamundi_validators
@@ -161,10 +160,10 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             publicamundi_validators.is_dataset_type,
         ];
  
+        # Add field-based validation processors
+
         field_name = 'baz'
         field = publicamundi_metadata.IInspireMetadata.get(field_name)
-        #raise Exception('Break')
-        
         if field.default:
             x1 = toolkit.get_validator('default')(field.default)
         elif field.defaultFactory:
@@ -179,10 +178,20 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         
         schema[field_name] = [x1, x2, x3]
 
+
+        schema['foo-0-baz'] = [
+            toolkit.get_converter('convert_to_extras')
+        ]
+
+
+        # Add before/after validation processors
+
+        schema['__before'].insert(-1, publicamundi_validators.preprocess_updated_dataset)
+        
         if not schema.get('__after'):
             schema['__after'] = []
-        schema['__after'].append(publicamundi_validators.validate_dataset)
-        
+        schema['__after'].append(publicamundi_validators.validate_updated_dataset)
+       
         return schema
 
     def create_package_schema(self):
