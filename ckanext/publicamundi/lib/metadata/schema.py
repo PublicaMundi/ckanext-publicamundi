@@ -1,25 +1,9 @@
 import zope.interface 
 import zope.schema
 import re
-import logging
 
 import ckanext.publicamundi.lib
-
-class IBaseObject(zope.interface.Interface):
-    
-    def get_validation_errors():
-        '''Invoke all field-level validators and return a dict with errors.'''
-    
-    def validate_invariants():
-        '''Invoke all object-level validators (invariants). 
-        On failure, an exception is raised.'''
-
-    def validate():
-        '''Validate object (both field-level and object-level).
-        Raises an exception on the 1st error encountered.'''
-
-    def to_dict(flatten):
-        '''Convert to a (flattened or not) dict'''
+from ckanext.publicamundi.lib.metadata.ibase import IBaseObject
 
 class IBaseMetadata(IBaseObject):
     
@@ -28,19 +12,27 @@ class IBaseMetadata(IBaseObject):
         required = True,
         min_length = 2)
 
-class IContactInfo(IBaseObject):
+class IPostalAddress(IBaseObject):
     
-    email = zope.schema.TextLine(
-        title = u"Electronic mail address",
-        required = True)
-
     address = zope.schema.Text(
         title = u"Postal address",
         required = True)
 
     postalcode = zope.schema.TextLine(
         title = u"Postal code",
+        required = True,
         constraint = re.compile("\d{5,5}$").match)
+   
+class IContactInfo(IBaseObject):
+    
+    email = zope.schema.TextLine(title=u"Electronic mail address", required=False)
+    
+    address = zope.schema.Object(IPostalAddress, title=u"Postal Address", required=False)
+
+    @zope.interface.invariant
+    def not_empty(obj):
+        if obj.email is None and obj.address is None:
+            raise zope.interface.Invalid('At least one of email/address should be supplied')
 
 class ICkanMetadata(IBaseMetadata):
 
@@ -74,14 +66,25 @@ class IInspireMetadata(IBaseMetadata):
         max_length = 5,
     )
     
-    contact_info = zope.schema.Object(
-        IContactInfo,
+    contacts = zope.schema.List(
+        title = u'A list of contacts', 
+        required = False,
+        value_type = zope.schema.Object(IContactInfo, title = u'Contact'),
+        max_length = 5,
+    )
+   
+    contact_info = zope.schema.Object(IContactInfo,
         title = u'Contact Info', 
         required = True)
     
     @zope.interface.invariant
-    def title_is_ok(obj):
-        if not len(obj.title) > 1:
-            raise ValueError('Title is too short')
+    def check_tag_duplicates(obj):
+        s = set(obj.tags)
+        if len(s) < len(obj.tags):
+            raise zope.interface.Invalid('Tags contain duplicates')
  
-
+    '''
+    @zope.interface.invariant
+    def check_contact_info(obj):
+        IContactInfo.validateInvariants(obj.contact_info)
+    '''
