@@ -6,7 +6,9 @@ import ckanext.publicamundi.lib
 from ckanext.publicamundi.lib.metadata.ibase import IBaseObject
 
 class IBaseMetadata(IBaseObject):
-    
+
+    zope.interface.taggedValue('recurse-on-invariants', False)
+
     title = zope.schema.TextLine(
         title = u'Title',
         required = True,
@@ -23,6 +25,26 @@ class IPostalAddress(IBaseObject):
         required = True,
         constraint = re.compile("\d{5,5}$").match)
    
+class IPoint(IBaseObject):
+     
+    x = zope.schema.Float() 
+    y = zope.schema.Float()  
+
+class IPolygon(IBaseObject):
+    
+    points = zope.schema.List(
+        value_type = zope.schema.Object(IPoint),
+        required = True,
+        max_length = 10, 
+        min_length = 4)
+    
+    name = zope.schema.TextLine()
+    
+    @zope.interface.invariant
+    def check_polygon(obj):
+        if not (obj.points[0] == obj.points[-1]):
+            raise zope.interface.Invalid('The polygon line must be closed')
+
 class IContactInfo(IBaseObject):
     
     email = zope.schema.TextLine(title=u"Electronic mail address", required=False)
@@ -40,8 +62,10 @@ class ICkanMetadata(IBaseMetadata):
     def title_is_ok(obj):
         if not len(obj.title) > 1:
             raise ValueError('Title is too short')
- 
+
 class IInspireMetadata(IBaseMetadata):
+    
+    zope.interface.taggedValue('recurse-on-invariants', True)
     
     url = zope.schema.URI(
         title = u'URL',
@@ -66,6 +90,18 @@ class IInspireMetadata(IBaseMetadata):
         max_length = 5,
     )
     
+    geometry = zope.schema.List(
+        title = u'A collection of areas', 
+        required = False,
+        value_type = zope.schema.List(
+            title = u'A polygon area', 
+            value_type = zope.schema.Object(IPolygon,
+                title = u'A polygon'
+            ),
+            max_length =3),
+        max_length = 5,
+    )
+   
     contacts = zope.schema.List(
         title = u'A list of contacts', 
         required = False,

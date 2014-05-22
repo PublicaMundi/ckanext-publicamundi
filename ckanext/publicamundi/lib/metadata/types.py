@@ -26,6 +26,27 @@ class ContactInfo(BaseObject):
     def __init__(self, **kwargs):
         BaseObject.__init__(self, **kwargs)
 
+class Point(BaseObject):
+    zope.interface.implements(IPoint)
+    
+    x = None
+    y = None
+
+    def __repr__(self):
+        return '<Point x=%.1f y=%.2f>' %(self.x, self.y)
+    
+    def __eq__(self, other):
+        if isinstance(other, Point): 
+            return self.x == other.x and self.y == other.y
+        else:
+            return False
+
+class Polygon(BaseObject):
+    zope.interface.implements(IPolygon)
+    
+    points = None
+    name = None
+
 class CkanMetadata(BaseMetadata):
     zope.interface.implements(ICkanMetadata)
 
@@ -44,6 +65,7 @@ class InspireMetadata(BaseMetadata):
     baz = None
     contact_info = ContactInfo
     contacts = list
+    geometry = list
 
     def __init__(self, **kwargs):
         BaseMetadata.__init__(self, **kwargs)

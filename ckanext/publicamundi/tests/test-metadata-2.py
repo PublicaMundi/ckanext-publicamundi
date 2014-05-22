@@ -12,6 +12,15 @@ def print_as_dict(o):
     for k,v in o.to_dict(flatten=True).items():
         print k, ':', v   
 
+def validate_fields(o, S):
+    for k,F in zope.schema.getFields(S).items():
+        f = F.get(o)
+        e = None
+        try:
+            F.validate(f)
+        except zope.interface.Invalid as ex:
+            e = ex     
+
 if __name__  == '__main__':
 
     ci1 = ContactInfo(
@@ -30,19 +39,49 @@ if __name__  == '__main__':
     )
 
     ci4 = ContactInfo()
+    
+    geom1 = [
+        [
+            Polygon(
+                points=[
+                    Point(x=0.6, y=0.5),
+                    Point(x=0.7, y=0.1),
+                    Point(x=1.6, y=0.2),
+                    Point(x=0.6, y=0.5),
+                ],
+                name = u'A1'
+            ),            
+            Polygon(
+                points=[
+                    Point(x=1.2, y=0.4),
+                    Point(x=1.7, y=0.1),
+                    Point(x=1.6, y=0.2),
+                    Point(x=1.2, y=0.4),
+                ],
+                name = u'A2'
+            ),
+
+        ]
+    ]
 
     x1 = InspireMetadata(
         foo = 'bar', 
         title = u'Ababoua', 
-        tags = [u'alpha', u'beta', u'gamma'], 
+        tags = [u'alpha', u'beta', u'alpha'], 
         url = 'http://example.com',
-        contact_info = ci1,
-        contacts = [ci2, ci4],
+        contact_info = ci2,
+        contacts = [ci1, ci2],
+        geometry = geom1,
     )
-    
+ 
+    X = x1.get_schema()
+    F = X.get('contacts')
+
+    #validate_fields(x1, X)
+
     errors = x1.get_validation_errors()    
     print errors
 
-    if not errors:
-        print_as_dict(x1)
+    #if not errors:
+    #    print_as_dict(x1)
 

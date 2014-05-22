@@ -35,25 +35,9 @@ class BaseObject(object):
     _schema = None
    
     ## interface IBaseObject
-    
-    # Fixme: Check invariants for nested objects!
 
     def get_validation_errors(self):
-        S = self.get_schema()
-        return zope.schema.getValidationErrors(S, self)
-    
-    def validate_invariants(self):
-        S = self.get_schema()
-        return S.validateInvariants(self)
-        
-    def validate(self):
-        S = self.get_schema()
-        # Invoke field-level validators
-        for k,F in zope.schema.getFields(S).items():
-            F.validate(F.get(self))
-        # Check object-level invariants
-        S.validateInvariants(self)
-        return
+        return self._validate()
 
     def to_dict(self, flatten=False):
         if flatten:
@@ -99,8 +83,77 @@ class BaseObject(object):
         S = cls.get_schema()
         return flattened_schema(S)
 
-    ## Helpers
+    ## Validation helpers
     
+    def _validate(self):
+        S = self.get_schema()
+        errors = zope.schema.getSchemaValidationErrors(S, self)
+        if errors:
+            return errors
+        errors = []
+        try:
+            self._validate_invariants()
+        except zope.interface.Invalid as ex:
+            errors.append(ex)
+        return errors
+
+    def _validate_invariants(self):
+        S = self.get_schema()
+        # Validate field invariants
+        recurse = False
+        try:
+            recurse = S.getTaggedValue('recurse-on-invariants')
+        except KeyError:
+            pass
+        if recurse:
+            errors = []
+            for k,F in zope.schema.getFields(S).items():
+                f = F.get(self)
+                if not f:
+                    continue
+                try:
+                    self._validate_invariants_for_field(f,F)
+                except zope.interface.Invalid as ex:
+                    errors.append((k,ex))
+            if errors:
+                raise zope.interface.Invalid(errors)
+                
+        # Check own invariants
+        try:
+            S.validateInvariants(self)
+        except zope.interface.Invalid as ex:
+            raise zope.interface.Invalid((None,ex))
+
+    def _validate_invariants_for_field(self, f, F):
+        if isinstance(F, zope.schema.Object):
+            f._validate_invariants()
+        elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
+            self._validate_invariants_for_field_list(f, F)
+        elif isinstance(F, zope.schema.Dict):
+            self._validate_invariants_for_field_dict(f, F)
+                    
+    def _validate_invariants_for_field_list(self, f, F):
+        errors = []
+        for i,y in enumerate(f):
+            try:
+                self._validate_invariants_for_field(y, F.value_type)       
+            except zope.interface.Invalid as ex:
+                errors.append((i,ex))
+        if errors:
+            raise zope.interface.Invalid(errors)
+          
+    def _validate_invariants_for_field_dict(self, f, F):
+        errors = []
+        for k,y in f.items():
+            try:
+                self._validate_invariants_for_field(y, F.value_type)       
+            except zope.interface.Invalid as ex:
+                errors.append((k,ex))
+        if errors:
+            raise zope.interface.Invalid(errors)
+
+    ## Dictization helpers
+
     def dictized(self):
         S = self.get_schema()
         res = {}
