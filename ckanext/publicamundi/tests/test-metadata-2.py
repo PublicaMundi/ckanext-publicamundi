@@ -7,10 +7,12 @@ from ckanext.publicamundi.lib.metadata.types import *
 def print_as_dict(o):
     assert isinstance(o, BaseObject)
 
-    print json.dumps(o.to_dict(), indent=4)
-
-    for k,v in o.to_dict(flatten=True).items():
-        print k, ':', v   
+    d1 = o.to_dict(flat=False)
+    print json.dumps(d1, indent=4)
+    
+    d2 = o.to_dict(flat=True)
+    for k in sorted(d2):
+        print k, ':', d2[k]   
 
 def validate_fields(o, S):
     for k,F in zope.schema.getFields(S).items():
@@ -60,18 +62,29 @@ if __name__  == '__main__':
                 ],
                 name = u'A2'
             ),
-
-        ]
+        ],[
+            Polygon(
+                points=[
+                    Point(x=5.1, y=4.5),
+                    Point(x=4.7, y=3.8),
+                    Point(x=4.6, y=3.2),
+                    Point(x=4.6, y=4.5),
+                    Point(x=5.1, y=4.5),
+                ],
+                name = u'B1'
+            ), 
+        ],
     ]
 
     x1 = InspireMetadata(
         foo = 'bar', 
         title = u'Ababoua', 
-        tags = [u'alpha', u'beta', u'alpha'], 
+        tags = [u'alpha', u'beta', u'gamma'], 
         url = 'http://example.com',
         contact_info = ci2,
-        contacts = [ci1, ci2],
+        contacts = [ci1, ci2, ci3],
         geometry = geom1,
+        thematic_category = 'environment',
     )
  
     X = x1.get_schema()
@@ -82,6 +95,6 @@ if __name__  == '__main__':
     errors = x1.get_validation_errors()    
     print errors
 
-    #if not errors:
-    #    print_as_dict(x1)
+    if not errors:
+        print_as_dict(x1)
 

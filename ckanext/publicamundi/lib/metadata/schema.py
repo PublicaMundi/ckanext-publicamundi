@@ -119,8 +119,3 @@ class IInspireMetadata(IBaseMetadata):
         if len(s) < len(obj.tags):
             raise zope.interface.Invalid('Tags contain duplicates')
  
-    '''
-    @zope.interface.invariant
-    def check_contact_info(obj):
-        IContactInfo.validateInvariants(obj.contact_info)
-    '''
