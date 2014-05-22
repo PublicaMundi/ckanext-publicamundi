@@ -31,15 +31,12 @@ if __name__  == '__main__':
             postalcode = u'11362'),
         email = u'foo@example.com',
     )
-
     ci2 = ContactInfo(
         email = u'boo@example.com',
     )
-
     ci3 = ContactInfo(
         email = u'baz@example.com',
     )
-
     ci4 = ContactInfo()
     
     geom1 = [
@@ -79,10 +76,10 @@ if __name__  == '__main__':
     x1 = InspireMetadata(
         foo = 'bar', 
         title = u'Ababoua', 
-        tags = [u'alpha', u'beta', u'gamma'], 
+        tags = [ u'alpha', u'beta', u'gamma' ], 
         url = 'http://example.com',
         contact_info = ci2,
-        contacts = [ci1, ci2, ci3],
+        contacts = { 'personal': ci1, 'office': ci2 },
         geometry = geom1,
         thematic_category = 'environment',
     )
@@ -90,7 +87,7 @@ if __name__  == '__main__':
     X = x1.get_schema()
     F = X.get('contacts')
 
-    #validate_fields(x1, X)
+    validate_fields(x1, X)
 
     errors = x1.get_validation_errors()    
     print errors

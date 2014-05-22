@@ -64,7 +64,7 @@ class InspireMetadata(BaseMetadata):
     tags = list
     baz = None
     contact_info = ContactInfo
-    contacts = list
+    contacts = dict
     geometry = list
 
     def __init__(self, **kwargs):

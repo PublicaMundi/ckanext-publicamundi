@@ -4,27 +4,34 @@ import zope.schema
 import ckanext.publicamundi.lib
 from ckanext.publicamundi.lib.metadata.schema import IBaseObject
 
-def flattened_schema(S):
+def flatten_schema(S):
     assert S.extends(IBaseObject)
     res = {}
     fields = zope.schema.getFields(S)
     for k,F in fields.items():
-        res1 = flattened_field(F)
-        for k1,f1 in res1.items():
-            res[(k,)+k1] = f1
+        res1 = flatten_field(F)
+        for k1,F1 in res1.items():
+            res[(k,)+k1] = F1
     return res
 
-def flattened_field(F):
+def flatten_field(F):
     assert isinstance(F, zope.schema.Field)
     res = None
     if isinstance(F, zope.schema.Object):
-        res = flattened_schema(F.schema)
+        res = flatten_schema(F.schema)
     elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
         res = {}
-        res1 = flattened_field(F.value_type)
+        res1 = flatten_field(F.value_type)
         for i in range(0, F.max_length):
-            for k,f in res1.items():
-                res[(i,)+k] = f
+            for k1,F1 in res1.items():
+                res[(i,)+k1] = F1
+    elif isinstance(F, zope.schema.Dict):
+        assert isinstance(F.key_type, zope.schema.Choice), 'Only zope.schema.Choice supported for key_type'
+        res = {}
+        res1 = flatten_field(F.value_type)
+        for v in F.key_type.vocabulary:
+            for k1,F1 in res1.items():
+                res[(v.token,)+k1] = F1
     else:
         res = { (): F }
     return res
@@ -81,7 +88,7 @@ class BaseObject(object):
     @classmethod
     def get_flattened_fields(cls):
         S = cls.get_schema()
-        return flattened_schema(S)
+        return flatten_schema(S)
 
     ## Validation helpers
     
