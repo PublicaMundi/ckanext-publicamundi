@@ -14,7 +14,8 @@ def print_as_dict(o):
     for k in sorted(d2):
         print k, ':', d2[k]   
 
-def validate_fields(o, S):
+def validate_fields(o):
+    S = o.get_schema()
     for k,F in zope.schema.getFields(S).items():
         f = F.get(o)
         e = None
@@ -83,27 +84,22 @@ if __name__  == '__main__':
         geometry = geom1,
         thematic_category = 'environment',
     )
- 
-    X = x1.get_schema()
-    F = X.get('contacts')
 
-    validate_fields(x1, X)
+    validate_fields(x1)
 
     errors = x1.get_validation_errors()    
-    print errors
-
     if not errors:
         print_as_dict(x1)
     
 
-    # reconstruct
+    # Test {to/from}_dict
+
     d1 = x1.to_dict()
-    x1a = InspireMetadata()
-    x1a.from_dict(d1)
+    x2 = InspireMetadata().from_dict(d1)
 
-
-
-
+    s1 = json.dumps(d1)
+    s2 = json.dumps(x2.to_dict())
+    assert s1 == s2
     
 
 

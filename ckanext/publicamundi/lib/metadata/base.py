@@ -47,10 +47,10 @@ class BaseObject(object):
     _schema = None
     
     default_factories = {
-        zope.schema.TextLine: unicode,
-        zope.schema.Text: unicode,
-        zope.schema.BytesLine: str,
-        zope.schema.Bytes: str,
+        zope.schema.TextLine: None,
+        zope.schema.Text: None,
+        zope.schema.BytesLine: None,
+        zope.schema.Bytes: None,
         zope.schema.Int: None,
         zope.schema.Float: None,
         zope.schema.Bool: None,
@@ -76,7 +76,9 @@ class BaseObject(object):
         is_flat = isinstance(d.iterkeys().next(), tuple)
         if is_flat:
             d = dictization.unflatten(d)
-        return self._construct(d)
+        self._construct(d)
+        # provide method chaining
+        return self
         
     ## Constructor based on keyword args 
     
@@ -87,9 +89,21 @@ class BaseObject(object):
             v = kwargs.get(k)
             if not v:
                 factory = cls.get_field_factory(k, F)
-                if factory:
-                    v = factory()
+                v = factory() if factory else F.default
             setattr(self, k, v)
+    
+    ## Provide a string representation
+
+    def __repr__(self):
+        cls = type(self)
+        typename = cls.__name__ #"%s:%s" %(cls.__module__, cls.__name__)
+        s = '<' + typename
+        for k,F in self.get_fields().items():
+            f = F.get(self)
+            if f:
+                s += ' %s=%s' %(k, repr(f))
+        s += '>'
+        return s
 
     ## Introspective class methods
 
@@ -120,15 +134,11 @@ class BaseObject(object):
     def get_field_factory(cls, k, F=None):
         assert not k or isinstance(k, basestring)
         assert not F or isinstance(F, zope.schema.Field)
-        assert k or F, 'At least one of k,F should be specified' 
+        assert k or F, 'At least one of k(key), F(Field) should be specified' 
         factory = None
         # Check if a factory is defined explicitly as a class attribute
-        try:
-            if k:
-                factory = getattr(cls, k)
-        except AttributeError:
-            pass
-        if factory:
+        if k and hasattr(cls, k):
+            factory = getattr(cls, k)
             return factory
         # Find a sensible factory for this field 
         if not F:
@@ -273,8 +283,8 @@ class BaseObject(object):
             factory = cls.get_field_factory(k, F)
             f = None
             if not v: 
-                # No value, use factory (if exists)
-                f = factory() if factory else None
+                # No value given, use factory (if exists)
+                f = factory() if factory else F.default
             else:
                 # Input provided a value on k
                 f = self._make_field(v, F, factory)

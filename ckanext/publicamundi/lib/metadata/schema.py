@@ -79,6 +79,7 @@ class IInspireMetadata(IBaseMetadata):
     baz = zope.schema.TextLine(
         title = u'Baz', 
         required = False,
+        default = u'bazinka',
         min_length = 5)
 
     tags = zope.schema.List(

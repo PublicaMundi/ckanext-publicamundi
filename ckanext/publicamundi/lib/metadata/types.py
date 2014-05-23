@@ -18,9 +18,6 @@ class PostalAddress(BaseObject):
     address = None 
     postalcode = None
 
-    def __init__(self, **kwargs):
-        BaseObject.__init__(self, **kwargs)
-
 adapter_registry.register([], IPostalAddress, '', PostalAddress)
 
 class ContactInfo(BaseObject):
@@ -28,9 +25,6 @@ class ContactInfo(BaseObject):
     
     email = None
     address = None
-
-    def __init__(self, **kwargs):
-        BaseObject.__init__(self, **kwargs)
 
 adapter_registry.register([], IContactInfo, '', ContactInfo)
 
@@ -63,9 +57,6 @@ class CkanMetadata(BaseMetadata):
     zope.interface.implements(ICkanMetadata)
 
     title = None
-    
-    def __init__(self, **kwargs):
-        BaseMetadata.__init__(self, **kwargs)
 
 adapter_registry.register([], ICkanMetadata, '', CkanMetadata)
 
@@ -81,8 +72,6 @@ class InspireMetadata(BaseMetadata):
     contacts = dict
     geometry = list
 
-    def __init__(self, **kwargs):
-        BaseMetadata.__init__(self, **kwargs)
 
 adapter_registry.register([], IInspireMetadata, '', InspireMetadata)
 
