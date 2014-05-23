@@ -1,8 +1,12 @@
 import zope.interface
 import zope.schema
+import logging
 
-import ckanext.publicamundi.lib
+import ckanext.publicamundi.lib.dictization as dictization
+from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.schema import IBaseObject
+
+log1 = logging.getLogger(__name__)
 
 def flatten_schema(S):
     assert S.extends(IBaseObject)
@@ -39,8 +43,23 @@ def flatten_field(F):
 class BaseObject(object):
     zope.interface.implements(IBaseObject)
 
+    # Fixme thread-safety issues?
     _schema = None
-   
+    
+    default_factories = {
+        zope.schema.TextLine: unicode,
+        zope.schema.Text: unicode,
+        zope.schema.BytesLine: str,
+        zope.schema.Bytes: str,
+        zope.schema.Int: None,
+        zope.schema.Float: None,
+        zope.schema.Bool: None,
+        zope.schema.Datetime: None,
+        zope.schema.List: list,
+        zope.schema.Tuple: list,
+        zope.schema.Dict: dict,
+    }
+
     ## interface IBaseObject
 
     def get_validation_errors(self):
@@ -52,18 +71,25 @@ class BaseObject(object):
         else:
             return self.dictize()
 
+    def from_dict(self, d):
+        assert isinstance(d, dict)
+        is_flat = isinstance(d.iterkeys().next(), tuple)
+        if is_flat:
+            d = dictization.unflatten(d)
+        return self._construct(d)
+        
     ## Constructor based on keyword args 
     
     def __init__(self, **kwargs):
         cls = type(self)
         S = cls.get_schema()
-        for k in zope.schema.getFieldNames(S):
+        for k,F in zope.schema.getFields(S).items():
             v = kwargs.get(k)
             if not v:
-                factory = getattr(cls,k)
+                factory = cls.get_field_factory(k, F)
                 if factory:
                     v = factory()
-            setattr(self,k,v)
+            setattr(self, k, v)
 
     ## Introspective class methods
 
@@ -89,6 +115,32 @@ class BaseObject(object):
     def get_flattened_fields(cls):
         S = cls.get_schema()
         return flatten_schema(S)
+ 
+    @classmethod
+    def get_field_factory(cls, k, F=None):
+        assert not k or isinstance(k, basestring)
+        assert not F or isinstance(F, zope.schema.Field)
+        assert k or F, 'At least one of k,F should be specified' 
+        factory = None
+        # Check if a factory is defined explicitly as a class attribute
+        try:
+            if k:
+                factory = getattr(cls, k)
+        except AttributeError:
+            pass
+        if factory:
+            return factory
+        # Find a sensible factory for this field 
+        if not F:
+            S = cls.get_schema()
+            F = S.get(k)
+            if not F:
+                raise ValueError('Cannot find field %s for schema %s' %(k,S))
+        if isinstance(F, zope.schema.Object):
+            factory = adapter_registry.lookup([], F.schema) 
+        else:
+            factory = F.defaultFactory or cls.default_factories.get(type(F))
+        return factory
 
     ## Validation helpers
     
@@ -135,23 +187,13 @@ class BaseObject(object):
         if isinstance(F, zope.schema.Object):
             f._validate_invariants()
         elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
-            self._validate_invariants_for_field_list(f, F)
+            self._validate_invariants_for_field_items(enumerate(f), F)
         elif isinstance(F, zope.schema.Dict):
-            self._validate_invariants_for_field_dict(f, F)
+            self._validate_invariants_for_field_items(f.iteritems(), F)
                     
-    def _validate_invariants_for_field_list(self, f, F):
+    def _validate_invariants_for_field_items(self, items, F):
         errors = []
-        for i,y in enumerate(f):
-            try:
-                self._validate_invariants_for_field(y, F.value_type)       
-            except zope.interface.Invalid as ex:
-                errors.append((i,ex))
-        if errors:
-            raise zope.interface.Invalid(errors)
-          
-    def _validate_invariants_for_field_dict(self, f, F):
-        errors = []
-        for k,y in f.items():
+        for k,y in items:
             try:
                 self._validate_invariants_for_field(y, F.value_type)       
             except zope.interface.Invalid as ex:
@@ -177,23 +219,17 @@ class BaseObject(object):
         if isinstance(F, zope.schema.Object):
             return f._dictize()
         elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
-            return self._dictize_field_list(f, F)
+            a = list()
+            for i,y in enumerate(f):
+                a.append(self._dictize_field(y, F.value_type))
+            return a
         elif isinstance(F, zope.schema.Dict):
-            return self._dictize_field_dict(f, F)
+            d = dict()
+            for k,y in f.items():
+                d[k] = self._dictize_field(y, F.value_type) 
+            return d
         else:
             return f
-
-    def _dictize_field_list(self, f, F):
-        a = []
-        for i,y in enumerate(f):
-            a.append(self._dictize_field(y, F.value_type))
-        return a
-    
-    def _dictize_field_dict(self, f, F):
-        d = {}
-        for k,y in f.items():
-            d[k] = self._dictize_field(y, F.value_type) 
-        return d
 
     def flatten(self):
         return self._flatten()
@@ -228,3 +264,45 @@ class BaseObject(object):
                 d[(k,)+k1] = v1
         return d
    
+    def _construct(self, d):
+        cls = type(self)
+        S = cls.get_schema()
+        log1.info('Building an object as %s; schema=%s', cls, S)
+        for k,F in zope.schema.getFields(S).items():
+            v = d.get(k)
+            factory = cls.get_field_factory(k, F)
+            f = None
+            if not v: 
+                # No value, use factory (if exists)
+                f = factory() if factory else None
+            else:
+                # Input provided a value on k
+                f = self._make_field(v, F, factory)
+            setattr(self, k, f)
+
+    def _make_field(self, v, F, factory=None):
+        assert isinstance(F, zope.schema.Field)
+        # Find a factory (if missing)
+        if not factory:
+            factory = self.get_field_factory(None, F)
+        # Create a new field instance
+        if isinstance(F, zope.schema.Object):
+            f = factory()
+            f._construct(v)
+            return f
+        elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
+            a = list()
+            for i,y in enumerate(v):
+                v1 = self._make_field(y, F.value_type)
+                a.append(v1)
+                pass
+            return a
+        elif isinstance(F, zope.schema.Dict):
+            d = dict()
+            for k,y in v.items():
+                v1 = self._make_field(y, F.value_type)
+                d[k] = v1
+            return d
+        else:
+            return v
+       

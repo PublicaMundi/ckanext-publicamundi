@@ -1,5 +1,7 @@
+import zope.interface
+import zope.interface.adapter
 
-import ckanext.publicamundi.lib
+adapter_registry = zope.interface.adapter.AdapterRegistry()
 
 from ckanext.publicamundi.lib.metadata.schema import IBaseMetadata
 from ckanext.publicamundi.lib.metadata.schema import ICkanMetadata, IInspireMetadata
@@ -19,4 +21,5 @@ dataset_types = {
         'cls': None,
     },
 }
+
 

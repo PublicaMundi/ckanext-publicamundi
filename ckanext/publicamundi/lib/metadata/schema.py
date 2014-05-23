@@ -35,7 +35,7 @@ class IPolygon(IBaseObject):
     points = zope.schema.List(
         value_type = zope.schema.Object(IPoint),
         required = True,
-        max_length = 10, 
+        max_length = 8, 
         min_length = 4)
     
     name = zope.schema.TextLine()

@@ -76,7 +76,7 @@ if __name__  == '__main__':
     x1 = InspireMetadata(
         foo = 'bar', 
         title = u'Ababoua', 
-        tags = [ u'alpha', u'beta', u'gamma' ], 
+        tags = [ u'alpha', u'beta', u'gamma', ], 
         url = 'http://example.com',
         contact_info = ci2,
         contacts = { 'personal': ci1, 'office': ci2 },
@@ -94,4 +94,17 @@ if __name__  == '__main__':
 
     if not errors:
         print_as_dict(x1)
+    
+
+    # reconstruct
+    d1 = x1.to_dict()
+    x1a = InspireMetadata()
+    x1a.from_dict(d1)
+
+
+
+
+    
+
+
 
