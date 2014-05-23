@@ -1,4 +1,4 @@
-resource_language :{
+resource_language :[
             "Bulgarian",
             "Czech",
             "Danish",
@@ -21,11 +21,11 @@ resource_language :{
             "Slovak",
             "Slovenian",
             "Spanish",
-            "Swedish"}
+            "Swedish"]
 
 
 topic_category = 
-{
+[
             "Farming",
             "Biota",
             "Boundaries",
@@ -44,13 +44,13 @@ topic_category =
             "Society",
             "Structure",
             "Transportation",
-            "UtilitiesCommunication"}
+            "UtilitiesCommunication"]
 
 
 
 
 countries = 
-{
+[
         "Albania",
             "Andorra",
             "Austria",
@@ -113,18 +113,18 @@ countries =
             "Ukraine",
             "United Kingdom",
             "World",
-}
+]
 
 
 date_type =
-{
+[
             "creation",
             "publication",
-            "revision"}
+            "revision"]
 
 
 responsible_party_role=
-{
+[
             "ResourceProvider",
             "Custodian",
             "Owner",
@@ -135,13 +135,13 @@ responsible_party_role=
             "PrincipalInvestigator",
             "Processor",
             "Publisher",
-            "Author"}
+            "Author"]
 
 
 
 
 topic_category_gr = 
-{
+[
             "Βιόκοσμος",
             "Γεωγραφική θέση",
             "Γεωεπιστημονικές πληροφορίες",
@@ -160,10 +160,10 @@ topic_category_gr =
             "Υγεία",
             "Υψομετρία",
             "Χωροταξία/Κτηματολόγιο",
-            "Όρια"}
+            "Όρια"]
 
 
-inspire_data_themes_gr = {
+inspire_data_themes_gr = [
             "Έδαφος",
             "Ανθρώπινη υγεία και ασφάλεια",
             "Ατμοσφαιρικές συνθήκες",
@@ -197,16 +197,16 @@ inspire_data_themes_gr = {
             "Υδρογραφία",
             "Υψομετρία",
             "Χρήσεις γης",
-            "Ωκεανογραφικά γεωγραφικά χαρακτηριστικά"}
+            "Ωκεανογραφικά γεωγραφικά χαρακτηριστικά"]
 
 
-date_type_gr = {
+date_type_gr = [
       "Ημερομηνία δημιουργίας",
       “Ημερομηνία δημοσίευσης”,
-      “Ημερομηνία τελευταίας αναθεώρησης”}
+      “Ημερομηνία τελευταίας αναθεώρησης”]
 
 
-responsible_party_role_gr = {
+responsible_party_role_gr = [
             "Αρμόδιος για επικοινωνία",
             "Δημιουργός",
             "Διανομέας",
@@ -217,11 +217,11 @@ responsible_party_role_gr = {
             "Πρωτεύων διερευνητής",
             "Συντάκτης",
             "Υπόλογος",
-            "Χρήστης"}
+            "Χρήστης"]
 
 
 keywords_from_repositories = 
-{
+[
 “GEMET INSPIRE Data Themes" : {
             "Addresses",
             "Administrative units",
@@ -1115,4 +1115,4 @@ keywords_from_repositories =
 "version <spatial object>",
 "view service (view)",
 }
-}
+]
