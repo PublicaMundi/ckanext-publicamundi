@@ -1,5 +1,7 @@
 import zope.interface
 import zope.schema
+from zope.interface.verify import verifyObject
+
 import json
 
 from ckanext.publicamundi.lib.metadata.types import *
@@ -75,8 +77,9 @@ if __name__  == '__main__':
     ]
 
     x1 = InspireMetadata(
-        foo = 'bar', 
-        title = u'Ababoua', 
+        foo = 'bar',
+        baz = u'Bazzz',
+        title = u'Ababoua Ababoua', 
         tags = [ u'alpha', u'beta', u'gamma', ], 
         url = 'http://example.com',
         contact_info = ci2,
