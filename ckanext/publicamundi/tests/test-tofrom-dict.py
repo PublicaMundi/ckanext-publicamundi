@@ -14,7 +14,7 @@ d1 = {
 
 x1 = ContactInfo().from_dict(d1)
 
-errs = x1.get_validation_errors()
+errs = x1.validate()
 
 d1a = x1.to_dict(flat=True)
 

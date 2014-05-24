@@ -51,7 +51,7 @@ x1 = InspireMetadata(
     thematic_category = 'environmental',
 )
 
-errs1 = x1.get_validation_errors()
+errs1 = x1.validate()
 
 errs1_dict = x1.dictize_errors(errs1)
 
@@ -70,7 +70,7 @@ x2 = InspireMetadata(
     thematic_category = 'environment',
 )
 
-errs2 = x2.get_validation_errors()
+errs2 = x2.validate()
 
 errs2_dict = x2.dictize_errors(errs2)
 

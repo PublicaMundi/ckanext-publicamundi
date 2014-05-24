@@ -5,10 +5,9 @@ import ckanext.publicamundi.lib
 
 class IBaseObject(zope.interface.Interface):
     
-    def get_validation_errors():
+    def validate():
         '''Invoke all validators and return a dict with errors.
-        The invariants are checked only if schema validation (field-based) 
-        is successfull'''
+        The invariants are checked only if schema validation (field-based) succeeds.'''
 
     def to_dict(flat):
         '''Convert to a (flattened or nested) dict.'''

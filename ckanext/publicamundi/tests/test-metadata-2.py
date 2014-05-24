@@ -90,7 +90,7 @@ if __name__  == '__main__':
 
     validate_fields(x1)
 
-    errors = x1.get_validation_errors()    
+    errors = x1.validate()    
     if not errors:
         print_as_dict(x1)
     

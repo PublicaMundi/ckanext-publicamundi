@@ -63,7 +63,7 @@ class BaseObject(object):
 
     ## interface IBaseObject
 
-    def get_validation_errors(self):
+    def validate(self):
         return self._validate()
 
     def to_dict(self, flat=False):
@@ -364,7 +364,8 @@ class BaseObject(object):
         
     
     def flatten_errors(self, errors):
-        raise NotImplementedError('Todo')
+        error_dict = self._dictize_errors(errors)
+        return dictization.flatten(error_dict)
 
     ## Dictization helpers
     
