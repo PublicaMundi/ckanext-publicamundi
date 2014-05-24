@@ -79,7 +79,13 @@ class InspireClassification(object):
 
 @zope.interface.implementer(IInspireGeographic)
 class InspireGeographic(object):
-	def __init__(self, geographic_bounding_box):
+	def __init__(self, geographic_bounding_box,geographic_countries):
 		self.geographic_bounding_box = geographic_bounding_box
-
+		self.geographic_countries = geographic_countries
+	
+	def print_fields(self):
+		print 'Geographic Bounding Box (north lat, south lat, east lng, west lng):'
+		for k in self.geographic_bounding_box:
+			print '(%d, %d, %d, %d):' % (k.north_bound_latitude, k.south_bound_latitude, k.east_bound_longitude, k.west_bound_longitude) 
+		print 'Geographic countries: %s' % self.geographic_countries 
 		

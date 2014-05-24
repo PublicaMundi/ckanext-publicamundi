@@ -114,9 +114,13 @@ class IGeographicBoundingBox(zope.interface.Interface):
 
 class IInspireGeographic(zope.interface.Interface):
 
-	geographic_bounding_box = zope.schema.Object(IGeographicBoundingBox, 
+	geographic_bounding_box = zope.schema.List( 
 		title = u'Geographic Bounding Box', 
-		description = u"This is the extent of the resource in the geographic space, given as a bounding box. The bounding box shall be expressed with westbound and eastbound longitudes, and southbound and northbound latitudes in decimal degrees, with a precision of at least two decimals.")
+		description = u"This is the extent of the resource in the geographic space, given as a bounding box. The bounding box shall be expressed with westbound and eastbound longitudes, and southbound and northbound latitudes in decimal degrees, with a precision of at least two decimals.",
+		required = True,
+		min_length = 1,
+		value_type = zope.schema.Object(IGeographicBoundingBox, 
+			title = u'Geographic Bounding Box'))
 
 	geographic_countries = zope.schema.Choice(vocabularies.countries,
             title = u'Countries',
