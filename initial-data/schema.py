@@ -9,10 +9,13 @@ class IPointOfContact(zope.interface.Interface):
 		title = u"Organization Name",
 		description = u"The name of the organization",
 		required = True)
-	email = zope.schema.TextLine(
+	email = zope.schema.List(
 		title = u"Email",
 		required = True,
-		constraint = re.compile("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").match)
+		min_length = 1,
+		value_type = zope.schema.TextLine(
+			title = u'Email',
+			constraint = re.compile("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").match))
 
 class IInspireMetadata(zope.interface.Interface): 
      
@@ -125,3 +128,145 @@ class IInspireGeographic(zope.interface.Interface):
 	geographic_countries = zope.schema.Choice(vocabularies.countries,
             title = u'Countries',
             required = False)
+
+_a_greater_b_called = []
+class ITemporalExtent(zope.interface.Interface):
+	starting_date = zope.schema.Date(
+		title = u'Starting date',
+		required = False,
+		max = datetime.date.today())
+
+	ending_date = zope.schema.Date(
+		title = u'Ending date',
+		required = False,
+		max = datetime.date.today())
+
+	@zope.interface.invariant
+    	def check_date_order(obj):
+		_a_greater_b_called.append(obj)
+		if obj.starting_date > obj.ending_date:
+			raise zope.interface.Invalid('Start date (%s) later than end date (%s)' % (obj.starting_date,obj.ending_date))
+	
+
+class IInspireTemporal(zope.interface.Interface):
+	
+	temporal_extent = zope.schema.List(
+		title = u'Temporal Extent',
+		description = u"The temporal extent defines the time period covered by the content of the resource. This time period may be expressed as any of the following: - an individual date, - an interval of dates expressed through the starting date and end date of the interval,- a mix of individual dates and intervals of dates.",
+		required = False,
+		value_type = zope.schema.Object(ITemporalExtent,
+			title = u'Temporal extent'))
+	creation_date = zope.schema.Date(
+		title = u'Date of creation',
+		description = u"This is the date of creation of the resource. There shall not be more than one date of creation.",
+		required = False,
+		max = datetime.date.today())
+	publication_date = zope.schema.Date(
+		title = u'Date of publication',
+		description = u"This is the date of publication of the resource when available, or the date of entry into force. There may be more than one date of publication.",
+		required = False,
+		max = datetime.date.today())
+	revision_date = zope.schema.Date(
+		title = u'Date of last revision',
+		description = u"This is the date of last revision of the resource, if the resource has been revised. There shall not be more than one date of last revision.",
+		required = False,
+		max = datetime.date.today())
+	
+	@zope.interface.invariant
+	def check_creation_publication_order(obj):
+		_a_greater_b_called.append(obj)
+		if obj.creation_date > obj.publication_date:
+			raise zope.interface.Invalid('Creation date (%s) later than publication date (%s)' % (obj.creation_date,obj.publication_date))
+
+	@zope.interface.invariant
+	def check_publication_revision_order(obj):
+		_a_greater_b_called.append(obj)
+		if obj.publication_date > obj.revision_date:
+			raise zope.interface.Invalid('Publication date (%s) later than last revision date (%s)' % (obj.publication_date,obj.revision_date))
+
+
+class ISpatialResolution(zope.interface.Interface):
+	equivalent_scale = zope.schema.Int(
+		title = u'Equivalent Scale',
+		required = False)
+	resolution_distance = zope.schema.Int(
+		title = u'Resolution distance',
+		required = False)
+	unit_of_measure = zope.schema.TextLine(
+		title = u'Unit of measure',
+		required = False)
+#TODO what invariants for spatial resolution?
+
+class IInspireQualityValidity(zope.interface.Interface):
+	
+	lineage = zope.schema.Text(
+		title = u'Lineage',
+		description = u"This is a statement on process history and/or overall quality of the spatial data set. Where appropriate it may include a statement whether the data set has been validated or quality assured, whether it is the official version (if multiple versions exist), and whether it has legal validity. The value domain of this metadata element is free text.",
+		required = False)
+	spatial_resolution = zope.schema.List(
+		title = u'Spatial resolution',
+		description = u"Spatial resolution refers to the level of detail of the data set. It shall be expressed as a set of zero to many resolution distances (typically for gridded data and imagery-derived products) or equivalent scales (typically for maps or map-derived products). An equivalent scale is generally expressed as an integer value expressing the scale denominator. A resolution distance shall be expressed as a numerical value associated with a unit of length.",
+		required = False,
+		value_type = zope.schema.Object(ISpatialResolution,
+			title = u'Spatial resolution'))
+
+class IConformity(zope.interface.Interface):
+	#specifications have suggestions vocabulary!
+	specifications = zope.schema.TextLine(
+		title = u'Specifications',
+		description = u"This is a citation of the implementing rules adopted under Article 7(1) of Directive 2007/2/EC or other specification to which a particular resource conforms. A resource may conform to more than one implementing rules adopted under Article 7(1) of Directive 2007/2/EC or other specification. This citation shall include at least the title and a reference date (date of publication, date of last revision or of creation) of the implementing rules adopted under Article 7(1) of Directive 2007/2/EC or of the specification.",
+		required = False)
+	date = zope.schema.Date(
+		title = u'Date',
+		required = True,
+		max = datetime.date.today())
+	date_type = zope.schema.Choice(vocabularies.date_type,
+		title = u'Date type',
+		required = True)
+	degree = zope.schema.Choice(vocabularies.degree,
+		title = u'Degree',
+		description = u"This is the degree of conformity of the resource to the implementing rules adopted under Article 7(1) of Directive 2007/2/EC or other specification.",
+		required = True)
+
+class IInspireConformity(zope.interface.Interface):
+	conformity = zope.schema.List(
+		title = u'Conformity',
+		required = False,
+		value_type = zope.schema.Object(IConformity,
+			title = u'Conformity'))
+
+class IInspireConstraints(zope.interface.Interface):
+	#conditions have suggestions vocabulary
+	conditions = zope.schema.List(
+		title = u'Conditions applying to access and use',
+		description = u'This metadata element defines the conditions for access and use of spatial data sets and services, and where applicable, corresponding fees as required by Article 5(2)(b) and Article 11(2)(f) of Directive 2007/2/EC. The value domain of this metadata element is free text. \nThe element must have values. If no conditions apply to the access and use of the resource, "no conditions apply" shall be used. If conditions are unknown, "conditions unknown" shall be used. This element shall also provide information on any fees necessary to access and use the resource, if applicable, or refer to a uniform resource locator (URL) where information on fees is available.',
+		required = True,
+		min_length = 1,
+		value_type = zope.schema.TextLine(title = u'Condition'))
+	# limitations have suggestsions vocabulary 
+	limitations = zope.schema.List(
+		title = u'Limitations on public access',
+		description = u"When Member States limit public access to spatial data sets and spatial data services under Article 13 of Directive 2007/2/EC, this metadata element shall provide information on the limitations and the reasons for them. If there are no limitations on public access, this metadata element shall indicate that fact.\nThe value domain of this metadata element is free text.",
+		required = True,
+		min_length = 1,
+		value_type = zope.schema.TextLine(title = u'Limitation'))
+
+class IResponsibleParty(zope.interface.Interface):
+	point_of_contact = zope.schema.Object(IPointOfContact,
+		title = u'Responsible Party',
+		required = True)
+	party_role = zope.schema.Choice(vocabularies.party_roles,
+		title = u'Responsible party role',
+		description = u'This is the role of the responsible organisation.',
+		required = True)
+
+class IInspireResponsibleParty(zope.interface.Interface):
+	responsible_party = zope.schema.List(
+		title = u'Responsible Party',
+		description = u'This is the description of the organisation responsible for the establishment, management, maintenance and distribution of the resource.\nThis description shall include:\n- the name of the organisation as free text,\n- a contact e-mail address as a character string.',
+		required = True,
+		min_length = 1,
+		value_type = zope.schema.Object(IResponsibleParty,
+			title = u'Responsible Party'))
+
+		
