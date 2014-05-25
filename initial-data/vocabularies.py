@@ -227,5 +227,5 @@ vocabularies = {
 		{"display":"Accident", "value":'accident', "display-el": "Ατυχήματα"},
 		{ "display":"Administration", "value":'administration', "display-el": "Διοίκηση"}
 	]
-}
+ }
 
