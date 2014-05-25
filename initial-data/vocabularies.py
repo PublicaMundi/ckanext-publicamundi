@@ -119,8 +119,12 @@ date_type = [
             "publication",
             "revision"]
 
+degree = [
+	"Not evaluated",
+	"Not conformant",
+	"Conformant"]
 
-responsible_party_role= [
+party_roles= [
             "ResourceProvider",
             "Custodian",
             "Owner",
