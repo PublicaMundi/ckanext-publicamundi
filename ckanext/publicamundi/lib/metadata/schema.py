@@ -6,7 +6,6 @@ import ckanext.publicamundi.lib
 from ckanext.publicamundi.lib.metadata.ibase import IBaseObject
 
 class IBaseMetadata(IBaseObject):
-
     zope.interface.taggedValue('recurse-on-invariants', False)
 
     title = zope.schema.TextLine(
@@ -57,6 +56,7 @@ class IContactInfo(IBaseObject):
             raise zope.interface.Invalid('At least one of email/address should be supplied')
 
 class ICkanMetadata(IBaseMetadata):
+    zope.interface.taggedValue('recurse-on-invariants', True)
 
     @zope.interface.invariant
     def title_is_ok(obj):
@@ -64,7 +64,6 @@ class ICkanMetadata(IBaseMetadata):
             raise ValueError('Title is too short')
 
 class IInspireMetadata(IBaseMetadata):
-    
     zope.interface.taggedValue('recurse-on-invariants', True)
     
     url = zope.schema.URI(

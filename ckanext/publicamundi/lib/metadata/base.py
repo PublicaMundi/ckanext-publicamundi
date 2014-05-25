@@ -1,13 +1,16 @@
+import threading
+import logging
 import zope.interface
 import zope.interface.verify
 import zope.schema
-import logging
 
 import ckanext.publicamundi.lib.dictization as dictization
 from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.schema import IBaseObject
 
-log1 = logging.getLogger(__name__)
+_logger = logging.getLogger(__name__)
+
+_cache = threading.local()
 
 def flatten_schema(S):
     assert S.extends(IBaseObject)
@@ -43,9 +46,6 @@ def flatten_field(F):
 
 class BaseObject(object):
     zope.interface.implements(IBaseObject)
-
-    # Fixme thread-safety issues?
-    _schema = None
     
     default_factories = {
         zope.schema.TextLine: None,
@@ -62,6 +62,10 @@ class BaseObject(object):
     }
 
     ## interface IBaseObject
+
+    @classmethod
+    def schema(cls):
+        return cls.get_schema()
 
     def validate(self):
         return self._validate()
@@ -95,7 +99,7 @@ class BaseObject(object):
     
     ## Provide a string representation
 
-    def __repr__(self):
+    def _repr(self):
         cls = type(self)
         typename = cls.__name__ #"%s:%s" %(cls.__module__, cls.__name__)
         s = '<' + typename
@@ -106,20 +110,30 @@ class BaseObject(object):
         s += '>'
         return s
 
+    __repr__ = _repr
+
     ## Introspective class methods
 
     @classmethod
-    def _detect_schema(cls):
+    def lookup_schema(cls):
+        S = None
         for iface in zope.interface.implementedBy(cls):
             if iface.extends(IBaseObject):
-                return iface
-        return None
+                S = iface
+                break
+        return S
     
     @classmethod
     def get_schema(cls):
-        if not cls._schema:
-            cls._schema = cls._detect_schema()
-        return cls._schema
+        S = None
+        if not hasattr(_cache, 'schema'):
+            _cache.schema = {}
+        try:
+            S = _cache.schema[cls]
+        except KeyError:
+            S  = cls.lookup_schema()
+            _cache.schema[cls] = S
+        return S
 
     @classmethod
     def get_fields(cls):
@@ -433,7 +447,6 @@ class BaseObject(object):
     def _construct(self, d):
         cls = type(self)
         S = cls.get_schema()
-        log1.info('Building an object as %s; schema=%s', cls, S)
         for k,F in zope.schema.getFields(S).items():
             v = d.get(k)
             factory = cls.get_field_factory(k, F)
