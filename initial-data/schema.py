@@ -269,4 +269,64 @@ class IInspireResponsibleParty(zope.interface.Interface):
 		value_type = zope.schema.Object(IResponsibleParty,
 			title = u'Responsible Party'))
 
+class IOriginatingVocabulary(zope.interface.Interface):
+	title = zope.schema.TextLine(
+		title = u'Title',
+		required = True)
+	reference_date = zope.schema.Date(
+		title = u'Reference date',
+		required = True)
+	date_type = zope.schema.Choice(vocabularies.date_type,
+		title = u'Date Type',
+		required = True)
+
+class IFreeKeyword(zope.interface.Interface):
+	keyword_value = zope.schema.TextLine(
+		title = u"Keyword value",
+		description = u"The keyword value is a commonly used word, formalised word or phrase used to describe the subject. While the topic category is too coarse for detailed queries, keywords help narrowing a full text search and they allow for structured keyword search.\nThe value domain of this metadata element is free text.",
+		required = True)
+	originating_vocabulary = zope.schema.Object(IOriginatingVocabulary,
+		title = u'Originating controlled vocabulary',
+		description = u"If the keyword value originates from a controlled vocabulary (thesaurus, ontology), for example GEMET, the citation of the originating controlled vocabulary shall be provided.\nThis citation shall include at least the title and a reference date (date of publication, date of last revision or of creation) of the originating controlled vocabulary.",
+		required = True)
+	
+inspire_data_themes_items = []
+
+_mandatory_list = []
+class IInspireKeyword(zope.interface.Interface):
+
+	
+	free_keyword = zope.schema.Object(IFreeKeyword,
+		title = u'Free keyword',
+		required = True)
+
+	keywords = zope.schema.List(
+		title = u'Keyword value',
+		description = u'The keyword value is a commonly used word, formalised word or phrase used to describe the subject. While the topic category is too coarse for detailed queries, keywords help narrowing a full text search and they allow for structured keyword search.',
+		required = True,
+		min_length = 1,
+		value_type = zope.schema.Dict(
+			key_type = zope.schema.Choice(vocabularies.vocabularies.keys()),
+			value_type = zope.schema.List(
+				required = True,
+				min_length = 1)
+))
+
+	@zope.interface.invariant
+    	def check_mandatory(obj):
+		_mandatory_list.append(obj)
+		for item in vocabularies.vocabularies.get('inspire_data_themes'):
+			inspire_data_themes_items.append(item.get('value'))
+		check = False
+		for k in obj.keywords:
+			if 'inspire_data_themes' in k.keys():
+				check = True
+		if not check:
+			raise zope.interface.Invalid('You need to select at least one keyword from INSPIRE data theme')
+			
+				
+	
+	
+		
+
 		

@@ -1,17 +1,16 @@
 import zope.interface
 from schema import *
 
-@zope.interface.implementer(IPointOfContact)
 class PointOfContact(object):
-		
+	zope.interface.implements(IPointOfContact)	
 	def __init__(self, organization_name, email):
 		self.organization_name = organization_name
 		self.email = email
 	def print_fields(self):
 		print '%s , %s ' % (self.organization_name, self.email)
 
-@zope.interface.implementer(IInspireMetadata)
 class InspireMetadata(object):
+	zope.interface.implements(IInspireMetadata)	
 
 	def __init__(self,point_of_contact,metadata_date,metadata_language):
 		self.point_of_contact = point_of_contact
@@ -23,8 +22,10 @@ class InspireMetadata(object):
 			print '(%s , %s) ' % (k.organization_name,k.email)
 		print 'Date: %s ' % (self.metadata_date)
 		print 'Language: %s ' % (self.metadata_language)
-@zope.interface.implementer(IIdentifier)
+
 class Identifier(object):
+	zope.interface.implements(IIdentifier)	
+
 	def __init__(self,code, codespace):
 		self.code = code
 		self.codespace = codespace
@@ -32,8 +33,8 @@ class Identifier(object):
 		print 'Code: %s' % self.code
 		print 'Codespace: %s' % self.codespace
 
-@zope.interface.implementer(IInspireIdentification)
 class InspireIdentification(object):
+	zope.interface.implements(IInspireIdentification)	
 
 	def __init__(self, resource_title, identifier, resource_abstract, resource_locator, resource_language):
 		self.resource_title = resource_title
@@ -56,8 +57,9 @@ class InspireIdentification(object):
 			print '%s' % k
 
 			
-@zope.interface.implementer(IGeographicBoundingBox)
 class GeographicBoundingBox(object):
+	zope.interface.implements(IGeographicBoundingBox)
+	
 	def __init__(self, north_bound_latitude, south_bound_latitude, east_bound_longitude, west_bound_longitude):
 		self.north_bound_latitude = north_bound_latitude
 		self.south_bound_latitude = south_bound_latitude
@@ -70,15 +72,17 @@ class GeographicBoundingBox(object):
 		print 'West Lng: %d' %self.west_bound_longitude 
 		
 
-@zope.interface.implementer(IInspireClassification)
 class InspireClassification(object):
+	zope.interface.implements(IInspireClassification)	
+	
 	def __init__(self, topic_category):
 		self.topic_category = topic_category
 	def print_fields(self):
 		print 'Topic Category: %s' % self.topic_category
 
-@zope.interface.implementer(IInspireGeographic)
 class InspireGeographic(object):
+	zope.interface.implements(IInspireGeographic)	
+	
 	def __init__(self, geographic_bounding_box,geographic_countries):
 		self.geographic_bounding_box = geographic_bounding_box
 		self.geographic_countries = geographic_countries
@@ -90,8 +94,9 @@ class InspireGeographic(object):
 		print 'Geographic countries: %s' % self.geographic_countries 
 	
 	
-@zope.interface.implementer(ITemporalExtent)
 class TemporalExtent(object):
+	zope.interface.implements(ITemporalExtent)	
+
 	def __init__(self, starting_date, ending_date):
 		self.starting_date = starting_date
 		self.ending_date = ending_date
@@ -99,8 +104,10 @@ class TemporalExtent(object):
 	def print_fields(self):
 		print 'Temporal extent (starting date, ending date):'
 		print '(%s, %s):' % (self.starting_date, self.ending_date) 
-@zope.interface.implementer(IInspireTemporal)
+
 class InspireTemporal(object):
+	zope.interface.implements(IInspireTemporal)
+	
 	def __init__(self,temporal_extent, creation_date, publication_date, revision_date):
 		self.temporal_extent = temporal_extent
 		self.creation_date = creation_date
@@ -116,8 +123,9 @@ class InspireTemporal(object):
 		print 'Last revision date: %s' % self.revision_date 
 
 
-@zope.interface.implementer(ISpatialResolution)
 class SpatialResolution(object):
+	zope.interface.implements(ISpatialResolution)
+	
 	def __init__(self, equivalent_scale, resolution_distance, unit_of_measure):
 		self.equivalent_scale = equivalent_scale
 		self.resolution_distance = resolution_distance
@@ -129,8 +137,8 @@ class SpatialResolution(object):
 		print 'Unit of measure: %s' % self.unit_of_measure
 
 
-@zope.interface.implementer(IInspireQualityValidity)
 class InspireQualityValidity(object):
+	zope.interface.implements(IInspireQualityValidity)	
 
 	def __init__(self, lineage, spatial_resolution):
 		self.lineage = lineage
@@ -142,8 +150,9 @@ class InspireQualityValidity(object):
 		for k in self.spatial_resolution:
 			print '(%d %d %s)' % (k.equivalent_scale, k.resolution_distance, k.unit_of_measure)
 
-@zope.interface.implementer(IConformity)
 class Conformity(object):
+	zope.interface.implements(IConformity)	
+	
 	def __init__(self,specifications, date, date_type, degree):
 		self.specifications = specifications
 		self.date = date
@@ -156,8 +165,9 @@ class Conformity(object):
 		print 'Degree: %s' % self.degree
 
 
-@zope.interface.implementer(IInspireConformity)
 class InspireConformity(object):
+	zope.interface.implements(IInspireConformity)
+	
 	def __init__(self,conformity):
 		self.conformity = conformity
 	def print_fields(self):
@@ -165,8 +175,9 @@ class InspireConformity(object):
 		for k in self.conformity:
 			print '(%s %s %s %s)' % (k.specifications, k.date, k.date_type, k.degree)
 			
-@zope.interface.implementer(IInspireConstraints)
 class InspireConstraints(object):
+	zope.interface.implements(IInspireConstraints)	
+
 	def __init__(self,conditions, limitations):
 		self.conditions = conditions
 		self.limitations = limitations
@@ -174,17 +185,52 @@ class InspireConstraints(object):
 		print 'Conditions: %s' % self.conditions
 		print 'Limitations: %s' % self.limitations
 
-@zope.interface.implementer(IResponsibleParty)
 class ResponsibleParty(object):
+	zope.interface.implements(IResponsibleParty)
+	
 	def __init__(self,point_of_contact,party_role):
 		self.point_of_contact = point_of_contact
 		self.party_role = party_role
 	
-@zope.interface.implementer(IInspireResponsibleParty)
 class InspireResponsibleParty(object):
+	zope.interface.implements(IInspireResponsibleParty)
+	
 	def __init__(self,responsible_party):
 		self.responsible_party = responsible_party
 	def print_fields(self):
 		print 'Responsible party: (PoC, party_role)'
 		for k in self.responsible_party:
 			print '(%s)' % k.party_role
+
+class FreeKeyword(object):
+	zope.interface.implements(IFreeKeyword)
+	
+	def __init__(self,keyword_value,originating_vocabulary):
+		self.keyword_value = keyword_value
+		self.originating_vocabulary = originating_vocabulary
+	def print_fields(self):
+		print 'Keyword value: %s' % self.keyword_value
+
+class OriginatingVocabulary(object):
+	zope.interface.implements(IOriginatingVocabulary)
+	
+	def __init__(self,title,reference_date, date_type):
+		self.title = title
+		self.reference_date = reference_date
+		self.date_type = date_type
+	def print_fields(self):
+		print 'Title: %s' % self.title
+		print 'Reference date: %s' % self.reference_date
+		print 'Date type: %s' % self.date_type
+
+class InspireKeyword(object):
+	zope.interface.implements(IInspireKeyword)
+	
+	def __init__(self,free_keyword,keywords):
+		self.keywords = keywords
+		self.free_keyword = free_keyword
+	def print_fields(self):
+		print 'Free keyword: '
+		print '(%s)' % (self.free_keyword.keyword_value)
+		print 'All keywords:'
+		print '(%s) ' % (self.keywords)

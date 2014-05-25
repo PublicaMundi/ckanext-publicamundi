@@ -218,4 +218,14 @@ responsible_party_role_gr = [
             "Υπόλογος",
             "Χρήστης"]
 
+vocabularies = {
+	'inspire_data_themes': [
+		{"display":"Addresses", "value":'addresses', "display-el": "Διευθύνσεις"},
+		{"display": "Buildings", "value":'buildings', "display-el": "Κτίρια"}
+	],
+	'gemet_concepts': [
+		{"display":"Accident", "value":'accident', "display-el": "Ατυχήματα"},
+		{ "display":"Administration", "value":'administration', "display-el": "Διοίκηση"}
+	]
+ }
 
