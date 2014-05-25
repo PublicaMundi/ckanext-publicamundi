@@ -1,5 +1,6 @@
 import threading
 import logging
+import json
 import zope.interface
 import zope.interface.verify
 import zope.schema
@@ -61,6 +62,10 @@ class BaseObject(object):
         zope.schema.Dict: dict,
     }
 
+    KEY_GLUE = '.'
+    
+    META_TYPE_KEY = '_type'
+ 
     ## interface IBaseObject
 
     @classmethod
@@ -76,15 +81,36 @@ class BaseObject(object):
         else:
             return self.dictize()
 
-    def from_dict(self, d):
+    def from_dict(self, d, is_flat=None):
         assert isinstance(d, dict)
-        is_flat = isinstance(d.iterkeys().next(), tuple)
-        if is_flat:
-            d = dictization.unflatten(d)
+        # Decide if input is a flattened dict
+        if is_flat is None:
+            is_flat = isinstance(d.iterkeys().next(), tuple)
+            if is_flat:
+                d = dictization.unflatten(d)
+        # (Re)construct self
         self._construct(d)
-        # provide method chaining
+        # Allow method chaining
         return self
-        
+    
+    def to_json(self, flat=False, indent=None):
+        d = self.to_dict(flat)
+        if flat:
+            glue = self.KEY_GLUE
+            convert_key = lambda k: glue.join(map(str,k))
+            d = { convert_key(k): v for k, v in d.items() }
+        return json.dumps(d, indent=indent)
+
+    def from_json(self, s, is_flat=False):
+        d = json.loads(s)
+        if is_flat:
+            glue = self.KEY_GLUE
+            convert_key = lambda k: tuple(k.split(glue))
+            d = dictization.unflatten({ 
+                convert_key(k): v for k, v in d.items() 
+            })
+        return self.from_dict(d, is_flat=False)
+   
     ## Constructor based on keyword args 
     
     def __init__(self, **kwargs):
@@ -317,7 +343,7 @@ class BaseObject(object):
                 errors.append((k, ef))
         return errors
     
-    ## Error helpers - Convert to other formats 
+    ## Error helpers - Convert error lists 
     
     def dictize_errors(self, errors):
         return self._dictize_errors(errors)

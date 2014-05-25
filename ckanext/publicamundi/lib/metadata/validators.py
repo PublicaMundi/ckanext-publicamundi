@@ -5,7 +5,6 @@ import zope.schema
 import ckan.plugins.toolkit as toolkit
 from ckan.lib.navl.dictization_functions import missing, StopOnError, Invalid
 
-import ckanext.publicamundi.lib
 from ckanext.publicamundi.lib.metadata import dataset_types
 
 _t = toolkit._
@@ -16,13 +15,29 @@ def is_dataset_type(value, context):
     if not value in dataset_types:
         raise Invalid('Unknown dataset_type (%s)' %(value))
 
-def validate_updated_dataset(key, data, errors, context):
+def dataset_postprocess_read(key, data, errors, context):
     assert key[0] == '__after', 'This validator can only be invoked in the __after stage'
-    raise Exception('Break')
+    log1.debug('Post-processing dataset for reading')
+    # Prepare computed fields, reorganize structure etc.
+    data[('baz_view',)] = u'I am a read-only Baz'
+    #raise Exception('Break (postprocess read)')
     pass
 
-def preprocess_updated_dataset(key, data, errors, context):
+def dataset_postprocess_edit(key, data, errors, context):
+    assert key[0] == '__after', 'This validator can only be invoked in the __after stage'
+    log1.debug('Post-processing dataset for editing')
+    #raise Exception('Break (postprocess edit)')
+    pass
+
+def dataset_validate(key, data, errors, context):
+    assert key[0] == '__after', 'This validator can only be invoked in the __after stage'
+    log1.debug('Validating dataset for editing')
+    #raise Exception('Break (validate)')
+    pass
+
+def dataset_preprocess_edit(key, data, errors, context):
     assert key[0] == '__before', 'This validator can only be invoked in the __before stage'
+    log1.debug('Pre-processing dataset for editing')
     #raise Exception('Break')
     pass
 

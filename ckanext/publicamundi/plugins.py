@@ -179,18 +179,19 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         schema[field_name] = [x1, x2, x3]
 
 
-        schema['foo-0-baz'] = [
+        schema['foo.0.baz'] = [
             toolkit.get_converter('convert_to_extras')
         ]
 
 
         # Add before/after validation processors
 
-        schema['__before'].insert(-1, publicamundi_validators.preprocess_updated_dataset)
+        schema['__before'].insert(-1, publicamundi_validators.dataset_preprocess_edit)
         
         if not schema.get('__after'):
             schema['__after'] = []
-        schema['__after'].append(publicamundi_validators.validate_updated_dataset)
+        schema['__after'].append(publicamundi_validators.dataset_postprocess_edit)
+        schema['__after'].append(publicamundi_validators.dataset_validate)
        
         return schema
 
@@ -207,12 +208,13 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     def show_package_schema(self):
         schema = super(DatasetForm, self).show_package_schema()
 
+        import ckanext.publicamundi.lib.metadata.validators as publicamundi_validators
+        
         log1.info(' ** show_package_schema(): Building schema ...')
 
         # Don't show vocab tags mixed in with normal 'free' tags
         # (e.g. on dataset pages, or on the search page)
         schema['tags']['__extras'].append(toolkit.get_converter('free_tags_only'))
-
         
         schema.update({
             'dataset_type': [
@@ -228,18 +230,9 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             ],
         })
 
-        log1.info(' ** show_package_schema(): Adding an __after processor ...')
-        
-        def f(k, data, errors, context):
-            #raise Exception('Break (f)')
-            data[('baz_view',)] = u'I am a read-only Baz'
-            pass
-
         if not schema.get('__after'):
             schema['__after'] = []
-        
-        #schema['__before'].insert(-1, f)
-        schema['__after'].append(f)
+        schema['__after'].append(publicamundi_validators.dataset_postprocess_read)
 
         return schema
 

@@ -2,22 +2,27 @@ import json
 import ckanext.publicamundi.lib.dictization as dictization
 
 d = {
-    'foo': {
-        'a': 99,
-        'b': {
-            'b1': 'B1',
-            'b2': 'B2',
+    u'foo': {
+        u'a': 99,
+        u'b': {
+            u'b1': u'B1',
+            u'b2': u'B2',
         },
     },
-    'measurements': {
-        'created': '12-Dec-2014',
-        'samples': {
+    u'measurements': {
+        u'created': u'12-Dec-2014',
+        u'samples': {
             'a': [ 1.4 ,7.6, 9.7, 5.9, 5.0, 9.1, 11.3, ],
             'b': [ 4.9 ],
-            'c': [],
+            'c': { 
+                # Here, unflatten() should detect a list 
+                u'0': 99,
+                u'1': 100,
+                u'2': 199,
+            },
         },
     },
-    'author': u'lalakis',
+    u'author': u'lalakis',
 }
 
 d1 = dictization.flatten(d)

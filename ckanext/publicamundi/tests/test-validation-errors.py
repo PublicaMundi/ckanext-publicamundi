@@ -76,4 +76,19 @@ errs2_dict = x2.dictize_errors(errs2)
 
 print json.dumps(errs2_dict, indent=4)
 
+# Test #3: Fix errors and expect success
+
+x2.tags = [u'hello-world', u'goodbye']
+x2.contacts = { 
+    'personal':  ContactInfo(email=u'nobody@example.com'), 
+    'office': ContactInfo(address=PostalAddress(address=u'Nowhere-Land', postalcode=u'12345'))
+}
+x2.contact_info = ContactInfo(email=u'nomad@somewhere.com')
+
+errs2 = x2.validate()
+assert not errs2
+
+
+
+
 

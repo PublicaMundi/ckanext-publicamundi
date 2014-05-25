@@ -1,5 +1,5 @@
 import itertools
-import ckanext.publicamundi.lib
+import logging
 
 def flatten(d, key_converter=None):
     '''Flatten a dictionary'''
@@ -25,20 +25,31 @@ unflatten = nest
 
 def _nest(d):
     keys = sorted(d)
-    is_list = isinstance(keys[0][0], int)
-    res = [] if is_list else {}
+    # Collect all pairs (k,res1) for this level
+    pairs = list()
+    is_list, i1, i = True, -1, None
     for k,g in itertools.groupby(keys, lambda t: t[0]):
-        d1 = {}
+        # Guess the key type (update is_list flag)
+        if is_list:
+            # We have'nt (yet) discovered a non-index key  
+            i = _as_integer(k)
+            is_list = isinstance(i, int) and (i == i1 +1)
+            i1 = i
+        # Create another pair
+        d1 = dict()
         for k1 in g:
             d1[k1[1:]] = d[k1]
         if d1.has_key(()):
             res1 = d1.pop(())
         else:
             res1 = _nest(d1)
-        if is_list:
-            res.append(res1)
-        else:
-            res[k] = res1
+        pairs.append((k, res1))
+    # Build result to proper type (dict/list)
+    res = None
+    if is_list:
+        res = [ v for k, v in sorted(pairs) ]
+    else:
+        res = dict(pairs)
     return res
 
 def _flatten_items(items):
@@ -60,3 +71,10 @@ def _flatten_items(items):
             res[(k,)] = v
     return res
 
+def _as_integer(x):
+    n = None
+    try:
+        n = int(x)
+    except ValueError:
+        pass
+    return n
