@@ -6,7 +6,7 @@ import zope.schema
 
 import ckanext.publicamundi.lib.dictization as dictization
 from ckanext.publicamundi.lib.metadata import adapter_registry
-from ckanext.publicamundi.lib.metadata.schema import IBaseObject
+from ckanext.publicamundi.lib.metadata.ibase import IBaseObject
 
 _logger = logging.getLogger(__name__)
 

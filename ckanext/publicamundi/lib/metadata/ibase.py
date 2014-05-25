@@ -1,7 +1,4 @@
 import zope.interface 
-import zope.schema
-
-import ckanext.publicamundi.lib
 
 class IBaseObject(zope.interface.Interface):
     

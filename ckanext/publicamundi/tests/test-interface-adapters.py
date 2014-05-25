@@ -1,7 +1,7 @@
 import zope.interface
 
 from ckanext.publicamundi.lib.metadata import adapter_registry
-from ckanext.publicamundi.lib.metadata.schema import *
+from ckanext.publicamundi.lib.metadata.schemata import *
 from ckanext.publicamundi.lib.metadata.types import *
 
 info1 = adapter_registry.queryMultiAdapter([], IContactInfo)
