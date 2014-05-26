@@ -94,18 +94,18 @@ class BaseObject(object):
         return self
     
     def to_json(self, flat=False, indent=None):
+        cls = type(self)
         d = self.to_dict(flat)
         if flat:
-            glue = self.KEY_GLUE
-            convert_key = lambda k: glue.join(map(str,k))
+            convert_key = cls.get_key_serializer(cls.KEY_GLUE)
             d = { convert_key(k): v for k, v in d.items() }
         return json.dumps(d, indent=indent)
 
     def from_json(self, s, is_flat=False):
+        cls = type(self)
         d = json.loads(s)
         if is_flat:
-            glue = self.KEY_GLUE
-            convert_key = lambda k: tuple(k.split(glue))
+            convert_key = cls.get_key_serializer(cls.KEY_GLUE, inverse=True)
             d = dictization.unflatten({ 
                 convert_key(k): v for k, v in d.items() 
             })
@@ -510,4 +510,16 @@ class BaseObject(object):
             return d
         else:
             return v
-       
+    
+    @staticmethod
+    def get_key_serializer(glue, inverse=False):
+        '''Serialize/Unserialize tuple-typed dict keys'''    
+
+        def to_string(k): 
+            return glue.join(map(str, k))
+    
+        def from_string(s):
+            return tuple(str(s).split(glue))
+    
+        return from_string if inverse else to_string
+
