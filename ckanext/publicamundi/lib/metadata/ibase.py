@@ -3,10 +3,12 @@ import zope.interface
 class ISerializer(zope.interface.Interface):
     
     def loads(s, opts=None):
-        '''Load (unserialize) an object a string'''
+        '''Load (unserialize) an object a string
+        '''
     
     def dumps(obj, opts=None):
-        '''Dump (serialize) an object as a string'''
+        '''Dump (serialize) an object as a string
+        '''
 
 class IBaseObject(zope.interface.Interface):
     
