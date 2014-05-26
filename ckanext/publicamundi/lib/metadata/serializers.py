@@ -115,10 +115,10 @@ _field_serializers = {
     zope.schema.Dict: None,
 }
 
-def get_key_tuple_serializer():
+def get_key_tuple_serializer(glue):
     '''Get a proper serializer for a dict tuple-typed key
     '''
-    return KeyTupleSerializer(glue='.', prefix=None, suffix=None)
+    return KeyTupleSerializer(glue, prefix=None, suffix=None)
 
 def get_key_string_serializer():
     '''Get a proper serializer for a dict str-typed key
@@ -129,6 +129,6 @@ def get_field_serializer(F):
     '''Get a proper serializer for a leaf zope.schema.Field instance
     '''
     assert isinstance(F, zope.schema.Field) 
-    serializer = _field_serializers.get(F)
+    serializer = _field_serializers.get(type(F))
     return serializer
 

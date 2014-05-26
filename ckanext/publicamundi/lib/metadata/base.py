@@ -7,7 +7,9 @@ import zope.schema
 
 import ckanext.publicamundi.lib.dictization as dictization
 from ckanext.publicamundi.lib.metadata import adapter_registry
-from ckanext.publicamundi.lib.metadata.ibase import IBaseObject
+from ckanext.publicamundi.lib.metadata.ibase import IBaseObject, ISerializer
+from ckanext.publicamundi.lib.metadata.serializers import get_field_serializer
+from ckanext.publicamundi.lib.metadata.serializers import get_key_tuple_serializer
 
 _logger = logging.getLogger(__name__)
 
@@ -97,17 +99,17 @@ class BaseObject(object):
         cls = type(self)
         d = self.to_dict(flat)
         if flat:
-            convert_key = cls.get_key_serializer(cls.KEY_GLUE)
-            d = { convert_key(k): v for k, v in d.items() }
+            serializer = get_key_tuple_serializer(cls.KEY_GLUE)
+            d = { serializer.dumps(k): v for k, v in d.items() }
         return json.dumps(d, indent=indent)
 
     def from_json(self, s, is_flat=False):
         cls = type(self)
         d = json.loads(s)
         if is_flat:
-            convert_key = cls.get_key_serializer(cls.KEY_GLUE, inverse=True)
+            serializer = get_key_tuple_serializer(cls.KEY_GLUE)
             d = dictization.unflatten({ 
-                convert_key(k): v for k, v in d.items() 
+                serializer.loads(k): v for k, v in d.items() 
             })
         return self.from_dict(d, is_flat=False)
    
@@ -511,15 +513,3 @@ class BaseObject(object):
         else:
             return v
     
-    @staticmethod
-    def get_key_serializer(glue, inverse=False):
-        '''Serialize/Unserialize tuple-typed dict keys'''    
-
-        def to_string(k): 
-            return glue.join(map(str, k))
-    
-        def from_string(s):
-            return tuple(str(s).split(glue))
-    
-        return from_string if inverse else to_string
-
