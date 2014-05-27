@@ -95,11 +95,7 @@ class ITemporalExtent(zope.interface.Interface):
 _mandatory_list = []
 
 class ISpatialResolution(zope.interface.Interface):
-	
-	denominator = zope.schema.Int(
-		title = u'Equivalent scale',
-		required = False)
-
+		
 	distance = zope.schema.Int(
 		title = u'Resolution distance',
 		required = False)
@@ -121,7 +117,7 @@ class IConformity(zope.interface.Interface):
 
 	title = zope.schema.TextLine(
 		title = u'Specifications',
-		required = False)
+		required = True)
 
 	date = zope.schema.Date(
 		title = u'Date',

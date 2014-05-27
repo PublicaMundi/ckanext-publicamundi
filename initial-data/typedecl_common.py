@@ -55,12 +55,10 @@ class TemporalExtent(object):
 class SpatialResolution(object):
 	zope.interface.implements(ISpatialResolution)	
 
-	def __init__(self,denominator,distance,uom):
-		self.denominator = denominator
+	def __init__(self,distance,uom):
 		self.distance = distance
 		self.uom = uom
 	def print_fields(self):
-		print 'Denominator: %s' % self.denominator
 		print 'Distance: %s' % self.distance
 		print 'Uom: %s' % self.uom
 
