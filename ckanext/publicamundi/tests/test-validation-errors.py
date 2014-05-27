@@ -41,7 +41,7 @@ x1 = InspireMetadata(
     url = 'example.com',
     temporal_extent = TemporalExtent(start=datetime.datetime(2014, 5, 27), end='bad date'),
     contact_info = ContactInfo(email='booooo'),
-    contacts = { 'personal': ci11, 'office': ci12 },
+    contacts = { 'personal': ci11, 'office': ci12, 'boo': ContactInfo(email=u'foo@example.com') },
     geometry = [[poly1, poly2,], ['boo', 'far']],
     thematic_category = 'environmental',
 )

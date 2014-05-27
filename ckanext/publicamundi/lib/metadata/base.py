@@ -302,11 +302,18 @@ class BaseObject(object):
         
         def _validate_schema_for_field_items(self, items, F):
             '''Return <errors>'''
-            # Fixme issue #11
-            # If F.key_type exists, validate
-            #   (a) is a Choice field, and
-            #   (b) keys for given items are a subset of Choice.vocabulary
             errors = []
+            # Validate item keys (if defined)
+            if hasattr(F, 'key_type') and F.key_type:
+                assert isinstance(F.key_type, zope.schema.Choice)
+                items = list(items) # hydrate to re-use it
+                for k,y in items:
+                    try:
+                        F.key_type.validate(k)
+                    except zope.interface.Invalid as ex:
+                        errors.append((k, [ex]))
+                pass
+            # Validate item values
             for k,y in items:
                 ef = self._validate_schema_for_field(y, F.value_type)
                 if ef:
