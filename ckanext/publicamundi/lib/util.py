@@ -1,17 +1,8 @@
-import datetime
 import json
 import geojson
 import shapely
 
-class JsonEncoder(json.JSONEncoder):
-    '''Override default json.JSONEncoder behaviour so that it can serialize
-    datetime objects
-    '''
-    def default(self, o):
-        if isinstance(o, datetime.datetime):
-            return o.isoformat()
-        else:
-            return json.JSONEncoder.default(self, o)
+from ckanext.publicamundi.lib.json_encoder import JsonEncoder
 
 def object_to_json(o, indent=None):
     return json.dumps(o, cls=JsonEncoder, indent=indent)

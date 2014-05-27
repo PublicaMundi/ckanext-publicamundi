@@ -15,7 +15,10 @@ import ckan.logic as logic
 
 import ckanext.publicamundi.model as publicamundi_model
 import ckanext.publicamundi.lib.util as publicamundi_util
+import ckanext.publicamundi.lib.metadata as publicamundi_metadata
+
 from ckanext.publicamundi.lib.util import object_to_json
+from ckanext.publicamundi.lib.metadata import dataset_types
 
 _t = toolkit._
 
@@ -33,8 +36,9 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     @classmethod
     def publicamundi_helloworld(cls):
         ''' This is our simple helper function. '''
-        html = '<span>Hello (PublicaMundi) World</span>'
-        return p.toolkit.literal(html)
+        markup = p.toolkit.render_snippet('snippets/hello.html', data={ 'name': 'PublicaMundi' })
+        #markup = '<span>Hello (PublicaMundi) World</span>'
+        return p.toolkit.literal(markup)
 
     @classmethod
     def organization_list_objects(cls, org_names = []):
@@ -92,6 +96,12 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     def dump_jsonpickle(cls, obj):
         return jsonpickle.encode(obj)
 
+    @classmethod
+    def dataset_type_options(cls):
+        '''Provide options for dataset-type (needed for select boxes)'''
+        for name, spec in dataset_types.items():
+            yield { 'value': name, 'text': spec['title'] }
+
     ## ITemplateHelpers interface ##
 
     def get_helpers(self):
@@ -100,6 +110,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         '''
         return {
             # define externsion-specific helpers
+            'dataset_type_options': self.dataset_type_options,
             'publicamundi_helloworld': self.publicamundi_helloworld,
             'organization_list_objects': self.organization_list_objects,
             'organization_dict_objects': self.organization_dict_objects,
@@ -139,55 +150,49 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         return []
 
     def _modify_package_schema(self, schema):
-        ''' Override CKAN's create/update schema '''
+        log1.info('_modify_package_schema(): Building schema ...')
 
-        from ckan.lib.navl.dictization_functions import missing, StopOnError, Invalid
-
-        def baz_converter_1(key, data, errors, context):
-            ''' Some typical behaviour inside a validator/converter '''
-
-            ## Stop processing on this key and signal the validator with another error (an instance of Invalid) 
-            #raise Invalid('The baz value (%s) is invalid' %(data.get(key,'<none>')))
-
-            ## Stop further processing on this key, but not an error
-            #raise StopOnError
-            pass
+        import ckanext.publicamundi.lib.metadata.validators as publicamundi_validators
         
-        def after_validation_processor(key, data, errors, context):
-            assert key[0] == '__after', 'This validator can only be invoked in the __after stage'
-            pass
+        schema['dataset_type'] = [
+            toolkit.get_validator('default')('ckan'),
+            toolkit.get_converter('convert_to_extras'),
+            publicamundi_validators.is_dataset_type,
+        ];
+ 
+        # Add field-based validation processors
+
+        field_name = 'baz'
+        field = publicamundi_metadata.IInspireMetadata.get(field_name)
+        if field.default:
+            x1 = toolkit.get_validator('default')(field.default)
+        elif field.defaultFactory:
+            x1 = toolkit.get_validator('default')(field.defaultFactory())
+        elif not field.required:
+            x1 = toolkit.get_validator('ignore_missing')
+        else:
+            x1 = toolkit.get_validator('not_empty')
+
+        x2 = publicamundi_validators.get_field_validator(field)
+        x3 = toolkit.get_converter('convert_to_extras')
         
-        def before_validation_processor(key, data, errors, context):
-            assert key[0] == '__before', 'This validator can only be invoked in the __before stage'
-            pass
+        schema[field_name] = [x1, x2, x3]
 
-        # Update default validation schema (inherited from DefaultDatasetForm)
 
-        schema.update({
-            'foo': [
-                toolkit.get_validator('ignore_missing'),
-                toolkit.get_converter('convert_to_tags')('foo'),
-            ],
-            'baz': [
-                toolkit.get_validator('ignore_missing'),
-                toolkit.get_converter('convert_to_extras'),
-                baz_converter_1,
-            ],
-        })
+        schema['foo.0.baz'] = [
+            toolkit.get_converter('convert_to_extras')
+        ]
 
-        # Add callbacks to the '__after' pseudo-key to be invoked after all key-based validators/converters
 
+        # Add before/after validation processors
+
+        schema['__before'].insert(-1, publicamundi_validators.dataset_preprocess_edit)
+        
         if not schema.get('__after'):
             schema['__after'] = []
-        schema['__after'].append(after_validation_processor)
-
-        # A similar hook is also provided by the '__before' pseudo-key with obvious functionality.
-
-        if not schema.get('__before'):
-            schema['__before'] = []
-        # any additional validator must be inserted before the default 'ignore' one. 
-        schema['__before'].insert(-1, before_validation_processor) # insert as second-to-last
-
+        schema['__after'].append(publicamundi_validators.dataset_postprocess_edit)
+        schema['__after'].append(publicamundi_validators.dataset_validate)
+       
         return schema
 
     def create_package_schema(self):
@@ -203,11 +208,18 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     def show_package_schema(self):
         schema = super(DatasetForm, self).show_package_schema()
 
+        import ckanext.publicamundi.lib.metadata.validators as publicamundi_validators
+        
+        log1.info(' ** show_package_schema(): Building schema ...')
+
         # Don't show vocab tags mixed in with normal 'free' tags
         # (e.g. on dataset pages, or on the search page)
         schema['tags']['__extras'].append(toolkit.get_converter('free_tags_only'))
-
+        
         schema.update({
+            'dataset_type': [
+                toolkit.get_converter('convert_from_extras'),
+            ],
             'foo': [
                 toolkit.get_converter('convert_from_tags')('foo'),
                 toolkit.get_validator('ignore_missing')
@@ -217,6 +229,10 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
                 toolkit.get_validator('ignore_missing')
             ],
         })
+
+        if not schema.get('__after'):
+            schema['__after'] = []
+        schema['__after'].append(publicamundi_validators.dataset_postprocess_read)
 
         return schema
 
@@ -355,6 +371,7 @@ class PackageController(p.SingletonPlugin):
 
     def _create_or_update_csw_record(self, session, pkg_dict):
         ''' Sync dataset fields to CswRecord fields '''
+        #raise Exception('Break')
         from geoalchemy import WKTSpatialElement
         from ckanext.publicamundi.lib.util import geojson_to_wkt
         # Populate record fields

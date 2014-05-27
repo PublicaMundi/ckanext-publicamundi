@@ -3,7 +3,21 @@
 {# Note: The parent template has aliased c.pkg_dict as pkg #}
 
 {% block package_description %}
+    
   {{ super() }}
+  
+  <div>
+    <dt>Dataset Type:</dt><dd>{{ pkg.dataset_type | default('<none>') }}</dd>
+  </div>
+
+  <div>
+    <dt>Baz:</dt><dd>{{ pkg.baz | default('<none>') }}</dd>
+  </div>
+  
+  <div>
+    <dt>Baz (view):</dt><dd>{{ pkg.baz_view | default('<none>') }}</dd>
+  </div>
+
 
   {# Add our custom "foo" field to the dataset read page. #}
   {#
