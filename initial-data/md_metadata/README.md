@@ -18,13 +18,9 @@ Installation steps
 
     $ cd src
     
-    $ git clone git@github.com:kalxas/OWSLib.git owslib
+    $ git clone https://github.com/geopython/OWSLib.git owslib
     
     $ cd owslib
-    
-    $ git fetch -va origin
-    
-    $ git checkout 159-jinja
     
     $ python setup.py build
     
@@ -35,6 +31,8 @@ Installation steps
 3. Install lxml
 
     $ pip install lxml
+
+    $ pip install jinja2
 
 4. Clone gist:
 
