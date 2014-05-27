@@ -22,6 +22,8 @@ adapter_registry.register([], IPoint, '', Point)
 
 adapter_registry.register([], IPolygon, '', Polygon)
 
+adapter_registry.register([], ITemporalExtent, '', TemporalExtent)
+
 adapter_registry.register([], ICkanMetadata, '', CkanMetadata)
 
 adapter_registry.register([], IInspireMetadata, '', InspireMetadata)

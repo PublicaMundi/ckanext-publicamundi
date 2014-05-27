@@ -23,12 +23,12 @@ class IBaseObject(zope.interface.Interface):
         The invariants (keyed at None) are checked only if schema validation (field-based) succeeds.
         '''
 
-    def to_dict(flat):
+    def to_dict(flat, opts=None):
         '''Convert to a (flattened or nested) dict.
         This method should *not* alter the object itself.
         '''
     
-    def from_dict(d, is_flat=None):
+    def from_dict(d, is_flat=None, opts=None):
         '''(Re)construct this object from a (flattened or nested) dict. 
         If parameter is_flat is not provided, an input dict d with tuple-typed keys will be 
         considered a flattened dict (otherwise, will be considered a nested one).

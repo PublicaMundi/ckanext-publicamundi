@@ -102,13 +102,13 @@ _field_serializers = {
     zope.schema.Text: UnicodeSerializer(),
     zope.schema.BytesLine: None,
     zope.schema.Bytes: None,
-    zope.schema.Int: IntSerializer(),
-    zope.schema.Float: FloatSerializer(),
-    zope.schema.Bool: IntSerializer(),
+    zope.schema.Int: None,
+    zope.schema.Float: None,
+    zope.schema.Bool: None,
     zope.schema.Datetime: DatetimeSerializer(),
-    zope.schema.DottedName: None,
-    zope.schema.URI: None,
-    zope.schema.Id: None,
+    zope.schema.DottedName: StringSerializer(),
+    zope.schema.URI: StringSerializer(),
+    zope.schema.Id: StringSerializer(),
     zope.schema.Choice: None,
     zope.schema.List: None,
     zope.schema.Tuple: None,
@@ -127,6 +127,9 @@ def get_key_string_serializer():
 
 def get_field_serializer(F):
     '''Get a proper serializer for a leaf zope.schema.Field instance
+    
+    Note: 
+    Consider using F.fromUnicode as an unserializer.  
     '''
     assert isinstance(F, zope.schema.Field) 
     serializer = _field_serializers.get(type(F))

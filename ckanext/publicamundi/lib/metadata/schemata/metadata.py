@@ -33,9 +33,12 @@ class IInspireMetadata(IBaseMetadata):
         value_type = zope.schema.TextLine(
             title = u'Tag', 
             constraint = re.compile('[-a-z0-9]+$').match),
-        max_length = 5,
-    )
-    
+        max_length = 5,)
+   
+    temporal_extent = zope.schema.Object(ITemporalExtent,
+        title = u'Temporal Extent',
+        required = False)
+ 
     geometry = zope.schema.List(
         title = u'A collection of areas', 
         required = False,
@@ -45,8 +48,7 @@ class IInspireMetadata(IBaseMetadata):
                 title = u'A polygon'
             ),
             max_length = 2),
-        max_length = 2,
-    )
+        max_length = 2,)
    
     contacts = zope.schema.Dict(
         title = u'A list of contacts', 
@@ -54,8 +56,7 @@ class IInspireMetadata(IBaseMetadata):
         key_type = zope.schema.Choice(('personal', 'office'),
             title = u'The type of contact'),
         value_type = zope.schema.Object(IContactInfo, 
-            title = u'Contact'),
-    )
+            title = u'Contact'))
    
     contact_info = zope.schema.Object(IContactInfo,
         title = u'Contact Info', 

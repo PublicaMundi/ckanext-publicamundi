@@ -6,6 +6,7 @@ import zope.interface.verify
 import zope.schema
 
 import ckanext.publicamundi.lib.dictization as dictization
+from ckanext.publicamundi.lib.json_encoder import JsonEncoder
 from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.ibase import IBaseObject, ISerializer
 from ckanext.publicamundi.lib.metadata.serializers import get_field_serializer
@@ -65,8 +66,6 @@ class BaseObject(object):
     }
 
     KEY_GLUE = '.'
-    
-    META_TYPE_KEY = '_type'
  
     ## interface IBaseObject
 
@@ -77,27 +76,31 @@ class BaseObject(object):
     def validate(self):
         return self._validate()
 
-    def to_dict(self, flat=False):
+    def to_dict(self, flat=False, opts=None):
         if flat:
-            return self.flatten()
+            return self.flatten(opts)
         else:
-            return self.dictize()
+            return self.dictize(opts)
 
-    def from_dict(self, d, is_flat=None):
+    def from_dict(self, d, is_flat=None, opts=None):
         assert isinstance(d, dict)
+        cls = type(self) 
         # Decide if input is a flattened dict
         if is_flat is None:
             is_flat = isinstance(d.iterkeys().next(), tuple)
-            if is_flat:
-                d = dictization.unflatten(d)
+        if is_flat:
+            d = dictization.unflatten(d)
         # (Re)construct self
-        self._construct(d)
+        self.load(d, opts)
         # Allow method chaining
         return self
     
     def to_json(self, flat=False, indent=None):
         cls = type(self)
-        d = self.to_dict(flat)
+        opts = {
+            'serialize-values': True,
+        }
+        d = self.to_dict(flat, opts)
         if flat:
             serializer = get_key_tuple_serializer(cls.KEY_GLUE)
             d = { serializer.dumps(k): v for k, v in d.items() }
@@ -111,7 +114,10 @@ class BaseObject(object):
             d = dictization.unflatten({ 
                 serializer.loads(k): v for k, v in d.items() 
             })
-        return self.from_dict(d, is_flat=False)
+        opts = {
+            'unserialize-values': True,
+        }
+        return self.from_dict(d, is_flat=False, opts=opts)
    
     ## Constructor based on keyword args 
     
@@ -196,7 +202,10 @@ class BaseObject(object):
         return factory
 
     ## Validation helpers
-    
+   
+    class Validator(object):
+        pass
+
     def _validate(self):
         '''Return a list <errors> structured as: 
           
@@ -404,112 +413,170 @@ class BaseObject(object):
             res[k] = self._dictize_errors_for_field(ex, f[k], F.value_type) 
         return res
         
-    
     def flatten_errors(self, errors):
         error_dict = self._dictize_errors(errors)
         return dictization.flatten(error_dict)
 
     ## Dictization helpers
-    
-    def dictize(self):
-        return self._dictize()
 
-    def _dictize(self): 
-        S = self.get_schema()
-        res = {}
-        fields = zope.schema.getFields(S)
-        for k,F in fields.items():
-            f = F.get(self)
-            res[k] = self._dictize_field(f, F) if f else None
-        return res
+    class Dictizer(object):
+        
+        def __init__(self, obj, opts=None):
+            self.obj = obj
+            self.opts = opts or {}
 
-    def _dictize_field(self, f, F):
-        if isinstance(F, zope.schema.Object):
-            return f._dictize()
-        elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
-            a = list()
-            for i,y in enumerate(f):
-                a.append(self._dictize_field(y, F.value_type))
-            return a
-        elif isinstance(F, zope.schema.Dict):
-            d = dict()
-            for k,y in f.items():
-                d[k] = self._dictize_field(y, F.value_type) 
-            return d
-        else:
-            return f
-
-    def flatten(self):
-        return self._flatten()
-
-    def _flatten(self): 
-        S = self.get_schema()
-        res = {}
-        fields = zope.schema.getFields(S)
-        for k,F in fields.items():
-            f = F.get(self)
-            if f:
-                res1 = self._flatten_field(f, F)
-                for k1,v1 in res1.items():
-                    res[(k,)+k1] = v1
-        return res
-
-    def _flatten_field(self, f, F):
-        if isinstance(F, zope.schema.Object):
-            return f._flatten()
-        elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
-            return self._flatten_field_items(enumerate(f), F)
-        elif isinstance(F, zope.schema.Dict):
-            return self._flatten_field_items(f.iteritems(), F)
-        else:
-            return { (): f }
-
-    def _flatten_field_items(self, items, F):
-        d = {}
-        for k,y in items:
-            res1 = self._flatten_field(y, F.value_type)
-            for k1,v1 in res1.items():
-                d[(k,)+k1] = v1
-        return d
-   
-    def _construct(self, d):
-        cls = type(self)
-        S = cls.get_schema()
-        for k,F in zope.schema.getFields(S).items():
-            v = d.get(k)
-            factory = cls.get_field_factory(k, F)
-            f = None
-            if not v: 
-                # No value given, use factory (if exists)
-                f = factory() if factory else F.default
-            else:
-                # Input provided a value on k
-                f = self._make_field(v, F, factory)
-            setattr(self, k, f)
-
-    def _make_field(self, v, F, factory=None):
-        assert isinstance(F, zope.schema.Field)
-        # Find a factory (if missing)
-        if not factory:
-            factory = self.get_field_factory(None, F)
-        # Create a new field instance
-        if isinstance(F, zope.schema.Object):
-            f = factory()
-            f._construct(v)
-            return f
-        elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
-            a = list()
-            for i,y in enumerate(v):
-                v1 = self._make_field(y, F.value_type)
-                a.append(v1)
-                pass
-            return a
-        elif isinstance(F, zope.schema.Dict):
-            d = dict()
-            for k,y in v.items():
-                v1 = self._make_field(y, F.value_type)
-                d[k] = v1
-            return d
-        else:
+        def dictize(self):
+            S = self.obj.get_schema()
+            res = {}
+            fields = zope.schema.getFields(S)
+            for k,F in fields.items():
+                f = F.get(self.obj)
+                res[k] = self._dictize_field(f, F) if f else None
+            return res
+        
+        def _get_field_value(self, f, F):
+            '''Get the value of a field considered as a leaf. 
+            Serialize this value if requested so.
+            '''
+            v = f
+            if self.opts.get('serialize-values'):
+                serializer = get_field_serializer(F)
+                if serializer:
+                    v = serializer.dumps(f)
             return v
+       
+        def _dictize_field(self, f, F):
+            if isinstance(F, zope.schema.Object):
+                cls = type(self) 
+                return cls(f, self.opts).dictize()
+            elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
+                a = list()
+                for i,y in enumerate(f):
+                    a.append(self._dictize_field(y, F.value_type))
+                return a
+            elif isinstance(F, zope.schema.Dict):
+                d = dict()
+                for k,y in f.items():
+                    d[k] = self._dictize_field(y, F.value_type) 
+                return d
+            else:
+                # A leaf field 
+                return self._get_field_value(f, F) 
+                
+        def flatten(self):
+            S = self.obj.get_schema()
+            res = {}
+            fields = zope.schema.getFields(S)
+            for k,F in fields.items():
+                f = F.get(self.obj)
+                if f:
+                    res1 = self._flatten_field(f, F)
+                    for k1,v1 in res1.items():
+                        res[(k,)+k1] = v1
+            return res
+
+        def _flatten_field(self, f, F):
+            if isinstance(F, zope.schema.Object):
+                cls = type(self) 
+                return cls(f, self.opts).flatten()
+            elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
+                return self._flatten_field_items(enumerate(f), F)
+            elif isinstance(F, zope.schema.Dict):
+                return self._flatten_field_items(f.iteritems(), F)
+            else:
+                # A leaf field
+                v = self._get_field_value(f, F)
+                return { (): v }
+
+        def _flatten_field_items(self, items, F):
+            d = dict()
+            for k,y in items:
+                res1 = self._flatten_field(y, F.value_type)
+                for k1,v1 in res1.items():
+                    d[(k,)+k1] = v1
+            return d
     
+    class Loader(object):
+         
+        def __init__(self, obj, opts=None):
+            self.obj = obj
+            self.opts = opts or {}
+        
+        def load(self, d):
+            S = self.obj.get_schema()
+            for k,F in zope.schema.getFields(S).items():
+                v = d.get(k)
+                factory = self.obj.get_field_factory(k, F)
+                f = None
+                if not v: 
+                    # No value given, use factory (if exists)
+                    f = factory() if factory else F.default
+                else:
+                    # Input provided a value on k
+                    f = self._create_field(v, F, factory)
+                setattr(self.obj, k, f)
+            return
+        
+        def _create_field(self, v, F, factory=None):
+            assert isinstance(F, zope.schema.Field)
+            cls = type(self)
+            # Find a factory (if not given)
+            if not factory:
+                factory = self.obj.get_field_factory(None, F)
+            # Create a new field instance
+            if isinstance(F, zope.schema.Object):
+                f = factory()
+                cls(f, self.opts).load(v)
+                return f
+            elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
+                a = list()
+                for i,y in enumerate(v):
+                    f1 = self._create_field(y, F.value_type)
+                    a.append(f1)
+                return a
+            elif isinstance(F, zope.schema.Dict):
+                d = dict()
+                for k,y in v.items():
+                    f1 = self._create_field(y, F.value_type)
+                    d[k] = f1
+                return d
+            else:
+                # A leaf field (may need to be unserialized)
+                f = v 
+                if self.opts.get('unserialize-values'):
+                    serializer = get_field_serializer(F)
+                    if serializer:
+                        f = serializer.loads(v)
+                return f
+        
+    class Factory(object):
+        
+        def __init__(self, iface, opts=None):
+            assert iface.extends(IBaseObject), 'Expected a schema-providing interface'
+            self.target_iface = iface
+            self.target_cls = adapter_registry.lookup([], iface, '')
+            if not self.target_cls:
+                raise ValueError('Cannot find a class implementing %s' %(iface))
+            self.opts = {
+                'unserialize-values': False,
+            }
+            self.opts.update(opts or {})
+        
+        def from_dict(self, d, is_flat=False):
+            return self.target_cls().from_dict(d, is_flat, self.opts)
+
+        def __call__(self, d=None, is_flat=False):
+            return self.from_dict(d, is_flat)
+    
+    def dictize(self, opts=None):
+        cls = type(self)
+        return cls.Dictizer(self, opts).dictize()
+
+    def flatten(self, opts=None):
+        cls = type(self)
+        return cls.Dictizer(self, opts).flatten()
+    
+    def load(self, d, opts=None):
+        cls = type(self)
+        return cls.Loader(self, opts).load(d)
+

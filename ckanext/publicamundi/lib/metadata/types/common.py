@@ -36,3 +36,9 @@ class Polygon(BaseObject):
     points = None
     name = None
 
+class TemporalExtent(BaseObject):
+    zope.interface.implements(ITemporalExtent)
+    
+    start = None
+    end = None
+

@@ -1,6 +1,7 @@
 import zope.interface 
 import zope.schema
 import re
+import datetime
 
 from ckanext.publicamundi.lib.metadata.ibase import IBaseObject
 
@@ -45,4 +46,22 @@ class IContactInfo(IBaseObject):
     def not_empty(obj):
         if obj.email is None and obj.address is None:
             raise zope.interface.Invalid('At least one of email/address should be supplied')
+
+class ITemporalExtent(IBaseObject):
+
+    start = zope.schema.Datetime(
+        title = u'Starting date',
+        required = False,
+        max = datetime.datetime.now())
+
+    end = zope.schema.Datetime(
+        title = u'Ending date',
+        required = False)
+
+    @zope.interface.invariant
+    def check_date_order(obj):
+        if obj.start > obj.end:
+            msg = 'The start-date (%s) is later than end-date (%s)' % (obj.start,obj.end)
+            raise zope.interface.Invalid(msg)
+
 
