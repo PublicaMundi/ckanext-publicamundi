@@ -1,9 +1,18 @@
 # -*- coding: utf-8 -*-
 
-languages = [{'display': 'Greek', 'value': 'el'}, {'display': 'English', 'value': 'en'}, {'display': 'Italian', 'value': 'it'}, {'display': 'Irish', 'value': 'ga'}, {'display': 'Czech', 'value': 'cs'}, {'display': 'Estonian', 'value': 'et'}, {'display': 'Spanish', 'value': 'es'}, {'display': 'Dutch', 'value': 'nl'}, {'display': 'Portuguese', 'value': 'pt'}, {'display': 'Latvian', 'value': 'lv'}, {'display': 'Lithuanian', 'value': 'lt'}, {'display': 'Romanian', 'value': 'ro'}, {'display': 'Polish', 'value': 'pl'}, {'display': 'French', 'value': 'fr'}, {'display': 'Bulgarian', 'value': 'bg'}, {'display': 'German', 'value': 'de'}, {'display': 'Danish', 'value': 'da'}, {'display': 'Finnish', 'value': 'fi'}, {'display': 'Hungarian', 'value': 'hu'}, {'display': 'Swedish', 'value': 'sv'}, {'display': 'Slovak', 'value': 'sk'}, {'display': 'Maltese', 'value': 'mt'}, {'display': 'Slovenian', 'value': 'sl'}]
+from keywords import keywords
 
 
-topic_category = [{'display': 'IntelligenceMilitary', 'display-el': "Στρατιωτικές πληροφορίες",'value': 'intelligencemilitary'}, 
+vocabularies = {
+'languages' : 
+{
+'name' : 'Languages',
+'terms' : [{'display': 'Greek', 'value': 'el'}, {'display': 'English', 'value': 'en'}, {'display': 'Italian', 'value': 'it'}, {'display': 'Irish', 'value': 'ga'}, {'display': 'Czech', 'value': 'cs'}, {'display': 'Estonian', 'value': 'et'}, {'display': 'Spanish', 'value': 'es'}, {'display': 'Dutch', 'value': 'nl'}, {'display': 'Portuguese', 'value': 'pt'}, {'display': 'Latvian', 'value': 'lv'}, {'display': 'Lithuanian', 'value': 'lt'}, {'display': 'Romanian', 'value': 'ro'}, {'display': 'Polish', 'value': 'pl'}, {'display': 'French', 'value': 'fr'}, {'display': 'Bulgarian', 'value': 'bg'}, {'display': 'German', 'value': 'de'}, {'display': 'Danish', 'value': 'da'}, {'display': 'Finnish', 'value': 'fi'}, {'display': 'Hungarian', 'value': 'hu'}, {'display': 'Swedish', 'value': 'sv'}, {'display': 'Slovak', 'value': 'sk'}, {'display': 'Maltese', 'value': 'mt'}, {'display': 'Slovenian', 'value': 'sl'}]
+},
+'topic_category': 
+{
+'name': 'Topic Category',
+'terms': [{'display': 'IntelligenceMilitary', 'display-el': "Στρατιωτικές πληροφορίες",'value': 'intelligencemilitary'}, 
 		{'display': 'Environment', 'display-el':"Περιβάλλον", 'value': 'environment'}, 
 		{'display': 'GeoscientificInformation', 'display-el':"Γεωεπιστημονικές πληροφορίες",'value': 'geoscientificinformation'}, 
 		{'display': 'Elevation', 'display-el':"Υψομετρία",'value': 'elevation'}, 
@@ -22,8 +31,11 @@ topic_category = [{'display': 'IntelligenceMilitary', 'display-el': "Στρατ�
 		{'display': 'Farming', 'display-el':"Γεωργία",'value': 'farming'}, 
 		{'display': 'ImageryBaseMapsEarthCover', 'display-el':"Ορθοεικόνες/Βασικοί χάρτες/Κάλυψη γης",'value': 'imagerybasemapsearthcover'}, 
 		{'display': 'Economy', 'display-el':"Οικονομία",'value': 'economy'}]
-
-countries = [{'display': 'Belgium', 'value': 'BE'}, 
+},
+'countries' :
+{
+'name' : 'Countries',
+'terms': [{'display': 'Belgium', 'value': 'BE'}, 
 		{'display': 'France', 'value': 'FR'}, 
 		{'display': 'Bulgaria', 'value': 'BG'}, 
 		{'display': 'Bosnia and Herzegovina', 'value': 'BA'}, 
@@ -85,17 +97,26 @@ countries = [{'display': 'Belgium', 'value': 'BE'},
 		{'display': 'Malta', 'value': 'MT'}, 
 		{'display': 'Martinique', 'value': 'MQ'}, 
 		{'display': 'Ukraine', 'value': 'UA'}]
-
-date_types = [
+},
+'date_types': 
+{
+'name' : 'Date Types',
+'terms': [
             {'value':"creation", 'display':"Date of Creation", 'display-el':"Ημερομηνία δημιουργίας"},
             {'value':"publication", 'display':"Publication Date", 'display-el': "Ημερομηνία δημοσίευσης"},
             {'value':"revision", 'display':"Last revision Date", 'display-el': "Ημερομηνία τελευταίας αναθεώρησης"}]
-
-degrees = [{'display': 'Not evaluated', 'value': 'not_evaluated'}, {'display': 'Conformant', 'value': 'conformant'}, {'display': 'Not conformant', 'value': 'not_conformant'}]
-
-
-
-party_roles = [{'display': 'Originator', 'display-el':"Δημιουργός",'value': 'originator'}, 
+},
+'degrees':
+{
+'name' : 'Degrees',
+'terms': [{'display': 'Not evaluated', 'value': 'not_evaluated'}, 
+        {'display': 'Conformant', 'value': 'conformant'}, 
+        {'display': 'Not conformant', 'value': 'not_conformant'}]
+},
+'party_roles' : 
+{
+'name' : 'Party Roles',
+'terms': [{'display': 'Originator', 'display-el':"Δημιουργός",'value': 'originator'}, 
 		{'display': 'PointOfContact','display-el':"Αρμόδιος για επικοινωνία", 'value': 'pointofcontact'}, 
 		{'display': 'Custodian', 'display-el':"Υπόλογος", 'value': 'custodian'}, 
 		{'display': 'ResourceProvider','display-el':"Πάροχος πόρου", 'value': 'resourceprovider'}, 
@@ -106,44 +127,16 @@ party_roles = [{'display': 'Originator', 'display-el':"Δημιουργός",'va
 		{'display': 'PrincipalInvestigator', 'display-el':"Πρωτεύων διερευνητής", 'value': 'investigator'}, 
 		{'display': 'Author','display-el': "Συντάκτης", 'value': 'author'}, 
 		{'display': 'Processor', 'display-el':"Επεξεργαστής", 'value': 'processor'}]
+},
+'keywords' :
+{
+'name' : 'Keywords',
+'terms' : keywords 
+## keywords = { 'test_vocabulary': {'display' : 'Test Vocab', 'terms' : [{'display':'Keyword 1', 'value':'keyword1'}, {'display':'Keyword 2','value':'keyword2'}] }, 'test_vocabulary_2':{'display' : 'Test vocab 2','terms' : [{'display':'Keyword1','value':'keyword1'}]} }
+}
+}
 
 
-
-inspire_data_themes_gr = [
-            "Έδαφος",
-            "Ανθρώπινη υγεία και ασφάλεια",
-            "Ατμοσφαιρικές συνθήκες",
-            "Βιογεωγραφικές περιοχές",
-            "Γεωλογία",
-            "Γεωργικές εγκαταστάσεις και εγκαταστάσεις υδατοκαλλιέργειας",
-            "Γεωτεμάχια κτηματολογίου",
-            "Δίκτυα μεταφορών",
-            "Διευθύνσεις",
-            "Διοικητικές ενότητες",
-            "Εγκαταστάσεις παραγωγής και βιομηχανικές εγκαταστάσεις",
-            "Εγκαταστάσεις παρακολούθησης του περιβάλλοντος",
-            "Ενδιαιτήματα και βιότοποι",
-            "Ενεργειακοί πόροι",
-            "Επιχειρήσεις κοινής ωφελείας και κρατικές υπηρεσίες",
-            "Ζώνες διαχείρισης/περιορισμού/ρύθμισης εκτάσεων και μονάδες αναφοράς",
-            "Ζώνες φυσικών κινδύνων",
-            "Θαλάσσιες περιοχές",
-            "Κάλυψη γης",
-            "Κατανομή ειδών",
-            "Κατανομή πληθυσμού - δημογραφία",
-            "Κτίρια",
-            "Μετεωρολογικά γεωγραφικά χαρακτηριστικά",
-            "Ορθοφωτογραφία",
-            "Ορυκτοί πόροι",
-            "Προστατευόμενες τοποθεσίες",
-            "Στατιστικές μονάδες",
-            "Συστήματα γεωγραφικού καννάβου",
-            "Συστήματα συντεταγμένων",
-            "Τοπωνύμια",
-            "Υδρογραφία",
-            "Υψομετρία",
-            "Χρήσεις γης",
-            "Ωκεανογραφικά γεωγραφικά χαρακτηριστικά"]
 
 
 

@@ -1,10 +1,8 @@
 import zope.interface
 import zope.schema
-from zope.schema.vocabulary import SimpleVocabulary
 from schema_common import *
 import re
 import datetime
-import vocabularies
 
 gemet_inspire_data_themes = 'Inspire Data Themes'
 _inspire_data_themes_items = []
@@ -21,9 +19,7 @@ class IInspireMetadata(zope.interface.Interface):
         description = u"This is the description of the organisation responsible for the creation and maintenance of the metadata. This description shall include:   - the name of the organisation as free text, - a contact e-mail address as a character string.",
         required = True,
         min_length = 1,
-        value_type = zope.schema.Object(IResponsibleParty, 
-            title = u'A Point of Contact',
-            required = True))
+        value_type = zope.schema.Object(IResponsibleParty, title = u'A Point of Contact',required = True)) 
     
     datestamp = zope.schema.Date(
         title = u'Metadata Date',
@@ -32,7 +28,7 @@ class IInspireMetadata(zope.interface.Interface):
         default = datetime.date.today(),
         max = datetime.date.today())
     
-    languagecode = zope.schema.Choice(Helper.flatten_dict_vals(vocabularies.languages),
+    languagecode = zope.schema.Choice(h.get_terms('languages'),
         title = u'Metadata Language',
         description = u"This is the language in which the metadata elements are expressed.The value domain of this metadata element is limited to the official languages of the Community expressed in conformity with ISO 639-2.",
         required = True,
@@ -73,7 +69,7 @@ class IInspireMetadata(zope.interface.Interface):
         title = u'Resource Language',
         description = u"The language(s) used within the resource. The value domain of this metadata element is limited to the languages defined in ISO 639-2.",
         required = False,
-        value_type = zope.schema.Choice(Helper.flatten_dict_vals(vocabularies.languages)))
+        value_type = zope.schema.Choice(h.get_terms('languages')))
     ## TODO: identtype, textline, choice?? 
     
     #Classification 
@@ -82,7 +78,7 @@ class IInspireMetadata(zope.interface.Interface):
         title = u'Topic Category',
         description = u"The topic category is a high-level classification scheme to assist in the grouping and topic-based search of available spatial data resources. The value domain of this metadata element is defined in Part D.2.",
         required = True,
-        value_type = zope.schema.Choice(Helper.flatten_dict_vals(vocabularies.topic_category)))
+        value_type = zope.schema.Choice(h.get_terms('topic_category')))
     #Keywords 
     
     keywords = zope.schema.List(
@@ -154,14 +150,16 @@ class IInspireMetadata(zope.interface.Interface):
     @zope.interface.invariant
     def check_creation_publication_order(obj):
         _a_greater_b_called.append(obj)
-        if obj.creation_date > obj.publication_date:
-            raise zope.interface.Invalid('Creation date (%s) later than publication date (%s)' % (obj.creation_date,obj.publication_date))
+        if obj.creation_date and obj.publication_date:
+            if obj.creation_date > obj.publication_date:
+                raise zope.interface.Invalid('Creation date (%s) later than publication date (%s)' % (obj.creation_date,obj.publication_date))
 
     @zope.interface.invariant
     def check_publication_revision_order(obj):
         _a_greater_b_called.append(obj)
-        if obj.publication_date > obj.revision_date:
-            raise zope.interface.Invalid('Publication date (%s) later than last revision date (%s)' % (obj.publication_date,obj.revision_date))
+        if obj.publication_date and obj.revision_date:
+            if obj.publication_date > obj.revision_date:
+                raise zope.interface.Invalid('Publication date (%s) later than last revision date (%s)' % (obj.publication_date,obj.revision_date))
 
     # Quality & Validity
     
@@ -171,8 +169,8 @@ class IInspireMetadata(zope.interface.Interface):
         required = False)
 
     denominator = zope.schema.List(
-		title = u'Equivalent scale',
-		required = False,
+        title = u'Equivalent scale',
+        required = False,
         value_type = zope.schema.Int())
 
     spatial_resolution = zope.schema.List(

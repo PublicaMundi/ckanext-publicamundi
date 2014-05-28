@@ -1,8 +1,9 @@
 import zope.interface
 from schema import *
 from owslib.iso import *
-from jinja2 import Environment, FileSystemLoader
+#from jinja2 import Environment, FileSystemLoader
 from typedecl_common import *
+import ckan.plugins as p
 
 class InspireMetadata(object):
     zope.interface.implements(IInspireMetadata)
@@ -152,103 +153,13 @@ class InspireMetadata(object):
 
     @classmethod
     def to_xml(cls,imd,outfile):
-        md = MD_Metadata()
-
-        md.identification = MD_DataIdentification()
-        md.dataquality = DQ_DataQuality()
-        md.distribution = MD_Distribution()
-        md.identification.extent = EX_Extent()
-        md.identification.extent.boundingBox = EX_GeographicBoundingBox()
-
-        for it in imd.contact:
-            val = CI_ResponsibleParty()
-            val.organization = it.organization
-            val.email = it.email[0]
-            val.role = it.role
-            md.contact.append(val)
-
-        md.datestamp = imd.datestamp
-        md.languagecode = imd.languagecode
-        md.identification.title = imd.title
-        md.identification.abstract = imd.abstract
-        md.identification.identtype = 'dataset'
-        
-        for it in imd.locator:
-            val = CI_OnlineResource()
-            val.url = it
-            md.distribution.online.append(val)
-
-        md.identifier = imd.identifier[0]
-        md.identification.uricode = imd.identifier
-        md.identification.resourcelanguage = imd.resource_language
-        md.identification.topiccategory = imd.topic_category
-
-        # Keyword/Keyword (GIMED):
-        for it in imd.keywords:
-            kw = {}
-            kw['keywords'] = it.get('terms')
-            kw['type'] = None
-            kw['thesaurus'] = {}
-            kw['thesaurus']['date'] = it.get('date')
-            kw['thesaurus']['datetype'] = it.get('datetype')
-            kw['thesaurus']['title'] = it.get('name')
-            md.identification.keywords.append(kw)
-
-        md.identification.extent.boundingBox.miny = imd.bounding_box[0].sblat
-        md.identification.extent.boundingBox.maxy = imd.bounding_box[0].nblat
-        md.identification.extent.boundingBox.minx = imd.bounding_box[0].wblng
-        md.identification.extent.boundingBox.maxx = imd.bounding_box[0].eblng
-
-        md.identification.temporalextent_start = imd.temporal_extent[0].start
-        md.identification.temporalextent_end = imd.temporal_extent[0].end
-
-        val = CI_Date()
-        val.date = imd.publication_date
-        val.type = 'publication'
-        md.identification.date.append(val)
-
-        val = CI_Date()
-        val.date = imd.creation_date
-        val.type = 'creation'
-        md.identification.date.append(val)
-
-        val = CI_Date()
-        val.date = imd.revision_date
-        val.type = 'revision'
-        md.identification.date.append(val)
-
-        md.identification.denominators = imd.denominator
-        for k in imd.spatial_resolution:
-            md.identification.denominators.append(k.distance)
-            md.identification.denominators.append(k.uom)
-
-        md.dataquality.lineage = imd.lineage
-
-        for k in imd.conformity:
-            md.dataquality.conformancetitle.append(k.title)
-            md.dataquality.conformancedate.append(k.date)
-            md.dataquality.conformancedatetype.append(k.date_type)
-            md.dataquality.conformancedegree.append(k.degree)
-
-
-        md.identification.accessconstraints = 'otherRestrictions'
-        md.identification.otherconstraints = imd.limitations
-
-        md.identification.uselimitation = imd.access_constraints
-
-        for it in imd.responsible_party:
-            val = CI_ResponsibleParty()
-            val.organization = it.organization
-            val.email = it.email[0]
-            val.role = it.role
-            md.identification.contact.append(val)
-
 
         # Save custom record to a valid ISO XML file
-        env = Environment(loader=FileSystemLoader('.'))
-        env.globals.update(zip=zip)
-        template = env.get_template('mdmetadata2iso.xml')
-        iso_xml = template.render(md=md)
+        #env = Environment(loader=FileSystemLoader('.'))
+        #env.globals.update(zip=zip)
+        #template = env.get_template('mdmetadata_iso.xml')
+        #iso_xml = template.render(md=md)
+        iso_xml = p.toolkit.render('package/inspire_iso.xml',extra_vars={'data':imd})
         xml_file = outfile
         xml_file = open(outfile, "w")
         xml_file.write(iso_xml)

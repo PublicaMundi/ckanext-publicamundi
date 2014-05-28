@@ -4,7 +4,7 @@ from zope.schema.vocabulary import SimpleVocabulary
 import re
 import datetime
 import vocabularies 
-from helper import *
+import helper as h
 
 class IResponsibleParty(zope.interface.Interface):
 	organization = zope.schema.TextLine(
@@ -19,7 +19,7 @@ class IResponsibleParty(zope.interface.Interface):
 			title = u'Email',
 			constraint = re.compile("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").match))
 
-	role = zope.schema.Choice(Helper.flatten_dict_vals(vocabularies.party_roles),
+	role = zope.schema.Choice(h.get_terms('party_roles'),
 		title = u'Responsible party role',
 		description = u'This is the role of the responsible organisation.',
 		required = True)
@@ -36,8 +36,9 @@ class IFreeKeyword(zope.interface.Interface):
 		required = False)
 	reference_date = zope.schema.Date(
 		title = u'Reference date',
-		required = False)
-	date_type = zope.schema.Choice(Helper.flatten_dict_vals(vocabularies.date_types),
+		required = False,
+        max = datetime.date.today())
+	date_type = zope.schema.Choice(h.get_terms('date_types'),
 		title = u'Date Type',
 		required = False)
 	
@@ -124,12 +125,13 @@ class IConformity(zope.interface.Interface):
 		required = True,
 		max = datetime.date.today())
 
-	date_type = zope.schema.Choice(Helper.flatten_dict_vals(vocabularies.date_types),
+	date_type = zope.schema.Choice(h.get_terms('date_types'),
 		title = u'Date type',
 		required = True)
 
-	degree = zope.schema.Choice(Helper.flatten_dict_vals(vocabularies.degrees),
+	degree = zope.schema.Choice(h.get_terms('degrees'),
 		title = u'Degree',
 		description = u'This is the degree of conformity of the resource to the implementing rules adopted under Article 7(1) of Directive 2007/2/EC or other specification.',
 		default = "not_evaluated",
 		required = True)
+

@@ -5,7 +5,7 @@ from typedecl_common import *
 from typedecl import *
 
 print 'Testing Metadata\n'
-# if date entered wrong datetime.date raises error
+# if date entered wrong datetime.datetime raises error
 
 ###	def __init__(self,contact,datestamp,languagecode,title,identifier,abstract,locator,resource_language,topic_category,keywords, bounding_box,temporal_extent,creation_date,publication_date,revision_date,lineage,spatial_resolution,conformity,access_constraints,limitations,responsible_party):
 
