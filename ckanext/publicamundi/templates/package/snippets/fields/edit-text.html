@@ -1,0 +1,13 @@
+{% import "macros/form.html" as form %}
+{% set field_name = name_prefix ~ F.getName() %}
+{% set field_title = title or  F.title %}
+{{ 
+    form.input(field_name, 
+        label = title or F.title, 
+        id = field_name, 
+        placeholder = F.default or '', 
+        value = f, 
+        error = errors,  
+        classes = ['control-medium', 'field-edit-' ~ field_name ~ 'wrapper' ]
+    ) 
+}}

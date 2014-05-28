@@ -8,6 +8,7 @@ from ckanext.publicamundi.lib.metadata.ibase import ISerializer, IBaseObject
 from ckanext.publicamundi.lib.metadata.base import BaseObject
 from ckanext.publicamundi.lib.metadata.schemata import ICkanMetadata, IInspireMetadata
 from ckanext.publicamundi.lib.metadata.types import CkanMetadata, InspireMetadata
+from ckanext.publicamundi.lib.metadata.widgets import get_markup_for_field, get_markup_for_object 
 
 dataset_types = {
     'ckan': { 

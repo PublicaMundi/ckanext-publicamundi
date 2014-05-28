@@ -11,7 +11,7 @@ from ckanext.publicamundi.lib.metadata.widgets.ibase import IWidget, IFieldWidge
 class FieldWidget(object):
     zope.interface.implements(IFieldWidget)
 
-    def __init__(self, f, F):
+    def __init__(self, F, f):
         assert isinstance(F, zope.schema.Field)
         self.field_value = f
         self.field_def = F
