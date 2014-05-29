@@ -114,8 +114,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'publicamundi_helloworld': self.publicamundi_helloworld,
             'organization_list_objects': self.organization_list_objects,
             'organization_dict_objects': self.organization_dict_objects,
-            'markup_for_field': publicamundi_metadata.get_markup_for_field,
-            'markup_for_object': publicamundi_metadata.get_markup_for_object,
+            'markup_for_field': publicamundi_metadata.generate_markup_for_field,
+            'markup_for_object': publicamundi_metadata.generate_markup_for_object,
             # define debug helpers
             'debug_template_vars': self.debug_template_vars,
             'dump_jsonpickle': self.dump_jsonpickle,

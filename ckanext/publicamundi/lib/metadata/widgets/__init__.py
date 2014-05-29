@@ -9,7 +9,7 @@ from ckanext.publicamundi.lib.metadata.widgets.base import FieldWidget, ObjectWi
 from ckanext.publicamundi.lib.metadata.widgets import read as read_widgets 
 from ckanext.publicamundi.lib.metadata.widgets import edit as edit_widgets
 
-def get_markup_for_field(action, F, f, name_prefix='', title=None, description=None):
+def generate_markup_for_field(action, F, f, name_prefix='', title=None, description=None):
     assert isinstance(F, zope.schema.Field)
     w = adapter_registry.queryMultiAdapter([F, f], IFieldWidget, action)
     if not w:
@@ -21,7 +21,7 @@ def get_markup_for_field(action, F, f, name_prefix='', title=None, description=N
         'errors': [], # Todo 
     })
 
-def get_markup_for_object(action, obj, name_prefix='', title=None, description=None):
+def generate_markup_for_object(action, obj, name_prefix='', title=None, description=None):
     assert isinstance(obj, BaseObject)
     # Todo
     pass
