@@ -13,8 +13,8 @@
 
 
 {% block package_metadata_fields %}
- 
   
+  {#
   {% if data.get('state') == 'draft' %}
   {{ form.select('dataset_type', 
         label = _('Dataset Type'), 
@@ -26,6 +26,8 @@
   {{ form.hidden('dataset_type', data.get('dataset_type')) }}
   <div><dt>Dataset Type:</dt><dd>{{ data.get('dataset_type') }}</dd></div>
   {% endif %}
+  #}
+
   
   
   {{ form.input('baz', 
@@ -46,9 +48,6 @@
         classes=['control-medium']) 
   }}
  
-
-
-
   {#
   {% set music_genres = data.get('foo', [None]) %}
   {{ form.select('foo', 
@@ -62,3 +61,6 @@
   {{ super() }}
 
 {% endblock %}
+
+
+{% resource 'ckanext-publicamundi/datepicker' %}
