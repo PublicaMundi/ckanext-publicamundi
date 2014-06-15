@@ -6,7 +6,7 @@ from ckanext.publicamundi.lib.metadata import BaseObject
 
 from ckanext.publicamundi.lib.metadata.widgets.ibase import IFieldWidget, IObjectWidget
 from ckanext.publicamundi.lib.metadata.widgets.base import FieldWidget, ObjectWidget
-from ckanext.publicamundi.lib.metadata.widgets import read as read_widgets 
+from ckanext.publicamundi.lib.metadata.widgets import read as read_widgets
 from ckanext.publicamundi.lib.metadata.widgets import edit as edit_widgets
 
 def generate_markup_for_field(action, F, f, name_prefix='', title=None, description=None):
@@ -26,15 +26,15 @@ def generate_markup_for_object(action, obj, name_prefix='', title=None, descript
     # Todo
     pass
 
-adapter_registry.register([zope.schema.interfaces.IText, None], 
+adapter_registry.register([zope.schema.interfaces.IText, None],
     IFieldWidget, 'read', read_widgets.TextFieldWidget)
 
-adapter_registry.register([zope.schema.interfaces.ITextLine, None], 
+adapter_registry.register([zope.schema.interfaces.ITextLine, None],
     IFieldWidget, 'read', read_widgets.TextFieldWidget)
 
-adapter_registry.register([zope.schema.interfaces.IText, None], 
+adapter_registry.register([zope.schema.interfaces.IText, None],
     IFieldWidget, 'edit', edit_widgets.TextFieldWidget)
 
-adapter_registry.register([zope.schema.interfaces.ITextLine, None], 
+adapter_registry.register([zope.schema.interfaces.ITextLine, None],
     IFieldWidget, 'edit', edit_widgets.TextFieldWidget)
 
