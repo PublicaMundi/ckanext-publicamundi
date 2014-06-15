@@ -10,7 +10,7 @@ Install
     paster publicamundi-setup --config /path/to/development.ini
 
 Uninstall
-----------
+---------
 
     paster publicamundi-cleanup --config /path/to/development.ini
 
