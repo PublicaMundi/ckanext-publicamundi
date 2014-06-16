@@ -143,8 +143,12 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         mapper.connect ('/api/util/resource/mimetype_autocomplete',
             controller='ckanext.publicamundi.controllers.api:Controller', action='mimetype_autocomplete')
+
         #mapper.connect('tags', '/tags',
         #    controller='ckanext.publicamundi.controllers.tags:Controller', action='index')
+
+        mapper.connect('publicamundi-tests', '/testing/publicamundi/{action}',
+            controller='ckanext.publicamundi.controllers.tests:TestsController',)
 
         return mapper
 
@@ -181,7 +185,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             toolkit.get_converter('convert_to_extras'),
             publicamundi_validators.is_dataset_type,
         ];
- 
+
         # Add field-based validation processors
 
         field_name = 'baz'
@@ -197,24 +201,24 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         x2 = publicamundi_validators.get_field_validator(field)
         x3 = toolkit.get_converter('convert_to_extras')
-        
+
         schema[field_name] = [x1, x2, x3]
 
 
-        schema['foo.0.baz'] = [
-            toolkit.get_converter('convert_to_extras')
-        ]
+        #schema['foo.0.baz'] = [
+        #    toolkit.get_converter('convert_to_extras')
+        #]
 
 
         # Add before/after validation processors
 
         schema['__before'].insert(-1, publicamundi_validators.dataset_preprocess_edit)
-        
+
         if not schema.get('__after'):
             schema['__after'] = []
         schema['__after'].append(publicamundi_validators.dataset_postprocess_edit)
         schema['__after'].append(publicamundi_validators.dataset_validate)
-       
+
         return schema
 
     def create_package_schema(self):
