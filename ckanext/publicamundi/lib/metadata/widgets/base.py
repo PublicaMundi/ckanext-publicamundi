@@ -18,7 +18,7 @@ class FieldWidget(object):
 
     def get_template(self):
         raise NotImplementedError('This method should be defined in a derived class')
-    
+
     def render(self, name_prefix, data={}):
         tpl = self.get_template()
         data.update({
@@ -26,9 +26,8 @@ class FieldWidget(object):
             'f': self.field_value,
             'F': self.field_def,
         })
-        markup = toolkit.render_snippet(tpl, data) 
+        markup = toolkit.render_snippet(tpl, data)
         return toolkit.literal(markup)
-
 
 class ObjectWidget(object):
     zope.interface.implements(IObjectWidget)

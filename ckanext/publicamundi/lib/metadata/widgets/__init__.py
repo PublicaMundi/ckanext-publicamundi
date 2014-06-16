@@ -11,12 +11,12 @@ from ckanext.publicamundi.lib.metadata.widgets import edit as edit_widgets
 
 def generate_markup_for_field(action, F, f, name_prefix='', title=None, description=None):
     assert isinstance(F, zope.schema.Field)
-    w = adapter_registry.queryMultiAdapter([F, f], IFieldWidget, action)
-    if not w:
+    widget = adapter_registry.queryMultiAdapter([F, f], IFieldWidget, action)
+    if not widget:
         raise ValueError('Cannot find an widget adapter for field %s for action %s' %(
             F, action))
-    return w.render(name_prefix, {
-        'title': title, 
+    return widget.render(name_prefix, {
+        'title': title,
         'description': description,
         'errors': [], # Todo 
     })

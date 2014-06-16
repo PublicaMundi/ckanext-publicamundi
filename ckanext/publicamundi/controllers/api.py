@@ -6,18 +6,17 @@ import datetime
 from pylons import g
 from pylons.i18n import _
 
-from   ckan.lib.base import (BaseController, c, request, response, render, abort, redirect)
-import ckan.model           as model
-import ckan.plugins         as p
+from ckan.lib.base import (BaseController, c, request, response, abort, redirect)
+import ckan.model as model
 import ckan.plugins.toolkit as toolkit
-import ckan.logic           as logic
+import ckan.logic as logic
 
 import ckanext.publicamundi
 import ckanext.publicamundi.lib.actions as publicamundi_actions
 
 log1 = logging.getLogger(__name__)
 
-CONTENT_TYPES = {
+content_types = {
     'json': 'application/json; charset=utf8',
 }
 
@@ -38,7 +37,7 @@ class Controller(BaseController):
             }
         }
 
-        response.headers['Content-Type'] = CONTENT_TYPES['json']
+        response.headers['Content-Type'] = content_types['json']
         return [json.dumps(result_set)]
 
 
