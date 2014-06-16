@@ -16,6 +16,7 @@ import ckan.logic as logic
 import ckanext.publicamundi.model as publicamundi_model
 import ckanext.publicamundi.lib.util as publicamundi_util
 import ckanext.publicamundi.lib.metadata as publicamundi_metadata
+import ckanext.publicamundi.lib.actions as publicamundi_actions
 
 from ckanext.publicamundi.lib.util import object_to_json
 from ckanext.publicamundi.lib.metadata import dataset_types
@@ -30,6 +31,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     p.implements(p.IConfigurable, inherit=True)
     p.implements(p.IConfigurer, inherit=True)
     p.implements(p.IDatasetForm, inherit=True)
+    p.implements(p.IRoutes, inherit=True)
+    p.implements(p.IActions, inherit=True)
 
     ## Define helper methods ## 
 
@@ -132,6 +135,25 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     def configure(self, config):
         ''' Apply configuration options to this plugin '''
         pass
+
+    ## IRoutes interface ##
+
+    def before_map(self, mapper):
+        ''' Called before routes map is setup. '''
+
+        mapper.connect ('/api/util/resource/mimetype_autocomplete',
+            controller='ckanext.publicamundi.controllers.api:Controller', action='mimetype_autocomplete')
+        #mapper.connect('tags', '/tags',
+        #    controller='ckanext.publicamundi.controllers.tags:Controller', action='index')
+
+        return mapper
+
+    ## IActions interface ##
+
+    def get_actions(self):
+        return {
+            'mimetype_autocomplete': publicamundi_actions.mimetype_autocomplete,
+        }
 
     ## IDatasetForm interface ##
 
@@ -266,7 +288,6 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
     def history_template(self):
         return super(DatasetForm, self).history_template()
-
 
 class PackageController(p.SingletonPlugin):
     ''' Hook into the package controller '''
