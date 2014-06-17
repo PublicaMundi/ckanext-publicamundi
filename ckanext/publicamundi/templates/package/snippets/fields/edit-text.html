@@ -1,6 +1,25 @@
 {% import "macros/form.html" as form %}
-{% set field_name = name_prefix ~ F.getName() %}
+{% set field_name = name_prefix ~ '.' ~ F.getName() %}
 {% set field_title = title or  F.title %}
+
+
+{#  
+<div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
+    <label class="control-label" for="{{ for }}">
+        {% if is_required %}<span title="{{ _("This field is required") }}" class="control-required">*</span> {% endif %}{{ label or _('Custom') }}
+    </label>
+    <div class="controls{{ " " ~ control_classes | join(' ') }}">
+      <input 
+        id="{{ 'field-' ~ field_name }}" 
+        type="text" name="{{ field_name }}" 
+        value="{{ f | empty_and_escape }}" 
+        placeholder="{{ F.default | empty_and_escape }}"  
+      />
+      {% if error and error is iterable %}<span class="error-block">{{ error|join(', ') }}</span>{% endif %}
+    </div>
+</div>
+#}
+
 {{ 
     form.input(field_name, 
         label = title or F.title, 

@@ -1,7 +1,7 @@
 import zope.interface
 
 class IWidget(zope.interface.Interface):
-    
+
     def get_template():
         '''Return a filename for a template'''
 

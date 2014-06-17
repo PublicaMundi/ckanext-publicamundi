@@ -20,6 +20,11 @@ class TestController(ckan.tests.TestController):
         for k in ['title']:
             yield self._test_markup_for_field, 'x1', k, 'read'
 
+    def test_edit_field_widgets(self):
+        '''Generate markup for editing fields'''
+        for k in ['title']:
+            yield self._test_markup_for_field, 'x1', k, 'edit'
+
     @with_request_context('publicamundi-tests', 'index')
     def _test_markup_for_field(self, fixture_name, k, action):
         '''Render a field widget'''
@@ -28,6 +33,6 @@ class TestController(ckan.tests.TestController):
         F = S.get(k)
         f = F.get(x)
         markup = generate_markup_for_field(action, F, f, fixture_name)
-        log1.info('Generated markup for %r: %s' %(x, markup))
+        log1.info('Generated %s markup for %r:\n%s\n' %(action, f, markup))
         assert markup
 

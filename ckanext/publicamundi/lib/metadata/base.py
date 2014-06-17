@@ -453,9 +453,9 @@ class BaseObject(object):
                 f = F.get(self.obj)
                 res[k] = self._dictize_field(f, F) if f else None
             return res
-        
+
         def _get_field_value(self, f, F):
-            '''Get the value of a field considered as a leaf. 
+            '''Get the value of a field considered as a leaf.
             Serialize this value if requested so.
             '''
             v = f
@@ -464,7 +464,7 @@ class BaseObject(object):
                 if serializer:
                     v = serializer.dumps(f)
             return v
-       
+
         def _dictize_field(self, f, F):
             if isinstance(F, zope.schema.Object):
                 cls = type(self) 
@@ -482,7 +482,7 @@ class BaseObject(object):
             else:
                 # A leaf field 
                 return self._get_field_value(f, F) 
-                
+
         def flatten(self):
             S = self.obj.get_schema()
             res = {}

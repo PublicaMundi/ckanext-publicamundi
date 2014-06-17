@@ -31,14 +31,14 @@ class FieldWidget(object):
 
 class ObjectWidget(object):
     zope.interface.implements(IObjectWidget)
-    
+
     def __init__(self, obj):
         assert isinstance(obj, BaseObject)
         self.obj = obj
-   
+
     def get_template(self):
         raise NotImplementedError('This method should be defined in a derived class')
-    
+
     def render(self, name_prefix, data={}):
         raise NotImplementedError('Todo')
 

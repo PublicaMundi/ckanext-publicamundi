@@ -1,4 +1,4 @@
-import zope.interface 
+import zope.interface
 import zope.schema
 
 from ckanext.publicamundi.lib.metadata.ibase import IBaseObject

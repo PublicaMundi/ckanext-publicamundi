@@ -74,7 +74,7 @@ class DatetimeSerializer(BaseSerializer):
         return datetime.datetime.strptime(s, self.fmt)
 
 class KeyTupleSerializer(object):
-    
+
     def __init__(self, glue, prefix, suffix):
         self.glue = str(glue)
         self.prefix = str(prefix or '')
@@ -127,11 +127,11 @@ def get_key_string_serializer():
 
 def get_field_serializer(F):
     '''Get a proper serializer for a leaf zope.schema.Field instance
-    
-    Note: 
-    Consider using F.fromUnicode as an unserializer.  
+
+    Note:
+    Consider using F.fromUnicode as an unserializer.
     '''
-    assert isinstance(F, zope.schema.Field) 
+    assert isinstance(F, zope.schema.Field)
     serializer = _field_serializers.get(type(F))
     return serializer
 

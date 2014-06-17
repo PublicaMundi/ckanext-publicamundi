@@ -12,7 +12,7 @@ class CkanMetadata(BaseMetadata):
 
 class InspireMetadata(BaseMetadata):
     zope.interface.implements(IInspireMetadata)
-    
+
     title = None
     url = None
     thematic_category = None
