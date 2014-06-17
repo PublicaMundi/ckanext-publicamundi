@@ -21,7 +21,7 @@ def nest(d, key_converter=None):
     res = _nest(d)
     return res
 
-unflatten = nest 
+unflatten = nest
 
 def _nest(d):
     keys = sorted(d)

@@ -50,7 +50,7 @@ def flatten_field(F):
 
 class BaseObject(object):
     zope.interface.implements(IBaseObject)
-    
+
     default_factories = {
         zope.schema.TextLine: None,
         zope.schema.Text: None,
@@ -66,7 +66,7 @@ class BaseObject(object):
     }
 
     KEY_GLUE = '.'
- 
+
     ## interface IBaseObject
 
     @classmethod
@@ -108,7 +108,7 @@ class BaseObject(object):
         self.load(d, opts)
         # Allow method chaining
         return self
-    
+
     def to_json(self, flat=False, indent=None):
         cls = type(self)
         opts = {
@@ -132,9 +132,9 @@ class BaseObject(object):
             'unserialize-values': True,
         }
         return self.from_dict(d, is_flat=False, opts=opts)
-   
+
     ## Constructor based on keyword args 
-    
+
     def __init__(self, **kwargs):
         cls = type(self)
         S = cls.get_schema()
@@ -144,7 +144,7 @@ class BaseObject(object):
                 factory = cls.get_field_factory(k, F)
                 v = factory() if factory else F.default
             setattr(self, k, v)
-    
+
     ## Provide a string representation
 
     def _repr(self):
@@ -170,7 +170,7 @@ class BaseObject(object):
                 S = iface
                 break
         return S
-    
+
     @classmethod
     def get_schema(cls):
         S = None
@@ -187,12 +187,12 @@ class BaseObject(object):
     def get_fields(cls):
         S = cls.get_schema()
         return zope.schema.getFields(S)
-    
+
     @classmethod
     def get_flattened_fields(cls):
         S = cls.get_schema()
         return flatten_schema(S)
- 
+
     @classmethod
     def get_field_factory(cls, k, F=None):
         assert not k or isinstance(k, basestring)
@@ -216,9 +216,9 @@ class BaseObject(object):
         return factory
 
     ## Validation 
-   
+
     class Validator(object):
-        
+
         def __init__(self, obj, opts=None):
             self.obj = obj
             self.opts = opts or {}
@@ -375,12 +375,12 @@ class BaseObject(object):
             return errors
 
     ## Error helpers - Convert error lists 
-    
+
     def dictize_errors(self, errors):
         return self._dictize_errors(errors)
 
     INVARIANT_ERROR_KEY = '__after'
-    
+
     def _dictize_errors(self, errors):
         cls = type(self)
         S = cls.get_schema()
@@ -401,7 +401,7 @@ class BaseObject(object):
                 f = F.get(self)
                 res[k] = self._dictize_errors_for_field(ex, f, F)
         return res
-    
+
     def _dictize_errors_for_field(self, ex, f, F):
         assert isinstance(ex, zope.interface.Invalid), 'Validation errors derive from Invalid'
         # Check if we must descend 
@@ -423,7 +423,7 @@ class BaseObject(object):
             return self._dictize_errors_for_field_collection(errors, f, F)
         else:
             return '%s: %s' %(type(ex).__name__, repr(errors))
- 
+
     def _dictize_errors_for_field_collection(self, errors, f, F):
         res = {} 
         for k, ef in errors:
@@ -432,7 +432,7 @@ class BaseObject(object):
             # Note that here, k will be either an integer or a string
             res[k] = self._dictize_errors_for_field(ex, f[k], F.value_type) 
         return res
-        
+
     def flatten_errors(self, errors):
         error_dict = self._dictize_errors(errors)
         return dictization.flatten(error_dict)
@@ -440,7 +440,7 @@ class BaseObject(object):
     ## Dictization helpers
 
     class Dictizer(object):
-        
+
         def __init__(self, obj, opts=None):
             self.obj = obj
             self.opts = opts or {}
@@ -515,9 +515,9 @@ class BaseObject(object):
                 for k1,v1 in res1.items():
                     d[(k,)+k1] = v1
             return d
-    
+
     class Loader(object):
-         
+
         def __init__(self, obj, opts=None):
             self.obj = obj
             self.opts = opts or {}
@@ -568,9 +568,9 @@ class BaseObject(object):
                     if serializer:
                         f = serializer.loads(v)
                 return f
-        
+
     class Factory(object):
-        
+
         def __init__(self, iface, opts=None):
             assert iface.extends(IBaseObject), 'Expected a schema-providing interface'
             self.target_iface = iface
@@ -581,13 +581,13 @@ class BaseObject(object):
                 'unserialize-values': False,
             }
             self.opts.update(opts or {})
-        
+
         def from_dict(self, d, is_flat=False):
             return self.target_cls().from_dict(d, is_flat, self.opts)
 
         def __call__(self, d=None, is_flat=False):
             return self.from_dict(d, is_flat)
-    
+
     def dictize(self, opts=None):
         cls = type(self)
         return cls.Dictizer(self, opts).dictize()
@@ -595,7 +595,7 @@ class BaseObject(object):
     def flatten(self, opts=None):
         cls = type(self)
         return cls.Dictizer(self, opts).flatten()
-    
+
     def load(self, d, opts=None):
         cls = type(self)
         return cls.Loader(self, opts).load(d)
