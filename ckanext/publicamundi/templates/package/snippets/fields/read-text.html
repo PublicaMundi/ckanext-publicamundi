@@ -1,4 +1,5 @@
-<div class="field-read-{{ name_prefix ~ F.getName() }}-wrapper">
-    <dt>{{ title or F.title or F.getName() }}</dt>
+{% set title = title or F.title or F.getName() %}
+<div class="field-read-{{ name_prefix ~ '.' ~ F.getName() }}-wrapper">
+    <dt>{{ title }}</dt>
     <dd>{{ f }}</dd>
 </div>

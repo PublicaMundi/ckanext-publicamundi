@@ -11,6 +11,8 @@ from ckanext.publicamundi.lib.metadata.widgets.ibase import IWidget, IFieldWidge
 class FieldWidget(object):
     zope.interface.implements(IFieldWidget)
 
+    action = ''
+
     def __init__(self, F, f):
         assert isinstance(F, zope.schema.Field)
         self.field_value = f
@@ -32,6 +34,8 @@ class FieldWidget(object):
 class ObjectWidget(object):
     zope.interface.implements(IObjectWidget)
 
+    action = ''
+
     def __init__(self, obj):
         assert isinstance(obj, BaseObject)
         self.obj = obj
@@ -41,4 +45,17 @@ class ObjectWidget(object):
 
     def render(self, name_prefix, data={}):
         raise NotImplementedError('Todo')
+
+
+class ReadFieldWidget(FieldWidget):
+    action = 'read'
+
+class EditFieldWidget(FieldWidget):
+    action = 'edit'
+
+class ReadObjectWidget(ObjectWidget):
+    action = 'read'
+
+class EditObjectWidget(ObjectWidget):
+    action = 'edit'
 
