@@ -24,7 +24,7 @@ class TestsController(BaseController):
 
     def test_field_markup(self):
         k = 'title'
-        x = fixtures.x1
+        x = fixtures.foo1
         S = x.get_schema()
         F = S.get(k)
         f = F.get(x)
@@ -34,12 +34,12 @@ class TestsController(BaseController):
             'title': u'Foo',
             'placeholder': u'Enter a title',
         }
-        c.data = markup = generate_markup_for_field('edit', F, f, 'x1', **data)
+        c.data = markup = generate_markup_for_field('edit', F, f, 'foo1', **data)
         return render('tests/page.html')
 
     def test_field_markup_with_helper(self):
         k = 'title'
-        x = fixtures.x1
+        x = fixtures.foo1
         S = x.get_schema()
         F = S.get(k)
         f = F.get(x)

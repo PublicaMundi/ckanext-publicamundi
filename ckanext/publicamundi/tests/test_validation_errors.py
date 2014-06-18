@@ -35,7 +35,7 @@ poly3 = Polygon(name = u'P3', points=[
 
 # Fixture x1: schema validation errors
 
-x1 = InspireMetadata(
+x1 = Foo(
     baz = u'Bazzz',
     title = u'Ababoua Ababoua',
     tags = [ u'alpha', u'beta', u'gamma', 42, 'aaa'],
@@ -49,7 +49,7 @@ x1 = InspireMetadata(
 
 # Fixture x2: invariant errors
 
-x2 = InspireMetadata(
+x2 = Foo(
     baz = u'Bazzz',
     title = u'Ababoua Ababoua',
     tags = [ u'alpha', u'beta', u'gamma', u'alpha'], # duplicate 

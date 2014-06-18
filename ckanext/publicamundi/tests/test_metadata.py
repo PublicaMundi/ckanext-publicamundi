@@ -28,24 +28,24 @@ def convert_to_dict(x):
     obj = getattr(fixtures, x)
 
     d = obj.to_dict()
-    obj1 = types.InspireMetadata().from_dict(d)
+    obj1 = types.Foo().from_dict(d)
     s = json.dumps(d, cls=JsonEncoder)
     s1 = json.dumps(obj1.to_dict(), cls=JsonEncoder)
     assert s == s1
 
     d = obj.to_dict(flat=True)
-    obj2 = types.InspireMetadata().from_dict(d, is_flat=True)
+    obj2 = types.Foo().from_dict(d, is_flat=True)
     s = json.dumps(obj.to_dict(), cls=JsonEncoder)
     s2 = json.dumps(obj2.to_dict(), cls=JsonEncoder)
     assert s == s2
 
 def test_validators():
-    yield validate, 'x1'
+    yield validate, 'foo1'
 
 def test_dict_converters():
-    yield convert_to_dict, 'x1'
+    yield convert_to_dict, 'foo1'
 
 if __name__  == '__main__':
-    validate('x1')
-    convert_to_dict('x1')
+    validate('foo1')
+    convert_to_dict('foo1')
 

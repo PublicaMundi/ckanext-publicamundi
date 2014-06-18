@@ -181,7 +181,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         log1.info('_modify_package_schema(): Building schema ...')
 
         import ckanext.publicamundi.lib.metadata.validators as publicamundi_validators
-        
+
         schema['dataset_type'] = [
             toolkit.get_validator('default')('ckan'),
             toolkit.get_converter('convert_to_extras'),
@@ -191,7 +191,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         # Add field-based validation processors
 
         field_name = 'baz'
-        field = publicamundi_metadata.IInspireMetadata.get(field_name)
+        field = publicamundi_metadata.IFoo.get(field_name)
         if field.default:
             x1 = toolkit.get_validator('default')(field.default)
         elif field.defaultFactory:

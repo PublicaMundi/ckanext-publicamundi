@@ -11,4 +11,5 @@ class IBaseMetadata(IObject):
 from ckanext.publicamundi.lib.metadata.schemata.common import *
 from ckanext.publicamundi.lib.metadata.schemata.metadata import ICkanMetadata
 from ckanext.publicamundi.lib.metadata.schemata.metadata import IInspireMetadata
+from ckanext.publicamundi.lib.metadata.schemata.foo import IFoo
 

@@ -15,7 +15,7 @@ dt1 = TemporalExtent(
     start = datetime.datetime(2014, 5, 27, 1, 30, 0),
     end = datetime.datetime(2014, 5, 29, 1, 30, 0))
 
-x1 = InspireMetadata(
+foo1 = Foo(
     baz = u'Bazzz',
     title = u'Ababoua Ababoua',
     tags = [ u'alpha', u'beta', u'gamma'],

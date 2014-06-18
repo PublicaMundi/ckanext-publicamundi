@@ -14,11 +14,3 @@ class InspireMetadata(BaseMetadata):
     zope.interface.implements(IInspireMetadata)
 
     title = None
-    url = None
-    thematic_category = None
-    tags = list
-    baz = None
-    contact_info = ContactInfo
-    contacts = dict
-    geometry = list
-

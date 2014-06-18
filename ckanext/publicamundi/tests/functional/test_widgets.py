@@ -14,7 +14,6 @@ from ckanext.publicamundi.lib.metadata.widgets import generate_markup_for_field
 from ckanext.publicamundi.lib.metadata.widgets import generate_markup_for_object
 
 log1 = logging.getLogger(__name__)
-#log1.setLevel(logging.INFO)
 
 class TestController(ckan.tests.TestController):
 
@@ -24,17 +23,17 @@ class TestController(ckan.tests.TestController):
     def test_read_field_widgets(self):
         '''Generate markup for reading fields'''
         for k in ['title']:
-            yield self._test_markup_for_field, 'x1', k, 'read'
-            yield self._test_markup_for_field, 'x1', k, 'read', { 'title': u'X1' }
+            yield self._test_markup_for_field, 'foo1', k, 'read'
+            yield self._test_markup_for_field, 'foo1', k, 'read', { 'title': u'X1' }
 
     @nose.tools.istest
     def test_edit_field_widgets(self):
         '''Generate markup for editing fields'''
         for k in ['title']:
-            yield self._test_markup_for_field, 'x1', k, 'edit'
-            yield self._test_markup_for_field, 'x1', k, 'edit', { 'title': u'X1' }
-            yield self._test_markup_for_field, 'x1', k, 'edit', { 'required': False }
-            yield self._test_markup_for_field, 'x1', k, 'edit', { 'classes': [ 'control-large' ], 'title': u'Foo' }
+            yield self._test_markup_for_field, 'foo1', k, 'edit'
+            yield self._test_markup_for_field, 'foo1', k, 'edit', { 'title': u'X1' }
+            yield self._test_markup_for_field, 'foo1', k, 'edit', { 'required': False }
+            yield self._test_markup_for_field, 'foo1', k, 'edit', { 'classes': [ 'control-large' ], 'title': u'Foo' }
 
     @with_request_context('publicamundi-tests', 'index')
     def _test_markup_for_field(self, fixture_name, k, action, data={}):

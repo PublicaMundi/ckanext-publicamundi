@@ -8,7 +8,7 @@ from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.tests import fixtures
 
 def test_1():
-    x1 = fixtures.x1
+    x1 = fixtures.foo1
 
     errs = x1.validate()
     assert not errs
@@ -18,7 +18,7 @@ def test_1():
     s1r = x1.to_json(flat=False)
     s1f = x1.to_json(flat=True)
 
-    factory = Object.Factory(schemata.IInspireMetadata)
+    factory = Object.Factory(schemata.IFoo)
 
     x2 = factory.from_dict(d1r, is_flat=False)
     x3 = factory.from_dict(d1f, is_flat=True)

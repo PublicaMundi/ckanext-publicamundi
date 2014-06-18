@@ -6,8 +6,8 @@ from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.schemata import *
 from ckanext.publicamundi.lib.metadata.types import *
 
-class InspireMetadata1(Object):
-    zope.interface.implements(IInspireMetadata)
+class Foo1(Object):
+    zope.interface.implements(IFoo)
 
 ## Tests ##
 
@@ -33,7 +33,7 @@ def _test_field_factory(cls_name, k):
         assert not (f is None)
 
 def test_field_factories():
-    for X in [InspireMetadata, InspireMetadata1]:
+    for X in [Foo, Foo1]:
         S = X.get_schema()
         for k in zope.schema.getFieldNames(S):
             yield _test_field_factory, X.__name__, k

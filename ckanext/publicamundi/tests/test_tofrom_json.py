@@ -2,17 +2,18 @@ import zope.interface
 import zope.schema
 import json
 
-from ckanext.publicamundi.lib.metadata.types import *
+from ckanext.publicamundi.lib.metadata.schemata import IFoo
+from ckanext.publicamundi.lib.metadata.types import Foo
 from ckanext.publicamundi.tests import fixtures
 
 def test_x1():
     '''Convert a valid object to/from JSON'''
-    x1 = fixtures.x1
+    x1 = fixtures.foo1
 
     s1d = x1.to_json(flat=False, indent=4)
     s1f = x1.to_json(flat=True, indent=4)
 
-    x2 = InspireMetadata()
+    x2 = Foo()
     try:
         x2.from_json(s1d, is_flat=False)
         errs2 = x2.validate()
@@ -24,7 +25,7 @@ def test_x1():
     except Exception as ex:
         assert False, 'Cannot serialize/deserialize from (nested) JSON'
 
-    x3 = InspireMetadata()
+    x3 = Foo()
     try:
         x3.from_json(s1f, is_flat=True)
         errs3 = x3.validate()

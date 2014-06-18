@@ -22,4 +22,3 @@ d1a = x1.to_dict(flat=True)
 s1  = x1.to_json()
 s1a = x1.to_json(flat=True, indent=4)
 
-
