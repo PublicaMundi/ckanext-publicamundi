@@ -1,37 +1,28 @@
-{#{% import "macros/form.html" as form %}#}
-
 {% set name = name_prefix ~ '.' ~ F.getName() -%}
 {% set title = title or F.title -%}
-{% set required = required or F.required -%}
-{% set classes = [ 'control-medium', 'field-edit-' ~ name ~ '-wrapper' ] -%}
-{% set control_classes = [ ] -%}
+{% set placeholder = placeholder or F.default -%}
+{% if required is not defined %}{% set required = F.required -%}{% endif -%}
+{% if classes is not defined %}{% set classes = [] -%}{% endif -%}
+{% set classes = classes + [ 'field-edit-' ~ name ~ '-group' ] -%}
+{% if input_classes is not defined %}{% set input_classes = [ 'input-medium' ] -%}{% endif -%}
 {% set error = None -%}
 
 <div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
-    <label class="control-label" for="{{ for }}">
-        {% if F.required %}<span title="{{ _("This field is required") }}" class="control-required">*</span>{% endif %}
+    <label class="control-label" for="{{ 'field-' ~ name }}">
+        {% if required %}<span title="{{ _("This field is required") }}" class="control-required">*</span>{% endif %}
         {{ title }}
     </label>
-    <div class="controls{{ " " ~ control_classes | join(' ') }}">
+    <div class="controls">
         <input 
             id="{{ 'field-' ~ name }}" 
-            type="text" name="{{ name }}" 
-            value="{{ f | empty_and_escape }}" 
-            placeholder="{{ F.default | empty_and_escape }}"  
+            type="text" 
+            name="{{ name }}"
+            class={{ input_classes | join(" ") }}
+            value="{{ value | empty_and_escape }}" 
+            placeholder="{{ placeholder | empty_and_escape }}"  
         />
-        {% if error and error is iterable %}<span class="error-block">{{ error | join(', ') }}</span>{% endif %}
+        {% if error and error is iterable %}
+        <span class="error-block">{{ error | join(', ') }}</span>
+        {% endif %}
     </div>
 </div>
-
-{#  
-{{ 
-    form.input(name, 
-        label = title or F.title, 
-        id = name, 
-        placeholder = F.default or '', 
-        value = f, 
-        error = errors,  
-        classes = ['control-medium', 'field-edit-' ~ name ~ 'wrapper' ]
-    ) 
-}}
-#}

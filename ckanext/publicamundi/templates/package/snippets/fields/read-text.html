@@ -1,5 +1,5 @@
 {% set title = title or F.title or F.getName() %}
-<div class="field-read-{{ name_prefix ~ '.' ~ F.getName() }}-wrapper">
+<div class="field-read-{{ name_prefix ~ '.' ~ F.getName() }}-group">
     <dt>{{ title }}</dt>
-    <dd>{{ f }}</dd>
+    <dd>{{ value }}</dd>
 </div>

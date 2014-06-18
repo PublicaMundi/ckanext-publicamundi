@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.3dev'
+version = '0.4dev'
 
 setup(
 	name='ckanext-publicamundi',
@@ -13,7 +13,7 @@ setup(
 	keywords='',
 	author='Michail Alexakis',
 	author_email='alexakis@imis.athena-innovation.gr',
-	url='',
+	url='https://github.com/PublicaMundi/ckanext-publicamundi',
 	license='',
 	packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
 	namespace_packages=['ckanext', 'ckanext.publicamundi'],

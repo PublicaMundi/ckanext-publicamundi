@@ -31,13 +31,13 @@ def teardown_request_context():
 def with_request_context(route_name, action='index'):
     def _decorator(method):
         @functools.wraps(method)
-        def _method(test_controller, *args):
+        def _method(test_controller, *args, **kwargs):
             if not (isinstance(test_controller, ckan.tests.TestController)):
                 raise TypeError('The decorated can only be applied to a TestController')
             resp = test_controller.app.get(url_for(route_name, action=action))
             setup_request_context(resp)
             try:
-                method(test_controller, *args)
+                method(test_controller, *args, **kwargs)
             finally:
                 teardown_request_context()
         return _method

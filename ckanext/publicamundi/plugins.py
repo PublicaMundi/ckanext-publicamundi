@@ -112,7 +112,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         These helpers will be available under the 'h' thread-local global object.
         '''
         return {
-            # define externsion-specific helpers
+            # define extension-specific helpers
             'dataset_type_options': self.dataset_type_options,
             'publicamundi_helloworld': self.publicamundi_helloworld,
             'organization_list_objects': self.organization_list_objects,

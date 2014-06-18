@@ -15,7 +15,7 @@ class FieldWidget(object):
 
     def __init__(self, F, f):
         assert isinstance(F, zope.schema.Field)
-        self.field_value = f
+        self.field_val = f
         self.field_def = F
 
     def get_template(self):
@@ -25,7 +25,7 @@ class FieldWidget(object):
         tpl = self.get_template()
         data.update({
             'name_prefix': name_prefix,
-            'f': self.field_value,
+            'value': self.field_val,
             'F': self.field_def,
         })
         markup = toolkit.render_snippet(tpl, data)
@@ -44,7 +44,13 @@ class ObjectWidget(object):
         raise NotImplementedError('This method should be defined in a derived class')
 
     def render(self, name_prefix, data={}):
-        raise NotImplementedError('Todo')
+        tpl = self.get_template()
+        data.update({
+            'name_prefix': name_prefix,
+            'obj': self.obj,
+        })
+        markup = toolkit.render_snippet(tpl, data)
+        return toolkit.literal(markup)
 
 
 class ReadFieldWidget(FieldWidget):

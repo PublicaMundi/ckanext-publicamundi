@@ -2,6 +2,8 @@ import datetime
 
 from ckanext.publicamundi.lib.metadata.types import *
 
+pt1 = Point(x=0.76, y=0.23)
+
 poly1 = Polygon(name = u'P1', points=[
     Point(x=0.6, y=0.5), Point(x=0.7, y=0.1),
     Point(x=1.6, y=0.2), Point(x=0.6, y=0.5),])

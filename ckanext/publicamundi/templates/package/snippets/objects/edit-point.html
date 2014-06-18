@@ -1,0 +1,33 @@
+{% set name = name_prefix -%}
+{% set placeholder = '0.0' -%}
+{% if classes is not defined %}{% set classes = [] -%}{% endif -%}
+{% set classes = classes + [ 'object-edit-' ~ name ~ '-group' ] -%}
+{% if input_classes is not defined %}{% set input_classes = [ 'input-small' ] -%}{% endif -%}
+{% set error = None -%}
+
+<div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
+    <label class="control-label">
+        {% if required %}<span title="{{ _("This field is required") }}" class="control-required">*</span>{% endif %}{{ title }}
+    </label>
+    <div class="controls">
+        <input 
+            id="{{ 'object-' ~ name ~ '.' ~ 'x' }}" 
+            type="text" 
+            name="{{ name }}.x"
+            class={{ input_classes | join(' ') }}
+            value="{{ obj.x | empty_and_escape }}" 
+            placeholder="{{ placeholder }}"  
+        />
+        <input 
+            id="{{ 'object-' ~ name ~ '.' ~ 'y' }}" 
+            type="text" 
+            name="{{ name }}.y" 
+            class={{ input_classes | join(' ') }}
+            value="{{ obj.y | empty_and_escape }}" 
+            placeholder="{{ placeholder }}"  
+        />
+        {% if error and error is iterable %}
+        <span class="error-block">{{ error | join(', ') }}</span>
+        {% endif %}
+    </div>
+</div>
