@@ -1,10 +1,10 @@
 import zope.interface
 
 from ckanext.publicamundi.lib.metadata import adapter_registry
-from ckanext.publicamundi.lib.metadata.base import BaseObject
+from ckanext.publicamundi.lib.metadata.base import Object
 from ckanext.publicamundi.lib.metadata.schemata import *
 
-class BaseMetadata(BaseObject):
+class BaseMetadata(Object):
     zope.interface.implements(IBaseMetadata)
 
 # Import types

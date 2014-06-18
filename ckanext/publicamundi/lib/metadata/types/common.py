@@ -1,21 +1,21 @@
 import zope.interface
 
-from ckanext.publicamundi.lib.metadata.base import BaseObject
+from ckanext.publicamundi.lib.metadata.base import Object
 from ckanext.publicamundi.lib.metadata.schemata import *
 
-class PostalAddress(BaseObject):
+class PostalAddress(Object):
     zope.interface.implements(IPostalAddress)
-    
-    address = None 
+
+    address = None
     postalcode = None
 
-class ContactInfo(BaseObject):
+class ContactInfo(Object):
     zope.interface.implements(IContactInfo)
-    
+
     email = None
     address = None
 
-class Point(BaseObject):
+class Point(Object):
     zope.interface.implements(IPoint)
 
     x = None
@@ -30,15 +30,15 @@ class Point(BaseObject):
         else:
             return False
 
-class Polygon(BaseObject):
+class Polygon(Object):
     zope.interface.implements(IPolygon)
-    
+
     points = None
     name = None
 
-class TemporalExtent(BaseObject):
+class TemporalExtent(Object):
     zope.interface.implements(ITemporalExtent)
-    
+
     start = None
     end = None
 

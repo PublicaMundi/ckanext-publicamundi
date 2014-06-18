@@ -8,7 +8,7 @@ import zope.schema
 import ckanext.publicamundi.lib.dictization as dictization
 from ckanext.publicamundi.lib.json_encoder import JsonEncoder
 from ckanext.publicamundi.lib.metadata import adapter_registry
-from ckanext.publicamundi.lib.metadata.ibase import IBaseObject, ISerializer
+from ckanext.publicamundi.lib.metadata.ibase import IObject, ISerializer
 from ckanext.publicamundi.lib.metadata.serializers import get_field_serializer
 from ckanext.publicamundi.lib.metadata.serializers import get_key_tuple_serializer
 
@@ -17,7 +17,7 @@ _logger = logging.getLogger(__name__)
 _cache = threading.local()
 
 def flatten_schema(S):
-    assert S.extends(IBaseObject)
+    assert S.extends(IObject)
     res = {}
     fields = zope.schema.getFields(S)
     for k,F in fields.items():
@@ -48,8 +48,8 @@ def flatten_field(F):
         res = { (): F }
     return res
 
-class BaseObject(object):
-    zope.interface.implements(IBaseObject)
+class Object(object):
+    zope.interface.implements(IObject)
 
     default_factories = {
         zope.schema.TextLine: None,
@@ -67,7 +67,7 @@ class BaseObject(object):
 
     KEY_GLUE = '.'
 
-    ## interface IBaseObject
+    ## interface IObject
 
     @classmethod
     def schema(cls):
@@ -98,7 +98,7 @@ class BaseObject(object):
 
     def from_dict(self, d, is_flat=None, opts=None):
         assert isinstance(d, dict)
-        cls = type(self) 
+        cls = type(self)
         # Decide if input is a flattened dict
         if is_flat is None:
             is_flat = isinstance(d.iterkeys().next(), tuple)
@@ -166,7 +166,7 @@ class BaseObject(object):
     def lookup_schema(cls):
         S = None
         for iface in zope.interface.implementedBy(cls):
-            if iface.extends(IBaseObject):
+            if iface.extends(IObject):
                 S = iface
                 break
         return S
@@ -225,7 +225,7 @@ class BaseObject(object):
             return
 
         def validate(self):
-            '''Return <errors> following the structure of BaseObject.validate() result'''
+            '''Return <errors> following the structure of Object.validate() result'''
             errors = self.validate_schema() 
             if errors:
                 # Stop here, do not check invariants
@@ -413,7 +413,7 @@ class BaseObject(object):
         errors = ex.args[0]
         if isinstance(F, zope.schema.Object):
             # If supports further dictization, descent into object
-            if isinstance(f, BaseObject):
+            if isinstance(f, Object):
                 return f._dictize_errors(errors)
             else:
                 return errors
@@ -467,7 +467,7 @@ class BaseObject(object):
 
         def _dictize_field(self, f, F):
             if isinstance(F, zope.schema.Object):
-                cls = type(self) 
+                cls = type(self)
                 return cls(f, self.opts).dictize()
             elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
                 a = list()
@@ -477,11 +477,11 @@ class BaseObject(object):
             elif isinstance(F, zope.schema.Dict):
                 d = dict()
                 for k,y in f.items():
-                    d[k] = self._dictize_field(y, F.value_type) 
+                    d[k] = self._dictize_field(y, F.value_type)
                 return d
             else:
                 # A leaf field 
-                return self._get_field_value(f, F) 
+                return self._get_field_value(f, F)
 
         def flatten(self):
             S = self.obj.get_schema()
@@ -497,7 +497,7 @@ class BaseObject(object):
 
         def _flatten_field(self, f, F):
             if isinstance(F, zope.schema.Object):
-                cls = type(self) 
+                cls = type(self)
                 return cls(f, self.opts).flatten()
             elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
                 return self._flatten_field_items(enumerate(f), F)
@@ -521,7 +521,7 @@ class BaseObject(object):
         def __init__(self, obj, opts=None):
             self.obj = obj
             self.opts = opts or {}
-        
+
         def load(self, d):
             S = self.obj.get_schema()
             for k,F in zope.schema.getFields(S).items():
@@ -536,7 +536,7 @@ class BaseObject(object):
                     f = self._create_field(v, F, factory)
                 setattr(self.obj, k, f)
             return
-        
+
         def _create_field(self, v, F, factory=None):
             assert isinstance(F, zope.schema.Field)
             cls = type(self)
@@ -572,7 +572,7 @@ class BaseObject(object):
     class Factory(object):
 
         def __init__(self, iface, opts=None):
-            assert iface.extends(IBaseObject), 'Expected a schema-providing interface'
+            assert iface.extends(IObject), 'Expected a schema-providing interface'
             self.target_iface = iface
             self.target_cls = adapter_registry.lookup([], iface, '')
             if not self.target_cls:

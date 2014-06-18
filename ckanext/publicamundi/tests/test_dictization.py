@@ -1,8 +1,8 @@
 import json
 import copy
-import ckanext.publicamundi.lib.dictization as dictization
-
 from nose.tools import raises, ok_, eq_
+
+import ckanext.publicamundi.lib.dictization as dictization
 
 d = {
     u'foo': {

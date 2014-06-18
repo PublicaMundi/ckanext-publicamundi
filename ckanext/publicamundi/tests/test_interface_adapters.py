@@ -6,7 +6,7 @@ from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.schemata import *
 from ckanext.publicamundi.lib.metadata.types import *
 
-class InspireMetadata1(BaseObject):
+class InspireMetadata1(Object):
     zope.interface.implements(IInspireMetadata)
 
 ## Tests ##

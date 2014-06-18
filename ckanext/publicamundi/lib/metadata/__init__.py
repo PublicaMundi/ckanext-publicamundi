@@ -4,8 +4,8 @@ import zope.schema
 
 adapter_registry = zope.interface.adapter.AdapterRegistry()
 
-from ckanext.publicamundi.lib.metadata.ibase import ISerializer, IBaseObject
-from ckanext.publicamundi.lib.metadata.base import BaseObject
+from ckanext.publicamundi.lib.metadata.ibase import ISerializer, IObject
+from ckanext.publicamundi.lib.metadata.base import Object
 from ckanext.publicamundi.lib.metadata.schemata import ICkanMetadata, IInspireMetadata
 from ckanext.publicamundi.lib.metadata.types import CkanMetadata, InspireMetadata
 from ckanext.publicamundi.lib.metadata.widgets import generate_markup_for_field, generate_markup_for_object

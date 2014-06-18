@@ -4,8 +4,8 @@ import zope.schema
 import ckan.plugins.toolkit as toolkit
 
 from ckanext.publicamundi.lib.metadata import adapter_registry
-from ckanext.publicamundi.lib.metadata.ibase import IBaseObject
-from ckanext.publicamundi.lib.metadata.base import BaseObject
+from ckanext.publicamundi.lib.metadata.ibase import IObject
+from ckanext.publicamundi.lib.metadata.base import Object
 from ckanext.publicamundi.lib.metadata.widgets.ibase import IWidget, IFieldWidget, IObjectWidget
 
 class FieldWidget(object):
@@ -37,7 +37,7 @@ class ObjectWidget(object):
     action = ''
 
     def __init__(self, obj):
-        assert isinstance(obj, BaseObject)
+        assert isinstance(obj, Object)
         self.obj = obj
 
     def get_template(self):

@@ -1,6 +1,9 @@
 import datetime
+import copy
 
 from ckanext.publicamundi.lib.metadata.types import *
+
+## Valid objects ##
 
 pt1 = Point(x=0.76, y=0.23)
 

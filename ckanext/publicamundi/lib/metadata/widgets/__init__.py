@@ -2,7 +2,7 @@ import zope.interface
 import zope.schema
 
 from ckanext.publicamundi.lib.metadata import adapter_registry
-from ckanext.publicamundi.lib.metadata import BaseObject
+from ckanext.publicamundi.lib.metadata import Object
 
 from ckanext.publicamundi.lib.metadata.widgets.ibase import IFieldWidget, IObjectWidget
 from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
@@ -18,7 +18,7 @@ def generate_markup_for_field(action, F, f, name_prefix='', **kwargs):
     return widget.render(name_prefix, kwargs)
 
 def generate_markup_for_object(action, obj, name_prefix='', **kwargs):
-    assert isinstance(obj, BaseObject)
+    assert isinstance(obj, Object)
     widget = adapter_registry.queryMultiAdapter([obj], IObjectWidget, action)
     if not widget:
         raise ValueError('Cannot find an widget adapter for schema %s for action %s' %(

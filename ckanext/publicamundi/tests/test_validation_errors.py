@@ -1,5 +1,6 @@
 import zope.interface
 import zope.schema
+import copy
 import json
 import datetime
 
@@ -32,7 +33,7 @@ poly3 = Polygon(name = u'P3', points=[
     Point(x=1.9, y=1.5),
 ])
 
-# Test #1: schema validation errors
+# Fixture x1: schema validation errors
 
 x1 = InspireMetadata(
     baz = u'Bazzz',
@@ -46,13 +47,7 @@ x1 = InspireMetadata(
     thematic_category = 'environmental',
 )
 
-errs1 = x1.validate()
-
-errs1_dict = x1.dictize_errors(errs1)
-
-print json.dumps(errs1_dict, indent=4)
-
-# Test #2: invariant errors
+# Fixture x2: invariant errors
 
 x2 = InspireMetadata(
     baz = u'Bazzz',
@@ -68,23 +63,42 @@ x2 = InspireMetadata(
         end = datetime.datetime(2014, 5, 20)),
 )
 
-errs2 = x2.validate()
+# Fixture x3: valid (fix errors on x2)
 
-errs2_dict = x2.dictize_errors(errs2)
-
-print json.dumps(errs2_dict, indent=4)
-
-# Test #3: Fix errors and expect success
-
-x2.tags = [u'hello-world', u'goodbye']
-x2.contacts = {
+x3 = copy.deepcopy(x2)
+x3.tags = [u'hello-world', u'goodbye']
+x3.contacts = {
     'personal':  ContactInfo(email=u'nobody@example.com'),
     'office': ContactInfo(address=PostalAddress(address=u'Nowhere-Land', postalcode=u'12345'))
 }
-x2.contact_info = ContactInfo(email=u'nomad@somewhere.com')
-x2.temporal_extent.end = datetime.datetime(2014, 5, 28)
+x3.contact_info = ContactInfo(email=u'nomad@somewhere.com')
+x3.temporal_extent.end = datetime.datetime(2014, 5, 28)
 
-errs2 = x2.validate()
-assert not errs2
+## Tests ##
 
+def test_x1():
+    '''Find schema validation errors'''
+    errs1 = x1.validate()
+    errs1_dict = x1.dictize_errors(errs1)
+    assert errs1_dict
+    print json.dumps(errs1_dict, indent=4)
+
+def test_x2():
+    '''Find invariant errors'''
+    errs2 = x2.validate()
+    errs2_dict = x2.dictize_errors(errs2)
+    assert errs2_dict
+    print json.dumps(errs2_dict, indent=4)
+
+def test_x3():
+    '''Verify a valid object'''
+    errs3 = x3.validate()
+    assert not errs3
+
+## Main ##
+
+if __name__ == '__main__':
+    test_x1();
+    test_x2();
+    test_x3();
 

@@ -1,4 +1,5 @@
 import paste.fixture
+import nose.tools
 import pylons.test
 
 import ckan.model as model
@@ -16,7 +17,7 @@ class Test(object):
         cls.app = paste.fixture.TestApp(pylons.test.pylonsapp)
 
         # Test code should use CKAN's plugins.load() to load plugins to be tested.
-        plugins.load('publicamundi_dataset')
+        #plugins.load('publicamundi_dataset')
 
     def setup(self):
         '''Nose runs this method before each test method in our test class.'''
@@ -34,7 +35,8 @@ class Test(object):
         '''
         # We have to unload the plugin we loaded, so it doesn't affect any
         # tests that run after ours.
-        plugins.unload('publicamundi_dataset')
+        #plugins.unload('publicamundi_dataset')
 
+    @nose.tools.nottest
     def test_1(self):
         pass
