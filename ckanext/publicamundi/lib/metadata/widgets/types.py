@@ -18,6 +18,16 @@ class PointReadWidget(base_widgets.ReadObjectWidget):
     def get_template(self):
         return 'package/snippets/objects/read-point.html'
 
+class TemporalExtentEditWidget(base_widgets.EditObjectWidget):
+
+    def _get_template(self):
+        return 'package/snippets/objects/edit-temporal_extent.html'
+
+class TemporalExtentReadWidget(base_widgets.ReadObjectWidget):
+
+    def _get_template(self):
+        return 'package/snippets/objects/read-temporal_extent.html'
+
 ## Register adapters ##
 
 def register_object_widget(object_iface, widget_cls):
@@ -27,6 +37,8 @@ def register_object_widget(object_iface, widget_cls):
 default_widgets = [
     (schemata.IPoint, PointReadWidget),
     (schemata.IPoint, PointEditWidget),
+    (schemata.ITemporalExtent, TemporalExtentReadWidget),
+    (schemata.ITemporalExtent, TemporalExtentEditWidget),
 ]
 
 for object_iface, widget_cls in default_widgets:

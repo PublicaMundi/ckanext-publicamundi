@@ -1,6 +1,6 @@
-{% set title = title or F.title or F.getName() -%}
-{% set term = F.vocabulary.getTerm(value) if value -%}
-<div class="field-read-{{ name_prefix ~ '.' ~ F.getName() }}-group">
+{% set title = title or field.title or field.getName() -%}
+{% set term = field.vocabulary.getTerm(value) if value -%}
+<div class="field-read-{{ name_prefix ~ '.' ~ field.getName() }}-group">
     <dt>{{ title }}</dt>
     <dd>{{ term.title if term else 'n/a' }}</dd>  
 </div>

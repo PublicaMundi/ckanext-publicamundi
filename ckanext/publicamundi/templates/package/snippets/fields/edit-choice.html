@@ -1,8 +1,8 @@
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
-{% set name = name_prefix ~ '.' ~ F.getName() -%}
-{% set title = title or F.title -%}
-{% set required = F.required if required is not defined else required -%}
+{% set name = name_prefix ~ '.' ~ field.getName() -%}
+{% set title = title or field.title -%}
+{% set required = field.required if required is not defined else required -%}
 {% set classes = [] if classes is not defined else classes -%}
 {% set classes = classes + [ 'control-select', 'field-edit-' ~ name ~ '-group' ] -%}
 {% set attrs = {} if attrs is not defined else attrs -%}
@@ -17,7 +17,7 @@
             {% if not required -%}
             <option value=""></option>
             {% endif -%}
-            {% for option in F.vocabulary %}
+            {% for option in field.vocabulary %}
             <option 
                 value="{{ option.value }}"
                 {% if option.value == value %} selected="selected"{% endif %}

@@ -1,4 +1,5 @@
 import zope.interface
+import zope.interface.verify
 import zope.schema
 
 from ckanext.publicamundi.lib.metadata import adapter_registry
@@ -17,6 +18,7 @@ def generate_markup_for_field(action, F, f, name_prefix='', **kwargs):
         actions.append(basic_action) # as a fallback
     except ValueError:
         pass
+    # Lookup registry
     widget = None
     while not widget and actions:
         name = actions.pop(0)
@@ -24,6 +26,8 @@ def generate_markup_for_field(action, F, f, name_prefix='', **kwargs):
     if not widget:
         raise ValueError('Cannot find an widget adapter for field %s for action %s' %(
             F, action))
+    # Found a widget to adapt [F, f]
+    assert zope.interface.verify.verifyObject(IFieldWidget, widget)
     return widget.render(name_prefix, kwargs)
 
 def generate_markup_for_object(action, obj, name_prefix='', **kwargs):
@@ -34,6 +38,7 @@ def generate_markup_for_object(action, obj, name_prefix='', **kwargs):
         actions.append(basic_action) # as a fallback
     except ValueError:
         pass
+    # Lookup registry
     widget = None
     while not widget and actions:
         name = actions.pop(0)
@@ -41,5 +46,7 @@ def generate_markup_for_object(action, obj, name_prefix='', **kwargs):
     if not widget:
         raise ValueError('Cannot find an widget adapter for schema %s for action %s' %(
             obj.get_schema(), action))
+    # Found a widget to adapt [obj]
+    assert zope.interface.verify.verifyObject(IObjectWidget, widget)
     return widget.render(name_prefix, kwargs)
 

@@ -18,6 +18,9 @@ class IFieldWidget(IWidget):
 
 class IObjectWidget(IWidget):
 
+    def get_omitted_fields():
+        '''Return a list of fields that should be omitted from rendering'''
+
     def render(name_prefix, data):
         '''Generate markup'''
 

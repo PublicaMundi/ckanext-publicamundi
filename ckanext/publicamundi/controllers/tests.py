@@ -67,6 +67,8 @@ class TestsController(BaseController):
         })
 
     def get_object_markup(self):
+        markup = ''
+        # A Point object
         obj = fixtures.pt1
         data = {
             'required': False,
@@ -74,6 +76,14 @@ class TestsController(BaseController):
             'input_classes': [ 'input-small' ],
             'title': u'Point A',
         }
-        c.form = generate_markup_for_object('edit.baz', obj, 'pt1', **data)
+        markup += toolkit.literal('<h3>Markup for object <code>Point</code></h3>')
+        markup += generate_markup_for_object('edit.baz', obj, 'pt1', **data)
+        # A TemporalExtent object
+        obj = fixtures.dt1
+        data = {}
+        markup += toolkit.literal('<h3>Markup for object <code>TemporalExtent</code></h3>')
+        markup += generate_markup_for_object('edit.faz', obj, 'dt1', **data)
+        # Render 
+        c.form = markup
         return render('tests/form.html')
 
