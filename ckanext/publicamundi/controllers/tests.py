@@ -22,24 +22,41 @@ class TestsController(BaseController):
     def index(self, id=None):
         return u'Another test!'
 
-    def test_field_markup(self):
-        k = 'title'
+    def get_field_markup(self):
         x = fixtures.foo1
         S = x.get_schema()
-        F = S.get(k)
-        f = F.get(x)
-        data = {
-            'required': True,
-            'classes': [ 'control-medium' ],
-            'title': u'Foo',
-            'placeholder': u'Enter a title',
+        test_fields = {
+            #'title': {
+            #    'required': True,
+            #    'classes': [ 'control-medium' ],
+            #    'title': u'Title',
+            #    'placeholder': u'Enter a title',
+            #    'attrs': { 'data-foo': 'baz' }
+            #},
+            #'reviewed': {
+            #    'title': u'Reviewed',
+            #},
+            #'notes': {
+            #    'description': u'Add a detailed description',
+            #},
+            'thematic_category': {
+            }
         }
-        c.data = markup = generate_markup_for_field('edit', F, f, 'foo1', **data)
-        return render('tests/page.html')
+        markup = ''
+        for k, data in test_fields.items():
+            F = S.get(k)
+            f = F.get(x)
+            markup += toolkit.literal('<h3>Edit markup for field <code>%s</code></h3>' %(k))
+            markup += generate_markup_for_field('edit', F, f, 'foo1', **data)
+            markup += toolkit.literal('<h3>Read markup for field <code>%s</code></h3>' %(k))
+            markup += generate_markup_for_field('read', F, f, 'foo1', **data)
+        #raise Exception('Break')
+        c.form = markup
+        return render('tests/form.html')
 
-    def test_field_markup_with_helper(self):
-        k = 'title'
+    def get_field_markup_with_helper(self):
         x = fixtures.foo1
+        k = 'title'
         S = x.get_schema()
         F = S.get(k)
         f = F.get(x)
@@ -49,7 +66,7 @@ class TestsController(BaseController):
             'title': u'Title',
         })
 
-    def test_object_markup(self):
+    def get_object_markup(self):
         obj = fixtures.pt1
         data = {
             'required': False,
@@ -57,6 +74,6 @@ class TestsController(BaseController):
             'input_classes': [ 'input-small' ],
             'title': u'Point A',
         }
-        c.data = markup = generate_markup_for_object('edit', obj, 'pt1', **data)
-        return render('tests/page.html')
+        c.form = generate_markup_for_object('edit', obj, 'pt1', **data)
+        return render('tests/form.html')
 

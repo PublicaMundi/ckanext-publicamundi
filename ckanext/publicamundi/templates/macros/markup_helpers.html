@@ -1,0 +1,5 @@
+{%- macro attributes(attrs={}) -%}
+  {%- for key, value in attrs.items() -%}
+  {{ " " }}{{ key }}{% if value != "" %}="{{ value }}"{% endif %}
+  {%- endfor -%}
+{%- endmacro -%}

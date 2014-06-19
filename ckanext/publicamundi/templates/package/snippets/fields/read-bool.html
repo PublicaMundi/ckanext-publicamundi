@@ -1,0 +1,5 @@
+{% set title = title or F.title or F.getName() %}
+<div class="field-read-{{ name_prefix ~ '.' ~ F.getName() }}-group">
+    <dt>{{ title }}</dt>
+    <dd>{% if value %}{{ _('Yes') }}{% else %}{{ _('No') }}{% endif %}</dd>
+</div>

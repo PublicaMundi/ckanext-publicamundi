@@ -1,0 +1,18 @@
+{% extends 'page.html' %}
+
+{% block scripts %}
+{{ super() }}
+<style>
+    form > h3 { margin-top: 20px; color: #777}
+    form > h3 > code { font-size: inherit }
+</style>
+{% resource 'ckanext-publicamundi/styles' %}
+{% endblock %}
+
+{% block primary_content_inner %}
+<form class="form">
+    {{ c.form }}
+</form>
+{% endblock %}
+
+

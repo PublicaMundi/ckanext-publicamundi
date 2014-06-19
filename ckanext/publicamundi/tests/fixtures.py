@@ -26,7 +26,9 @@ foo1 = Foo(
         'office': ContactInfo(address=PostalAddress(address=u'Nowhere-Land', postalcode=u'12345'))
     },
     geometry = [[ poly1 ]],
-    thematic_category = 'environment',
+    reviewed = False,
+    notes = u'Hello World',
+    thematic_category = None,
     temporal_extent = dt1,
 )
 

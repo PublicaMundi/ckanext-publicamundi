@@ -1,3 +1,10 @@
 {% extends 'page.html' %}
 
-{% block primary_content_inner %}{{ c.data }}{% endblock %}
+{% block primary_content_inner %}
+{{ c.markup }}
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{% resource 'ckanext-publicamundi/styles' %}
+{% endblock %}

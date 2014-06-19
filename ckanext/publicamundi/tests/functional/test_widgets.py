@@ -22,18 +22,17 @@ class TestController(ckan.tests.TestController):
     @nose.tools.istest
     def test_read_field_widgets(self):
         '''Generate markup for reading fields'''
-        for k in ['title']:
+        for k in ['title', 'reviewed']:
             yield self._test_markup_for_field, 'foo1', k, 'read'
             yield self._test_markup_for_field, 'foo1', k, 'read', { 'title': u'X1' }
 
     @nose.tools.istest
     def test_edit_field_widgets(self):
         '''Generate markup for editing fields'''
-        for k in ['title']:
+        for k in ['title', 'reviewed']:
             yield self._test_markup_for_field, 'foo1', k, 'edit'
             yield self._test_markup_for_field, 'foo1', k, 'edit', { 'title': u'X1' }
             yield self._test_markup_for_field, 'foo1', k, 'edit', { 'required': False }
-            yield self._test_markup_for_field, 'foo1', k, 'edit', { 'classes': [ 'control-large' ], 'title': u'Foo' }
 
     @with_request_context('publicamundi-tests', 'index')
     def _test_markup_for_field(self, fixture_name, k, action, data={}):
@@ -48,6 +47,8 @@ class TestController(ckan.tests.TestController):
         pq = pyquery.PyQuery(unicode(markup))
         assert pq
         assert pq.is_('div')
+        if action == 'edit':
+            assert pq.find('input')
 
     ## Objects ##
 

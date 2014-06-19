@@ -97,7 +97,12 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
     @classmethod
     def dump_jsonpickle(cls, obj):
-        return jsonpickle.encode(obj)
+        s = 'undefined'
+        try:
+            s = jsonpickle.encode(obj)
+        except:
+            pass
+        return s
 
     @classmethod
     def dataset_type_options(cls):
