@@ -22,7 +22,7 @@ class IFoo(IBaseMetadata):
             SimpleTerm('economy', 'economy', u'Economy'))),
         title = u'The main thematic category',
         required = True,
-        default = None)
+        default = 'economy')
 
     baz = zope.schema.TextLine(
         title = u'Baz',

@@ -6,8 +6,23 @@ from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.schemata import *
 from ckanext.publicamundi.lib.metadata.types import *
 
+## Foo1 ##
+
 class Foo1(Object):
     zope.interface.implements(IFoo)
+
+## Foo2 ##
+
+class Foo2(Object):
+    pass
+
+zope.interface.classImplements(Foo2, IFoo)
+
+## Foo3 ##
+
+Foo3 = type('Foo3', (Object,), {})
+
+zope.interface.classImplements(Foo3, IFoo)
 
 ## Tests ##
 
@@ -33,7 +48,7 @@ def _test_field_factory(cls_name, k):
         assert not (f is None)
 
 def test_field_factories():
-    for X in [Foo, Foo1]:
+    for X in [Foo, Foo1, Foo2, Foo3]:
         S = X.get_schema()
         for k in zope.schema.getFieldNames(S):
             yield _test_field_factory, X.__name__, k

@@ -26,19 +26,19 @@ class TestsController(BaseController):
         x = fixtures.foo1
         S = x.get_schema()
         test_fields = {
-            #'title': {
-            #    'required': True,
-            #    'classes': [ 'control-medium' ],
-            #    'title': u'Title',
-            #    'placeholder': u'Enter a title',
-            #    'attrs': { 'data-foo': 'baz' }
-            #},
-            #'reviewed': {
-            #    'title': u'Reviewed',
-            #},
-            #'notes': {
-            #    'description': u'Add a detailed description',
-            #},
+            'title': {
+                'required': True,
+                'classes': [ 'control-medium' ],
+                'title': u'Title',
+                'placeholder': u'Enter a title',
+                'attrs': { 'data-foo': 'baz' }
+            },
+            'reviewed': {
+                'title': u'Reviewed',
+            },
+            'notes': {
+                'description': u'Add a detailed description',
+            },
             'thematic_category': {
             }
         }
@@ -47,9 +47,9 @@ class TestsController(BaseController):
             F = S.get(k)
             f = F.get(x)
             markup += toolkit.literal('<h3>Edit markup for field <code>%s</code></h3>' %(k))
-            markup += generate_markup_for_field('edit', F, f, 'foo1', **data)
+            markup += generate_markup_for_field('edit.baz', F, f, 'foo1', **data)
             markup += toolkit.literal('<h3>Read markup for field <code>%s</code></h3>' %(k))
-            markup += generate_markup_for_field('read', F, f, 'foo1', **data)
+            markup += generate_markup_for_field('read.bar', F, f, 'foo1', **data)
         #raise Exception('Break')
         c.form = markup
         return render('tests/form.html')
@@ -74,6 +74,6 @@ class TestsController(BaseController):
             'input_classes': [ 'input-small' ],
             'title': u'Point A',
         }
-        c.form = generate_markup_for_object('edit', obj, 'pt1', **data)
+        c.form = generate_markup_for_object('edit.baz', obj, 'pt1', **data)
         return render('tests/form.html')
 

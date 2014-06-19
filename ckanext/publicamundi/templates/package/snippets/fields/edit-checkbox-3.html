@@ -1,0 +1,17 @@
+{% import 'macros/markup_helpers.html' as markup_helpers -%}
+
+{% set name = name_prefix ~ '.' ~ F.getName() -%}
+{% set title = title or F.title -%}
+{% set description = description or F.description or title -%}
+{% set attrs = {} if attrs is not defined else attrs -%}
+{% set classes = [ 'field-edit-' ~ name ~ '-group' ] -%}
+
+<div class="{{ "error" if error }}{{ " " ~ classes | join(' ') }}">
+    <label class="checkbox">
+        <input type="checkbox" name="{{ name }}" id="field-{{ name }}" value="{{ name }}"
+            class="{{ input_classes | list | join(" ") }}"
+            {% if value %}checked="checked"{% endif -%}
+            {{ markup_helpers.attributes(attrs) -}} />
+         <span>{{ description }}</span>
+     </label>
+</div>
