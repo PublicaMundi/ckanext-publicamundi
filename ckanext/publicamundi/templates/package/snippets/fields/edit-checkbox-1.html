@@ -1,10 +1,11 @@
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
-{% set name = name_prefix ~ '.' ~ field.getName() -%}
+{% set name = name or name_prefix ~ '.' ~ field.getName() -%}
 {% set title = title or field.title -%}
 {% set description = description or field.description or title -%}
 {% set attrs = {} if attrs is not defined else attrs -%}
-{% set classes = [ 'field-edit-' ~ name ~ '-group' ] -%}
+{% set classes = [] if classes is not defined else classes -%}
+{% set classes = classes + [ 'field-edit-' ~ name ~ '-group' ] -%}
 
 <div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
     <label class="control-label">{{ title }}</label>

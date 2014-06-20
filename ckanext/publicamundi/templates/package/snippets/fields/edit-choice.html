@@ -1,6 +1,6 @@
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
-{% set name = name_prefix ~ '.' ~ field.getName() -%}
+{% set name = name or name_prefix ~ '.' ~ field.getName() -%}
 {% set title = title or field.title -%}
 {% set required = field.required if required is not defined else required -%}
 {% set classes = [] if classes is not defined else classes -%}

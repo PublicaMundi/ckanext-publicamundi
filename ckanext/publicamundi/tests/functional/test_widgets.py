@@ -12,8 +12,8 @@ from ckanext.publicamundi.tests.functional import with_request_context
 from ckanext.publicamundi.tests import fixtures
 
 from ckanext.publicamundi.lib.metadata.types import *
-from ckanext.publicamundi.lib.metadata.widgets import generate_markup_for_field
-from ckanext.publicamundi.lib.metadata.widgets import generate_markup_for_object
+from ckanext.publicamundi.lib.metadata.widgets import markup_for_field
+from ckanext.publicamundi.lib.metadata.widgets import markup_for_object
 from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 from ckanext.publicamundi.lib.metadata.widgets import fields as field_widgets
 
@@ -76,7 +76,7 @@ class TestController(ckan.tests.TestController):
         S = x.get_schema()
         F = S.get(k)
         f = F.get(x)
-        markup = generate_markup_for_field(action, F, f, fixture_name, **data)
+        markup = markup_for_field(action, F, f, fixture_name, **data)
         log1.info('Generated %s markup for %r:\n%s' %(action, f, markup))
         assert markup
         pq = pyquery.PyQuery(unicode(markup))
@@ -103,7 +103,7 @@ class TestController(ckan.tests.TestController):
     def _test_markup_for_object(self, fixture_name, action, data={}):
         '''Render an object widget'''
         obj = getattr(fixtures, fixture_name)
-        markup = generate_markup_for_object(action, obj, fixture_name, **data)
+        markup = markup_for_object(action, obj, fixture_name, **data)
         log1.info('Generated %s markup for object %r:\n%s' %(action, obj, markup))
         assert markup
         pq = pyquery.PyQuery(unicode(markup))

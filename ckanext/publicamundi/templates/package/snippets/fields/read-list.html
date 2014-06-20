@@ -1,0 +1,20 @@
+{% import 'macros/markup_helpers.html' as markup_helpers -%}
+
+{% set name = name or name_prefix ~ '.' ~ field.getName() -%}
+{% set title = title or field.title -%}
+{% set description = description or field.description -%}
+{% set attrs = {} if attrs is not defined else attrs -%}
+{% set classes = [] if classes is not defined else classes -%}
+{% set classes = classes + [ 'field-read-' ~ name ~ '-group' ] -%}
+
+<div class="{{ classes | join(' ') }}" {{ markup_helpers.attributes(attrs) }} >
+    
+    <h3 class="title">{{ title }}</h3>
+    <div class="label label-info">Todo</div>
+    {#
+    {% if description %}<div class="description">{{ description }}</div>{% endif -%}
+    {% for item in items -%}
+    {{ item.markup }}
+    {% endfor -%}
+    #}
+</div>
