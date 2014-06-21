@@ -16,6 +16,11 @@ class IObject(zope.interface.Interface):
         '''Return the schema interface (InterfaceClass) this object is supposed to
         conform to.'''
 
+    def get_field(k):
+        '''Return the zope.schema.Field that corresponds to attribute k.
+        The returned field instance should be bound to the context of this object.
+        '''
+
     def validate():
         '''Invoke all validators and return a list structured as
             <errors> ::= [ (<field>, <field-errors>), ... ]

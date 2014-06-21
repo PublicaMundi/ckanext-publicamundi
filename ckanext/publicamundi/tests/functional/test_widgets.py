@@ -12,8 +12,8 @@ from ckanext.publicamundi.tests.functional import with_request_context
 from ckanext.publicamundi.tests import fixtures
 
 from ckanext.publicamundi.lib.metadata.types import *
-from ckanext.publicamundi.lib.metadata.widgets import generate_markup_for_field
-from ckanext.publicamundi.lib.metadata.widgets import generate_markup_for_object
+from ckanext.publicamundi.lib.metadata.widgets import markup_for_field
+from ckanext.publicamundi.lib.metadata.widgets import markup_for_object
 from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 from ckanext.publicamundi.lib.metadata.widgets import fields as field_widgets
 
@@ -60,7 +60,7 @@ class TestController(ckan.tests.TestController):
     @nose.tools.istest
     def test_edit_field_widgets(self):
         '''Generate markup for editing fields'''
-        for k in []: #['title', 'reviewed', 'notes', 'thematic_category']:
+        for k in ['title', 'reviewed', 'notes', 'thematic_category']:
             yield self._test_markup_for_field, 'foo1', k, 'edit'
             yield self._test_markup_for_field, 'foo1', k, 'edit', { 'title': u'Another Title' }
             yield self._test_markup_for_field, 'foo1', k, 'edit', { 'required': False }
@@ -73,16 +73,14 @@ class TestController(ckan.tests.TestController):
     def _test_markup_for_field(self, fixture_name, k, action, data={}):
         '''Render a field widget'''
         x = getattr(fixtures, fixture_name)
-        S = x.get_schema()
-        F = S.get(k)
-        f = F.get(x)
-        markup = generate_markup_for_field(action, F, f, fixture_name, **data)
+        f = x.get_field(k)
+        markup = markup_for_field(action, f, fixture_name, data)
         log1.info('Generated %s markup for %r:\n%s' %(action, f, markup))
         assert markup
         pq = pyquery.PyQuery(unicode(markup))
         assert pq
         assert pq.is_('div')
-        if action == 'edit':
+        if action.startswith('edit'):
             assert pq.find('input') or pq.find('textarea') or pq.find('select')
 
     ## Test objects ##
@@ -103,7 +101,7 @@ class TestController(ckan.tests.TestController):
     def _test_markup_for_object(self, fixture_name, action, data={}):
         '''Render an object widget'''
         obj = getattr(fixtures, fixture_name)
-        markup = generate_markup_for_object(action, obj, fixture_name, **data)
+        markup = markup_for_object(action, obj, fixture_name, data)
         log1.info('Generated %s markup for object %r:\n%s' %(action, obj, markup))
         assert markup
         pq = pyquery.PyQuery(unicode(markup))

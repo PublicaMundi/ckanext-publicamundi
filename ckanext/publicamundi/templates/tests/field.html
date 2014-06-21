@@ -1,5 +1,5 @@
 {% extends 'page.html' %}
 
 {% block primary_content_inner %}
-{{ h.markup_for_field('read', field_def, field_val, 'foo', title=title) }}
+{{ h.markup_for_field('read', field, 'foo', { 'title': title }) }}
 {% endblock %}

@@ -4,8 +4,9 @@ import json
 import zope.interface
 import zope.interface.verify
 import zope.schema
+from collections import namedtuple
 
-import ckanext.publicamundi.lib.dictization as dictization
+from ckanext.publicamundi.lib import dictization
 from ckanext.publicamundi.lib.json_encoder import JsonEncoder
 from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.ibase import IObject, ISerializer
@@ -15,6 +16,8 @@ from ckanext.publicamundi.lib.metadata.serializers import get_key_tuple_serializ
 _logger = logging.getLogger(__name__)
 
 _cache = threading.local()
+
+FieldContext = namedtuple('FieldContext', ['key', 'obj'], verbose=False)
 
 def flatten_schema(S):
     assert S.extends(IObject)
@@ -73,17 +76,22 @@ class Object(object):
     def schema(cls):
         return cls.get_schema()
 
+    def get_field(self, k):
+        cls = type(self)
+        S = cls.get_schema()
+        return S.get(k).bind(FieldContext(key=k, obj=self))
+
     def validate(self):
         '''Return a list <errors> structured as:
-          
-          errors ::= [ (k, ef), ... ]      
-          ef ::= [ ex1, ex2, ...] 
+
+          errors ::= [ (k, ef), ... ]
+          ef ::= [ ex1, ex2, ...]
           ex ::= Invalid(arg0, arg1, ...)
           arg0 ::= errors
           arg0 ::= <literal-value>
 
         Notation:
-          ef : field-errors 
+          ef : field-errors
           ex : exception (derived from Invalid)
 
         '''

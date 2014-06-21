@@ -46,7 +46,7 @@ class ChoiceReadWidget(base_widgets.ReadFieldWidget):
 
 def register_field_widget(field_iface, widget_cls):
     adapter_registry.register(
-        [field_iface, None], IFieldWidget, widget_cls.action, widget_cls)
+        [field_iface], IFieldWidget, widget_cls.action, widget_cls)
 
 default_widgets = [
     # Readers
