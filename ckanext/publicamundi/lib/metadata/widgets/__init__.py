@@ -6,9 +6,6 @@ from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata import Object, FieldContext
 
 from ckanext.publicamundi.lib.metadata.widgets.ibase import IFieldWidget, IObjectWidget
-from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
-from ckanext.publicamundi.lib.metadata.widgets import fields as field_widgets
-from ckanext.publicamundi.lib.metadata.widgets import types as object_widgets
 
 def markup_for_field(action, field, name_prefix='', data={}):
     assert isinstance(field, zope.schema.Field)
@@ -49,4 +46,8 @@ def markup_for_object(action, obj, name_prefix='', data={}):
     # Found a widget to adapt [obj]
     assert zope.interface.verify.verifyObject(IObjectWidget, widget)
     return widget.render(name_prefix, data)
+
+from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
+from ckanext.publicamundi.lib.metadata.widgets import fields as field_widgets
+from ckanext.publicamundi.lib.metadata.widgets import types as object_widgets
 

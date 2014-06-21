@@ -133,8 +133,8 @@ class Object(object):
         d = json.loads(s)
         if is_flat:
             serializer = get_key_tuple_serializer(cls.KEY_GLUE)
-            d = dictization.unflatten({ 
-                serializer.loads(k): v for k, v in d.items() 
+            d = dictization.unflatten({
+                serializer.loads(k): v for k, v in d.items()
             })
         opts = {
             'unserialize-values': True,
@@ -205,7 +205,7 @@ class Object(object):
     def get_field_factory(cls, k, F=None):
         assert not k or isinstance(k, basestring)
         assert not F or isinstance(F, zope.schema.Field)
-        assert k or F, 'At least one of k(key), F(Field) should be specified' 
+        assert k or F, 'At least one of k(key), F(Field) should be specified'
         factory = None
         # Check if a factory is defined explicitly as a class attribute
         if k and hasattr(cls, k):
@@ -218,7 +218,7 @@ class Object(object):
             if not F:
                 raise ValueError('Cannot find field %s for schema %s' %(k,S))
         if isinstance(F, zope.schema.Object):
-            factory = adapter_registry.lookup([], F.schema) 
+            factory = adapter_registry.lookup([], F.schema)
         else:
             factory = F.defaultFactory or cls.default_factories.get(type(F))
         return factory
@@ -234,7 +234,7 @@ class Object(object):
 
         def validate(self):
             '''Return <errors> following the structure of Object.validate() result'''
-            errors = self.validate_schema() 
+            errors = self.validate_schema()
             if errors:
                 # Stop here, do not check invariants
                 return errors
@@ -307,7 +307,7 @@ class Object(object):
                 except zope.interface.Invalid as ex:
                     ef.append(ex)
             return ef
-        
+
         def _validate_schema_for_field_items(self, items, F):
             '''Return <errors>'''
             errors = []
@@ -332,7 +332,7 @@ class Object(object):
             '''Return <errors>'''
             errors = []
             S = self.obj.get_schema()
-        
+
             # Descend into field invariants
             recurse = False
             try:
@@ -347,13 +347,13 @@ class Object(object):
                     ef = self._validate_invariants_for_field(f, F)
                     if ef:
                         errors.append((k, ef))
-                
+
             # Check own invariants
             try:
                 S.validateInvariants(self.obj)
             except zope.interface.Invalid as ex:
                 errors.append((None, [ex]))
-        
+
             return errors
 
         def _validate_invariants_for_field(self, f, F):
@@ -368,11 +368,11 @@ class Object(object):
                 errors = self._validate_invariants_for_field_items(enumerate(f), F)
             elif isinstance(F, zope.schema.Dict):
                 errors = self._validate_invariants_for_field_items(f.iteritems(), F)
-        
+
             if errors:
                 ef.append(zope.interface.Invalid(errors))
             return ef
-        
+
         def _validate_invariants_for_field_items(self, items, F):
             '''Returns <errors>'''
             errors = []
@@ -415,8 +415,8 @@ class Object(object):
         # Check if we must descend 
         if not (ex.args and isinstance(ex.args[0], list)):
             # Treat this as a literal, stop descending
-            return '%s: %s' %(type(ex).__name__, str(ex).strip())    
-        
+            return '%s: %s' %(type(ex).__name__, str(ex).strip())
+
         # If here, we have a valid <errors> list
         errors = ex.args[0]
         if isinstance(F, zope.schema.Object):
@@ -433,12 +433,12 @@ class Object(object):
             return '%s: %s' %(type(ex).__name__, repr(errors))
 
     def _dictize_errors_for_field_collection(self, errors, f, F):
-        res = {} 
+        res = {}
         for k, ef in errors:
             # Pick the 1st exception
             ex = ef[0]
             # Note that here, k will be either an integer or a string
-            res[k] = self._dictize_errors_for_field(ex, f[k], F.value_type) 
+            res[k] = self._dictize_errors_for_field(ex, f[k], F.value_type)
         return res
 
     def flatten_errors(self, errors):
@@ -536,7 +536,7 @@ class Object(object):
                 v = d.get(k)
                 factory = self.obj.get_field_factory(k, F)
                 f = None
-                if not v: 
+                if not v:
                     # No value given, use factory (if exists)
                     f = factory() if factory else F.default
                 else:
@@ -570,7 +570,7 @@ class Object(object):
                 return d
             else:
                 # A leaf field (may need to be unserialized)
-                f = v 
+                f = v
                 if self.opts.get('unserialize-values'):
                     serializer = get_field_serializer(F)
                     if serializer:

@@ -1,22 +1,15 @@
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
-{% set name = name_prefix ~ '.' ~ field.getName() -%}
-{% set title = title or field.title -%}
 {% set placeholder = placeholder or field.default -%}
-{% set required = field.required if required is not defined else required -%}
-{% set description = field.description if description is not defined else description -%}
-{% set classes = [] if classes is not defined else classes -%}
-{% set classes = classes + [ 'control-full', 'field-edit-' ~ name ~ '-group' ] -%}
-{% set input_classes = [] if input_classes is not defined -%}
-{% set attrs = {} if attrs is not defined else attrs -%}
+{% set classes = classes + [ 'control-full' ] -%}
 
 <div class="control-group{{ " " ~ classes | join(' ') }}">
-    <label class="control-label" for="{{ 'field-' ~ name }}">
+    <label class="control-label" for="{{ 'field-' ~ qname }}">
         {{ title }}
         {% if required %}<span title="{{ _("This field is required") }}" class="control-required">*</span>{% endif %}
     </label>
     <div class="controls">
-        <textarea id="{{ 'field-' ~ name }}" name="{{ name }}" class={{ input_classes | join(" ") }}
+        <textarea id="{{ 'field-' ~ qname }}" name="{{ qname }}" class={{ input_classes | list | join(" ") }}
             placeholder="{{ placeholder | empty_and_escape }}"  
             {{ markup_helpers.attributes(attrs) -}}
           />{{ value | empty_and_escape }}</textarea>

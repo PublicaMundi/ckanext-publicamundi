@@ -7,6 +7,8 @@ from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 
 ## Define widgets ##
 
+# Editors
+
 class TextEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
@@ -26,6 +28,8 @@ class ChoiceEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/edit-choice.html'
+
+# Readers
 
 class TextReadWidget(base_widgets.ReadFieldWidget):
 

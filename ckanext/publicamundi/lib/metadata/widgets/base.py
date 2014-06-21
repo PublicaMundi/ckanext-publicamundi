@@ -21,13 +21,14 @@ class FieldWidget(object):
         self.field = field
         name = field.getName()
         if name:
-            # This is a named field, used an attribute for a
+            # This is a named field, used as an attribute in a
             # schema-providing object
             assert name == field.context.key
             self.name = name
             self.value = field.get(field.context.obj)
         else:
-            # This is an anonymous field
+            # This is an anonymous field, probably created from
+            # a nested field declaration (e.g. a List.value_type)
             self.name = field.context.key
             self.value = field.context.obj[field.context.key]
         return
@@ -35,14 +36,34 @@ class FieldWidget(object):
     ## IFieldWidget interface ##
 
     def set_template_vars(self, name_prefix, data):
+        '''Prepare template context'''
+
+        basic_action = self.action.split('.')[0]
+
+        # Provide basic variables
         template_vars = {
             'name_prefix': name_prefix,
             'action': self.action,
+            'basic_action': basic_action,
             'field': self.field,
             'value': self.value,
             'name': self.name,
+            'required': self.field.required,
+            'title': self.field.title,
+            'description': self.field.description,
+            'readonly': self.field.readonly,
+            'attrs': {},
+            'classes': [],
         }
+
+        # Override with caller's variables
         template_vars.update(data)
+
+        # Provide computed variables or sensible defaults
+        qname = "%s.%s" %(name_prefix, template_vars['name'])
+        template_vars['qname'] = qname
+        template_vars['classes'] = template_vars['classes'] + [ 'field-%s-%s' %(basic_action, qname) ]
+
         return template_vars
 
     def get_template(self):
@@ -66,13 +87,28 @@ class ObjectWidget(object):
     action = ''
 
     def set_template_vars(self, name_prefix, data):
+        '''Prepare template context'''
+
+        # Provide basic variables
         template_vars = {
             'name_prefix': name_prefix,
             'action': self.action,
             'obj': self.obj,
             'schema': self.obj.get_schema(),
         }
+
+        # Override with caller's variables
         template_vars.update(data)
+
+        # Provide computed variables and sensible defaults
+        qname = name_prefix
+        basic_action = self.action.split('.')[0]
+        template_vars.update({
+            'qname': qname,
+            'classes': [ 'field-%s-%s' %(basic_action, qname), ],
+            'attrs': {},
+        })
+
         return template_vars
 
     def get_template(self):

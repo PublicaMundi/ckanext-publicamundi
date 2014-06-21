@@ -1,4 +1,5 @@
 import logging
+import copy
 import json
 
 from pylons import url
@@ -30,17 +31,18 @@ class TestsController(BaseController):
                 'required': True,
                 'classes': [ 'control-medium' ],
                 'title': u'Title',
+                'description': u'Blah blah',
                 'placeholder': u'Enter a title',
                 'attrs': { 'data-foo': 'baz' }
             },
-            'reviewed': {
-                'title': u'Reviewed',
-            },
-            'notes': {
-                'description': u'Add a detailed description',
-            },
-            'thematic_category': {
-            }
+#            'reviewed': {
+#                'title': u'Reviewed',
+#            },
+#            'notes': {
+#                'description': u'Add a detailed description',
+#            },
+#            'thematic_category': {
+#            }
         }
         markup = ''
         for k, data in test_fields.items():

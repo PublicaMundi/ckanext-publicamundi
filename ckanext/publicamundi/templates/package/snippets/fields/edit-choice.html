@@ -1,28 +1,21 @@
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
-{% set name = name_prefix ~ '.' ~ field.getName() -%}
-{% set title = title or field.title -%}
-{% set required = field.required if required is not defined else required -%}
-{% set classes = [] if classes is not defined else classes -%}
-{% set classes = classes + [ 'control-select', 'field-edit-' ~ name ~ '-group' ] -%}
-{% set attrs = {} if attrs is not defined else attrs -%}
+{% set classes = classes + [ 'control-select' ] -%}
 
 <div class="control-group{{ " " ~ classes | join(' ') }}">
-    <label class="control-label" for="{{ 'field-' ~ name }}">
+    <label class="control-label" for="{{ 'field-' ~ qname }}">
         {{ title }}
         <code>{{ value }}</code>
     </label>
     <div class="controls">
-        <select name="{{ name }}" id="{{ 'field-' ~ name }}" {{ markup_helpers.attributes(attrs) }} />
+        <select name="{{ qname }}" id="{{ 'field-' ~ qname }}" {{ markup_helpers.attributes(attrs) }} />
             {% if not required -%}
             <option value=""></option>
             {% endif -%}
-            {% for option in field.vocabulary %}
-            <option 
-                value="{{ option.value }}"
-                {% if option.value == value %} selected="selected"{% endif %}
+            {% for option in field.vocabulary -%}
+            <option value="{{ option.value }}" {% if option.value == value %}selected="selected"{% endif %}
                 >{{ option.title or option.value }}</option>
-            {% endfor %}
+            {% endfor -%}
         </select>
     </div>
 </div>

@@ -1,5 +1,4 @@
-{% set title = title or field.title or field.getName() %}
-<div class="field-read-{{ name_prefix ~ '.' ~ field.getName() }}-group">
+<div class="{{ classes | join(' ') }}">
     <dt>{{ title }}</dt>
     <dd>{{ value }}</dd>
 </div>
