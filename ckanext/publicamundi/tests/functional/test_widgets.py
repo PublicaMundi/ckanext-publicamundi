@@ -72,7 +72,7 @@ class TestController(ckan.tests.TestController):
     @with_request_context('publicamundi-tests', 'index')
     def _test_markup_for_field(self, fixture_name, k, action, data={}):
         '''Render a field widget'''
-        basic_action = action.split('.')[0]
+        base_action = action.split('.')[0]
         x = getattr(fixtures, fixture_name)
         f = x.get_field(k)
         markup = markup_for_field(action, f, fixture_name, data)
@@ -81,7 +81,7 @@ class TestController(ckan.tests.TestController):
         pq = pyquery.PyQuery(unicode(markup))
         assert pq
         assert pq.is_('div')
-        assert pq.is_('.field-%s-%s\\.%s' %(basic_action, fixture_name, k))
+        assert pq.is_('.field-%s-%s\\.%s' %(base_action, fixture_name, k))
         if action.startswith('edit'):
             e = pq.find('input') or pq.find('textarea') or pq.find('select')
             assert e

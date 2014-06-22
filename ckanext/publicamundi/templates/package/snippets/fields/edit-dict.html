@@ -3,9 +3,9 @@
 <div class="{{ classes | join(' ') }}" {{ markup_helpers.attributes(attrs) }} >
     <h3 class="title">{{ title }}</h3>
     {% if description %}<div class="description">{{ description }}</div>{% endif -%}
-    <ol>
+    <ul>
         {% for item in items -%}
         <li>{{ item.markup }}</li>
         {% endfor -%}
-    </ol>
+    </ul>
 </div>

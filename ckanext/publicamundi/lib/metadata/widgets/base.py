@@ -7,17 +7,24 @@ from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.ibase import IObject
 from ckanext.publicamundi.lib.metadata.base import Object, FieldContext
 from ckanext.publicamundi.lib.metadata.widgets.ibase import IFieldWidget, IObjectWidget
+from ckanext.publicamundi.lib.metadata.widgets import markup_for_field
+from ckanext.publicamundi.lib.metadata.widgets import markup_for_object
 
 ## Base
 
 class FieldWidget(object):
     zope.interface.implements(IFieldWidget)
 
-    action = ''
+    action = 'any'
 
     def __init__(self, field):
         assert isinstance(field, zope.schema.Field)
         assert field.context and isinstance(field.context, FieldContext)
+        action_parts = self.action.split('.')
+        if len(action_parts) > 1:
+            self.base_action, self.action_variation = action_parts
+        else:
+            self.base_action, self.action_variation = self.action, None
         self.field = field
         name = field.getName()
         if name:
@@ -38,13 +45,11 @@ class FieldWidget(object):
     def set_template_vars(self, name_prefix, data):
         '''Prepare template context'''
 
-        basic_action = self.action.split('.')[0]
-
         # Provide basic variables
         template_vars = {
             'name_prefix': name_prefix,
             'action': self.action,
-            'basic_action': basic_action,
+            'base_action': self.base_action,
             'field': self.field,
             'value': self.value,
             'name': self.name,
@@ -62,7 +67,8 @@ class FieldWidget(object):
         # Provide computed variables or sensible defaults
         qname = "%s.%s" %(name_prefix, template_vars['name'])
         template_vars['qname'] = qname
-        template_vars['classes'] = template_vars['classes'] + [ 'field-%s-%s' %(basic_action, qname) ]
+        template_vars['classes'] = template_vars['classes'] + \
+            [ 'field-%s-%s' %(self.base_action, qname), ]
 
         return template_vars
 
@@ -80,11 +86,16 @@ class ObjectWidget(object):
 
     def __init__(self, obj):
         assert isinstance(obj, Object)
+        action_parts = self.action.split('.')
+        if len(action_parts) > 1:
+            self.base_action, self.action_variation = action_parts
+        else:
+            self.base_action, self.action_variation = self.action, None
         self.obj = obj
 
     ## IObjectWidget interface ##
 
-    action = ''
+    action = 'any'
 
     def set_template_vars(self, name_prefix, data):
         '''Prepare template context'''
@@ -93,8 +104,11 @@ class ObjectWidget(object):
         template_vars = {
             'name_prefix': name_prefix,
             'action': self.action,
+            'base_action': self.base_action,
             'obj': self.obj,
             'schema': self.obj.get_schema(),
+            'classes': [],
+            'attrs': {},
         }
 
         # Override with caller's variables
@@ -102,12 +116,9 @@ class ObjectWidget(object):
 
         # Provide computed variables and sensible defaults
         qname = name_prefix
-        basic_action = self.action.split('.')[0]
-        template_vars.update({
-            'qname': qname,
-            'classes': [ 'field-%s-%s' %(basic_action, qname), ],
-            'attrs': {},
-        })
+        template_vars['qname'] = qname
+        template_vars['classes'] = template_vars['classes'] + \
+            [ 'object-%s-%s' %(self.base_action, qname), ]
 
         return template_vars
 
@@ -157,4 +168,68 @@ class EditObjectWidget(ObjectWidget):
             if F.readonly:
                 fields.append(k)
         return fields
+
+## Base widgets for collections 
+
+class ListWidgetTraits(FieldWidget):
+
+    def set_template_vars(self, name_prefix, data):
+        '''Prepare data for the template.
+        The markup for items will be generated before the template is
+        called, as it will only act as glue.
+        '''
+        data = FieldWidget.set_template_vars(self, name_prefix, data)
+        field = self.field
+        value = self.value
+        title = data['title']
+        qname = data['qname']
+        item_prefix = qname
+        item_action = '%s.%s-item' %(
+            self.base_action, (self.action_variation or 'list'))
+        def render_item(item):
+            i, y = item
+            assert isinstance(i, int)
+            yf = field.value_type.bind(FieldContext(key=i, obj=value))
+            return {
+                'index': i,
+                'markup': markup_for_field(item_action, yf, item_prefix, {
+                    'title': u'%s %d' %(title, i),
+                }),
+            }
+        data.update({
+            'items': map(render_item, enumerate(value)),
+        })
+        return data
+
+class DictWidgetTraits(FieldWidget):
+
+    def set_template_vars(self, name_prefix, data):
+        '''Prepare data for the template.
+        The markup for items will be generated before the template is
+        called, as it will only act as glue.
+        '''
+        # Todo: 
+        # Use field.key_type to get description for keys (vocab terms)
+        data = FieldWidget.set_template_vars(self, name_prefix, data)
+        field = self.field
+        value = self.value
+        title = data['title']
+        qname = data['qname']
+        item_prefix = qname
+        item_action = '%s.%s-item' %(
+            self.base_action, (self.action_variation or 'dict'))
+        def render_item(item):
+            k, y = item
+            assert isinstance(k, basestring)
+            yf = field.value_type.bind(FieldContext(key=k, obj=value))
+            return {
+                'key': k,
+                'markup': markup_for_field(item_action, yf, item_prefix, {
+                    'title': u'%s %s' %(title, k),
+                }),
+            }
+        data.update({
+            'items': map(render_item, value.iteritems()),
+        })
+        return data
 
