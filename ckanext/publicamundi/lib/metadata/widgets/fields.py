@@ -4,6 +4,7 @@ import zope.schema
 from ckan.plugins import toolkit
 
 from ckanext.publicamundi.lib.metadata import adapter_registry
+from ckanext.publicamundi.lib.metadata import Object, FieldContext
 from ckanext.publicamundi.lib.metadata.widgets.ibase import IFieldWidget
 from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 from ckanext.publicamundi.lib.metadata.widgets import markup_for_field
@@ -37,43 +38,45 @@ class ListEditWidget(base_widgets.EditFieldWidget):
 
     action = 'edit'
 
-    def __init__(self, F, f):
+    def __init__(self, field):
         assert \
-            (isinstance(F, zope.schema.List) and isinstance(f, list)) or \
-            (isinstance(F, zope.schema.Tuple) and isinstance(f, tuple))
-        base_widgets.EditFieldWidget.__init__(self, F, f)
+            isinstance(field, zope.schema.List) or \
+            isinstance(field, zope.schema.Tuple)
+        base_widgets.EditFieldWidget.__init__(self, field)
 
     def get_template(self):
         return 'package/snippets/fields/edit-list.html'
 
-    def render(self, name_prefix, data={}):
+    def set_template_vars(self, name_prefix, data):
         '''Prepare data for the template.
         The markup for items will be generated before the template is
-        called, as the template will only act as glue.
+        called, as it will only act as glue.
         '''
-        F = self.field_def
-        f = self.field_val
-        title = data.get('title') or F.title
-        item_prefix = name_prefix + '.' + F.getName()
+        data = base_widgets.EditFieldWidget.set_template_vars(self, name_prefix, data)
+        field = self.field
+        value = self.value
+        title = data['title']
+        qname = data['qname']
+        basic_action = data['basic_action']
+        item_prefix = qname
+        item_action = '%s.list-item' %(basic_action)
         def render_item(item):
             i, y = item
-            # Todo: distinguish between name and fullname
             item_data = {
                 'title': u'%s #%d' %(title, i),
-                'name': item_prefix + '.' + str(i),
             }
+            yf = field.value_type.bind(FieldContext(key=i, obj=value))
             return {
                 'index': i,
-                'markup': markup_for_field('edit', F.value_type, y, item_prefix, **item_data)
+                'markup': markup_for_field(item_action, yf, item_prefix, item_data)
             }
         data.update({
-            'items': map(render_item, enumerate(f)),
-            'num_items': len(f),
-            'attrs': {
-                'data-disabled-module': 'list',
-            },
+            'items': map(render_item, enumerate(value)),
+            'attrs': dict(data['attrs'].items() + [
+                ('data-disabled-module', 'list'),
+            ]),
         })
-        return base_widgets.EditFieldWidget.render(self, name_prefix, data)
+        return data
 
 # Readers #
 
@@ -98,6 +101,11 @@ class ListReadWidget(base_widgets.ReadFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/read-list.html'
+
+    def set_template_vars(self, name_prefix, data):
+        data = base_widgets.ReadFieldWidget.set_template_vars(self, name_prefix, data)
+        # Todo
+        return data
 
 ## Register adapters ##
 
