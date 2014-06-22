@@ -35,14 +35,10 @@ class TestsController(BaseController):
                 'placeholder': u'Enter a title',
                 'attrs': { 'data-foo': 'baz' }
             },
-#            'reviewed': {
-#                'title': u'Reviewed',
-#            },
-#            'notes': {
-#                'description': u'Add a detailed description',
-#            },
-#            'thematic_category': {
-#            }
+            'reviewed': { 'title': u'Reviewed',},
+            'notes': { 'description': u'Add a detailed description', },
+            'thematic_category': {},
+            'tags': {},
         }
         markup = ''
         for k, data in test_fields.items():
