@@ -11,9 +11,11 @@ from ckan.tests import url_for
 from ckanext.publicamundi.tests.functional import with_request_context
 from ckanext.publicamundi.tests import fixtures
 
+from ckanext.publicamundi.lib.metadata import adapter_registry 
 from ckanext.publicamundi.lib.metadata.types import *
 from ckanext.publicamundi.lib.metadata.widgets import markup_for_field
 from ckanext.publicamundi.lib.metadata.widgets import markup_for_object
+from ckanext.publicamundi.lib.metadata.widgets import ibase as ibase_widgets
 from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 from ckanext.publicamundi.lib.metadata.widgets import fields as field_widgets
 
@@ -39,9 +41,7 @@ BoolWidget3.action = 'edit.checkbox-3'
 BoolWidget3.get_template = lambda t: 'package/snippets/fields/edit-checkbox-3.html'
 
 field_widgets.register_field_widget(zope.schema.interfaces.IBool, BoolWidget1)
-
 field_widgets.register_field_widget(zope.schema.interfaces.IBool, BoolWidget2)
-
 field_widgets.register_field_widget(zope.schema.interfaces.IBool, BoolWidget3)
 
 ## Tests ##
@@ -50,6 +50,24 @@ class TestController(ckan.tests.TestController):
 
     ## Test fields ##
 
+    @nose.tools.istest
+    def test_registered_field_widgets(self):
+        field_ifaces = [
+            zope.schema.interfaces.IBool,
+            zope.schema.interfaces.IText,
+            zope.schema.interfaces.IList,
+        ]
+        for iface in field_ifaces:
+            yield self._test_registered_field_widgets, iface
+    
+    def _test_registered_field_widgets(self, field_iface):
+        adapters = adapter_registry.lookupAll([field_iface], ibase_widgets.IFieldWidget)
+        print
+        print ' -- Widget adapters for field %s -- ' %(field_iface)
+        for adapter in adapters:
+            print adapter
+        assert len(adapters) > 1
+ 
     @nose.tools.istest
     def test_read_field_widgets(self):
         '''Generate markup for reading fields'''
