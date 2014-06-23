@@ -7,6 +7,7 @@ from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata import Object, FieldContext
 from ckanext.publicamundi.lib.metadata.widgets.ibase import IFieldWidget
 from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
+from ckanext.publicamundi.lib.metadata.widgets import logger
 
 ## Define widgets ##
 
@@ -34,20 +35,18 @@ class ChoiceEditWidget(base_widgets.EditFieldWidget):
 
 class ListEditWidget(base_widgets.EditFieldWidget, base_widgets.ListWidgetTraits):
 
-    action = 'edit'
-
-    def __init__(self, field):
+    def __init__(self, field, qualified_action):
         assert \
             isinstance(field, zope.schema.List) or \
             isinstance(field, zope.schema.Tuple)
-        base_widgets.EditFieldWidget.__init__(self, field)
+        base_widgets.EditFieldWidget.__init__(self, field, qualified_action)
 
     def get_template(self):
         return 'package/snippets/fields/edit-list.html'
 
-    def set_template_vars(self, name_prefix, data):
+    def prepare_template_vars(self, name_prefix, data):
         '''Prepare data for the template'''
-        data = base_widgets.ListWidgetTraits.set_template_vars(self, name_prefix, data)
+        data = base_widgets.ListWidgetTraits.prepare_template_vars(self, name_prefix, data)
         data.update({
             'attrs': dict(data['attrs'].items() + [
                 ('data-disabled-module', 'list'),
@@ -57,18 +56,16 @@ class ListEditWidget(base_widgets.EditFieldWidget, base_widgets.ListWidgetTraits
 
 class DictEditWidget(base_widgets.EditFieldWidget, base_widgets.DictWidgetTraits):
 
-    action = 'edit'
-
-    def __init__(self, field):
+    def __init__(self, field, qualified_action):
         assert isinstance(field, zope.schema.Dict)
-        base_widgets.EditFieldWidget.__init__(self, field)
+        base_widgets.EditFieldWidget.__init__(self, field, qualified_action)
 
     def get_template(self):
         return 'package/snippets/fields/edit-dict.html'
 
-    def set_template_vars(self, name_prefix, data):
+    def prepare_template_vars(self, name_prefix, data):
         '''Prepare data for the template'''
-        data = base_widgets.DictWidgetTraits.set_template_vars(self, name_prefix, data)
+        data = base_widgets.DictWidgetTraits.prepare_template_vars(self, name_prefix, data)
         data.update({
             'attrs': dict(data['attrs'].items() + [
                 ('data-disabled-module', 'dict'),
@@ -83,6 +80,13 @@ class TextReadWidget(base_widgets.ReadFieldWidget):
     def get_template(self):
         return 'package/snippets/fields/read-text.html'
 
+class TextAsItemReadWidget(base_widgets.ReadFieldWidget):
+
+    qualifiers = ['item']
+
+    def get_template(self):
+        return 'package/snippets/fields/read-text-item.html'
+
 class BoolReadWidget(base_widgets.ReadFieldWidget):
 
     def get_template(self):
@@ -95,20 +99,18 @@ class ChoiceReadWidget(base_widgets.ReadFieldWidget):
 
 class ListReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListWidgetTraits):
 
-    action = 'read'
-
-    def __init__(self, field):
+    def __init__(self, field, qualified_action):
         assert \
             isinstance(field, zope.schema.List) or \
             isinstance(field, zope.schema.Tuple)
-        base_widgets.ReadFieldWidget.__init__(self, field)
+        base_widgets.ReadFieldWidget.__init__(self, field, qualified_action)
 
     def get_template(self):
         return 'package/snippets/fields/read-list.html'
 
-    def set_template_vars(self, name_prefix, data):
+    def prepare_template_vars(self, name_prefix, data):
         '''Prepare data for the template'''
-        data = base_widgets.ListWidgetTraits.set_template_vars(self, name_prefix, data)
+        data = base_widgets.ListWidgetTraits.prepare_template_vars(self, name_prefix, data)
         data.update({
             'attrs': dict(data['attrs'].items() + [
                 ('data-disabled-module', 'list'),
@@ -118,18 +120,16 @@ class ListReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListWidgetTraits
 
 class DictReadWidget(base_widgets.ReadFieldWidget, base_widgets.DictWidgetTraits):
 
-    action = 'read'
-
-    def __init__(self, field):
+    def __init__(self, field, qualified_action):
         assert isinstance(field, zope.schema.Dict)
-        base_widgets.ReadFieldWidget.__init__(self, field)
+        base_widgets.ReadFieldWidget.__init__(self, field, qualified_action)
 
     def get_template(self):
         return 'package/snippets/fields/read-dict.html'
 
-    def set_template_vars(self, name_prefix, data):
+    def prepare_template_vars(self, name_prefix, data):
         '''Prepare data for the template'''
-        data = base_widgets.DictWidgetTraits.set_template_vars(self, name_prefix, data)
+        data = base_widgets.DictWidgetTraits.prepare_template_vars(self, name_prefix, data)
         data.update({
             'attrs': dict(data['attrs'].items() + [
                 ('data-disabled-module', 'dict'),
@@ -140,13 +140,17 @@ class DictReadWidget(base_widgets.ReadFieldWidget, base_widgets.DictWidgetTraits
 ## Register adapters ##
 
 def register_field_widget(field_iface, widget_cls):
-    adapter_registry.register(
-        [field_iface], IFieldWidget, widget_cls.action, widget_cls)
+    for name in widget_cls.get_qualified_actions():
+        adapter_registry.register(
+            [field_iface, None], IFieldWidget, name, widget_cls)
+        logger.info('Registered adapter %s for field [%s, None] with name "%s"', 
+            widget_cls.__name__, field_iface.__name__, name)
 
 default_widgets = [
     # Readers
     (zope.schema.interfaces.IText, TextReadWidget),
     (zope.schema.interfaces.ITextLine, TextReadWidget),
+    (zope.schema.interfaces.ITextLine, TextAsItemReadWidget),
     (zope.schema.interfaces.IBytesLine, TextReadWidget),
     (zope.schema.interfaces.IBytes, None),
     (zope.schema.interfaces.IBool, BoolReadWidget),

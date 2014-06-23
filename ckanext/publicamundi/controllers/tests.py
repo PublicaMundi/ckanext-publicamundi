@@ -44,9 +44,9 @@ class TestsController(BaseController):
         for k, data in test_fields.items():
             f = x.get_field(k)
             markup += toolkit.literal('<h3>Edit markup for field <code>%s</code></h3>' %(k))
-            markup += markup_for_field('edit.baz', f, 'foo1', data)
+            markup += markup_for_field('edit:baz', f, 'foo1', data)
             markup += toolkit.literal('<h3>Read markup for field <code>%s</code></h3>' %(k))
-            markup += markup_for_field('read.bar', f, 'foo1', data)
+            markup += markup_for_field('read:bar', f, 'foo1', data)
         #raise Exception('Break')
         c.form = markup
         return render('tests/form.html')
@@ -70,12 +70,12 @@ class TestsController(BaseController):
             'title': u'Point A',
         }
         markup += toolkit.literal('<h3>Markup for object <code>Point</code></h3>')
-        markup += markup_for_object('edit.baz', obj, 'pt1', data)
+        markup += markup_for_object('edit:baz', obj, 'pt1', data)
         # A TemporalExtent object
         obj = fixtures.dt1
         data = {}
         markup += toolkit.literal('<h3>Markup for object <code>TemporalExtent</code></h3>')
-        markup += markup_for_object('edit.faz', obj, 'dt1', data)
+        markup += markup_for_object('edit:faz', obj, 'dt1', data)
         # Render 
         c.form = markup
         return render('tests/form.html')

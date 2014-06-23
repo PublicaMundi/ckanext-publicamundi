@@ -31,8 +31,9 @@ class TemporalExtentReadWidget(base_widgets.ReadObjectWidget):
 ## Register adapters ##
 
 def register_object_widget(object_iface, widget_cls):
-    adapter_registry.register(
-        [object_iface], IObjectWidget, widget_cls.action, widget_cls)
+    for name in widget_cls.get_qualified_actions():
+        adapter_registry.register(
+            [object_iface, None], IObjectWidget, name, widget_cls)
 
 default_widgets = [
     (schemata.IPoint, PointReadWidget),
