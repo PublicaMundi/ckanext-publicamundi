@@ -21,6 +21,11 @@ from ckanext.publicamundi.lib.metadata.widgets import fields as field_widgets
 
 log1 = logging.getLogger(__name__)
 
+## Define a dummy interface ##
+
+class IBaz(zope.interface.Interface):
+    pass
+
 ## Define widgets ##
 
 class BoolWidget1(base_widgets.EditFieldWidget):
@@ -52,6 +57,29 @@ class TestController(ckan.tests.TestController):
     ## Test fields ##
  
     @nose.tools.istest
+    def test_registered_field_widgets(self):
+        field_ifaces = [
+            zope.schema.interfaces.IBool,
+            zope.schema.interfaces.IText,
+            zope.schema.interfaces.ITextLine,
+            zope.schema.interfaces.IList,
+        ]
+        for iface in field_ifaces:
+            yield self._test_registered_field_widgets, iface
+    
+    def _test_registered_field_widgets(self, field_iface):
+        '''Fetch all registered adapters for a given field interface'''
+        # Note: 
+        # The lookupAll() method requires to pass an adaptee interface, so we have
+        # created a dummy interface (IBaz) to be used as equivalent to <anything> 
+        adapters = adapter_registry.lookupAll([field_iface, IBaz], ibase_widgets.IFieldWidget)
+        print
+        print ' -- Registered widget adapters for field %s -- ' %(field_iface)
+        for adapter in adapters:
+            print adapter
+        assert len(adapters) >= 2  
+    
+    @nose.tools.istest
     def test_read_field_widgets(self):
         '''Generate markup for reading fields'''
         for k in ['title', 'reviewed']:
@@ -69,7 +97,7 @@ class TestController(ckan.tests.TestController):
             yield self._test_markup_for_field, 'foo1', k, 'edit:checkbox_1'
             yield self._test_markup_for_field, 'foo1', k, 'edit:checkbox_2'
             yield self._test_markup_for_field, 'foo1', k, 'edit:checkbox_3'
-            yield self._test_markup_for_field, 'foo1', k, 'edit:checkbox_3.baz'
+            yield self._test_markup_for_field, 'foo1', k, 'edit:checkbox_3.bar.baz'
 
     @with_request_context('publicamundi-tests', 'index')
     def _test_markup_for_field(self, fixture_name, k, action, data={}):

@@ -22,7 +22,7 @@ class TestsController(BaseController):
 
     def index(self, id=None):
         return u'Another test!'
-
+    
     def get_field_markup(self):
         x = fixtures.foo1
         S = x.get_schema()
@@ -42,12 +42,13 @@ class TestsController(BaseController):
         }
         markup = ''
         for k, data in test_fields.items():
-            f = x.get_field(k)
+            f = x.get_field(k) 
             markup += toolkit.literal('<h3>Edit markup for field <code>%s</code></h3>' %(k))
             markup += markup_for_field('edit:baz', f, 'foo1', data)
             markup += toolkit.literal('<h3>Read markup for field <code>%s</code></h3>' %(k))
             markup += markup_for_field('read:bar', f, 'foo1', data)
         #raise Exception('Break')
+        c.form_class = 'form' # 'form-horizontal'
         c.form = markup
         return render('tests/form.html')
 
