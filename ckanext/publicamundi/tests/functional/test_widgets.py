@@ -12,12 +12,13 @@ from ckanext.publicamundi.tests.functional import with_request_context
 from ckanext.publicamundi.tests import fixtures
 
 from ckanext.publicamundi.lib.metadata import adapter_registry 
+from ckanext.publicamundi.lib.metadata.schemata import *
 from ckanext.publicamundi.lib.metadata.types import *
-from ckanext.publicamundi.lib.metadata.widgets import markup_for_field
-from ckanext.publicamundi.lib.metadata.widgets import markup_for_object
 from ckanext.publicamundi.lib.metadata.widgets import ibase as ibase_widgets
 from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 from ckanext.publicamundi.lib.metadata.widgets import fields as field_widgets
+from ckanext.publicamundi.lib.metadata.widgets import markup_for_field, markup_for_object
+from ckanext.publicamundi.lib.metadata.widgets import field_widget_adapter
 
 log1 = logging.getLogger(__name__)
 
@@ -28,27 +29,25 @@ class IBaz(zope.interface.Interface):
 
 ## Define widgets ##
 
+@field_widget_adapter(zope.schema.interfaces.IBool, qualifiers=['checkbox1'])
 class BoolWidget1(base_widgets.EditFieldWidget):
-    qualifiers = ['checkbox_1']
+    
     def get_template(self):
         return 'package/snippets/fields/edit-checkbox-1.html'
 
+@field_widget_adapter(zope.schema.interfaces.IBool, qualifiers=['checkbox2'])
 class BoolWidget2(base_widgets.EditFieldWidget):
-    qualifiers = ['checkbox_2']
 
     def get_template(self):
         return 'package/snippets/fields/edit-checkbox-2.html'
 
 BoolWidget3 = type('BoolWidget3', (base_widgets.EditFieldWidget,), {
-    'qualifiers': None,
     'get_template': None
 })
-BoolWidget3.qualifiers = ['checkbox_3']
 BoolWidget3.get_template = lambda t: 'package/snippets/fields/edit-checkbox-3.html'
-
-field_widgets.register_field_widget(zope.schema.interfaces.IBool, BoolWidget1)
-field_widgets.register_field_widget(zope.schema.interfaces.IBool, BoolWidget2)
-field_widgets.register_field_widget(zope.schema.interfaces.IBool, BoolWidget3)
+BoolWidget3 = \
+    field_widget_adapter(zope.schema.interfaces.IBool, qualifiers=['checkbox3'])\
+    (BoolWidget3)
 
 ## Tests ##
 
@@ -60,9 +59,11 @@ class TestController(ckan.tests.TestController):
     def test_registered_field_widgets(self):
         field_ifaces = [
             zope.schema.interfaces.IBool,
+            zope.schema.interfaces.IChoice,
             zope.schema.interfaces.IText,
             zope.schema.interfaces.ITextLine,
             zope.schema.interfaces.IList,
+            zope.schema.interfaces.IDict,
         ]
         for iface in field_ifaces:
             yield self._test_registered_field_widgets, iface
@@ -119,6 +120,25 @@ class TestController(ckan.tests.TestController):
 
 
     ## Test objects ##
+    
+    @nose.tools.istest
+    def test_registered_object_widgets(self):
+        object_ifaces = [
+            IPoint,
+            ITemporalExtent,
+        ]
+        for iface in object_ifaces:
+            yield self._test_registered_object_widgets, iface
+    
+    def _test_registered_object_widgets(self, object_iface):
+        '''Fetch all registered adapters for a given object interface'''
+        # Note: see also _test_registered_field_widgets() method
+        adapters = adapter_registry.lookupAll([object_iface, IBaz], ibase_widgets.IObjectWidget)
+        print
+        print ' -- Registered widget adapters for schema %s -- ' %(object_iface)
+        for adapter in adapters:
+            print adapter
+        assert len(adapters) >= 2  
 
     @nose.tools.istest
     def test_read_object_widgets(self):

@@ -18,10 +18,6 @@ class Widget(object):
     zope.interface.implements(IWidget)
     
     action = None
-
-    qualifiers = []
-
-    is_fallback = None
     
     def get_template(self):
         raise NotImplementedError('Method should be implemented in a derived class')
@@ -31,19 +27,6 @@ class Widget(object):
 
     def render(self, data):
         raise NotImplementedError('Method should be implemented in a derived class')
-
-    ## Helpers ##
-    
-    @classmethod
-    def get_qualified_actions(cls):
-        '''Return a list of qualified actions this widget is capable to handle'''
-        r = []
-        if cls.is_fallback or not cls.qualifiers:
-            r.append(cls.action)
-        for q in set(cls.qualifiers):
-            if len(q):
-                r.append('%s:%s' %(cls.action, q))
-        return r 
     
 class FieldWidget(Widget):
     zope.interface.implements(IFieldWidget)
@@ -176,28 +159,20 @@ class ReadFieldWidget(FieldWidget):
 
     action = 'read'
 
-    is_fallback = False
-
 class EditFieldWidget(FieldWidget):
 
     action = 'edit'
     
-    is_fallback = False
-
 class ReadObjectWidget(ObjectWidget):
 
     action = 'read'
 
-    is_fallback = False
-    
     def get_omitted_fields(self):
         return []
 
 class EditObjectWidget(ObjectWidget):
 
     action = 'edit'
-
-    is_fallback = False
     
     def get_omitted_fields(self):
         return self._get_readonly_fields()

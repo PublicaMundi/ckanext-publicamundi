@@ -1,9 +1,11 @@
 import zope.interface
 import zope.interface.verify
+import zope.interface.interfaces
 import zope.schema
 import logging
 
 from ckanext.publicamundi.lib.metadata import adapter_registry
+from ckanext.publicamundi.lib.metadata import IObject
 from ckanext.publicamundi.lib.metadata import Object, FieldContext
 
 from ckanext.publicamundi.lib.metadata.widgets.ibase import IWidget
@@ -11,19 +13,55 @@ from ckanext.publicamundi.lib.metadata.widgets.ibase import IFieldWidget, IObjec
 
 logger = logging.getLogger(__name__)
 
+qualifier_field = zope.schema.DottedName(required=True)
+
+# Decorators for widget adapters
+
+def field_widget_adapter(field_iface, qualifiers=[], is_fallback=False):
+    assert field_iface.extends(zope.schema.interfaces.IField)
+    def decorate(widget_cls):
+        assert IFieldWidget.implementedBy(widget_cls) 
+        names = set()
+        if is_fallback or not qualifiers:
+            names.add(widget_cls.action)
+        for qualifier in qualifiers:
+            qualifier_field.validate(qualifier)
+            names.add('%s:%s' %(widget_cls.action, qualifier))
+        for name in names:
+            adapter_registry.register([field_iface, None], IFieldWidget, name, widget_cls)
+        return widget_cls
+    return decorate
+
+def object_widget_adapter(object_iface, qualifiers=[], is_fallback=False):
+    assert object_iface.extends(IObject)
+    def decorate(widget_cls):
+        assert IObjectWidget.implementedBy(widget_cls) 
+        names = set()
+        if is_fallback or not qualifiers:
+            names.add(widget_cls.action)
+        for qualifier in qualifiers:
+            qualifier_field.validate(qualifier)
+            names.add('%s:%s' %(widget_cls.action, qualifier))
+        for name in names:
+            adapter_registry.register([object_iface, None], IObjectWidget, name, widget_cls)
+        return widget_cls
+    return decorate
+
+# Utilities
+
 def parse_qualified_action(q):
     ''' Parse <action>:<qualifier> '''
+    # Split to parts
     try:
         action, qualifier = q.split(':')
     except:
         action, qualifier = q, None
+    
     # Validate parts
-    try:
-        IWidget.get('action').validate(action)
-        if qualifier:
-            IWidget.get('qualifiers').value_type.validate(qualifier)
-    except Exception as ex:
-        return None
+    IWidget.get('action').validate(action)
+    if qualifier:
+        qualifier_field.validate(qualifier)
+
     return (action, qualifier)
 
 def _widget_for(qualified_action, obj, target_iface):
@@ -59,6 +97,8 @@ def markup_for_object(qualified_action, obj, name_prefix='', data={}):
     assert isinstance(obj, Object)
     widget = _widget_for(qualified_action, obj, IObjectWidget)
     return widget.render(name_prefix, data)
+
+# Import actual widgets
 
 from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 from ckanext.publicamundi.lib.metadata.widgets import fields as field_widgets

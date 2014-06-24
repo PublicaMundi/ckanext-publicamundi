@@ -76,7 +76,7 @@ class TestsController(BaseController):
         obj = fixtures.dt1
         data = {}
         markup += toolkit.literal('<h3>Markup for object <code>TemporalExtent</code></h3>')
-        markup += markup_for_object('edit:faz', obj, 'dt1', data)
+        #markup += markup_for_object('edit:faz', obj, 'dt1', data)
         # Render 
         c.form = markup
         return render('tests/form.html')

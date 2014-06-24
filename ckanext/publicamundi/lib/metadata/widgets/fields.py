@@ -3,36 +3,51 @@ import zope.schema
 
 from ckan.plugins import toolkit
 
-from ckanext.publicamundi.lib.metadata import adapter_registry
-from ckanext.publicamundi.lib.metadata import Object, FieldContext
-from ckanext.publicamundi.lib.metadata.widgets.ibase import IFieldWidget
 from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
+from ckanext.publicamundi.lib.metadata.widgets import field_widget_adapter
+
 from ckanext.publicamundi.lib.metadata.widgets import logger
 
 ## Define widgets ##
 
+# Todo: Provide readers/editors for:
+#  - IBytes
+#  - IInt
+#  - IFloat
+#  - IDatetime
+#  - IDottedName
+#  - IURI
+#  - IObject
+
 # Editors #
 
+@field_widget_adapter(zope.schema.interfaces.IText)
 class TextEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/edit-text.html'
 
+@field_widget_adapter(zope.schema.interfaces.IBytesLine)
+@field_widget_adapter(zope.schema.interfaces.ITextLine)
 class TextLineEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/edit-textline.html'
 
+@field_widget_adapter(zope.schema.interfaces.IBool)
 class BoolEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/edit-checkbox-1.html'
 
+@field_widget_adapter(zope.schema.interfaces.IChoice)
 class ChoiceEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/edit-choice.html'
 
+@field_widget_adapter(zope.schema.interfaces.IList)
+@field_widget_adapter(zope.schema.interfaces.ITuple)
 class ListEditWidget(base_widgets.EditFieldWidget, base_widgets.ListWidgetTraits):
 
     def __init__(self, field, qualified_action):
@@ -54,6 +69,7 @@ class ListEditWidget(base_widgets.EditFieldWidget, base_widgets.ListWidgetTraits
         })
         return data
 
+@field_widget_adapter(zope.schema.interfaces.IDict)
 class DictEditWidget(base_widgets.EditFieldWidget, base_widgets.DictWidgetTraits):
 
     def __init__(self, field, qualified_action):
@@ -75,28 +91,34 @@ class DictEditWidget(base_widgets.EditFieldWidget, base_widgets.DictWidgetTraits
 
 # Readers #
 
+@field_widget_adapter(zope.schema.interfaces.IText)
+@field_widget_adapter(zope.schema.interfaces.ITextLine)
+@field_widget_adapter(zope.schema.interfaces.IBytesLine)
 class TextReadWidget(base_widgets.ReadFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/read-text.html'
 
+@field_widget_adapter(zope.schema.interfaces.ITextLine, qualifiers=['item'])
 class TextAsItemReadWidget(base_widgets.ReadFieldWidget):
-
-    qualifiers = ['item']
 
     def get_template(self):
         return 'package/snippets/fields/read-text-item.html'
 
+@field_widget_adapter(zope.schema.interfaces.IBool)
 class BoolReadWidget(base_widgets.ReadFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/read-bool.html'
 
+@field_widget_adapter(zope.schema.interfaces.IChoice)
 class ChoiceReadWidget(base_widgets.ReadFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/read-choice.html'
 
+@field_widget_adapter(zope.schema.interfaces.IList)
+@field_widget_adapter(zope.schema.interfaces.ITuple)
 class ListReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListWidgetTraits):
 
     def __init__(self, field, qualified_action):
@@ -118,6 +140,7 @@ class ListReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListWidgetTraits
         })
         return data
 
+@field_widget_adapter(zope.schema.interfaces.IDict)
 class DictReadWidget(base_widgets.ReadFieldWidget, base_widgets.DictWidgetTraits):
 
     def __init__(self, field, qualified_action):
@@ -136,53 +159,4 @@ class DictReadWidget(base_widgets.ReadFieldWidget, base_widgets.DictWidgetTraits
             ]),
         })
         return data
-
-## Register adapters ##
-
-def register_field_widget(field_iface, widget_cls):
-    for name in widget_cls.get_qualified_actions():
-        adapter_registry.register(
-            [field_iface, None], IFieldWidget, name, widget_cls)
-        logger.info('Registered adapter %s for field [%s, None] with name "%s"', 
-            widget_cls.__name__, field_iface.__name__, name)
-
-default_widgets = [
-    # Readers
-    (zope.schema.interfaces.IText, TextReadWidget),
-    (zope.schema.interfaces.ITextLine, TextReadWidget),
-    (zope.schema.interfaces.ITextLine, TextAsItemReadWidget),
-    (zope.schema.interfaces.IBytesLine, TextReadWidget),
-    (zope.schema.interfaces.IBytes, None),
-    (zope.schema.interfaces.IBool, BoolReadWidget),
-    (zope.schema.interfaces.IInt, None),
-    (zope.schema.interfaces.IFloat, None),
-    (zope.schema.interfaces.IDatetime, None),
-    (zope.schema.interfaces.IChoice, ChoiceReadWidget),
-    (zope.schema.interfaces.IDottedName, None),
-    (zope.schema.interfaces.IURI, None),
-    (zope.schema.interfaces.IList, ListReadWidget),
-    (zope.schema.interfaces.ITuple, ListReadWidget),
-    (zope.schema.interfaces.IDict, DictReadWidget),
-    (zope.schema.interfaces.IObject, None),
-    # Editors
-    (zope.schema.interfaces.IText, TextEditWidget),
-    (zope.schema.interfaces.ITextLine, TextLineEditWidget),
-    (zope.schema.interfaces.IBytesLine, TextLineEditWidget),
-    (zope.schema.interfaces.IBytes, None),
-    (zope.schema.interfaces.IBool, BoolEditWidget),
-    (zope.schema.interfaces.IInt, None),
-    (zope.schema.interfaces.IFloat, None),
-    (zope.schema.interfaces.IDatetime, None),
-    (zope.schema.interfaces.IChoice, ChoiceEditWidget),
-    (zope.schema.interfaces.IDottedName, None),
-    (zope.schema.interfaces.IURI, None),
-    (zope.schema.interfaces.IList, ListEditWidget),
-    (zope.schema.interfaces.ITuple, ListEditWidget),
-    (zope.schema.interfaces.IDict, DictEditWidget),
-    (zope.schema.interfaces.IObject, None),
-]
-
-for field_iface, widget_cls in default_widgets:
-    if widget_cls:
-        register_field_widget(field_iface, widget_cls)
 

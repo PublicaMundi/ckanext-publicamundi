@@ -7,27 +7,19 @@ from ckanext.publicamundi.lib.metadata.schemata import *
 class BaseMetadata(Object):
     zope.interface.implements(IBaseMetadata)
 
+# Decorator for an object's null adapter (i.e. implementer)
+
+def object_null_adapter(iface, name=''):
+    assert hasattr(iface, 'interfaces')
+    def decorate(cls):
+        assert iface.implementedBy(cls)
+        adapter_registry.register([], iface, name, cls)
+        return cls
+    return decorate
+
 # Import types
 
 from ckanext.publicamundi.lib.metadata.types.common import *
 from ckanext.publicamundi.lib.metadata.types.metadata import *
 from ckanext.publicamundi.lib.metadata.types.foo import Foo
-
-# Register null adapters (implementers) for needed interfaces
-
-adapter_registry.register([], IPostalAddress, '', PostalAddress)
-
-adapter_registry.register([], IContactInfo, '', ContactInfo)
-
-adapter_registry.register([], IPoint, '', Point)
-
-adapter_registry.register([], IPolygon, '', Polygon)
-
-adapter_registry.register([], ITemporalExtent, '', TemporalExtent)
-
-adapter_registry.register([], ICkanMetadata, '', CkanMetadata)
-
-adapter_registry.register([], IInspireMetadata, '', InspireMetadata)
-
-adapter_registry.register([], IFoo, '', Foo)
 

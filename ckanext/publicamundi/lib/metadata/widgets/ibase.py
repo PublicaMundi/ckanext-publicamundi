@@ -5,16 +5,11 @@ class IWidget(zope.interface.Interface):
 
     action = zope.schema.Choice(('read', 'edit'))
 
-    qualifiers = zope.schema.List(value_type=zope.schema.DottedName())
-    
-    is_fallback = zope.schema.Bool()
-
     def get_template():
         '''Return a filename for a template'''
 
     def prepare_template_vars(data):
-        '''Prepare and return context data before rendering the widget.
-        '''
+        '''Prepare and return context data before rendering the widget'''
 
     def render(data):
         '''Generate markup'''
