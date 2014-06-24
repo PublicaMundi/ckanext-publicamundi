@@ -4,14 +4,13 @@ import zope.interface.interfaces
 import zope.schema
 import logging
 
+from ckanext.publicamundi.lib import logger
 from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata import IObject
 from ckanext.publicamundi.lib.metadata import Object, FieldContext
 
 from ckanext.publicamundi.lib.metadata.widgets.ibase import IWidget
 from ckanext.publicamundi.lib.metadata.widgets.ibase import IFieldWidget, IObjectWidget
-
-logger = logging.getLogger(__name__)
 
 qualifier_field = zope.schema.DottedName(required=True)
 
@@ -79,7 +78,7 @@ def _widget_for(qualified_action, obj, target_iface):
     while not widget and names:
         name = names.pop()
         widget = adapter_registry.queryMultiAdapter([obj, name], target_iface, name)
-        logger.debug('Lookup for a widget for %s for action "%s": %s',
+        logger.debug('Lookup widget for <%s> for action "%s": %s',
             type(obj).__name__, name, widget)
     if not widget:
         raise ValueError('Cannot find a widget for %s for action %s' %(

@@ -7,13 +7,12 @@ import zope.schema
 from collections import namedtuple
 
 from ckanext.publicamundi.lib import dictization
+from ckanext.publicamundi.lib import logger
 from ckanext.publicamundi.lib.json_encoder import JsonEncoder
 from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.ibase import IObject, ISerializer
 from ckanext.publicamundi.lib.metadata.serializers import get_field_serializer
 from ckanext.publicamundi.lib.metadata.serializers import get_key_tuple_serializer
-
-_logger = logging.getLogger(__name__)
 
 _cache = threading.local()
 

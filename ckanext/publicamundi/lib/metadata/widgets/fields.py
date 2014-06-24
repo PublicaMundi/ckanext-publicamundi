@@ -6,7 +6,7 @@ from ckan.plugins import toolkit
 from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 from ckanext.publicamundi.lib.metadata.widgets import field_widget_adapter
 
-from ckanext.publicamundi.lib.metadata.widgets import logger
+from ckanext.publicamundi.lib import logger
 
 ## Define widgets ##
 
