@@ -37,10 +37,15 @@ class CommandDispatcher(CkanCommand):
 
     subcommands = {
         'greet': { 
-            'method_name': 'invoke_greet',
+            'method_name': 'do_greet',
             'options': [
                 make_option("-n", "--name",
                     action="store", type="string", dest="name"),
+            ],
+         },
+         'widget-info': {
+            'method_name': 'do_print_widget_info',
+            'options': [
             ],
          },
     }
@@ -94,11 +99,55 @@ class CommandDispatcher(CkanCommand):
     
     ## Subcommands
 
-    def invoke_greet(self, opts, *args):
+    def do_greet(self, opts, *args):
         '''Greet with a helloworld message
         '''
         self.logger.debug('Running "greet" with args: %r %r', opts, args)
         print 'Hello %s' %(opts.name)
+    
+    def do_print_widget_info(self, opts, *args):
+        '''Print information for registered widgets
+        '''
+
+        import zope.interface
+        import zope.schema
+      
+        from ckanext.publicamundi.lib.metadata import adapter_registry 
+        from ckanext.publicamundi.lib.metadata import schemata
+        from ckanext.publicamundi.lib.metadata import types
+        from ckanext.publicamundi.lib.metadata import widgets
+        
+        print
+        print ' == Widgets for zope.schema-based fields == '
+        print
+        for name in dir(zope.schema.interfaces):
+            x = getattr(zope.schema.interfaces, name)
+            if isinstance(x, zope.interface.interface.InterfaceClass):
+                field_iface = x
+                print field_iface.__name__
+                r = adapter_registry.lookupAll(
+                    [field_iface, zope.interface.Interface], widgets.IFieldWidget)
+                if not r:
+                    print '  --'
+                for qualified_action, widget_cls in r:
+                    print '  %-15.15s %s' %(qualified_action, widget_cls)
+
+        print
+        print ' == Widgets for object schemata == '
+        print
+        for name in dir(schemata):
+            x = getattr(schemata, name)
+            if isinstance(x, zope.interface.interface.InterfaceClass):
+                object_iface = x
+                print object_iface.__name__
+                r = adapter_registry.lookupAll(
+                    [object_iface, zope.interface.Interface], widgets.IObjectWidget)
+                if not r:
+                    print '  --'
+                for qualified_action, widget_cls in r:
+                    print '  %-15.15s %s' %(qualified_action, widget_cls)
+
+        
 
 class Example1(CkanCommand):
     '''This is an example of a publicamundi-specific paster command:
