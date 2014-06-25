@@ -1,4 +1,10 @@
-import sys, re, os, os.path, json, logging
+import sys
+import re
+import os.path
+import json
+import logging
+import optparse
+from optparse import make_option 
 
 import ckan.model as model
 import ckan.logic as logic
@@ -7,44 +13,96 @@ from ckan.logic import get_action, ValidationError
 
 from ckan.lib.cli import CkanCommand
 
-class Greet(CkanCommand):
+def parser_error(msg):
+    '''Monkey-patch for optparse parser's error() method.
+    This is used whenever we want to prevent the default exit() behaviour.
     '''
-    This is an example of a publicamundi-specific paster command:
+    raise ValueError(msg)
 
-    The command should be invoked as below:
-
-    paster [PASTER-OPTIONS] publicamundi-greet --config=../ckan/development.ini [COMMAND-OPTIONS]
-
+class CommandDispatcher(CkanCommand):
+    '''This is an entry point for several publicamundi-related Paster commands
+    Invoke as below:
+    
+    paster [PASTER-OPTIONS] publicamundi --config=INI_FILE [COMMAND] [COMMAND-OPTIONS]
+    
     '''
 
-    summary = 'This is an example of a publicamundi-specific paster command'
+    summary = 'An entry point for publicamundi-related Paster commands'
     usage = __doc__
     group_name = 'ckanext-publicamundi'
-    max_args = 10
+    max_args = 15
     min_args = 0
+
+    subcommand_usage = 'paster [PASTER-OPTIONS] publicamundi --config INI_FILE %(name)s [OPTIONS]'
+
+    subcommands = {
+        'greet': { 
+            'method_name': 'invoke_greet',
+            'options': [
+                make_option("-n", "--name",
+                    action="store", type="string", dest="name"),
+            ],
+         },
+    }
 
     def __init__(self, name):
         CkanCommand.__init__(self, name)
-        # Configure options parser
-        self.parser.add_option('-t', '--to', dest='target', help='Specify target', type=str, default='World')
-
+        self.parser.disable_interspersed_args()        
+        
     def command(self):
         self._load_config()
-        self.log = logging.getLogger(__name__)
+        self.logger = logging.getLogger('ckanext.publicamundi')
+        self.logger.setLevel(logging.INFO)
+        
+        self.logger.debug('Remaining args are ' + repr(self.args))
+        self.logger.debug('Options are ' + repr(self.options))
 
-        # Create a context for action api calls
-        context = {'model':model,'session':model.Session,'ignore_auth':True}
-        self.admin_user = get_action('get_site_user')(context,{})
-        context.update({'user': self.admin_user.get('name')})
+        subcommand = self.args.pop(0) if self.args else 'help'
 
-        self.log.info ('Remaining args are ' + repr(self.args))
-        self.log.info ('Options are ' + repr(self.options))
+        if subcommand == 'help':
+            print self.__doc__
+            return
+        elif subcommand in self.subcommands:
+            spec = self.subcommands.get(subcommand)
+            method_name = spec['method_name']
+            assert hasattr(self, method_name), 'No method named %s' %(method_name) 
+            method = getattr(self, method_name)
+            parser = self.standard_parser()
+            parser.set_usage(self.subcommand_usage %(dict(name=subcommand)))
+            parser.error = parser_error
+            parser.add_options(option_list=spec.get('options', []))
+            try:
+                opts, args = parser.parse_args(args=self.args)
+            except Exception as ex:
+                self.logger.error('Bad options for subcommand %s: %s', subcommand, str(ex))
+                print 
+                print method.__doc__
+                print
+                parser.print_help()
+                return
+            else:
+                self.logger.debug('Trying to invoke "%s" with: opts=%r, args=%s' %(
+                    subcommand, opts, args))
+                return method(opts, *args)
+        else:
+            self.logger.error('Unknown subcommand: %s' %(subcommand))
+            print 'The available publicamundi commands are:'
+            for k, spec in self.subcommands.items():
+                method = getattr(self, spec['method_name'])    
+                print '  %s: %s' %(k, method.__doc__.split("\n")[0])
+            return
+    
+    ## Subcommands
 
-        print 'Hello (' + self.options.target + ')'
+    def invoke_greet(self, opts, *args):
+        '''Greet with a helloworld message
+        '''
+        self.logger.debug('Running "greet" with args: %r %r', opts, args)
+        print 'Hello %s' %(opts.name)
 
-class Test1(CkanCommand):
+class Example1(CkanCommand):
     '''This is an example of a publicamundi-specific paster command:
-    >>> paster [PASTER-OPTIONS] publicamundi-test --config=../ckan/development.ini [COMMAND-OPTIONS]
+    >>> paster [PASTER-OPTIONS] publicamundi-example1 --config=../ckan/development.ini [COMMAND-OPTIONS]
     '''
 
     summary = 'This is an example of a publicamundi-specific paster command'

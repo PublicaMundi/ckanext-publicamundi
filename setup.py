@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.3dev'
+version = '0.4dev'
 
 setup(
 	name='ckanext-publicamundi',
@@ -34,13 +34,13 @@ setup(
         publicamundi_errorware = ckanext.publicamundi.plugins:ErrorHandler
 
         [paste.paster_command]
-
-        publicamundi-greet = ckanext.publicamundi.commands:Greet
-
+        
         publicamundi-setup = ckanext.publicamundi.commands:Setup
 
         publicamundi-cleanup = ckanext.publicamundi.commands:Cleanup
 
+        publicamundi = ckanext.publicamundi.commands:CommandDispatcher
+        
         [fanstatic.libraries]
 
 	""",
