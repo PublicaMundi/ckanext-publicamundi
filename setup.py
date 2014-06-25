@@ -34,13 +34,13 @@ setup(
         publicamundi_errorware = ckanext.publicamundi.plugins:ErrorHandler
 
         [paste.paster_command]
-
-        publicamundi-greet = ckanext.publicamundi.commands:Greet
-
+        
         publicamundi-setup = ckanext.publicamundi.commands:Setup
 
         publicamundi-cleanup = ckanext.publicamundi.commands:Cleanup
 
+        publicamundi = ckanext.publicamundi.commands:CommandDispatcher
+        
         [fanstatic.libraries]
 
 	""",
