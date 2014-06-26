@@ -39,7 +39,7 @@ setup(
 
         publicamundi-cleanup = ckanext.publicamundi.commands:Cleanup
 
-        publicamundi = ckanext.publicamundi.commands:CommandDispatcher
+        publicamundi = ckanext.publicamundi.commands:Command
         
         [fanstatic.libraries]
 
