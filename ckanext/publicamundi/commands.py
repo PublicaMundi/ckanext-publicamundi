@@ -10,94 +10,35 @@ import ckan.model as model
 import ckan.logic as logic
 
 from ckan.logic import get_action, ValidationError
-
 from ckan.lib.cli import CkanCommand
 
-def parser_error(msg):
-    '''Monkey-patch for optparse parser's error() method.
-    This is used whenever we want to prevent the default exit() behaviour.
-    '''
-    raise ValueError(msg)
+from ckanext.publicamundi.lib.cli import CommandDispatcher
 
-class CommandDispatcher(CkanCommand):
-    '''This is an entry point for several publicamundi-related Paster commands
+class Command(CommandDispatcher):
+    '''This is a Paster command for several publicamundi-related subcommands
     Invoke as below:
     
-    paster [PASTER-OPTIONS] publicamundi --config=INI_FILE [COMMAND] [COMMAND-OPTIONS]
-    
+    paster [PASTER-OPTIONS] publicamundi [--config INI_FILE] [--setup-app] [COMMAND] [COMMAND-OPTIONS]
     '''
 
-    summary = 'An entry point for publicamundi-related Paster commands'
+    summary = '''This is a Paster command for several publicamundi-related subcommands'''
     usage = __doc__
     group_name = 'ckanext-publicamundi'
     max_args = 15
     min_args = 0
-
-    subcommand_usage = 'paster [PASTER-OPTIONS] publicamundi --config INI_FILE %(name)s [OPTIONS]'
-
-    subcommands = {
-        'greet': { 
-            'method_name': 'invoke_greet',
-            'options': [
-                make_option("-n", "--name",
-                    action="store", type="string", dest="name"),
-            ],
-         },
+    
+    options_config = {
+        'greet': [
+            make_option('--name', type='string', dest='name'),
+            make_option('--num', type='int', dest='num', default=5),
+        ]
     }
 
-    def __init__(self, name):
-        CkanCommand.__init__(self, name)
-        self.parser.disable_interspersed_args()        
-        
-    def command(self):
-        self._load_config()
-        self.logger = logging.getLogger('ckanext.publicamundi')
-        self.logger.setLevel(logging.INFO)
-        
-        self.logger.debug('Remaining args are ' + repr(self.args))
-        self.logger.debug('Options are ' + repr(self.options))
-
-        subcommand = self.args.pop(0) if self.args else 'help'
-
-        if subcommand == 'help':
-            print self.__doc__
-            return
-        elif subcommand in self.subcommands:
-            spec = self.subcommands.get(subcommand)
-            method_name = spec['method_name']
-            assert hasattr(self, method_name), 'No method named %s' %(method_name) 
-            method = getattr(self, method_name)
-            parser = self.standard_parser()
-            parser.set_usage(self.subcommand_usage %(dict(name=subcommand)))
-            parser.error = parser_error
-            parser.add_options(option_list=spec.get('options', []))
-            try:
-                opts, args = parser.parse_args(args=self.args)
-            except Exception as ex:
-                self.logger.error('Bad options for subcommand %s: %s', subcommand, str(ex))
-                print 
-                print method.__doc__
-                print
-                parser.print_help()
-                return
-            else:
-                self.logger.debug('Trying to invoke "%s" with: opts=%r, args=%s' %(
-                    subcommand, opts, args))
-                return method(opts, *args)
-        else:
-            self.logger.error('Unknown subcommand: %s' %(subcommand))
-            print 'The available publicamundi commands are:'
-            for k, spec in self.subcommands.items():
-                method = getattr(self, spec['method_name'])    
-                print '  %s: %s' %(k, method.__doc__.split("\n")[0])
-            return
-    
-    ## Subcommands
-
-    def invoke_greet(self, opts, *args):
+    @CommandDispatcher.subcommand(name='greet', options=options_config['greet'])
+    def greet(self, opts, *args):
         '''Greet with a helloworld message
         '''
-        self.logger.debug('Running "greet" with args: %r %r', opts, args)
+        self.logger.info('Running "greet" with args: %r %r', opts, args)
         print 'Hello %s' %(opts.name)
 
 class Example1(CkanCommand):
