@@ -48,7 +48,7 @@ class FieldWidget(Widget):
             self.value = field.get(field.context.obj)
         else:
             # This is an anonymous field, probably created from
-            # a nested field declaration (e.g. a List.value_type)
+            # a nested field declaration (e.g. as a List.value_type)
             self.name = field.context.key
             self.value = field.context.obj[field.context.key]
         return
@@ -194,11 +194,13 @@ class ListFieldWidgetTraits(FieldWidget):
         The markup for items will be generated before the template is
         called, as it will only act as glue.
         '''
-        data = FieldWidget.prepare_template_vars(self, name_prefix, data)
+        
         field = self.field
         value = self.value
-        title = data['title']
-        qname = data['qname']
+        
+        data = FieldWidget.prepare_template_vars(self, name_prefix, data)
+        title = data.get('title')
+        qname = data.get('qname')
         item_action = '%s:item%s' %(self.action, \
             ('.' + self.qualifier if self.qualifier else ''))
         def render_item(item):
@@ -208,12 +210,13 @@ class ListFieldWidgetTraits(FieldWidget):
             return {
                 'index': i,
                 'markup': markup_for_field(item_action, yf, qname, {
-                    'title': u'%s %d' %(title, i),
+                    'title': '%s #%d' %(yf.title, i) 
                 }),
             }
         data.update({
             'items': map(render_item, enumerate(value)),
         })
+        
         return data
 
 class DictFieldWidgetTraits(FieldWidget):
@@ -223,28 +226,31 @@ class DictFieldWidgetTraits(FieldWidget):
         The markup for items will be generated before the template is
         called, as it will only act as glue.
         '''
-        # Todo: 
-        # Use field.key_type to get description for keys (vocab terms)
-        data = FieldWidget.prepare_template_vars(self, name_prefix, data)
+        
         field = self.field
         value = self.value
-        title = data['title']
-        qname = data['qname']
+        assert isinstance(field.key_type, zope.schema.Choice)
+        
+        data = FieldWidget.prepare_template_vars(self, name_prefix, data)
+        title = data.get('title')
+        qname = data.get('qname')
         item_action = '%s:item%s' %(self.action, \
             ('.' + self.qualifier if self.qualifier else ''))
         def render_item(item):
             k, y = item
             assert isinstance(k, basestring)
             yf = field.value_type.bind(FieldContext(key=k, obj=value))
+            term = field.key_type.vocabulary.getTerm(k)
             return {
-                'key': k,
+                'key': term,
                 'markup': markup_for_field(item_action, yf, qname, {
-                    'title': u'%s %s' %(title, k),
+                    'title': term.title or term.token
                 }),
             }
         data.update({
             'items': map(render_item, value.iteritems()),
         })
+
         return data
 
 ## Base widgets for fields holding objects
@@ -259,10 +265,19 @@ class ObjectFieldWidgetTraits(FieldWidget):
         data = FieldWidget.prepare_template_vars(self, name_prefix, data)
         field = self.field
         value = self.value
-        qname = data['qname']
+        qname = data.get('qname')
+        # Build the template context for the object's widget: some variables
+        # are moved to the object's context,
+        data1 = {}
+        for k in ['title', 'description', 'required', 'readonly']:
+            v = data.pop(k, None)
+            if v: 
+                data1[k] = v
+        # Generate markup for the contained object, feed result to
+        # the current template context
         data.update({
             'obj': {
-                'markup': markup_for_object(self.qualified_action, value, qname, data)
+                'markup': markup_for_object(self.qualified_action, value, qname, data1)
             }
         })
         return data

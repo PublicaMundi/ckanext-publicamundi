@@ -35,12 +35,12 @@ class TestsController(BaseController):
                 'placeholder': u'Enter a title',
                 'attrs': { 'data-foo': 'baz' }
             },
-            'temporal_extent': { 'title': u'Temporal Extent', },
-            'reviewed': { 'title': u'Reviewed', },
-            'notes': { 'description': u'Add a detailed description', },
-            'thematic_category': {},
-            'tags': {},
-            #'contacts': { 'title': u'Contacts', },
+            #'temporal_extent': { 'title': u'Temporal Extent', },
+            #'reviewed': { 'title': u'Reviewed', },
+            #'notes': { 'description': u'Add a detailed description', },
+            #'thematic_category': {},
+            #'tags': {},
+            'contacts': { 'title': u'Contacts', },
         }
         markup = ''
         for k, data in test_fields.items():

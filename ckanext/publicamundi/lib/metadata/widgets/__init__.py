@@ -63,9 +63,13 @@ def parse_qualified_action(q):
 
     return (action, qualifier)
 
-def _widget_for(qualified_action, obj, target_iface):
-    '''Find and instantiate a widget to adapt obj to a target interface.
+def _widget_for(qualified_action, x, target_iface):
+    '''Find and instantiate a widget to adapt x to a target interface.
+
+    Note that x is either a zope-based field (i.e. zope.schema.interfaces.IField) or a 
+    schema-providing object (i.e. ckanext.publicamundi.lib.metadata.schemata.IObject). 
     '''
+    
     # Build an array with all candidate names
     names = []
     action, qualifier = parse_qualified_action(qualified_action)
@@ -73,17 +77,19 @@ def _widget_for(qualified_action, obj, target_iface):
     qualifier_parts = qualifier.split('.') if qualifier else []
     for i in range(0, len(qualifier_parts)):
         names.append('%s:%s' %(action, '.'.join(qualifier_parts[:i+1])))
+    
     # Lookup registry
     widget = None
     while not widget and names:
         name = names.pop()
-        widget = adapter_registry.queryMultiAdapter([obj, name], target_iface, name)
+        widget = adapter_registry.queryMultiAdapter([x, name], target_iface, name)
         logger.debug('Lookup widget for <%s> for action "%s": %s',
-            type(obj).__name__, name, widget)
+            type(x).__name__, name, widget)
     if not widget:
-        raise ValueError('Cannot find a widget for %s for action %s' %(
-            obj, action))
-    # Found a widget to adapt obj
+        raise ValueError('Cannot find a widget for %s for action "%s"' %(
+            type(x).__name__, action))
+    
+    # Found a widget to adapt x
     assert zope.interface.verify.verifyObject(target_iface, widget)
     return widget
 

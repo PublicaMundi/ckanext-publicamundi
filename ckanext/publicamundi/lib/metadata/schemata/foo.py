@@ -66,7 +66,10 @@ class IFoo(IBaseMetadata):
     contacts = zope.schema.Dict(
         title = u'A list of contacts',
         required = False,
-        key_type = zope.schema.Choice(('personal', 'office'),
+        key_type = zope.schema.Choice(
+            vocabulary = SimpleVocabulary((
+                SimpleTerm('personal', 'personal', u'Personal'), 
+                SimpleTerm('office', 'office', u'Office'))),
             title = u'The type of contact'),
         value_type = zope.schema.Object(IContactInfo,
             title = u'Contact'))

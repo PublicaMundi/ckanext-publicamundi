@@ -14,6 +14,7 @@ from ckanext.publicamundi.lib import logger
 #  - IBytes
 #  - IInt
 #  - IFloat
+#  - IDate
 #  - IDatetime
 #  - IDottedName
 #  - IURI

@@ -4,7 +4,8 @@
 
 <div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
     <label class="control-label">
-        {% if required %}<span title="{{ _("This field is required") }}" class="control-required">*</span>{% endif %}{{ title or name }}
+        {% if required %}<span title="{{ _("This field is required") }}" class="control-required">*</span>{% endif -%}
+        {{ title }}
     </label>
     <div class="controls">
         <input 
