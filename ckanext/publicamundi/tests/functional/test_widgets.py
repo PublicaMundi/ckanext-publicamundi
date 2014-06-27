@@ -64,6 +64,7 @@ class TestController(ckan.tests.TestController):
             zope.schema.interfaces.ITextLine,
             zope.schema.interfaces.IList,
             zope.schema.interfaces.IDict,
+            zope.schema.interfaces.IObject,
         ]
         for iface in field_ifaces:
             yield self._test_registered_field_widgets, iface
@@ -117,6 +118,7 @@ class TestController(ckan.tests.TestController):
             e = pq.find('input') or pq.find('textarea') or pq.find('select')
             assert e
             assert e.attr('name') == '%s.%s' %(fixture_name, k)
+            assert e.attr('id') == 'input-%s.%s' %(fixture_name, k)
 
 
     ## Test objects ##

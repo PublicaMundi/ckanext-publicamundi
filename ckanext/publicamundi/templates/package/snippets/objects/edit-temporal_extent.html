@@ -1,0 +1,35 @@
+{% if input_classes is not defined %}{% set input_classes = [ 'span3' ] -%}{% endif -%}
+{% set error = None -%}
+
+<div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
+    <label class="control-label">
+        {% if required %}<span title="{{ _("This field is required") }}" class="control-required">*</span>{% endif %}{{ title or name }}
+    </label>
+    <div class="controls">
+       <input type="text" 
+          class="{{ input_classes | join(' ') }}"
+          title="{{ _('Start Date') }}"
+          placeholder="{{ _('Start Date') }}" 
+          value="{{ obj.start | empty_and_escape }}" 
+          name="{{ qname }}.start" 
+          id="input-{{ qname }}.start"
+          data-module="datepicker"
+          data-module-dateformat="yyyy-mm-dd"
+        >
+       <input type="text" 
+          class="{{ input_classes | join(' ') }}"
+          title="{{ _('End Date') }}"
+          placeholder="{{ _('End Date') }}" 
+          value="{{ obj.end | empty_and_escape }}" 
+          name="{{ qname }}.end" 
+          id="input-{{ qname }}.end"
+          data-module="datepicker"
+          data-module-dateformat="yyyy-mm-dd"
+        >
+       {% if error and error is iterable %}
+       <span class="error-block">{{ error | join(', ') }}</span>
+       {% endif %}
+    </div>
+</div>
+
+{% resource 'ckanext-publicamundi/datepicker' %}

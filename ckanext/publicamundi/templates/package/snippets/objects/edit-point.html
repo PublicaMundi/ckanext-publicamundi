@@ -1,9 +1,6 @@
-{% set name = name_prefix -%}
-{% set placeholder = '0.0' -%}
-{% if classes is not defined %}{% set classes = [] -%}{% endif -%}
-{% set classes = classes + [ 'object-edit-' ~ name ~ '-group' ] -%}
 {% if input_classes is not defined %}{% set input_classes = [ 'input-small' ] -%}{% endif -%}
 {% set error = None -%}
+{% set placeholder = '0.0' -%}
 
 <div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
     <label class="control-label">
@@ -11,17 +8,17 @@
     </label>
     <div class="controls">
         <input 
-            id="{{ 'object-' ~ name ~ '.' ~ 'x' }}" 
+            id="{{ 'input-' ~ qname ~ '.' ~ 'x' }}" 
             type="text" 
-            name="{{ name }}.x"
+            name="{{ qname }}.x"
             class={{ input_classes | join(' ') }}
             value="{{ obj.x | empty_and_escape }}" 
             placeholder="{{ placeholder }}"  
         />
         <input 
-            id="{{ 'object-' ~ name ~ '.' ~ 'y' }}" 
+            id="{{ 'input-' ~ qname ~ '.' ~ 'y' }}" 
             type="text" 
-            name="{{ name }}.y" 
+            name="{{ qname }}.y" 
             class={{ input_classes | join(' ') }}
             value="{{ obj.y | empty_and_escape }}" 
             placeholder="{{ placeholder }}"  

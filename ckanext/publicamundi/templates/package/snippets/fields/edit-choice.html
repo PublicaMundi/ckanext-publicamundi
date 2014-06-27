@@ -8,7 +8,7 @@
         <code>{{ value }}</code>
     </label>
     <div class="controls">
-        <select name="{{ qname }}" id="{{ 'field-' ~ qname }}" {{ markup_helpers.attributes(attrs) }} />
+        <select name="{{ qname }}" id="{{ 'input-' ~ qname }}" {{ markup_helpers.attributes(attrs) }} />
             {% if not required -%}
             <option value=""></option>
             {% endif -%}

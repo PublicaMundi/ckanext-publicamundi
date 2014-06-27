@@ -9,7 +9,7 @@
         {% if required %}<span title="{{ _("This field is required") }}" class="control-required">*</span>{% endif %}
     </label>
     <div class="controls">
-        <textarea id="{{ 'field-' ~ qname }}" name="{{ qname }}" class={{ input_classes | list | join(" ") }}
+        <textarea id="{{ 'input-' ~ qname }}" name="{{ qname }}" class={{ input_classes | list | join(" ") }}
             placeholder="{{ placeholder | empty_and_escape }}"  
             {{ markup_helpers.attributes(attrs) -}}
           />{{ value | empty_and_escape }}</textarea>

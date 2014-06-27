@@ -4,7 +4,7 @@
     <label class="control-label">{{ title }}</label>
     <div class="controls">
         <div class="checkbox">
-            <input type="checkbox" name="{{ qname }}" id="field-{{ qname }}" value="{{ qname }}"
+            <input type="checkbox" name="{{ qname }}" id="input-{{ qname }}" value="{{ qname }}"
                 class="{{ input_classes | list | join(" ") }}"
                 {% if value %}checked="checked"{% endif -%}
                 {{ markup_helpers.attributes(attrs) -}}

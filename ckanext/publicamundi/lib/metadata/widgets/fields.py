@@ -17,7 +17,6 @@ from ckanext.publicamundi.lib import logger
 #  - IDatetime
 #  - IDottedName
 #  - IURI
-#  - IObject
 
 # Editors #
 
@@ -48,7 +47,7 @@ class ChoiceEditWidget(base_widgets.EditFieldWidget):
 
 @field_widget_adapter(zope.schema.interfaces.IList)
 @field_widget_adapter(zope.schema.interfaces.ITuple)
-class ListEditWidget(base_widgets.EditFieldWidget, base_widgets.ListWidgetTraits):
+class ListEditWidget(base_widgets.EditFieldWidget, base_widgets.ListFieldWidgetTraits):
 
     def __init__(self, field, qualified_action):
         assert \
@@ -61,7 +60,7 @@ class ListEditWidget(base_widgets.EditFieldWidget, base_widgets.ListWidgetTraits
 
     def prepare_template_vars(self, name_prefix, data):
         '''Prepare data for the template'''
-        data = base_widgets.ListWidgetTraits.prepare_template_vars(self, name_prefix, data)
+        data = base_widgets.ListFieldWidgetTraits.prepare_template_vars(self, name_prefix, data)
         data.update({
             'attrs': dict(data['attrs'].items() + [
                 ('data-disabled-module', 'list'),
@@ -70,7 +69,7 @@ class ListEditWidget(base_widgets.EditFieldWidget, base_widgets.ListWidgetTraits
         return data
 
 @field_widget_adapter(zope.schema.interfaces.IDict)
-class DictEditWidget(base_widgets.EditFieldWidget, base_widgets.DictWidgetTraits):
+class DictEditWidget(base_widgets.EditFieldWidget, base_widgets.DictFieldWidgetTraits):
 
     def __init__(self, field, qualified_action):
         assert isinstance(field, zope.schema.Dict)
@@ -81,10 +80,30 @@ class DictEditWidget(base_widgets.EditFieldWidget, base_widgets.DictWidgetTraits
 
     def prepare_template_vars(self, name_prefix, data):
         '''Prepare data for the template'''
-        data = base_widgets.DictWidgetTraits.prepare_template_vars(self, name_prefix, data)
+        data = base_widgets.DictFieldWidgetTraits.prepare_template_vars(self, name_prefix, data)
         data.update({
             'attrs': dict(data['attrs'].items() + [
                 ('data-disabled-module', 'dict'),
+            ]),
+        })
+        return data
+
+@field_widget_adapter(zope.schema.interfaces.IObject)
+class ObjectEditWidget(base_widgets.EditFieldWidget, base_widgets.ObjectFieldWidgetTraits):
+
+    def __init__(self, field, qualified_action):
+        assert isinstance(field, zope.schema.Object)
+        base_widgets.EditFieldWidget.__init__(self, field, qualified_action)
+
+    def get_template(self):
+        return 'package/snippets/fields/edit-object.html'
+
+    def prepare_template_vars(self, name_prefix, data):
+        '''Prepare data for the template'''
+        data = base_widgets.ObjectFieldWidgetTraits.prepare_template_vars(self, name_prefix, data)
+        data.update({
+            'attrs': dict(data.get('attrs', {}).items() + [
+                ('data-disabled-module', 'object'),
             ]),
         })
         return data
@@ -119,7 +138,7 @@ class ChoiceReadWidget(base_widgets.ReadFieldWidget):
 
 @field_widget_adapter(zope.schema.interfaces.IList)
 @field_widget_adapter(zope.schema.interfaces.ITuple)
-class ListReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListWidgetTraits):
+class ListReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListFieldWidgetTraits):
 
     def __init__(self, field, qualified_action):
         assert \
@@ -132,7 +151,7 @@ class ListReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListWidgetTraits
 
     def prepare_template_vars(self, name_prefix, data):
         '''Prepare data for the template'''
-        data = base_widgets.ListWidgetTraits.prepare_template_vars(self, name_prefix, data)
+        data = base_widgets.ListFieldWidgetTraits.prepare_template_vars(self, name_prefix, data)
         data.update({
             'attrs': dict(data['attrs'].items() + [
                 ('data-disabled-module', 'list'),
@@ -141,7 +160,7 @@ class ListReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListWidgetTraits
         return data
 
 @field_widget_adapter(zope.schema.interfaces.IDict)
-class DictReadWidget(base_widgets.ReadFieldWidget, base_widgets.DictWidgetTraits):
+class DictReadWidget(base_widgets.ReadFieldWidget, base_widgets.DictFieldWidgetTraits):
 
     def __init__(self, field, qualified_action):
         assert isinstance(field, zope.schema.Dict)
@@ -152,10 +171,30 @@ class DictReadWidget(base_widgets.ReadFieldWidget, base_widgets.DictWidgetTraits
 
     def prepare_template_vars(self, name_prefix, data):
         '''Prepare data for the template'''
-        data = base_widgets.DictWidgetTraits.prepare_template_vars(self, name_prefix, data)
+        data = base_widgets.DictFieldWidgetTraits.prepare_template_vars(self, name_prefix, data)
         data.update({
             'attrs': dict(data['attrs'].items() + [
                 ('data-disabled-module', 'dict'),
+            ]),
+        })
+        return data
+
+@field_widget_adapter(zope.schema.interfaces.IObject)
+class ObjectReadWidget(base_widgets.ReadFieldWidget, base_widgets.ObjectFieldWidgetTraits):
+
+    def __init__(self, field, qualified_action):
+        assert isinstance(field, zope.schema.Object)
+        base_widgets.ReadFieldWidget.__init__(self, field, qualified_action)
+    
+    def get_template(self):
+        return 'package/snippets/fields/read-object.html'
+
+    def prepare_template_vars(self, name_prefix, data):
+        '''Prepare data for the template'''
+        data = base_widgets.ObjectFieldWidgetTraits.prepare_template_vars(self, name_prefix, data)
+        data.update({
+            'attrs': dict(data.get('attrs', {}).items() + [
+                ('data-disabled-module', 'object'),
             ]),
         })
         return data

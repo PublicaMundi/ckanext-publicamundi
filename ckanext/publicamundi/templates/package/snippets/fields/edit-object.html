@@ -1,0 +1,9 @@
+{% import 'macros/markup_helpers.html' as markup_helpers -%}
+
+<div class="{{ classes | join(' ') }}" {{ markup_helpers.attributes(attrs) }} >
+    <h3 class="title">{{ title }}</h3>
+    {% if description %}<div class="description">{{ description }}</div>{% endif -%}
+    <div>
+        {{ obj.markup }}
+    </div>
+</div>

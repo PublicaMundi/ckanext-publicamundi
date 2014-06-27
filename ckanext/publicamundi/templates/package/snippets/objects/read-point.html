@@ -1,4 +1,4 @@
-<div class="field-read-{{ name_prefix }}-group">
+<div class="{{ classes | join(' ') }}">
     <dt>{{ title or 'Point' }}</dt>
     <dd>x={{ '%.2f' | format(obj.x) }} y={{ '%.2f' | format(obj.y) }}</dd>
 </div>

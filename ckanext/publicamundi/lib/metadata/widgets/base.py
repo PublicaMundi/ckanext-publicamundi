@@ -1,5 +1,6 @@
 import zope.interface
 import zope.schema
+import copy
 
 import ckan.plugins.toolkit as toolkit
 
@@ -23,7 +24,7 @@ class Widget(object):
         raise NotImplementedError('Method should be implemented in a derived class')
 
     def prepare_template_vars(self, data):
-        return data
+        return copy.deepcopy(data)
 
     def render(self, data):
         raise NotImplementedError('Method should be implemented in a derived class')
@@ -184,9 +185,9 @@ class EditObjectWidget(ObjectWidget):
                 fields.append(k)
         return fields
 
-## Base widgets for collections 
+## Base widgets for fields holding collections 
 
-class ListWidgetTraits(FieldWidget):
+class ListFieldWidgetTraits(FieldWidget):
 
     def prepare_template_vars(self, name_prefix, data):
         '''Prepare data for the template.
@@ -198,7 +199,6 @@ class ListWidgetTraits(FieldWidget):
         value = self.value
         title = data['title']
         qname = data['qname']
-        item_prefix = qname
         item_action = '%s:item%s' %(self.action, \
             ('.' + self.qualifier if self.qualifier else ''))
         def render_item(item):
@@ -207,7 +207,7 @@ class ListWidgetTraits(FieldWidget):
             yf = field.value_type.bind(FieldContext(key=i, obj=value))
             return {
                 'index': i,
-                'markup': markup_for_field(item_action, yf, item_prefix, {
+                'markup': markup_for_field(item_action, yf, qname, {
                     'title': u'%s %d' %(title, i),
                 }),
             }
@@ -216,7 +216,7 @@ class ListWidgetTraits(FieldWidget):
         })
         return data
 
-class DictWidgetTraits(FieldWidget):
+class DictFieldWidgetTraits(FieldWidget):
 
     def prepare_template_vars(self, name_prefix, data):
         '''Prepare data for the template.
@@ -230,7 +230,6 @@ class DictWidgetTraits(FieldWidget):
         value = self.value
         title = data['title']
         qname = data['qname']
-        item_prefix = qname
         item_action = '%s:item%s' %(self.action, \
             ('.' + self.qualifier if self.qualifier else ''))
         def render_item(item):
@@ -239,12 +238,32 @@ class DictWidgetTraits(FieldWidget):
             yf = field.value_type.bind(FieldContext(key=k, obj=value))
             return {
                 'key': k,
-                'markup': markup_for_field(item_action, yf, item_prefix, {
+                'markup': markup_for_field(item_action, yf, qname, {
                     'title': u'%s %s' %(title, k),
                 }),
             }
         data.update({
             'items': map(render_item, value.iteritems()),
+        })
+        return data
+
+## Base widgets for fields holding objects
+
+class ObjectFieldWidgetTraits(FieldWidget):
+    
+    def prepare_template_vars(self, name_prefix, data):
+        '''Prepare data for the template.
+        The markup for the contained object will be generated before the 
+        template is called, as it will only act as glue.
+        '''
+        data = FieldWidget.prepare_template_vars(self, name_prefix, data)
+        field = self.field
+        value = self.value
+        qname = data['qname']
+        data.update({
+            'obj': {
+                'markup': markup_for_object(self.qualified_action, value, qname, data)
+            }
         })
         return data
 
