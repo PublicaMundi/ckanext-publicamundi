@@ -1,3 +1,4 @@
+import datetime
 import logging
 import copy
 import json
@@ -35,24 +36,30 @@ class TestsController(BaseController):
                 'placeholder': u'Enter a title',
                 'attrs': { 'data-foo': 'baz' }
             },
-            #'temporal_extent': { 'title': u'Temporal Extent', },
-            #'reviewed': { 'title': u'Reviewed', },
-            #'notes': { 'description': u'Add a detailed description', },
-            #'thematic_category': {},
-            #'tags': {},
+            'temporal_extent': { 'title': u'Temporal Extent', },
+            'reviewed': { 'title': u'Reviewed', },
+            'notes': { 'description': u'Add a detailed description', },
+            'thematic_category': {},
+            'tags': {},
             'contacts': { 'title': u'Contacts', },
+            'created': { 
+                'title': u'Created At', 
+                'placeholder': datetime.date.today(),
+            },
         }
-        markup = ''
+        c.form_sections = []
         for k, data in test_fields.items():
-            f = x.get_field(k) 
-            markup += toolkit.literal('<h3>Edit markup for field <code>%s</code></h3>' %(k))
-            markup += markup_for_field('edit:baz', f, 'foo1', data)
-            markup += toolkit.literal('<h3>Read markup for field <code>%s</code></h3>' %(k))
-            markup += markup_for_field('read:bar', f, 'foo1', data)
+            f = x.get_field(k)
+            c.form_sections.append({
+                'heading': toolkit.literal('<h3>Field <code>%s</code></h3>' %(k)),
+                'body': \
+                    markup_for_field('edit:baz', f, 'foo1', data) + \
+                    toolkit.literal('<hr/>') + \
+                    markup_for_field('read:bar', f, 'foo1', data)
+            })
         #raise Exception('Break')
         c.form_class = 'form' # 'form-horizontal'
-        c.form = markup
-        return render('tests/form.html')
+        return render('tests/accordion-form.html')
 
     def get_field_markup_with_helper(self):
         x = fixtures.foo1

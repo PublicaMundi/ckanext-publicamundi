@@ -14,8 +14,6 @@ from ckanext.publicamundi.lib import logger
 #  - IBytes
 #  - IInt
 #  - IFloat
-#  - IDate
-#  - IDatetime
 #  - IDottedName
 #  - IURI
 
@@ -45,6 +43,18 @@ class ChoiceEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/edit-choice.html'
+
+@field_widget_adapter(zope.schema.interfaces.IDate)
+class DateEditWidget(base_widgets.EditFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/edit-date.html'
+
+@field_widget_adapter(zope.schema.interfaces.IDatetime)
+class DatetimeEditWidget(base_widgets.EditFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/edit-datetime.html'
 
 @field_widget_adapter(zope.schema.interfaces.IList)
 @field_widget_adapter(zope.schema.interfaces.ITuple)
@@ -136,6 +146,18 @@ class ChoiceReadWidget(base_widgets.ReadFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/read-choice.html'
+
+@field_widget_adapter(zope.schema.interfaces.IDate)
+class DateReadWidget(base_widgets.ReadFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/read-date.html'
+
+@field_widget_adapter(zope.schema.interfaces.IDatetime)
+class DatetimeReadWidget(base_widgets.ReadFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/read-datetime.html'
 
 @field_widget_adapter(zope.schema.interfaces.IList)
 @field_widget_adapter(zope.schema.interfaces.ITuple)

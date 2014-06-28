@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.4dev'
+version = '0.5dev'
 
 setup(
 	name='ckanext-publicamundi',

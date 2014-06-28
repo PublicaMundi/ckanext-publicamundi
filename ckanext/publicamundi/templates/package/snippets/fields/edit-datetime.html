@@ -14,6 +14,8 @@
             class={{ input_classes | list | join(" ") }}
             value="{{ value | empty_and_escape }}" 
             placeholder="{{ placeholder | empty_and_escape }}"
+            data-module="datepicker"
+            data-module-dateformat="yyyy-mm-dd 00:00:00"
             {{ markup_helpers.attributes(attrs) -}}
         />
         {% if error and error is iterable -%}
@@ -21,3 +23,5 @@
         {% endif -%}
     </div>
 </div>
+
+{% resource 'ckanext-publicamundi/datepicker' %}

@@ -3,7 +3,7 @@
 {% set classes = classes + [ 'control-select' ] -%}
 
 <div class="control-group{{ " " ~ classes | join(' ') }}">
-    <label class="control-label" for="{{ 'field-' ~ qname }}">
+    <label class="control-label" for="{{ 'input-' ~ qname }}">
         {{ title }}
         <code>{{ value }}</code>
     </label>

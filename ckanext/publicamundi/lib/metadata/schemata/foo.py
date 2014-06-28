@@ -77,6 +77,10 @@ class IFoo(IBaseMetadata):
     contact_info = zope.schema.Object(IContactInfo,
         title = u'Contact Info',
         required = True)
+    
+    created = zope.schema.Date(
+        title = u'Created at',
+        required = True)
 
     @zope.interface.invariant
     def check_tag_duplicates(obj):

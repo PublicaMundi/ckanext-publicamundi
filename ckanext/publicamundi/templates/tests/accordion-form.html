@@ -1,0 +1,17 @@
+{% extends 'page.html' %}
+
+{% block scripts %}
+{{ super() }}
+<style>
+    /*form > h3, form > h4 { margin-top: 20px; color: #777} */
+</style>
+{% resource 'ckanext-publicamundi/styles' %}
+{% endblock %}
+
+{% block primary_content_inner %}
+<form class="{{ c.form_class }}">
+    {% snippet 'snippets/accordion.html', id='accordion-1', sections=c.form_sections %}
+</form>
+{% endblock %}
+
+

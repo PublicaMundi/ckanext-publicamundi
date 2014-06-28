@@ -27,6 +27,7 @@ foo1 = Foo(
     },
     geometry = [[ poly1 ]],
     reviewed = False,
+    created = datetime.date(2014, 06, 11),
     notes = u'Hello World',
     thematic_category = None,
     temporal_extent = dt1,

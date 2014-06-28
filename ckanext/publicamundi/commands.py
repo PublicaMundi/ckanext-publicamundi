@@ -5,6 +5,7 @@ import json
 import logging
 import optparse
 from optparse import make_option 
+from zope.dottedname.resolve import resolve
 
 import ckan.model as model
 import ckan.logic as logic
@@ -16,9 +17,7 @@ from ckanext.publicamundi.lib.cli import CommandDispatcher
 
 class Command(CommandDispatcher):
     '''This is a Paster command for several publicamundi-related subcommands
-    Invoke as below:
-    
-    paster [PASTER-OPTIONS] publicamundi [--config INI_FILE] [--setup-app] [COMMAND] [COMMAND-OPTIONS]
+    >>> paster [PASTER-OPTIONS] publicamundi [--config INI_FILE] [--setup-app] [COMMAND] [COMMAND-OPTIONS]
     '''
 
     summary = '''This is a Paster command for several publicamundi-related subcommands'''
@@ -33,6 +32,12 @@ class Command(CommandDispatcher):
             make_option('--num', type='int', dest='num', default=5),
         ],
         'widget-info': [
+            make_option('--no-fields', action='store_false', dest='show_fields', default=True),
+            make_option('--field-cls', type='string', dest='field_cls', 
+                help='Filter results regarding only this field class (e.g. zope.schema.Date)'),
+            make_option('--no-objects', action='store_false', dest='show_objects', default=True),
+            make_option('--object-cls', type='string', dest='object_cls', 
+                help='Filter results regarding only this object class'),
         ], 
     }
 
@@ -55,36 +60,54 @@ class Command(CommandDispatcher):
         from ckanext.publicamundi.lib.metadata import schemata
         from ckanext.publicamundi.lib.metadata import types
         from ckanext.publicamundi.lib.metadata import widgets
-        
-        print
-        print ' == Widgets for zope.schema-based fields == '
-        print
-        for name in dir(zope.schema.interfaces):
-            x = getattr(zope.schema.interfaces, name)
-            if isinstance(x, zope.interface.interface.InterfaceClass):
-                field_iface = x
-                print field_iface.__name__
-                r = adapter_registry.lookupAll(
-                    [field_iface, zope.interface.Interface], widgets.IFieldWidget)
-                if not r:
-                    print '  --'
-                for qualified_action, widget_cls in r:
-                    print '  %-15.15s %s' %(qualified_action, widget_cls)
+       
+        field_cls = None
+        if opts.field_cls:
+            assert re.match('zope\.schema\.(\w+)$', opts.field_cls), \
+                'Expected a zope.schema.Field-based field class'
+            field_cls = resolve(opts.field_cls)
+            assert isinstance(field_cls, type), \
+                'The name "%s" does not resolve to a class' %(opts.field_cls)
 
-        print
-        print ' == Widgets for object schemata == '
-        print
-        for name in dir(schemata):
-            x = getattr(schemata, name)
-            if isinstance(x, zope.interface.interface.InterfaceClass):
-                object_iface = x
-                print object_iface.__name__
-                r = adapter_registry.lookupAll(
-                    [object_iface, zope.interface.Interface], widgets.IObjectWidget)
-                if not r:
-                    print '  --'
-                for qualified_action, widget_cls in r:
-                    print '  %-15.15s %s' %(qualified_action, widget_cls)
+        if opts.show_fields:
+            print
+            print ' == Widgets for zope.schema-based fields == '
+            print
+            for name in dir(zope.schema.interfaces):
+                x = getattr(zope.schema.interfaces, name)
+                if isinstance(x, zope.interface.interface.InterfaceClass):
+                    field_iface = x
+                    if not field_cls or field_iface.implementedBy(field_cls): 
+                        print field_iface.__name__
+                        r = adapter_registry.lookupAll(
+                            [field_iface, zope.interface.Interface], widgets.IFieldWidget)
+                        if not r:
+                            print '  --'
+                        for qualified_action, widget_cls in r:
+                            print '  %-15.15s %s' %(qualified_action, widget_cls)
+
+        object_cls = None
+        if opts.object_cls:
+            object_cls = resolve(opts.object_cls)
+            assert isinstance(object_cls, type), \
+                'The name "%s" does not resolve to a class' %(opts.object_cls)
+        
+        if opts.show_objects:
+            print
+            print ' == Widgets for object schemata == '
+            print
+            for name in dir(schemata):
+                x = getattr(schemata, name)
+                if isinstance(x, zope.interface.interface.InterfaceClass):
+                    object_iface = x
+                    if not object_cls or object_iface.implementedBy(object_cls): 
+                        print object_iface.__name__
+                        r = adapter_registry.lookupAll(
+                            [object_iface, zope.interface.Interface], widgets.IObjectWidget)
+                        if not r:
+                            print '  --'
+                        for qualified_action, widget_cls in r:
+                            print '  %-15.15s %s' %(qualified_action, widget_cls)
 
 class Example1(CkanCommand):
     '''This is an example of a publicamundi-specific paster command:

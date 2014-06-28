@@ -1,10 +1,10 @@
-{% if input_classes is not defined %}{% set input_classes = [ 'span3' ] -%}{% endif -%}
+{% if input_classes is not defined %}{% set input_classes = [ 'input-medium' ] -%}{% endif -%}
 {% set error = None -%}
 
 <div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
     <label class="control-label">
-        {% if required %}<span title="{{ _("This field is required") }}" class="control-required">*</span>{% endif -%}
         {{ title }}
+        {% if required %}<span title="{{ _("This field is required") }}" class="control-required">*</span>{% endif -%}
     </label>
     <div class="controls">
        <input type="text" 

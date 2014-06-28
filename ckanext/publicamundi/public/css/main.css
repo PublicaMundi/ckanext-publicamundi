@@ -5,3 +5,17 @@
 div.controls .help-block {
     font-size: 0.85em;
 }
+
+div.accordion-group {
+    border-radius: 1px;
+}
+
+select,
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="tel"] {
+    border-radius: 1px;
+}
+

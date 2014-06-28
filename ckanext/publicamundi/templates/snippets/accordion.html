@@ -1,0 +1,17 @@
+<div class="accordion" id="{{ id }}">
+    {% for section in sections -%}
+    {% with section_id = id ~ '-section-' ~ loop.index %}
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#{{ id }}" href="#{{ section_id }}"
+                >{{ section.heading }}</a>
+        </div>
+        <div id="{{ section_id }}" class="accordion-body collapse {% if loop.first %}in{% endif %}">
+            <div class="accordion-inner">
+                {{ section.body }}
+            </div>
+        </div>
+    </div>
+    {% endwith -%}
+    {% endfor -%}
+</div>
