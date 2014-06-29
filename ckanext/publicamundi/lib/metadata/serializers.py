@@ -73,6 +73,32 @@ class DatetimeSerializer(BaseSerializer):
     def loads(self, s):
         return datetime.datetime.strptime(s, self.fmt)
 
+class DateSerializer(BaseSerializer):
+
+    def __init__(self, fmt="%Y-%m-%d"):
+        self.fmt = fmt
+
+    def dumps(self, t):
+        assert isinstance(t, datetime.date)
+        return t.strftime(self.fmt)
+
+    def loads(self, s):
+        t = datetime.datetime.strptime(s, self.fmt)
+        return t.date()
+
+class TimeSerializer(BaseSerializer):
+
+    def __init__(self, fmt="%H:%M:%S"):
+        self.fmt = fmt
+
+    def dumps(self, t):
+        assert isinstance(t, datetime.time)
+        return t.strftime(self.fmt)
+
+    def loads(self, s):
+        t = datetime.datetime.strptime(s, self.fmt)
+        return t.time()
+
 class KeyTupleSerializer(object):
 
     def __init__(self, glue, prefix, suffix):
@@ -97,6 +123,10 @@ class KeyTupleSerializer(object):
         l = tuple(str(s).split(self.glue))
         return l
 
+# Todo
+# A better way to map fields to their serializers would be through
+# the existing adapter registry (provide the ISerializer interface)
+
 _field_serializers = {
     zope.schema.TextLine: UnicodeSerializer(),
     zope.schema.Text: UnicodeSerializer(),
@@ -106,6 +136,8 @@ _field_serializers = {
     zope.schema.Float: None,
     zope.schema.Bool: None,
     zope.schema.Datetime: DatetimeSerializer(),
+    zope.schema.Date: DateSerializer(),
+    zope.schema.Time: TimeSerializer(),
     zope.schema.DottedName: StringSerializer(),
     zope.schema.URI: StringSerializer(),
     zope.schema.Id: StringSerializer(),
@@ -114,6 +146,10 @@ _field_serializers = {
     zope.schema.Tuple: None,
     zope.schema.Dict: None,
 }
+
+# Todo
+# Maybe name as serializer_for() to provide similar naming with other
+# adapters
 
 def get_key_tuple_serializer(glue):
     '''Get a proper serializer for a dict tuple-typed key
@@ -127,10 +163,11 @@ def get_key_string_serializer():
 
 def get_field_serializer(F):
     '''Get a proper serializer for a leaf zope.schema.Field instance
-
-    Note:
-    Consider using F.fromUnicode as an unserializer.
-    '''
+    ''' 
+    
+    # Note:
+    # Consider using F.fromUnicode as an unserializer.
+    
     assert isinstance(F, zope.schema.Field)
     serializer = _field_serializers.get(type(F))
     return serializer
