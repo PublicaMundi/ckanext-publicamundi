@@ -1,4 +1,4 @@
-{% if input_classes is not defined %}{% set input_classes = [ 'input-medium' ] -%}{% endif -%}
+{% if input_classes is not defined %}{% set input_classes = [ 'input-small' ] -%}{% endif -%}
 {% set error = None -%}
 
 <div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
@@ -15,8 +15,9 @@
           name="{{ qname }}.start" 
           id="input-{{ qname }}.start"
           data-module="datepicker"
-          data-module-dateformat="yyyy-mm-dd"
+          data-module-format="yyyy-mm-dd"
         >
+       &nbsp; 
        <input type="text" 
           class="{{ input_classes | join(' ') }}"
           title="{{ _('End Date') }}"
@@ -25,7 +26,7 @@
           name="{{ qname }}.end" 
           id="input-{{ qname }}.end"
           data-module="datepicker"
-          data-module-dateformat="yyyy-mm-dd"
+          data-module-format="yyyy-mm-dd"
         >
        {% if error and error is iterable %}
        <span class="error-block">{{ error | join(', ') }}</span>

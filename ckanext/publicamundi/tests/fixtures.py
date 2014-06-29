@@ -12,8 +12,8 @@ poly1 = Polygon(name = u'P1', points=[
     Point(x=1.6, y=0.2), Point(x=0.6, y=0.5),])
 
 dt1 = TemporalExtent(
-    start = datetime.datetime(2014, 5, 27, 1, 30, 0),
-    end = datetime.datetime(2014, 5, 29, 1, 30, 0))
+    start = datetime.date(2014, 5, 27),
+    end = datetime.date(2014, 5, 29))
 
 foo1 = Foo(
     baz = u'Bazzz',
@@ -27,7 +27,8 @@ foo1 = Foo(
     },
     geometry = [[ poly1 ]],
     reviewed = False,
-    created = datetime.date(2014, 06, 11),
+    created = datetime.datetime(2014, 06, 11),
+    wakeup_time = datetime.time(8, 0, 0),
     notes = u'Hello World',
     thematic_category = None,
     temporal_extent = dt1,

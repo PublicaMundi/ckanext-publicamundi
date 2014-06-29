@@ -2,14 +2,16 @@
 this.ckan.module('datepicker', function ($, _) {
   return {
     options: {
-        dateformat: 'yyyy-mm-dd',
+        format: 'yyyy-mm-dd',
     },
     initialize: function() {
         var module = this
         if ($.fn.datepicker) {
             $(this.el).datepicker({
-                format: this.options.dateformat
+                format: module.options.format
             })
+        } else {
+            window.console.error('The jQuery extension "bootstrap-datepicker" is not loaded')
         }
         window.console.log('Initialized module: datepicker')
     },

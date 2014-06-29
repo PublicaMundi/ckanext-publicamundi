@@ -1,7 +1,7 @@
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
 {% set placeholder = placeholder or field.default -%}
-{% set input_classes = [ 'input-medium' ] if input_classes is not defined -%}
+{% set input_classes = [ 'input-small' ] if input_classes is not defined -%}
 {% set error = None -%}
 
 <div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
@@ -12,7 +12,7 @@
     <div class="controls">
         <div class="input-append datetime"
             data-module="datetimepicker" 
-            data-module-picktime="true" data-module-pickdate="true" data-module-format="yyyy-MM-dd hh:mm:ss"
+            data-module-picktime="false" data-module-pickdate="true" data-module-format="yyyy-MM-dd"
              >
             <input type="text" id="{{ 'input-' ~ qname }}"  name="{{ qname }}"
                 class={{ input_classes | list | join(" ") }}
@@ -20,7 +20,7 @@
                 placeholder="{{ placeholder | empty_and_escape }}"
             />
             <span class="add-on">
-              <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                <i data-date-icon="icon-calendar"></i>
             </span>
         </div>
         {% if error and error is iterable -%}

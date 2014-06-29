@@ -78,8 +78,12 @@ class IFoo(IBaseMetadata):
         title = u'Contact Info',
         required = True)
     
-    created = zope.schema.Date(
+    created = zope.schema.Datetime(
         title = u'Created at',
+        required = True)
+
+    wakeup_time = zope.schema.Time(
+        title = u'Wakeup time',
         required = True)
 
     @zope.interface.invariant

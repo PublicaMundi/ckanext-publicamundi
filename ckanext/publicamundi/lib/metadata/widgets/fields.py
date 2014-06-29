@@ -50,6 +50,12 @@ class DateEditWidget(base_widgets.EditFieldWidget):
     def get_template(self):
         return 'package/snippets/fields/edit-date.html'
 
+@field_widget_adapter(zope.schema.interfaces.ITime)
+class TimeEditWidget(base_widgets.EditFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/edit-time.html'
+
 @field_widget_adapter(zope.schema.interfaces.IDatetime)
 class DatetimeEditWidget(base_widgets.EditFieldWidget):
 
@@ -152,6 +158,12 @@ class DateReadWidget(base_widgets.ReadFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/read-date.html'
+
+@field_widget_adapter(zope.schema.interfaces.ITime)
+class TimeReadWidget(base_widgets.ReadFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/read-time.html'
 
 @field_widget_adapter(zope.schema.interfaces.IDatetime)
 class DatetimeReadWidget(base_widgets.ReadFieldWidget):

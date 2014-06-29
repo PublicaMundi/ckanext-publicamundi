@@ -44,7 +44,10 @@ class TestsController(BaseController):
             'contacts': { 'title': u'Contacts', },
             'created': { 
                 'title': u'Created At', 
-                'placeholder': datetime.date.today(),
+                'placeholder': datetime.datetime.now(),
+            },
+            'wakeup_time': {
+                'title': u'Wakeup At',
             },
         }
         c.form_sections = []
@@ -71,6 +74,7 @@ class TestsController(BaseController):
 
     def get_object_markup(self):
         markup = ''
+        c.form_sections = []
         # A Point object
         obj = fixtures.pt1
         data = {
@@ -79,17 +83,28 @@ class TestsController(BaseController):
             'input_classes': [ 'input-small' ],
             'title': u'Point A',
         }
-        markup += toolkit.literal('<h3>Edit markup for object <code>Point</code></h3>')
-        markup += markup_for_object('edit:baz', obj, 'pt1', data)
-        markup += toolkit.literal('<h3>Read markup for object <code>Point</code></h3>')
-        markup += markup_for_object('read:boz', obj, 'pt1', { 'title': u'Point B' })
+        c.form_sections.append({
+            'heading': toolkit.literal('<h3>Object <code>Point</code></h3>'),
+            'body': \
+                markup_for_object('edit:baz', obj, 'pt1', data) + \
+                toolkit.literal('<hr/>') + \
+                markup_for_object('read:boz', obj, 'pt1', { 'title': u'Point B' })
+        })
         # A TemporalExtent object
         obj = fixtures.dt1
-        markup += toolkit.literal('<h3>Edit markup for object <code>TemporalExtent</code></h3>')
-        markup += markup_for_object('edit:faz.baz', obj, 'dt1', { 'title': u'Extent A' })
-        markup += toolkit.literal('<h3>Read markup for object <code>TemporalExtent</code></h3>')
-        markup += markup_for_object('read', obj, 'dt1', { 'title': u'Extent B' })
+        c.form_sections.append({
+            'heading': toolkit.literal('<h3>Object <code>TemporalExtent</code></h3>'),
+            'body': \
+                markup_for_object('edit:faz.baz', obj, 'dt1', { 'title': u'Extent A' }) + \
+                toolkit.literal('<hr/>') + \
+                markup_for_object('read', obj, 'dt1', { 'title': u'Extent B' })
+        })
         # Render 
-        c.form = markup
-        return render('tests/form.html')
+        return render('tests/accordion-form.html')
 
+    ## Sandbox
+
+    def test1(self):
+        c.form = None
+        return render('tests/form.html')
+        

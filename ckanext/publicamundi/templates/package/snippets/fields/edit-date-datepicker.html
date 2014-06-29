@@ -1,0 +1,27 @@
+{% import 'macros/markup_helpers.html' as markup_helpers -%}
+
+{% set placeholder = placeholder or field.default -%}
+{% set input_classes = [ 'input-small' ] if input_classes is not defined -%}
+{% set error = None -%}
+
+<div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
+    <label class="control-label" for="{{ 'input-' ~ qname }}">
+        {{ title }}
+        {% if required %}<span title="{{ _("This field is required") }}" class="control-required">*</span>{% endif -%}
+    </label>
+    <div class="controls">
+        <input type="text" id="{{ 'input-' ~ qname }}"  name="{{ qname }}"
+            class={{ input_classes | list | join(" ") }}
+            value="{{ value | empty_and_escape }}" 
+            placeholder="{{ placeholder | empty_and_escape }}"
+            data-module="datepicker"
+            data-module-format="yyyy-mm-dd"
+            {{ markup_helpers.attributes(attrs) -}}
+        />
+        {% if error and error is iterable -%}
+        <span class="error-block">{{ error | join(', ') }}</span>
+        {% endif -%}
+    </div>
+</div>
+
+{% resource 'ckanext-publicamundi/datepicker' %}

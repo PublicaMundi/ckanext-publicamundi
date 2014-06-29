@@ -19,3 +19,20 @@ input[type="tel"] {
     border-radius: 1px;
 }
 
+.input-append .add-on:last-child, 
+.input-append .btn:last-child, 
+.input-append .btn-group:last-child > .dropdown-toggle {
+    border-radius: 0 1px 1px 0;
+}
+
+.input-append.datetime .add-on, 
+.input-append.time .add-on,
+.input-append.date .add-on {
+    cursor: pointer;
+}
+
+
+.bootstrap-datetimepicker-widget td, 
+.bootstrap-datetimepicker-widget th {
+    border-radius: 2px;
+}

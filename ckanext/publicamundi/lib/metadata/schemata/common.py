@@ -49,12 +49,11 @@ class IContactInfo(IObject):
 
 class ITemporalExtent(IObject):
 
-    start = zope.schema.Datetime(
+    start = zope.schema.Date(
         title = u'Starting date',
-        required = False,
-        max = datetime.datetime.now())
+        required = False)
 
-    end = zope.schema.Datetime(
+    end = zope.schema.Date(
         title = u'Ending date',
         required = False)
 
