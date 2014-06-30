@@ -30,7 +30,7 @@ class IInspireMetadata(zope.interface.Interface):
         description = u"The date which specifies when the metadata record was created or updated. This date shall be expressed in conformity with ISO 8601.",
         required = False,
         default = datetime.date.today(),
-        max = datetime.date.today())
+        )
     
     languagecode = zope.schema.Choice(Helper.flatten_dict_vals(vocabularies.languages),
         title = u'Metadata Language',
@@ -139,17 +139,17 @@ class IInspireMetadata(zope.interface.Interface):
         title = u'Date of creation',
         description = u"This is the date of creation of the resource. There shall not be more than one date of creation.",
         required = False,
-        max = datetime.date.today())
+        )
     publication_date = zope.schema.Date(
         title = u'Date of publication',
         description = u"This is the date of publication of the resource when available, or the date of entry into force. There may be more than one date of publication.",
         required = False,
-        max = datetime.date.today())
+        )
     revision_date = zope.schema.Date(
         title = u'Date of last revision',
         description = u"This is the date of last revision of the resource, if the resource has been revised. There shall not be more than one date of last revision.",
         required = False,
-        max = datetime.date.today())
+        )
     
     @zope.interface.invariant
     def check_creation_publication_order(obj):
