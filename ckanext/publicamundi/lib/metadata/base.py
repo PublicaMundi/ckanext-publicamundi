@@ -192,6 +192,11 @@ class Object(object):
         return S
 
     @classmethod
+    def get_field_names(cls):
+        S = cls.get_schema()
+        return zope.schema.getFieldNames(S) 
+
+    @classmethod
     def get_fields(cls):
         S = cls.get_schema()
         return zope.schema.getFields(S)

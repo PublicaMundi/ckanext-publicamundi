@@ -67,11 +67,13 @@ class PostalAddressReadWidget(base_widgets.ReadObjectWidget):
 class ContactInfoExtentEditWidget(base_widgets.EditObjectWidget):
 
     def get_template(self):
-        return 'package/snippets/objects/edit-contact_info.html'
+        return None
+        #return 'package/snippets/objects/edit-contact_info.html'
 
 @object_widget_adapter(schemata.IContactInfo)
 class ContactInfoReadWidget(base_widgets.ReadObjectWidget):
 
     def get_template(self):
-        return 'package/snippets/objects/read-contact_info.html'
+        return None
+        #return 'package/snippets/objects/read-contact_info.html'
 

@@ -1,0 +1,6 @@
+<div class="{{ " " ~ classes | join(' ') }}">
+    <h3>{{ title }}</h3>
+    {% for f in fields -%}
+    {{ f.markup }}
+    {% endfor -%}
+</div>

@@ -23,7 +23,7 @@ foo1 = Foo(
     contact_info = ContactInfo(email=u'nomad@somewhere.com'),
     contacts = {
         'personal':  ContactInfo(email=u'nobody@example.com', address=PostalAddress(address=u'North Pole', postalcode=u'54321')),
-        'office': ContactInfo(email=u'somebody@company.com'),
+        'office': ContactInfo(email=u'somebody@company.com', address=PostalAddress(address=u'South Pole', postalcode=u'12345')),
     },
     geometry = [[ poly1 ]],
     reviewed = False,

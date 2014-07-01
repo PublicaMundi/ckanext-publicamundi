@@ -89,7 +89,7 @@ class FieldWidget(Widget):
             'widget',
             'field-widget', 
             'field-%s-widget' %(self.action),
-            'field-%s-qname-%s' %(self.action, qname), ]
+            'field-qname-%s' %(qname), ]
 
         return template_vars
 
@@ -108,11 +108,15 @@ class ObjectWidget(Widget):
         action, qualifier = parse_qualified_action(qualified_action)
         assert action == self.action
         self.qualifier = qualifier
-    
+
     @property
     def qualified_action(self):
         return self.action + \
             (':' + self.qualifier if self.qualifier else '')
+
+    def get_glue_template(self):
+        return 'package/snippets/objects/%(action)s.html' %(
+            dict(action=self.action))
 
     ## IObjectWidget interface ##
 
@@ -140,7 +144,7 @@ class ObjectWidget(Widget):
             'widget',
             'object-widget',
             'object-%s-widget' %(self.action),
-            'object-%s-qname-%s' %(self.action, qname), ]
+            'object-qname-%s' %(qname), ]
 
         return template_vars
 
@@ -151,13 +155,27 @@ class ObjectWidget(Widget):
         return None
 
     def render(self, name_prefix, data={}):
+        data = self.prepare_template_vars(name_prefix, data)
         tpl = self.get_template()
-        if tpl:
-            data = self.prepare_template_vars(name_prefix, data)
-            markup = toolkit.render_snippet(tpl, data)
-        else:
-            # Todo
-            markup = '<h3>hellooooo object</h3>'
+        if not tpl:
+            # No template is supplied: use a default template to
+            # glue fields together
+            tpl = self.get_glue_template()
+            # Prepare additional vars needed for the this template:
+            # all fields are processed (rendered) and passed to the
+            # glue template
+            def render_field(k):
+                f = self.obj.get_field(k)
+                return {
+                    'field': f,
+                    'markup': markup_for_field(self.qualified_action, f, name_prefix, {}) 
+                }
+            field_names = set(self.obj.get_field_names()) - \
+                set(self.get_omitted_fields())
+            data.update({
+                'fields': map(render_field, field_names) 
+            })
+        markup = toolkit.render_snippet(tpl, data)
         return toolkit.literal(markup)
 
 ## Base readers and editors
@@ -182,9 +200,9 @@ class EditObjectWidget(ObjectWidget):
     action = 'edit'
     
     def get_omitted_fields(self):
-        return self._get_readonly_fields()
+        return []
 
-    def _get_readonly_fields(self):
+    def get_readonly_fields(self):
         fields = []
         for k, F in self.obj.get_fields().items():
             if F.readonly:

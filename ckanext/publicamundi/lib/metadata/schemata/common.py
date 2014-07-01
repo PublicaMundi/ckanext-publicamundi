@@ -38,7 +38,8 @@ class IPolygon(IObject):
 
 class IContactInfo(IObject):
 
-    email = zope.schema.TextLine(title=u"Electronic mail address", required=False)
+    email = zope.schema.TextLine(title=u"Email", 
+        description=u'Electronic Mail Address', required=False)
 
     address = zope.schema.Object(IPostalAddress, title=u"Postal Address", required=False)
 

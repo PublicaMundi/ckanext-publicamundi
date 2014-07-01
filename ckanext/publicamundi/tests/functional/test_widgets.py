@@ -91,7 +91,7 @@ class TestController(ckan.tests.TestController):
     @nose.tools.istest
     def test_edit_field_widgets(self):
         '''Generate markup for editing fields'''
-        for k in ['title', 'reviewed', 'notes', 'thematic_category']:
+        for k in ['title', 'reviewed', 'notes', 'thematic_category', 'wakeup_time', 'created']:
             yield self._test_markup_for_field, 'foo1', k, 'edit'
             yield self._test_markup_for_field, 'foo1', k, 'edit', { 'title': u'Another Title' }
             yield self._test_markup_for_field, 'foo1', k, 'edit', { 'required': False }
@@ -113,7 +113,8 @@ class TestController(ckan.tests.TestController):
         pq = pyquery.PyQuery(unicode(markup))
         assert pq
         assert pq.is_('div')
-        assert pq.is_('.field-%s-%s\\.%s' %(action, fixture_name, k))
+        assert pq.is_('.field-qname-%s\\.%s' %(fixture_name, k))
+        assert pq.is_('.field-%s-widget' %(action))
         if action.startswith('edit'):
             e = pq.find('input') or pq.find('textarea') or pq.find('select')
             assert e
