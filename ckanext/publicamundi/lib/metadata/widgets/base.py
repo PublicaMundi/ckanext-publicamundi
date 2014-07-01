@@ -85,8 +85,11 @@ class FieldWidget(Widget):
         # Provide computed variables or sensible defaults
         qname = "%s.%s" %(name_prefix, template_vars['name'])
         template_vars['qname'] = qname
-        template_vars['classes'] = template_vars['classes'] + \
-            [ 'field-%s-%s' %(self.action, qname), ]
+        template_vars['classes'] = template_vars['classes'] + [\
+            'widget',
+            'field-widget', 
+            'field-%s-widget' %(self.action),
+            'field-%s-qname-%s' %(self.action, qname), ]
 
         return template_vars
 
@@ -133,8 +136,11 @@ class ObjectWidget(Widget):
         # Provide computed variables and sensible defaults
         qname = name_prefix
         template_vars['qname'] = qname
-        template_vars['classes'] = template_vars['classes'] + \
-            [ 'object-%s-%s' %(self.action, qname), ]
+        template_vars['classes'] = template_vars['classes'] + [\
+            'widget',
+            'object-widget',
+            'object-%s-widget' %(self.action),
+            'object-%s-qname-%s' %(self.action, qname), ]
 
         return template_vars
 
@@ -266,6 +272,11 @@ class ObjectFieldWidgetTraits(FieldWidget):
         field = self.field
         value = self.value
         qname = data.get('qname')
+        # If value is None, pass an empty (but structured) object created
+        # from the default factory
+        if value is None:
+            factory = Object.Factory(self.field.schema)
+            value = factory()
         # Build the template context for the object's widget: some variables
         # are moved to the object's context,
         data1 = {}

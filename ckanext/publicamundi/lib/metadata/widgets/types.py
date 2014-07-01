@@ -7,6 +7,8 @@ from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 
 ## Define widgets ##
 
+# IPoint 
+
 @object_widget_adapter(schemata.IPoint)
 class PointEditWidget(base_widgets.EditObjectWidget):
 
@@ -19,6 +21,8 @@ class PointReadWidget(base_widgets.ReadObjectWidget):
     def get_template(self):
         return 'package/snippets/objects/read-point.html'
 
+# ITemporalExtent
+
 @object_widget_adapter(schemata.ITemporalExtent)
 class TemporalExtentEditWidget(base_widgets.EditObjectWidget):
 
@@ -30,6 +34,34 @@ class TemporalExtentReadWidget(base_widgets.ReadObjectWidget):
 
     def get_template(self):
         return 'package/snippets/objects/read-temporal_extent.html'
+
+# IPostalAddress
+
+@object_widget_adapter(schemata.IPostalAddress)
+class PostalAddressEditWidget(base_widgets.EditObjectWidget):
+
+    def get_template(self):
+        return 'package/snippets/objects/edit-postal_address.html'
+
+@object_widget_adapter(schemata.IPostalAddress, qualifiers=['compact'])
+class PostalAddressCompactEditWidget(base_widgets.EditObjectWidget):
+
+    def get_template(self):
+        return 'package/snippets/objects/edit-postal_address-compact.html'
+
+@object_widget_adapter(schemata.IPostalAddress, qualifiers=['comfortable'])
+class PostalAddressComfortableEditWidget(base_widgets.EditObjectWidget):
+
+    def get_template(self):
+        return 'package/snippets/objects/edit-postal_address-comfortable.html'
+
+@object_widget_adapter(schemata.IPostalAddress)
+class PostalAddressReadWidget(base_widgets.ReadObjectWidget):
+
+    def get_template(self):
+        return 'package/snippets/objects/read-postal_address.html'
+
+# IContactInfo
 
 @object_widget_adapter(schemata.IContactInfo)
 class ContactInfoExtentEditWidget(base_widgets.EditObjectWidget):

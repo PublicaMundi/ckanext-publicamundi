@@ -11,7 +11,7 @@
     </label>
     <div class="controls">
         <input type="text" id="{{ 'input-' ~ qname }}"  name="{{ qname }}"
-            class={{ input_classes | list | join(" ") }}
+            class="{{ input_classes | list | join(" ") }}"
             value="{{ value | empty_and_escape }}" 
             placeholder="{{ placeholder | empty_and_escape }}"
             {{ markup_helpers.attributes(attrs) -}}

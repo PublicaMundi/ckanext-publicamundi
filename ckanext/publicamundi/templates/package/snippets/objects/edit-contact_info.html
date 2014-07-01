@@ -1,14 +1,10 @@
 {% set error = None -%}
 
-<div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
-    <label class="control-label">
-        {{ title }}
-        {% if required %}<span title="{{ _("This field is required") }}" class="control-required">*</span>{% endif -%}
-    </label>
-    <div class="controls">
-        <div class="label label-info">Todo</div>
-        {% if error and error is iterable %}
-        <span class="error-block">{{ error | join(', ') }}</span>
-        {% endif %}
-    </div>
+<div class="{{ " " ~ classes | join(' ') }}">
+    
+    <h3>
+        {% if required %}<span title="{{ _("This field is required") }}" class="control-required">*</span>{% endif %}{{ title -}}
+    </h3>
+    {{ h.markup_for_field('edit', obj.get_field('email'), qname, { 'title': _('Email') }) }}
+    {{ h.markup_for_field('edit:compact', obj.get_field('address'), qname, { 'title': _('Postal Address') }) }}
 </div>

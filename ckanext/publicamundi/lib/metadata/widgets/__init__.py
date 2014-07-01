@@ -82,7 +82,7 @@ def _widget_for(qualified_action, x, target_iface):
     widget = None
     while not widget and names:
         name = names.pop()
-        widget = adapter_registry.queryMultiAdapter([x, name], target_iface, name)
+        widget = adapter_registry.queryMultiAdapter([x, qualified_action], target_iface, name)
         logger.debug('Lookup widget for <%s> for action "%s": %s',
             type(x).__name__, name, widget)
     if not widget:

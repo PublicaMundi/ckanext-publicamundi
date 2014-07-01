@@ -61,7 +61,7 @@ class TestsController(BaseController):
                     markup_for_field('read:bar', f, 'foo1', data)
             })
         #raise Exception('Break')
-        c.form_class = 'form' # 'form-horizontal'
+        c.form_class = 'form-horizontal' # 'form-horizontal'
         return render('tests/accordion-form.html')
 
     def get_field_markup_with_helper(self):
@@ -75,7 +75,7 @@ class TestsController(BaseController):
     def get_object_markup(self):
         markup = ''
         c.form_sections = []
-        # A Point object
+        # 1. A Point object
         obj = fixtures.pt1
         data = {
             'required': False,
@@ -90,7 +90,7 @@ class TestsController(BaseController):
                 toolkit.literal('<hr/>') + \
                 markup_for_object('read:boz', obj, 'pt1', { 'title': u'Point B' })
         })
-        # A TemporalExtent object
+        # 2. A TemporalExtent object
         obj = fixtures.dt1
         c.form_sections.append({
             'heading': toolkit.literal('<h3>Object <code>TemporalExtent</code></h3>'),
@@ -99,7 +99,17 @@ class TestsController(BaseController):
                 toolkit.literal('<hr/>') + \
                 markup_for_object('read', obj, 'dt1', { 'title': u'Extent B' })
         })
-        # Render 
+        # 3. A PostalAddress object
+        obj = PostalAddress(address=u'22 Acacia Avenue', postalcode=u'12345')
+        c.form_sections.append({
+            'heading': toolkit.literal('<h3>Object <code>PostalAddress</code></h3>'),
+            'body': \
+                markup_for_object('edit:comfortable', obj, 'contact_info', { 'title': u'Address A' }) + \
+                toolkit.literal('<hr/>') + \
+                markup_for_object('read', obj, 'contact_info', { 'title': u'Address B' })
+        })
+        # Render
+        c.form_class = 'form-horizontal'
         return render('tests/accordion-form.html')
 
     ## Sandbox

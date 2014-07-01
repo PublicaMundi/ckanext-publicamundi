@@ -76,6 +76,7 @@ class Object(object):
         return cls.get_schema()
 
     def get_field(self, k):
+        '''Return a bound field for attribute k'''
         cls = type(self)
         S = cls.get_schema()
         return S.get(k).bind(FieldContext(key=k, obj=self))
@@ -592,7 +593,7 @@ class Object(object):
         def from_dict(self, d, is_flat=False):
             return self.target_cls().from_dict(d, is_flat, self.opts)
 
-        def __call__(self, d=None, is_flat=False):
+        def __call__(self, d={}, is_flat=False):
             return self.from_dict(d, is_flat)
 
     def dictize(self, opts=None):

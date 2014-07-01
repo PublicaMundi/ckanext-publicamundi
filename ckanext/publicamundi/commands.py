@@ -84,7 +84,7 @@ class Command(CommandDispatcher):
                         if not r:
                             print '  --'
                         for qualified_action, widget_cls in r:
-                            print '  %-15.15s %s' %(qualified_action, widget_cls)
+                            print '  %-20.20s %s' %(qualified_action, widget_cls)
 
         object_cls = None
         if opts.object_cls:
@@ -107,7 +107,7 @@ class Command(CommandDispatcher):
                         if not r:
                             print '  --'
                         for qualified_action, widget_cls in r:
-                            print '  %-15.15s %s' %(qualified_action, widget_cls)
+                            print '  %-20.20s %s' %(qualified_action, widget_cls)
 
 class Example1(CkanCommand):
     '''This is an example of a publicamundi-specific paster command:

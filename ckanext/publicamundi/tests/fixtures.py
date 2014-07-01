@@ -22,8 +22,8 @@ foo1 = Foo(
     url = 'http://example.com',
     contact_info = ContactInfo(email=u'nomad@somewhere.com'),
     contacts = {
-        'personal':  ContactInfo(email=u'nobody@example.com'),
-        'office': ContactInfo(address=PostalAddress(address=u'Nowhere-Land', postalcode=u'12345'))
+        'personal':  ContactInfo(email=u'nobody@example.com', address=PostalAddress(address=u'North Pole', postalcode=u'54321')),
+        'office': ContactInfo(email=u'somebody@company.com'),
     },
     geometry = [[ poly1 ]],
     reviewed = False,
