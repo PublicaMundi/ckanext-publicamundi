@@ -13,7 +13,6 @@ from ckanext.publicamundi.lib import logger
 # Todo: Provide readers/editors for:
 #  - IPassword
 #  - IBytes
-#  - IURI
 
 # Editors #
 
@@ -35,6 +34,12 @@ class EmailEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/edit-textline-email.html'
+
+@field_widget_adapter(zope.schema.interfaces.IURI)
+class UriEditWidget(base_widgets.EditFieldWidget):
+   
+    def get_template(self):
+        return 'package/snippets/fields/edit-uri.html'
 
 @field_widget_adapter(zope.schema.interfaces.IInt)
 class IntEditWidget(base_widgets.EditFieldWidget):
@@ -179,6 +184,12 @@ class EmailReadWidget(base_widgets.ReadFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/read-textline-email.html'
+
+@field_widget_adapter(zope.schema.interfaces.IURI)
+class UriReadWidget(base_widgets.ReadFieldWidget):
+   
+    def get_template(self):
+        return 'package/snippets/fields/read-uri.html'
 
 @field_widget_adapter(zope.schema.interfaces.IInt)
 class IntReadWidget(base_widgets.ReadFieldWidget):

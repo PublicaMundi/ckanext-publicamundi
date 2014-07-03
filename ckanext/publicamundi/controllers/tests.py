@@ -30,6 +30,7 @@ class TestsController(BaseController):
         test_fields = {
             'grade': { 'title': u'Foo Grade' },
             'rating': { 'title': u'Foo Rating' },
+            'url': { 'title': u'Website URL' },
             'contacts': { 'title': u'Contacts', },
             'title': {
                 'required': True,
