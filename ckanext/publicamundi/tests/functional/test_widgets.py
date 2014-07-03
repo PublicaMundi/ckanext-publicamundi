@@ -28,18 +28,18 @@ log1 = logging.getLogger(__name__)
 class BoolWidget1(base_widgets.EditFieldWidget):
     
     def get_template(self):
-        return 'package/snippets/fields/edit-checkbox-1.html'
+        return 'package/snippets/fields/edit-bool-checkbox-1.html'
 
 @field_widget_adapter(zope.schema.interfaces.IBool, qualifiers=['checkbox2'])
 class BoolWidget2(base_widgets.EditFieldWidget):
 
     def get_template(self):
-        return 'package/snippets/fields/edit-checkbox-2.html'
+        return 'package/snippets/fields/edit-bool-checkbox-2.html'
 
 BoolWidget3 = type('BoolWidget3', (base_widgets.EditFieldWidget,), {
     'get_template': None
 })
-BoolWidget3.get_template = lambda t: 'package/snippets/fields/edit-checkbox-3.html'
+BoolWidget3.get_template = lambda t: 'package/snippets/fields/edit-bool-checkbox-3.html'
 BoolWidget3 = \
     field_widget_adapter(zope.schema.interfaces.IBool, qualifiers=['checkbox3'])\
     (BoolWidget3)

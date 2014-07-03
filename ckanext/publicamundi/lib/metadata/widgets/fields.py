@@ -44,19 +44,26 @@ class IntEditWidget(base_widgets.EditFieldWidget):
         data = base_widgets.EditFieldWidget.prepare_template_vars(self, name_prefix, data)
         minval = self.field.min
         maxval = self.field.max
-        data['input_classes'] = [ 'span1' ]
         if (minval is None) or (maxval is None) or (maxval - minval > 1e3):
-            data['input_classes'] = [ 'span2' ] 
+            data['input_classes'] = [ 'span2' ]
+        else:
+            data['input_classes'] = [ 'span1' ]
         return data
    
     def get_template(self):
         return 'package/snippets/fields/edit-int.html'
 
+@field_widget_adapter(zope.schema.interfaces.IInt, qualifiers=['text'])
+class IntAsTextEditWidget(IntEditWidget):
+   
+    def get_template(self):
+        return 'package/snippets/fields/edit-int-text.html'
+
 @field_widget_adapter(zope.schema.interfaces.IBool)
 class BoolEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
-        return 'package/snippets/fields/edit-checkbox-1.html'
+        return 'package/snippets/fields/edit-bool-checkbox-1.html'
 
 @field_widget_adapter(zope.schema.interfaces.IChoice)
 class ChoiceEditWidget(base_widgets.EditFieldWidget):
