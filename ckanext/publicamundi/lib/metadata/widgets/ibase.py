@@ -66,10 +66,7 @@ class IFieldWidget(IWidget):
 
 class IObjectWidget(IWidget):
     '''The interface for a widget adapter for a IObject-based object'''
-    
-    def get_omitted_fields():
-        '''Return a list of fields that should be omitted from rendering'''
-
+        
     def prepare_template_vars(name_prefix, data):
         '''Prepare context before rendering the widget'''
 

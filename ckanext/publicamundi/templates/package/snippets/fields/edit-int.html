@@ -2,6 +2,7 @@
 
 {% set placeholder = placeholder or field.default -%}
 {% if input_classes is not defined %}{% set input_classes = [ 'input-small' ] %}{% endif -%}
+{% do input_classes.append('number') %}
 {% set error = None -%}
 
 <div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
@@ -10,23 +11,15 @@
         {% if required %}<span title="{{ _("This field is required") }}" class="control-required">*</span>{% endif -%}
     </label>
     <div class="controls">
-        <div class="input-append datetime"
-            data-module="datetimepicker" 
-            data-module-picktime="false" data-module-pickdate="true" data-module-format="yyyy-MM-dd"
-             >
-            <input type="text" id="{{ 'input-' ~ qname }}"  name="{{ qname }}"
-                class={{ input_classes | list | join(" ") }}
-                value="{{ value | empty_and_escape }}" 
-                placeholder="{{ placeholder | empty_and_escape }}"
-            />
-            <span class="add-on">
-                <i data-date-icon="icon-calendar"></i>
-            </span>
-        </div>
+        <input type="number" id="{{ 'input-' ~ qname }}"  name="{{ qname }}"
+            class="{{ input_classes | list | join(" ") }}"
+            value="{{ value | empty_and_escape }}"
+            step="1" min="{{ field.min }}" max="{{ field.max }}"
+            placeholder="{{ placeholder | empty_and_escape }}"
+            {{ markup_helpers.attributes(attrs) -}}
+        />
         {% if error and error is iterable -%}
         <span class="error-block">{{ error | join(', ') }}</span>
         {% endif -%}
     </div>
 </div>
-
-{% resource 'ckanext-publicamundi/datetimepicker' %}

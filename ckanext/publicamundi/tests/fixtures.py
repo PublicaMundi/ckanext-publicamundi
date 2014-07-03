@@ -32,5 +32,6 @@ foo1 = Foo(
     notes = u'Hello World',
     thematic_category = None,
     temporal_extent = dt1,
+    rating = 7,
 )
 

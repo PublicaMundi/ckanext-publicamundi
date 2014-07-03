@@ -76,14 +76,14 @@ class TestController(ckan.tests.TestController):
     @nose.tools.istest
     def test_read_field_widgets(self):
         '''Generate markup for reading fields'''
-        for k in ['title', 'reviewed']:
+        for k in ['title', 'reviewed', 'notes', 'thematic_category', 'wakeup_time', 'created', 'rating']:
             yield self._test_markup_for_field, 'foo1', k, 'read'
             yield self._test_markup_for_field, 'foo1', k, 'read', { 'title': u'X1' }
 
     @nose.tools.istest
     def test_edit_field_widgets(self):
         '''Generate markup for editing fields'''
-        for k in ['title', 'reviewed', 'notes', 'thematic_category', 'wakeup_time', 'created']:
+        for k in ['title', 'reviewed', 'notes', 'thematic_category', 'wakeup_time', 'created', 'rating']:
             yield self._test_markup_for_field, 'foo1', k, 'edit'
             yield self._test_markup_for_field, 'foo1', k, 'edit', { 'title': u'Another Title' }
             yield self._test_markup_for_field, 'foo1', k, 'edit', { 'required': False }

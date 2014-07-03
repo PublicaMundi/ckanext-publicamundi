@@ -12,7 +12,6 @@ from ckanext.publicamundi.lib import logger
 
 # Todo: Provide readers/editors for:
 #  - IBytes
-#  - IInt
 #  - IFloat
 #  - IDottedName
 #  - IURI
@@ -31,6 +30,27 @@ class TextLineEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/edit-textline.html'
+
+@field_widget_adapter(zope.schema.interfaces.ITextLine, qualifiers=['email'])
+class EmailEditWidget(base_widgets.EditFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/edit-textline-email.html'
+
+@field_widget_adapter(zope.schema.interfaces.IInt)
+class IntEditWidget(base_widgets.EditFieldWidget):
+
+    def prepare_template_vars(self, name_prefix, data):
+        data = base_widgets.EditFieldWidget.prepare_template_vars(self, name_prefix, data)
+        minval = self.field.min
+        maxval = self.field.max
+        data['input_classes'] = [ 'span1' ]
+        if (minval is None) or (maxval is None) or (maxval - minval > 1e3):
+            data['input_classes'] = [ 'span2' ] 
+        return data
+   
+    def get_template(self):
+        return 'package/snippets/fields/edit-int.html'
 
 @field_widget_adapter(zope.schema.interfaces.IBool)
 class BoolEditWidget(base_widgets.EditFieldWidget):
@@ -76,12 +96,9 @@ class ListEditWidget(base_widgets.EditFieldWidget, base_widgets.ListFieldWidgetT
         return 'package/snippets/fields/edit-list.html'
 
     def prepare_template_vars(self, name_prefix, data):
-        '''Prepare data for the template'''
         data = base_widgets.ListFieldWidgetTraits.prepare_template_vars(self, name_prefix, data)
-        data.update({
-            'attrs': dict(data['attrs'].items() + [
-                ('data-disabled-module', 'list'),
-            ]),
+        data['attrs'].update({
+            'data-disabled-module': 'list',
         })
         return data
 
@@ -96,12 +113,9 @@ class DictEditWidget(base_widgets.EditFieldWidget, base_widgets.DictFieldWidgetT
         return 'package/snippets/fields/edit-dict.html'
 
     def prepare_template_vars(self, name_prefix, data):
-        '''Prepare data for the template'''
         data = base_widgets.DictFieldWidgetTraits.prepare_template_vars(self, name_prefix, data)
-        data.update({
-            'attrs': dict(data['attrs'].items() + [
-                ('data-disabled-module', 'dict'),
-            ]),
+        data['attrs'].update({
+            'data-disabled-module': 'dict',
         })
         return data
 
@@ -116,12 +130,9 @@ class ObjectEditWidget(base_widgets.EditFieldWidget, base_widgets.ObjectFieldWid
         return 'package/snippets/fields/edit-object.html'
 
     def prepare_template_vars(self, name_prefix, data):
-        '''Prepare data for the template'''
         data = base_widgets.ObjectFieldWidgetTraits.prepare_template_vars(self, name_prefix, data)
-        data.update({
-            'attrs': dict(data.get('attrs', {}).items() + [
-                ('data-disabled-module', 'object'),
-            ]),
+        data['attrs'].update({
+            'data-disabled-module': 'object',
         })
         return data
 
@@ -140,6 +151,18 @@ class TextAsItemReadWidget(base_widgets.ReadFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/read-text-item.html'
+
+@field_widget_adapter(zope.schema.interfaces.ITextLine, qualifiers=['email'])
+class EmailReadWidget(base_widgets.ReadFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/read-textline-email.html'
+
+@field_widget_adapter(zope.schema.interfaces.IInt)
+class IntReadWidget(base_widgets.ReadFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/read-int.html'
 
 @field_widget_adapter(zope.schema.interfaces.IBool)
 class BoolReadWidget(base_widgets.ReadFieldWidget):
@@ -187,10 +210,8 @@ class ListReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListFieldWidgetT
     def prepare_template_vars(self, name_prefix, data):
         '''Prepare data for the template'''
         data = base_widgets.ListFieldWidgetTraits.prepare_template_vars(self, name_prefix, data)
-        data.update({
-            'attrs': dict(data['attrs'].items() + [
-                ('data-disabled-module', 'list'),
-            ]),
+        data['attrs'].update({
+            'data-disabled-module': 'list',
         })
         return data
 
@@ -207,10 +228,8 @@ class DictReadWidget(base_widgets.ReadFieldWidget, base_widgets.DictFieldWidgetT
     def prepare_template_vars(self, name_prefix, data):
         '''Prepare data for the template'''
         data = base_widgets.DictFieldWidgetTraits.prepare_template_vars(self, name_prefix, data)
-        data.update({
-            'attrs': dict(data['attrs'].items() + [
-                ('data-disabled-module', 'dict'),
-            ]),
+        data['attrs'].update({
+            'data-disabled-module': 'dict',
         })
         return data
 
@@ -227,10 +246,8 @@ class ObjectReadWidget(base_widgets.ReadFieldWidget, base_widgets.ObjectFieldWid
     def prepare_template_vars(self, name_prefix, data):
         '''Prepare data for the template'''
         data = base_widgets.ObjectFieldWidgetTraits.prepare_template_vars(self, name_prefix, data)
-        data.update({
-            'attrs': dict(data.get('attrs', {}).items() + [
-                ('data-disabled-module', 'object'),
-            ]),
+        data['attrs'].update({
+            'data-disabled-module': 'object',
         })
         return data
 

@@ -86,6 +86,13 @@ class IFoo(IBaseMetadata):
         title = u'Wakeup time',
         required = True)
 
+    rating = zope.schema.Int(
+        title = u'Rating',
+        required = False,
+        default = 5,
+        min = 0,
+        max = 10)
+
     @zope.interface.invariant
     def check_tag_duplicates(obj):
         s = set(obj.tags)

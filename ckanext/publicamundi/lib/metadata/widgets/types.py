@@ -66,14 +66,24 @@ class PostalAddressReadWidget(base_widgets.ReadObjectWidget):
 @object_widget_adapter(schemata.IContactInfo)
 class ContactInfoExtentEditWidget(base_widgets.EditObjectWidget):
 
+    def get_field_qualifiers(self):
+        return {
+            'email': 'email'
+        }
+    
     def get_template(self):
-        return None
+        return None # use glue template
         #return 'package/snippets/objects/edit-contact_info.html'
 
 @object_widget_adapter(schemata.IContactInfo)
 class ContactInfoReadWidget(base_widgets.ReadObjectWidget):
+    
+    def get_field_qualifiers(self):
+        return {
+            'email': 'email'
+        }
 
     def get_template(self):
-        return None
+        return None # use glue template
         #return 'package/snippets/objects/read-contact_info.html'
 

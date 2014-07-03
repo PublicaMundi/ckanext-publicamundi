@@ -38,7 +38,6 @@ class Widget(object):
         else:
             return QualAction(self.action).to_string()
 
-
 class FieldWidget(Widget):
     zope.interface.implements(IFieldWidget)
 
@@ -112,8 +111,29 @@ class ObjectWidget(Widget):
         self.obj = obj
 
     def get_glue_template(self):
+        '''Provide a template responsible to glue (rendered) fields together'''
         return 'package/snippets/objects/%(action)s.html' %(
             dict(action=self.action))
+
+    def get_field_qualifiers(self):
+        '''Return a map of (field, qualifier) items.
+
+        If no valid template is provided (via get_template()) then we attempt to 
+        render a  widget by glue-ing its fields together. In this case, each field is 
+        rendered using a "proper" qualifier for it. 
+
+        We search for a "proper" qualifier by examining the following (in this order):
+
+         * a qualifier returned by get_field_qualifiers()
+         * a qualifier tagged directly to the field as 'widget-qualifier'
+         * a qualifier specified by self.qualified_action
+
+        '''
+        return {}
+    
+    def get_omitted_fields(self):
+        '''Return a list of fields that should be omitted from rendering'''
+        return None
 
     ## IObjectWidget interface ##
 
@@ -149,9 +169,6 @@ class ObjectWidget(Widget):
     def get_template(self):
         return None
 
-    def get_omitted_fields(self):
-        return None
-
     def render(self, name_prefix, data={}):
         data = self.prepare_template_vars(name_prefix, data)
         tpl = self.get_template()
@@ -162,9 +179,14 @@ class ObjectWidget(Widget):
             # Prepare additional vars needed for the this template:
             # all fields are processed (rendered) and passed to the
             # glue template
+            field_qualifiers = self.get_field_qualifiers()
             q = self.qualified_action
             def render_field(k):
                 f = self.obj.get_field(k)
+                qf = field_qualifiers.get(k) or \
+                    f.queryTaggedValue('widget-qualifier') or \
+                    self.context.provided_action.qualifier
+                q = QualAction(self.action, qualifier=qf).to_string()
                 return {
                     'field': f,
                     'markup': markup_for_field(q, f, name_prefix, {}) 

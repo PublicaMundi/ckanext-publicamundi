@@ -28,6 +28,7 @@ class TestsController(BaseController):
         x = fixtures.foo1
         S = x.get_schema()
         test_fields = {
+            'rating': { 'title': u'Foo Rating' },
             'contacts': { 'title': u'Contacts', },
             'title': {
                 'required': True,
