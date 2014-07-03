@@ -33,5 +33,6 @@ foo1 = Foo(
     thematic_category = None,
     temporal_extent = dt1,
     rating = 7,
+    grade = 13.7,
 )
 

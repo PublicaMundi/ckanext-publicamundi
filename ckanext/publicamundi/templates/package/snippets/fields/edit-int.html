@@ -2,7 +2,7 @@
 
 {% set placeholder = placeholder or field.default -%}
 {% if input_classes is not defined %}{% set input_classes = [ 'input-small' ] %}{% endif -%}
-{% do input_classes.append('number') %}
+{% do input_classes.extend(['number', 'int']) %}
 {% set error = None -%}
 
 <div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
@@ -12,7 +12,7 @@
     <div class="controls">
         <input type="number" id="{{ 'input-' ~ qname }}"  name="{{ qname }}"
             class="{{ input_classes | list | join(" ") }}"
-            value="{{ value | empty_and_escape }}"
+            value="{{ value | int(default=field.default) }}"
             step="1" min="{{ field.min }}" max="{{ field.max }}"
             placeholder="{{ placeholder | empty_and_escape }}"
             {{ markup_helpers.attributes(attrs) -}}

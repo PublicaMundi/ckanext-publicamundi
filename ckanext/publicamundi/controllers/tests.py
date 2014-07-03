@@ -28,6 +28,7 @@ class TestsController(BaseController):
         x = fixtures.foo1
         S = x.get_schema()
         test_fields = {
+            'grade': { 'title': u'Foo Grade' },
             'rating': { 'title': u'Foo Rating' },
             'contacts': { 'title': u'Contacts', },
             'title': {
@@ -57,7 +58,7 @@ class TestsController(BaseController):
             c.form_sections.append({
                 'heading': toolkit.literal('<h3>Field <code>%s</code></h3>' %(k)),
                 'body': \
-                    markup_for_field('edit:baz', f, 'foo1', data) + \
+                    markup_for_field('edit', f, 'foo1', data) + \
                     toolkit.literal('<hr/>') + \
                     markup_for_field('read:bar', f, 'foo1', data)
             })

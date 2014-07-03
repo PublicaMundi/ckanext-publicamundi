@@ -11,9 +11,8 @@ from ckanext.publicamundi.lib import logger
 ## Define widgets ##
 
 # Todo: Provide readers/editors for:
+#  - IPassword
 #  - IBytes
-#  - IFloat
-#  - IDottedName
 #  - IURI
 
 # Editors #
@@ -42,12 +41,9 @@ class IntEditWidget(base_widgets.EditFieldWidget):
 
     def prepare_template_vars(self, name_prefix, data):
         data = base_widgets.EditFieldWidget.prepare_template_vars(self, name_prefix, data)
-        minval = self.field.min
-        maxval = self.field.max
-        if (minval is None) or (maxval is None) or (maxval - minval > 1e3):
-            data['input_classes'] = [ 'span2' ]
-        else:
-            data['input_classes'] = [ 'span1' ]
+        minval, maxval = self.field.min, self.field.max
+        data['input_classes'] = [ \
+            'span2' if ((minval is None) or (maxval is None) or (maxval - minval > 1e3)) else 'span1' ]
         return data
    
     def get_template(self):
@@ -58,6 +54,25 @@ class IntAsTextEditWidget(IntEditWidget):
    
     def get_template(self):
         return 'package/snippets/fields/edit-int-text.html'
+
+@field_widget_adapter(zope.schema.interfaces.IFloat)
+class FloatEditWidget(base_widgets.EditFieldWidget):
+
+    def prepare_template_vars(self, name_prefix, data):
+        data = base_widgets.EditFieldWidget.prepare_template_vars(self, name_prefix, data)
+        minval, maxval = self.field.min, self.field.max
+        data['input_classes'] = [ \
+            'input-small' if ((minval is None) or (maxval is None) or (maxval - minval > 1e3)) else 'span2' ]
+        return data
+   
+    def get_template(self):
+        return 'package/snippets/fields/edit-float.html'
+
+@field_widget_adapter(zope.schema.interfaces.IFloat, qualifiers=['text'])
+class FloatAsTextEditWidget(FloatEditWidget):
+   
+    def get_template(self):
+        return 'package/snippets/fields/edit-float-text.html'
 
 @field_widget_adapter(zope.schema.interfaces.IBool)
 class BoolEditWidget(base_widgets.EditFieldWidget):
@@ -71,11 +86,11 @@ class ChoiceEditWidget(base_widgets.EditFieldWidget):
     def get_template(self):
         return 'package/snippets/fields/edit-choice.html'
 
-@field_widget_adapter(zope.schema.interfaces.IDate)
+@field_widget_adapter(zope.schema.interfaces.IDate, qualifiers=['datetimepicker'], is_fallback=True)
 class DateEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
-        return 'package/snippets/fields/edit-date.html'
+        return 'package/snippets/fields/edit-date-datetimepicker.html'
 
 @field_widget_adapter(zope.schema.interfaces.ITime)
 class TimeEditWidget(base_widgets.EditFieldWidget):
@@ -170,6 +185,12 @@ class IntReadWidget(base_widgets.ReadFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/read-int.html'
+
+@field_widget_adapter(zope.schema.interfaces.IFloat)
+class FloatReadWidget(base_widgets.ReadFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/read-float.html'
 
 @field_widget_adapter(zope.schema.interfaces.IBool)
 class BoolReadWidget(base_widgets.ReadFieldWidget):

@@ -92,6 +92,13 @@ class IFoo(IBaseMetadata):
         default = 5,
         min = 0,
         max = 10)
+    
+    grade = zope.schema.Float(
+        title = u'Grade',
+        required = False,
+        default = 5.0,
+        min = 0.0,
+        max = 20.0)
 
     @zope.interface.invariant
     def check_tag_duplicates(obj):
