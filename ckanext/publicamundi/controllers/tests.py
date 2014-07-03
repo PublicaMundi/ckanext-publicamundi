@@ -29,26 +29,26 @@ class TestsController(BaseController):
         S = x.get_schema()
         test_fields = {
             'contacts': { 'title': u'Contacts', },
-#            'title': {
-#                'required': True,
-#                'classes': [ 'control-medium' ],
-#                'title': u'Title',
-#                'description': u'Blah blah',
-#                'placeholder': u'Enter a title',
-#                'attrs': { 'data-foo': 'baz' }
-#            },
-#            'temporal_extent': { 'title': u'Temporal Extent', },
-#            'reviewed': { 'title': u'Reviewed', },
-#            'notes': { 'description': u'Add a detailed description', },
-#            'thematic_category': {},
-#            'tags': {},
-#            'created': { 
-#                'title': u'Created At', 
-#                'placeholder': datetime.datetime.now(),
-#            },
-#            'wakeup_time': {
-#                'title': u'Wakeup At',
-#            },
+            'title': {
+                'required': True,
+                'classes': [ 'control-medium' ],
+                'title': u'Title',
+                'description': u'Blah blah',
+                'placeholder': u'Enter a title',
+                'attrs': { 'data-foo': 'baz' }
+            },
+            'temporal_extent': { 'title': u'Temporal Extent', },
+            'reviewed': { 'title': u'Reviewed', },
+            'notes': { 'description': u'Add a detailed description', },
+            'thematic_category': {},
+            'tags': {},
+            'created': { 
+                'title': u'Created At', 
+                'placeholder': datetime.datetime.now(),
+            },
+            'wakeup_time': {
+                'title': u'Wakeup At',
+            },
         }
         c.form_sections = []
         for k, data in test_fields.items():

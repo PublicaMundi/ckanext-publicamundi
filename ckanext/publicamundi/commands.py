@@ -79,8 +79,7 @@ class Command(CommandDispatcher):
                     field_iface = x
                     if not field_cls or field_iface.implementedBy(field_cls): 
                         print field_iface.__name__
-                        r = adapter_registry.lookupAll(
-                            [field_iface, zope.interface.Interface], widgets.IFieldWidget)
+                        r = adapter_registry.lookupAll([field_iface], widgets.IFieldWidget)
                         if not r:
                             print '  --'
                         for qualified_action, widget_cls in r:
@@ -102,8 +101,7 @@ class Command(CommandDispatcher):
                     object_iface = x
                     if not object_cls or object_iface.implementedBy(object_cls): 
                         print object_iface.__name__
-                        r = adapter_registry.lookupAll(
-                            [object_iface, zope.interface.Interface], widgets.IObjectWidget)
+                        r = adapter_registry.lookupAll([object_iface], widgets.IObjectWidget)
                         if not r:
                             print '  --'
                         for qualified_action, widget_cls in r:

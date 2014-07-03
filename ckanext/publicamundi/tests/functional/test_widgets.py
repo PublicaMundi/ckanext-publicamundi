@@ -22,11 +22,6 @@ from ckanext.publicamundi.lib.metadata.widgets import field_widget_adapter
 
 log1 = logging.getLogger(__name__)
 
-## Define a dummy interface ##
-
-class IBaz(zope.interface.Interface):
-    pass
-
 ## Define widgets ##
 
 @field_widget_adapter(zope.schema.interfaces.IBool, qualifiers=['checkbox1'])
@@ -71,10 +66,7 @@ class TestController(ckan.tests.TestController):
     
     def _test_registered_field_widgets(self, field_iface):
         '''Fetch all registered adapters for a given field interface'''
-        # Note: 
-        # The lookupAll() method requires to pass an adaptee interface, so we have
-        # created a dummy interface (IBaz) to be used as equivalent to <anything> 
-        adapters = adapter_registry.lookupAll([field_iface, IBaz], ibase_widgets.IFieldWidget)
+        adapters = adapter_registry.lookupAll([field_iface], ibase_widgets.IFieldWidget)
         print
         print ' -- Registered widget adapters for field %s -- ' %(field_iface)
         for adapter in adapters:
@@ -135,8 +127,7 @@ class TestController(ckan.tests.TestController):
     
     def _test_registered_object_widgets(self, object_iface):
         '''Fetch all registered adapters for a given object interface'''
-        # Note: see also _test_registered_field_widgets() method
-        adapters = adapter_registry.lookupAll([object_iface, IBaz], ibase_widgets.IObjectWidget)
+        adapters = adapter_registry.lookupAll([object_iface], ibase_widgets.IObjectWidget)
         print
         print ' -- Registered widget adapters for schema %s -- ' %(object_iface)
         for adapter in adapters:

@@ -66,11 +66,11 @@ class DatetimeEditWidget(base_widgets.EditFieldWidget):
 @field_widget_adapter(zope.schema.interfaces.ITuple)
 class ListEditWidget(base_widgets.EditFieldWidget, base_widgets.ListFieldWidgetTraits):
 
-    def __init__(self, field, qualified_action):
+    def __init__(self, field):
         assert \
             isinstance(field, zope.schema.List) or \
             isinstance(field, zope.schema.Tuple)
-        base_widgets.EditFieldWidget.__init__(self, field, qualified_action)
+        base_widgets.EditFieldWidget.__init__(self, field)
 
     def get_template(self):
         return 'package/snippets/fields/edit-list.html'
@@ -88,9 +88,9 @@ class ListEditWidget(base_widgets.EditFieldWidget, base_widgets.ListFieldWidgetT
 @field_widget_adapter(zope.schema.interfaces.IDict)
 class DictEditWidget(base_widgets.EditFieldWidget, base_widgets.DictFieldWidgetTraits):
 
-    def __init__(self, field, qualified_action):
+    def __init__(self, field):
         assert isinstance(field, zope.schema.Dict)
-        base_widgets.EditFieldWidget.__init__(self, field, qualified_action)
+        base_widgets.EditFieldWidget.__init__(self, field)
 
     def get_template(self):
         return 'package/snippets/fields/edit-dict.html'
@@ -108,9 +108,9 @@ class DictEditWidget(base_widgets.EditFieldWidget, base_widgets.DictFieldWidgetT
 @field_widget_adapter(zope.schema.interfaces.IObject)
 class ObjectEditWidget(base_widgets.EditFieldWidget, base_widgets.ObjectFieldWidgetTraits):
 
-    def __init__(self, field, qualified_action):
+    def __init__(self, field):
         assert isinstance(field, zope.schema.Object)
-        base_widgets.EditFieldWidget.__init__(self, field, qualified_action)
+        base_widgets.EditFieldWidget.__init__(self, field)
 
     def get_template(self):
         return 'package/snippets/fields/edit-object.html'
@@ -175,11 +175,11 @@ class DatetimeReadWidget(base_widgets.ReadFieldWidget):
 @field_widget_adapter(zope.schema.interfaces.ITuple)
 class ListReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListFieldWidgetTraits):
 
-    def __init__(self, field, qualified_action):
+    def __init__(self, field):
         assert \
             isinstance(field, zope.schema.List) or \
             isinstance(field, zope.schema.Tuple)
-        base_widgets.ReadFieldWidget.__init__(self, field, qualified_action)
+        base_widgets.ReadFieldWidget.__init__(self, field)
 
     def get_template(self):
         return 'package/snippets/fields/read-list.html'
@@ -197,9 +197,9 @@ class ListReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListFieldWidgetT
 @field_widget_adapter(zope.schema.interfaces.IDict)
 class DictReadWidget(base_widgets.ReadFieldWidget, base_widgets.DictFieldWidgetTraits):
 
-    def __init__(self, field, qualified_action):
+    def __init__(self, field):
         assert isinstance(field, zope.schema.Dict)
-        base_widgets.ReadFieldWidget.__init__(self, field, qualified_action)
+        base_widgets.ReadFieldWidget.__init__(self, field)
 
     def get_template(self):
         return 'package/snippets/fields/read-dict.html'
@@ -217,9 +217,9 @@ class DictReadWidget(base_widgets.ReadFieldWidget, base_widgets.DictFieldWidgetT
 @field_widget_adapter(zope.schema.interfaces.IObject)
 class ObjectReadWidget(base_widgets.ReadFieldWidget, base_widgets.ObjectFieldWidgetTraits):
 
-    def __init__(self, field, qualified_action):
+    def __init__(self, field):
         assert isinstance(field, zope.schema.Object)
-        base_widgets.ReadFieldWidget.__init__(self, field, qualified_action)
+        base_widgets.ReadFieldWidget.__init__(self, field)
     
     def get_template(self):
         return 'package/snippets/fields/read-object.html'

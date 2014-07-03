@@ -9,9 +9,9 @@ from ckanext.publicamundi.lib.metadata.ibase import IObject
 from ckanext.publicamundi.lib.metadata.base import Object, FieldContext
 from ckanext.publicamundi.lib.metadata.widgets.ibase import IWidget 
 from ckanext.publicamundi.lib.metadata.widgets.ibase import IFieldWidget, IObjectWidget
-from ckanext.publicamundi.lib.metadata.widgets import parse_qualified_action
-from ckanext.publicamundi.lib.metadata.widgets import markup_for_field
+from ckanext.publicamundi.lib.metadata.widgets import QualAction, LookupContext
 from ckanext.publicamundi.lib.metadata.widgets import markup_for_object
+from ckanext.publicamundi.lib.metadata.widgets import markup_for_field
     
 ## Base
 
@@ -19,6 +19,8 @@ class Widget(object):
     zope.interface.implements(IWidget)
     
     action = None
+
+    context = None
     
     def get_template(self):
         raise NotImplementedError('Method should be implemented in a derived class')
@@ -29,16 +31,23 @@ class Widget(object):
     def render(self, data):
         raise NotImplementedError('Method should be implemented in a derived class')
     
+    @property
+    def qualified_action(self):
+        if self.context:
+            return self.context.provided_action.to_string()
+        else:
+            return QualAction(self.action).to_string()
+
+
 class FieldWidget(Widget):
     zope.interface.implements(IFieldWidget)
 
-    def __init__(self, field, qualified_action):
+    def __init__(self, field):
+        # Check adaptee: must be a bound field
         assert isinstance(field, zope.schema.Field)
         assert field.context and isinstance(field.context, FieldContext)
+        # Initialize
         self.field = field
-        action, qualifier = parse_qualified_action(qualified_action)
-        assert action == self.action
-        self.qualifier = qualifier
         name = field.getName()
         if name:
             # This is a named field, used as an attribute in a
@@ -53,11 +62,6 @@ class FieldWidget(Widget):
             self.value = field.context.obj[field.context.key]
         return
     
-    @property
-    def qualified_action(self):
-        return self.action + \
-            (':' + self.qualifier if self.qualifier else '')
-
     ## IFieldWidget interface ##
     
     def prepare_template_vars(self, name_prefix, data):
@@ -67,7 +71,8 @@ class FieldWidget(Widget):
         template_vars = {
             'name_prefix': name_prefix,
             'action': self.action,
-            'qualified_action': self.qualified_action,
+            'requested_action': self.context.requested_action,
+            'provided_action': self.context.provided_action,
             'field': self.field,
             'value': self.value,
             'name': self.name,
@@ -102,17 +107,9 @@ class FieldWidget(Widget):
 class ObjectWidget(Widget):
     zope.interface.implements(IObjectWidget)
 
-    def __init__(self, obj, qualified_action):
+    def __init__(self, obj):
         assert isinstance(obj, Object)
         self.obj = obj
-        action, qualifier = parse_qualified_action(qualified_action)
-        assert action == self.action
-        self.qualifier = qualifier
-
-    @property
-    def qualified_action(self):
-        return self.action + \
-            (':' + self.qualifier if self.qualifier else '')
 
     def get_glue_template(self):
         return 'package/snippets/objects/%(action)s.html' %(
@@ -127,7 +124,8 @@ class ObjectWidget(Widget):
         template_vars = {
             'name_prefix': name_prefix,
             'action': self.action,
-            'qualified_action': self.qualified_action,
+            'requested_action': self.context.requested_action,
+            'provided_action': self.context.provided_action,
             'obj': self.obj,
             'schema': self.obj.get_schema(),
             'classes': [],
@@ -164,11 +162,12 @@ class ObjectWidget(Widget):
             # Prepare additional vars needed for the this template:
             # all fields are processed (rendered) and passed to the
             # glue template
+            q = self.qualified_action
             def render_field(k):
                 f = self.obj.get_field(k)
                 return {
                     'field': f,
-                    'markup': markup_for_field(self.qualified_action, f, name_prefix, {}) 
+                    'markup': markup_for_field(q, f, name_prefix, {}) 
                 }
             field_names = set(self.obj.get_field_names()) - \
                 set(self.get_omitted_fields())
@@ -225,15 +224,15 @@ class ListFieldWidgetTraits(FieldWidget):
         data = FieldWidget.prepare_template_vars(self, name_prefix, data)
         title = data.get('title')
         qname = data.get('qname')
-        item_action = '%s:item%s' %(self.action, \
-            ('.' + self.qualifier if self.qualifier else ''))
+        a = self.context.provided_action.make_child('item')
+        q = a.to_string()
         def render_item(item):
             i, y = item
             assert isinstance(i, int)
             yf = field.value_type.bind(FieldContext(key=i, obj=value))
             return {
                 'index': i,
-                'markup': markup_for_field(item_action, yf, qname, {
+                'markup': markup_for_field(q, yf, qname, {
                     'title': '%s #%d' %(yf.title, i) 
                 }),
             }
@@ -258,8 +257,8 @@ class DictFieldWidgetTraits(FieldWidget):
         data = FieldWidget.prepare_template_vars(self, name_prefix, data)
         title = data.get('title')
         qname = data.get('qname')
-        item_action = '%s:item%s' %(self.action, \
-            ('.' + self.qualifier if self.qualifier else ''))
+        a = self.context.provided_action.make_child('item')
+        q = a.to_string()
         def render_item(item):
             k, y = item
             assert isinstance(k, basestring)
@@ -267,7 +266,7 @@ class DictFieldWidgetTraits(FieldWidget):
             term = field.key_type.vocabulary.getTerm(k)
             return {
                 'key': term,
-                'markup': markup_for_field(item_action, yf, qname, {
+                'markup': markup_for_field(q, yf, qname, {
                     'title': term.title or term.token
                 }),
             }
@@ -304,9 +303,10 @@ class ObjectFieldWidgetTraits(FieldWidget):
                 data1[k] = v
         # Generate markup for the contained object, feed result to
         # the current template context
+        q = self.context.requested_action.to_string()
         data.update({
             'obj': {
-                'markup': markup_for_object(self.qualified_action, value, qname, data1)
+                'markup': markup_for_object(q, value, qname, data1)
             }
         })
         return data
