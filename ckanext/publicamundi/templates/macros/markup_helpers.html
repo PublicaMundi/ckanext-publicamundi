@@ -3,3 +3,9 @@
   {{ " " }}{{ key }}{% if value != "" %}="{{ value }}"{% endif %}
   {%- endfor -%}
 {%- endmacro -%}
+
+{%- macro mark_required(required, msg=None) -%}
+  {% if required -%}
+  <span title="{{ msg or _("This field is required") }}" class="control-required">*</span>
+  {% endif -%}
+{%- endmacro -%}

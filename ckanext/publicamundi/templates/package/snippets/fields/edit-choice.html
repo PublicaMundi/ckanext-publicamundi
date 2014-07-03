@@ -4,8 +4,7 @@
 
 <div class="control-group{{ " " ~ classes | join(' ') }}">
     <label class="control-label" for="{{ 'input-' ~ qname }}">
-        {{ title }}
-        <code>{{ value }}</code>
+        {{ title }}{{ markup_helpers.mark_required(required) }}
     </label>
     <div class="controls">
         <select name="{{ qname }}" id="{{ 'input-' ~ qname }}" {{ markup_helpers.attributes(attrs) }} />
