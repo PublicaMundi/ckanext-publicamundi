@@ -112,7 +112,7 @@ class ObjectWidget(Widget):
 
     def get_glue_template(self):
         '''Provide a template responsible to glue (rendered) fields together'''
-        return 'package/snippets/objects/%(action)s.html' %(
+        return 'package/snippets/objects/glue-%(action)s.html' %(
             dict(action=self.action))
 
     def get_field_qualifiers(self):
