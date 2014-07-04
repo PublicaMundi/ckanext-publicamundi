@@ -11,8 +11,7 @@ from ckanext.publicamundi.lib import logger
 ## Define widgets ##
 
 # Todo: Provide readers/editors for:
-#  - IPassword
-#  - IBytes
+#  - IBytes (upload?)
 
 # Editors #
 
@@ -40,6 +39,12 @@ class UriEditWidget(base_widgets.EditFieldWidget):
    
     def get_template(self):
         return 'package/snippets/fields/edit-uri.html'
+
+@field_widget_adapter(zope.schema.interfaces.IPassword)
+class PasswordEditWidget(base_widgets.EditFieldWidget):
+   
+    def get_template(self):
+        return 'package/snippets/fields/edit-password.html'
 
 @field_widget_adapter(zope.schema.interfaces.IInt)
 class IntEditWidget(base_widgets.EditFieldWidget):
@@ -190,6 +195,12 @@ class UriReadWidget(base_widgets.ReadFieldWidget):
    
     def get_template(self):
         return 'package/snippets/fields/read-uri.html'
+
+@field_widget_adapter(zope.schema.interfaces.IPassword)
+class PasswordReadWidget(base_widgets.ReadFieldWidget):
+   
+    def get_template(self):
+        return 'package/snippets/fields/read-password.html'
 
 @field_widget_adapter(zope.schema.interfaces.IInt)
 class IntReadWidget(base_widgets.ReadFieldWidget):

@@ -25,6 +25,11 @@ class TestsController(BaseController):
         return u'Another test!'
     
     def get_field_markup(self):
+        if request.method == 'POST':
+            d = dict(request.params.items())
+            response.headers['Content-Type'] = 'application/json' 
+            return json.dumps(d)
+
         x = fixtures.foo1
         S = x.get_schema()
         test_fields = {
@@ -49,9 +54,8 @@ class TestsController(BaseController):
                 'title': u'Created At', 
                 'placeholder': datetime.datetime.now(),
             },
-            'wakeup_time': {
-                'title': u'Wakeup At',
-            },
+            'wakeup_time': { 'title': u'Wakeup At',},
+            'password': {},
         }
         c.form_sections = []
         for k, data in test_fields.items():

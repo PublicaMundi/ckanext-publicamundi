@@ -100,6 +100,11 @@ class IFoo(IBaseMetadata):
         min = 0.0,
         max = 20.0)
 
+    password = zope.schema.Password(
+        title = u'Password',
+        min_length = 6,
+    )
+
     @zope.interface.invariant
     def check_tag_duplicates(obj):
         s = set(obj.tags)

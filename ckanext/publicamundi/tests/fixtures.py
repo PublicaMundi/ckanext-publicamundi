@@ -34,5 +34,6 @@ foo1 = Foo(
     temporal_extent = dt1,
     rating = 7,
     grade = 13.7,
+    password = 'secret',
 )
 

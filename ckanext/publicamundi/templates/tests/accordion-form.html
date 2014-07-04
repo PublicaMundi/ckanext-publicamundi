@@ -9,8 +9,9 @@
 {% endblock %}
 
 {% block primary_content_inner %}
-<form class="{{ c.form_class }}">
+<form method="post" class="{{ c.form_class }}">
     {% snippet 'snippets/accordion.html', id='accordion-1', sections=c.form_sections %}
+    <input type="submit" name="submit" />
 </form>
 {% endblock %}
 
