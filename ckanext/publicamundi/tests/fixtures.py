@@ -32,8 +32,8 @@ foo1 = Foo(
     notes = u'Hello World',
     thematic_category = None,
     temporal_extent = dt1,
-    rating = 7,
+    rating = 0,
     grade = 13.7,
-    password = 'secret',
+    password = u'secret',
 )
 

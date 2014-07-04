@@ -88,20 +88,19 @@ class IFoo(IBaseMetadata):
 
     rating = zope.schema.Int(
         title = u'Rating',
-        required = False,
-        default = 5,
-        min = 0,
+        required = True,
+        min = -10,
         max = 10)
     
     grade = zope.schema.Float(
         title = u'Grade',
-        required = False,
-        default = 5.0,
-        min = 0.0,
+        required = True,
+        min = -20.0,
         max = 20.0)
 
     password = zope.schema.Password(
         title = u'Password',
+        required = False,
         min_length = 6,
     )
 

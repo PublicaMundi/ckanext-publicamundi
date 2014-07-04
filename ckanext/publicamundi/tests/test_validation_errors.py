@@ -46,7 +46,9 @@ x1 = Foo(
     geometry = [[poly1, poly2,], ['boo', 'far']],
     thematic_category = 'environmental',
     created = datetime.datetime(2014, 5, 27, 18, 0, 0),
-    wakeup_time = datetime.time(20, 0, 0)
+    wakeup_time = datetime.time(20, 0, 0),
+    rating = -100,
+    grade = 50.5,
 )
 
 # Fixture x2: invariant errors
@@ -64,7 +66,9 @@ x2 = Foo(
         start = datetime.date(2014, 5, 27),
         end = datetime.date(2014, 5, 20)),
     created = datetime.datetime(2014, 5, 27, 18, 0, 0),
-    wakeup_time = datetime.time(20, 0, 0)
+    wakeup_time = datetime.time(20, 0, 0),
+    rating = 0,
+    grade = 0.0,
 )
 
 # Fixture x3: valid (fix errors on x2)
@@ -85,8 +89,9 @@ def test_x1():
     errs1 = x1.validate()
     errs1_dict = x1.dictize_errors(errs1)
     assert errs1_dict
-    expected_keys = set(
-        ['tags', 'url', 'contact_info', 'contacts', 'temporal_extent', 'geometry', 'thematic_category'])
+    expected_keys = set([
+        'tags', 'url', 'contact_info', 'contacts', 'temporal_extent', 'geometry', 'thematic_category',
+        'rating', 'grade'])
     assert expected_keys.issubset(set(errs1_dict.keys())) 
     print json.dumps(errs1_dict, indent=4)
 
