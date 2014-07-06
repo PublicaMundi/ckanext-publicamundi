@@ -8,8 +8,6 @@ from ckanext.publicamundi.lib.metadata.widgets import field_widget_adapter
 
 from ckanext.publicamundi.lib import logger
 
-## Define widgets ##
-
 # Todo: Provide readers/editors for:
 #  - IBytes (upload?)
 

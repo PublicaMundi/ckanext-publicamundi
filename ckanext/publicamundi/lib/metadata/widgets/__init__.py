@@ -148,5 +148,5 @@ def markup_for_object(qualified_action, obj, name_prefix='', data={}):
 
 from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 from ckanext.publicamundi.lib.metadata.widgets import fields as field_widgets
-from ckanext.publicamundi.lib.metadata.widgets import types as object_widgets
+from ckanext.publicamundi.lib.metadata.widgets import objects as object_widgets
 

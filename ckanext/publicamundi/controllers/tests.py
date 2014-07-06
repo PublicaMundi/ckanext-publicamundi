@@ -33,10 +33,10 @@ class TestsController(BaseController):
         x = fixtures.foo1
         S = x.get_schema()
         test_fields = {
-#            'contacts': { 'title': u'Contacts', },
-#            'grade': { 'title': u'Foo Grade' },
-#            'rating': { 'title': u'Foo Rating' },
-#            'url': { 'title': u'Website URL' },
+            'contacts': { 'title': u'Contacts', },
+            'grade': { 'title': u'Foo Grade' },
+            'rating': { 'title': u'Foo Rating' },
+            'url': { 'title': u'Website URL' },
             'title': {
                 'required': True,
                 'classes': [ 'control-medium' ],
@@ -45,17 +45,17 @@ class TestsController(BaseController):
                 'placeholder': u'Enter a title',
                 'attrs': { 'data-foo': 'baz', 'data-boo': 'faz', 'autocomplete': 'off' }
             },
-#            'temporal_extent': { 'title': u'Temporal Extent', },
-#            'reviewed': { 'title': u'Reviewed', },
-#            'notes': { 'description': u'Add a detailed description', },
-#            'thematic_category': {},
-#            'tags': {},
-#            'created': { 
-#                'title': u'Created At', 
-#                'placeholder': datetime.datetime.now(),
-#            },
-#            'wakeup_time': { 'title': u'Wakeup At',},
-#            'password': {},
+            'temporal_extent': { 'title': u'Temporal Extent', },
+            'reviewed': { 'title': u'Reviewed', },
+            'notes': { 'description': u'Add a detailed description', },
+            'thematic_category': {},
+            'tags': {},
+            'created': { 
+                'title': u'Created At', 
+                'placeholder': datetime.datetime.now(),
+            },
+            'wakeup_time': { 'title': u'Wakeup At',},
+            'password': {},
         }
         c.form_sections = []
         for k, data in test_fields.items():
