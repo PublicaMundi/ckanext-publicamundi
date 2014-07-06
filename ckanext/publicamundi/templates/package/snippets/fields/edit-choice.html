@@ -7,7 +7,7 @@
         {{ title }}{{ markup_helpers.mark_required(required) }}
     </label>
     <div class="controls">
-        <select name="{{ qname }}" id="{{ 'input-' ~ qname }}" {{ markup_helpers.attributes(attrs) }} />
+        <select name="{{ qname }}" id="{{ 'input-' ~ qname }}" {{ attrs | xmlattr }} />
             {% if not required -%}
             <option value=""></option>
             {% endif -%}

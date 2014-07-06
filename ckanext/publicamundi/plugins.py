@@ -154,6 +154,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         #mapper.connect('tags', '/tags',
         #    controller='ckanext.publicamundi.controllers.tags:Controller', action='index')
 
+        mapper.connect('publicamundi-tests', '/testing/publicamundi/{action}/{id}',
+            controller='ckanext.publicamundi.controllers.tests:TestsController',)
         mapper.connect('publicamundi-tests', '/testing/publicamundi/{action}',
             controller='ckanext.publicamundi.controllers.tests:TestsController',)
 

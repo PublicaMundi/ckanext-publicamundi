@@ -15,7 +15,7 @@
             placeholder="{{ placeholder | empty_and_escape }}"
             data-module="datepicker"
             data-module-format="yyyy-mm-dd"
-            {{ markup_helpers.attributes(attrs) -}}
+            {{ attrs | xmlattr -}}
         />
         {% if error and error is iterable -%}
         <span class="error-block">{{ error | join(', ') }}</span>

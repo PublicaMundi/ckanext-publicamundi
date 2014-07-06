@@ -128,7 +128,7 @@ def _widget_for(qualified_action, x, target_iface):
         widget.context = LookupContext(requested=q, provided=candidate)
     else:
         raise ValueError('Cannot find a widget for %s for action "%s"' %(
-            type(x).__name__, action))
+            type(x).__name__, qualified_action))
     
     # Found a widget to adapt x
     assert zope.interface.verify.verifyObject(target_iface, widget)

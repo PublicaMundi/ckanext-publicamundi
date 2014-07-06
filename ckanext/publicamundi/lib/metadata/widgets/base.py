@@ -194,7 +194,7 @@ class ObjectWidget(Widget):
             field_names = set(self.obj.get_field_names()) - \
                 set(self.get_omitted_fields())
             data.update({
-                'fields': map(render_field, field_names) 
+                'fields': { k: render_field(k) for k in field_names },
             })
         markup = toolkit.render_snippet(tpl, data)
         return toolkit.literal(markup)
@@ -248,8 +248,7 @@ class ListFieldWidgetTraits(FieldWidget):
         qname = data.get('qname')
         a = self.context.provided_action.make_child('item')
         q = a.to_string()
-        def render_item(item):
-            i, y = item
+        def render_item(i, y):
             assert isinstance(i, int)
             yf = field.value_type.bind(FieldContext(key=i, obj=value))
             return {
@@ -259,7 +258,7 @@ class ListFieldWidgetTraits(FieldWidget):
                 }),
             }
         data.update({
-            'items': map(render_item, enumerate(value)),
+            'items': [ render_item(i,y) for i,y in enumerate(value) ],
         })
         
         return data
@@ -281,8 +280,7 @@ class DictFieldWidgetTraits(FieldWidget):
         qname = data.get('qname')
         a = self.context.provided_action.make_child('item')
         q = a.to_string()
-        def render_item(item):
-            k, y = item
+        def render_item(k, y):
             assert isinstance(k, basestring)
             yf = field.value_type.bind(FieldContext(key=k, obj=value))
             term = field.key_type.vocabulary.getTerm(k)
@@ -293,7 +291,7 @@ class DictFieldWidgetTraits(FieldWidget):
                 }),
             }
         data.update({
-            'items': map(render_item, value.iteritems()),
+            'items': { k: render_item(k, y) for k, y in value.iteritems() },
         })
 
         return data

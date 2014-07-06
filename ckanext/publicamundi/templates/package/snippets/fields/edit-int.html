@@ -15,7 +15,7 @@
             value="{{ value | int(default=field.default) }}"
             step="1" min="{{ field.min }}" max="{{ field.max }}"
             placeholder="{{ placeholder | empty_and_escape }}"
-            {{ markup_helpers.attributes(attrs) -}}
+            {{ attrs | xmlattr -}}
         />
         {% if error and error is iterable -%}
         <span class="error-block">{{ error | join(', ') }}</span>

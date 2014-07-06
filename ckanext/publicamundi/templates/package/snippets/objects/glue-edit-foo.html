@@ -1,0 +1,41 @@
+{% import 'macros/accordion.html' as accordion -%}
+{% set error = None -%}
+
+{% set groups = [
+        { 
+            'name': 'basic',
+            'heading': _('Basic'),
+            'fields': ['url', 'notes', 'baz']
+        },
+        { 
+            'name': 'categorization',
+            'heading': _('Categorization'),
+            'fields': ['tags', 'thematic_category'],
+        },
+        { 
+            'name': 'contact',
+            'heading': _('Contact'),
+            'fields': ['contact_info', 'contacts'],
+        },
+        { 
+            'name': 'details',
+            'heading': _('Details'),
+            'fields': ['temporal_extent', 'reviewed', 'created', 'wakeup_time', 
+                'rating', 'grade'],
+        },
+   ]
+%}
+
+<div class="{{ " " ~ classes | join(' ') }}">
+    <h3>{{ title }}</h3>
+ 
+    {% call(group_desc) accordion.accordion('foo-fields', groups) %}
+        {% for field_name in group_desc.fields -%}
+        {% with f = fields[field_name] -%}
+        {{ f.markup }}
+        <hr/>
+        {% endwith -%}
+        {% endfor -%}
+    {% endcall %}
+
+</div>

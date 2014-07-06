@@ -14,7 +14,7 @@
             class="{{ input_classes | list | join(" ") }}"
             value="{{ value | empty_and_escape }}" 
             placeholder="{{ placeholder | empty_and_escape }}"
-            {{ markup_helpers.attributes(attrs) -}}
+            {{ attrs | xmlattr -}}
         />
         {% if error and error is iterable -%}
         <span class="error-block">{{ error | join(', ') }}</span>

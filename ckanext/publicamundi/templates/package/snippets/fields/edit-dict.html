@@ -3,8 +3,8 @@
     {% if title %}<h3 class="title">{{ title }}</h3>{% endif -%}
     {% if description %}<div class="description">{{ description }}</div>{% endif -%}
     <ul>
-        {% for item in items -%}
-        <li>{{ item.markup }}</li>
+        {% for k, y in items.items() -%}
+        <li>{{ y.markup }}</li>
         {% endfor -%}
     </ul>
 </div>

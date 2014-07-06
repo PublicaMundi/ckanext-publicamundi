@@ -11,7 +11,7 @@
         <textarea id="{{ 'input-' ~ qname }}" name="{{ qname }}" 
             class="{{ input_classes | list | join(" ") }}"
             placeholder="{{ placeholder | empty_and_escape }}"  
-            {{ markup_helpers.attributes(attrs) -}}
+            {{ attrs | xmlattr -}}
           />{{ value | empty_and_escape }}</textarea>
         {% if description %}<div class="help-block">{{ description }}</div>{% endif %}
     </div>

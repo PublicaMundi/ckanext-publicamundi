@@ -24,7 +24,7 @@ class TestsController(BaseController):
     def index(self, id=None):
         return u'Another test!'
     
-    def get_field_markup(self):
+    def get_fields_markup(self):
         if request.method == 'POST':
             d = dict(request.params.items())
             response.headers['Content-Type'] = 'application/json' 
@@ -33,29 +33,29 @@ class TestsController(BaseController):
         x = fixtures.foo1
         S = x.get_schema()
         test_fields = {
-            'grade': { 'title': u'Foo Grade' },
-            'rating': { 'title': u'Foo Rating' },
-            'url': { 'title': u'Website URL' },
-            'contacts': { 'title': u'Contacts', },
+#            'contacts': { 'title': u'Contacts', },
+#            'grade': { 'title': u'Foo Grade' },
+#            'rating': { 'title': u'Foo Rating' },
+#            'url': { 'title': u'Website URL' },
             'title': {
                 'required': True,
                 'classes': [ 'control-medium' ],
                 'title': u'Title',
                 'description': u'Blah blah',
                 'placeholder': u'Enter a title',
-                'attrs': { 'data-foo': 'baz' }
+                'attrs': { 'data-foo': 'baz', 'data-boo': 'faz', 'autocomplete': 'off' }
             },
-            'temporal_extent': { 'title': u'Temporal Extent', },
-            'reviewed': { 'title': u'Reviewed', },
-            'notes': { 'description': u'Add a detailed description', },
-            'thematic_category': {},
-            'tags': {},
-            'created': { 
-                'title': u'Created At', 
-                'placeholder': datetime.datetime.now(),
-            },
-            'wakeup_time': { 'title': u'Wakeup At',},
-            'password': {},
+#            'temporal_extent': { 'title': u'Temporal Extent', },
+#            'reviewed': { 'title': u'Reviewed', },
+#            'notes': { 'description': u'Add a detailed description', },
+#            'thematic_category': {},
+#            'tags': {},
+#            'created': { 
+#                'title': u'Created At', 
+#                'placeholder': datetime.datetime.now(),
+#            },
+#            'wakeup_time': { 'title': u'Wakeup At',},
+#            'password': {},
         }
         c.form_sections = []
         for k, data in test_fields.items():
@@ -79,9 +79,10 @@ class TestsController(BaseController):
             'title': u'Title',
         })
 
-    def get_object_markup(self):
+    def get_objects_markup(self):
         markup = ''
         c.form_sections = []
+        
         # 1. A Point object
         obj = fixtures.pt1
         data = {
@@ -97,6 +98,7 @@ class TestsController(BaseController):
                 toolkit.literal('<hr/>') + \
                 markup_for_object('read:boz', obj, 'pt1', { 'title': u'Point B' })
         })
+        
         # 2. A TemporalExtent object
         obj = fixtures.dt1
         c.form_sections.append({
@@ -106,6 +108,7 @@ class TestsController(BaseController):
                 toolkit.literal('<hr/>') + \
                 markup_for_object('read', obj, 'dt1', { 'title': u'Extent B' })
         })
+        
         # 3. A PostalAddress object
         obj = PostalAddress(address=u'22 Acacia Avenue', postalcode=u'12345')
         c.form_sections.append({
@@ -115,13 +118,55 @@ class TestsController(BaseController):
                 toolkit.literal('<hr/>') + \
                 markup_for_object('read', obj, 'contact_info', { 'title': u'Address B' })
         })
+        
         # Render
         c.form_class = 'form-horizontal'
         return render('tests/accordion-form.html')
 
-    ## Sandbox
-
-    def test1(self):
-        c.form = None
-        return render('tests/form.html')
+    def edit_foo(self, id='foo1'):
+        if request.method == 'POST':
+            d = dict(request.params.items())
+            response.headers['Content-Type'] = 'application/json' 
+            return json.dumps(d)
         
+        obj = getattr(fixtures, id)
+        assert isinstance(obj, Foo)
+
+        c.form_class = 'form-horizontal'
+        c.form_markup = markup_for_object('edit', obj, 'a.foo1', { 'title': u'Foo #1' })
+        return render('tests/form.html')
+
+    def show_foo(self, id='foo1'):
+        obj = getattr(fixtures, id)
+        assert isinstance(obj, Foo)
+        c.markup = markup_for_object('read', obj, 'a.foo1', { 'title': u'Foo #2' })
+        return render('tests/page.html')
+
+    def test_accordion_form(self):
+        c.form_sections = []
+
+        from collections import namedtuple
+        P = namedtuple('P', ['heading', 'body'])
+        
+        def heading_markup(k):
+            def markup():
+                return 'Head #%s' %(k)
+            return markup
+        
+        def body_markup(k):
+            def markup():
+                return 'Body #%s' %(k)
+            return markup
+        
+        for y in ['a', 'b']:
+            p = P(
+                heading = heading_markup(y), 
+                body = body_markup(y),
+            )
+            c.form_sections.append(p)
+
+        #raise Exception('Break')
+        c.form_class = 'form-horizontal' # 'form-horizontal'
+        return render('tests/accordion-form.html')
+
+
