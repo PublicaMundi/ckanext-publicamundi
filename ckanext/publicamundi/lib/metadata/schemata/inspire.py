@@ -61,6 +61,7 @@ class IInspireMetadata(IObject):
         title = u'Metadata Point of Contact',
         description = u"This is the description of the organisation responsible for the creation and maintenance of the metadata. This description shall include:   - the name of the organisation as free text, - a contact e-mail address as a character string.",
         required = True,
+        min_length = 1,
         value_type = zope.schema.Object(IResponsibleParty, 
             title = u'A Point of Contact',
             required = True))
@@ -122,6 +123,7 @@ class IInspireMetadata(IObject):
         title = u'Topic Category',
         description = u"The topic category is a high-level classification scheme to assist in the grouping and topic-based search of available spatial data resources. The value domain of this metadata element is defined in Part D.2.",
         required = True,
+        min_length = 1,
         value_type = zope.schema.Choice(Helper.flatten_dict_vals(vocabularies.topic_category)))
     #Keywords
      

@@ -60,7 +60,7 @@ class IResponsibleParty(IObject):
     email = zope.schema.List(
         title = u'Email',
         required = True,
-        max_length = 2,
+        min_length = 1,
         value_type = RFC822MailAddress(
             title = u'Email'))
             #constraint = re.compile("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").match))
