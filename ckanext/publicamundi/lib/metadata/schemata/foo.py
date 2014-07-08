@@ -20,7 +20,7 @@ class IFoo(IBaseMetadata):
             SimpleTerm('government', 'government', u'Government'),
             SimpleTerm('health', 'health', u'Health'),
             SimpleTerm('economy', 'economy', u'Economy'))),
-        title = u'The main thematic category',
+        title = u'Thematic category',
         required = True,
         default = 'economy')
 
@@ -31,7 +31,7 @@ class IFoo(IBaseMetadata):
         min_length = 5)
 
     tags = zope.schema.List(
-        title = u'A list of tags for this bookmark',
+        title = u'Tags',
         required = False,
         value_type = zope.schema.TextLine(
             title = u'Tag',
@@ -43,7 +43,7 @@ class IFoo(IBaseMetadata):
         required = False)
 
     geometry = zope.schema.List(
-        title = u'A collection of areas',
+        title = u'Geometry',
         required = False,
         value_type = zope.schema.List(
             title = u'A polygon area',
@@ -64,7 +64,7 @@ class IFoo(IBaseMetadata):
         description = u'Add your notes')
 
     contacts = zope.schema.Dict(
-        title = u'A list of contacts',
+        title = u'Contacts',
         required = False,
         key_type = zope.schema.Choice(
             vocabulary = SimpleVocabulary((

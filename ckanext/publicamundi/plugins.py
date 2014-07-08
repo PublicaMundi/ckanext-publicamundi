@@ -18,7 +18,7 @@ import ckanext.publicamundi.lib.util as publicamundi_util
 import ckanext.publicamundi.lib.metadata as publicamundi_metadata
 import ckanext.publicamundi.lib.actions as publicamundi_actions
 
-from ckanext.publicamundi.lib.util import object_to_json
+from ckanext.publicamundi.lib.util import object_to_json, random_name
 from ckanext.publicamundi.lib.metadata import dataset_types
 
 _t = toolkit._
@@ -40,7 +40,6 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     def publicamundi_helloworld(cls):
         ''' This is our simple helper function. '''
         markup = p.toolkit.render_snippet('snippets/hello.html', data={ 'name': 'PublicaMundi' })
-        #markup = '<span>Hello (PublicaMundi) World</span>'
         return p.toolkit.literal(markup)
 
     @classmethod
@@ -118,8 +117,9 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         '''
         return {
             # define extension-specific helpers
-            'dataset_type_options': self.dataset_type_options,
             'publicamundi_helloworld': self.publicamundi_helloworld,
+            'random_name': random_name,
+            'dataset_type_options': self.dataset_type_options,
             'organization_list_objects': self.organization_list_objects,
             'organization_dict_objects': self.organization_dict_objects,
             'markup_for_field': publicamundi_metadata.markup_for_field,

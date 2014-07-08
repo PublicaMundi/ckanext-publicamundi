@@ -1,10 +1,5 @@
-{% extends 'page.html' %}
+{% extends 'tests/base.html' %}
 
 {% block primary_content_inner %}
 {{ c.markup }}
-{% endblock %}
-
-{% block scripts %}
-{{ super() }}
-{% resource 'ckanext-publicamundi/styles' %}
 {% endblock %}

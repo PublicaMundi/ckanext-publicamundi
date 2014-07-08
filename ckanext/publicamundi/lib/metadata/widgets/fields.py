@@ -88,11 +88,17 @@ class BoolEditWidget(base_widgets.EditFieldWidget):
     def get_template(self):
         return 'package/snippets/fields/edit-bool-checkbox-1.html'
 
-@field_widget_adapter(zope.schema.interfaces.IChoice)
+@field_widget_adapter(zope.schema.interfaces.IChoice, qualifiers=['select'], is_fallback=True)
 class ChoiceEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
-        return 'package/snippets/fields/edit-choice.html'
+        return 'package/snippets/fields/edit-choice-select.html'
+
+@field_widget_adapter(zope.schema.interfaces.IChoice, qualifiers=['select2'])
+class ChoiceTwoEditWidget(base_widgets.EditFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/edit-choice-select2.html'
 
 @field_widget_adapter(zope.schema.interfaces.IDate, qualifiers=['datetimepicker'], is_fallback=True)
 class DateEditWidget(base_widgets.EditFieldWidget):
@@ -131,6 +137,16 @@ class ListEditWidget(base_widgets.EditFieldWidget, base_widgets.ListFieldWidgetT
             'data-disabled-module': 'list',
         })
         return data
+
+@field_widget_adapter(zope.schema.interfaces.IList, qualifiers=['tags'])
+class TagsEditWidget(base_widgets.EditFieldWidget, base_widgets.ListFieldWidgetTraits):
+
+    def __init__(self, field):
+        assert isinstance(field, zope.schema.List)
+        base_widgets.EditFieldWidget.__init__(self, field)
+
+    def get_template(self):
+        return 'package/snippets/fields/edit-list-tags.html'
 
 @field_widget_adapter(zope.schema.interfaces.IDict)
 class DictEditWidget(base_widgets.EditFieldWidget, base_widgets.DictFieldWidgetTraits):
@@ -262,6 +278,16 @@ class ListReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListFieldWidgetT
             'data-disabled-module': 'list',
         })
         return data
+
+@field_widget_adapter(zope.schema.interfaces.IList, qualifiers=['tags'])
+class TagsReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListFieldWidgetTraits):
+
+    def __init__(self, field):
+        assert isinstance(field, zope.schema.List)
+        base_widgets.ReadFieldWidget.__init__(self, field)
+
+    def get_template(self):
+        return 'package/snippets/fields/read-list-tags.html'
 
 @field_widget_adapter(zope.schema.interfaces.IDict)
 class DictReadWidget(base_widgets.ReadFieldWidget, base_widgets.DictFieldWidgetTraits):

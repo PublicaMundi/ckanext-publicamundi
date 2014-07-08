@@ -159,10 +159,7 @@ class TestsController(BaseController):
             return markup
         
         for y in ['a', 'b']:
-            p = P(
-                heading = heading_markup(y), 
-                body = body_markup(y),
-            )
+            p = P(heading=heading_markup(y), body=body_markup(y))
             c.form_sections.append(p)
 
         #raise Exception('Break')

@@ -1,3 +1,5 @@
+import random
+import string
 import json
 import geojson
 import shapely
@@ -22,3 +24,7 @@ def wkt_to_geojson(s):
     g = geojson.Feature(geometry=wkt_loads(s))
     return str(g.geometry)
 
+def random_name(l):
+    return random.choice(string.lowercase) + \
+        ''.join(random.sample(string.lowercase + string.digits, int(l)-1))
+    

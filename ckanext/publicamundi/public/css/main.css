@@ -19,6 +19,14 @@ input[type="tel"] {
     border-radius: 1px;
 }
 
+.select2-container-multi .select2-choices {
+    border-radius: 1px;
+}
+
+.select2-container-multi .select2-choices .select2-search-choice {
+    border-radius: 1px;
+}
+
 .input-append .add-on:last-child, 
 .input-append .btn:last-child, 
 .input-append .btn-group:last-child > .dropdown-toggle {

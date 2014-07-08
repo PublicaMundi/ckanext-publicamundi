@@ -1,0 +1,26 @@
+{% import 'macros/markup_helpers.html' as markup_helpers -%}
+
+{% set placeholder = placeholder or field.default -%}
+{% if input_classes is not defined %}{% set input_classes = [ 'input-xlarge' ] %}{% endif -%}
+{% set error = None -%}
+
+<div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
+    <label class="control-label" for="{{ 'input-' ~ qname }}">
+        {{- title }}{{ markup_helpers.mark_required(required) -}}
+    </label>
+    <div class="controls">
+        <input type="text" id="{{ 'input-' ~ qname }}"  name="{{ qname }}"
+            class="{{ input_classes | list | join(' ') }}"
+            value="{{ value | list | join(',') }}" 
+            data-module="input-select2-tags"
+            data-module-width="element"
+            data-module-minimuminputlength="2"
+            data-module-tags="true"
+            data-module-itemize="true"
+            {{ attrs | xmlattr -}}
+        />
+        {% if error and error is iterable -%}
+        <span class="error-block">{{ error | join(', ') }}</span>
+        {% endif -%}
+    </div>
+</div>
