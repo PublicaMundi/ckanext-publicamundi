@@ -38,7 +38,8 @@ class IThesaurus(IObject):
 
     terms = zope.schema.List(
         title = u"Terms",
-        value_type = zope.schema.Choice(Helper.get_all_keyword_terms()),
+        value_type = zope.schema.ASCII(),
+        #zope.schema.Choice(Helper.get_all_keyword_terms()),
         required = True,
         min_length = 1)
 

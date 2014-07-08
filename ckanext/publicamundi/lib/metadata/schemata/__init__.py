@@ -2,6 +2,7 @@ import zope.interface
 import zope.schema
 
 from ckanext.publicamundi.lib.metadata.ibase import IObject
+from ckanext.publicamundi.lib.metadata import *
 
 class IBaseMetadata(IObject):
     zope.interface.taggedValue('recurse-on-invariants', False)
@@ -10,6 +11,6 @@ class IBaseMetadata(IObject):
 
 from ckanext.publicamundi.lib.metadata.schemata.common import *
 from ckanext.publicamundi.lib.metadata.schemata.metadata import ICkanMetadata
-from ckanext.publicamundi.lib.metadata.schemata.metadata import IInspireMetadata
+#from ckanext.publicamundi.lib.metadata.schemata.metadata import IInspireMetadata
 from ckanext.publicamundi.lib.metadata.schemata.foo import IFoo
 

@@ -20,8 +20,7 @@ from ckanext.publicamundi.tests.fixtures import *
 thes1 = Thesaurus(name="inspire_data_themes",
             title=u"Inspire Data Themes",
             reference_date=datetime.date(2000, 1, 1),
-            date_type='creation',
-            )
+            date_type='creation')
 
 
 #Empty terms
@@ -53,27 +52,28 @@ thes4 = Thesaurus(name="inspire_data_themes",
 
 def test_thes1():
     ''' INSPIRE thesaurus terms missing'''
-    assert_faulty_keys(thes1, set(['terms']))
+    assert_faulty_keys(field=thes1, expected_keys=set(['terms']))
 
 
 def test_thes2():
     ''' INSPIRE thesaurus empty terms'''
-    assert_faulty_keys(thes2, set(['terms']))
+    assert_faulty_keys(field=thes2, expected_keys=set(['terms']))
 
 
 def test_thes3():
     ''' INSPIRE thesaurus wrong name'''
-    assert_faulty_keys(thes3, set(['name']))
+    assert_faulty_keys(field=thes3, expected_keys=set(['name']))
 
 
 def test_thes4():
     ''' INSPIRE correct thesaurus'''
-    assert_faulty_keys(thes4, None)
+    assert_faulty_keys(field=thes4)
+
 
 # Inspire keywords fixtures
 
 
-# Keywords not included in any of the vocabularies
+# Keywords not included in any of the vocabularies (invariant)
 insp1 = InspireMetadata(contact=[ResponsibleParty(organization=u"Org", email=[u"email@asd.gr"], role="pointofcontact")],
     datestamp = datetime.date.today(),
     languagecode = "el",
@@ -83,7 +83,7 @@ insp1 = InspireMetadata(contact=[ResponsibleParty(organization=u"Org", email=[u"
     locator = ["http://www.google.com", "http://publicamundi.eu"],
     resource_language = ["el"],
     topic_category = ["biota"],
-    keywords = [Thesaurus(terms =["addresses123", "accident"],
+    keywords = [Thesaurus(terms =["addresses123", "addresses"],
                         name="inspire_data_themes",
                         title=u"Inspire Data Themes",
                         reference_date=datetime.date(2000, 1, 1),
@@ -252,27 +252,27 @@ insp5 = InspireMetadata(contact = [ResponsibleParty(organization=u"Org", email=[
 
 def test_insp1():
     ''' INSPIRE keywords not from any of the vocabularies'''
-    assert_faulty_keys(insp1, set(['keywords']))
+    assert_faulty_keys(field=insp1, expected_keys=set(['__after']), expected_invariants="does not belong to thesaurus")
 
 
 def test_insp2():
     ''' INSPIRE keywords missing value from INSPIRE Data Themes'''
-    assert_faulty_keys(insp2, set(['__after']))
+    assert_faulty_keys(field=insp2, expected_keys=set(['__after']), expected_invariants="You need to select at least one keyword from INSPIRE data themes")
 
 
 def test_insp3():
     ''' INSPIRE keywords not from correct vocabulary '''
-    assert_faulty_keys(insp3, set(['__after']))
+    assert_faulty_keys(field=insp3, expected_keys=set(['__after']), expected_invariants="does not belong to thesaurus")
 
 
 def test_insp4():
     ''' INSPIRE keywords empty'''
-    assert_faulty_keys(insp4, set(['keywords']))
+    assert_faulty_keys(field=insp4, expected_keys=set(['keywords']))
 
 
 def test_insp5():
     ''' INSPIRE correct keywords'''
-    assert_faulty_keys(insp5, None)
+    assert_faulty_keys(field=insp5)
 
 
 if __name__ == '__main__':

@@ -35,17 +35,6 @@ foo1 = Foo(
     temporal_extent = dt1,
 )
 
-# Schema validation errors, name, email not list
-rp1 = ResponsibleParty(organization = "Non unicode name", email = "non unicode email",role = "Author")
-
-# Schema validation errors, empty fields
-rp2 = ResponsibleParty(organization = u"org",email = [u""])
-
-# Schema validation errors, email not correct
-rp3 = ResponsibleParty(organization = u"unicode name",email = ["unicodenon@email"],role = u"author")
-
-# No schema errors
-rp_correct = ResponsibleParty(organization = u"org",email = [u"correct@email.com",u"asd@asda.asd",u"asdasd@asdasd.asd"],role = "author")
 
 # '''Find schema validation errors: originating_vocabulary,date_type'''
 fkw1 = FreeKeyword(value = u"val", reference_date = datetime.date(1000,1,1),date_type = "creationn")

@@ -37,6 +37,6 @@ class Helper():
             lista.append(a.get('value'))
         return lista
 
-if __name__ == '__main__':
+#if __name__ == '__main__':
 
     #print Helper.get_keyword_keys()

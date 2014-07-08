@@ -181,7 +181,6 @@ insp5 = InspireMetadata(contact = [ResponsibleParty(organization=u"Org", email=[
     limitations = [u"limit1", u"limit2"],
     responsible_party = [ResponsibleParty(organization=u"Org", email=[u"email@asd.gr"], role="pointofcontact"), ResponsibleParty(organization=u"Org2", email=[u"email2@asd.gr"], role="pointofcontact")])
 
-
 # Inspire correct schema 
 insp6 = InspireMetadata(contact = [ResponsibleParty(organization=u"Org", email=[u"email@asd.gr"], role="pointofcontact")],
     datestamp = datetime.date.today(),
@@ -223,31 +222,31 @@ insp6 = InspireMetadata(contact = [ResponsibleParty(organization=u"Org", email=[
 
 def test_insp1():
     ''' Missing required title, abstract (not lists) '''
-    assert_faulty_keys(insp1, set(['title', 'abstract']))
+    assert_faulty_keys(field=insp1, expected_keys=set(['title', 'abstract']))
 
 def test_insp1_5():
     '''Missing required topic_category, responsible_party(lists)'''
-    assert_faulty_keys(insp1_5, set(['topic_category', 'responsible_party']))
+    assert_faulty_keys(field=insp1_5, expected_keys=set(['topic_category', 'responsible_party']))
 
 def test_insp2():
     ''' Creation, publication, revision date not in order'''
-    assert_faulty_keys(insp2, set(['__after']))
+    assert_faulty_keys(field=insp2, expected_keys=set(['__after']), expected_invariants="later than publication date")
 
 def test_insp3():
     ''' Min_length of contact, locator smaller than min_length'''
-    assert_faulty_keys(insp3, set(['contact', 'locator']))
+    assert_faulty_keys(field=insp3, expected_keys=set(['contact', 'locator']))
 
 def test_insp4():
     '''Temporal extent start field (required field in ITemporalExtent) missing'''
-    assert_faulty_keys(insp4, set(['temporal_extent']))
+    assert_faulty_keys(field=insp4, expected_keys=set(['temporal_extent']))
 
 def test_insp5():
     '''Temporal Extent (not required field) missing'''
-    assert_faulty_keys(insp5, None)
+    assert_faulty_keys(field=insp5)
 
 def test_insp6():
     '''Validate correct inspire schema'''
-    assert_faulty_keys(insp6, None)
+    assert_faulty_keys(field=insp6)
 
 if __name__ == '__main__':
     test_insp3()

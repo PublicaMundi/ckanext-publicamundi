@@ -1,17 +1,20 @@
 import nose.tools
+import re
 import json
 
 @nose.tools.nottest
-def assert_faulty_keys(field,expected_keys):
-    errs1 = field.validate()
-    errs1_dict = field.dictize_errors(errs1)
-    print json.dumps(errs1_dict, indent=4)
+def assert_faulty_keys(field, expected_keys=None, expected_invariants=None):
+    errs = field.validate()
+    errs_dict = field.dictize_errors(errs)
+    print json.dumps(errs_dict, indent=4)
     if not expected_keys:
-        assert not errs1_dict
+        assert not errs_dict
         pass
     else:
-        assert errs1_dict
-        #assert (expected_keys.issubset(set(errs1_dict.keys())) and set(errs1_dict.keys()).issubset(expected_keys))
-        assert expected_keys == set(errs1_dict.keys())
+        assert errs_dict
+        assert expected_keys == set(errs_dict.keys())
+        if '__after' in errs_dict.keys():
+            assert expected_invariants in json.dumps(errs_dict['__after'])
+
 
 
