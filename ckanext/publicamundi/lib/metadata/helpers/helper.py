@@ -1,8 +1,11 @@
 import keywords
 
+
 class Helper():
+
     def __init__(self):
         pass
+
     @staticmethod
     def flatten_dict_vals(list):
         result = []
@@ -10,7 +13,7 @@ class Helper():
             if 'value' in i:
                 result.append(i['value'])
         return result
-    
+
     @staticmethod
     def get_keyword_dict(value):
         dict = {}
@@ -19,7 +22,7 @@ class Helper():
                 dict = adict
                 break
         return dict
-    
+
     @staticmethod
     def get_all_keyword_terms():
         lista = []
@@ -35,6 +38,5 @@ class Helper():
         return lista
 
 if __name__ == '__main__':
-    #print Helper.flatten_dict_vals(Helper.get_keyword_dict('gemet_themes').get('terms'));
-    print Helper.get_keyword_keys();
 
+    #print Helper.get_keyword_keys()

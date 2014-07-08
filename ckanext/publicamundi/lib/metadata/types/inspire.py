@@ -1,13 +1,8 @@
 import zope.interface
-#from jinja2 import Environment, FileSystemLoader
-#from owslib.iso import *
 import ckan.plugins as p
-
 from ckanext.publicamundi.lib.metadata.types.common import *
 from ckanext.publicamundi.lib.metadata.schemata.inspire import *
-
 from ckanext.publicamundi.lib.metadata.base import Object
-
 from ckanext.publicamundi.lib.metadata.types import object_null_adapter
 
 @object_null_adapter(IThesaurus)
@@ -48,7 +43,7 @@ class InspireMetadata(Object):
     limitation = list
     responsible_party = list
 
-'''    
+    '''
     @classmethod
     def from_xml(cls,infile):
         def to_date(str):
@@ -68,7 +63,7 @@ class InspireMetadata(Object):
         url_list = []
         for it in md.distribution.online:
             url_list.append(it.url)
-        
+
         keywords_list = []
         for it in md.identification.keywords:
             kw = {}
@@ -135,7 +130,7 @@ class InspireMetadata(Object):
                 constr_list.append(unicode(it))
 
         return InspireMetadata(to_resp_party(md.contact), datestamp,  md.languagecode, unicode(md.identification.title),id_list , unicode(md.identification.abstract), url_list, md.identification.resourcelanguage, md.identification.topiccategory, keywords_list, [GeographicBoundingBox(float(md.identification.extent.boundingBox.maxy),float(md.identification.extent.boundingBox.miny),float(md.identification.extent.boundingBox.maxx),float(md.identification.extent.boundingBox.minx))], temporal_extent, creation_date, publication_date, revision_date, unicode(md.dataquality.lineage), denom_list, spatial_list, conf_list, limit_list, constr_list, to_resp_party(md.identification.contact))
-'''
+    '''
 
 @classmethod
 def to_xml(cls,imd,outfile):
@@ -150,4 +145,3 @@ def to_xml(cls,imd,outfile):
     xml_file = open(outfile, "w")
     xml_file.write(iso_xml)
     xml_file.close()
-

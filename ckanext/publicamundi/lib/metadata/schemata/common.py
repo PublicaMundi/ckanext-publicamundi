@@ -2,9 +2,8 @@ import zope.interface
 import zope.schema
 import re
 import datetime
-from z3c.schema.hostname import HostName
+#from z3c.schema.hostname import HostName
 from z3c.schema.email import RFC822MailAddress
-
 from ckanext.publicamundi.lib.metadata.helpers import vocabularies
 from ckanext.publicamundi.lib.metadata.helpers.helper import *
 from ckanext.publicamundi.lib.metadata.ibase import IObject
@@ -43,7 +42,7 @@ class IPolygon(IObject):
 class IContactInfo(IObject):
 
     #email = zope.schema.TextLine(title=u"Electronic mail address", required=False)
-    email = RFC822MailAddress()
+    email = RFC822MailAddress(title=u"Electronic mail address", required=False)
 
     address = zope.schema.Object(IPostalAddress, title=u"Postal Address", required=False)
 
@@ -53,10 +52,12 @@ class IContactInfo(IObject):
             raise zope.interface.Invalid('At least one of email/address should be supplied')
 
 class IResponsibleParty(IObject):
+
     organization = zope.schema.TextLine(
         title = u'Organization name',
         required = True,
         min_length = 1)
+
     email = zope.schema.List(
         title = u'Email',
         required = True,
@@ -69,8 +70,9 @@ class IResponsibleParty(IObject):
         title = u'Responsible party role',
         description = u'This is the role of the responsible organisation.',
         required = True)
-    
+
 class IFreeKeyword(IObject):
+
     value = zope.schema.TextLine(
         title = u"Keyword value",
         description = u"The keyword value is a commonly used word, formalised word or phrase used to describe the subject. While the topic category is too coarse for detailed queries, keywords help narrowing a full text search and they allow for structured keyword search.\nThe value domain of this metadata element is free text.",
@@ -80,36 +82,41 @@ class IFreeKeyword(IObject):
         title = u'Title',
         description = u"If the keyword value originates from a controlled vocabulary (thesaurus, ontology), for example GEMET, the citation of the originating controlled vocabulary shall be provided.\nThis citation shall include at least the title and a reference date (date of publication, date of last revision or of creation) of the originating controlled vocabulary.",
         required = False)
+
     reference_date = zope.schema.Date(
         title = u'Reference date',
         required = False)
+
     date_type = zope.schema.Choice(Helper.flatten_dict_vals(vocabularies.date_types),
         title = u'Date Type',
         required = False)
-    
+
     @zope.interface.invariant
     def check_case_mandatory(obj):
-        
         if obj.value or obj.originating_vocabulary or obj.reference_date or obj.date_type:
             if not obj.value or not obj.originating_vocabulary or not obj.reference_date or not obj.date_type:
                 raise zope.interface.Invalid('You need to fill in the rest Free Keyword fields')
 
 class IGeographicBoundingBox(IObject):
+
     nblat = zope.schema.Float(
         title = u'North Bound Latitude',
         min = -90.0,
         max = 90.0,
         required = True)
+
     sblat = zope.schema.Float(
         title = u'South Bound Latitude',
         min = -90.0,
         max = 90.0,
         required = True)
+
     eblng = zope.schema.Float(
         title = u'East Bound Longitude',
         min = -180.0,
         max = 180.0,
         required = True)
+
     wblng = zope.schema.Float(
         title = u'West Bound Longitude',
         min = -180.0,
@@ -118,6 +125,7 @@ class IGeographicBoundingBox(IObject):
 
 
 class ITemporalExtent(IObject):
+
     start = zope.schema.Date(
         title = u'Starting date',
         required = True,
@@ -135,7 +143,7 @@ class ITemporalExtent(IObject):
 
 
 class ISpatialResolution(IObject):
-        
+
     distance = zope.schema.Int(
         title = u'Resolution distance',
         required = False)

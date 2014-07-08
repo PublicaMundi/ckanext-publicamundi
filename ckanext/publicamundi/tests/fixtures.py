@@ -1,6 +1,7 @@
 import datetime
 import copy
 
+from ckanext.publicamundi.lib.metadata.types.inspire import *
 from ckanext.publicamundi.lib.metadata.types import *
 
 ## Objects ##
@@ -35,58 +36,105 @@ foo1 = Foo(
 )
 
 # Schema validation errors, name, email not list
-rp1 = ResponsibleParty("Non unicode name","non unicode email","Author")
+rp1 = ResponsibleParty(organization = "Non unicode name", email = "non unicode email",role = "Author")
 
 # Schema validation errors, empty fields
-rp2 = ResponsibleParty(u"org",[u""],u"")
+rp2 = ResponsibleParty(organization = u"org",email = [u""])
 
 # Schema validation errors, email not correct
-rp3 = ResponsibleParty(u"unicode name",["unicodenon@email"],u"author")
+rp3 = ResponsibleParty(organization = u"unicode name",email = ["unicodenon@email"],role = u"author")
 
 # No schema errors
-rp_correct = ResponsibleParty(u"org",[u"correct@email.com"],"author")
+rp_correct = ResponsibleParty(organization = u"org",email = [u"correct@email.com",u"asd@asda.asd",u"asdasd@asdasd.asd"],role = "author")
 
 # '''Find schema validation errors: originating_vocabulary,date_type'''
-fkw1 = FreeKeyword(u"val",None,datetime.date(1000,1,1),"creationn")
+fkw1 = FreeKeyword(value = u"val", reference_date = datetime.date(1000,1,1),date_type = "creationn")
 
 # '''Find schema validation invariant error - not all fields set'''
-fkw2 = FreeKeyword(u"val",None,datetime.date.today(),'creation')
+fkw2 = FreeKeyword(value = u"val", reference_date = datetime.date.today(),date_time = 'creation')
+
+# Validate correct keyword schema
+kw_inspire_correct = Thesaurus(
+    title = u'inspire',
+    reference_date = datetime.date.today(),
+    date_type = 'creation',
+    value = 'gemet_groups',
+    terms = ['addresses'])
 
 # '''Validate correct schema'''
-fkw_correct = FreeKeyword(u"val",u"original",datetime.date.today(),'creation')
+fkw_correct = FreeKeyword(value = u"val",originating_vocabulary = u"original",reference_date = datetime.date.today(),date_type = 'creation')
 
 # '''Find schema validation errors: all not float'''
-gbb1 = GeographicBoundingBox(50,50,40,30)
+gbb1 = GeographicBoundingBox(nblat = 50,sblat = 50,wblng = 40,eblng= 30)
 
 #'''Find schema validation errors - nblat, wblng greater than max allowed'''
-gbb2 = GeographicBoundingBox(-1235.0,0.0,123.123,1235.0)
+gbb2 = GeographicBoundingBox(nblat = -1235.0,sblat = 0.0 ,eblng = 123.123 ,wblng = 1235.0)
 
 # '''Validate correct schema'''
-gbb_correct = GeographicBoundingBox(-50.0,-20.12,0.0,15.0)
+gbb_correct = GeographicBoundingBox(nblat = -50.0, sblat = -20.12, wblng = 15.0, eblng = 1.0)
+
+# '''Find schema validation errors: start missing'''
+te1 = TemporalExtent(end = datetime.date.today())
 
 # '''Find schema validation errors: start not date'''
-te1 = TemporalExtent(2015,datetime.date.today())
+te2 = TemporalExtent(start = 2015, end = datetime.date.today())
 
 # '''Find schema invariant error - start date greater than end date'''
-te2 = TemporalExtent(datetime.date(2015,01,01),datetime.date.today())
+te3 = TemporalExtent(start = datetime.date(2015,01,01),end = datetime.date.today())
 
 # '''Validate correct schema'''
-te_correct = TemporalExtent(datetime.date.today(), datetime.date(2015,01,01))
+te_correct = TemporalExtent(start = datetime.date.today(), end = datetime.date(2015,01,01))
 
 # '''Find schema validation errors date, creation, degree'''
-cnf1 = Conformity(u"lala", 2015,"creationn", "confofrmant")
+cnf1 = Conformity(title = u"lala", date = 2015,date_type = "creationn", degree = "confofrmant")
 # '''Validate correct schema'''
-cnf_correct = Conformity(u"lala",datetime.date.today(),"creation","conformant")
+cnf_correct = Conformity(title = u"lala",date = datetime.date.today(),date_type = "creation", degree = "conformant")
 
 # '''Find schema validation error - distance not int '''
-sr1 = SpatialResolution(5.0,u"lala")
+sr1 = SpatialResolution(distance = 5.0, uom = u"lala")
 
 # '''Find schema invariant error - not all values set'''
-sr2 = SpatialResolution(5, None)
+sr2 = SpatialResolution(distance = 5)
 
 # '''Validate correct schema - no values set'''
-sr3 = SpatialResolution(None,None)
+sr3 = SpatialResolution()
 
 #'''Validate correct schema'''
-sr_correct = SpatialResolution(5, u"lala")
+sr_correct = SpatialResolution(distance = 5, uom = u"lala")
+
+insp_correct = InspireMetadata(
+    contact = [ResponsibleParty(organization = u"Org",email = [u"email@asd.gr"],role = "pointofcontact")],
+    datestamp = datetime.date.today(),
+    languagecode = "el",
+    title = u"Title",
+    identifier = [u"12314213123"],
+    abstract = u"abstracttttttt",
+    locator = ["http://www.google.com","http://publicamundi.eu"],
+    resource_language = ["el"],
+    topic_category = ["biota"],
+    keywords = [Thesaurus(terms = ["addresses"], 
+        name = "inspire_data_themes", 
+        title = u"Inspire Data Themes", 
+        date = datetime.date(2000,1,1), 
+        date_type = 'creation'),
+        
+        Thesaurus(terms = ["accident"], 
+        name = "gemet_concepts", 
+        title = u"Gemet Concepts", 
+        date = datetime.date(2000,1,1), 
+        date_type = 'creation'),
+        ],
+    bounding_box = [GeographicBoundingBox(nblat = 0.0, sblat = 0.0, wblng= 0.0, eblng = 0.0)], 
+    temporal_extent = [TemporalExtent(start = datetime.date(2012,1,1),end = datetime.date(2014,1,1))],
+    creation_date = datetime.date(2012,1,1),
+    publication_date = datetime.date(2013,1,1),
+    revision_date = datetime.date(2014,1,1),
+    lineage = u"lineaage",
+    denominator = [0,1,2,3],
+    spatial_resolution = [SpatialResolution(uom = u"meters")],
+    conformity = [Conformity(title = u"specifications blabla",date = datetime.date.today(),date_type = "creation",degree = "conformant")],
+    access_constraints = [u"lalala1",u"lalala2"],
+    limitations = [u"limit1",u"limit2"],
+    responsible_party = [ResponsibleParty(organization = u"Org",email = [u"email@asd.gr"],role = "pointofcontact"),ResponsibleParty(organization = u"Org2",email = [u"email2@asd.gr"],role = "pointofcontact")])
+
 
