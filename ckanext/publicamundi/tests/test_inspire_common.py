@@ -183,11 +183,14 @@ def test_te4():
 # '''Find schema validation error - distance not int '''
 sr1 = SpatialResolution(distance = 5.0, uom = u"lala")
 
+# '''Find schema validation value 0'''
+sr2 = SpatialResolution(distance = 0, uom=u"meters")
+
 # '''Find schema invariant error - not all values set'''
-sr2 = SpatialResolution(distance = 5)
+sr3 = SpatialResolution(distance = 5)
 
 # '''Validate correct schema - no values set'''
-sr3 = SpatialResolution()
+sr4 = SpatialResolution()
 
 #'''Validate correct schema'''
 sr_correct = SpatialResolution(distance = 5, uom = u"lala")
@@ -198,18 +201,21 @@ def test_sr1():
     '''Spatial Resolution validation error - distance not int '''
     assert_faulty_keys(field=sr1, expected_keys=set(['distance']))
 
-
 def test_sr2():
-    '''Spatial Resolution invariant error - not all values set'''
-    assert_faulty_keys(field=sr2, expected_keys=set(['__after']), expected_invariants=["You need to fill in the rest Spatial Resolution fields"])
-
+    '''Spatial Resolution validation value 0'''
+    assert_faulty_keys(field=sr2)
 
 def test_sr3():
-    '''Spatial Resolution correct schema - no values set'''
-    assert_faulty_keys(field=sr3)
+    '''Spatial Resolution invariant error - not all values set'''
+    assert_faulty_keys(field=sr3, expected_keys=set(['__after']), expected_invariants=["You need to fill in the rest Spatial Resolution fields"])
 
 
 def test_sr4():
+    '''Spatial Resolution correct schema - no values set'''
+    assert_faulty_keys(field=sr4)
+
+
+def test_sr5():
     '''Spatial Resolution correct schema'''
     assert_faulty_keys(field=sr_correct)
 

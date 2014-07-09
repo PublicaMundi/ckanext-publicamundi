@@ -63,7 +63,7 @@ insp1_5 = InspireMetadata(contact = [ResponsibleParty(organization=u"Org", email
     revision_date = datetime.date(2014,1,1),
     lineage = u"lineaage",
     denominator = [0,1,2,3],
-    spatial_resolution = [SpatialResolution(uom = u"meters")],
+    spatial_resolution = [SpatialResolution(distance=5, uom = u"meters")],
     conformity = [Conformity(title=u"specifications blabla", date=datetime.date.today(), date_type="creation", degree="conformant")],
     access_constraints = [u"lalala1", u"lalala2"],
     limitations = [u"limit1", u"limit2"])
@@ -85,7 +85,7 @@ insp2 = InspireMetadata(
             reference_date = datetime.date(2000,1,1),
             date_type = 'creation')],
     bounding_box = [GeographicBoundingBox(nblat=0.0, sblat=0.0, eblng=0.0, wblng=0.0)],
-    temporal_extent = [TemporalExtent(start=datetime.date(2013,1,1), end=datetime.date(2012,1,1))],
+    temporal_extent = [TemporalExtent(start=datetime.date(2012,1,1), end=datetime.date(2013,1,1))],
     creation_date = datetime.date(2014,1,1),
     publication_date = datetime.date(2013,1,1),
     revision_date = datetime.date(2012,1,1),
@@ -120,7 +120,7 @@ insp3 = InspireMetadata(
     revision_date = datetime.date(2014,1,1),
     lineage = u"lineaage",
     denominator = [0,1,2,3],
-    spatial_resolution = [SpatialResolution(uom=u"meters")],
+    spatial_resolution = [SpatialResolution(distance=5, uom=u"meters")],
     conformity = [Conformity(title=u"specifications blabla", date=datetime.date.today(), date_type="creation", degree="conformant")],
     access_constraints = [u"lalala1", u"lalala2"],
     limitations = [u"limit1", u"limit2"],
@@ -148,7 +148,7 @@ insp4 = InspireMetadata(contact = [ResponsibleParty(organization=u"Org", email=[
     revision_date = datetime.date(2014,1,1),
     lineage = u"lineaage",
     denominator = [0,1,2,3],
-    spatial_resolution = [SpatialResolution(uom=u"meters")],
+    spatial_resolution = [SpatialResolution(distance=5, uom=u"meters")],
     conformity = [Conformity(title=u"specifications blabla", date=datetime.date.today(), date_type="creation", degree="conformant")],
     access_constraints = [u"lalala1" ,u"lalala2"],
     limitations = [u"limit1", u"limit2"],
@@ -175,13 +175,13 @@ insp5 = InspireMetadata(contact = [ResponsibleParty(organization=u"Org", email=[
     revision_date = datetime.date(2014,1,1),
     lineage = u"lineaage",
     denominator = [0,1,2,3],
-    spatial_resolution = [SpatialResolution(uom=u"meters")],
+    spatial_resolution = [SpatialResolution(distance=5, uom=u"meters")],
     conformity = [Conformity(title=u"specifications blabla", date=datetime.date.today(), date_type="creation", degree="conformant")],
     access_constraints = [u"lalala1", u"lalala2"],
     limitations = [u"limit1", u"limit2"],
     responsible_party = [ResponsibleParty(organization=u"Org", email=[u"email@asd.gr"], role="pointofcontact"), ResponsibleParty(organization=u"Org2", email=[u"email2@asd.gr"], role="pointofcontact")])
 
-# Inspire correct schema 
+# Inspire Wrong temporal extent date order (invariant in subclass)
 insp6 = InspireMetadata(contact = [ResponsibleParty(organization=u"Org", email=[u"email@asd.gr"], role="pointofcontact")],
     datestamp = datetime.date.today(),
     languagecode = "el",
@@ -213,7 +213,7 @@ insp6 = InspireMetadata(contact = [ResponsibleParty(organization=u"Org", email=[
     revision_date = datetime.date(2014,1,1),
     lineage = u"lineaage",
     denominator = [],
-    spatial_resolution = [SpatialResolution(uom=u"meters")],
+    spatial_resolution = [SpatialResolution(distance=5, uom=u"meters")],
     conformity = [Conformity(title=u"specifications blabla", date=datetime.date.today(), date_type="creation", degree="conformant")],
     access_constraints = [u"lalala1", u"lalala2"],
     limitations = [u"limit1", u"limit2"],
@@ -284,7 +284,7 @@ def test_insp5():
 
 def test_insp6():
     '''Wrong temporal extent date order (invariant in subclass)'''
-    assert_faulty_keys(field=insp6, expected_keys=set(['__after']))
+    assert_faulty_keys(field=insp6, expected_keys=set(['temporal_extent']), expected_invariants=["later than end date"])
 
 def test_insp7():
     '''Validate correct inspire schema'''

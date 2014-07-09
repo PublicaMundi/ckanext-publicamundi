@@ -147,7 +147,7 @@ class Object(object):
         S = cls.get_schema()
         for k,F in zope.schema.getFields(S).items():
             v = kwargs.get(k)
-            if not v:
+            if v is None:
                 factory = cls.get_field_factory(k, F)
                 v = factory() if factory else F.default
             setattr(self, k, v)
@@ -458,7 +458,10 @@ class Object(object):
             fields = zope.schema.getFields(S)
             for k,F in fields.items():
                 f = F.get(self.obj)
-                res[k] = self._dictize_field(f, F) if f else None
+                if f is None:
+                    res[k] = None
+                else:
+                    res[k] = self._dictize_field(f, F)
             return res
 
         def _get_field_value(self, f, F):
@@ -496,7 +499,9 @@ class Object(object):
             fields = zope.schema.getFields(S)
             for k,F in fields.items():
                 f = F.get(self.obj)
-                if f:
+                if f is None:
+                    pass
+                else:
                     res1 = self._flatten_field(f, F)
                     for k1,v1 in res1.items():
                         res[(k,)+k1] = v1
@@ -535,7 +540,7 @@ class Object(object):
                 v = d.get(k)
                 factory = self.obj.get_field_factory(k, F)
                 f = None
-                if not v:
+                if v is None:
                     # No value given, use factory (if exists)
                     f = factory() if factory else F.default
                 else:

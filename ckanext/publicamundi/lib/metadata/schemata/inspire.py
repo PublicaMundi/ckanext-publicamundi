@@ -44,7 +44,7 @@ class IThesaurus(IObject):
         min_length = 1)
 
 class IInspireMetadata(IObject):
-
+    zope.interface.taggedValue('recurse-on-invariants', True)
     #Metadata on metadata
 
     contact = zope.schema.List(
