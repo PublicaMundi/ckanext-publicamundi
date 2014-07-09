@@ -55,8 +55,14 @@ class TestController(ckan.tests.TestController):
         field_ifaces = [
             zope.schema.interfaces.IBool,
             zope.schema.interfaces.IChoice,
-            zope.schema.interfaces.IText,
+            zope.schema.interfaces.IText, 
             zope.schema.interfaces.ITextLine,
+            zope.schema.interfaces.IURI,
+            zope.schema.interfaces.IInt,
+            zope.schema.interfaces.IFloat,
+            zope.schema.interfaces.IDate,
+            zope.schema.interfaces.IDatetime,
+            zope.schema.interfaces.ITime,
             zope.schema.interfaces.IList,
             zope.schema.interfaces.IDict,
             zope.schema.interfaces.IObject,
@@ -92,6 +98,9 @@ class TestController(ckan.tests.TestController):
             yield self._test_markup_for_field, 'foo1', k, 'edit:checkbox_2'
             yield self._test_markup_for_field, 'foo1', k, 'edit:checkbox_3'
             yield self._test_markup_for_field, 'foo1', k, 'edit:checkbox_3.bar.baz'
+        for k in ['tags']:
+            yield self._test_markup_for_field, 'foo1', k, 'edit:baz'
+            yield self._test_markup_for_field, 'foo1', k, 'edit:tags'
 
     @with_request_context('publicamundi-tests', 'index')
     def _test_markup_for_field(self, fixture_name, k, action, data={}):
@@ -110,8 +119,8 @@ class TestController(ckan.tests.TestController):
         if action.startswith('edit'):
             e = pq.find('input') or pq.find('textarea') or pq.find('select')
             assert e
-            assert e.attr('name') == '%s.%s' %(fixture_name, k)
-            assert e.attr('id') == 'input-%s.%s' %(fixture_name, k)
+            assert e.attr('name').startswith('%s.%s' %(fixture_name, k))
+            assert e.attr('id').startswith('input-%s.%s' %(fixture_name, k))
 
 
     ## Test objects ##

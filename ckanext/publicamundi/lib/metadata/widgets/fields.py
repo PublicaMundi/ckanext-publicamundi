@@ -5,6 +5,7 @@ from ckan.plugins import toolkit
 
 from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 from ckanext.publicamundi.lib.metadata.widgets import field_widget_adapter
+from ckanext.publicamundi.lib.metadata.widgets import field_widget_multiadapter
 
 from ckanext.publicamundi.lib import logger
 
@@ -138,10 +139,11 @@ class ListEditWidget(base_widgets.EditFieldWidget, base_widgets.ListFieldWidgetT
         })
         return data
 
-@field_widget_adapter(zope.schema.interfaces.IList, qualifiers=['tags'])
-class TagsEditWidget(base_widgets.EditFieldWidget, base_widgets.ListFieldWidgetTraits):
+@field_widget_multiadapter([zope.schema.interfaces.ITuple, zope.schema.interfaces.ITextLine], qualifiers=['tags'])
+@field_widget_multiadapter([zope.schema.interfaces.IList, zope.schema.interfaces.ITextLine], qualifiers=['tags'])
+class TagsEditWidget(base_widgets.EditFieldWidget):
 
-    def __init__(self, field):
+    def __init__(self, field, *args):
         assert isinstance(field, zope.schema.List)
         base_widgets.EditFieldWidget.__init__(self, field)
 
@@ -279,10 +281,11 @@ class ListReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListFieldWidgetT
         })
         return data
 
-@field_widget_adapter(zope.schema.interfaces.IList, qualifiers=['tags'])
-class TagsReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListFieldWidgetTraits):
+@field_widget_multiadapter([zope.schema.interfaces.ITuple, zope.schema.interfaces.ITextLine], qualifiers=['tags'])
+@field_widget_multiadapter([zope.schema.interfaces.IList, zope.schema.interfaces.ITextLine], qualifiers=['tags'])
+class TagsReadWidget(base_widgets.ReadFieldWidget):
 
-    def __init__(self, field):
+    def __init__(self, field, *args):
         assert isinstance(field, zope.schema.List)
         base_widgets.ReadFieldWidget.__init__(self, field)
 

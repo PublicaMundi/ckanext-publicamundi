@@ -47,9 +47,8 @@ class Widget(object):
 class FieldWidget(Widget):
     zope.interface.implements(IFieldWidget)
 
-    def __init__(self, field):
-        # Fixme: argument list 
-        # Check adaptee: must be a bound field
+    def __init__(self, field, *args):
+        # Check adaptee: 1st argument must be a bound field
         assert isinstance(field, zope.schema.Field)
         assert field.context and isinstance(field.context, FieldContext)
         # Initialize
