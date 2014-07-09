@@ -67,6 +67,18 @@ class LookupContext(object):
         self.requested_action = requested
         self.provided_action = provided
 
+# Exception for adaptation failures
+
+class WidgetNotFound(Exception):
+    
+    def __init__(self, qualified_action, r):
+        self.qualified_action = qualified_action
+        self.r = r
+
+    def __str__(self):
+        return 'Cannot find a widget for %s for action "%s"' %(
+            type(self.r).__name__, self.qualified_action)
+
 # Decorators for widget adapters
 
 def decorator_for_widget_multiadapter(required_ifaces, provided_iface, qualifiers, is_fallback):
@@ -105,76 +117,83 @@ def object_widget_adapter(object_iface, qualifiers=[], is_fallback=False):
 
 # Utilities
 
-def widget_for_field(qualified_action, field):
-    '''Find and instantiate a widget to adapt field to a widget interface.
-
-    Note that x is either a zope-based field (i.e. zope.schema.interfaces.IField) or a 
-    schema-providing object (i.e. ckanext.publicamundi.lib.metadata.schemata.IObject). 
+def widget_for_object(qualified_action, obj):
+    '''Find and instantiate a widget to adapt an object to a widget interface.
     '''
     
     # Build an array with all candidate names
     q = QualAction.from_string(qualified_action)
-    candidates = q.parents()
-    candidates.append(q)
+    candidates = list(reversed(q.parents() + [q]))
 
     # Lookup registry
     widget = None
-    for candidate in reversed(candidates):
+    for candidate in candidates:
         name = candidate.to_string()
-        widget = adapter_registry.queryMultiAdapter([x], target_iface, name)
-        logger.debug('Looked up widget for <%s> for action "%s": %s',
-            type(x).__name__, name, widget)
+        widget = adapter_registry.queryMultiAdapter([obj], IObjectWidget, name)
+        logger.debug('Trying to adapt [%s] to widget for action "%s": %s',
+            type(obj).__name__, name, 
+            widget.cls_name() if widget else 'NONE')
         if widget:
             break
+    
     if widget:
         widget.context = LookupContext(requested=q, provided=candidate)
     else:
-        raise ValueError('Cannot find a widget for %s for action "%s"' %(
-            type(x).__name__, qualified_action))
+        raise WidgetNotFound(qualified_action, obj)
     
-    # Found a widget to adapt x
-    assert zope.interface.verify.verifyObject(target_iface, widget)
+    # Found a widget to adapt to obj
+    assert zope.interface.verify.verifyObject(IObjectWidget, widget)
     return widget
 
-def _widget_for(qualified_action, x, target_iface):
-    '''Find and instantiate a widget to adapt x to a target interface.
-
-    Note that x is either a zope-based field (i.e. zope.schema.interfaces.IField) or a 
-    schema-providing object (i.e. ckanext.publicamundi.lib.metadata.schemata.IObject). 
+def widget_for_field(qualified_action, field):
+    '''Find and instantiate a widget to adapt a field to a widget interface.
+    The given field should be a bound instance of zope.schema.Field.
     '''
     
     # Build an array with all candidate names
     q = QualAction.from_string(qualified_action)
-    candidates = q.parents()
-    candidates.append(q)
+    candidates = list(reversed(q.parents() + [q]))
 
+    # Build adaptee vector
+    adaptee = [field]
+    y = field
+    while zope.schema.interfaces.IContainer.providedBy(y):
+        adaptee.append(y.value_type)
+        y = y.value_type
+     
     # Lookup registry
     widget = None
-    for candidate in reversed(candidates):
-        name = candidate.to_string()
-        widget = adapter_registry.queryMultiAdapter([x], target_iface, name)
-        logger.debug('Looked up widget for <%s> for action "%s": %s',
-            type(x).__name__, name, widget)
+    while len(adaptee):
+        for candidate in candidates:
+            name = candidate.to_string()
+            widget = adapter_registry.queryMultiAdapter(adaptee, IFieldWidget, name)
+            logger.debug('Trying to adapt [%s] to widget for action "%s": %s',
+                ', '.join([type(x).__name__ for x in adaptee]), name, 
+                widget.cls_name() if widget else 'NONE')
+            if widget:
+                break
         if widget:
             break
+        # Fall back to a more general version of this adaptee    
+        adaptee.pop()
+    
     if widget:
         widget.context = LookupContext(requested=q, provided=candidate)
     else:
-        raise ValueError('Cannot find a widget for %s for action "%s"' %(
-            type(x).__name__, qualified_action))
+        raise WidgetNotFound(qualified_action, field)
     
-    # Found a widget to adapt x
-    assert zope.interface.verify.verifyObject(target_iface, widget)
+    # Found a widget to adapt to field
+    assert zope.interface.verify.verifyObject(IFieldWidget, widget)
     return widget
 
 def markup_for_field(qualified_action, field, name_prefix='', data={}):
     assert isinstance(field, zope.schema.Field)
-    widget = _widget_for(qualified_action, field, IFieldWidget)
+    widget = widget_for_field(qualified_action, field)
     return widget.render(name_prefix, data)
 
 def markup_for_object(qualified_action, obj, name_prefix='', data={}):
     assert isinstance(obj, Object)
-    widget = _widget_for(qualified_action, obj, IObjectWidget)
+    widget = widget_for_object(qualified_action, obj)
     return widget.render(name_prefix, data)
 
 # Import actual widgets
