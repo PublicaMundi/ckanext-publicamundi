@@ -252,17 +252,17 @@ insp5 = InspireMetadata(contact = [ResponsibleParty(organization=u"Org", email=[
 
 def test_insp1():
     ''' INSPIRE keywords not from any of the vocabularies'''
-    assert_faulty_keys(field=insp1, expected_keys=set(['__after']), expected_invariants="does not belong to thesaurus")
+    assert_faulty_keys(field=insp1, expected_keys=set(['__after']), expected_invariants=["does not belong to thesaurus"])
 
 
 def test_insp2():
     ''' INSPIRE keywords missing value from INSPIRE Data Themes'''
-    assert_faulty_keys(field=insp2, expected_keys=set(['__after']), expected_invariants="You need to select at least one keyword from INSPIRE data themes")
+    assert_faulty_keys(field=insp2, expected_keys=set(['__after']), expected_invariants=["You need to select at least one keyword from INSPIRE data themes"])
 
 
 def test_insp3():
     ''' INSPIRE keywords not from correct vocabulary '''
-    assert_faulty_keys(field=insp3, expected_keys=set(['__after']), expected_invariants="does not belong to thesaurus")
+    assert_faulty_keys(field=insp3, expected_keys=set(['__after']), expected_invariants=["does not belong to thesaurus"])
 
 
 def test_insp4():

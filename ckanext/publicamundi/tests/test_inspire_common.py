@@ -93,7 +93,7 @@ def test_fkw1():
 
 def test_fkw2():
     '''Free Keywords validation invariant error - not all fields set'''
-    assert_faulty_keys(field=fkw2, expected_keys=set(['__after']), expected_invariants="You need to fill in the rest Free Keyword fields")
+    assert_faulty_keys(field=fkw2, expected_keys=set(['__after']), expected_invariants=["You need to fill in the rest Free Keyword fields"])
 
 
 def test_fkw3():
@@ -166,7 +166,7 @@ def test_te2():
 
 def test_te3():
     '''Temporal Extent invariant error - start date greater than end date'''
-    assert_faulty_keys(field=te3, expected_keys=set(['__after']), expected_invariants="later than end date")
+    assert_faulty_keys(field=te3, expected_keys=set(['__after']), expected_invariants=["later than end date"])
 
 
 def test_te4():
@@ -201,7 +201,7 @@ def test_sr1():
 
 def test_sr2():
     '''Spatial Resolution invariant error - not all values set'''
-    assert_faulty_keys(field=sr2, expected_keys=set(['__after']), expected_invariants="You need to fill in the rest Spatial Resolution fields")
+    assert_faulty_keys(field=sr2, expected_keys=set(['__after']), expected_invariants=["You need to fill in the rest Spatial Resolution fields"])
 
 
 def test_sr3():
