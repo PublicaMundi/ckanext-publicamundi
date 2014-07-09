@@ -69,10 +69,9 @@ class LookupContext(object):
 
 # Decorators for widget adapters
 
-def field_widget_adapter(field_iface, qualifiers=[], is_fallback=False):
-    assert field_iface.extends(zope.schema.interfaces.IField)
+def decorator_for_widget_multiadapter(required_ifaces, provided_iface, qualifiers, is_fallback):
     def decorate(widget_cls):
-        assert IFieldWidget.implementedBy(widget_cls) 
+        assert provided_iface.implementedBy(widget_cls) 
         names = set()
         action = widget_cls.action
         if is_fallback or not qualifiers:
@@ -81,27 +80,61 @@ def field_widget_adapter(field_iface, qualifiers=[], is_fallback=False):
             q = QualAction(action=action, qualifier=qualifier)
             names.add(q.to_string())
         for name in names:
-            adapter_registry.register([field_iface], IFieldWidget, name, widget_cls)
+            adapter_registry.register(required_ifaces, provided_iface, name, widget_cls)
         return widget_cls
     return decorate
+   
+def field_widget_adapter(field_iface, qualifiers=[], is_fallback=False):
+    assert field_iface.extends(zope.schema.interfaces.IField)
+    decorator = decorator_for_widget_multiadapter(
+        [field_iface], IFieldWidget, qualifiers, is_fallback)
+    return decorator
 
+def field_widget_multiadapter(field_ifaces, qualifiers=[], is_fallback=False):
+    for iface in field_ifaces:
+        assert iface.extends(zope.schema.interfaces.IField)
+    decorator = decorator_for_widget_multiadapter(
+        field_ifaces, IFieldWidget, qualifiers, is_fallback)
+    return decorator
+      
 def object_widget_adapter(object_iface, qualifiers=[], is_fallback=False):
     assert object_iface.extends(IObject)
-    def decorate(widget_cls):
-        assert IObjectWidget.implementedBy(widget_cls) 
-        names = set()
-        action = widget_cls.action
-        if is_fallback or not qualifiers:
-            names.add(action)
-        for qualifier in qualifiers: 
-            q = QualAction(action=action, qualifier=qualifier)
-            names.add(q.to_string())
-        for name in names:
-            adapter_registry.register([object_iface], IObjectWidget, name, widget_cls)
-        return widget_cls
-    return decorate
+    decorator = decorator_for_widget_multiadapter(
+        [object_iface], IObjectWidget, qualifiers, is_fallback)
+    return decorator
 
 # Utilities
+
+def widget_for_field(qualified_action, field):
+    '''Find and instantiate a widget to adapt field to a widget interface.
+
+    Note that x is either a zope-based field (i.e. zope.schema.interfaces.IField) or a 
+    schema-providing object (i.e. ckanext.publicamundi.lib.metadata.schemata.IObject). 
+    '''
+    
+    # Build an array with all candidate names
+    q = QualAction.from_string(qualified_action)
+    candidates = q.parents()
+    candidates.append(q)
+
+    # Lookup registry
+    widget = None
+    for candidate in reversed(candidates):
+        name = candidate.to_string()
+        widget = adapter_registry.queryMultiAdapter([x], target_iface, name)
+        logger.debug('Looked up widget for <%s> for action "%s": %s',
+            type(x).__name__, name, widget)
+        if widget:
+            break
+    if widget:
+        widget.context = LookupContext(requested=q, provided=candidate)
+    else:
+        raise ValueError('Cannot find a widget for %s for action "%s"' %(
+            type(x).__name__, qualified_action))
+    
+    # Found a widget to adapt x
+    assert zope.interface.verify.verifyObject(target_iface, widget)
+    return widget
 
 def _widget_for(qualified_action, x, target_iface):
     '''Find and instantiate a widget to adapt x to a target interface.
