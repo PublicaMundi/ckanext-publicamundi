@@ -990,7 +990,7 @@ vocabularies = [
                         "title": "Coordinate system"
                     }, 
                     {
-                        "name": "cross_section_(watercourse)", 
+                        "name": "cross_section_watercourse", 
                         "title": "Cross section (watercourse)"
                     }, 
                     {
@@ -1282,11 +1282,11 @@ vocabularies = [
                         "title": "deep water route"
                     }, 
                     {
-                        "name": "discovery_service_(discovery)", 
+                        "name": "discovery_service_discovery", 
                         "title": "discovery service (discovery)"
                     }, 
                     {
-                        "name": "download_service_(download)", 
+                        "name": "download_service_download", 
                         "title": "download service (download)"
                     }, 
                     {
@@ -1390,7 +1390,7 @@ vocabularies = [
                         "title": "interoperable spatial data"
                     }, 
                     {
-                        "name": "invoke_spatial_data_service_(invoke)", 
+                        "name": "invoke_spatial_data_service_invoke", 
                         "title": "invoke spatial data service (invoke)"
                     }, 
                     {
@@ -1546,7 +1546,7 @@ vocabularies = [
                         "title": "ontology"
                     }, 
                     {
-                        "name": "other_service_(service)", 
+                        "name": "other_service_service", 
                         "title": "other service (service)"
                     }, 
                     {
@@ -1666,7 +1666,7 @@ vocabularies = [
                         "title": "transformation"
                     }, 
                     {
-                        "name": "transformation_service_(transformation)", 
+                        "name": "transformation_service_transformation", 
                         "title": "transformation service (transformation)"
                     }, 
                     {
@@ -1694,7 +1694,7 @@ vocabularies = [
                         "title": "version <spatial object>"
                     }, 
                     {
-                        "name": "view_service_(view)", 
+                        "name": "view_service_view", 
                         "title": "view service (view)"
                     }
                 ], 
@@ -1854,15 +1854,15 @@ vocabularies = [
                         "title": "AGRICULTURE, FORESTRY; ANIMAL HUSBANDRY; FISHERY"
                     }, 
                     {
-                        "name": "anthroposphere_(built_environment_human_settlements_land_setup)", 
+                        "name": "anthroposphere_built_environment_human_settlements_land_setup", 
                         "title": "ANTHROPOSPHERE (built environment, human settlements, land setup)"
                     }, 
                     {
-                        "name": "atmosphere_(air_climate)", 
+                        "name": "atmosphere_air_climate", 
                         "title": "ATMOSPHERE (air, climate)"
                     }, 
                     {
-                        "name": "biosphere_(organisms_ecosystems)", 
+                        "name": "biosphere_organisms_ecosystems", 
                         "title": "BIOSPHERE (organisms, ecosystems)"
                     }, 
                     {
@@ -1882,7 +1882,7 @@ vocabularies = [
                         "title": "ENERGY"
                     }, 
                     {
-                        "name": "environment_(natural_environment_anthropic_environment)", 
+                        "name": "environment_natural_environment_anthropic_environment", 
                         "title": "ENVIRONMENT (natural environment, anthropic environment)"
                     }, 
                     {
@@ -1902,7 +1902,7 @@ vocabularies = [
                         "title": "HEALTH, NUTRITION"
                     }, 
                     {
-                        "name": "hydrosphere_(freshwater_marine_water_waters)", 
+                        "name": "hydrosphere_freshwater_marine_water_waters", 
                         "title": "HYDROSPHERE (freshwater, marine water, waters)"
                     }, 
                     {
@@ -1914,7 +1914,7 @@ vocabularies = [
                         "title": "INFORMATION, EDUCATION, CULTURE, ENVIRONMENTAL AWARENESS"
                     }, 
                     {
-                        "name": "land_(landscape_geography)", 
+                        "name": "land_landscape_geography", 
                         "title": "LAND (landscape, geography)"
                     }, 
                     {
@@ -1922,7 +1922,7 @@ vocabularies = [
                         "title": "LEGISLATION, NORMS, CONVENTIONS"
                     }, 
                     {
-                        "name": "lithosphere_(soil_geological_processes)", 
+                        "name": "lithosphere_soil_geological_processes", 
                         "title": "LITHOSPHERE (soil, geological processes)"
                     }, 
                     {
@@ -1942,7 +1942,7 @@ vocabularies = [
                         "title": "RESEARCH, SCIENCES"
                     }, 
                     {
-                        "name": "resources_(utilisation_of_resources)", 
+                        "name": "resources_utilisation_of_resources", 
                         "title": "RESOURCES (utilisation of resources)"
                     }, 
                     {
@@ -1958,7 +1958,7 @@ vocabularies = [
                         "title": "SPACE"
                     }, 
                     {
-                        "name": "time_(chronology)", 
+                        "name": "time_chronology", 
                         "title": "TIME (chronology)"
                     }, 
                     {
@@ -2064,15 +2064,15 @@ vocabularies = [
                         "title": "Ambient Ozone Concentration"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_(fine)_composition", 
+                        "name": "ambient_particulate_matter_fine_composition", 
                         "title": "Ambient Particulate Matter (fine) Composition"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_composition_(coarse)", 
+                        "name": "ambient_particulate_matter_composition_coarse", 
                         "title": "Ambient Particulate Matter Composition (coarse)"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_concentration_(fine)", 
+                        "name": "ambient_particulate_matter_concentration_fine", 
                         "title": "Ambient Particulate Matter Concentration (fine)"
                     }, 
                     {
@@ -2084,7 +2084,7 @@ vocabularies = [
                         "title": "Ambient Volatile Organic Compounds"
                     }, 
                     {
-                        "name": "animal_activity_(range_season_length_migration_patterns)", 
+                        "name": "animal_activity_range_season_length_migration_patterns", 
                         "title": "Animal activity (range, season length, migration patterns)"
                     }, 
                     {
@@ -2140,7 +2140,7 @@ vocabularies = [
                         "title": "CRYOSPHERE"
                     }, 
                     {
-                        "name": "carbon_(stores_uptake_flux)", 
+                        "name": "carbon_stores_uptake_flux", 
                         "title": "Carbon (stores, uptake, flux)"
                     }, 
                     {
@@ -2164,7 +2164,7 @@ vocabularies = [
                         "title": "Cloud Cover"
                     }, 
                     {
-                        "name": "cloud_parameters_(other)", 
+                        "name": "cloud_parameters_other", 
                         "title": "Cloud Parameters (Other)"
                     }, 
                     {
@@ -2180,11 +2180,11 @@ vocabularies = [
                         "title": "Column Ozone Concentration"
                     }, 
                     {
-                        "name": "column_particulate_matter_concentration_(coarse)", 
+                        "name": "column_particulate_matter_concentration_coarse", 
                         "title": "Column Particulate Matter Concentration (coarse)"
                     }, 
                     {
-                        "name": "column_particulate_matter_concentration_(fine)", 
+                        "name": "column_particulate_matter_concentration_fine", 
                         "title": "Column Particulate Matter Concentration (fine)"
                     }, 
                     {
@@ -2192,7 +2192,7 @@ vocabularies = [
                         "title": "Column Sulfur Dioxide Concentration"
                     }, 
                     {
-                        "name": "contaminants/pollutants_(inorganic/organic)", 
+                        "name": "contaminants/pollutants_inorganic/organic", 
                         "title": "Contaminants/Pollutants (Inorganic/Organic)"
                     }, 
                     {
@@ -2232,7 +2232,7 @@ vocabularies = [
                         "title": "Desertification"
                     }, 
                     {
-                        "name": "direct_normal_irradiation_(dni)", 
+                        "name": "direct_normal_irradiation_dni", 
                         "title": "Direct Normal Irradiation (DNI)"
                     }, 
                     {
@@ -2264,11 +2264,11 @@ vocabularies = [
                         "title": "Emissivity"
                     }, 
                     {
-                        "name": "enhanced_vegetation_index_(evi)", 
+                        "name": "enhanced_vegetation_index_evi", 
                         "title": "Enhanced Vegetation Index (EVI)"
                     }, 
                     {
-                        "name": "erosion_(reefs_sandbars)", 
+                        "name": "erosion_reefs_sandbars", 
                         "title": "Erosion (reefs, sandbars)"
                     }, 
                     {
@@ -2292,7 +2292,7 @@ vocabularies = [
                         "title": "FUNGI"
                     }, 
                     {
-                        "name": "field_cover_(continuous)", 
+                        "name": "field_cover_continuous", 
                         "title": "Field Cover (Continuous)"
                     }, 
                     {
@@ -2320,11 +2320,11 @@ vocabularies = [
                         "title": "Forest Structure"
                     }, 
                     {
-                        "name": "fraction_of_absorbed_photosynthetically_active_radiation_(fapar)", 
+                        "name": "fraction_of_absorbed_photosynthetically_active_radiation_fapar", 
                         "title": "Fraction of Absorbed Photosynthetically Active Radiation (FAPAR)"
                     }, 
                     {
-                        "name": "fraction_of_photosynthetically_active_radiation_(fpar)", 
+                        "name": "fraction_of_photosynthetically_active_radiation_fpar", 
                         "title": "Fraction of Photosynthetically Active Radiation (fPAR)"
                     }, 
                     {
@@ -2368,7 +2368,7 @@ vocabularies = [
                         "title": "Glacier/ice Sheet Extent"
                     }, 
                     {
-                        "name": "global_horizontal_irradiation_(ghi)", 
+                        "name": "global_horizontal_irradiation_ghi", 
                         "title": "Global Horizontal Irradiation (GHI)"
                     }, 
                     {
@@ -2456,7 +2456,7 @@ vocabularies = [
                         "title": "Land Use"
                     }, 
                     {
-                        "name": "leaf_area_index_(lai)", 
+                        "name": "leaf_area_index_lai", 
                         "title": "Leaf Area Index (LAI)"
                     }, 
                     {
@@ -2492,11 +2492,11 @@ vocabularies = [
                         "title": "Non-native species"
                     }, 
                     {
-                        "name": "normalized_difference_vegetation_index_(ndvi)", 
+                        "name": "normalized_difference_vegetation_index_ndvi", 
                         "title": "Normalized Difference Vegetation Index (NDVI)"
                     }, 
                     {
-                        "name": "nutrients_(phosphorous_nitrogen_potassium_nitratessulfates)", 
+                        "name": "nutrients_phosphorous_nitrogen_potassium_nitratessulfates", 
                         "title": "Nutrients (Phosphorous, Nitrogen, Potassium, Nitrates,Sulfates)"
                     }, 
                     {
@@ -2548,7 +2548,7 @@ vocabularies = [
                         "title": "Other long-lived GHGs"
                     }, 
                     {
-                        "name": "outgoing_longwave_radiation_(top_of_atmosphere_)", 
+                        "name": "outgoing_longwave_radiation_top_of_atmosphere_", 
                         "title": "Outgoing Longwave Radiation (Top of Atmosphere )"
                     }, 
                     {
@@ -2576,7 +2576,7 @@ vocabularies = [
                         "title": "Phenology"
                     }, 
                     {
-                        "name": "photosynthetically_active_radiation_(par)", 
+                        "name": "photosynthetically_active_radiation_par", 
                         "title": "Photosynthetically Active Radiation (PAR)"
                     }, 
                     {
@@ -2648,7 +2648,7 @@ vocabularies = [
                         "title": "Sea Ice Cover"
                     }, 
                     {
-                        "name": "sea_ice_surface_(skin)_temperature", 
+                        "name": "sea_ice_surface_skin_temperature", 
                         "title": "Sea Ice Surface (Skin) Temperature"
                     }, 
                     {
@@ -2680,11 +2680,11 @@ vocabularies = [
                         "title": "Snow Depth"
                     }, 
                     {
-                        "name": "snow_water_equivalent_(swe)", 
+                        "name": "snow_water_equivalent_swe", 
                         "title": "Snow Water Equivalent (SWE)"
                     }, 
                     {
-                        "name": "soil_adjusted_vegetation_index_(savi)+c29", 
+                        "name": "soil_adjusted_vegetation_index_savi+c29", 
                         "title": "Soil Adjusted Vegetation Index (SAVI)+C29"
                     }, 
                     {
@@ -2840,11 +2840,11 @@ vocabularies = [
                         "title": "Water Algal Blooms"
                     }, 
                     {
-                        "name": "water_bodies_(location)", 
+                        "name": "water_bodies_location", 
                         "title": "Water Bodies (location)"
                     }, 
                     {
-                        "name": "water_depth_(shallow_near-shore)", 
+                        "name": "water_depth_shallow_near-shore", 
                         "title": "Water Depth (Shallow Near-Shore)"
                     }, 
                     {
@@ -3150,7 +3150,7 @@ vocabularies = [
                         "title": "Beacon"
                     }, 
                     {
-                        "name": "bio-geographic_regions_(bio-geographic_regions)", 
+                        "name": "bio-geographic_regions_bio-geographic_regions", 
                         "title": "Bio-geographic Regions (Bio-geographic Regions)"
                     }, 
                     {
@@ -3294,7 +3294,7 @@ vocabularies = [
                         "title": "Grade Separated Crossing"
                     }, 
                     {
-                        "name": "habitat_(habitats_and_biotopes)", 
+                        "name": "habitat_habitats_and_biotopes", 
                         "title": "Habitat (Habitats and Biotopes)"
                     }, 
                     {
@@ -3510,7 +3510,7 @@ vocabularies = [
                         "title": "Rapids"
                     }, 
                     {
-                        "name": "responsible_agency_(protected_sites)", 
+                        "name": "responsible_agency_protected_sites", 
                         "title": "Responsible Agency (Protected Sites)"
                     }, 
                     {
@@ -3586,11 +3586,11 @@ vocabularies = [
                         "title": "Sluice"
                     }, 
                     {
-                        "name": "species_aggregation_unit_(species_distribution)", 
+                        "name": "species_aggregation_unit_species_distribution", 
                         "title": "Species Aggregation Unit (Species Distribution)"
                     }, 
                     {
-                        "name": "species_distribution_(species_distribution)", 
+                        "name": "species_distribution_species_distribution", 
                         "title": "Species Distribution (Species Distribution)"
                     }, 
                     {
@@ -3864,7 +3864,7 @@ vocabularies = [
                         "title": "craft"
                     }, 
                     {
-                        "name": "culture_(society)", 
+                        "name": "culture_society", 
                         "title": "culture (society)"
                     }, 
                     {
@@ -4032,11 +4032,11 @@ vocabularies = [
                         "title": "land setup"
                     }, 
                     {
-                        "name": "law_(corpus_of_rules)", 
+                        "name": "law_corpus_of_rules", 
                         "title": "law (corpus of rules)"
                     }, 
                     {
-                        "name": "law_(individual)", 
+                        "name": "law_individual", 
                         "title": "law (individual)"
                     }, 
                     {
@@ -4060,7 +4060,7 @@ vocabularies = [
                         "title": "material"
                     }, 
                     {
-                        "name": "medicine_(practice)", 
+                        "name": "medicine_practice", 
                         "title": "medicine (practice)"
                     }, 
                     {
@@ -4176,7 +4176,7 @@ vocabularies = [
                         "title": "society"
                     }, 
                     {
-                        "name": "space_(interplanetary)", 
+                        "name": "space_interplanetary", 
                         "title": "space (interplanetary)"
                     }, 
                     {
@@ -4204,7 +4204,7 @@ vocabularies = [
                         "title": "tourism"
                     }, 
                     {
-                        "name": "trade_(services)", 
+                        "name": "trade_services", 
                         "title": "trade (services)"
                     }, 
                     {
@@ -4550,7 +4550,7 @@ vocabularies = [
                         "title": "Coordinate system"
                     }, 
                     {
-                        "name": "cross_section_(watercourse)", 
+                        "name": "cross_section_watercourse", 
                         "title": "Cross section (watercourse)"
                     }, 
                     {
@@ -4842,11 +4842,11 @@ vocabularies = [
                         "title": "deep water route"
                     }, 
                     {
-                        "name": "discovery_service_(discovery)", 
+                        "name": "discovery_service_discovery", 
                         "title": "discovery service (discovery)"
                     }, 
                     {
-                        "name": "download_service_(download)", 
+                        "name": "download_service_download", 
                         "title": "download service (download)"
                     }, 
                     {
@@ -4950,7 +4950,7 @@ vocabularies = [
                         "title": "interoperable spatial data"
                     }, 
                     {
-                        "name": "invoke_spatial_data_service_(invoke)", 
+                        "name": "invoke_spatial_data_service_invoke", 
                         "title": "invoke spatial data service (invoke)"
                     }, 
                     {
@@ -5106,7 +5106,7 @@ vocabularies = [
                         "title": "ontology"
                     }, 
                     {
-                        "name": "other_service_(service)", 
+                        "name": "other_service_service", 
                         "title": "other service (service)"
                     }, 
                     {
@@ -5226,7 +5226,7 @@ vocabularies = [
                         "title": "transformation"
                     }, 
                     {
-                        "name": "transformation_service_(transformation)", 
+                        "name": "transformation_service_transformation", 
                         "title": "transformation service (transformation)"
                     }, 
                     {
@@ -5254,7 +5254,7 @@ vocabularies = [
                         "title": "version <spatial object>"
                     }, 
                     {
-                        "name": "view_service_(view)", 
+                        "name": "view_service_view", 
                         "title": "view service (view)"
                     }
                 ], 
@@ -5414,15 +5414,15 @@ vocabularies = [
                         "title": "AGRICULTURE, FORESTRY; ANIMAL HUSBANDRY; FISHERY"
                     }, 
                     {
-                        "name": "anthroposphere_(built_environment_human_settlements_land_setup)", 
+                        "name": "anthroposphere_built_environment_human_settlements_land_setup", 
                         "title": "ANTHROPOSPHERE (built environment, human settlements, land setup)"
                     }, 
                     {
-                        "name": "atmosphere_(air_climate)", 
+                        "name": "atmosphere_air_climate", 
                         "title": "ATMOSPHERE (air, climate)"
                     }, 
                     {
-                        "name": "biosphere_(organisms_ecosystems)", 
+                        "name": "biosphere_organisms_ecosystems", 
                         "title": "BIOSPHERE (organisms, ecosystems)"
                     }, 
                     {
@@ -5442,7 +5442,7 @@ vocabularies = [
                         "title": "ENERGY"
                     }, 
                     {
-                        "name": "environment_(natural_environment_anthropic_environment)", 
+                        "name": "environment_natural_environment_anthropic_environment", 
                         "title": "ENVIRONMENT (natural environment, anthropic environment)"
                     }, 
                     {
@@ -5462,7 +5462,7 @@ vocabularies = [
                         "title": "HEALTH, NUTRITION"
                     }, 
                     {
-                        "name": "hydrosphere_(freshwater_marine_water_waters)", 
+                        "name": "hydrosphere_freshwater_marine_water_waters", 
                         "title": "HYDROSPHERE (freshwater, marine water, waters)"
                     }, 
                     {
@@ -5474,7 +5474,7 @@ vocabularies = [
                         "title": "INFORMATION, EDUCATION, CULTURE, ENVIRONMENTAL AWARENESS"
                     }, 
                     {
-                        "name": "land_(landscape_geography)", 
+                        "name": "land_landscape_geography", 
                         "title": "LAND (landscape, geography)"
                     }, 
                     {
@@ -5482,7 +5482,7 @@ vocabularies = [
                         "title": "LEGISLATION, NORMS, CONVENTIONS"
                     }, 
                     {
-                        "name": "lithosphere_(soil_geological_processes)", 
+                        "name": "lithosphere_soil_geological_processes", 
                         "title": "LITHOSPHERE (soil, geological processes)"
                     }, 
                     {
@@ -5502,7 +5502,7 @@ vocabularies = [
                         "title": "RESEARCH, SCIENCES"
                     }, 
                     {
-                        "name": "resources_(utilisation_of_resources)", 
+                        "name": "resources_utilisation_of_resources", 
                         "title": "RESOURCES (utilisation of resources)"
                     }, 
                     {
@@ -5518,7 +5518,7 @@ vocabularies = [
                         "title": "SPACE"
                     }, 
                     {
-                        "name": "time_(chronology)", 
+                        "name": "time_chronology", 
                         "title": "TIME (chronology)"
                     }, 
                     {
@@ -5624,15 +5624,15 @@ vocabularies = [
                         "title": "Ambient Ozone Concentration"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_(fine)_composition", 
+                        "name": "ambient_particulate_matter_fine_composition", 
                         "title": "Ambient Particulate Matter (fine) Composition"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_composition_(coarse)", 
+                        "name": "ambient_particulate_matter_composition_coarse", 
                         "title": "Ambient Particulate Matter Composition (coarse)"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_concentration_(fine)", 
+                        "name": "ambient_particulate_matter_concentration_fine", 
                         "title": "Ambient Particulate Matter Concentration (fine)"
                     }, 
                     {
@@ -5644,7 +5644,7 @@ vocabularies = [
                         "title": "Ambient Volatile Organic Compounds"
                     }, 
                     {
-                        "name": "animal_activity_(range_season_length_migration_patterns)", 
+                        "name": "animal_activity_range_season_length_migration_patterns", 
                         "title": "Animal activity (range, season length, migration patterns)"
                     }, 
                     {
@@ -5700,7 +5700,7 @@ vocabularies = [
                         "title": "CRYOSPHERE"
                     }, 
                     {
-                        "name": "carbon_(stores_uptake_flux)", 
+                        "name": "carbon_stores_uptake_flux", 
                         "title": "Carbon (stores, uptake, flux)"
                     }, 
                     {
@@ -5724,7 +5724,7 @@ vocabularies = [
                         "title": "Cloud Cover"
                     }, 
                     {
-                        "name": "cloud_parameters_(other)", 
+                        "name": "cloud_parameters_other", 
                         "title": "Cloud Parameters (Other)"
                     }, 
                     {
@@ -5740,11 +5740,11 @@ vocabularies = [
                         "title": "Column Ozone Concentration"
                     }, 
                     {
-                        "name": "column_particulate_matter_concentration_(coarse)", 
+                        "name": "column_particulate_matter_concentration_coarse", 
                         "title": "Column Particulate Matter Concentration (coarse)"
                     }, 
                     {
-                        "name": "column_particulate_matter_concentration_(fine)", 
+                        "name": "column_particulate_matter_concentration_fine", 
                         "title": "Column Particulate Matter Concentration (fine)"
                     }, 
                     {
@@ -5752,7 +5752,7 @@ vocabularies = [
                         "title": "Column Sulfur Dioxide Concentration"
                     }, 
                     {
-                        "name": "contaminants/pollutants_(inorganic/organic)", 
+                        "name": "contaminants/pollutants_inorganic/organic", 
                         "title": "Contaminants/Pollutants (Inorganic/Organic)"
                     }, 
                     {
@@ -5792,7 +5792,7 @@ vocabularies = [
                         "title": "Desertification"
                     }, 
                     {
-                        "name": "direct_normal_irradiation_(dni)", 
+                        "name": "direct_normal_irradiation_dni", 
                         "title": "Direct Normal Irradiation (DNI)"
                     }, 
                     {
@@ -5824,11 +5824,11 @@ vocabularies = [
                         "title": "Emissivity"
                     }, 
                     {
-                        "name": "enhanced_vegetation_index_(evi)", 
+                        "name": "enhanced_vegetation_index_evi", 
                         "title": "Enhanced Vegetation Index (EVI)"
                     }, 
                     {
-                        "name": "erosion_(reefs_sandbars)", 
+                        "name": "erosion_reefs_sandbars", 
                         "title": "Erosion (reefs, sandbars)"
                     }, 
                     {
@@ -5852,7 +5852,7 @@ vocabularies = [
                         "title": "FUNGI"
                     }, 
                     {
-                        "name": "field_cover_(continuous)", 
+                        "name": "field_cover_continuous", 
                         "title": "Field Cover (Continuous)"
                     }, 
                     {
@@ -5880,11 +5880,11 @@ vocabularies = [
                         "title": "Forest Structure"
                     }, 
                     {
-                        "name": "fraction_of_absorbed_photosynthetically_active_radiation_(fapar)", 
+                        "name": "fraction_of_absorbed_photosynthetically_active_radiation_fapar", 
                         "title": "Fraction of Absorbed Photosynthetically Active Radiation (FAPAR)"
                     }, 
                     {
-                        "name": "fraction_of_photosynthetically_active_radiation_(fpar)", 
+                        "name": "fraction_of_photosynthetically_active_radiation_fpar", 
                         "title": "Fraction of Photosynthetically Active Radiation (fPAR)"
                     }, 
                     {
@@ -5928,7 +5928,7 @@ vocabularies = [
                         "title": "Glacier/ice Sheet Extent"
                     }, 
                     {
-                        "name": "global_horizontal_irradiation_(ghi)", 
+                        "name": "global_horizontal_irradiation_ghi", 
                         "title": "Global Horizontal Irradiation (GHI)"
                     }, 
                     {
@@ -6016,7 +6016,7 @@ vocabularies = [
                         "title": "Land Use"
                     }, 
                     {
-                        "name": "leaf_area_index_(lai)", 
+                        "name": "leaf_area_index_lai", 
                         "title": "Leaf Area Index (LAI)"
                     }, 
                     {
@@ -6052,11 +6052,11 @@ vocabularies = [
                         "title": "Non-native species"
                     }, 
                     {
-                        "name": "normalized_difference_vegetation_index_(ndvi)", 
+                        "name": "normalized_difference_vegetation_index_ndvi", 
                         "title": "Normalized Difference Vegetation Index (NDVI)"
                     }, 
                     {
-                        "name": "nutrients_(phosphorous_nitrogen_potassium_nitratessulfates)", 
+                        "name": "nutrients_phosphorous_nitrogen_potassium_nitratessulfates", 
                         "title": "Nutrients (Phosphorous, Nitrogen, Potassium, Nitrates,Sulfates)"
                     }, 
                     {
@@ -6108,7 +6108,7 @@ vocabularies = [
                         "title": "Other long-lived GHGs"
                     }, 
                     {
-                        "name": "outgoing_longwave_radiation_(top_of_atmosphere_)", 
+                        "name": "outgoing_longwave_radiation_top_of_atmosphere_", 
                         "title": "Outgoing Longwave Radiation (Top of Atmosphere )"
                     }, 
                     {
@@ -6136,7 +6136,7 @@ vocabularies = [
                         "title": "Phenology"
                     }, 
                     {
-                        "name": "photosynthetically_active_radiation_(par)", 
+                        "name": "photosynthetically_active_radiation_par", 
                         "title": "Photosynthetically Active Radiation (PAR)"
                     }, 
                     {
@@ -6208,7 +6208,7 @@ vocabularies = [
                         "title": "Sea Ice Cover"
                     }, 
                     {
-                        "name": "sea_ice_surface_(skin)_temperature", 
+                        "name": "sea_ice_surface_skin_temperature", 
                         "title": "Sea Ice Surface (Skin) Temperature"
                     }, 
                     {
@@ -6240,11 +6240,11 @@ vocabularies = [
                         "title": "Snow Depth"
                     }, 
                     {
-                        "name": "snow_water_equivalent_(swe)", 
+                        "name": "snow_water_equivalent_swe", 
                         "title": "Snow Water Equivalent (SWE)"
                     }, 
                     {
-                        "name": "soil_adjusted_vegetation_index_(savi)+c29", 
+                        "name": "soil_adjusted_vegetation_index_savi+c29", 
                         "title": "Soil Adjusted Vegetation Index (SAVI)+C29"
                     }, 
                     {
@@ -6400,11 +6400,11 @@ vocabularies = [
                         "title": "Water Algal Blooms"
                     }, 
                     {
-                        "name": "water_bodies_(location)", 
+                        "name": "water_bodies_location", 
                         "title": "Water Bodies (location)"
                     }, 
                     {
-                        "name": "water_depth_(shallow_near-shore)", 
+                        "name": "water_depth_shallow_near-shore", 
                         "title": "Water Depth (Shallow Near-Shore)"
                     }, 
                     {
@@ -6710,7 +6710,7 @@ vocabularies = [
                         "title": "Beacon"
                     }, 
                     {
-                        "name": "bio-geographic_regions_(bio-geographic_regions)", 
+                        "name": "bio-geographic_regions_bio-geographic_regions", 
                         "title": "Bio-geographic Regions (Bio-geographic Regions)"
                     }, 
                     {
@@ -6854,7 +6854,7 @@ vocabularies = [
                         "title": "Grade Separated Crossing"
                     }, 
                     {
-                        "name": "habitat_(habitats_and_biotopes)", 
+                        "name": "habitat_habitats_and_biotopes", 
                         "title": "Habitat (Habitats and Biotopes)"
                     }, 
                     {
@@ -7070,7 +7070,7 @@ vocabularies = [
                         "title": "Rapids"
                     }, 
                     {
-                        "name": "responsible_agency_(protected_sites)", 
+                        "name": "responsible_agency_protected_sites", 
                         "title": "Responsible Agency (Protected Sites)"
                     }, 
                     {
@@ -7146,11 +7146,11 @@ vocabularies = [
                         "title": "Sluice"
                     }, 
                     {
-                        "name": "species_aggregation_unit_(species_distribution)", 
+                        "name": "species_aggregation_unit_species_distribution", 
                         "title": "Species Aggregation Unit (Species Distribution)"
                     }, 
                     {
-                        "name": "species_distribution_(species_distribution)", 
+                        "name": "species_distribution_species_distribution", 
                         "title": "Species Distribution (Species Distribution)"
                     }, 
                     {
@@ -7424,7 +7424,7 @@ vocabularies = [
                         "title": "craft"
                     }, 
                     {
-                        "name": "culture_(society)", 
+                        "name": "culture_society", 
                         "title": "culture (society)"
                     }, 
                     {
@@ -7592,11 +7592,11 @@ vocabularies = [
                         "title": "land setup"
                     }, 
                     {
-                        "name": "law_(corpus_of_rules)", 
+                        "name": "law_corpus_of_rules", 
                         "title": "law (corpus of rules)"
                     }, 
                     {
-                        "name": "law_(individual)", 
+                        "name": "law_individual", 
                         "title": "law (individual)"
                     }, 
                     {
@@ -7620,7 +7620,7 @@ vocabularies = [
                         "title": "material"
                     }, 
                     {
-                        "name": "medicine_(practice)", 
+                        "name": "medicine_practice", 
                         "title": "medicine (practice)"
                     }, 
                     {
@@ -7736,7 +7736,7 @@ vocabularies = [
                         "title": "society"
                     }, 
                     {
-                        "name": "space_(interplanetary)", 
+                        "name": "space_interplanetary", 
                         "title": "space (interplanetary)"
                     }, 
                     {
@@ -7764,7 +7764,7 @@ vocabularies = [
                         "title": "tourism"
                     }, 
                     {
-                        "name": "trade_(services)", 
+                        "name": "trade_services", 
                         "title": "trade (services)"
                     }, 
                     {
@@ -8110,7 +8110,7 @@ vocabularies = [
                         "title": "Coordinate system"
                     }, 
                     {
-                        "name": "cross_section_(watercourse)", 
+                        "name": "cross_section_watercourse", 
                         "title": "Cross section (watercourse)"
                     }, 
                     {
@@ -8402,11 +8402,11 @@ vocabularies = [
                         "title": "deep water route"
                     }, 
                     {
-                        "name": "discovery_service_(discovery)", 
+                        "name": "discovery_service_discovery", 
                         "title": "discovery service (discovery)"
                     }, 
                     {
-                        "name": "download_service_(download)", 
+                        "name": "download_service_download", 
                         "title": "download service (download)"
                     }, 
                     {
@@ -8510,7 +8510,7 @@ vocabularies = [
                         "title": "interoperable spatial data"
                     }, 
                     {
-                        "name": "invoke_spatial_data_service_(invoke)", 
+                        "name": "invoke_spatial_data_service_invoke", 
                         "title": "invoke spatial data service (invoke)"
                     }, 
                     {
@@ -8666,7 +8666,7 @@ vocabularies = [
                         "title": "ontology"
                     }, 
                     {
-                        "name": "other_service_(service)", 
+                        "name": "other_service_service", 
                         "title": "other service (service)"
                     }, 
                     {
@@ -8786,7 +8786,7 @@ vocabularies = [
                         "title": "transformation"
                     }, 
                     {
-                        "name": "transformation_service_(transformation)", 
+                        "name": "transformation_service_transformation", 
                         "title": "transformation service (transformation)"
                     }, 
                     {
@@ -8814,7 +8814,7 @@ vocabularies = [
                         "title": "version <spatial object>"
                     }, 
                     {
-                        "name": "view_service_(view)", 
+                        "name": "view_service_view", 
                         "title": "view service (view)"
                     }
                 ], 
@@ -8974,15 +8974,15 @@ vocabularies = [
                         "title": "AGRICULTURE, FORESTRY; ANIMAL HUSBANDRY; FISHERY"
                     }, 
                     {
-                        "name": "anthroposphere_(built_environment_human_settlements_land_setup)", 
+                        "name": "anthroposphere_built_environment_human_settlements_land_setup", 
                         "title": "ANTHROPOSPHERE (built environment, human settlements, land setup)"
                     }, 
                     {
-                        "name": "atmosphere_(air_climate)", 
+                        "name": "atmosphere_air_climate", 
                         "title": "ATMOSPHERE (air, climate)"
                     }, 
                     {
-                        "name": "biosphere_(organisms_ecosystems)", 
+                        "name": "biosphere_organisms_ecosystems", 
                         "title": "BIOSPHERE (organisms, ecosystems)"
                     }, 
                     {
@@ -9002,7 +9002,7 @@ vocabularies = [
                         "title": "ENERGY"
                     }, 
                     {
-                        "name": "environment_(natural_environment_anthropic_environment)", 
+                        "name": "environment_natural_environment_anthropic_environment", 
                         "title": "ENVIRONMENT (natural environment, anthropic environment)"
                     }, 
                     {
@@ -9022,7 +9022,7 @@ vocabularies = [
                         "title": "HEALTH, NUTRITION"
                     }, 
                     {
-                        "name": "hydrosphere_(freshwater_marine_water_waters)", 
+                        "name": "hydrosphere_freshwater_marine_water_waters", 
                         "title": "HYDROSPHERE (freshwater, marine water, waters)"
                     }, 
                     {
@@ -9034,7 +9034,7 @@ vocabularies = [
                         "title": "INFORMATION, EDUCATION, CULTURE, ENVIRONMENTAL AWARENESS"
                     }, 
                     {
-                        "name": "land_(landscape_geography)", 
+                        "name": "land_landscape_geography", 
                         "title": "LAND (landscape, geography)"
                     }, 
                     {
@@ -9042,7 +9042,7 @@ vocabularies = [
                         "title": "LEGISLATION, NORMS, CONVENTIONS"
                     }, 
                     {
-                        "name": "lithosphere_(soil_geological_processes)", 
+                        "name": "lithosphere_soil_geological_processes", 
                         "title": "LITHOSPHERE (soil, geological processes)"
                     }, 
                     {
@@ -9062,7 +9062,7 @@ vocabularies = [
                         "title": "RESEARCH, SCIENCES"
                     }, 
                     {
-                        "name": "resources_(utilisation_of_resources)", 
+                        "name": "resources_utilisation_of_resources", 
                         "title": "RESOURCES (utilisation of resources)"
                     }, 
                     {
@@ -9078,7 +9078,7 @@ vocabularies = [
                         "title": "SPACE"
                     }, 
                     {
-                        "name": "time_(chronology)", 
+                        "name": "time_chronology", 
                         "title": "TIME (chronology)"
                     }, 
                     {
@@ -9184,15 +9184,15 @@ vocabularies = [
                         "title": "Ambient Ozone Concentration"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_(fine)_composition", 
+                        "name": "ambient_particulate_matter_fine_composition", 
                         "title": "Ambient Particulate Matter (fine) Composition"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_composition_(coarse)", 
+                        "name": "ambient_particulate_matter_composition_coarse", 
                         "title": "Ambient Particulate Matter Composition (coarse)"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_concentration_(fine)", 
+                        "name": "ambient_particulate_matter_concentration_fine", 
                         "title": "Ambient Particulate Matter Concentration (fine)"
                     }, 
                     {
@@ -9204,7 +9204,7 @@ vocabularies = [
                         "title": "Ambient Volatile Organic Compounds"
                     }, 
                     {
-                        "name": "animal_activity_(range_season_length_migration_patterns)", 
+                        "name": "animal_activity_range_season_length_migration_patterns", 
                         "title": "Animal activity (range, season length, migration patterns)"
                     }, 
                     {
@@ -9260,7 +9260,7 @@ vocabularies = [
                         "title": "CRYOSPHERE"
                     }, 
                     {
-                        "name": "carbon_(stores_uptake_flux)", 
+                        "name": "carbon_stores_uptake_flux", 
                         "title": "Carbon (stores, uptake, flux)"
                     }, 
                     {
@@ -9284,7 +9284,7 @@ vocabularies = [
                         "title": "Cloud Cover"
                     }, 
                     {
-                        "name": "cloud_parameters_(other)", 
+                        "name": "cloud_parameters_other", 
                         "title": "Cloud Parameters (Other)"
                     }, 
                     {
@@ -9300,11 +9300,11 @@ vocabularies = [
                         "title": "Column Ozone Concentration"
                     }, 
                     {
-                        "name": "column_particulate_matter_concentration_(coarse)", 
+                        "name": "column_particulate_matter_concentration_coarse", 
                         "title": "Column Particulate Matter Concentration (coarse)"
                     }, 
                     {
-                        "name": "column_particulate_matter_concentration_(fine)", 
+                        "name": "column_particulate_matter_concentration_fine", 
                         "title": "Column Particulate Matter Concentration (fine)"
                     }, 
                     {
@@ -9312,7 +9312,7 @@ vocabularies = [
                         "title": "Column Sulfur Dioxide Concentration"
                     }, 
                     {
-                        "name": "contaminants/pollutants_(inorganic/organic)", 
+                        "name": "contaminants/pollutants_inorganic/organic", 
                         "title": "Contaminants/Pollutants (Inorganic/Organic)"
                     }, 
                     {
@@ -9352,7 +9352,7 @@ vocabularies = [
                         "title": "Desertification"
                     }, 
                     {
-                        "name": "direct_normal_irradiation_(dni)", 
+                        "name": "direct_normal_irradiation_dni", 
                         "title": "Direct Normal Irradiation (DNI)"
                     }, 
                     {
@@ -9384,11 +9384,11 @@ vocabularies = [
                         "title": "Emissivity"
                     }, 
                     {
-                        "name": "enhanced_vegetation_index_(evi)", 
+                        "name": "enhanced_vegetation_index_evi", 
                         "title": "Enhanced Vegetation Index (EVI)"
                     }, 
                     {
-                        "name": "erosion_(reefs_sandbars)", 
+                        "name": "erosion_reefs_sandbars", 
                         "title": "Erosion (reefs, sandbars)"
                     }, 
                     {
@@ -9412,7 +9412,7 @@ vocabularies = [
                         "title": "FUNGI"
                     }, 
                     {
-                        "name": "field_cover_(continuous)", 
+                        "name": "field_cover_continuous", 
                         "title": "Field Cover (Continuous)"
                     }, 
                     {
@@ -9440,11 +9440,11 @@ vocabularies = [
                         "title": "Forest Structure"
                     }, 
                     {
-                        "name": "fraction_of_absorbed_photosynthetically_active_radiation_(fapar)", 
+                        "name": "fraction_of_absorbed_photosynthetically_active_radiation_fapar", 
                         "title": "Fraction of Absorbed Photosynthetically Active Radiation (FAPAR)"
                     }, 
                     {
-                        "name": "fraction_of_photosynthetically_active_radiation_(fpar)", 
+                        "name": "fraction_of_photosynthetically_active_radiation_fpar", 
                         "title": "Fraction of Photosynthetically Active Radiation (fPAR)"
                     }, 
                     {
@@ -9488,7 +9488,7 @@ vocabularies = [
                         "title": "Glacier/ice Sheet Extent"
                     }, 
                     {
-                        "name": "global_horizontal_irradiation_(ghi)", 
+                        "name": "global_horizontal_irradiation_ghi", 
                         "title": "Global Horizontal Irradiation (GHI)"
                     }, 
                     {
@@ -9576,7 +9576,7 @@ vocabularies = [
                         "title": "Land Use"
                     }, 
                     {
-                        "name": "leaf_area_index_(lai)", 
+                        "name": "leaf_area_index_lai", 
                         "title": "Leaf Area Index (LAI)"
                     }, 
                     {
@@ -9612,11 +9612,11 @@ vocabularies = [
                         "title": "Non-native species"
                     }, 
                     {
-                        "name": "normalized_difference_vegetation_index_(ndvi)", 
+                        "name": "normalized_difference_vegetation_index_ndvi", 
                         "title": "Normalized Difference Vegetation Index (NDVI)"
                     }, 
                     {
-                        "name": "nutrients_(phosphorous_nitrogen_potassium_nitratessulfates)", 
+                        "name": "nutrients_phosphorous_nitrogen_potassium_nitratessulfates", 
                         "title": "Nutrients (Phosphorous, Nitrogen, Potassium, Nitrates,Sulfates)"
                     }, 
                     {
@@ -9668,7 +9668,7 @@ vocabularies = [
                         "title": "Other long-lived GHGs"
                     }, 
                     {
-                        "name": "outgoing_longwave_radiation_(top_of_atmosphere_)", 
+                        "name": "outgoing_longwave_radiation_top_of_atmosphere_", 
                         "title": "Outgoing Longwave Radiation (Top of Atmosphere )"
                     }, 
                     {
@@ -9696,7 +9696,7 @@ vocabularies = [
                         "title": "Phenology"
                     }, 
                     {
-                        "name": "photosynthetically_active_radiation_(par)", 
+                        "name": "photosynthetically_active_radiation_par", 
                         "title": "Photosynthetically Active Radiation (PAR)"
                     }, 
                     {
@@ -9768,7 +9768,7 @@ vocabularies = [
                         "title": "Sea Ice Cover"
                     }, 
                     {
-                        "name": "sea_ice_surface_(skin)_temperature", 
+                        "name": "sea_ice_surface_skin_temperature", 
                         "title": "Sea Ice Surface (Skin) Temperature"
                     }, 
                     {
@@ -9800,11 +9800,11 @@ vocabularies = [
                         "title": "Snow Depth"
                     }, 
                     {
-                        "name": "snow_water_equivalent_(swe)", 
+                        "name": "snow_water_equivalent_swe", 
                         "title": "Snow Water Equivalent (SWE)"
                     }, 
                     {
-                        "name": "soil_adjusted_vegetation_index_(savi)+c29", 
+                        "name": "soil_adjusted_vegetation_index_savi+c29", 
                         "title": "Soil Adjusted Vegetation Index (SAVI)+C29"
                     }, 
                     {
@@ -9960,11 +9960,11 @@ vocabularies = [
                         "title": "Water Algal Blooms"
                     }, 
                     {
-                        "name": "water_bodies_(location)", 
+                        "name": "water_bodies_location", 
                         "title": "Water Bodies (location)"
                     }, 
                     {
-                        "name": "water_depth_(shallow_near-shore)", 
+                        "name": "water_depth_shallow_near-shore", 
                         "title": "Water Depth (Shallow Near-Shore)"
                     }, 
                     {
@@ -10270,7 +10270,7 @@ vocabularies = [
                         "title": "Beacon"
                     }, 
                     {
-                        "name": "bio-geographic_regions_(bio-geographic_regions)", 
+                        "name": "bio-geographic_regions_bio-geographic_regions", 
                         "title": "Bio-geographic Regions (Bio-geographic Regions)"
                     }, 
                     {
@@ -10414,7 +10414,7 @@ vocabularies = [
                         "title": "Grade Separated Crossing"
                     }, 
                     {
-                        "name": "habitat_(habitats_and_biotopes)", 
+                        "name": "habitat_habitats_and_biotopes", 
                         "title": "Habitat (Habitats and Biotopes)"
                     }, 
                     {
@@ -10630,7 +10630,7 @@ vocabularies = [
                         "title": "Rapids"
                     }, 
                     {
-                        "name": "responsible_agency_(protected_sites)", 
+                        "name": "responsible_agency_protected_sites", 
                         "title": "Responsible Agency (Protected Sites)"
                     }, 
                     {
@@ -10706,11 +10706,11 @@ vocabularies = [
                         "title": "Sluice"
                     }, 
                     {
-                        "name": "species_aggregation_unit_(species_distribution)", 
+                        "name": "species_aggregation_unit_species_distribution", 
                         "title": "Species Aggregation Unit (Species Distribution)"
                     }, 
                     {
-                        "name": "species_distribution_(species_distribution)", 
+                        "name": "species_distribution_species_distribution", 
                         "title": "Species Distribution (Species Distribution)"
                     }, 
                     {
@@ -10984,7 +10984,7 @@ vocabularies = [
                         "title": "craft"
                     }, 
                     {
-                        "name": "culture_(society)", 
+                        "name": "culture_society", 
                         "title": "culture (society)"
                     }, 
                     {
@@ -11152,11 +11152,11 @@ vocabularies = [
                         "title": "land setup"
                     }, 
                     {
-                        "name": "law_(corpus_of_rules)", 
+                        "name": "law_corpus_of_rules", 
                         "title": "law (corpus of rules)"
                     }, 
                     {
-                        "name": "law_(individual)", 
+                        "name": "law_individual", 
                         "title": "law (individual)"
                     }, 
                     {
@@ -11180,7 +11180,7 @@ vocabularies = [
                         "title": "material"
                     }, 
                     {
-                        "name": "medicine_(practice)", 
+                        "name": "medicine_practice", 
                         "title": "medicine (practice)"
                     }, 
                     {
@@ -11296,7 +11296,7 @@ vocabularies = [
                         "title": "society"
                     }, 
                     {
-                        "name": "space_(interplanetary)", 
+                        "name": "space_interplanetary", 
                         "title": "space (interplanetary)"
                     }, 
                     {
@@ -11324,7 +11324,7 @@ vocabularies = [
                         "title": "tourism"
                     }, 
                     {
-                        "name": "trade_(services)", 
+                        "name": "trade_services", 
                         "title": "trade (services)"
                     }, 
                     {
@@ -11670,7 +11670,7 @@ vocabularies = [
                         "title": "Coordinate system"
                     }, 
                     {
-                        "name": "cross_section_(watercourse)", 
+                        "name": "cross_section_watercourse", 
                         "title": "Cross section (watercourse)"
                     }, 
                     {
@@ -11962,11 +11962,11 @@ vocabularies = [
                         "title": "deep water route"
                     }, 
                     {
-                        "name": "discovery_service_(discovery)", 
+                        "name": "discovery_service_discovery", 
                         "title": "discovery service (discovery)"
                     }, 
                     {
-                        "name": "download_service_(download)", 
+                        "name": "download_service_download", 
                         "title": "download service (download)"
                     }, 
                     {
@@ -12070,7 +12070,7 @@ vocabularies = [
                         "title": "interoperable spatial data"
                     }, 
                     {
-                        "name": "invoke_spatial_data_service_(invoke)", 
+                        "name": "invoke_spatial_data_service_invoke", 
                         "title": "invoke spatial data service (invoke)"
                     }, 
                     {
@@ -12226,7 +12226,7 @@ vocabularies = [
                         "title": "ontology"
                     }, 
                     {
-                        "name": "other_service_(service)", 
+                        "name": "other_service_service", 
                         "title": "other service (service)"
                     }, 
                     {
@@ -12346,7 +12346,7 @@ vocabularies = [
                         "title": "transformation"
                     }, 
                     {
-                        "name": "transformation_service_(transformation)", 
+                        "name": "transformation_service_transformation", 
                         "title": "transformation service (transformation)"
                     }, 
                     {
@@ -12374,7 +12374,7 @@ vocabularies = [
                         "title": "version <spatial object>"
                     }, 
                     {
-                        "name": "view_service_(view)", 
+                        "name": "view_service_view", 
                         "title": "view service (view)"
                     }
                 ], 
@@ -12534,15 +12534,15 @@ vocabularies = [
                         "title": "AGRICULTURE, FORESTRY; ANIMAL HUSBANDRY; FISHERY"
                     }, 
                     {
-                        "name": "anthroposphere_(built_environment_human_settlements_land_setup)", 
+                        "name": "anthroposphere_built_environment_human_settlements_land_setup", 
                         "title": "ANTHROPOSPHERE (built environment, human settlements, land setup)"
                     }, 
                     {
-                        "name": "atmosphere_(air_climate)", 
+                        "name": "atmosphere_air_climate", 
                         "title": "ATMOSPHERE (air, climate)"
                     }, 
                     {
-                        "name": "biosphere_(organisms_ecosystems)", 
+                        "name": "biosphere_organisms_ecosystems", 
                         "title": "BIOSPHERE (organisms, ecosystems)"
                     }, 
                     {
@@ -12562,7 +12562,7 @@ vocabularies = [
                         "title": "ENERGY"
                     }, 
                     {
-                        "name": "environment_(natural_environment_anthropic_environment)", 
+                        "name": "environment_natural_environment_anthropic_environment", 
                         "title": "ENVIRONMENT (natural environment, anthropic environment)"
                     }, 
                     {
@@ -12582,7 +12582,7 @@ vocabularies = [
                         "title": "HEALTH, NUTRITION"
                     }, 
                     {
-                        "name": "hydrosphere_(freshwater_marine_water_waters)", 
+                        "name": "hydrosphere_freshwater_marine_water_waters", 
                         "title": "HYDROSPHERE (freshwater, marine water, waters)"
                     }, 
                     {
@@ -12594,7 +12594,7 @@ vocabularies = [
                         "title": "INFORMATION, EDUCATION, CULTURE, ENVIRONMENTAL AWARENESS"
                     }, 
                     {
-                        "name": "land_(landscape_geography)", 
+                        "name": "land_landscape_geography", 
                         "title": "LAND (landscape, geography)"
                     }, 
                     {
@@ -12602,7 +12602,7 @@ vocabularies = [
                         "title": "LEGISLATION, NORMS, CONVENTIONS"
                     }, 
                     {
-                        "name": "lithosphere_(soil_geological_processes)", 
+                        "name": "lithosphere_soil_geological_processes", 
                         "title": "LITHOSPHERE (soil, geological processes)"
                     }, 
                     {
@@ -12622,7 +12622,7 @@ vocabularies = [
                         "title": "RESEARCH, SCIENCES"
                     }, 
                     {
-                        "name": "resources_(utilisation_of_resources)", 
+                        "name": "resources_utilisation_of_resources", 
                         "title": "RESOURCES (utilisation of resources)"
                     }, 
                     {
@@ -12638,7 +12638,7 @@ vocabularies = [
                         "title": "SPACE"
                     }, 
                     {
-                        "name": "time_(chronology)", 
+                        "name": "time_chronology", 
                         "title": "TIME (chronology)"
                     }, 
                     {
@@ -12744,15 +12744,15 @@ vocabularies = [
                         "title": "Ambient Ozone Concentration"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_(fine)_composition", 
+                        "name": "ambient_particulate_matter_fine_composition", 
                         "title": "Ambient Particulate Matter (fine) Composition"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_composition_(coarse)", 
+                        "name": "ambient_particulate_matter_composition_coarse", 
                         "title": "Ambient Particulate Matter Composition (coarse)"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_concentration_(fine)", 
+                        "name": "ambient_particulate_matter_concentration_fine", 
                         "title": "Ambient Particulate Matter Concentration (fine)"
                     }, 
                     {
@@ -12764,7 +12764,7 @@ vocabularies = [
                         "title": "Ambient Volatile Organic Compounds"
                     }, 
                     {
-                        "name": "animal_activity_(range_season_length_migration_patterns)", 
+                        "name": "animal_activity_range_season_length_migration_patterns", 
                         "title": "Animal activity (range, season length, migration patterns)"
                     }, 
                     {
@@ -12820,7 +12820,7 @@ vocabularies = [
                         "title": "CRYOSPHERE"
                     }, 
                     {
-                        "name": "carbon_(stores_uptake_flux)", 
+                        "name": "carbon_stores_uptake_flux", 
                         "title": "Carbon (stores, uptake, flux)"
                     }, 
                     {
@@ -12844,7 +12844,7 @@ vocabularies = [
                         "title": "Cloud Cover"
                     }, 
                     {
-                        "name": "cloud_parameters_(other)", 
+                        "name": "cloud_parameters_other", 
                         "title": "Cloud Parameters (Other)"
                     }, 
                     {
@@ -12860,11 +12860,11 @@ vocabularies = [
                         "title": "Column Ozone Concentration"
                     }, 
                     {
-                        "name": "column_particulate_matter_concentration_(coarse)", 
+                        "name": "column_particulate_matter_concentration_coarse", 
                         "title": "Column Particulate Matter Concentration (coarse)"
                     }, 
                     {
-                        "name": "column_particulate_matter_concentration_(fine)", 
+                        "name": "column_particulate_matter_concentration_fine", 
                         "title": "Column Particulate Matter Concentration (fine)"
                     }, 
                     {
@@ -12872,7 +12872,7 @@ vocabularies = [
                         "title": "Column Sulfur Dioxide Concentration"
                     }, 
                     {
-                        "name": "contaminants/pollutants_(inorganic/organic)", 
+                        "name": "contaminants/pollutants_inorganic/organic", 
                         "title": "Contaminants/Pollutants (Inorganic/Organic)"
                     }, 
                     {
@@ -12912,7 +12912,7 @@ vocabularies = [
                         "title": "Desertification"
                     }, 
                     {
-                        "name": "direct_normal_irradiation_(dni)", 
+                        "name": "direct_normal_irradiation_dni", 
                         "title": "Direct Normal Irradiation (DNI)"
                     }, 
                     {
@@ -12944,11 +12944,11 @@ vocabularies = [
                         "title": "Emissivity"
                     }, 
                     {
-                        "name": "enhanced_vegetation_index_(evi)", 
+                        "name": "enhanced_vegetation_index_evi", 
                         "title": "Enhanced Vegetation Index (EVI)"
                     }, 
                     {
-                        "name": "erosion_(reefs_sandbars)", 
+                        "name": "erosion_reefs_sandbars", 
                         "title": "Erosion (reefs, sandbars)"
                     }, 
                     {
@@ -12972,7 +12972,7 @@ vocabularies = [
                         "title": "FUNGI"
                     }, 
                     {
-                        "name": "field_cover_(continuous)", 
+                        "name": "field_cover_continuous", 
                         "title": "Field Cover (Continuous)"
                     }, 
                     {
@@ -13000,11 +13000,11 @@ vocabularies = [
                         "title": "Forest Structure"
                     }, 
                     {
-                        "name": "fraction_of_absorbed_photosynthetically_active_radiation_(fapar)", 
+                        "name": "fraction_of_absorbed_photosynthetically_active_radiation_fapar", 
                         "title": "Fraction of Absorbed Photosynthetically Active Radiation (FAPAR)"
                     }, 
                     {
-                        "name": "fraction_of_photosynthetically_active_radiation_(fpar)", 
+                        "name": "fraction_of_photosynthetically_active_radiation_fpar", 
                         "title": "Fraction of Photosynthetically Active Radiation (fPAR)"
                     }, 
                     {
@@ -13048,7 +13048,7 @@ vocabularies = [
                         "title": "Glacier/ice Sheet Extent"
                     }, 
                     {
-                        "name": "global_horizontal_irradiation_(ghi)", 
+                        "name": "global_horizontal_irradiation_ghi", 
                         "title": "Global Horizontal Irradiation (GHI)"
                     }, 
                     {
@@ -13136,7 +13136,7 @@ vocabularies = [
                         "title": "Land Use"
                     }, 
                     {
-                        "name": "leaf_area_index_(lai)", 
+                        "name": "leaf_area_index_lai", 
                         "title": "Leaf Area Index (LAI)"
                     }, 
                     {
@@ -13172,11 +13172,11 @@ vocabularies = [
                         "title": "Non-native species"
                     }, 
                     {
-                        "name": "normalized_difference_vegetation_index_(ndvi)", 
+                        "name": "normalized_difference_vegetation_index_ndvi", 
                         "title": "Normalized Difference Vegetation Index (NDVI)"
                     }, 
                     {
-                        "name": "nutrients_(phosphorous_nitrogen_potassium_nitratessulfates)", 
+                        "name": "nutrients_phosphorous_nitrogen_potassium_nitratessulfates", 
                         "title": "Nutrients (Phosphorous, Nitrogen, Potassium, Nitrates,Sulfates)"
                     }, 
                     {
@@ -13228,7 +13228,7 @@ vocabularies = [
                         "title": "Other long-lived GHGs"
                     }, 
                     {
-                        "name": "outgoing_longwave_radiation_(top_of_atmosphere_)", 
+                        "name": "outgoing_longwave_radiation_top_of_atmosphere_", 
                         "title": "Outgoing Longwave Radiation (Top of Atmosphere )"
                     }, 
                     {
@@ -13256,7 +13256,7 @@ vocabularies = [
                         "title": "Phenology"
                     }, 
                     {
-                        "name": "photosynthetically_active_radiation_(par)", 
+                        "name": "photosynthetically_active_radiation_par", 
                         "title": "Photosynthetically Active Radiation (PAR)"
                     }, 
                     {
@@ -13328,7 +13328,7 @@ vocabularies = [
                         "title": "Sea Ice Cover"
                     }, 
                     {
-                        "name": "sea_ice_surface_(skin)_temperature", 
+                        "name": "sea_ice_surface_skin_temperature", 
                         "title": "Sea Ice Surface (Skin) Temperature"
                     }, 
                     {
@@ -13360,11 +13360,11 @@ vocabularies = [
                         "title": "Snow Depth"
                     }, 
                     {
-                        "name": "snow_water_equivalent_(swe)", 
+                        "name": "snow_water_equivalent_swe", 
                         "title": "Snow Water Equivalent (SWE)"
                     }, 
                     {
-                        "name": "soil_adjusted_vegetation_index_(savi)+c29", 
+                        "name": "soil_adjusted_vegetation_index_savi+c29", 
                         "title": "Soil Adjusted Vegetation Index (SAVI)+C29"
                     }, 
                     {
@@ -13520,11 +13520,11 @@ vocabularies = [
                         "title": "Water Algal Blooms"
                     }, 
                     {
-                        "name": "water_bodies_(location)", 
+                        "name": "water_bodies_location", 
                         "title": "Water Bodies (location)"
                     }, 
                     {
-                        "name": "water_depth_(shallow_near-shore)", 
+                        "name": "water_depth_shallow_near-shore", 
                         "title": "Water Depth (Shallow Near-Shore)"
                     }, 
                     {
@@ -13830,7 +13830,7 @@ vocabularies = [
                         "title": "Beacon"
                     }, 
                     {
-                        "name": "bio-geographic_regions_(bio-geographic_regions)", 
+                        "name": "bio-geographic_regions_bio-geographic_regions", 
                         "title": "Bio-geographic Regions (Bio-geographic Regions)"
                     }, 
                     {
@@ -13974,7 +13974,7 @@ vocabularies = [
                         "title": "Grade Separated Crossing"
                     }, 
                     {
-                        "name": "habitat_(habitats_and_biotopes)", 
+                        "name": "habitat_habitats_and_biotopes", 
                         "title": "Habitat (Habitats and Biotopes)"
                     }, 
                     {
@@ -14190,7 +14190,7 @@ vocabularies = [
                         "title": "Rapids"
                     }, 
                     {
-                        "name": "responsible_agency_(protected_sites)", 
+                        "name": "responsible_agency_protected_sites", 
                         "title": "Responsible Agency (Protected Sites)"
                     }, 
                     {
@@ -14266,11 +14266,11 @@ vocabularies = [
                         "title": "Sluice"
                     }, 
                     {
-                        "name": "species_aggregation_unit_(species_distribution)", 
+                        "name": "species_aggregation_unit_species_distribution", 
                         "title": "Species Aggregation Unit (Species Distribution)"
                     }, 
                     {
-                        "name": "species_distribution_(species_distribution)", 
+                        "name": "species_distribution_species_distribution", 
                         "title": "Species Distribution (Species Distribution)"
                     }, 
                     {
@@ -14544,7 +14544,7 @@ vocabularies = [
                         "title": "craft"
                     }, 
                     {
-                        "name": "culture_(society)", 
+                        "name": "culture_society", 
                         "title": "culture (society)"
                     }, 
                     {
@@ -14712,11 +14712,11 @@ vocabularies = [
                         "title": "land setup"
                     }, 
                     {
-                        "name": "law_(corpus_of_rules)", 
+                        "name": "law_corpus_of_rules", 
                         "title": "law (corpus of rules)"
                     }, 
                     {
-                        "name": "law_(individual)", 
+                        "name": "law_individual", 
                         "title": "law (individual)"
                     }, 
                     {
@@ -14740,7 +14740,7 @@ vocabularies = [
                         "title": "material"
                     }, 
                     {
-                        "name": "medicine_(practice)", 
+                        "name": "medicine_practice", 
                         "title": "medicine (practice)"
                     }, 
                     {
@@ -14856,7 +14856,7 @@ vocabularies = [
                         "title": "society"
                     }, 
                     {
-                        "name": "space_(interplanetary)", 
+                        "name": "space_interplanetary", 
                         "title": "space (interplanetary)"
                     }, 
                     {
@@ -14884,7 +14884,7 @@ vocabularies = [
                         "title": "tourism"
                     }, 
                     {
-                        "name": "trade_(services)", 
+                        "name": "trade_services", 
                         "title": "trade (services)"
                     }, 
                     {
@@ -15230,7 +15230,7 @@ vocabularies = [
                         "title": "Coordinate system"
                     }, 
                     {
-                        "name": "cross_section_(watercourse)", 
+                        "name": "cross_section_watercourse", 
                         "title": "Cross section (watercourse)"
                     }, 
                     {
@@ -15522,11 +15522,11 @@ vocabularies = [
                         "title": "deep water route"
                     }, 
                     {
-                        "name": "discovery_service_(discovery)", 
+                        "name": "discovery_service_discovery", 
                         "title": "discovery service (discovery)"
                     }, 
                     {
-                        "name": "download_service_(download)", 
+                        "name": "download_service_download", 
                         "title": "download service (download)"
                     }, 
                     {
@@ -15630,7 +15630,7 @@ vocabularies = [
                         "title": "interoperable spatial data"
                     }, 
                     {
-                        "name": "invoke_spatial_data_service_(invoke)", 
+                        "name": "invoke_spatial_data_service_invoke", 
                         "title": "invoke spatial data service (invoke)"
                     }, 
                     {
@@ -15786,7 +15786,7 @@ vocabularies = [
                         "title": "ontology"
                     }, 
                     {
-                        "name": "other_service_(service)", 
+                        "name": "other_service_service", 
                         "title": "other service (service)"
                     }, 
                     {
@@ -15906,7 +15906,7 @@ vocabularies = [
                         "title": "transformation"
                     }, 
                     {
-                        "name": "transformation_service_(transformation)", 
+                        "name": "transformation_service_transformation", 
                         "title": "transformation service (transformation)"
                     }, 
                     {
@@ -15934,7 +15934,7 @@ vocabularies = [
                         "title": "version <spatial object>"
                     }, 
                     {
-                        "name": "view_service_(view)", 
+                        "name": "view_service_view", 
                         "title": "view service (view)"
                     }
                 ], 
@@ -16094,15 +16094,15 @@ vocabularies = [
                         "title": "AGRICULTURE, FORESTRY; ANIMAL HUSBANDRY; FISHERY"
                     }, 
                     {
-                        "name": "anthroposphere_(built_environment_human_settlements_land_setup)", 
+                        "name": "anthroposphere_built_environment_human_settlements_land_setup", 
                         "title": "ANTHROPOSPHERE (built environment, human settlements, land setup)"
                     }, 
                     {
-                        "name": "atmosphere_(air_climate)", 
+                        "name": "atmosphere_air_climate", 
                         "title": "ATMOSPHERE (air, climate)"
                     }, 
                     {
-                        "name": "biosphere_(organisms_ecosystems)", 
+                        "name": "biosphere_organisms_ecosystems", 
                         "title": "BIOSPHERE (organisms, ecosystems)"
                     }, 
                     {
@@ -16122,7 +16122,7 @@ vocabularies = [
                         "title": "ENERGY"
                     }, 
                     {
-                        "name": "environment_(natural_environment_anthropic_environment)", 
+                        "name": "environment_natural_environment_anthropic_environment", 
                         "title": "ENVIRONMENT (natural environment, anthropic environment)"
                     }, 
                     {
@@ -16142,7 +16142,7 @@ vocabularies = [
                         "title": "HEALTH, NUTRITION"
                     }, 
                     {
-                        "name": "hydrosphere_(freshwater_marine_water_waters)", 
+                        "name": "hydrosphere_freshwater_marine_water_waters", 
                         "title": "HYDROSPHERE (freshwater, marine water, waters)"
                     }, 
                     {
@@ -16154,7 +16154,7 @@ vocabularies = [
                         "title": "INFORMATION, EDUCATION, CULTURE, ENVIRONMENTAL AWARENESS"
                     }, 
                     {
-                        "name": "land_(landscape_geography)", 
+                        "name": "land_landscape_geography", 
                         "title": "LAND (landscape, geography)"
                     }, 
                     {
@@ -16162,7 +16162,7 @@ vocabularies = [
                         "title": "LEGISLATION, NORMS, CONVENTIONS"
                     }, 
                     {
-                        "name": "lithosphere_(soil_geological_processes)", 
+                        "name": "lithosphere_soil_geological_processes", 
                         "title": "LITHOSPHERE (soil, geological processes)"
                     }, 
                     {
@@ -16182,7 +16182,7 @@ vocabularies = [
                         "title": "RESEARCH, SCIENCES"
                     }, 
                     {
-                        "name": "resources_(utilisation_of_resources)", 
+                        "name": "resources_utilisation_of_resources", 
                         "title": "RESOURCES (utilisation of resources)"
                     }, 
                     {
@@ -16198,7 +16198,7 @@ vocabularies = [
                         "title": "SPACE"
                     }, 
                     {
-                        "name": "time_(chronology)", 
+                        "name": "time_chronology", 
                         "title": "TIME (chronology)"
                     }, 
                     {
@@ -16304,15 +16304,15 @@ vocabularies = [
                         "title": "Ambient Ozone Concentration"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_(fine)_composition", 
+                        "name": "ambient_particulate_matter_fine_composition", 
                         "title": "Ambient Particulate Matter (fine) Composition"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_composition_(coarse)", 
+                        "name": "ambient_particulate_matter_composition_coarse", 
                         "title": "Ambient Particulate Matter Composition (coarse)"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_concentration_(fine)", 
+                        "name": "ambient_particulate_matter_concentration_fine", 
                         "title": "Ambient Particulate Matter Concentration (fine)"
                     }, 
                     {
@@ -16324,7 +16324,7 @@ vocabularies = [
                         "title": "Ambient Volatile Organic Compounds"
                     }, 
                     {
-                        "name": "animal_activity_(range_season_length_migration_patterns)", 
+                        "name": "animal_activity_range_season_length_migration_patterns", 
                         "title": "Animal activity (range, season length, migration patterns)"
                     }, 
                     {
@@ -16380,7 +16380,7 @@ vocabularies = [
                         "title": "CRYOSPHERE"
                     }, 
                     {
-                        "name": "carbon_(stores_uptake_flux)", 
+                        "name": "carbon_stores_uptake_flux", 
                         "title": "Carbon (stores, uptake, flux)"
                     }, 
                     {
@@ -16404,7 +16404,7 @@ vocabularies = [
                         "title": "Cloud Cover"
                     }, 
                     {
-                        "name": "cloud_parameters_(other)", 
+                        "name": "cloud_parameters_other", 
                         "title": "Cloud Parameters (Other)"
                     }, 
                     {
@@ -16420,11 +16420,11 @@ vocabularies = [
                         "title": "Column Ozone Concentration"
                     }, 
                     {
-                        "name": "column_particulate_matter_concentration_(coarse)", 
+                        "name": "column_particulate_matter_concentration_coarse", 
                         "title": "Column Particulate Matter Concentration (coarse)"
                     }, 
                     {
-                        "name": "column_particulate_matter_concentration_(fine)", 
+                        "name": "column_particulate_matter_concentration_fine", 
                         "title": "Column Particulate Matter Concentration (fine)"
                     }, 
                     {
@@ -16432,7 +16432,7 @@ vocabularies = [
                         "title": "Column Sulfur Dioxide Concentration"
                     }, 
                     {
-                        "name": "contaminants/pollutants_(inorganic/organic)", 
+                        "name": "contaminants/pollutants_inorganic/organic", 
                         "title": "Contaminants/Pollutants (Inorganic/Organic)"
                     }, 
                     {
@@ -16472,7 +16472,7 @@ vocabularies = [
                         "title": "Desertification"
                     }, 
                     {
-                        "name": "direct_normal_irradiation_(dni)", 
+                        "name": "direct_normal_irradiation_dni", 
                         "title": "Direct Normal Irradiation (DNI)"
                     }, 
                     {
@@ -16504,11 +16504,11 @@ vocabularies = [
                         "title": "Emissivity"
                     }, 
                     {
-                        "name": "enhanced_vegetation_index_(evi)", 
+                        "name": "enhanced_vegetation_index_evi", 
                         "title": "Enhanced Vegetation Index (EVI)"
                     }, 
                     {
-                        "name": "erosion_(reefs_sandbars)", 
+                        "name": "erosion_reefs_sandbars", 
                         "title": "Erosion (reefs, sandbars)"
                     }, 
                     {
@@ -16532,7 +16532,7 @@ vocabularies = [
                         "title": "FUNGI"
                     }, 
                     {
-                        "name": "field_cover_(continuous)", 
+                        "name": "field_cover_continuous", 
                         "title": "Field Cover (Continuous)"
                     }, 
                     {
@@ -16560,11 +16560,11 @@ vocabularies = [
                         "title": "Forest Structure"
                     }, 
                     {
-                        "name": "fraction_of_absorbed_photosynthetically_active_radiation_(fapar)", 
+                        "name": "fraction_of_absorbed_photosynthetically_active_radiation_fapar", 
                         "title": "Fraction of Absorbed Photosynthetically Active Radiation (FAPAR)"
                     }, 
                     {
-                        "name": "fraction_of_photosynthetically_active_radiation_(fpar)", 
+                        "name": "fraction_of_photosynthetically_active_radiation_fpar", 
                         "title": "Fraction of Photosynthetically Active Radiation (fPAR)"
                     }, 
                     {
@@ -16608,7 +16608,7 @@ vocabularies = [
                         "title": "Glacier/ice Sheet Extent"
                     }, 
                     {
-                        "name": "global_horizontal_irradiation_(ghi)", 
+                        "name": "global_horizontal_irradiation_ghi", 
                         "title": "Global Horizontal Irradiation (GHI)"
                     }, 
                     {
@@ -16696,7 +16696,7 @@ vocabularies = [
                         "title": "Land Use"
                     }, 
                     {
-                        "name": "leaf_area_index_(lai)", 
+                        "name": "leaf_area_index_lai", 
                         "title": "Leaf Area Index (LAI)"
                     }, 
                     {
@@ -16732,11 +16732,11 @@ vocabularies = [
                         "title": "Non-native species"
                     }, 
                     {
-                        "name": "normalized_difference_vegetation_index_(ndvi)", 
+                        "name": "normalized_difference_vegetation_index_ndvi", 
                         "title": "Normalized Difference Vegetation Index (NDVI)"
                     }, 
                     {
-                        "name": "nutrients_(phosphorous_nitrogen_potassium_nitratessulfates)", 
+                        "name": "nutrients_phosphorous_nitrogen_potassium_nitratessulfates", 
                         "title": "Nutrients (Phosphorous, Nitrogen, Potassium, Nitrates,Sulfates)"
                     }, 
                     {
@@ -16788,7 +16788,7 @@ vocabularies = [
                         "title": "Other long-lived GHGs"
                     }, 
                     {
-                        "name": "outgoing_longwave_radiation_(top_of_atmosphere_)", 
+                        "name": "outgoing_longwave_radiation_top_of_atmosphere_", 
                         "title": "Outgoing Longwave Radiation (Top of Atmosphere )"
                     }, 
                     {
@@ -16816,7 +16816,7 @@ vocabularies = [
                         "title": "Phenology"
                     }, 
                     {
-                        "name": "photosynthetically_active_radiation_(par)", 
+                        "name": "photosynthetically_active_radiation_par", 
                         "title": "Photosynthetically Active Radiation (PAR)"
                     }, 
                     {
@@ -16888,7 +16888,7 @@ vocabularies = [
                         "title": "Sea Ice Cover"
                     }, 
                     {
-                        "name": "sea_ice_surface_(skin)_temperature", 
+                        "name": "sea_ice_surface_skin_temperature", 
                         "title": "Sea Ice Surface (Skin) Temperature"
                     }, 
                     {
@@ -16920,11 +16920,11 @@ vocabularies = [
                         "title": "Snow Depth"
                     }, 
                     {
-                        "name": "snow_water_equivalent_(swe)", 
+                        "name": "snow_water_equivalent_swe", 
                         "title": "Snow Water Equivalent (SWE)"
                     }, 
                     {
-                        "name": "soil_adjusted_vegetation_index_(savi)+c29", 
+                        "name": "soil_adjusted_vegetation_index_savi+c29", 
                         "title": "Soil Adjusted Vegetation Index (SAVI)+C29"
                     }, 
                     {
@@ -17080,11 +17080,11 @@ vocabularies = [
                         "title": "Water Algal Blooms"
                     }, 
                     {
-                        "name": "water_bodies_(location)", 
+                        "name": "water_bodies_location", 
                         "title": "Water Bodies (location)"
                     }, 
                     {
-                        "name": "water_depth_(shallow_near-shore)", 
+                        "name": "water_depth_shallow_near-shore", 
                         "title": "Water Depth (Shallow Near-Shore)"
                     }, 
                     {
@@ -17390,7 +17390,7 @@ vocabularies = [
                         "title": "Beacon"
                     }, 
                     {
-                        "name": "bio-geographic_regions_(bio-geographic_regions)", 
+                        "name": "bio-geographic_regions_bio-geographic_regions", 
                         "title": "Bio-geographic Regions (Bio-geographic Regions)"
                     }, 
                     {
@@ -17534,7 +17534,7 @@ vocabularies = [
                         "title": "Grade Separated Crossing"
                     }, 
                     {
-                        "name": "habitat_(habitats_and_biotopes)", 
+                        "name": "habitat_habitats_and_biotopes", 
                         "title": "Habitat (Habitats and Biotopes)"
                     }, 
                     {
@@ -17750,7 +17750,7 @@ vocabularies = [
                         "title": "Rapids"
                     }, 
                     {
-                        "name": "responsible_agency_(protected_sites)", 
+                        "name": "responsible_agency_protected_sites", 
                         "title": "Responsible Agency (Protected Sites)"
                     }, 
                     {
@@ -17826,11 +17826,11 @@ vocabularies = [
                         "title": "Sluice"
                     }, 
                     {
-                        "name": "species_aggregation_unit_(species_distribution)", 
+                        "name": "species_aggregation_unit_species_distribution", 
                         "title": "Species Aggregation Unit (Species Distribution)"
                     }, 
                     {
-                        "name": "species_distribution_(species_distribution)", 
+                        "name": "species_distribution_species_distribution", 
                         "title": "Species Distribution (Species Distribution)"
                     }, 
                     {
@@ -18104,7 +18104,7 @@ vocabularies = [
                         "title": "craft"
                     }, 
                     {
-                        "name": "culture_(society)", 
+                        "name": "culture_society", 
                         "title": "culture (society)"
                     }, 
                     {
@@ -18272,11 +18272,11 @@ vocabularies = [
                         "title": "land setup"
                     }, 
                     {
-                        "name": "law_(corpus_of_rules)", 
+                        "name": "law_corpus_of_rules", 
                         "title": "law (corpus of rules)"
                     }, 
                     {
-                        "name": "law_(individual)", 
+                        "name": "law_individual", 
                         "title": "law (individual)"
                     }, 
                     {
@@ -18300,7 +18300,7 @@ vocabularies = [
                         "title": "material"
                     }, 
                     {
-                        "name": "medicine_(practice)", 
+                        "name": "medicine_practice", 
                         "title": "medicine (practice)"
                     }, 
                     {
@@ -18416,7 +18416,7 @@ vocabularies = [
                         "title": "society"
                     }, 
                     {
-                        "name": "space_(interplanetary)", 
+                        "name": "space_interplanetary", 
                         "title": "space (interplanetary)"
                     }, 
                     {
@@ -18444,7 +18444,7 @@ vocabularies = [
                         "title": "tourism"
                     }, 
                     {
-                        "name": "trade_(services)", 
+                        "name": "trade_services", 
                         "title": "trade (services)"
                     }, 
                     {
@@ -18790,7 +18790,7 @@ vocabularies = [
                         "title": "Coordinate system"
                     }, 
                     {
-                        "name": "cross_section_(watercourse)", 
+                        "name": "cross_section_watercourse", 
                         "title": "Cross section (watercourse)"
                     }, 
                     {
@@ -19082,11 +19082,11 @@ vocabularies = [
                         "title": "deep water route"
                     }, 
                     {
-                        "name": "discovery_service_(discovery)", 
+                        "name": "discovery_service_discovery", 
                         "title": "discovery service (discovery)"
                     }, 
                     {
-                        "name": "download_service_(download)", 
+                        "name": "download_service_download", 
                         "title": "download service (download)"
                     }, 
                     {
@@ -19190,7 +19190,7 @@ vocabularies = [
                         "title": "interoperable spatial data"
                     }, 
                     {
-                        "name": "invoke_spatial_data_service_(invoke)", 
+                        "name": "invoke_spatial_data_service_invoke", 
                         "title": "invoke spatial data service (invoke)"
                     }, 
                     {
@@ -19346,7 +19346,7 @@ vocabularies = [
                         "title": "ontology"
                     }, 
                     {
-                        "name": "other_service_(service)", 
+                        "name": "other_service_service", 
                         "title": "other service (service)"
                     }, 
                     {
@@ -19466,7 +19466,7 @@ vocabularies = [
                         "title": "transformation"
                     }, 
                     {
-                        "name": "transformation_service_(transformation)", 
+                        "name": "transformation_service_transformation", 
                         "title": "transformation service (transformation)"
                     }, 
                     {
@@ -19494,7 +19494,7 @@ vocabularies = [
                         "title": "version <spatial object>"
                     }, 
                     {
-                        "name": "view_service_(view)", 
+                        "name": "view_service_view", 
                         "title": "view service (view)"
                     }
                 ], 
@@ -19654,15 +19654,15 @@ vocabularies = [
                         "title": "AGRICULTURE, FORESTRY; ANIMAL HUSBANDRY; FISHERY"
                     }, 
                     {
-                        "name": "anthroposphere_(built_environment_human_settlements_land_setup)", 
+                        "name": "anthroposphere_built_environment_human_settlements_land_setup", 
                         "title": "ANTHROPOSPHERE (built environment, human settlements, land setup)"
                     }, 
                     {
-                        "name": "atmosphere_(air_climate)", 
+                        "name": "atmosphere_air_climate", 
                         "title": "ATMOSPHERE (air, climate)"
                     }, 
                     {
-                        "name": "biosphere_(organisms_ecosystems)", 
+                        "name": "biosphere_organisms_ecosystems", 
                         "title": "BIOSPHERE (organisms, ecosystems)"
                     }, 
                     {
@@ -19682,7 +19682,7 @@ vocabularies = [
                         "title": "ENERGY"
                     }, 
                     {
-                        "name": "environment_(natural_environment_anthropic_environment)", 
+                        "name": "environment_natural_environment_anthropic_environment", 
                         "title": "ENVIRONMENT (natural environment, anthropic environment)"
                     }, 
                     {
@@ -19702,7 +19702,7 @@ vocabularies = [
                         "title": "HEALTH, NUTRITION"
                     }, 
                     {
-                        "name": "hydrosphere_(freshwater_marine_water_waters)", 
+                        "name": "hydrosphere_freshwater_marine_water_waters", 
                         "title": "HYDROSPHERE (freshwater, marine water, waters)"
                     }, 
                     {
@@ -19714,7 +19714,7 @@ vocabularies = [
                         "title": "INFORMATION, EDUCATION, CULTURE, ENVIRONMENTAL AWARENESS"
                     }, 
                     {
-                        "name": "land_(landscape_geography)", 
+                        "name": "land_landscape_geography", 
                         "title": "LAND (landscape, geography)"
                     }, 
                     {
@@ -19722,7 +19722,7 @@ vocabularies = [
                         "title": "LEGISLATION, NORMS, CONVENTIONS"
                     }, 
                     {
-                        "name": "lithosphere_(soil_geological_processes)", 
+                        "name": "lithosphere_soil_geological_processes", 
                         "title": "LITHOSPHERE (soil, geological processes)"
                     }, 
                     {
@@ -19742,7 +19742,7 @@ vocabularies = [
                         "title": "RESEARCH, SCIENCES"
                     }, 
                     {
-                        "name": "resources_(utilisation_of_resources)", 
+                        "name": "resources_utilisation_of_resources", 
                         "title": "RESOURCES (utilisation of resources)"
                     }, 
                     {
@@ -19758,7 +19758,7 @@ vocabularies = [
                         "title": "SPACE"
                     }, 
                     {
-                        "name": "time_(chronology)", 
+                        "name": "time_chronology", 
                         "title": "TIME (chronology)"
                     }, 
                     {
@@ -19864,15 +19864,15 @@ vocabularies = [
                         "title": "Ambient Ozone Concentration"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_(fine)_composition", 
+                        "name": "ambient_particulate_matter_fine_composition", 
                         "title": "Ambient Particulate Matter (fine) Composition"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_composition_(coarse)", 
+                        "name": "ambient_particulate_matter_composition_coarse", 
                         "title": "Ambient Particulate Matter Composition (coarse)"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_concentration_(fine)", 
+                        "name": "ambient_particulate_matter_concentration_fine", 
                         "title": "Ambient Particulate Matter Concentration (fine)"
                     }, 
                     {
@@ -19884,7 +19884,7 @@ vocabularies = [
                         "title": "Ambient Volatile Organic Compounds"
                     }, 
                     {
-                        "name": "animal_activity_(range_season_length_migration_patterns)", 
+                        "name": "animal_activity_range_season_length_migration_patterns", 
                         "title": "Animal activity (range, season length, migration patterns)"
                     }, 
                     {
@@ -19940,7 +19940,7 @@ vocabularies = [
                         "title": "CRYOSPHERE"
                     }, 
                     {
-                        "name": "carbon_(stores_uptake_flux)", 
+                        "name": "carbon_stores_uptake_flux", 
                         "title": "Carbon (stores, uptake, flux)"
                     }, 
                     {
@@ -19964,7 +19964,7 @@ vocabularies = [
                         "title": "Cloud Cover"
                     }, 
                     {
-                        "name": "cloud_parameters_(other)", 
+                        "name": "cloud_parameters_other", 
                         "title": "Cloud Parameters (Other)"
                     }, 
                     {
@@ -19980,11 +19980,11 @@ vocabularies = [
                         "title": "Column Ozone Concentration"
                     }, 
                     {
-                        "name": "column_particulate_matter_concentration_(coarse)", 
+                        "name": "column_particulate_matter_concentration_coarse", 
                         "title": "Column Particulate Matter Concentration (coarse)"
                     }, 
                     {
-                        "name": "column_particulate_matter_concentration_(fine)", 
+                        "name": "column_particulate_matter_concentration_fine", 
                         "title": "Column Particulate Matter Concentration (fine)"
                     }, 
                     {
@@ -19992,7 +19992,7 @@ vocabularies = [
                         "title": "Column Sulfur Dioxide Concentration"
                     }, 
                     {
-                        "name": "contaminants/pollutants_(inorganic/organic)", 
+                        "name": "contaminants/pollutants_inorganic/organic", 
                         "title": "Contaminants/Pollutants (Inorganic/Organic)"
                     }, 
                     {
@@ -20032,7 +20032,7 @@ vocabularies = [
                         "title": "Desertification"
                     }, 
                     {
-                        "name": "direct_normal_irradiation_(dni)", 
+                        "name": "direct_normal_irradiation_dni", 
                         "title": "Direct Normal Irradiation (DNI)"
                     }, 
                     {
@@ -20064,11 +20064,11 @@ vocabularies = [
                         "title": "Emissivity"
                     }, 
                     {
-                        "name": "enhanced_vegetation_index_(evi)", 
+                        "name": "enhanced_vegetation_index_evi", 
                         "title": "Enhanced Vegetation Index (EVI)"
                     }, 
                     {
-                        "name": "erosion_(reefs_sandbars)", 
+                        "name": "erosion_reefs_sandbars", 
                         "title": "Erosion (reefs, sandbars)"
                     }, 
                     {
@@ -20092,7 +20092,7 @@ vocabularies = [
                         "title": "FUNGI"
                     }, 
                     {
-                        "name": "field_cover_(continuous)", 
+                        "name": "field_cover_continuous", 
                         "title": "Field Cover (Continuous)"
                     }, 
                     {
@@ -20120,11 +20120,11 @@ vocabularies = [
                         "title": "Forest Structure"
                     }, 
                     {
-                        "name": "fraction_of_absorbed_photosynthetically_active_radiation_(fapar)", 
+                        "name": "fraction_of_absorbed_photosynthetically_active_radiation_fapar", 
                         "title": "Fraction of Absorbed Photosynthetically Active Radiation (FAPAR)"
                     }, 
                     {
-                        "name": "fraction_of_photosynthetically_active_radiation_(fpar)", 
+                        "name": "fraction_of_photosynthetically_active_radiation_fpar", 
                         "title": "Fraction of Photosynthetically Active Radiation (fPAR)"
                     }, 
                     {
@@ -20168,7 +20168,7 @@ vocabularies = [
                         "title": "Glacier/ice Sheet Extent"
                     }, 
                     {
-                        "name": "global_horizontal_irradiation_(ghi)", 
+                        "name": "global_horizontal_irradiation_ghi", 
                         "title": "Global Horizontal Irradiation (GHI)"
                     }, 
                     {
@@ -20256,7 +20256,7 @@ vocabularies = [
                         "title": "Land Use"
                     }, 
                     {
-                        "name": "leaf_area_index_(lai)", 
+                        "name": "leaf_area_index_lai", 
                         "title": "Leaf Area Index (LAI)"
                     }, 
                     {
@@ -20292,11 +20292,11 @@ vocabularies = [
                         "title": "Non-native species"
                     }, 
                     {
-                        "name": "normalized_difference_vegetation_index_(ndvi)", 
+                        "name": "normalized_difference_vegetation_index_ndvi", 
                         "title": "Normalized Difference Vegetation Index (NDVI)"
                     }, 
                     {
-                        "name": "nutrients_(phosphorous_nitrogen_potassium_nitratessulfates)", 
+                        "name": "nutrients_phosphorous_nitrogen_potassium_nitratessulfates", 
                         "title": "Nutrients (Phosphorous, Nitrogen, Potassium, Nitrates,Sulfates)"
                     }, 
                     {
@@ -20348,7 +20348,7 @@ vocabularies = [
                         "title": "Other long-lived GHGs"
                     }, 
                     {
-                        "name": "outgoing_longwave_radiation_(top_of_atmosphere_)", 
+                        "name": "outgoing_longwave_radiation_top_of_atmosphere_", 
                         "title": "Outgoing Longwave Radiation (Top of Atmosphere )"
                     }, 
                     {
@@ -20376,7 +20376,7 @@ vocabularies = [
                         "title": "Phenology"
                     }, 
                     {
-                        "name": "photosynthetically_active_radiation_(par)", 
+                        "name": "photosynthetically_active_radiation_par", 
                         "title": "Photosynthetically Active Radiation (PAR)"
                     }, 
                     {
@@ -20448,7 +20448,7 @@ vocabularies = [
                         "title": "Sea Ice Cover"
                     }, 
                     {
-                        "name": "sea_ice_surface_(skin)_temperature", 
+                        "name": "sea_ice_surface_skin_temperature", 
                         "title": "Sea Ice Surface (Skin) Temperature"
                     }, 
                     {
@@ -20480,11 +20480,11 @@ vocabularies = [
                         "title": "Snow Depth"
                     }, 
                     {
-                        "name": "snow_water_equivalent_(swe)", 
+                        "name": "snow_water_equivalent_swe", 
                         "title": "Snow Water Equivalent (SWE)"
                     }, 
                     {
-                        "name": "soil_adjusted_vegetation_index_(savi)+c29", 
+                        "name": "soil_adjusted_vegetation_index_savi+c29", 
                         "title": "Soil Adjusted Vegetation Index (SAVI)+C29"
                     }, 
                     {
@@ -20640,11 +20640,11 @@ vocabularies = [
                         "title": "Water Algal Blooms"
                     }, 
                     {
-                        "name": "water_bodies_(location)", 
+                        "name": "water_bodies_location", 
                         "title": "Water Bodies (location)"
                     }, 
                     {
-                        "name": "water_depth_(shallow_near-shore)", 
+                        "name": "water_depth_shallow_near-shore", 
                         "title": "Water Depth (Shallow Near-Shore)"
                     }, 
                     {
@@ -20950,7 +20950,7 @@ vocabularies = [
                         "title": "Beacon"
                     }, 
                     {
-                        "name": "bio-geographic_regions_(bio-geographic_regions)", 
+                        "name": "bio-geographic_regions_bio-geographic_regions", 
                         "title": "Bio-geographic Regions (Bio-geographic Regions)"
                     }, 
                     {
@@ -21094,7 +21094,7 @@ vocabularies = [
                         "title": "Grade Separated Crossing"
                     }, 
                     {
-                        "name": "habitat_(habitats_and_biotopes)", 
+                        "name": "habitat_habitats_and_biotopes", 
                         "title": "Habitat (Habitats and Biotopes)"
                     }, 
                     {
@@ -21310,7 +21310,7 @@ vocabularies = [
                         "title": "Rapids"
                     }, 
                     {
-                        "name": "responsible_agency_(protected_sites)", 
+                        "name": "responsible_agency_protected_sites", 
                         "title": "Responsible Agency (Protected Sites)"
                     }, 
                     {
@@ -21386,11 +21386,11 @@ vocabularies = [
                         "title": "Sluice"
                     }, 
                     {
-                        "name": "species_aggregation_unit_(species_distribution)", 
+                        "name": "species_aggregation_unit_species_distribution", 
                         "title": "Species Aggregation Unit (Species Distribution)"
                     }, 
                     {
-                        "name": "species_distribution_(species_distribution)", 
+                        "name": "species_distribution_species_distribution", 
                         "title": "Species Distribution (Species Distribution)"
                     }, 
                     {
@@ -21664,7 +21664,7 @@ vocabularies = [
                         "title": "craft"
                     }, 
                     {
-                        "name": "culture_(society)", 
+                        "name": "culture_society", 
                         "title": "culture (society)"
                     }, 
                     {
@@ -21832,11 +21832,11 @@ vocabularies = [
                         "title": "land setup"
                     }, 
                     {
-                        "name": "law_(corpus_of_rules)", 
+                        "name": "law_corpus_of_rules", 
                         "title": "law (corpus of rules)"
                     }, 
                     {
-                        "name": "law_(individual)", 
+                        "name": "law_individual", 
                         "title": "law (individual)"
                     }, 
                     {
@@ -21860,7 +21860,7 @@ vocabularies = [
                         "title": "material"
                     }, 
                     {
-                        "name": "medicine_(practice)", 
+                        "name": "medicine_practice", 
                         "title": "medicine (practice)"
                     }, 
                     {
@@ -21976,7 +21976,7 @@ vocabularies = [
                         "title": "society"
                     }, 
                     {
-                        "name": "space_(interplanetary)", 
+                        "name": "space_interplanetary", 
                         "title": "space (interplanetary)"
                     }, 
                     {
@@ -22004,7 +22004,7 @@ vocabularies = [
                         "title": "tourism"
                     }, 
                     {
-                        "name": "trade_(services)", 
+                        "name": "trade_services", 
                         "title": "trade (services)"
                     }, 
                     {
@@ -22350,7 +22350,7 @@ vocabularies = [
                         "title": "Coordinate system"
                     }, 
                     {
-                        "name": "cross_section_(watercourse)", 
+                        "name": "cross_section_watercourse", 
                         "title": "Cross section (watercourse)"
                     }, 
                     {
@@ -22642,11 +22642,11 @@ vocabularies = [
                         "title": "deep water route"
                     }, 
                     {
-                        "name": "discovery_service_(discovery)", 
+                        "name": "discovery_service_discovery", 
                         "title": "discovery service (discovery)"
                     }, 
                     {
-                        "name": "download_service_(download)", 
+                        "name": "download_service_download", 
                         "title": "download service (download)"
                     }, 
                     {
@@ -22750,7 +22750,7 @@ vocabularies = [
                         "title": "interoperable spatial data"
                     }, 
                     {
-                        "name": "invoke_spatial_data_service_(invoke)", 
+                        "name": "invoke_spatial_data_service_invoke", 
                         "title": "invoke spatial data service (invoke)"
                     }, 
                     {
@@ -22906,7 +22906,7 @@ vocabularies = [
                         "title": "ontology"
                     }, 
                     {
-                        "name": "other_service_(service)", 
+                        "name": "other_service_service", 
                         "title": "other service (service)"
                     }, 
                     {
@@ -23026,7 +23026,7 @@ vocabularies = [
                         "title": "transformation"
                     }, 
                     {
-                        "name": "transformation_service_(transformation)", 
+                        "name": "transformation_service_transformation", 
                         "title": "transformation service (transformation)"
                     }, 
                     {
@@ -23054,7 +23054,7 @@ vocabularies = [
                         "title": "version <spatial object>"
                     }, 
                     {
-                        "name": "view_service_(view)", 
+                        "name": "view_service_view", 
                         "title": "view service (view)"
                     }
                 ], 
@@ -23214,15 +23214,15 @@ vocabularies = [
                         "title": "AGRICULTURE, FORESTRY; ANIMAL HUSBANDRY; FISHERY"
                     }, 
                     {
-                        "name": "anthroposphere_(built_environment_human_settlements_land_setup)", 
+                        "name": "anthroposphere_built_environment_human_settlements_land_setup", 
                         "title": "ANTHROPOSPHERE (built environment, human settlements, land setup)"
                     }, 
                     {
-                        "name": "atmosphere_(air_climate)", 
+                        "name": "atmosphere_air_climate", 
                         "title": "ATMOSPHERE (air, climate)"
                     }, 
                     {
-                        "name": "biosphere_(organisms_ecosystems)", 
+                        "name": "biosphere_organisms_ecosystems", 
                         "title": "BIOSPHERE (organisms, ecosystems)"
                     }, 
                     {
@@ -23242,7 +23242,7 @@ vocabularies = [
                         "title": "ENERGY"
                     }, 
                     {
-                        "name": "environment_(natural_environment_anthropic_environment)", 
+                        "name": "environment_natural_environment_anthropic_environment", 
                         "title": "ENVIRONMENT (natural environment, anthropic environment)"
                     }, 
                     {
@@ -23262,7 +23262,7 @@ vocabularies = [
                         "title": "HEALTH, NUTRITION"
                     }, 
                     {
-                        "name": "hydrosphere_(freshwater_marine_water_waters)", 
+                        "name": "hydrosphere_freshwater_marine_water_waters", 
                         "title": "HYDROSPHERE (freshwater, marine water, waters)"
                     }, 
                     {
@@ -23274,7 +23274,7 @@ vocabularies = [
                         "title": "INFORMATION, EDUCATION, CULTURE, ENVIRONMENTAL AWARENESS"
                     }, 
                     {
-                        "name": "land_(landscape_geography)", 
+                        "name": "land_landscape_geography", 
                         "title": "LAND (landscape, geography)"
                     }, 
                     {
@@ -23282,7 +23282,7 @@ vocabularies = [
                         "title": "LEGISLATION, NORMS, CONVENTIONS"
                     }, 
                     {
-                        "name": "lithosphere_(soil_geological_processes)", 
+                        "name": "lithosphere_soil_geological_processes", 
                         "title": "LITHOSPHERE (soil, geological processes)"
                     }, 
                     {
@@ -23302,7 +23302,7 @@ vocabularies = [
                         "title": "RESEARCH, SCIENCES"
                     }, 
                     {
-                        "name": "resources_(utilisation_of_resources)", 
+                        "name": "resources_utilisation_of_resources", 
                         "title": "RESOURCES (utilisation of resources)"
                     }, 
                     {
@@ -23318,7 +23318,7 @@ vocabularies = [
                         "title": "SPACE"
                     }, 
                     {
-                        "name": "time_(chronology)", 
+                        "name": "time_chronology", 
                         "title": "TIME (chronology)"
                     }, 
                     {
@@ -23424,15 +23424,15 @@ vocabularies = [
                         "title": "Ambient Ozone Concentration"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_(fine)_composition", 
+                        "name": "ambient_particulate_matter_fine_composition", 
                         "title": "Ambient Particulate Matter (fine) Composition"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_composition_(coarse)", 
+                        "name": "ambient_particulate_matter_composition_coarse", 
                         "title": "Ambient Particulate Matter Composition (coarse)"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_concentration_(fine)", 
+                        "name": "ambient_particulate_matter_concentration_fine", 
                         "title": "Ambient Particulate Matter Concentration (fine)"
                     }, 
                     {
@@ -23444,7 +23444,7 @@ vocabularies = [
                         "title": "Ambient Volatile Organic Compounds"
                     }, 
                     {
-                        "name": "animal_activity_(range_season_length_migration_patterns)", 
+                        "name": "animal_activity_range_season_length_migration_patterns", 
                         "title": "Animal activity (range, season length, migration patterns)"
                     }, 
                     {
@@ -23500,7 +23500,7 @@ vocabularies = [
                         "title": "CRYOSPHERE"
                     }, 
                     {
-                        "name": "carbon_(stores_uptake_flux)", 
+                        "name": "carbon_stores_uptake_flux", 
                         "title": "Carbon (stores, uptake, flux)"
                     }, 
                     {
@@ -23524,7 +23524,7 @@ vocabularies = [
                         "title": "Cloud Cover"
                     }, 
                     {
-                        "name": "cloud_parameters_(other)", 
+                        "name": "cloud_parameters_other", 
                         "title": "Cloud Parameters (Other)"
                     }, 
                     {
@@ -23540,11 +23540,11 @@ vocabularies = [
                         "title": "Column Ozone Concentration"
                     }, 
                     {
-                        "name": "column_particulate_matter_concentration_(coarse)", 
+                        "name": "column_particulate_matter_concentration_coarse", 
                         "title": "Column Particulate Matter Concentration (coarse)"
                     }, 
                     {
-                        "name": "column_particulate_matter_concentration_(fine)", 
+                        "name": "column_particulate_matter_concentration_fine", 
                         "title": "Column Particulate Matter Concentration (fine)"
                     }, 
                     {
@@ -23552,7 +23552,7 @@ vocabularies = [
                         "title": "Column Sulfur Dioxide Concentration"
                     }, 
                     {
-                        "name": "contaminants/pollutants_(inorganic/organic)", 
+                        "name": "contaminants/pollutants_inorganic/organic", 
                         "title": "Contaminants/Pollutants (Inorganic/Organic)"
                     }, 
                     {
@@ -23592,7 +23592,7 @@ vocabularies = [
                         "title": "Desertification"
                     }, 
                     {
-                        "name": "direct_normal_irradiation_(dni)", 
+                        "name": "direct_normal_irradiation_dni", 
                         "title": "Direct Normal Irradiation (DNI)"
                     }, 
                     {
@@ -23624,11 +23624,11 @@ vocabularies = [
                         "title": "Emissivity"
                     }, 
                     {
-                        "name": "enhanced_vegetation_index_(evi)", 
+                        "name": "enhanced_vegetation_index_evi", 
                         "title": "Enhanced Vegetation Index (EVI)"
                     }, 
                     {
-                        "name": "erosion_(reefs_sandbars)", 
+                        "name": "erosion_reefs_sandbars", 
                         "title": "Erosion (reefs, sandbars)"
                     }, 
                     {
@@ -23652,7 +23652,7 @@ vocabularies = [
                         "title": "FUNGI"
                     }, 
                     {
-                        "name": "field_cover_(continuous)", 
+                        "name": "field_cover_continuous", 
                         "title": "Field Cover (Continuous)"
                     }, 
                     {
@@ -23680,11 +23680,11 @@ vocabularies = [
                         "title": "Forest Structure"
                     }, 
                     {
-                        "name": "fraction_of_absorbed_photosynthetically_active_radiation_(fapar)", 
+                        "name": "fraction_of_absorbed_photosynthetically_active_radiation_fapar", 
                         "title": "Fraction of Absorbed Photosynthetically Active Radiation (FAPAR)"
                     }, 
                     {
-                        "name": "fraction_of_photosynthetically_active_radiation_(fpar)", 
+                        "name": "fraction_of_photosynthetically_active_radiation_fpar", 
                         "title": "Fraction of Photosynthetically Active Radiation (fPAR)"
                     }, 
                     {
@@ -23728,7 +23728,7 @@ vocabularies = [
                         "title": "Glacier/ice Sheet Extent"
                     }, 
                     {
-                        "name": "global_horizontal_irradiation_(ghi)", 
+                        "name": "global_horizontal_irradiation_ghi", 
                         "title": "Global Horizontal Irradiation (GHI)"
                     }, 
                     {
@@ -23816,7 +23816,7 @@ vocabularies = [
                         "title": "Land Use"
                     }, 
                     {
-                        "name": "leaf_area_index_(lai)", 
+                        "name": "leaf_area_index_lai", 
                         "title": "Leaf Area Index (LAI)"
                     }, 
                     {
@@ -23852,11 +23852,11 @@ vocabularies = [
                         "title": "Non-native species"
                     }, 
                     {
-                        "name": "normalized_difference_vegetation_index_(ndvi)", 
+                        "name": "normalized_difference_vegetation_index_ndvi", 
                         "title": "Normalized Difference Vegetation Index (NDVI)"
                     }, 
                     {
-                        "name": "nutrients_(phosphorous_nitrogen_potassium_nitratessulfates)", 
+                        "name": "nutrients_phosphorous_nitrogen_potassium_nitratessulfates", 
                         "title": "Nutrients (Phosphorous, Nitrogen, Potassium, Nitrates,Sulfates)"
                     }, 
                     {
@@ -23908,7 +23908,7 @@ vocabularies = [
                         "title": "Other long-lived GHGs"
                     }, 
                     {
-                        "name": "outgoing_longwave_radiation_(top_of_atmosphere_)", 
+                        "name": "outgoing_longwave_radiation_top_of_atmosphere_", 
                         "title": "Outgoing Longwave Radiation (Top of Atmosphere )"
                     }, 
                     {
@@ -23936,7 +23936,7 @@ vocabularies = [
                         "title": "Phenology"
                     }, 
                     {
-                        "name": "photosynthetically_active_radiation_(par)", 
+                        "name": "photosynthetically_active_radiation_par", 
                         "title": "Photosynthetically Active Radiation (PAR)"
                     }, 
                     {
@@ -24008,7 +24008,7 @@ vocabularies = [
                         "title": "Sea Ice Cover"
                     }, 
                     {
-                        "name": "sea_ice_surface_(skin)_temperature", 
+                        "name": "sea_ice_surface_skin_temperature", 
                         "title": "Sea Ice Surface (Skin) Temperature"
                     }, 
                     {
@@ -24040,11 +24040,11 @@ vocabularies = [
                         "title": "Snow Depth"
                     }, 
                     {
-                        "name": "snow_water_equivalent_(swe)", 
+                        "name": "snow_water_equivalent_swe", 
                         "title": "Snow Water Equivalent (SWE)"
                     }, 
                     {
-                        "name": "soil_adjusted_vegetation_index_(savi)+c29", 
+                        "name": "soil_adjusted_vegetation_index_savi+c29", 
                         "title": "Soil Adjusted Vegetation Index (SAVI)+C29"
                     }, 
                     {
@@ -24200,11 +24200,11 @@ vocabularies = [
                         "title": "Water Algal Blooms"
                     }, 
                     {
-                        "name": "water_bodies_(location)", 
+                        "name": "water_bodies_location", 
                         "title": "Water Bodies (location)"
                     }, 
                     {
-                        "name": "water_depth_(shallow_near-shore)", 
+                        "name": "water_depth_shallow_near-shore", 
                         "title": "Water Depth (Shallow Near-Shore)"
                     }, 
                     {
@@ -24510,7 +24510,7 @@ vocabularies = [
                         "title": "Beacon"
                     }, 
                     {
-                        "name": "bio-geographic_regions_(bio-geographic_regions)", 
+                        "name": "bio-geographic_regions_bio-geographic_regions", 
                         "title": "Bio-geographic Regions (Bio-geographic Regions)"
                     }, 
                     {
@@ -24654,7 +24654,7 @@ vocabularies = [
                         "title": "Grade Separated Crossing"
                     }, 
                     {
-                        "name": "habitat_(habitats_and_biotopes)", 
+                        "name": "habitat_habitats_and_biotopes", 
                         "title": "Habitat (Habitats and Biotopes)"
                     }, 
                     {
@@ -24870,7 +24870,7 @@ vocabularies = [
                         "title": "Rapids"
                     }, 
                     {
-                        "name": "responsible_agency_(protected_sites)", 
+                        "name": "responsible_agency_protected_sites", 
                         "title": "Responsible Agency (Protected Sites)"
                     }, 
                     {
@@ -24946,11 +24946,11 @@ vocabularies = [
                         "title": "Sluice"
                     }, 
                     {
-                        "name": "species_aggregation_unit_(species_distribution)", 
+                        "name": "species_aggregation_unit_species_distribution", 
                         "title": "Species Aggregation Unit (Species Distribution)"
                     }, 
                     {
-                        "name": "species_distribution_(species_distribution)", 
+                        "name": "species_distribution_species_distribution", 
                         "title": "Species Distribution (Species Distribution)"
                     }, 
                     {
@@ -25224,7 +25224,7 @@ vocabularies = [
                         "title": "craft"
                     }, 
                     {
-                        "name": "culture_(society)", 
+                        "name": "culture_society", 
                         "title": "culture (society)"
                     }, 
                     {
@@ -25392,11 +25392,11 @@ vocabularies = [
                         "title": "land setup"
                     }, 
                     {
-                        "name": "law_(corpus_of_rules)", 
+                        "name": "law_corpus_of_rules", 
                         "title": "law (corpus of rules)"
                     }, 
                     {
-                        "name": "law_(individual)", 
+                        "name": "law_individual", 
                         "title": "law (individual)"
                     }, 
                     {
@@ -25420,7 +25420,7 @@ vocabularies = [
                         "title": "material"
                     }, 
                     {
-                        "name": "medicine_(practice)", 
+                        "name": "medicine_practice", 
                         "title": "medicine (practice)"
                     }, 
                     {
@@ -25536,7 +25536,7 @@ vocabularies = [
                         "title": "society"
                     }, 
                     {
-                        "name": "space_(interplanetary)", 
+                        "name": "space_interplanetary", 
                         "title": "space (interplanetary)"
                     }, 
                     {
@@ -25564,7 +25564,7 @@ vocabularies = [
                         "title": "tourism"
                     }, 
                     {
-                        "name": "trade_(services)", 
+                        "name": "trade_services", 
                         "title": "trade (services)"
                     }, 
                     {
@@ -25910,7 +25910,7 @@ vocabularies = [
                         "title": "Coordinate system"
                     }, 
                     {
-                        "name": "cross_section_(watercourse)", 
+                        "name": "cross_section_watercourse", 
                         "title": "Cross section (watercourse)"
                     }, 
                     {
@@ -26202,11 +26202,11 @@ vocabularies = [
                         "title": "deep water route"
                     }, 
                     {
-                        "name": "discovery_service_(discovery)", 
+                        "name": "discovery_service_discovery", 
                         "title": "discovery service (discovery)"
                     }, 
                     {
-                        "name": "download_service_(download)", 
+                        "name": "download_service_download", 
                         "title": "download service (download)"
                     }, 
                     {
@@ -26310,7 +26310,7 @@ vocabularies = [
                         "title": "interoperable spatial data"
                     }, 
                     {
-                        "name": "invoke_spatial_data_service_(invoke)", 
+                        "name": "invoke_spatial_data_service_invoke", 
                         "title": "invoke spatial data service (invoke)"
                     }, 
                     {
@@ -26466,7 +26466,7 @@ vocabularies = [
                         "title": "ontology"
                     }, 
                     {
-                        "name": "other_service_(service)", 
+                        "name": "other_service_service", 
                         "title": "other service (service)"
                     }, 
                     {
@@ -26586,7 +26586,7 @@ vocabularies = [
                         "title": "transformation"
                     }, 
                     {
-                        "name": "transformation_service_(transformation)", 
+                        "name": "transformation_service_transformation", 
                         "title": "transformation service (transformation)"
                     }, 
                     {
@@ -26614,7 +26614,7 @@ vocabularies = [
                         "title": "version <spatial object>"
                     }, 
                     {
-                        "name": "view_service_(view)", 
+                        "name": "view_service_view", 
                         "title": "view service (view)"
                     }
                 ], 
@@ -26774,15 +26774,15 @@ vocabularies = [
                         "title": "AGRICULTURE, FORESTRY; ANIMAL HUSBANDRY; FISHERY"
                     }, 
                     {
-                        "name": "anthroposphere_(built_environment_human_settlements_land_setup)", 
+                        "name": "anthroposphere_built_environment_human_settlements_land_setup", 
                         "title": "ANTHROPOSPHERE (built environment, human settlements, land setup)"
                     }, 
                     {
-                        "name": "atmosphere_(air_climate)", 
+                        "name": "atmosphere_air_climate", 
                         "title": "ATMOSPHERE (air, climate)"
                     }, 
                     {
-                        "name": "biosphere_(organisms_ecosystems)", 
+                        "name": "biosphere_organisms_ecosystems", 
                         "title": "BIOSPHERE (organisms, ecosystems)"
                     }, 
                     {
@@ -26802,7 +26802,7 @@ vocabularies = [
                         "title": "ENERGY"
                     }, 
                     {
-                        "name": "environment_(natural_environment_anthropic_environment)", 
+                        "name": "environment_natural_environment_anthropic_environment", 
                         "title": "ENVIRONMENT (natural environment, anthropic environment)"
                     }, 
                     {
@@ -26822,7 +26822,7 @@ vocabularies = [
                         "title": "HEALTH, NUTRITION"
                     }, 
                     {
-                        "name": "hydrosphere_(freshwater_marine_water_waters)", 
+                        "name": "hydrosphere_freshwater_marine_water_waters", 
                         "title": "HYDROSPHERE (freshwater, marine water, waters)"
                     }, 
                     {
@@ -26834,7 +26834,7 @@ vocabularies = [
                         "title": "INFORMATION, EDUCATION, CULTURE, ENVIRONMENTAL AWARENESS"
                     }, 
                     {
-                        "name": "land_(landscape_geography)", 
+                        "name": "land_landscape_geography", 
                         "title": "LAND (landscape, geography)"
                     }, 
                     {
@@ -26842,7 +26842,7 @@ vocabularies = [
                         "title": "LEGISLATION, NORMS, CONVENTIONS"
                     }, 
                     {
-                        "name": "lithosphere_(soil_geological_processes)", 
+                        "name": "lithosphere_soil_geological_processes", 
                         "title": "LITHOSPHERE (soil, geological processes)"
                     }, 
                     {
@@ -26862,7 +26862,7 @@ vocabularies = [
                         "title": "RESEARCH, SCIENCES"
                     }, 
                     {
-                        "name": "resources_(utilisation_of_resources)", 
+                        "name": "resources_utilisation_of_resources", 
                         "title": "RESOURCES (utilisation of resources)"
                     }, 
                     {
@@ -26878,7 +26878,7 @@ vocabularies = [
                         "title": "SPACE"
                     }, 
                     {
-                        "name": "time_(chronology)", 
+                        "name": "time_chronology", 
                         "title": "TIME (chronology)"
                     }, 
                     {
@@ -26984,15 +26984,15 @@ vocabularies = [
                         "title": "Ambient Ozone Concentration"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_(fine)_composition", 
+                        "name": "ambient_particulate_matter_fine_composition", 
                         "title": "Ambient Particulate Matter (fine) Composition"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_composition_(coarse)", 
+                        "name": "ambient_particulate_matter_composition_coarse", 
                         "title": "Ambient Particulate Matter Composition (coarse)"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_concentration_(fine)", 
+                        "name": "ambient_particulate_matter_concentration_fine", 
                         "title": "Ambient Particulate Matter Concentration (fine)"
                     }, 
                     {
@@ -27004,7 +27004,7 @@ vocabularies = [
                         "title": "Ambient Volatile Organic Compounds"
                     }, 
                     {
-                        "name": "animal_activity_(range_season_length_migration_patterns)", 
+                        "name": "animal_activity_range_season_length_migration_patterns", 
                         "title": "Animal activity (range, season length, migration patterns)"
                     }, 
                     {
@@ -27060,7 +27060,7 @@ vocabularies = [
                         "title": "CRYOSPHERE"
                     }, 
                     {
-                        "name": "carbon_(stores_uptake_flux)", 
+                        "name": "carbon_stores_uptake_flux", 
                         "title": "Carbon (stores, uptake, flux)"
                     }, 
                     {
@@ -27084,7 +27084,7 @@ vocabularies = [
                         "title": "Cloud Cover"
                     }, 
                     {
-                        "name": "cloud_parameters_(other)", 
+                        "name": "cloud_parameters_other", 
                         "title": "Cloud Parameters (Other)"
                     }, 
                     {
@@ -27100,11 +27100,11 @@ vocabularies = [
                         "title": "Column Ozone Concentration"
                     }, 
                     {
-                        "name": "column_particulate_matter_concentration_(coarse)", 
+                        "name": "column_particulate_matter_concentration_coarse", 
                         "title": "Column Particulate Matter Concentration (coarse)"
                     }, 
                     {
-                        "name": "column_particulate_matter_concentration_(fine)", 
+                        "name": "column_particulate_matter_concentration_fine", 
                         "title": "Column Particulate Matter Concentration (fine)"
                     }, 
                     {
@@ -27112,7 +27112,7 @@ vocabularies = [
                         "title": "Column Sulfur Dioxide Concentration"
                     }, 
                     {
-                        "name": "contaminants/pollutants_(inorganic/organic)", 
+                        "name": "contaminants/pollutants_inorganic/organic", 
                         "title": "Contaminants/Pollutants (Inorganic/Organic)"
                     }, 
                     {
@@ -27152,7 +27152,7 @@ vocabularies = [
                         "title": "Desertification"
                     }, 
                     {
-                        "name": "direct_normal_irradiation_(dni)", 
+                        "name": "direct_normal_irradiation_dni", 
                         "title": "Direct Normal Irradiation (DNI)"
                     }, 
                     {
@@ -27184,11 +27184,11 @@ vocabularies = [
                         "title": "Emissivity"
                     }, 
                     {
-                        "name": "enhanced_vegetation_index_(evi)", 
+                        "name": "enhanced_vegetation_index_evi", 
                         "title": "Enhanced Vegetation Index (EVI)"
                     }, 
                     {
-                        "name": "erosion_(reefs_sandbars)", 
+                        "name": "erosion_reefs_sandbars", 
                         "title": "Erosion (reefs, sandbars)"
                     }, 
                     {
@@ -27212,7 +27212,7 @@ vocabularies = [
                         "title": "FUNGI"
                     }, 
                     {
-                        "name": "field_cover_(continuous)", 
+                        "name": "field_cover_continuous", 
                         "title": "Field Cover (Continuous)"
                     }, 
                     {
@@ -27240,11 +27240,11 @@ vocabularies = [
                         "title": "Forest Structure"
                     }, 
                     {
-                        "name": "fraction_of_absorbed_photosynthetically_active_radiation_(fapar)", 
+                        "name": "fraction_of_absorbed_photosynthetically_active_radiation_fapar", 
                         "title": "Fraction of Absorbed Photosynthetically Active Radiation (FAPAR)"
                     }, 
                     {
-                        "name": "fraction_of_photosynthetically_active_radiation_(fpar)", 
+                        "name": "fraction_of_photosynthetically_active_radiation_fpar", 
                         "title": "Fraction of Photosynthetically Active Radiation (fPAR)"
                     }, 
                     {
@@ -27288,7 +27288,7 @@ vocabularies = [
                         "title": "Glacier/ice Sheet Extent"
                     }, 
                     {
-                        "name": "global_horizontal_irradiation_(ghi)", 
+                        "name": "global_horizontal_irradiation_ghi", 
                         "title": "Global Horizontal Irradiation (GHI)"
                     }, 
                     {
@@ -27376,7 +27376,7 @@ vocabularies = [
                         "title": "Land Use"
                     }, 
                     {
-                        "name": "leaf_area_index_(lai)", 
+                        "name": "leaf_area_index_lai", 
                         "title": "Leaf Area Index (LAI)"
                     }, 
                     {
@@ -27412,11 +27412,11 @@ vocabularies = [
                         "title": "Non-native species"
                     }, 
                     {
-                        "name": "normalized_difference_vegetation_index_(ndvi)", 
+                        "name": "normalized_difference_vegetation_index_ndvi", 
                         "title": "Normalized Difference Vegetation Index (NDVI)"
                     }, 
                     {
-                        "name": "nutrients_(phosphorous_nitrogen_potassium_nitratessulfates)", 
+                        "name": "nutrients_phosphorous_nitrogen_potassium_nitratessulfates", 
                         "title": "Nutrients (Phosphorous, Nitrogen, Potassium, Nitrates,Sulfates)"
                     }, 
                     {
@@ -27468,7 +27468,7 @@ vocabularies = [
                         "title": "Other long-lived GHGs"
                     }, 
                     {
-                        "name": "outgoing_longwave_radiation_(top_of_atmosphere_)", 
+                        "name": "outgoing_longwave_radiation_top_of_atmosphere_", 
                         "title": "Outgoing Longwave Radiation (Top of Atmosphere )"
                     }, 
                     {
@@ -27496,7 +27496,7 @@ vocabularies = [
                         "title": "Phenology"
                     }, 
                     {
-                        "name": "photosynthetically_active_radiation_(par)", 
+                        "name": "photosynthetically_active_radiation_par", 
                         "title": "Photosynthetically Active Radiation (PAR)"
                     }, 
                     {
@@ -27568,7 +27568,7 @@ vocabularies = [
                         "title": "Sea Ice Cover"
                     }, 
                     {
-                        "name": "sea_ice_surface_(skin)_temperature", 
+                        "name": "sea_ice_surface_skin_temperature", 
                         "title": "Sea Ice Surface (Skin) Temperature"
                     }, 
                     {
@@ -27600,11 +27600,11 @@ vocabularies = [
                         "title": "Snow Depth"
                     }, 
                     {
-                        "name": "snow_water_equivalent_(swe)", 
+                        "name": "snow_water_equivalent_swe", 
                         "title": "Snow Water Equivalent (SWE)"
                     }, 
                     {
-                        "name": "soil_adjusted_vegetation_index_(savi)+c29", 
+                        "name": "soil_adjusted_vegetation_index_savi+c29", 
                         "title": "Soil Adjusted Vegetation Index (SAVI)+C29"
                     }, 
                     {
@@ -27760,11 +27760,11 @@ vocabularies = [
                         "title": "Water Algal Blooms"
                     }, 
                     {
-                        "name": "water_bodies_(location)", 
+                        "name": "water_bodies_location", 
                         "title": "Water Bodies (location)"
                     }, 
                     {
-                        "name": "water_depth_(shallow_near-shore)", 
+                        "name": "water_depth_shallow_near-shore", 
                         "title": "Water Depth (Shallow Near-Shore)"
                     }, 
                     {
@@ -28070,7 +28070,7 @@ vocabularies = [
                         "title": "Beacon"
                     }, 
                     {
-                        "name": "bio-geographic_regions_(bio-geographic_regions)", 
+                        "name": "bio-geographic_regions_bio-geographic_regions", 
                         "title": "Bio-geographic Regions (Bio-geographic Regions)"
                     }, 
                     {
@@ -28214,7 +28214,7 @@ vocabularies = [
                         "title": "Grade Separated Crossing"
                     }, 
                     {
-                        "name": "habitat_(habitats_and_biotopes)", 
+                        "name": "habitat_habitats_and_biotopes", 
                         "title": "Habitat (Habitats and Biotopes)"
                     }, 
                     {
@@ -28430,7 +28430,7 @@ vocabularies = [
                         "title": "Rapids"
                     }, 
                     {
-                        "name": "responsible_agency_(protected_sites)", 
+                        "name": "responsible_agency_protected_sites", 
                         "title": "Responsible Agency (Protected Sites)"
                     }, 
                     {
@@ -28506,11 +28506,11 @@ vocabularies = [
                         "title": "Sluice"
                     }, 
                     {
-                        "name": "species_aggregation_unit_(species_distribution)", 
+                        "name": "species_aggregation_unit_species_distribution", 
                         "title": "Species Aggregation Unit (Species Distribution)"
                     }, 
                     {
-                        "name": "species_distribution_(species_distribution)", 
+                        "name": "species_distribution_species_distribution", 
                         "title": "Species Distribution (Species Distribution)"
                     }, 
                     {
@@ -28784,7 +28784,7 @@ vocabularies = [
                         "title": "craft"
                     }, 
                     {
-                        "name": "culture_(society)", 
+                        "name": "culture_society", 
                         "title": "culture (society)"
                     }, 
                     {
@@ -28952,11 +28952,11 @@ vocabularies = [
                         "title": "land setup"
                     }, 
                     {
-                        "name": "law_(corpus_of_rules)", 
+                        "name": "law_corpus_of_rules", 
                         "title": "law (corpus of rules)"
                     }, 
                     {
-                        "name": "law_(individual)", 
+                        "name": "law_individual", 
                         "title": "law (individual)"
                     }, 
                     {
@@ -28980,7 +28980,7 @@ vocabularies = [
                         "title": "material"
                     }, 
                     {
-                        "name": "medicine_(practice)", 
+                        "name": "medicine_practice", 
                         "title": "medicine (practice)"
                     }, 
                     {
@@ -29096,7 +29096,7 @@ vocabularies = [
                         "title": "society"
                     }, 
                     {
-                        "name": "space_(interplanetary)", 
+                        "name": "space_interplanetary", 
                         "title": "space (interplanetary)"
                     }, 
                     {
@@ -29124,7 +29124,7 @@ vocabularies = [
                         "title": "tourism"
                     }, 
                     {
-                        "name": "trade_(services)", 
+                        "name": "trade_services", 
                         "title": "trade (services)"
                     }, 
                     {
@@ -29470,7 +29470,7 @@ vocabularies = [
                         "title": "Coordinate system"
                     }, 
                     {
-                        "name": "cross_section_(watercourse)", 
+                        "name": "cross_section_watercourse", 
                         "title": "Cross section (watercourse)"
                     }, 
                     {
@@ -29762,11 +29762,11 @@ vocabularies = [
                         "title": "deep water route"
                     }, 
                     {
-                        "name": "discovery_service_(discovery)", 
+                        "name": "discovery_service_discovery", 
                         "title": "discovery service (discovery)"
                     }, 
                     {
-                        "name": "download_service_(download)", 
+                        "name": "download_service_download", 
                         "title": "download service (download)"
                     }, 
                     {
@@ -29870,7 +29870,7 @@ vocabularies = [
                         "title": "interoperable spatial data"
                     }, 
                     {
-                        "name": "invoke_spatial_data_service_(invoke)", 
+                        "name": "invoke_spatial_data_service_invoke", 
                         "title": "invoke spatial data service (invoke)"
                     }, 
                     {
@@ -30026,7 +30026,7 @@ vocabularies = [
                         "title": "ontology"
                     }, 
                     {
-                        "name": "other_service_(service)", 
+                        "name": "other_service_service", 
                         "title": "other service (service)"
                     }, 
                     {
@@ -30146,7 +30146,7 @@ vocabularies = [
                         "title": "transformation"
                     }, 
                     {
-                        "name": "transformation_service_(transformation)", 
+                        "name": "transformation_service_transformation", 
                         "title": "transformation service (transformation)"
                     }, 
                     {
@@ -30174,7 +30174,7 @@ vocabularies = [
                         "title": "version <spatial object>"
                     }, 
                     {
-                        "name": "view_service_(view)", 
+                        "name": "view_service_view", 
                         "title": "view service (view)"
                     }
                 ], 
@@ -30334,15 +30334,15 @@ vocabularies = [
                         "title": "AGRICULTURE, FORESTRY; ANIMAL HUSBANDRY; FISHERY"
                     }, 
                     {
-                        "name": "anthroposphere_(built_environment_human_settlements_land_setup)", 
+                        "name": "anthroposphere_built_environment_human_settlements_land_setup", 
                         "title": "ANTHROPOSPHERE (built environment, human settlements, land setup)"
                     }, 
                     {
-                        "name": "atmosphere_(air_climate)", 
+                        "name": "atmosphere_air_climate", 
                         "title": "ATMOSPHERE (air, climate)"
                     }, 
                     {
-                        "name": "biosphere_(organisms_ecosystems)", 
+                        "name": "biosphere_organisms_ecosystems", 
                         "title": "BIOSPHERE (organisms, ecosystems)"
                     }, 
                     {
@@ -30362,7 +30362,7 @@ vocabularies = [
                         "title": "ENERGY"
                     }, 
                     {
-                        "name": "environment_(natural_environment_anthropic_environment)", 
+                        "name": "environment_natural_environment_anthropic_environment", 
                         "title": "ENVIRONMENT (natural environment, anthropic environment)"
                     }, 
                     {
@@ -30382,7 +30382,7 @@ vocabularies = [
                         "title": "HEALTH, NUTRITION"
                     }, 
                     {
-                        "name": "hydrosphere_(freshwater_marine_water_waters)", 
+                        "name": "hydrosphere_freshwater_marine_water_waters", 
                         "title": "HYDROSPHERE (freshwater, marine water, waters)"
                     }, 
                     {
@@ -30394,7 +30394,7 @@ vocabularies = [
                         "title": "INFORMATION, EDUCATION, CULTURE, ENVIRONMENTAL AWARENESS"
                     }, 
                     {
-                        "name": "land_(landscape_geography)", 
+                        "name": "land_landscape_geography", 
                         "title": "LAND (landscape, geography)"
                     }, 
                     {
@@ -30402,7 +30402,7 @@ vocabularies = [
                         "title": "LEGISLATION, NORMS, CONVENTIONS"
                     }, 
                     {
-                        "name": "lithosphere_(soil_geological_processes)", 
+                        "name": "lithosphere_soil_geological_processes", 
                         "title": "LITHOSPHERE (soil, geological processes)"
                     }, 
                     {
@@ -30422,7 +30422,7 @@ vocabularies = [
                         "title": "RESEARCH, SCIENCES"
                     }, 
                     {
-                        "name": "resources_(utilisation_of_resources)", 
+                        "name": "resources_utilisation_of_resources", 
                         "title": "RESOURCES (utilisation of resources)"
                     }, 
                     {
@@ -30438,7 +30438,7 @@ vocabularies = [
                         "title": "SPACE"
                     }, 
                     {
-                        "name": "time_(chronology)", 
+                        "name": "time_chronology", 
                         "title": "TIME (chronology)"
                     }, 
                     {
@@ -30544,15 +30544,15 @@ vocabularies = [
                         "title": "Ambient Ozone Concentration"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_(fine)_composition", 
+                        "name": "ambient_particulate_matter_fine_composition", 
                         "title": "Ambient Particulate Matter (fine) Composition"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_composition_(coarse)", 
+                        "name": "ambient_particulate_matter_composition_coarse", 
                         "title": "Ambient Particulate Matter Composition (coarse)"
                     }, 
                     {
-                        "name": "ambient_particulate_matter_concentration_(fine)", 
+                        "name": "ambient_particulate_matter_concentration_fine", 
                         "title": "Ambient Particulate Matter Concentration (fine)"
                     }, 
                     {
@@ -30564,7 +30564,7 @@ vocabularies = [
                         "title": "Ambient Volatile Organic Compounds"
                     }, 
                     {
-                        "name": "animal_activity_(range_season_length_migration_patterns)", 
+                        "name": "animal_activity_range_season_length_migration_patterns", 
                         "title": "Animal activity (range, season length, migration patterns)"
                     }, 
                     {
@@ -30620,7 +30620,7 @@ vocabularies = [
                         "title": "CRYOSPHERE"
                     }, 
                     {
-                        "name": "carbon_(stores_uptake_flux)", 
+                        "name": "carbon_stores_uptake_flux", 
                         "title": "Carbon (stores, uptake, flux)"
                     }, 
                     {
@@ -30644,7 +30644,7 @@ vocabularies = [
                         "title": "Cloud Cover"
                     }, 
                     {
-                        "name": "cloud_parameters_(other)", 
+                        "name": "cloud_parameters_other", 
                         "title": "Cloud Parameters (Other)"
                     }, 
                     {
@@ -30660,11 +30660,11 @@ vocabularies = [
                         "title": "Column Ozone Concentration"
                     }, 
                     {
-                        "name": "column_particulate_matter_concentration_(coarse)", 
+                        "name": "column_particulate_matter_concentration_coarse", 
                         "title": "Column Particulate Matter Concentration (coarse)"
                     }, 
                     {
-                        "name": "column_particulate_matter_concentration_(fine)", 
+                        "name": "column_particulate_matter_concentration_fine", 
                         "title": "Column Particulate Matter Concentration (fine)"
                     }, 
                     {
@@ -30672,7 +30672,7 @@ vocabularies = [
                         "title": "Column Sulfur Dioxide Concentration"
                     }, 
                     {
-                        "name": "contaminants/pollutants_(inorganic/organic)", 
+                        "name": "contaminants/pollutants_inorganic/organic", 
                         "title": "Contaminants/Pollutants (Inorganic/Organic)"
                     }, 
                     {
@@ -30712,7 +30712,7 @@ vocabularies = [
                         "title": "Desertification"
                     }, 
                     {
-                        "name": "direct_normal_irradiation_(dni)", 
+                        "name": "direct_normal_irradiation_dni", 
                         "title": "Direct Normal Irradiation (DNI)"
                     }, 
                     {
@@ -30744,11 +30744,11 @@ vocabularies = [
                         "title": "Emissivity"
                     }, 
                     {
-                        "name": "enhanced_vegetation_index_(evi)", 
+                        "name": "enhanced_vegetation_index_evi", 
                         "title": "Enhanced Vegetation Index (EVI)"
                     }, 
                     {
-                        "name": "erosion_(reefs_sandbars)", 
+                        "name": "erosion_reefs_sandbars", 
                         "title": "Erosion (reefs, sandbars)"
                     }, 
                     {
@@ -30772,7 +30772,7 @@ vocabularies = [
                         "title": "FUNGI"
                     }, 
                     {
-                        "name": "field_cover_(continuous)", 
+                        "name": "field_cover_continuous", 
                         "title": "Field Cover (Continuous)"
                     }, 
                     {
@@ -30800,11 +30800,11 @@ vocabularies = [
                         "title": "Forest Structure"
                     }, 
                     {
-                        "name": "fraction_of_absorbed_photosynthetically_active_radiation_(fapar)", 
+                        "name": "fraction_of_absorbed_photosynthetically_active_radiation_fapar", 
                         "title": "Fraction of Absorbed Photosynthetically Active Radiation (FAPAR)"
                     }, 
                     {
-                        "name": "fraction_of_photosynthetically_active_radiation_(fpar)", 
+                        "name": "fraction_of_photosynthetically_active_radiation_fpar", 
                         "title": "Fraction of Photosynthetically Active Radiation (fPAR)"
                     }, 
                     {
@@ -30848,7 +30848,7 @@ vocabularies = [
                         "title": "Glacier/ice Sheet Extent"
                     }, 
                     {
-                        "name": "global_horizontal_irradiation_(ghi)", 
+                        "name": "global_horizontal_irradiation_ghi", 
                         "title": "Global Horizontal Irradiation (GHI)"
                     }, 
                     {
@@ -30936,7 +30936,7 @@ vocabularies = [
                         "title": "Land Use"
                     }, 
                     {
-                        "name": "leaf_area_index_(lai)", 
+                        "name": "leaf_area_index_lai", 
                         "title": "Leaf Area Index (LAI)"
                     }, 
                     {
@@ -30972,11 +30972,11 @@ vocabularies = [
                         "title": "Non-native species"
                     }, 
                     {
-                        "name": "normalized_difference_vegetation_index_(ndvi)", 
+                        "name": "normalized_difference_vegetation_index_ndvi", 
                         "title": "Normalized Difference Vegetation Index (NDVI)"
                     }, 
                     {
-                        "name": "nutrients_(phosphorous_nitrogen_potassium_nitratessulfates)", 
+                        "name": "nutrients_phosphorous_nitrogen_potassium_nitratessulfates", 
                         "title": "Nutrients (Phosphorous, Nitrogen, Potassium, Nitrates,Sulfates)"
                     }, 
                     {
@@ -31028,7 +31028,7 @@ vocabularies = [
                         "title": "Other long-lived GHGs"
                     }, 
                     {
-                        "name": "outgoing_longwave_radiation_(top_of_atmosphere_)", 
+                        "name": "outgoing_longwave_radiation_top_of_atmosphere_", 
                         "title": "Outgoing Longwave Radiation (Top of Atmosphere )"
                     }, 
                     {
@@ -31056,7 +31056,7 @@ vocabularies = [
                         "title": "Phenology"
                     }, 
                     {
-                        "name": "photosynthetically_active_radiation_(par)", 
+                        "name": "photosynthetically_active_radiation_par", 
                         "title": "Photosynthetically Active Radiation (PAR)"
                     }, 
                     {
@@ -31128,7 +31128,7 @@ vocabularies = [
                         "title": "Sea Ice Cover"
                     }, 
                     {
-                        "name": "sea_ice_surface_(skin)_temperature", 
+                        "name": "sea_ice_surface_skin_temperature", 
                         "title": "Sea Ice Surface (Skin) Temperature"
                     }, 
                     {
@@ -31160,11 +31160,11 @@ vocabularies = [
                         "title": "Snow Depth"
                     }, 
                     {
-                        "name": "snow_water_equivalent_(swe)", 
+                        "name": "snow_water_equivalent_swe", 
                         "title": "Snow Water Equivalent (SWE)"
                     }, 
                     {
-                        "name": "soil_adjusted_vegetation_index_(savi)+c29", 
+                        "name": "soil_adjusted_vegetation_index_savi+c29", 
                         "title": "Soil Adjusted Vegetation Index (SAVI)+C29"
                     }, 
                     {
@@ -31320,11 +31320,11 @@ vocabularies = [
                         "title": "Water Algal Blooms"
                     }, 
                     {
-                        "name": "water_bodies_(location)", 
+                        "name": "water_bodies_location", 
                         "title": "Water Bodies (location)"
                     }, 
                     {
-                        "name": "water_depth_(shallow_near-shore)", 
+                        "name": "water_depth_shallow_near-shore", 
                         "title": "Water Depth (Shallow Near-Shore)"
                     }, 
                     {
@@ -31630,7 +31630,7 @@ vocabularies = [
                         "title": "Beacon"
                     }, 
                     {
-                        "name": "bio-geographic_regions_(bio-geographic_regions)", 
+                        "name": "bio-geographic_regions_bio-geographic_regions", 
                         "title": "Bio-geographic Regions (Bio-geographic Regions)"
                     }, 
                     {
@@ -31774,7 +31774,7 @@ vocabularies = [
                         "title": "Grade Separated Crossing"
                     }, 
                     {
-                        "name": "habitat_(habitats_and_biotopes)", 
+                        "name": "habitat_habitats_and_biotopes", 
                         "title": "Habitat (Habitats and Biotopes)"
                     }, 
                     {
@@ -31990,7 +31990,7 @@ vocabularies = [
                         "title": "Rapids"
                     }, 
                     {
-                        "name": "responsible_agency_(protected_sites)", 
+                        "name": "responsible_agency_protected_sites", 
                         "title": "Responsible Agency (Protected Sites)"
                     }, 
                     {
@@ -32066,11 +32066,11 @@ vocabularies = [
                         "title": "Sluice"
                     }, 
                     {
-                        "name": "species_aggregation_unit_(species_distribution)", 
+                        "name": "species_aggregation_unit_species_distribution", 
                         "title": "Species Aggregation Unit (Species Distribution)"
                     }, 
                     {
-                        "name": "species_distribution_(species_distribution)", 
+                        "name": "species_distribution_species_distribution", 
                         "title": "Species Distribution (Species Distribution)"
                     }, 
                     {
@@ -32344,7 +32344,7 @@ vocabularies = [
                         "title": "craft"
                     }, 
                     {
-                        "name": "culture_(society)", 
+                        "name": "culture_society", 
                         "title": "culture (society)"
                     }, 
                     {
@@ -32512,11 +32512,11 @@ vocabularies = [
                         "title": "land setup"
                     }, 
                     {
-                        "name": "law_(corpus_of_rules)", 
+                        "name": "law_corpus_of_rules", 
                         "title": "law (corpus of rules)"
                     }, 
                     {
-                        "name": "law_(individual)", 
+                        "name": "law_individual", 
                         "title": "law (individual)"
                     }, 
                     {
@@ -32540,7 +32540,7 @@ vocabularies = [
                         "title": "material"
                     }, 
                     {
-                        "name": "medicine_(practice)", 
+                        "name": "medicine_practice", 
                         "title": "medicine (practice)"
                     }, 
                     {
@@ -32656,7 +32656,7 @@ vocabularies = [
                         "title": "society"
                     }, 
                     {
-                        "name": "space_(interplanetary)", 
+                        "name": "space_interplanetary", 
                         "title": "space (interplanetary)"
                     }, 
                     {
@@ -32684,7 +32684,7 @@ vocabularies = [
                         "title": "tourism"
                     }, 
                     {
-                        "name": "trade_(services)", 
+                        "name": "trade_services", 
                         "title": "trade (services)"
                     }, 
                     {

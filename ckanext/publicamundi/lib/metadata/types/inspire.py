@@ -1,19 +1,19 @@
 import zope.interface
 
 from ckanext.publicamundi.lib.metadata.base import Object
-from ckanext.publicamundi.lib.metadata.schemata.inspire import IThesaurus, IInspireMetadata
+from ckanext.publicamundi.lib.metadata.schemata.inspire import IThesaurusTerms, IInspireMetadata
 
 from ckanext.publicamundi.lib.metadata.types import object_null_adapter
 from ckanext.publicamundi.lib.metadata.types.common import *
 
-@object_null_adapter(IThesaurus)
-class Thesaurus(Object):
-    zope.interface.implements(IThesaurus)
+@object_null_adapter(IThesaurusTerms)
+class ThesaurusTerms(Object):
+    zope.interface.implements(IThesaurusTerms)
 
     title = None
     reference_date = None
     date_type = None
-    value = None
+    thesaurus_name = None
     terms = list
 
 

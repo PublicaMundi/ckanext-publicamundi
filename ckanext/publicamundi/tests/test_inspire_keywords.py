@@ -8,7 +8,6 @@ from ckanext.publicamundi.lib.metadata.types.inspire import *
 from ckanext.publicamundi.lib.metadata.base import *
 from ckanext.publicamundi.tests.helpers import assert_faulty_keys
 from ckanext.publicamundi.lib.metadata.types import *
-from ckanext.publicamundi.tests.fixtures import *
 
 
 #
@@ -17,14 +16,14 @@ from ckanext.publicamundi.tests.fixtures import *
 
 
 # Terms missing
-thes1 = Thesaurus(name="inspire_data_themes",
+thes1 = ThesaurusTerms(thesaurus_name="gemet_inspire_data_themes",
             title=u"Inspire Data Themes",
             reference_date=datetime.date(2000, 1, 1),
             date_type='creation')
 
 
 #Empty terms
-thes2 = Thesaurus(name="inspire_data_themes",
+thes2 = ThesaurusTerms(thesaurus_name="gemet_inspire_data_themes",
             title=u"Inspire Data Themes",
             reference_date=datetime.date(2000, 1, 1),
             date_type='creation',
@@ -32,7 +31,7 @@ thes2 = Thesaurus(name="inspire_data_themes",
 
 
 # Wrong name
-thes3 = Thesaurus(name="inspire_data_theme",
+thes3 = ThesaurusTerms(thesaurus_name="gemet_inspire_data_theme",
             title=u"Inspire Data Themes",
             reference_date=datetime.date(2000, 1, 1),
             date_type='creation',
@@ -40,11 +39,11 @@ thes3 = Thesaurus(name="inspire_data_theme",
 
 
 #Correct thesaurus
-thes4 = Thesaurus(name="inspire_data_themes",
+thes4 = ThesaurusTerms(thesaurus_name="gemet_inspire_data_themes",
             title=u"Inspire Data Themes",
             reference_date=datetime.date(2000, 1, 1),
             date_type='creation',
-            terms=["addresses"])
+            terms=[u"addresses"])
 
 
 # Inspire thesaurus tests
@@ -62,7 +61,7 @@ def test_thes2():
 
 def test_thes3():
     ''' INSPIRE thesaurus wrong name'''
-    assert_faulty_keys(field=thes3, expected_keys=set(['name']))
+    assert_faulty_keys(field=thes3, expected_keys=set(['thesaurus_name']))
 
 
 def test_thes4():
@@ -83,13 +82,13 @@ insp1 = InspireMetadata(contact=[ResponsibleParty(organization=u"Org", email=[u"
     locator = ["http://www.google.com", "http://publicamundi.eu"],
     resource_language = ["el"],
     topic_category = ["biota"],
-    keywords = [Thesaurus(terms =["addresses123", "addresses"],
-                        name="inspire_data_themes",
+    keywords = [ThesaurusTerms(terms =[u"addresses123", u"addresses"],
+                        thesaurus_name="gemet_inspire_data_themes",
                         title=u"Inspire Data Themes",
                         reference_date=datetime.date(2000, 1, 1),
                         date_type='creation'),
-                Thesaurus(terms=["addresses", "accident2"],
-                        name="gemet_concepts",
+                ThesaurusTerms(terms=[u"addresses", u"accident2"],
+                        thesaurus_name="gemet_concepts",
                         title=u"Gemet Concepts",
                         reference_date=datetime.date(2000, 1, 1),
                         date_type='creation'),
@@ -101,7 +100,7 @@ insp1 = InspireMetadata(contact=[ResponsibleParty(organization=u"Org", email=[u"
     revision_date = datetime.date(2014, 1, 1),
     lineage = u"lineaage",
     denominator = [0, 1, 2, 3],
-    spatial_resolution = [SpatialResolution(uom=u"meters")],
+    spatial_resolution = [SpatialResolution(distance=5, uom=u"meters")],
     conformity = [Conformity(title=u"specifications blabla", date=datetime.date.today(), date_type="creation", degree="conformant")],
     access_constraints = [u"lalala1", u"lalala2"],
     limitations = [u"limit1", u"limit2"],
@@ -119,13 +118,13 @@ insp2 = InspireMetadata(
     locator = ["http://www.google.com", "http://publicamundi.eu"],
     resource_language = ["el"],
     topic_category = ["biota"],
-    keywords = [Thesaurus(terms = ["accident"],
-                    name = "gemet_concepts",
+    keywords = [ThesaurusTerms(terms = [u"accident"],
+                    thesaurus_name = "gemet_concepts",
                     title = u"Gemet Concepts",
                     reference_date = datetime.date(2000, 1, 1),
                     date_type = 'creation'),
-                Thesaurus(terms = ["time_(chronology)"],
-                    name = "gemet_groups",
+                ThesaurusTerms(terms = [u"time_(chronology)"],
+                    thesaurus_name = "gemet_groups",
                     title = u"Gemet Groups",
                     reference_date = datetime.date(2000, 1, 1),
                     date_type = 'creation'),
@@ -137,7 +136,7 @@ insp2 = InspireMetadata(
     revision_date = datetime.date(2014, 1, 1),
     lineage = u"lineaage",
     denominator = [0, 1, 2, 3],
-    spatial_resolution = [SpatialResolution(uom = u"meters")],
+    spatial_resolution = [SpatialResolution(distance=5, uom = u"meters")],
     conformity = [Conformity(title = u"specifications blabla", date = datetime.date.today(), date_type = "creation", degree = "conformant")],
     access_constraints = [u"lalala1", u"lalala2"],
     limitations = [u"limit1", u"limit2"],
@@ -154,18 +153,18 @@ insp3 = InspireMetadata(contact = [ResponsibleParty(organization=u"Org",email=[u
         locator = ["http://www.google.com", "http://publicamundi.eu"],
         resource_language = ["el"],
         topic_category = ["biota"],
-        keywords = [Thesaurus(terms=["addresses", "accident"],
-                        name="inspire_data_themes",
+        keywords = [ThesaurusTerms(terms=[u"addresses", u"accident"],
+                        thesaurus_name="gemet_inspire_data_themes",
                         title=u"Inspire Data Themes",
                         reference_date=datetime.date(2000, 1, 1),
                         date_type='creation'),
-                    Thesaurus(terms=["addresses", "accident"],
-                        name="gemet_concepts",
+                    ThesaurusTerms(terms=[u"addresses", u"accident"],
+                        thesaurus_name="gemet_concepts",
                         title=u"Gemet Concepts",
                         reference_date=datetime.date(2000, 1, 1),
                         date_type='creation'),
-                    Thesaurus(terms=["time_(chronology)"],
-                        name="gemet_groups",
+                    ThesaurusTerms(terms=[u"time_(chronology)"],
+                        thesaurus_name="gemet_groups",
                         title=u"Gemet Groups",
                         reference_date=datetime.date(2000, 1, 1),
                         date_type='creation'),
@@ -177,7 +176,7 @@ insp3 = InspireMetadata(contact = [ResponsibleParty(organization=u"Org",email=[u
     revision_date = datetime.date(2014, 1, 1),
     lineage = u"lineaage",
     denominator = [0, 1, 2, 3],
-    spatial_resolution = [SpatialResolution(uom=u"meters")],
+    spatial_resolution = [SpatialResolution(distance=5, uom=u"meters")],
     conformity = [Conformity(title=u"specifications blabla", date=datetime.date.today(), date_type="creation", degree="conformant")],
     access_constraints = [u"lalala1", u"lalala2"],
     limitations = [u"limit1", u"limit2"],
@@ -201,7 +200,7 @@ insp4 = InspireMetadata(contact = [ResponsibleParty(organization=u"Org", email=[
     revision_date = datetime.date(2014, 1, 1),
     lineage = u"lineaage",
     denominator = [0, 1, 2, 3],
-    spatial_resolution = [SpatialResolution(uom=u"meters")],
+    spatial_resolution = [SpatialResolution(distance=5, uom=u"meters")],
     conformity = [Conformity(title=u"specifications blabla",date=datetime.date.today(), date_type="creation", degree="conformant")],
     access_constraints = [u"lalala1", u"lalala2"],
     limitations = [u"limit1", u"limit2"],
@@ -217,18 +216,18 @@ insp5 = InspireMetadata(contact = [ResponsibleParty(organization=u"Org", email=[
     locator = ["http://www.google.com", "http://publicamundi.eu"],
     resource_language = ["el"],
     topic_category = ["biota"],
-    keywords = [Thesaurus(terms = ["addresses"],
-                    name = "inspire_data_themes",
+    keywords = [ThesaurusTerms(terms = [u"addresses"],
+                    thesaurus_name = "gemet_inspire_data_themes",
                     title = u"Inspire Data Themes",
                     reference_date = datetime.date(2000,1,1),
                     date_type = 'creation'),
-                Thesaurus(terms = ["accident"],
-                    name = "gemet_concepts",
+                ThesaurusTerms(terms = [u"accident"],
+                    thesaurus_name = "gemet_concepts",
                     title = u"Gemet Concepts",
                     reference_date = datetime.date(2000,1,1),
                     date_type = 'creation'),
-                Thesaurus(terms = ["time_(chronology)"],
-                    name = "gemet_groups",
+                ThesaurusTerms(terms = [u"time_(chronology)"],
+                    thesaurus_name = "gemet_groups",
                     title = u"Gemet Groups",
                     reference_date = datetime.date(2000,1,1),
                     date_type = 'creation'),
@@ -240,7 +239,7 @@ insp5 = InspireMetadata(contact = [ResponsibleParty(organization=u"Org", email=[
     revision_date = datetime.date(2014, 1, 1),
     lineage = u"lineaage",
     denominator = [0, 1, 2, 3],
-    spatial_resolution = [SpatialResolution(uom = u"meters")],
+    spatial_resolution = [SpatialResolution(distance=5, uom = u"meters")],
     conformity = [Conformity(title = u"specifications blabla", date = datetime.date.today(), date_type = "creation", degree = "conformant")],
     access_constraints = [u"lalala1", u"lalala2"],
     limitations = [u"limit1", u"limit2"],
@@ -263,7 +262,6 @@ def test_insp2():
 def test_insp3():
     ''' INSPIRE keywords not from correct vocabulary '''
     assert_faulty_keys(field=insp3, expected_keys=set(['__after']), expected_invariants=["does not belong to thesaurus"])
-
 
 def test_insp4():
     ''' INSPIRE keywords empty'''

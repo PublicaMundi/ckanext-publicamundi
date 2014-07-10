@@ -1,5 +1,6 @@
-import keywords
-from vocabularies_raw import *
+#import keywords
+#from vocabularies_raw import *
+from vocabularies import vocabularies
 
 class ConvertVocabularies:
     # Returns list of dictionaries in the following format
@@ -67,24 +68,41 @@ class Helper:
         return result
 
     @staticmethod
-    def get_keyword_dict(value):
+    def get_keyword_dict(name):
         dict = {}
-        for adict in keywords.keywords_vocabulary:
-            if adict.get('name') == value:
-                dict = adict
-                break
+        for t in vocabularies:
+            if t.get('name') == 'keywords':
+                for adict in t.get('terms'):
+                    if adict.get('name') == name:
+                        dict = adict
+                        break
+            break
         return dict
 
     @staticmethod
-    def get_all_keyword_terms():
-        lista = []
-        for adict in keywords.keywords_vocabulary:
-            lista += adict.get('terms')
-        return list(set(Helper.flatten_dict_vals(lista)))
+    def get_vocabulary_terms(name):
+        outdict = {}
+        for adict in vocabularies:
+            if adict.get('name') == name:
+                outdict = adict
+                break
+        return outdict.get('terms')
+
+    @staticmethod
+    def get_keyword_terms(name):
+        outdict = {}
+        for adict in vocabularies:
+            if adict.get('name') == 'keywords':
+                for bdict in adict.get('terms'):
+                    if bdict.get('name') == name:
+                        outdict = bdict
+                        break
+                break
+        return outdict.get('terms')
 
     @staticmethod
     def get_keyword_keys():
         lista = []
-        for a in keywords.keywords_vocabulary:
+        for a in vocabularies['keywords']:
             lista.append(a.get('name'))
         return lista

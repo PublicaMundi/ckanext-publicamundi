@@ -14,10 +14,10 @@ def assert_faulty_keys(field, expected_keys=None, expected_invariants=None):
         assert errs_dict
         assert expected_keys == set(errs_dict.keys())
         if '__after' in errs_dict.keys():
-            print 'expected_invariants = ', expected_invariants
-            print 'errs_dict = ', json.dumps(errs_dict['__after'])
+            #print 'expected_invariants = ', expected_invariants
+            #print 'errs_dict = ', json.dumps(errs_dict['__after'])
             for k in expected_invariants:
-                print 'k = ', k
+                #print 'k = ', k
                 assert re.search(k, json.dumps(errs_dict['__after']))
                 #json.dumps(errs_dict['__after'])
 
