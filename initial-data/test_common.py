@@ -1,7 +1,7 @@
 import zope.interface
 import zope.schema
 import datetime
-from typedecl_common import *
+from initial_data.typedecl_common import *
 
 print '\nTesting Responsible Party\n'
 

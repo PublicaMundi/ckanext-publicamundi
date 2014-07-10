@@ -1,8 +1,7 @@
 import zope.interface
-
 from ckanext.publicamundi.lib.metadata.base import Object
 from ckanext.publicamundi.lib.metadata.schemata import *
-
+from ckanext.publicamundi.lib.metadata.schemata.common import *
 from ckanext.publicamundi.lib.metadata.types import object_null_adapter
 
 @object_null_adapter(IPostalAddress)
@@ -42,6 +41,32 @@ class Polygon(Object):
     points = None
     name = None
 
+@object_null_adapter(IResponsibleParty)
+class ResponsibleParty(Object):
+    zope.interface.implements(IResponsibleParty)
+
+    organization = None
+    email = None
+    role = None
+
+@object_null_adapter(IFreeKeyword)
+class FreeKeyword(Object):
+    zope.interface.implements(IFreeKeyword)
+
+    value = None
+    originating_vocabulary = None
+    reference_date = None
+    date_type = None
+
+@object_null_adapter(IGeographicBoundingBox)
+class GeographicBoundingBox(Object):
+    zope.interface.implements(IGeographicBoundingBox)
+
+    nblat = None
+    sblat = None
+    eblng = None
+    wblng = None
+
 @object_null_adapter(ITemporalExtent)
 class TemporalExtent(Object):
     zope.interface.implements(ITemporalExtent)
@@ -49,3 +74,18 @@ class TemporalExtent(Object):
     start = None
     end = None
 
+@object_null_adapter(ISpatialResolution)
+class SpatialResolution(Object):
+    zope.interface.implements(ISpatialResolution)
+
+    distance = None
+    uom = None
+
+@object_null_adapter(IConformity)
+class Conformity(Object):
+    zope.interface.implements(IConformity)
+
+    title = None
+    date = None
+    date_type = None
+    degree = None

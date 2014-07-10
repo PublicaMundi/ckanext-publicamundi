@@ -13,8 +13,8 @@ class CkanMetadata(BaseMetadata):
 
     title = None
 
-@object_null_adapter(IInspireMetadata)
-class InspireMetadata(BaseMetadata):
-    zope.interface.implements(IInspireMetadata)
-
-    title = None
+#@object_null_adapter(IInspireMetadata)
+#class InspireMetadata(BaseMetadata):
+#    zope.interface.implements(IInspireMetadata)
+#
+#    title = None

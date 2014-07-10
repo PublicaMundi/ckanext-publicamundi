@@ -1,7 +1,7 @@
 ckanext-publicamundi
 ====================
 
-This is a CKAN extension that hosts various plugins needed for PublicaMundi project.
+This is a CKAN extension that hosts various plugins needed for PublicaMundi project!
 
 Install
 -------
