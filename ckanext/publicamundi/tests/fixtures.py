@@ -46,7 +46,6 @@ foo1 = Foo(
     password = u'secret',
 )
 
-
 # Find schema validation errors: originating_vocabulary,date_type
 fkw1 = FreeKeyword(value = u"val", reference_date = datetime.date(1000,1,1),date_type = "creationn")
 

@@ -1,8 +1,7 @@
 import zope.interface
-import ckan.plugins as p
 
 from ckanext.publicamundi.lib.metadata.base import Object
-from ckanext.publicamundi.lib.metadata.schemata.inspire import IInspireMetadata
+from ckanext.publicamundi.lib.metadata.schemata.inspire import IThesaurus, IInspireMetadata
 
 from ckanext.publicamundi.lib.metadata.types import object_null_adapter
 from ckanext.publicamundi.lib.metadata.types.common import *
@@ -137,6 +136,8 @@ class InspireMetadata(Object):
     def to_xml(cls, imd, outfile):
         '''Convert to ISO XML'''
 
+        import ckan.plugins as p
+        
         iso_xml = p.toolkit.render('package/objects/inspire-iso.xml', extra_vars={
             'data':imd
         })

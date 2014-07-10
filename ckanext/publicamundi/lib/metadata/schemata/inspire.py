@@ -1,12 +1,14 @@
 import zope.interface
 import zope.schema
+from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 import re
 import datetime
-from common import *
-from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+
 from ckanext.publicamundi.lib.metadata.helpers import vocabularies
 from ckanext.publicamundi.lib.metadata.helpers import keywords
 from ckanext.publicamundi.lib.metadata.ibase import IObject
+
+from ckanext.publicamundi.lib.metadata.schemata.common import *
 
 class IThesaurus(IObject):
 

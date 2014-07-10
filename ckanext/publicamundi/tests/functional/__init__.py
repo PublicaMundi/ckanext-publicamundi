@@ -4,6 +4,7 @@ import pylons
 
 import ckan.tests
 from ckan.tests import url_for
+from ckan.tests import TestController as BaseTestController
 
 def setup_request_context(response):
     ''' Setup Pylons globals (c, url request, response, session)
@@ -32,7 +33,7 @@ def with_request_context(route_name, action='index'):
     def _decorator(method):
         @functools.wraps(method)
         def _method(test_controller, *args, **kwargs):
-            if not (isinstance(test_controller, ckan.tests.TestController)):
+            if not (isinstance(test_controller, BaseTestController)):
                 raise TypeError('The decorated can only be applied to a TestController')
             resp = test_controller.app.get(url_for(route_name, action=action))
             setup_request_context(resp)

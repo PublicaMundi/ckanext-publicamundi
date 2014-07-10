@@ -1,5 +1,6 @@
 import zope.interface
 import zope.schema
+import z3c.schema.email
 import logging
 import nose.tools
 import pyquery
@@ -7,6 +8,7 @@ import pyquery
 import pylons
 import ckan.tests
 from ckan.tests import url_for
+from ckan.tests import TestController as BaseTestController
 
 from ckanext.publicamundi.tests.functional import with_request_context
 from ckanext.publicamundi.tests import fixtures
@@ -46,7 +48,7 @@ BoolWidget3 = \
 
 ## Tests ##
 
-class TestController(ckan.tests.TestController):
+class TestController(BaseTestController):
 
     ## Test fields ##
  
@@ -60,6 +62,7 @@ class TestController(ckan.tests.TestController):
             zope.schema.interfaces.IList,
             zope.schema.interfaces.IDict,
             zope.schema.interfaces.IObject,
+            z3c.schema.email.interfaces.IRFC822MailAddress,
         ]
         for iface in field_ifaces:
             yield self._test_registered_field_widgets, iface

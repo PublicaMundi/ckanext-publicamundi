@@ -62,9 +62,8 @@ class IResponsibleParty(IObject):
         title = u'Email',
         required = True,
         min_length = 1,
-        value_type = RFC822MailAddress(
+        value_type = z3c.schema.email.RFC822MailAddress(
             title = u'Email'))
-            #constraint = re.compile("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?").match))
 
     role = zope.schema.Choice(Helper.flatten_dict_vals(vocabularies.party_roles),
         title = u'Responsible party role',

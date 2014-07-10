@@ -1,5 +1,6 @@
 import zope.interface
 import zope.schema
+import z3c.schema.email
 
 from ckan.plugins import toolkit
 
@@ -27,6 +28,7 @@ class TextLineEditWidget(base_widgets.EditFieldWidget):
         return 'package/snippets/fields/edit-textline.html'
 
 @field_widget_adapter(zope.schema.interfaces.ITextLine, qualifiers=['email'])
+@field_widget_adapter(z3c.schema.email.interfaces.IRFC822MailAddress)
 class EmailEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
