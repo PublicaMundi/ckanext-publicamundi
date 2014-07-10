@@ -297,9 +297,9 @@ class Object(object):
                         ef.append(ex)
                 # If type is ok, proceed to schema validation
                 if not ef:
-                    errors = self._validate_schema_for_field_items(enumerate(f), F)
-                    if errors:
-                        ef.append(zope.interface.Invalid(errors))
+                    exs = self._validate_schema_for_field_items(enumerate(f), F)
+                    if exs:
+                        ef.extend(exs)
             elif isinstance(F, zope.schema.Dict):
                 # Check is a dict type
                 if not isinstance(f, dict):
@@ -309,9 +309,9 @@ class Object(object):
                         ef.append(ex)
                 # If type is ok, proceed to schema validation
                 if not ef:
-                    errors = self._validate_schema_for_field_items(f.iteritems(), F)
-                    if errors:
-                        ef.append(zope.interface.Invalid(errors))
+                    exs = self._validate_schema_for_field_items(f.iteritems(), F)
+                    if exs:
+                        ef.extend(exs)
             else:
                 # A leaf field: validate directly via Field
                 try:
@@ -321,24 +321,40 @@ class Object(object):
             return ef
 
         def _validate_schema_for_field_items(self, items, F):
-            '''Return <errors>'''
+            '''Return list of <ex> i.e. a list of Invalid-based exceptions'''
+            exs = []
+            # Hydrate items (must be re-used)
+            items = list(items)
+
+            # 1. Validate length contraints
+            if F.min_length and len(items) < F.min_length:
+                exs.append(zope.schema.interfaces.TooShort(
+                    'The collection is too short (< %d)' % (F.min_length)))
+            
+            if F.max_length and len(items) > F.max_length:
+                exs.append(zope.schema.interfaces.TooBig(
+                    'The collection is too big (> %d)' % (F.max_length)))
+
+            # 2. Validate items
             errors = []
-            # Validate item keys (if defined)
+            # 2.1 Validate item keys (if exist)
             if hasattr(F, 'key_type') and F.key_type:
                 assert isinstance(F.key_type, zope.schema.Choice)
-                items = list(items) # hydrate to re-use it
                 for k,y in items:
                     try:
                         F.key_type.validate(k)
                     except zope.interface.Invalid as ex:
                         errors.append((k, [ex]))
                 pass
-            # Validate item values
+            # 2.2 Validate item values
             for k,y in items:
                 ef = self._validate_schema_for_field(y, F.value_type)
                 if ef:
                     errors.append((k, ef))
-            return errors
+            if errors:
+                exs.append(zope.interface.Invalid(errors))
+
+            return exs
 
         def validate_invariants(self):
             '''Return <errors>'''
@@ -372,31 +388,39 @@ class Object(object):
             '''Returns <ef>, i.e. an array of field-specific exceptions'''
             ef = []
 
-            errors = None
+            ex  = None
             if isinstance(F, zope.schema.Object):
                 cls = type(self)
                 errors = cls(f, self.opts).validate_invariants()
+                if errors:
+                    ex = zope.interface.Invalid(errors)
             elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
-                errors = self._validate_invariants_for_field_items(enumerate(f), F)
+                ex = self._validate_invariants_for_field_items(enumerate(f), F)
             elif isinstance(F, zope.schema.Dict):
-                errors = self._validate_invariants_for_field_items(f.iteritems(), F)
+                ex = self._validate_invariants_for_field_items(f.iteritems(), F)
 
-            if errors:
-                ef.append(zope.interface.Invalid(errors))
+            if ex:
+                ef.append(ex)
             return ef
 
         def _validate_invariants_for_field_items(self, items, F):
-            '''Returns <errors>'''
+            '''Return <ex> i.e. an Invalid-based exception'''
+            ex = None
+            
             errors = []
             for k,y in items:
                 ef = self._validate_invariants_for_field(y, F.value_type)
                 if ef:
                     errors.append((k, ef))
-            return errors
+            
+            if errors:
+                ex = zope.interface.Invalid(errors)
+            return ex    
 
     ## Error helpers - Convert error lists 
 
     def dictize_errors(self, errors):
+        ''' Convert an <errors> structure to a nested dict '''
         return self._dictize_errors(errors)
 
     INVARIANT_ERROR_KEY = '__after'
@@ -406,10 +430,11 @@ class Object(object):
         S = cls.get_schema()
         res = dict()
         for k, ef in errors:
-            # Pick the 1st exception (is this ok?)
+            # Fixme Pick the 1st exception (is this ok?)
             ex = ef[0]
             if k is None:
                 # Found a failed invariant
+                # Todo: maybe use defaultdict(list)
                 if not res.has_key(cls.INVARIANT_ERROR_KEY):
                     res[cls.INVARIANT_ERROR_KEY] = list()
                 res[cls.INVARIANT_ERROR_KEY].append(str(ex))
@@ -423,7 +448,9 @@ class Object(object):
         return res
 
     def _dictize_errors_for_field(self, ex, f, F):
-        assert isinstance(ex, zope.interface.Invalid), 'Validation errors derive from Invalid'
+        assert isinstance(ex, zope.interface.Invalid), \
+            'Validation errors should derive from Invalid'
+        
         # Check if we must descend 
         if not (ex.args and isinstance(ex.args[0], list)):
             # Treat this as a literal, stop descending
@@ -447,13 +474,14 @@ class Object(object):
     def _dictize_errors_for_field_collection(self, errors, f, F):
         res = {}
         for k, ef in errors:
-            # Pick the 1st exception
+            # Fixme again, pick the 1st exception
             ex = ef[0]
             # Note that here, k will be either an integer or a string
             res[k] = self._dictize_errors_for_field(ex, f[k], F.value_type)
         return res
 
     def flatten_errors(self, errors):
+        ''' Convert an <errors> structure to a flattened dict '''
         error_dict = self._dictize_errors(errors)
         return dictization.flatten(error_dict)
 

@@ -3,25 +3,31 @@ import re
 import json
 
 @nose.tools.nottest
-def assert_faulty_keys(x, expected_keys=None, expected_invariants=None):
-    
+def assert_faulty_keys(x, expected_keys=[], expected_invariants=[]):
+    '''Verify that a set of fields (given with their keys) fail to validate'''
+
+    expected_keys = set(expected_keys)
+
     errs = x.validate()
     errs_dict = x.dictize_errors(errs)
     
-    print json.dumps(errs_dict, indent=4)
+    faulty_keys = set(errs_dict.keys())
+
+    print ' ** Errors:\n%s' %(json.dumps(errs_dict, indent=4))
+    print ' ** Keys not expected but failed: %s' %(faulty_keys - expected_keys)
+    print ' ** Keys expected but not failed: %s' %(expected_keys - faulty_keys)
     
     if not expected_keys:
         assert not errs_dict
     else:
         assert errs_dict
-        assert expected_keys == set(errs_dict.keys())
+        assert expected_keys == faulty_keys
         if '__after' in errs_dict.keys():
-            print 'expected_invariants = ', expected_invariants
-            print 'errs_dict = ', json.dumps(errs_dict['__after'])
+            print ' ** Expected invariants (to fail):', expected_invariants
+            print ' ** Failed invariants:', json.dumps(errs_dict['__after'])
             for k in expected_invariants:
-                print 'k = ', k
+                print ' ** Matching error string for', k
                 assert re.search(k, json.dumps(errs_dict['__after']))
-
 
 
 
