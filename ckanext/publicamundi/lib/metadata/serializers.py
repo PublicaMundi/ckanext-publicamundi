@@ -63,7 +63,7 @@ class FloatSerializer(BaseSerializer):
 
 class DatetimeSerializer(BaseSerializer):
 
-    def __init__(self, fmt="%Y-%m-%dT%H:%M:%S.%f"):
+    def __init__(self, fmt="%Y-%m-%d %H:%M:%S"):
         self.fmt = fmt
 
     def dumps(self, t):

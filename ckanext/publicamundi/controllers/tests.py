@@ -11,11 +11,13 @@ import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
 
-from ckanext.publicamundi.tests import fixtures
-
-from ckanext.publicamundi.lib.metadata.types import *
+from ckanext.publicamundi.lib.metadata import schemata
+from ckanext.publicamundi.lib.metadata import types
+from ckanext.publicamundi.lib.metadata.types import Object
 from ckanext.publicamundi.lib.metadata.widgets import markup_for_field
 from ckanext.publicamundi.lib.metadata.widgets import markup_for_object
+
+from ckanext.publicamundi.tests import fixtures
 
 log1 = logging.getLogger(__name__)
 
@@ -85,6 +87,7 @@ class TestsController(BaseController):
         
         # 1. A Point object
         obj = fixtures.pt1
+        assert isinstance(obj, types.Point)
         data = {
             'required': False,
             'classes': [],
@@ -101,6 +104,7 @@ class TestsController(BaseController):
         
         # 2. A TemporalExtent object
         obj = fixtures.dt1
+        assert isinstance(obj, types.TemporalExtent)
         c.form_sections.append({
             'heading': toolkit.literal('<h3>Object <code>TemporalExtent</code></h3>'),
             'body': \
@@ -110,7 +114,7 @@ class TestsController(BaseController):
         })
         
         # 3. A PostalAddress object
-        obj = PostalAddress(address=u'22 Acacia Avenue', postalcode=u'12345')
+        obj = types.PostalAddress(address=u'22 Acacia Avenue', postalcode=u'12345')
         c.form_sections.append({
             'heading': toolkit.literal('<h3>Object <code>PostalAddress</code></h3>'),
             'body': \
@@ -124,21 +128,27 @@ class TestsController(BaseController):
         return render('tests/accordion-form.html')
 
     def edit_foo(self, id='foo1'):
+        obj = getattr(fixtures, id)
+        assert isinstance(obj, types.Foo)
         if request.method == 'POST':
             d = dict(request.params.items())
+            factory = Object.Factory(schemata.IFoo)
+            o = factory().from_dict(d, is_flat=True, opts={
+                'unserialize-keys': True,
+                'unserialize-values': True,
+            })
             response.headers['Content-Type'] = 'application/json' 
-            return json.dumps(d)
-        
-        obj = getattr(fixtures, id)
-        assert isinstance(obj, Foo)
-
-        c.form_class = 'form-horizontal'
-        c.form_markup = markup_for_object('edit', obj, 'a.foo1', { 'title': u'Foo #1' })
-        return render('tests/form.html')
+            return o.to_json()
+        else:
+            c.form_class = 'form-horizontal'
+            c.form_markup = markup_for_object('edit', obj, name_prefix='', data={ 
+                'title': u'Foo #1' 
+            })
+            return render('tests/form.html')
 
     def show_foo(self, id='foo1'):
         obj = getattr(fixtures, id)
-        assert isinstance(obj, Foo)
+        assert isinstance(obj, types.Foo)
         c.markup = markup_for_object('read', obj, 'a.foo1', { 'title': u'Foo #2' })
         return render('tests/page.html')
 

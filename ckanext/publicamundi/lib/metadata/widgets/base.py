@@ -87,7 +87,8 @@ class FieldWidget(Widget):
         template_vars.update(data)
 
         # Provide computed variables or sensible defaults
-        qname = "%s.%s" %(name_prefix, template_vars['name'])
+        qname = "%s%s" %(name_prefix + '.' if name_prefix else '', 
+            template_vars['name'])
         template_vars['qname'] = qname
         template_vars['classes'] = template_vars['classes'] + [\
             'widget',

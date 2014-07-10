@@ -62,6 +62,8 @@ class Object(object):
         zope.schema.Float: None,
         zope.schema.Bool: None,
         zope.schema.Datetime: None,
+        zope.schema.Date: None,
+        zope.schema.Time: None,
         zope.schema.List: list,
         zope.schema.Tuple: list,
         zope.schema.Dict: dict,
@@ -98,21 +100,34 @@ class Object(object):
         cls = type(self)
         return cls.Validator(self).validate()
 
-    def to_dict(self, flat=False, opts=None):
+    def to_dict(self, flat=False, opts={}):
         if flat:
-            return self.flatten(opts)
+            res = self.flatten(opts)
+            if 'serialize-keys' in opts:
+                key_serializer = get_key_tuple_serializer(self.KEY_GLUE)
+                res = { key_serializer.dumps(k): v for k, v in res.items() }
         else:
-            return self.dictize(opts)
+            res = self.dictize(opts)
+        return res
 
-    def from_dict(self, d, is_flat=None, opts=None):
+    def from_dict(self, d, is_flat=None, opts={}):
         assert isinstance(d, dict)
         cls = type(self)
+        
         # Decide if input is a flattened dict
         if is_flat is None:
             is_flat = isinstance(d.iterkeys().next(), tuple)
         if is_flat:
-            d = dictization.unflatten(d)
-        # (Re)construct self
+            if 'unserialize-keys' in opts:
+                key_serializer = get_key_tuple_serializer(cls.KEY_GLUE)
+                d = dictization.unflatten({
+                    key_serializer.loads(k): v for k, v in d.items()
+                })
+                opts.pop('unserialize-keys')
+            else:
+                d = dictization.unflatten(d)
+                
+        # Load self
         self.load(d, opts)
         # Allow method chaining
         return self
@@ -120,26 +135,20 @@ class Object(object):
     def to_json(self, flat=False, indent=None):
         cls = type(self)
         opts = {
+            'serialize-keys': flat,
             'serialize-values': True,
         }
         d = self.to_dict(flat, opts)
-        if flat:
-            serializer = get_key_tuple_serializer(cls.KEY_GLUE)
-            d = { serializer.dumps(k): v for k, v in d.items() }
         return json.dumps(d, indent=indent)
 
     def from_json(self, s, is_flat=False):
         cls = type(self)
         d = json.loads(s)
-        if is_flat:
-            serializer = get_key_tuple_serializer(cls.KEY_GLUE)
-            d = dictization.unflatten({
-                serializer.loads(k): v for k, v in d.items()
-            })
         opts = {
+            'unserialize-keys': is_flat,
             'unserialize-values': True,
         }
-        return self.from_dict(d, is_flat=False, opts=opts)
+        return self.from_dict(d, is_flat, opts=opts)
 
     ## Constructor based on keyword args 
 
@@ -155,7 +164,7 @@ class Object(object):
 
     ## Provide a string representation
 
-    def _repr(self):
+    def __repr__(self):
         cls = type(self)
         typename = cls.__name__ #"%s:%s" %(cls.__module__, cls.__name__)
         s = '<' + typename
@@ -165,8 +174,6 @@ class Object(object):
                 s += ' %s=%s' %(k, repr(f))
         s += '>'
         return s
-
-    __repr__ = _repr
 
     ## Introspective class methods
 
@@ -454,9 +461,9 @@ class Object(object):
 
     class Dictizer(object):
 
-        def __init__(self, obj, opts=None):
+        def __init__(self, obj, opts={}):
             self.obj = obj
-            self.opts = opts or {}
+            self.opts = opts
 
         def dictize(self):
             S = self.obj.get_schema()
@@ -536,9 +543,9 @@ class Object(object):
 
     class Loader(object):
 
-        def __init__(self, obj, opts=None):
+        def __init__(self, obj, opts={}):
             self.obj = obj
-            self.opts = opts or {}
+            self.opts = opts
 
         def load(self, d):
             S = self.obj.get_schema()
@@ -589,16 +596,16 @@ class Object(object):
 
     class Factory(object):
 
-        def __init__(self, iface, opts=None):
+        def __init__(self, iface, opts={}):
             assert iface.extends(IObject), 'Expected a schema-providing interface'
             self.target_iface = iface
             self.target_cls = adapter_registry.lookup([], iface, '')
             if not self.target_cls:
-                raise ValueError('Cannot find a class implementing %s' %(iface))
+                raise ValueError('Cannot find a class that implements %s' %(iface))
             self.opts = {
                 'unserialize-values': False,
             }
-            self.opts.update(opts or {})
+            self.opts.update(opts)
 
         def from_dict(self, d, is_flat=False):
             return self.target_cls().from_dict(d, is_flat, self.opts)
