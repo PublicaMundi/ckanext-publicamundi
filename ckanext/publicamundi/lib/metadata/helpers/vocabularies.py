@@ -100,148 +100,6 @@ vocabularies = [
     {
         "terms": [
             {
-                "name": "\u0388\u03b4\u03b1\u03c6\u03bf\u03c2", 
-                "title": "\u0388\u03b4\u03b1\u03c6\u03bf\u03c2"
-            }, 
-            {
-                "name": "\u0391\u03bd\u03b8\u03c1\u03ce\u03c0\u03b9\u03bd\u03b7_\u03c5\u03b3\u03b5\u03af\u03b1_\u03ba\u03b1\u03b9_\u03b1\u03c3\u03c6\u03ac\u03bb\u03b5\u03b9\u03b1", 
-                "title": "\u0391\u03bd\u03b8\u03c1\u03ce\u03c0\u03b9\u03bd\u03b7 \u03c5\u03b3\u03b5\u03af\u03b1 \u03ba\u03b1\u03b9 \u03b1\u03c3\u03c6\u03ac\u03bb\u03b5\u03b9\u03b1"
-            }, 
-            {
-                "name": "\u0391\u03c4\u03bc\u03bf\u03c3\u03c6\u03b1\u03b9\u03c1\u03b9\u03ba\u03ad\u03c2_\u03c3\u03c5\u03bd\u03b8\u03ae\u03ba\u03b5\u03c2", 
-                "title": "\u0391\u03c4\u03bc\u03bf\u03c3\u03c6\u03b1\u03b9\u03c1\u03b9\u03ba\u03ad\u03c2 \u03c3\u03c5\u03bd\u03b8\u03ae\u03ba\u03b5\u03c2"
-            }, 
-            {
-                "name": "\u0392\u03b9\u03bf\u03b3\u03b5\u03c9\u03b3\u03c1\u03b1\u03c6\u03b9\u03ba\u03ad\u03c2_\u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ad\u03c2", 
-                "title": "\u0392\u03b9\u03bf\u03b3\u03b5\u03c9\u03b3\u03c1\u03b1\u03c6\u03b9\u03ba\u03ad\u03c2 \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ad\u03c2"
-            }, 
-            {
-                "name": "\u0393\u03b5\u03c9\u03bb\u03bf\u03b3\u03af\u03b1", 
-                "title": "\u0393\u03b5\u03c9\u03bb\u03bf\u03b3\u03af\u03b1"
-            }, 
-            {
-                "name": "\u0393\u03b5\u03c9\u03c1\u03b3\u03b9\u03ba\u03ad\u03c2_\u03b5\u03b3\u03ba\u03b1\u03c4\u03b1\u03c3\u03c4\u03ac\u03c3\u03b5\u03b9\u03c2_\u03ba\u03b1\u03b9_\u03b5\u03b3\u03ba\u03b1\u03c4\u03b1\u03c3\u03c4\u03ac\u03c3\u03b5\u03b9\u03c2_\u03c5\u03b4\u03b1\u03c4\u03bf\u03ba\u03b1\u03bb\u03bb\u03b9\u03ad\u03c1\u03b3\u03b5\u03b9\u03b1\u03c2", 
-                "title": "\u0393\u03b5\u03c9\u03c1\u03b3\u03b9\u03ba\u03ad\u03c2 \u03b5\u03b3\u03ba\u03b1\u03c4\u03b1\u03c3\u03c4\u03ac\u03c3\u03b5\u03b9\u03c2 \u03ba\u03b1\u03b9 \u03b5\u03b3\u03ba\u03b1\u03c4\u03b1\u03c3\u03c4\u03ac\u03c3\u03b5\u03b9\u03c2 \u03c5\u03b4\u03b1\u03c4\u03bf\u03ba\u03b1\u03bb\u03bb\u03b9\u03ad\u03c1\u03b3\u03b5\u03b9\u03b1\u03c2"
-            }, 
-            {
-                "name": "\u0393\u03b5\u03c9\u03c4\u03b5\u03bc\u03ac\u03c7\u03b9\u03b1_\u03ba\u03c4\u03b7\u03bc\u03b1\u03c4\u03bf\u03bb\u03bf\u03b3\u03af\u03bf\u03c5", 
-                "title": "\u0393\u03b5\u03c9\u03c4\u03b5\u03bc\u03ac\u03c7\u03b9\u03b1 \u03ba\u03c4\u03b7\u03bc\u03b1\u03c4\u03bf\u03bb\u03bf\u03b3\u03af\u03bf\u03c5"
-            }, 
-            {
-                "name": "\u0394\u03af\u03ba\u03c4\u03c5\u03b1_\u03bc\u03b5\u03c4\u03b1\u03c6\u03bf\u03c1\u03ce\u03bd", 
-                "title": "\u0394\u03af\u03ba\u03c4\u03c5\u03b1 \u03bc\u03b5\u03c4\u03b1\u03c6\u03bf\u03c1\u03ce\u03bd"
-            }, 
-            {
-                "name": "\u0394\u03b9\u03b5\u03c5\u03b8\u03cd\u03bd\u03c3\u03b5\u03b9\u03c2", 
-                "title": "\u0394\u03b9\u03b5\u03c5\u03b8\u03cd\u03bd\u03c3\u03b5\u03b9\u03c2"
-            }, 
-            {
-                "name": "\u0394\u03b9\u03bf\u03b9\u03ba\u03b7\u03c4\u03b9\u03ba\u03ad\u03c2_\u03b5\u03bd\u03cc\u03c4\u03b7\u03c4\u03b5\u03c2", 
-                "title": "\u0394\u03b9\u03bf\u03b9\u03ba\u03b7\u03c4\u03b9\u03ba\u03ad\u03c2 \u03b5\u03bd\u03cc\u03c4\u03b7\u03c4\u03b5\u03c2"
-            }, 
-            {
-                "name": "\u0395\u03b3\u03ba\u03b1\u03c4\u03b1\u03c3\u03c4\u03ac\u03c3\u03b5\u03b9\u03c2_\u03c0\u03b1\u03c1\u03b1\u03b3\u03c9\u03b3\u03ae\u03c2_\u03ba\u03b1\u03b9_\u03b2\u03b9\u03bf\u03bc\u03b7\u03c7\u03b1\u03bd\u03b9\u03ba\u03ad\u03c2_\u03b5\u03b3\u03ba\u03b1\u03c4\u03b1\u03c3\u03c4\u03ac\u03c3\u03b5\u03b9\u03c2", 
-                "title": "\u0395\u03b3\u03ba\u03b1\u03c4\u03b1\u03c3\u03c4\u03ac\u03c3\u03b5\u03b9\u03c2 \u03c0\u03b1\u03c1\u03b1\u03b3\u03c9\u03b3\u03ae\u03c2 \u03ba\u03b1\u03b9 \u03b2\u03b9\u03bf\u03bc\u03b7\u03c7\u03b1\u03bd\u03b9\u03ba\u03ad\u03c2 \u03b5\u03b3\u03ba\u03b1\u03c4\u03b1\u03c3\u03c4\u03ac\u03c3\u03b5\u03b9\u03c2"
-            }, 
-            {
-                "name": "\u0395\u03b3\u03ba\u03b1\u03c4\u03b1\u03c3\u03c4\u03ac\u03c3\u03b5\u03b9\u03c2_\u03c0\u03b1\u03c1\u03b1\u03ba\u03bf\u03bb\u03bf\u03cd\u03b8\u03b7\u03c3\u03b7\u03c2_\u03c4\u03bf\u03c5_\u03c0\u03b5\u03c1\u03b9\u03b2\u03ac\u03bb\u03bb\u03bf\u03bd\u03c4\u03bf\u03c2", 
-                "title": "\u0395\u03b3\u03ba\u03b1\u03c4\u03b1\u03c3\u03c4\u03ac\u03c3\u03b5\u03b9\u03c2 \u03c0\u03b1\u03c1\u03b1\u03ba\u03bf\u03bb\u03bf\u03cd\u03b8\u03b7\u03c3\u03b7\u03c2 \u03c4\u03bf\u03c5 \u03c0\u03b5\u03c1\u03b9\u03b2\u03ac\u03bb\u03bb\u03bf\u03bd\u03c4\u03bf\u03c2"
-            }, 
-            {
-                "name": "\u0395\u03bd\u03b4\u03b9\u03b1\u03b9\u03c4\u03ae\u03bc\u03b1\u03c4\u03b1_\u03ba\u03b1\u03b9_\u03b2\u03b9\u03cc\u03c4\u03bf\u03c0\u03bf\u03b9", 
-                "title": "\u0395\u03bd\u03b4\u03b9\u03b1\u03b9\u03c4\u03ae\u03bc\u03b1\u03c4\u03b1 \u03ba\u03b1\u03b9 \u03b2\u03b9\u03cc\u03c4\u03bf\u03c0\u03bf\u03b9"
-            }, 
-            {
-                "name": "\u0395\u03bd\u03b5\u03c1\u03b3\u03b5\u03b9\u03b1\u03ba\u03bf\u03af_\u03c0\u03cc\u03c1\u03bf\u03b9", 
-                "title": "\u0395\u03bd\u03b5\u03c1\u03b3\u03b5\u03b9\u03b1\u03ba\u03bf\u03af \u03c0\u03cc\u03c1\u03bf\u03b9"
-            }, 
-            {
-                "name": "\u0395\u03c0\u03b9\u03c7\u03b5\u03b9\u03c1\u03ae\u03c3\u03b5\u03b9\u03c2_\u03ba\u03bf\u03b9\u03bd\u03ae\u03c2_\u03c9\u03c6\u03b5\u03bb\u03b5\u03af\u03b1\u03c2_\u03ba\u03b1\u03b9_\u03ba\u03c1\u03b1\u03c4\u03b9\u03ba\u03ad\u03c2_\u03c5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2", 
-                "title": "\u0395\u03c0\u03b9\u03c7\u03b5\u03b9\u03c1\u03ae\u03c3\u03b5\u03b9\u03c2 \u03ba\u03bf\u03b9\u03bd\u03ae\u03c2 \u03c9\u03c6\u03b5\u03bb\u03b5\u03af\u03b1\u03c2 \u03ba\u03b1\u03b9 \u03ba\u03c1\u03b1\u03c4\u03b9\u03ba\u03ad\u03c2 \u03c5\u03c0\u03b7\u03c1\u03b5\u03c3\u03af\u03b5\u03c2"
-            }, 
-            {
-                "name": "\u0396\u03ce\u03bd\u03b5\u03c2_\u03b4\u03b9\u03b1\u03c7\u03b5\u03af\u03c1\u03b9\u03c3\u03b7\u03c2/\u03c0\u03b5\u03c1\u03b9\u03bf\u03c1\u03b9\u03c3\u03bc\u03bf\u03cd/\u03c1\u03cd\u03b8\u03bc\u03b9\u03c3\u03b7\u03c2_\u03b5\u03ba\u03c4\u03ac\u03c3\u03b5\u03c9\u03bd_\u03ba\u03b1\u03b9_\u03bc\u03bf\u03bd\u03ac\u03b4\u03b5\u03c2_\u03b1\u03bd\u03b1\u03c6\u03bf\u03c1\u03ac\u03c2", 
-                "title": "\u0396\u03ce\u03bd\u03b5\u03c2 \u03b4\u03b9\u03b1\u03c7\u03b5\u03af\u03c1\u03b9\u03c3\u03b7\u03c2/\u03c0\u03b5\u03c1\u03b9\u03bf\u03c1\u03b9\u03c3\u03bc\u03bf\u03cd/\u03c1\u03cd\u03b8\u03bc\u03b9\u03c3\u03b7\u03c2 \u03b5\u03ba\u03c4\u03ac\u03c3\u03b5\u03c9\u03bd \u03ba\u03b1\u03b9 \u03bc\u03bf\u03bd\u03ac\u03b4\u03b5\u03c2 \u03b1\u03bd\u03b1\u03c6\u03bf\u03c1\u03ac\u03c2"
-            }, 
-            {
-                "name": "\u0396\u03ce\u03bd\u03b5\u03c2_\u03c6\u03c5\u03c3\u03b9\u03ba\u03ce\u03bd_\u03ba\u03b9\u03bd\u03b4\u03cd\u03bd\u03c9\u03bd", 
-                "title": "\u0396\u03ce\u03bd\u03b5\u03c2 \u03c6\u03c5\u03c3\u03b9\u03ba\u03ce\u03bd \u03ba\u03b9\u03bd\u03b4\u03cd\u03bd\u03c9\u03bd"
-            }, 
-            {
-                "name": "\u0398\u03b1\u03bb\u03ac\u03c3\u03c3\u03b9\u03b5\u03c2_\u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ad\u03c2", 
-                "title": "\u0398\u03b1\u03bb\u03ac\u03c3\u03c3\u03b9\u03b5\u03c2 \u03c0\u03b5\u03c1\u03b9\u03bf\u03c7\u03ad\u03c2"
-            }, 
-            {
-                "name": "\u039a\u03ac\u03bb\u03c5\u03c8\u03b7_\u03b3\u03b7\u03c2", 
-                "title": "\u039a\u03ac\u03bb\u03c5\u03c8\u03b7 \u03b3\u03b7\u03c2"
-            }, 
-            {
-                "name": "\u039a\u03b1\u03c4\u03b1\u03bd\u03bf\u03bc\u03ae_\u03b5\u03b9\u03b4\u03ce\u03bd", 
-                "title": "\u039a\u03b1\u03c4\u03b1\u03bd\u03bf\u03bc\u03ae \u03b5\u03b9\u03b4\u03ce\u03bd"
-            }, 
-            {
-                "name": "\u039a\u03b1\u03c4\u03b1\u03bd\u03bf\u03bc\u03ae_\u03c0\u03bb\u03b7\u03b8\u03c5\u03c3\u03bc\u03bf\u03cd_-_\u03b4\u03b7\u03bc\u03bf\u03b3\u03c1\u03b1\u03c6\u03af\u03b1", 
-                "title": "\u039a\u03b1\u03c4\u03b1\u03bd\u03bf\u03bc\u03ae \u03c0\u03bb\u03b7\u03b8\u03c5\u03c3\u03bc\u03bf\u03cd - \u03b4\u03b7\u03bc\u03bf\u03b3\u03c1\u03b1\u03c6\u03af\u03b1"
-            }, 
-            {
-                "name": "\u039a\u03c4\u03af\u03c1\u03b9\u03b1", 
-                "title": "\u039a\u03c4\u03af\u03c1\u03b9\u03b1"
-            }, 
-            {
-                "name": "\u039c\u03b5\u03c4\u03b5\u03c9\u03c1\u03bf\u03bb\u03bf\u03b3\u03b9\u03ba\u03ac_\u03b3\u03b5\u03c9\u03b3\u03c1\u03b1\u03c6\u03b9\u03ba\u03ac_\u03c7\u03b1\u03c1\u03b1\u03ba\u03c4\u03b7\u03c1\u03b9\u03c3\u03c4\u03b9\u03ba\u03ac", 
-                "title": "\u039c\u03b5\u03c4\u03b5\u03c9\u03c1\u03bf\u03bb\u03bf\u03b3\u03b9\u03ba\u03ac \u03b3\u03b5\u03c9\u03b3\u03c1\u03b1\u03c6\u03b9\u03ba\u03ac \u03c7\u03b1\u03c1\u03b1\u03ba\u03c4\u03b7\u03c1\u03b9\u03c3\u03c4\u03b9\u03ba\u03ac"
-            }, 
-            {
-                "name": "\u039f\u03c1\u03b8\u03bf\u03c6\u03c9\u03c4\u03bf\u03b3\u03c1\u03b1\u03c6\u03af\u03b1", 
-                "title": "\u039f\u03c1\u03b8\u03bf\u03c6\u03c9\u03c4\u03bf\u03b3\u03c1\u03b1\u03c6\u03af\u03b1"
-            }, 
-            {
-                "name": "\u039f\u03c1\u03c5\u03ba\u03c4\u03bf\u03af_\u03c0\u03cc\u03c1\u03bf\u03b9", 
-                "title": "\u039f\u03c1\u03c5\u03ba\u03c4\u03bf\u03af \u03c0\u03cc\u03c1\u03bf\u03b9"
-            }, 
-            {
-                "name": "\u03a0\u03c1\u03bf\u03c3\u03c4\u03b1\u03c4\u03b5\u03c5\u03cc\u03bc\u03b5\u03bd\u03b5\u03c2_\u03c4\u03bf\u03c0\u03bf\u03b8\u03b5\u03c3\u03af\u03b5\u03c2", 
-                "title": "\u03a0\u03c1\u03bf\u03c3\u03c4\u03b1\u03c4\u03b5\u03c5\u03cc\u03bc\u03b5\u03bd\u03b5\u03c2 \u03c4\u03bf\u03c0\u03bf\u03b8\u03b5\u03c3\u03af\u03b5\u03c2"
-            }, 
-            {
-                "name": "\u03a3\u03c4\u03b1\u03c4\u03b9\u03c3\u03c4\u03b9\u03ba\u03ad\u03c2_\u03bc\u03bf\u03bd\u03ac\u03b4\u03b5\u03c2", 
-                "title": "\u03a3\u03c4\u03b1\u03c4\u03b9\u03c3\u03c4\u03b9\u03ba\u03ad\u03c2 \u03bc\u03bf\u03bd\u03ac\u03b4\u03b5\u03c2"
-            }, 
-            {
-                "name": "\u03a3\u03c5\u03c3\u03c4\u03ae\u03bc\u03b1\u03c4\u03b1_\u03b3\u03b5\u03c9\u03b3\u03c1\u03b1\u03c6\u03b9\u03ba\u03bf\u03cd_\u03ba\u03b1\u03bd\u03bd\u03ac\u03b2\u03bf\u03c5", 
-                "title": "\u03a3\u03c5\u03c3\u03c4\u03ae\u03bc\u03b1\u03c4\u03b1 \u03b3\u03b5\u03c9\u03b3\u03c1\u03b1\u03c6\u03b9\u03ba\u03bf\u03cd \u03ba\u03b1\u03bd\u03bd\u03ac\u03b2\u03bf\u03c5"
-            }, 
-            {
-                "name": "\u03a3\u03c5\u03c3\u03c4\u03ae\u03bc\u03b1\u03c4\u03b1_\u03c3\u03c5\u03bd\u03c4\u03b5\u03c4\u03b1\u03b3\u03bc\u03ad\u03bd\u03c9\u03bd", 
-                "title": "\u03a3\u03c5\u03c3\u03c4\u03ae\u03bc\u03b1\u03c4\u03b1 \u03c3\u03c5\u03bd\u03c4\u03b5\u03c4\u03b1\u03b3\u03bc\u03ad\u03bd\u03c9\u03bd"
-            }, 
-            {
-                "name": "\u03a4\u03bf\u03c0\u03c9\u03bd\u03cd\u03bc\u03b9\u03b1", 
-                "title": "\u03a4\u03bf\u03c0\u03c9\u03bd\u03cd\u03bc\u03b9\u03b1"
-            }, 
-            {
-                "name": "\u03a5\u03b4\u03c1\u03bf\u03b3\u03c1\u03b1\u03c6\u03af\u03b1", 
-                "title": "\u03a5\u03b4\u03c1\u03bf\u03b3\u03c1\u03b1\u03c6\u03af\u03b1"
-            }, 
-            {
-                "name": "\u03a5\u03c8\u03bf\u03bc\u03b5\u03c4\u03c1\u03af\u03b1", 
-                "title": "\u03a5\u03c8\u03bf\u03bc\u03b5\u03c4\u03c1\u03af\u03b1"
-            }, 
-            {
-                "name": "\u03a7\u03c1\u03ae\u03c3\u03b5\u03b9\u03c2_\u03b3\u03b7\u03c2", 
-                "title": "\u03a7\u03c1\u03ae\u03c3\u03b5\u03b9\u03c2 \u03b3\u03b7\u03c2"
-            }, 
-            {
-                "name": "\u03a9\u03ba\u03b5\u03b1\u03bd\u03bf\u03b3\u03c1\u03b1\u03c6\u03b9\u03ba\u03ac_\u03b3\u03b5\u03c9\u03b3\u03c1\u03b1\u03c6\u03b9\u03ba\u03ac_\u03c7\u03b1\u03c1\u03b1\u03ba\u03c4\u03b7\u03c1\u03b9\u03c3\u03c4\u03b9\u03ba\u03ac", 
-                "title": "\u03a9\u03ba\u03b5\u03b1\u03bd\u03bf\u03b3\u03c1\u03b1\u03c6\u03b9\u03ba\u03ac \u03b3\u03b5\u03c9\u03b3\u03c1\u03b1\u03c6\u03b9\u03ba\u03ac \u03c7\u03b1\u03c1\u03b1\u03ba\u03c4\u03b7\u03c1\u03b9\u03c3\u03c4\u03b9\u03ba\u03ac"
-            }
-        ], 
-        "name": "inspire_data_themes_el", 
-        "title": "Inspire Data Themes el"
-    }, 
-    {
-        "terms": [
-            {
                 "name": "not_evaluated", 
                 "title": "Not evaluated"
             }, 
@@ -514,66 +372,59 @@ vocabularies = [
     {
         "terms": [
             {
-                "name": "creation", 
-                "title": "\u0397\u03bc\u03b5\u03c1\u03bf\u03bc\u03b7\u03bd\u03af\u03b1 \u03b4\u03b7\u03bc\u03b9\u03bf\u03c5\u03c1\u03b3\u03af\u03b1\u03c2"
-            }, 
-            {
-                "name": "publication", 
-                "title": "\u0397\u03bc\u03b5\u03c1\u03bf\u03bc\u03b7\u03bd\u03af\u03b1 \u03b4\u03b7\u03bc\u03bf\u03c3\u03af\u03b5\u03c5\u03c3\u03b7\u03c2"
-            }, 
-            {
-                "name": "revision", 
-                "title": "\u0397\u03bc\u03b5\u03c1\u03bf\u03bc\u03b7\u03bd\u03af\u03b1 \u03c4\u03b5\u03bb\u03b5\u03c5\u03c4\u03b1\u03af\u03b1\u03c2 \u03b1\u03bd\u03b1\u03b8\u03b5\u03ce\u03c1\u03b7\u03c3\u03b7\u03c2"
-            }
-        ], 
-        "name": "date_types_el", 
-        "title": "Date types el"
-    }, 
-    {
-        "terms": [
-            {
                 "name": "originator", 
-                "title": "Originator"
+                "title": "Originator",
+                "title-el":"Δημιουργός"
             }, 
             {
                 "name": "pointofcontact", 
-                "title": "PointOfContact"
+                "title": "PointOfContact",
+                "title-el":"Αρμόδιος για επικοινωνία"
             }, 
             {
                 "name": "custodian", 
-                "title": "Custodian"
+                "title": "Custodian",
+                "title-el":"Υπόλογος"
             }, 
             {
                 "name": "resourceprovider", 
-                "title": "ResourceProvider"
+                "title": "ResourceProvider",
+                "title-el":"Πάροχος πόρου"
             }, 
             {
                 "name": "owner", 
-                "title": "Owner"
+                "title": "Owner",
+                "title-el":"Κάτοχος"
             }, 
             {
                 "name": "user", 
-                "title": "User"
+                "title": "User",
+                "title-el":"Χρήστης"
             }, 
             {
                 "name": "distributor", 
-                "title": "Distributor"
+                "title": "Distributor",
+                "title-el":"Διανομέας"
             }, 
             {
                 "name": "publisher", 
-                "title": "Publisher"
+                "title": "Publisher",
+                "title-el":"Εκδότης"
             }, 
             {
                 "name": "investigator", 
-                "title": "PrincipalInvestigator"
+                "title": "PrincipalInvestigator",
+                "title-el":"Πρωτεύων διερευνητής"
             }, 
             {
                 "name": "author", 
-                "title": "Author"
+                "title": "Author",
+                "title-el":"Συντάκτης"
             }, 
             {
                 "name": "processor", 
-                "title": "Processor"
+                "title": "Processor",
+                "title-el":"Επεξεργαστής"
             }
         ], 
         "name": "party_roles", 
@@ -583,79 +434,99 @@ vocabularies = [
         "terms": [
             {
                 "name": "farming", 
-                "title": "Farming"
+                "title": "Farming",
+                "title-el":"Γεωργία"
             }, 
             {
                 "name": "biota", 
-                "title": "Biota"
+                "title": "Biota",
+                "title-el":"Βιόκοσμος"
             }, 
             {
                 "name": "boundaries", 
-                "title": "Boundaries"
+                "title": "Boundaries",
+                "title-el":"Όρια"
             }, 
             {
                 "name": "climatologymeteorologyatmosphere", 
-                "title": "ClimatologyMeteorologyAtmosphere"
+                "title": "Climatology/Meteorology/Atmosphere",
+                "title-el":"Κλιματολογία/Μετεωρολογία/Ατμόσφαιρα"
             }, 
             {
                 "name": "economy", 
                 "title": "Economy"
+                "title-el":"Οικονομία"
             }, 
             {
                 "name": "elevation", 
                 "title": "Elevation"
+                "title-el":"Υψομετρία"
             }, 
             {
                 "name": "environment", 
-                "title": "Environment"
+                "title": "Environment",
+                "title-el":"Περιβάλλον"
             }, 
             {
                 "name": "geoscientificinformation", 
-                "title": "GeoscientificInformation"
+                "title": "GeoscientificInformation",
+                "title-el":"Γεωεπιστημονικές πληροφορίες"
             }, 
             {
                 "name": "health", 
-                "title": "Health"
+                "title": "Health",
+                "title-el":"Υγεία"
             }, 
             {
                 "name": "imagerybasemapsearthcover", 
-                "title": "ImageryBaseMapsEarthCover"
+                "title": "ImageryBaseMapsEarthCover",
+                "title-el":"Ορθοεικόνες/Βασικοί χάρτες/Κάλυψη γης"
             }, 
             {
                 "name": "intelligencemilitary", 
-                "title": "IntelligenceMilitary"
+                "title": "IntelligenceMilitary",
+                "title-el":"Στρατιωτικές πληροφορίες"
             }, 
             {
                 "name": "inlandwaters", 
-                "title": "InlandWaters"
+                "title": "InlandWaters",
+                "title-el":"Εσωτερικά ύδατα"
             }, 
             {
                 "name": "location", 
-                "title": "Location"
+                "title": "Location",
+                "title-el":"Γεωγραφική θέση"
+                  
             }, 
             {
                 "name": "oceans", 
-                "title": "Oceans"
+                "title": "Oceans",
+                "title-el":"Θάλασσες"
             }, 
             {
                 "name": "planningcadastre", 
-                "title": "PlanningCadastre"
+                "title": "PlanningCadastre",
+                "title-el":"Χωροταξία/Κτηματολόγιο"
             }, 
             {
                 "name": "society", 
-                "title": "Society"
+                "title": "Society",
+                "title-el":"Κοινωνία"
             }, 
             {
                 "name": "structure", 
-                "title": "Structure"
+                "title": "Structure",
+                "title-el":"Κατασκευές"
             }, 
             {
                 "name": "transportation", 
-                "title": "Transportation"
+                "title": "Transportation",
+                "title-el":"Μεταφορές"
             }, 
             {
                 "name": "utilitiescommunication", 
-                "title": "UtilitiesCommunication"
+                "title": "UtilitiesCommunication",
+                "title-el":"Επιχειρήσεις κοινής ωφελείας/Επικοινωνία"
             }
         ], 
         "name": "topic_category", 
@@ -665,15 +536,18 @@ vocabularies = [
         "terms": [
             {
                 "name": "creation", 
-                "title": "Date of Creation"
+                "title": "Date of Creation",
+                "title-el":"Ημερομηνία δημιουργίας"
             }, 
             {
                 "name": "publication", 
-                "title": "Publication Date"
+                "title": "Publication Date",
+                "title-el":"Ημερομηνία δημοσίευσης"
             }, 
             {
                 "name": "revision", 
-                "title": "Last Revision Date"
+                "title": "Last Revision Date",
+                "title-el":"Ημερομηνία τελευταίας αναθεώρησης"
             }
         ], 
         "name": "date_types", 

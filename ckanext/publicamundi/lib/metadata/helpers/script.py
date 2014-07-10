@@ -27,7 +27,7 @@ def convert_raw_vocabularies():
         out_list.append({u'title':u'Keywords', u'name':u'keywords', u'terms':tmp})
 
         fp = open("output.py", "w")
-        fp.write(u"vocabularies = "+ json.dumps(out_list, indent=4))
+        fp.write(u"vocabularies = "+ json.dumps(out_list, indent=4, encoding='utf8', ensure_ascii=False).encode('utf8'))
         fp.close()
 
     return out_list
