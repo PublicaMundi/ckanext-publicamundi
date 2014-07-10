@@ -41,7 +41,8 @@ class IPolygon(IObject):
 
 class IContactInfo(IObject):
 
-    email = z3c.schema.email.RFC822MailAddress(title=u"Electronic mail address", required=False)
+    email = z3c.schema.email.RFC822MailAddress(title=u'Email',
+        description=u'Electronic mail address', required=False)
 
     address = zope.schema.Object(IPostalAddress, title=u"Postal Address", required=False)
 

@@ -1,7 +1,8 @@
 import zope.interface
+
 from ckanext.publicamundi.lib.metadata.base import Object
 from ckanext.publicamundi.lib.metadata.schemata import *
-from ckanext.publicamundi.lib.metadata.schemata.common import *
+
 from ckanext.publicamundi.lib.metadata.types import object_null_adapter
 
 @object_null_adapter(IPostalAddress)

@@ -1,9 +1,11 @@
 import zope.interface
 import ckan.plugins as p
-from ckanext.publicamundi.lib.metadata.types.common import *
-from ckanext.publicamundi.lib.metadata.schemata.inspire import *
+
 from ckanext.publicamundi.lib.metadata.base import Object
+from ckanext.publicamundi.lib.metadata.schemata.inspire import IInspireMetadata
+
 from ckanext.publicamundi.lib.metadata.types import object_null_adapter
+from ckanext.publicamundi.lib.metadata.types.common import *
 
 @object_null_adapter(IThesaurus)
 class Thesaurus(Object):
@@ -14,7 +16,6 @@ class Thesaurus(Object):
     date_type = None
     value = None
     terms = list
-
 
 @object_null_adapter(IInspireMetadata)
 class InspireMetadata(Object):
@@ -42,10 +43,11 @@ class InspireMetadata(Object):
     access_constraints = list
     limitation = list
     responsible_party = list
-
-    '''
+    
     @classmethod
-    def from_xml(cls,infile):
+    def from_xml(cls, infile):
+        ''' Load from a valid ISO XML file'''
+
         def to_date(str):
             return datetime.datetime.strptime(str,'%Y-%m-%d').date()
         def to_resp_party(alist):
@@ -130,18 +132,17 @@ class InspireMetadata(Object):
                 constr_list.append(unicode(it))
 
         return InspireMetadata(to_resp_party(md.contact), datestamp,  md.languagecode, unicode(md.identification.title),id_list , unicode(md.identification.abstract), url_list, md.identification.resourcelanguage, md.identification.topiccategory, keywords_list, [GeographicBoundingBox(float(md.identification.extent.boundingBox.maxy),float(md.identification.extent.boundingBox.miny),float(md.identification.extent.boundingBox.maxx),float(md.identification.extent.boundingBox.minx))], temporal_extent, creation_date, publication_date, revision_date, unicode(md.dataquality.lineage), denom_list, spatial_list, conf_list, limit_list, constr_list, to_resp_party(md.identification.contact))
-    '''
+    
+    @classmethod
+    def to_xml(cls, imd, outfile):
+        '''Convert to ISO XML'''
 
-@classmethod
-def to_xml(cls,imd,outfile):
+        iso_xml = p.toolkit.render('package/objects/inspire-iso.xml', extra_vars={
+            'data':imd
+        })
 
-    # Save custom record to a valid ISO XML file
-    #env = Environment(loader=FileSystemLoader('.'))
-    #env.globals.update(zip=zip)
-    #template = env.get_template('mdmetadata_iso.xml')
-    #iso_xml = template.render(md=md)
-    iso_xml = p.toolkit.render('package/inspire_iso.xml',extra_vars={'data':imd})
-    xml_file = outfile
-    xml_file = open(outfile, "w")
-    xml_file.write(iso_xml)
-    xml_file.close()
+        xml_file = outfile
+        xml_file = open(outfile, "w")
+        xml_file.write(iso_xml)
+        xml_file.close()
+

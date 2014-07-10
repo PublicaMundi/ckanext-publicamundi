@@ -1,7 +1,7 @@
 import zope.interface
 
 from ckanext.publicamundi.lib.metadata.base import Object
-from ckanext.publicamundi.lib.metadata.schemata import *
+from ckanext.publicamundi.lib.metadata.schemata import ICkanMetadata
 
 from ckanext.publicamundi.lib.metadata.types import object_null_adapter
 from ckanext.publicamundi.lib.metadata.types import BaseMetadata
@@ -13,8 +13,3 @@ class CkanMetadata(BaseMetadata):
 
     title = None
 
-#@object_null_adapter(IInspireMetadata)
-#class InspireMetadata(BaseMetadata):
-#    zope.interface.implements(IInspireMetadata)
-#
-#    title = None

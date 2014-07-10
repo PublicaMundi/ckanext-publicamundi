@@ -1,8 +1,8 @@
 import datetime
 import copy
 
-from ckanext.publicamundi.lib.metadata.types.inspire import *
 from ckanext.publicamundi.lib.metadata.types import *
+from ckanext.publicamundi.lib.metadata.types.inspire import *
 
 ## Objects ##
 
@@ -47,10 +47,10 @@ foo1 = Foo(
 )
 
 
-# '''Find schema validation errors: originating_vocabulary,date_type'''
+# Find schema validation errors: originating_vocabulary,date_type
 fkw1 = FreeKeyword(value = u"val", reference_date = datetime.date(1000,1,1),date_type = "creationn")
 
-# '''Find schema validation invariant error - not all fields set'''
+# Find schema validation invariant error - not all fields set
 fkw2 = FreeKeyword(value = u"val", reference_date = datetime.date.today(),date_time = 'creation')
 
 # Validate correct keyword schema
@@ -61,45 +61,45 @@ kw_inspire_correct = Thesaurus(
     value = 'gemet_groups',
     terms = ['addresses'])
 
-# '''Validate correct schema'''
+# Validate correct schema
 fkw_correct = FreeKeyword(value = u"val",originating_vocabulary = u"original",reference_date = datetime.date.today(),date_type = 'creation')
 
-# '''Find schema validation errors: all not float'''
+# Find schema validation errors: all not float
 gbb1 = GeographicBoundingBox(nblat = 50,sblat = 50,wblng = 40,eblng= 30)
 
-#'''Find schema validation errors - nblat, wblng greater than max allowed'''
+# Find schema validation errors - nblat, wblng greater than max allowed
 gbb2 = GeographicBoundingBox(nblat = -1235.0,sblat = 0.0 ,eblng = 123.123 ,wblng = 1235.0)
 
-# '''Validate correct schema'''
+# Validate correct schema
 gbb_correct = GeographicBoundingBox(nblat = -50.0, sblat = -20.12, wblng = 15.0, eblng = 1.0)
 
-# '''Find schema validation errors: start missing'''
+# Find schema validation errors: start missing
 te1 = TemporalExtent(end = datetime.date.today())
 
-# '''Find schema validation errors: start not date'''
+# Find schema validation errors: start not date
 te2 = TemporalExtent(start = 2015, end = datetime.date.today())
 
-# '''Find schema invariant error - start date greater than end date'''
+# Find schema invariant error - start date greater than end date
 te3 = TemporalExtent(start = datetime.date(2015,01,01),end = datetime.date.today())
 
-# '''Validate correct schema'''
+# Validate correct schema
 te_correct = TemporalExtent(start = datetime.date.today(), end = datetime.date(2015,01,01))
 
-# '''Find schema validation errors date, creation, degree'''
+# Find schema validation errors date, creation, degree'''
 cnf1 = Conformity(title = u"lala", date = 2015,date_type = "creationn", degree = "confofrmant")
 # '''Validate correct schema'''
 cnf_correct = Conformity(title = u"lala",date = datetime.date.today(),date_type = "creation", degree = "conformant")
 
-# '''Find schema validation error - distance not int '''
+# Find schema validation error - distance not int
 sr1 = SpatialResolution(distance = 5.0, uom = u"lala")
 
-# '''Find schema invariant error - not all values set'''
+# Find schema invariant error - not all values set
 sr2 = SpatialResolution(distance = 5)
 
-# '''Validate correct schema - no values set'''
+# Validate correct schema - no values set
 sr3 = SpatialResolution()
 
-#'''Validate correct schema'''
+# Validate correct schema
 sr_correct = SpatialResolution(distance = 5, uom = u"lala")
 
 insp_correct = InspireMetadata(
