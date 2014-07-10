@@ -32,10 +32,11 @@ class IFoo(IBaseMetadata):
 
     tags = zope.schema.List(
         title = u'Tags',
-        required = False,
+        required = True,
         value_type = zope.schema.TextLine(
             title = u'Tag',
             constraint = re.compile('[-a-z0-9]+$').match),
+        min_length = 1,
         max_length = 5,)
 
     temporal_extent = zope.schema.Object(ITemporalExtent,

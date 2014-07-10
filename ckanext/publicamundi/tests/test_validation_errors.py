@@ -6,6 +6,8 @@ import datetime
 
 from ckanext.publicamundi.lib.metadata.types import *
 
+from ckanext.publicamundi.tests import helpers
+
 ci11 = ContactInfo(
     address = PostalAddress(address = 'Acacia Avenue 22', postalcode = u'11362'),
     email = u'foo@example.com')
@@ -33,9 +35,9 @@ poly3 = Polygon(name = u'P3', points=[
     Point(x=1.9, y=1.5),
 ])
 
-# Fixture x1: schema validation errors
+# Fixture x1*: schema validation errors
 
-x1 = Foo(
+x11 = Foo(
     baz = u'Bazzz',
     title = u'Ababoua Ababoua',
     tags = [ u'alpha', u'beta', u'gamma', 42, 'aaa'],
@@ -50,6 +52,23 @@ x1 = Foo(
     rating = -100,
     grade = 50.5,
 )
+
+x12 = copy.deepcopy(x11)
+x12.tags = []
+x12.url = 'http://example.com'
+x12.grade = 5.45
+
+x13 = copy.deepcopy(x11)
+x13.tags = [u'alpha', u'beta', u'gamma', u'delta', u'epsilon', u'zeta']
+x13.rating = 0
+x13.grade = 0.0
+x13.geometry = [[ poly1, poly2 ]]
+x13.thematic_category = 'environment'
+
+x14 = copy.deepcopy(x13)
+x14.tags = [u'alpha', u'beta', u'gamma', u'delta', 55, u'epsilon', u'zeta', 'not-unicode']
+x14.temporal_extent.end = datetime.date(2014, 5, 22)
+x14.url = 'ftp://foo.example.com'
 
 # Fixture x2: invariant errors
 
@@ -84,35 +103,47 @@ x3.temporal_extent.end = datetime.date(2014, 5, 28)
 
 ## Tests ##
 
-def test_x1():
-    '''Find schema validation errors'''
-    errs1 = x1.validate()
-    errs1_dict = x1.dictize_errors(errs1)
-    assert errs1_dict
-    expected_keys = set([
-        'tags', 'url', 'contact_info', 'contacts', 'temporal_extent', 'geometry', 'thematic_category',
-        'rating', 'grade'])
-    assert expected_keys.issubset(set(errs1_dict.keys())) 
-    print json.dumps(errs1_dict, indent=4)
+def test_schema_x11():
+    '''Find schema validation errors (x11)'''
+    helpers.assert_faulty_keys(x11, 
+        expected_keys = set([
+            'tags', 'url', 'contact_info', 'contacts', 'temporal_extent', 'geometry', 
+            'thematic_category', 'rating', 'grade']))
 
-def test_x2():
+def test_schema_x12():
+    '''Find schema validation errors (x12)'''
+    helpers.assert_faulty_keys(x12, 
+        expected_keys = set([
+            'tags', 'contact_info', 'contacts', 'temporal_extent', 'geometry', 
+            'thematic_category', 'rating',]))
+
+def test_schema_x13():
+    '''Find schema validation errors (x13)'''
+    helpers.assert_faulty_keys(x13, 
+        expected_keys = set([
+            'tags', 'url', 'contact_info', 'contacts', 'temporal_extent',]))
+
+def test_schema_x14():
+    '''Find schema validation errors (x14)'''
+    helpers.assert_faulty_keys(x14, 
+        expected_keys = set(['tags', 'contact_info', 'contacts']))
+
+def test_invariants_x2():
     '''Find invariant errors'''
-    errs2 = x2.validate()
-    errs2_dict = x2.dictize_errors(errs2)
-    assert errs2_dict
-    expected_keys = set(['__after', 'contact_info', 'temporal_extent', 'contacts'])
-    assert expected_keys.issubset(set(errs2_dict.keys())) 
-    print json.dumps(errs2_dict, indent=4)
+    helpers.assert_faulty_keys(x2,
+        expected_keys = set(['__after', 'contact_info', 'temporal_extent', 'contacts']))
 
-def test_x3():
+def test_valid_x3():
     '''Verify a valid object'''
-    errs3 = x3.validate()
-    assert not errs3
+    helpers.assert_faulty_keys(x3, expected_keys=[])
 
 ## Main ##
 
 if __name__ == '__main__':
-    test_x1();
-    test_x2();
-    test_x3();
+    test_schema_x11();
+    test_schema_x12();
+    test_schema_x13();
+    test_schema_x14();
+    test_invariants_x2();
+    test_valid_x3();
 
