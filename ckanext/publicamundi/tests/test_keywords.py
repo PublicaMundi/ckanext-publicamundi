@@ -3,9 +3,10 @@ import zope.schema
 import copy
 import json
 import datetime
-from ckanext.publicamundi.lib.metadata.types import *
-from ckanext.publicamundi.lib.metadata.types.keywords import *
+
 from ckanext.publicamundi.lib.metadata.base import *
+from ckanext.publicamundi.lib.metadata.types import *
+
 from ckanext.publicamundi.tests.helpers import assert_faulty_keys
 from ckanext.publicamundi.tests.fixtures import * 
 
@@ -59,7 +60,7 @@ kw_inspire_glossary_correct = InspireGlossary(
 
 def test_kw1():
     ''' INSPIRE correct '''
-    assert_faulty_keys(kw_inspire_correct, None)
+    assert_faulty_keys(kw_inspire_correct, [])
 
 if __name__ == '__main__':
     #print repr(insp3)

@@ -34,7 +34,6 @@ class IThesaurus(IObject):
             SimpleTerm('inspire_glossary', 'inspire_glossary', u'INSPIRE Glossary'),
             SimpleTerm('geoss_earth_observation_vocabulary', 'geoss_earth_observation_vocabulary', u'GEOSS Earth Observation Vocabulary'),
             SimpleTerm('gemet_themes', 'gemet_themes', u'GEMET Themes'))),
-
         title = u"Machine friendly name",
         required = True)
 
@@ -47,7 +46,8 @@ class IThesaurus(IObject):
 
 class IInspireMetadata(IObject):
     zope.interface.taggedValue('recurse-on-invariants', True)
-    #Metadata on metadata
+    
+    # Metadata on metadata
 
     contact = zope.schema.List(
         title = u'Metadata Point of Contact',
@@ -70,14 +70,14 @@ class IInspireMetadata(IObject):
         required = True,
         default = "en")
 
-    #Identification 
+    # Identification 
 
     title = zope.schema.TextLine(
         title = u'Resource Title',
         description = u"This a characteristic, and often unique, name by which the resource is known.                                                       The value domain of this metadata element is free text.",
         required = True)
 
-    ## TODO: What constraints are needed for identifier??
+    # Todo: What constraints are needed for identifier??
 
     identifier = zope.schema.List(
         title = u'Identifier',
@@ -97,8 +97,6 @@ class IInspireMetadata(IObject):
         description = u"The resource locator defines the link(s) to the resource and/or the link to additional information about the resource. The value domain of this metadata element is a character string, commonly expressed as uniform resource locator (URL).",
         required = True,
         min_length = 1,
-        #min_length = 2,
-        #max_length = 3,
         value_type = zope.schema.URI(
             title = u'Linkage',
             required = True))
@@ -108,9 +106,10 @@ class IInspireMetadata(IObject):
         description = u"The language(s) used within the resource. The value domain of this metadata element is limited to the languages defined in ISO 639-2.",
         required = False,
         value_type = zope.schema.Choice(Helper.flatten_dict_vals(vocabularies.languages)))
-    ## TODO: identtype, textline, choice?? 
+    
+    # Todo: identtype, textline, choice?? 
 
-    #Classification 
+    # Classification 
 
     topic_category = zope.schema.List(
         title = u'Topic Category',
@@ -118,7 +117,7 @@ class IInspireMetadata(IObject):
         required = True,
         min_length = 1,
         value_type = zope.schema.Choice(Helper.flatten_dict_vals(vocabularies.topic_category)))
-    #Keywords
+    # Keywords
 
     keywords = zope.schema.List(
         title = u'Keyword value',
@@ -153,13 +152,14 @@ class IInspireMetadata(IObject):
         if errors:
             raise zope.interface.Invalid(errors)
 
-    #Geographic
+    # Geographic
+
     bounding_box = zope.schema.List(title = u'Geographic Bounding Box',
-    description = u"This is the extent of the resource in the geographic space, given as a bounding box. The bounding box shall be expressed with westbound and eastbound longitudes, and southbound and northbound latitudes in decimal degrees, with a precision of at least two decimals.",
-    required = True,
-    min_length = 1,
-    value_type = zope.schema.Object(IGeographicBoundingBox,
-        title = u'Geographic Bounding Box'))
+        description = u"This is the extent of the resource in the geographic space, given as a bounding box. The bounding box shall be expressed with westbound and eastbound longitudes, and southbound and northbound latitudes in decimal degrees, with a precision of at least two decimals.",
+        required = True,
+        min_length = 1,
+        value_type = zope.schema.Object(IGeographicBoundingBox,
+            title = u'Geographic Bounding Box'))
 
     # Temporal 
 
@@ -230,8 +230,9 @@ class IInspireMetadata(IObject):
         value_type = zope.schema.Object(IConformity,
             title = u'Conformity'))
 
-    #Constraints 
-    ## TODO xreiazomaste other_constraints??
+    # Constraints 
+    
+    # Todo: Do we need other_constraints ??
 
     access_constraints = zope.schema.List(
         title = u'Conditions applying to access and use',
@@ -247,7 +248,7 @@ class IInspireMetadata(IObject):
         min_length = 1,
         value_type = zope.schema.TextLine(title = u'Limitation'))
 
-    #Responsible Party
+    # Responsible Party
 
     responsible_party = zope.schema.List(
         title = u'Responsible Party',

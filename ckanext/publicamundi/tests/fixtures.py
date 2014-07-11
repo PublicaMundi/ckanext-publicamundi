@@ -57,11 +57,15 @@ kw_inspire_correct = Thesaurus(
     title = u'inspire',
     reference_date = datetime.date.today(),
     date_type = 'creation',
-    value = 'gemet_groups',
+    name = 'gemet_groups',
     terms = ['addresses'])
 
 # Validate correct schema
-fkw_correct = FreeKeyword(value = u"val",originating_vocabulary = u"original",reference_date = datetime.date.today(),date_type = 'creation')
+fkw_correct = FreeKeyword(
+    value = u"val",
+    originating_vocabulary = u"original",
+    reference_date = datetime.date.today(),
+    date_type = 'creation')
 
 # Find schema validation errors: all not float
 gbb1 = GeographicBoundingBox(nblat = 50,sblat = 50,wblng = 40,eblng= 30)

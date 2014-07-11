@@ -10,7 +10,6 @@ from ckanext.publicamundi.tests.helpers import assert_faulty_keys
 from ckanext.publicamundi.lib.metadata.types import *
 from ckanext.publicamundi.tests.fixtures import *
 
-
 #
 # INSPIRE fixtures
 #

@@ -122,7 +122,6 @@ class IGeographicBoundingBox(IObject):
         max = 180.0,
         required = True)
 
-
 class ITemporalExtent(IObject):
 
     start = zope.schema.Date(
@@ -139,23 +138,24 @@ class ITemporalExtent(IObject):
             msg = 'The start date (%s) is later than end date (%s)' % (obj.start,obj.end)
             raise zope.interface.Invalid(msg)
 
-
 class ISpatialResolution(IObject):
 
     distance = zope.schema.Int(
         title = u'Resolution distance',
-        required = False)
+        required = True)
 
     uom = zope.schema.TextLine(
         title = u'Unit of measure',
-        required = False,
+        required = True,
         min_length = 2)
 
+    '''
     @zope.interface.invariant
     def check_case_mandatory(obj):
         if obj.distance or obj.uom:
             if not obj.distance or not obj.uom:
                 raise zope.interface.Invalid('You need to fill in the rest Spatial Resolution fields')
+    '''
 
 class IConformity(IObject):
 
