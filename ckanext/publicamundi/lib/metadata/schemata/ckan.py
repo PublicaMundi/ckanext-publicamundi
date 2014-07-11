@@ -9,6 +9,3 @@ from ckanext.publicamundi.lib.metadata.schemata.common import *
 class ICkanMetadata(IBaseMetadata):
     zope.interface.taggedValue('recurse-on-invariants', True)
 
-class IInspireMetadata(IBaseMetadata):
-    zope.interface.taggedValue('recurse-on-invariants', True)
-

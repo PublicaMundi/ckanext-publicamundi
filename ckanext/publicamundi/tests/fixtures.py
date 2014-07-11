@@ -2,6 +2,7 @@ import datetime
 import copy
 
 from ckanext.publicamundi.lib.metadata.types import *
+from ckanext.publicamundi.lib.metadata.types.inspire import *
 
 ## Objects ##
 
@@ -44,4 +45,99 @@ foo1 = Foo(
     grade = 13.7,
     password = u'secret',
 )
+
+# Find schema validation errors: originating_vocabulary,date_type
+fkw1 = FreeKeyword(value = u"val", reference_date = datetime.date(1000,1,1),date_type = "creationn")
+
+# Find schema validation invariant error - not all fields set
+fkw2 = FreeKeyword(value = u"val", reference_date = datetime.date.today(),date_time = 'creation')
+
+# Validate correct keyword schema
+kw_inspire_correct = Thesaurus(
+    title = u'inspire',
+    reference_date = datetime.date.today(),
+    date_type = 'creation',
+    name = 'gemet_groups',
+    terms = ['addresses'])
+
+# Validate correct schema
+fkw_correct = FreeKeyword(
+    value = u"val",
+    originating_vocabulary = u"original",
+    reference_date = datetime.date.today(),
+    date_type = 'creation')
+
+# Find schema validation errors: all not float
+gbb1 = GeographicBoundingBox(nblat = 50,sblat = 50,wblng = 40,eblng= 30)
+
+# Find schema validation errors - nblat, wblng greater than max allowed
+gbb2 = GeographicBoundingBox(nblat = -1235.0,sblat = 0.0 ,eblng = 123.123 ,wblng = 1235.0)
+
+# Validate correct schema
+gbb_correct = GeographicBoundingBox(nblat = -50.0, sblat = -20.12, wblng = 15.0, eblng = 1.0)
+
+# Find schema validation errors: start missing
+te1 = TemporalExtent(end = datetime.date.today())
+
+# Find schema validation errors: start not date
+te2 = TemporalExtent(start = 2015, end = datetime.date.today())
+
+# Find schema invariant error - start date greater than end date
+te3 = TemporalExtent(start = datetime.date(2015,01,01),end = datetime.date.today())
+
+# Validate correct schema
+te_correct = TemporalExtent(start = datetime.date.today(), end = datetime.date(2015,01,01))
+
+# Find schema validation errors date, creation, degree'''
+cnf1 = Conformity(title = u"lala", date = 2015,date_type = "creationn", degree = "confofrmant")
+# '''Validate correct schema'''
+cnf_correct = Conformity(title = u"lala",date = datetime.date.today(),date_type = "creation", degree = "conformant")
+
+# Find schema validation error - distance not int
+sr1 = SpatialResolution(distance = 5.0, uom = u"lala")
+
+# Find schema invariant error - not all values set
+sr2 = SpatialResolution(distance = 5)
+
+# Validate correct schema - no values set
+sr3 = SpatialResolution()
+
+# Validate correct schema
+sr_correct = SpatialResolution(distance = 5, uom = u"lala")
+
+insp_correct = InspireMetadata(
+    contact = [ResponsibleParty(organization = u"Org",email = [u"email@asd.gr"],role = "pointofcontact")],
+    datestamp = datetime.date.today(),
+    languagecode = "el",
+    title = u"Title",
+    identifier = [u"12314213123"],
+    abstract = u"abstracttttttt",
+    locator = ["http://www.google.com","http://publicamundi.eu"],
+    resource_language = ["el"],
+    topic_category = ["biota"],
+    keywords = [Thesaurus(terms = ["addresses"], 
+        name = "inspire_data_themes", 
+        title = u"Inspire Data Themes", 
+        date = datetime.date(2000,1,1), 
+        date_type = 'creation'),
+        
+        Thesaurus(terms = ["accident"], 
+        name = "gemet_concepts", 
+        title = u"Gemet Concepts", 
+        date = datetime.date(2000,1,1), 
+        date_type = 'creation'),
+        ],
+    bounding_box = [GeographicBoundingBox(nblat = 0.0, sblat = 0.0, wblng= 0.0, eblng = 0.0)], 
+    temporal_extent = [TemporalExtent(start = datetime.date(2012,1,1),end = datetime.date(2014,1,1))],
+    creation_date = datetime.date(2012,1,1),
+    publication_date = datetime.date(2013,1,1),
+    revision_date = datetime.date(2014,1,1),
+    lineage = u"lineaage",
+    denominator = [0,1,2,3],
+    spatial_resolution = [SpatialResolution(uom = u"meters")],
+    conformity = [Conformity(title = u"specifications blabla",date = datetime.date.today(),date_type = "creation",degree = "conformant")],
+    access_constraints = [u"lalala1",u"lalala2"],
+    limitations = [u"limit1",u"limit2"],
+    responsible_party = [ResponsibleParty(organization = u"Org",email = [u"email@asd.gr"],role = "pointofcontact"),ResponsibleParty(organization = u"Org2",email = [u"email2@asd.gr"],role = "pointofcontact")])
+
 

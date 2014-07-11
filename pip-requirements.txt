@@ -8,3 +8,4 @@ zope.interface==4.0.1
 zope.schema==4.4
 zope.component==4.1
 zope.dottedname
+z3c.schema

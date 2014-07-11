@@ -77,12 +77,12 @@ class ITemporalExtent(zope.interface.Interface):
 	start = zope.schema.Date(
 		title = u'Starting date',
 		required = False,
-		max = datetime.date.today())
+		)
 
 	end = zope.schema.Date(
 		title = u'Ending date',
 		required = False,
-		max = datetime.date.today())
+		)
 
 	@zope.interface.invariant
     	def check_date_order(obj):
@@ -122,7 +122,7 @@ class IConformity(zope.interface.Interface):
 	date = zope.schema.Date(
 		title = u'Date',
 		required = True,
-		max = datetime.date.today())
+		)
 
 	date_type = zope.schema.Choice(Helper.flatten_dict_vals(vocabularies.date_types),
 		title = u'Date type',
