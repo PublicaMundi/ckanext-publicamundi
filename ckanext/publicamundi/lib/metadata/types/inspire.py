@@ -1,19 +1,18 @@
 import zope.interface
 
 from ckanext.publicamundi.lib.metadata.base import Object
-from ckanext.publicamundi.lib.metadata.schemata.inspire import IThesaurus, IInspireMetadata
-
+from ckanext.publicamundi.lib.metadata.schemata.inspire import IThesaurusTerms, IInspireMetadata
 from ckanext.publicamundi.lib.metadata.types import object_null_adapter
 from ckanext.publicamundi.lib.metadata.types.common import *
 
-@object_null_adapter(IThesaurus)
-class Thesaurus(Object):
-    zope.interface.implements(IThesaurus)
+@object_null_adapter(IThesaurusTerms)
+class ThesaurusTerms(Object):
+    zope.interface.implements(IThesaurusTerms)
 
     title = None
     reference_date = None
     date_type = None
-    value = None
+    thesaurus_name = None
     terms = list
 
 @object_null_adapter(IInspireMetadata)
@@ -42,9 +41,8 @@ class InspireMetadata(Object):
     access_constraints = list
     limitation = list
     responsible_party = list
-    
-    @classmethod
-    def from_xml(cls, infile):
+
+    def from_xml(self, infile):
         ''' Load from a valid ISO XML file'''
 
         def to_date(str):
@@ -130,20 +128,34 @@ class InspireMetadata(Object):
         for it in md.identification.otherconstraints:
                 constr_list.append(unicode(it))
 
-        return InspireMetadata(to_resp_party(md.contact), datestamp,  md.languagecode, unicode(md.identification.title),id_list , unicode(md.identification.abstract), url_list, md.identification.resourcelanguage, md.identification.topiccategory, keywords_list, [GeographicBoundingBox(float(md.identification.extent.boundingBox.maxy),float(md.identification.extent.boundingBox.miny),float(md.identification.extent.boundingBox.maxx),float(md.identification.extent.boundingBox.minx))], temporal_extent, creation_date, publication_date, revision_date, unicode(md.dataquality.lineage), denom_list, spatial_list, conf_list, limit_list, constr_list, to_resp_party(md.identification.contact))
-    
-    @classmethod
-    def to_xml(cls, imd, outfile):
+        self.contact = to_resp_party(md.contact)
+        self.datestamp = datestamp
+        self.languagecode = md.languagecode
+        self.title = unicode(md.identification.title)
+        self.abstract = unicode(md.identification.abstract)
+        self.locator = url_list
+        self.resource_language = md.identification.resourcelanguage
+        self.topic_category = md.identification.topiccategory
+        self.keywords = keywords_list
+        self.bounding_box = [GeographicBoundingBox(float(md.identification.extent.boundingBox.maxy),float(md.identification.extent.boundingBox.miny),float(md.identification.extent.boundingBox.maxx),float(md.identification.extent.boundingBox.minx))]
+        self.temporal_extent = temporal_extent
+        self.creation_date = creation_date
+        self.publication_date = publication_date
+        self.revision_date = revision_date
+        self.lineage = unicode(md.dataquality.lineage)
+        self.denominator = denom_list
+        self.spatial_resolution = spatial_list
+        self.conformity = conf_list
+        self.access_constraints = limit_list
+        self.limitation = constr_list
+        self.responsible_party = to_resp_party(md.identification.contact)
+
+    def to_xml(self, outfile):
         '''Convert to ISO XML'''
 
         import ckan.plugins as p
-        
-        iso_xml = p.toolkit.render('package/objects/inspire-iso.xml', extra_vars={
-            'data':imd
-        })
 
-        xml_file = outfile
-        xml_file = open(outfile, "w")
-        xml_file.write(iso_xml)
-        xml_file.close()
-
+        iso_xml = p.toolkit.render('package/inspire_iso.xml',extra_vars={'data':self})
+        fp = open(outfile, "w")
+        fp.write(iso_xml)
+        fp.close()

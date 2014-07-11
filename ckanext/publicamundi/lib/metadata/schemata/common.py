@@ -65,7 +65,7 @@ class IResponsibleParty(IObject):
         value_type = z3c.schema.email.RFC822MailAddress(
             title = u'Email'))
 
-    role = zope.schema.Choice(Helper.flatten_dict_vals(vocabularies.party_roles),
+    role = zope.schema.Choice(Helper.flatten_dict_vals(Helper.get_vocabulary_terms('party_roles')),
         title = u'Responsible party role',
         description = u'This is the role of the responsible organisation.',
         required = True)
@@ -86,7 +86,7 @@ class IFreeKeyword(IObject):
         title = u'Reference date',
         required = False)
 
-    date_type = zope.schema.Choice(Helper.flatten_dict_vals(vocabularies.date_types),
+    date_type = zope.schema.Choice(Helper.flatten_dict_vals(Helper.get_vocabulary_terms('date_types')),
         title = u'Date Type',
         required = False)
 
@@ -168,12 +168,12 @@ class IConformity(IObject):
         required = True,
         )
 
-    date_type = zope.schema.Choice(Helper.flatten_dict_vals(vocabularies.date_types),
+    date_type = zope.schema.Choice(Helper.flatten_dict_vals(Helper.get_vocabulary_terms('date_types')),
         title = u'Date type',
         required = True)
 
-    degree = zope.schema.Choice(Helper.flatten_dict_vals(vocabularies.degrees),
+    degree = zope.schema.Choice(Helper.flatten_dict_vals(Helper.get_vocabulary_terms('degrees')),
         title = u'Degree',
         description = u'This is the degree of conformity of the resource to the implementing rules adopted under Article 7(1) of Directive 2007/2/EC or other specification.',
-        default = "not_evaluated",
+        #default = u"not_evaluated",
         required = True)

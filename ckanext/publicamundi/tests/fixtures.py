@@ -2,7 +2,6 @@ import datetime
 import copy
 
 from ckanext.publicamundi.lib.metadata.types import *
-from ckanext.publicamundi.lib.metadata.types.inspire import *
 
 ## Objects ##
 
@@ -51,14 +50,6 @@ fkw1 = FreeKeyword(value = u"val", reference_date = datetime.date(1000,1,1),date
 
 # Find schema validation invariant error - not all fields set
 fkw2 = FreeKeyword(value = u"val", reference_date = datetime.date.today(),date_time = 'creation')
-
-# Validate correct keyword schema
-kw_inspire_correct = Thesaurus(
-    title = u'inspire',
-    reference_date = datetime.date.today(),
-    date_type = 'creation',
-    name = 'gemet_groups',
-    terms = ['addresses'])
 
 # Validate correct schema
 fkw_correct = FreeKeyword(
