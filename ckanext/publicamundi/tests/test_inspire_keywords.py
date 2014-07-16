@@ -5,10 +5,11 @@ import json
 import datetime
 
 from ckanext.publicamundi.lib.metadata.base import *
-from ckanext.publicamundi.lib.metadata.types import *
+from ckanext.publicamundi.lib.metadata.types.inspire import InspireMetadata, ThesaurusTerms
+from ckanext.publicamundi.lib.metadata.types.common import *
+
 
 from ckanext.publicamundi.tests.helpers import assert_faulty_keys
-from ckanext.publicamundi.tests.fixtures import *
 
 #
 # INSPIRE thesaurus fixtures
