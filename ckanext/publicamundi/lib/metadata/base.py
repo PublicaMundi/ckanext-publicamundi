@@ -124,6 +124,9 @@ class Object(object):
         cls = type(self)
         S = cls.get_schema()
         for k,F in zope.schema.getFields(S).items():
+            a = getattr(cls, k)
+            if isinstance(a, property):
+                continue
             v = kwargs.get(k)
             if v is None:
                 factory = cls.get_field_factory(k, F)
@@ -222,8 +225,10 @@ class Object(object):
         factory = None
         # Check if a factory is defined explicitly as a class attribute
         if k and hasattr(cls, k):
-            factory = getattr(cls, k)
-            return factory
+            a = getattr(cls, k)
+            if callable(a):
+                factory = a
+                return factory
         # Find a sensible factory for this field 
         if not F:
             S = cls.get_schema()
@@ -284,7 +289,7 @@ class Object(object):
                 except zope.interface.Invalid as ex:
                     ef.append(ex)
                 # If provides, descend into object's schema validation
-                if not ef:
+                if not ef and isinstance(f, Object):
                     cls = type(self)
                     errors = cls(f, self.opts).validate_schema()
                     if errors:
@@ -495,11 +500,16 @@ class Object(object):
             self.opts = opts
 
         def dictize(self):
-            S = self.obj.get_schema()
+            obj = self.obj
+            obj_cls = type(obj)
+            S = obj_cls.get_schema()
             res = {}
             fields = zope.schema.getFields(S)
-            for k,F in fields.items():
-                f = F.get(self.obj)
+            for k, F in fields.items():
+                a = getattr(obj_cls, k)
+                if isinstance(a, property):
+                    continue
+                f = F.get(obj)
                 if f is None:
                     res[k] = None
                 else:
@@ -519,8 +529,12 @@ class Object(object):
 
         def _dictize_field(self, f, F):
             if isinstance(F, zope.schema.Object):
-                cls = type(self)
-                return cls(f, self.opts).dictize()
+                if isinstance(f, Object):
+                    cls = type(self)
+                    return cls(f, self.opts).dictize()
+                else:
+                    # Can only dictize derivatives of Object
+                    return None
             elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
                 a = list()
                 for i,y in enumerate(f):
@@ -536,11 +550,16 @@ class Object(object):
                 return self._get_field_value(f, F)
 
         def flatten(self):
-            S = self.obj.get_schema()
+            obj = self.obj
+            obj_cls = type(obj)
+            S = obj_cls.get_schema()
             res = {}
             fields = zope.schema.getFields(S)
-            for k,F in fields.items():
-                f = F.get(self.obj)
+            for k, F in fields.items():
+                a = getattr(obj_cls, k)
+                if isinstance(a, property):
+                    continue
+                f = F.get(obj)
                 if f is None:
                     pass
                 else:
@@ -551,8 +570,12 @@ class Object(object):
 
         def _flatten_field(self, f, F):
             if isinstance(F, zope.schema.Object):
-                cls = type(self)
-                return cls(f, self.opts).flatten()
+                if isinstance(f, Object):
+                    cls = type(self)
+                    return cls(f, self.opts).flatten()
+                else:
+                    # Can only flatten derivatives of Object (see _dictize_field()) 
+                    return None
             elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
                 return self._flatten_field_items(enumerate(f), F)
             elif isinstance(F, zope.schema.Dict):
@@ -577,10 +600,15 @@ class Object(object):
             self.opts = opts
 
         def load(self, d):
-            S = self.obj.get_schema()
-            for k,F in zope.schema.getFields(S).items():
+            obj = self.obj
+            obj_cls = type(obj)
+            S = obj_cls.get_schema()
+            for k, F in zope.schema.getFields(S).items():
+                a = getattr(obj_cls, k)
+                if isinstance(a, property):
+                    continue
                 v = d.get(k)
-                factory = self.obj.get_field_factory(k, F)
+                factory = obj.get_field_factory(k, F)
                 f = None
                 if v is None:
                     # No value given, use factory (if exists)
@@ -588,7 +616,7 @@ class Object(object):
                 else:
                     # Input provided a value on k
                     f = self._create_field(v, F, factory)
-                setattr(self.obj, k, f)
+                setattr(obj, k, f)
             return
 
         def _create_field(self, v, F, factory=None):
@@ -600,7 +628,11 @@ class Object(object):
             # Create a new field instance
             if isinstance(F, zope.schema.Object):
                 f = factory()
-                cls(f, self.opts).load(v)
+                if isinstance(f, Object):
+                    cls(f, self.opts).load(v)
+                else:
+                    # Can only load derivatives of Object
+                    pass
                 return f
             elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
                 a = list()

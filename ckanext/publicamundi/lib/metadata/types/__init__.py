@@ -21,6 +21,7 @@ def object_null_adapter(iface, name=''):
 
 from ckanext.publicamundi.lib.metadata.types.common import *
 from ckanext.publicamundi.lib.metadata.types.ckan import CkanMetadata
+from ckanext.publicamundi.lib.metadata.types.inspire import Thesaurus, ThesaurusTerms
 from ckanext.publicamundi.lib.metadata.types.inspire import InspireMetadata
 from ckanext.publicamundi.lib.metadata.types.foo import Foo
 

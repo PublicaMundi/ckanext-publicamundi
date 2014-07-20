@@ -374,57 +374,46 @@ vocabularies = [
             {
                 "name": "originator", 
                 "title": "Originator",
-                "title-el":"Δημιουργός"
             }, 
             {
                 "name": "pointofcontact", 
                 "title": "PointOfContact",
-                "title-el":"Αρμόδιος για επικοινωνία"
             }, 
             {
                 "name": "custodian", 
                 "title": "Custodian",
-                "title-el":"Υπόλογος"
             }, 
             {
                 "name": "resourceprovider", 
                 "title": "ResourceProvider",
-                "title-el":"Πάροχος πόρου"
             }, 
             {
                 "name": "owner", 
                 "title": "Owner",
-                "title-el":"Κάτοχος"
             }, 
             {
                 "name": "user", 
                 "title": "User",
-                "title-el":"Χρήστης"
             }, 
             {
                 "name": "distributor", 
                 "title": "Distributor",
-                "title-el":"Διανομέας"
             }, 
             {
                 "name": "publisher", 
                 "title": "Publisher",
-                "title-el":"Εκδότης"
             }, 
             {
                 "name": "investigator", 
                 "title": "PrincipalInvestigator",
-                "title-el":"Πρωτεύων διερευνητής"
             }, 
             {
                 "name": "author", 
                 "title": "Author",
-                "title-el":"Συντάκτης"
             }, 
             {
                 "name": "processor", 
                 "title": "Processor",
-                "title-el":"Επεξεργαστής"
             }
         ], 
         "name": "party_roles", 
@@ -435,98 +424,79 @@ vocabularies = [
             {
                 "name": "farming", 
                 "title": "Farming",
-                "title-el":"Γεωργία"
             }, 
             {
                 "name": "biota", 
                 "title": "Biota",
-                "title-el":"Βιόκοσμος"
             }, 
             {
                 "name": "boundaries", 
                 "title": "Boundaries",
-                "title-el":"Όρια"
             }, 
             {
                 "name": "climatologymeteorologyatmosphere", 
                 "title": "Climatology/Meteorology/Atmosphere",
-                "title-el":"Κλιματολογία/Μετεωρολογία/Ατμόσφαιρα"
             }, 
             {
                 "name": "economy", 
                 "title": "Economy"
-                "title-el":"Οικονομία"
             }, 
             {
                 "name": "elevation", 
                 "title": "Elevation"
-                "title-el":"Υψομετρία"
             }, 
             {
                 "name": "environment", 
                 "title": "Environment",
-                "title-el":"Περιβάλλον"
             }, 
             {
                 "name": "geoscientificinformation", 
                 "title": "GeoscientificInformation",
-                "title-el":"Γεωεπιστημονικές πληροφορίες"
             }, 
             {
                 "name": "health", 
                 "title": "Health",
-                "title-el":"Υγεία"
             }, 
             {
                 "name": "imagerybasemapsearthcover", 
                 "title": "ImageryBaseMapsEarthCover",
-                "title-el":"Ορθοεικόνες/Βασικοί χάρτες/Κάλυψη γης"
             }, 
             {
                 "name": "intelligencemilitary", 
                 "title": "IntelligenceMilitary",
-                "title-el":"Στρατιωτικές πληροφορίες"
             }, 
             {
                 "name": "inlandwaters", 
                 "title": "InlandWaters",
-                "title-el":"Εσωτερικά ύδατα"
             }, 
             {
                 "name": "location", 
                 "title": "Location",
-                "title-el":"Γεωγραφική θέση"
                   
             }, 
             {
                 "name": "oceans", 
                 "title": "Oceans",
-                "title-el":"Θάλασσες"
             }, 
             {
                 "name": "planningcadastre", 
                 "title": "PlanningCadastre",
-                "title-el":"Χωροταξία/Κτηματολόγιο"
             }, 
             {
                 "name": "society", 
                 "title": "Society",
-                "title-el":"Κοινωνία"
             }, 
             {
                 "name": "structure", 
                 "title": "Structure",
-                "title-el":"Κατασκευές"
             }, 
             {
                 "name": "transportation", 
                 "title": "Transportation",
-                "title-el":"Μεταφορές"
             }, 
             {
                 "name": "utilitiescommunication", 
                 "title": "UtilitiesCommunication",
-                "title-el":"Επιχειρήσεις κοινής ωφελείας/Επικοινωνία"
             }
         ], 
         "name": "topic_category", 
@@ -537,17 +507,14 @@ vocabularies = [
             {
                 "name": "creation", 
                 "title": "Date of Creation",
-                "title-el":"Ημερομηνία δημιουργίας"
             }, 
             {
                 "name": "publication", 
                 "title": "Publication Date",
-                "title-el":"Ημερομηνία δημοσίευσης"
             }, 
             {
                 "name": "revision", 
                 "title": "Last Revision Date",
-                "title-el":"Ημερομηνία τελευταίας αναθεώρησης"
             }
         ], 
         "name": "date_types", 
