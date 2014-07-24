@@ -62,9 +62,8 @@ class IThesaurusTerms(IObject):
             except:
                 unexpected.append(term)
         if unexpected:
-            msg = 'The term(s) %s do not belong to thesaurus "%s"' %(
-                ','.join(unexpected), obj.thesaurus.title 
-            )
+            msg = 'The following terms dont belong to thesaurus "%(thesaurus_name)s": %(terms)s' %(dict(
+                terms = ','.join(unexpected), thesaurus_name = obj.thesaurus.title))
             raise zope.interface.Invalid(msg)
 
 class IInspireMetadata(IObject):
@@ -151,32 +150,14 @@ class IInspireMetadata(IObject):
         value_type = zope.schema.Object(IThesaurusTerms))
 
     @zope.interface.invariant
-    def check_mandatory(obj):
-        found = False
-        #print 'obj ', obj.keywords
+    def check_keywords(obj):
         if obj.keywords:
+            found = False
             for k in obj.keywords:
-                #for k in obj:
-                obj_dict = k.to_dict()
-                #print 'obj_dict = ', obj_dict
-                if 'thesaurus_name' in obj_dict:
-                    if obj_dict.get('thesaurus_name') == 'gemet_inspire_data_themes':
-                        found = True
-                if not found:
-                    raise zope.interface.Invalid('You need to select at least one keyword from INSPIRE data themes')
-
-    @zope.interface.invariant
-    def check_relative_value_type(obj):
-        errors = []
-        if obj.keywords:
-            for k in obj.keywords:
-                obj_dict = k.to_dict()
-                allowed_keywords = Helper.flatten_dict_vals(Helper.get_keyword_terms(obj_dict.get('thesaurus_name')))
-                for key in obj_dict.get('terms'):
-                    if not key in allowed_keywords:
-                        errors.append('Keyword %s does not belong to thesaurus %s' % (key, obj_dict.get('thesaurus_name')))
-            if errors:
-                raise zope.interface.Invalid(errors)
+                if k.thesaurus.name == 'keywords-gemet-inspire-data-themes':
+                    found = True
+            if not found:
+                raise zope.interface.Invalid('You need to select at least one keyword from INSPIRE data themes')
 
     # Geographic
 

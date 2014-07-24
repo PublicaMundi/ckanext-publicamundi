@@ -127,8 +127,9 @@ class Object(object):
             a = getattr(cls, k)
             if isinstance(a, property):
                 continue
-            v = kwargs.get(k)
-            if v is None:
+            if kwargs.has_key(k):
+                v = kwargs.get(k)
+            else:
                 factory = cls.get_field_factory(k, F)
                 v = factory() if factory else F.default
             setattr(self, k, v)
@@ -229,7 +230,10 @@ class Object(object):
             if callable(a):
                 factory = a
                 return factory
-        # Find a sensible factory for this field 
+            else:
+                return None
+        # If reached here, there ia no hint via class attribute. 
+        # try to find a sensible factory for this field 
         if not F:
             S = cls.get_schema()
             F = S.get(k)

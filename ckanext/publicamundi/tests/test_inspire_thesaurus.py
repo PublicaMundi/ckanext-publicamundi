@@ -11,31 +11,35 @@ from ckanext.publicamundi.lib.metadata.types.inspire import *
 
 from ckanext.publicamundi.tests.helpers import assert_faulty_keys
 
-thesaurus1 = Thesaurus(
+# Thesaurus pointing to "Gemet Concepts" vocabulary
+thesaurus_gemet_concepts = Thesaurus(
     title = u'GEMET Concepts',
     name = 'keywords-gemet-concepts',
     reference_date = datetime.date(2014, 1, 1),
     date_type = 'creation'
 )
 
-terms11 = ThesaurusTerms(
-    thesaurus = thesaurus1,
-    terms = ['accident', 'atmosphere']
-)
-
-terms12 = ThesaurusTerms(
-    thesaurus = thesaurus1,
-    terms = ['accident', 'foo']
+# Thesaurus does not exist
+thesaurus_baz = Thesaurus(
+    title = u'Baz',
+    name = 'keywords-baz',
+    reference_date = datetime.date(2014, 1, 1),
+    date_type = 'creation'
 )
 
 def test_11():
-    verifyObject(IThesaurus, thesaurus1)
+    terms11 = ThesaurusTerms(
+        thesaurus = thesaurus_gemet_concepts,
+        terms = ['accident', 'atmosphere']
+    )
+
+    verifyObject(IThesaurus, thesaurus_gemet_concepts)
     verifyObject(IThesaurusTerms, terms11)
     
-    for k in thesaurus1.vocabulary: 
+    for k in thesaurus_gemet_concepts.vocabulary: 
         print k.title, k.value
 
-    assert_faulty_keys(thesaurus1, expected_keys=[])
+    assert_faulty_keys(thesaurus_gemet_concepts, expected_keys=[])
     assert_faulty_keys(terms11, expected_keys=[])
 
     print ' -- to_dict --'
@@ -44,10 +48,62 @@ def test_11():
     print terms11.to_dict(flat=True)
 
 def test_12():
-    assert_faulty_keys(terms12, expected_keys=['__after'])
+    terms12 = ThesaurusTerms(
+        thesaurus = thesaurus_gemet_concepts,
+        terms = ['accident', 'foo']
+    )
+
+    assert_faulty_keys(terms12,
+        expected_keys = ['__after'], 
+        expected_invariants=['The following terms dont belong to thesaurus'])
+
+def test_13():
+    terms13 = ThesaurusTerms() 
+    
+    assert_faulty_keys(terms13,
+        expected_keys=['terms', 'thesaurus'])
+
+def test_14():
+    terms14 = ThesaurusTerms(
+        terms = ['foo']
+    ) 
+    
+    assert_faulty_keys(terms14,
+        expected_keys=['thesaurus'])
+
+def test_15():
+    terms15 = ThesaurusTerms(
+        thesaurus = 'i am not a thesaurus object',
+        terms = ['foo']
+    ) 
+    
+    assert_faulty_keys(terms15,
+        expected_keys=['thesaurus'])
+
+def test_16():
+    terms16 = ThesaurusTerms(
+        thesaurus = thesaurus_gemet_concepts,
+    ) 
+
+    assert_faulty_keys(terms16,
+        expected_keys=['terms'])
+
+def test_17():
+    '''Provide a non-existent vocabulary'''
+    
+    assert_faulty_keys(thesaurus_baz,
+        expected_keys=['vocabulary'])
+    
+    terms17 = ThesaurusTerms(
+        thesaurus = thesaurus_baz,
+        terms = ['baz-1', 'baz-2']
+    ) 
+
+    assert_faulty_keys(terms17,
+        expected_keys=['thesaurus'])
+
 
 if __name__ == '__main__':
     test_11()
-    test_12()
 
 

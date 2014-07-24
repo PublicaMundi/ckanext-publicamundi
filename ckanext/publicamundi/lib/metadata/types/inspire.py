@@ -53,7 +53,7 @@ class InspireMetadata(Object):
     spatial_resolution = list
     conformity = list
     access_constraints = list
-    limitation = list
+    limitations = list
     responsible_party = list
 
     def from_xml(self, infile):
@@ -161,7 +161,7 @@ class InspireMetadata(Object):
         self.spatial_resolution = spatial_list
         self.conformity = conf_list
         self.access_constraints = limit_list
-        self.limitation = constr_list
+        self.limitations = constr_list
         self.responsible_party = to_resp_party(md.identification.contact)
 
     def to_xml(self, outfile):
