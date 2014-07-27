@@ -35,10 +35,10 @@ class TestsController(BaseController):
         x = fixtures.foo1
         S = x.get_schema()
         test_fields = {
-            'contacts': { 'title': u'Contacts', },
-            'grade': { 'title': u'Foo Grade' },
-            'rating': { 'title': u'Foo Rating' },
             'url': { 'title': u'Website URL' },
+            'rating': { 'title': u'Foo Rating' },
+            'grade': { 'title': u'Foo Grade' },
+            'contacts': { 'title': u'Contacts', },
             'title': {
                 'required': True,
                 'classes': [ 'control-medium' ],
@@ -52,10 +52,7 @@ class TestsController(BaseController):
             'notes': { 'description': u'Add a detailed description', },
             'thematic_category': {},
             'tags': {},
-            'created': { 
-                'title': u'Created At', 
-                'placeholder': datetime.datetime.now(),
-            },
+            'created': { 'title': u'Created At', 'placeholder': datetime.datetime.now() },
             'wakeup_time': { 'title': u'Wakeup At',},
             'password': {},
         }
