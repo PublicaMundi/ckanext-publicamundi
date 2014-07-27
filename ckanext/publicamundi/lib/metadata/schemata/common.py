@@ -135,7 +135,7 @@ class ITemporalExtent(IObject):
     @zope.interface.invariant
     def check_date_order(obj):
         if obj.start > obj.end:
-            msg = 'The start date (%s) is later than end date (%s)' % (obj.start,obj.end)
+            msg = 'The start-date (%s) is later than end-date (%s)' % (obj.start,obj.end)
             raise zope.interface.Invalid(msg)
 
 class ISpatialResolution(IObject):

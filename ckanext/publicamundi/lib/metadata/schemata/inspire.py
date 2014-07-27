@@ -156,6 +156,7 @@ class IInspireMetadata(IObject):
             for k in obj.keywords:
                 if k.thesaurus.name == 'keywords-gemet-inspire-data-themes':
                     found = True
+                    break
             if not found:
                 raise zope.interface.Invalid('You need to select at least one keyword from INSPIRE data themes')
 
@@ -195,28 +196,25 @@ class IInspireMetadata(IObject):
 
     @zope.interface.invariant
     def check_creation_publication_order(obj):
-        err_list = []
+        errs = []
+        
         if obj.creation_date and obj.publication_date:
             if obj.creation_date > obj.publication_date:
-                err_list.append('Creation date (%s) later than publication date (%s)' % (obj.creation_date,obj.publication_date))
-            #zope.interface.Invalid('Creation date later than publication date')
+                errs.append('Creation date (%s) is later than publication date (%s)' % (
+                    obj.creation_date,obj.publication_date))
+        
         if obj.publication_date and obj.revision_date:
             if obj.publication_date > obj.revision_date:
-                err_list.append('Publication date (%s) later than last revision date (%s)' % (obj.publication_date,obj.revision_date))
-
+                errs.append('Publication date (%s) is later than last revision date (%s)' % (
+                    obj.publication_date,obj.revision_date))
+        
         if obj.creation_date and obj.revision_date:
             if obj.creation_date > obj.revision_date:
-                err_list.append('Creation date (%s) later than last revision date (%s)' % (obj.creation_date,obj.revision_date))
+                errs.append('Creation date (%s) is later than last revision date (%s)' % (
+                    obj.creation_date,obj.revision_date))
 
-        if err_list:
-            raise zope.interface.Invalid(err_list)
-
-            #raise zope.interface.Invalid('Creation date (%s) later than publication date (%s)' % (obj.creation_date,obj.publication_date))
-
-    #@zope.interface.invariant
-    #def check_publication_revision_order(obj):
-    #    if obj.publication_date > obj.revision_date:
-    #        raise zope.interface.Invalid('Publication date (%s) later than last revision date (%s)' % (obj.publication_date,obj.revision_date))
+        if errs:
+            raise zope.interface.Invalid(errs)
 
     # Quality & Validity
 

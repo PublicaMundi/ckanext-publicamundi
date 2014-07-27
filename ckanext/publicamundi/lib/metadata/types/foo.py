@@ -25,5 +25,6 @@ class Foo(BaseMetadata):
     temporal_extent = None
     reviewed = None
     created = None
+    published = None
     password = None
     wakeup_time = None

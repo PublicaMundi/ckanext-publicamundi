@@ -35,7 +35,7 @@ poly3 = Polygon(name = u'P3', points=[
     Point(x=1.9, y=1.5),
 ])
 
-# Fixture x1*: schema validation errors
+# Fixtures x1*: schema validation errors
 
 x11 = Foo(
     baz = u'Bazzz',
@@ -70,9 +70,9 @@ x14.tags = [u'alpha', u'beta', u'gamma', u'delta', 55, u'epsilon', u'zeta', 'not
 x14.temporal_extent.end = datetime.date(2014, 5, 22)
 x14.url = 'ftp://foo.example.com'
 
-# Fixture x2: invariant errors
+# Fixtures x2*: invariant errors
 
-x2 = Foo(
+x21 = Foo(
     baz = u'Bazzz',
     title = u'Ababoua Ababoua',
     tags = [ u'alpha', u'beta', u'gamma', u'alpha'], # duplicate 
@@ -90,9 +90,12 @@ x2 = Foo(
     grade = 0.0,
 )
 
-# Fixture x3: valid (fix errors on x2)
+x22 = copy.deepcopy(x21)
+x22.published = datetime.datetime(2014, 4, 15) # before creation date
 
-x3 = copy.deepcopy(x2)
+# Fixture x3: valid (fix errors on x21)
+
+x3 = copy.deepcopy(x21)
 x3.tags = [u'hello-world', u'goodbye']
 x3.contacts = {
     'personal':  ContactInfo(email=u'nobody@example.com'),
@@ -128,10 +131,20 @@ def test_schema_x14():
     helpers.assert_faulty_keys(x14, 
         expected_keys = set(['tags', 'contact_info', 'contacts']))
 
-def test_invariants_x2():
-    '''Find invariant errors'''
-    helpers.assert_faulty_keys(x2,
+def test_invariants_x21():
+    '''Find invariant errors (one on top)'''
+    helpers.assert_faulty_keys(x21,
         expected_keys = set(['__after', 'contact_info', 'temporal_extent', 'contacts']))
+
+def test_invariants_x22():
+    '''Find invariant errors (multiple on top)'''
+    helpers.assert_faulty_keys(x22,
+        expected_keys = set(['__after', 'contact_info', 'temporal_extent', 'contacts']))
+
+    # Did we catch 2 failed invariants on top?
+    errs = x22.validate()
+    errs_dict = x22.dictize_errors(errs)
+    assert len(errs_dict['__after']) >= 2
 
 def test_valid_x3():
     '''Verify a valid object'''
@@ -140,10 +153,11 @@ def test_valid_x3():
 ## Main ##
 
 if __name__ == '__main__':
-    test_schema_x11();
-    test_schema_x12();
-    test_schema_x13();
-    test_schema_x14();
-    test_invariants_x2();
-    test_valid_x3();
+    #test_schema_x11();
+    #test_schema_x12();
+    #test_schema_x13();
+    #test_schema_x14();
+    #test_invariants_x21();
+    test_invariants_x22();
+    #test_valid_x3();
 

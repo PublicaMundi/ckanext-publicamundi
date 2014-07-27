@@ -158,7 +158,9 @@ def test_te2():
 
 def test_te3():
     '''Temporal Extent invariant error - start date greater than end date'''
-    assert_faulty_keys(te3, expected_keys=set(['__after']), expected_invariants=["later than end date"])
+    assert_faulty_keys(te3, 
+        expected_keys = set(['__after']), 
+        expected_invariants = ["is later than end-date"])
 
 def test_te4():
     '''Temporal Extent correct schema'''

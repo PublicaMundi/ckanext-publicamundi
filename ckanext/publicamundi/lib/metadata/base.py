@@ -1,10 +1,11 @@
 import threading
 import logging
 import json
+import itertools
 import zope.interface
 import zope.interface.verify
 import zope.schema
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 
 from ckanext.publicamundi.lib import dictization
 from ckanext.publicamundi.lib import logger
@@ -232,8 +233,8 @@ class Object(object):
                 return factory
             else:
                 return None
-        # If reached here, there ia no hint via class attribute. 
-        # try to find a sensible factory for this field 
+        # If reached here, there is no hint via class attribute. 
+        # Try to find a factory for this field.
         if not F:
             S = cls.get_schema()
             F = S.get(k)
@@ -388,9 +389,10 @@ class Object(object):
 
             # Check own invariants
             try:
-                S.validateInvariants(self.obj)
-            except zope.interface.Invalid as ex:
-                errors.append((None, [ex]))
+                ef = []
+                S.validateInvariants(self.obj, ef)
+            except zope.interface.Invalid:
+                errors.append((None, ef))
 
             return errors
 
@@ -434,61 +436,93 @@ class Object(object):
         return self._dictize_errors(errors)
 
     INVARIANT_ERROR_KEY = '__after'
+    
+    GLOBAL_ERROR_KEY = '__after'
 
     def _dictize_errors(self, errors):
         cls = type(self)
+        invariant_error_key = cls.INVARIANT_ERROR_KEY 
         S = cls.get_schema()
-        res = dict()
+        res = defaultdict(list)
         for k, ef in errors:
-            # Fixme Pick the 1st exception (is this ok?)
-            ex = ef[0]
             if k is None:
-                # Found a failed invariant
-                # Todo: maybe use defaultdict(list)
-                if not res.has_key(cls.INVARIANT_ERROR_KEY):
-                    res[cls.INVARIANT_ERROR_KEY] = list()
-                res[cls.INVARIANT_ERROR_KEY].append(str(ex))
+                # Found failed invariants
+                res[invariant_error_key].extend([str(ex) for ex in ef])
             else:
-                # Found a field-specific error
+                # Found a field-level error
                 F = S.get(k)
                 if not F:
                     continue
                 f = F.get(self)
-                res[k] = self._dictize_errors_for_field(ex, f, F)
+                res[k] = self._dictize_errors_for_field(ef, f, F)
         return res
 
-    def _dictize_errors_for_field(self, ex, f, F):
-        assert isinstance(ex, zope.interface.Invalid), \
-            'Validation errors should derive from Invalid'
+    def _dictize_errors_for_field(self, ef, f, F):
+        '''Build a result for field-level errors from an <ef> structure.
+        This can be either a list of strings (leaf case) or a dict (non-leaf case)
+        '''
         
-        # Check if we must descend 
-        if not (ex.args and isinstance(ex.args[0], list)):
-            # Treat this as a literal, stop descending
-            return '%s: %s' %(type(ex).__name__, str(ex).strip())
+        assert all([ isinstance(ex, zope.interface.Invalid) for ex in ef ])
+         
+        # Decide if this result should be represented by a dict (non-leaf)
+        # or by a simple list of error strings (leaf).
+        # When fine-grained error info exists on subfields (i.e. when an
+        # exception with 1st arg an array of <errors> is encountered), then
+        # we must a use a dict. Otherwise, we simply use a array of strings.
 
-        # If here, we have a valid <errors> list
-        errors = ex.args[0]
+        are_leafs = list([ not(ex.args and isinstance(ex.args[0], list)) for ex in ef ])
+        
+        if all(are_leafs):
+            # Treat as literal strings, stop descending
+            return list([ self._stringify_exception(ex) for ex in ef ])
+        
+        # If here, we must descend (at least once) to field-level errors    
+        
+        # Todo! Refactor from <ex> to <ef>
+        
+        global_error_key = self.GLOBAL_ERROR_KEY
+        
+        res = None
+
         if isinstance(F, zope.schema.Object):
-            # If supports further dictization, descent into object
-            if isinstance(f, Object):
-                return f._dictize_errors(errors)
-            else:
-                return errors
-        elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
-            return self._dictize_errors_for_field_collection(errors, f, F)
-        elif isinstance(F, zope.schema.Dict):
-            return self._dictize_errors_for_field_collection(errors, f, F)
+            res = defaultdict(list)
+            if not isinstance(f, Object):
+                # Return array of exceptions as is (cannot descend into object)
+                return ef
+            # It supports further dictization, descent into object
+            for ex, is_leaf in itertools.izip(ef, are_leafs):
+                if is_leaf:
+                    res[global_error_key].append(self._stringify_exception(ex))
+                else:
+                    # Recurse on an <errors> structure (ex.args[0])
+                    res1 = f._dictize_errors(ex.args[0])
+                    res = dictization.merge_inplace(res, res1) 
+        elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple) or \
+             isinstance(F, zope.schema.Dict):
+            res = defaultdict(list)
+            for ex, is_leaf in itertools.izip(ef, are_leafs): 
+                if is_leaf:
+                    res[global_error_key].append(self._stringify_exception(ex))
+                else:
+                    # Recurse on an <errors> structure (ex.args[0])
+                    res1 = self._dictize_errors_for_field_collection(ex.args[0], f, F)
+                    res = dictization.merge_inplace(res, res1) 
         else:
-            return '%s: %s' %(type(ex).__name__, repr(errors))
+            # This is a field that is not composite (does not contain subfields)
+            res = list([ self._stringify_exception(ex) for ex in ef ])
+
+        return res
 
     def _dictize_errors_for_field_collection(self, errors, f, F):
-        res = {}
+        res = dict()
         for k, ef in errors:
-            # Fixme again, pick the 1st exception
-            ex = ef[0]
-            # Note that here, k will be either an integer or a string
-            res[k] = self._dictize_errors_for_field(ex, f[k], F.value_type)
+            # Here, k will be either an integer or a string
+            res[k] = self._dictize_errors_for_field(ef, f[k], F.value_type)
         return res
+
+    @staticmethod
+    def _stringify_exception(ex):
+        return '%s: %s' %(type(ex).__name__, str(ex).strip())
 
     def flatten_errors(self, errors):
         ''' Convert an <errors> structure to a flattened dict '''
