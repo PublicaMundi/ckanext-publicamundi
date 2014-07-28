@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.6dev'
+version = '0.7dev'
 
 setup(
 	name='ckanext-publicamundi',
@@ -18,8 +18,9 @@ setup(
 	packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
 	namespace_packages=['ckanext', 'ckanext.publicamundi'],
 	include_package_data=True,
+	paster_plugins=['Pylons'],
 	zip_safe=False,
-	install_requires=[
+    install_requires=[
 		# -*- Extra requirements: -*-
         # Note: Moved under pip-requirements.txt
 	],

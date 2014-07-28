@@ -7,7 +7,7 @@ from ckanext.publicamundi.lib.metadata.schemata.inspire import IThesaurusTerms, 
 from ckanext.publicamundi.lib.metadata.schemata.inspire import IInspireMetadata
 from ckanext.publicamundi.lib.metadata.types import object_null_adapter
 from ckanext.publicamundi.lib.metadata.types.common import *
-from ckanext.publicamundi.lib.metadata.types import inspire_vocabularies
+from ckanext.publicamundi.lib.metadata.vocabularies import inspire_vocabularies
 
 class Thesaurus(Object):
     zope.interface.implements(IThesaurus)
@@ -19,8 +19,7 @@ class Thesaurus(Object):
 
     @property
     def vocabulary(self):
-        spec = inspire_vocabularies.vocabularies.get(self.name)
-        return spec.get('vocabulary') if spec else None
+        return inspire_vocabularies.get_by_machine_name(self.name)
 
 @object_null_adapter(IThesaurusTerms)
 class ThesaurusTerms(Object):

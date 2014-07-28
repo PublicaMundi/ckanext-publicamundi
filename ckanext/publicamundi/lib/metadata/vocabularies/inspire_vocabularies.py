@@ -9,8 +9,8 @@ DATA_FILE = 'inspire_vocabularies.json'
 
 # Note: 
 # These exported vocabularies are intended to be read-only instances
-# of SimpleVocabulary. In general, there will be no need to access them
-# directly (only via Thesaurus properties)  
+# of SimpleVocabulary. In most cases, there will be no need to access
+# directly (but via Thesaurus properties).
 
 vocabularies = {}
 
@@ -77,6 +77,24 @@ def make_vocabularies():
             'name': name,
             'vocabulary': make_vocabulary(keywords_data.get(name))
         }
+
+def get_names():
+    return [ vocabularies[k]['name'] for k in vocabularies ]
+
+def get_machine_names():
+    return vocabularies.keys()
+
+def get_by_name(name):
+    keys = filter(lambda t: vocabularies[t]['name'] == name, vocabularies.keys())
+    if keys:
+        k = keys[0]
+        return vocabularies[k]['vocabulary']
+    else:
+        return None
+
+def get_by_machine_name(k):
+    spec = vocabularies.get(k)
+    return spec['vocabulary'] if spec else None
 
 ## Load vocabularies from JSON data
 

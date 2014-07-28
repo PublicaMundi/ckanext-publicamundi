@@ -6,11 +6,9 @@ from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from zope.schema.interfaces import IVocabularyTokenized
 from zope.interface.verify import verifyObject
 
-from ckanext.publicamundi.lib.metadata.helpers import vocabularies
-from ckanext.publicamundi.lib.metadata.helpers import keywords
 from ckanext.publicamundi.lib.metadata.ibase import IObject
-
 from ckanext.publicamundi.lib.metadata.schemata.common import *
+from ckanext.publicamundi.lib.metadata.vocabularies import inspire_vocabularies
 
 class IThesaurus(IObject):
     
@@ -20,11 +18,7 @@ class IThesaurus(IObject):
     
     date_type = zope.schema.Choice(
         title = u"Date Type",
-        vocabulary = SimpleVocabulary((
-            SimpleTerm('creation', 'creation', 'Date of Creation'),
-            SimpleTerm('publication', 'publication', 'Publication Date'),
-            SimpleTerm('revision', 'revision', 'Last Revision Date'),
-        )),
+        vocabulary = inspire_vocabularies.get_by_machine_name('date-types'),
         required = True)
 
     name = zope.schema.ASCII()
@@ -33,9 +27,9 @@ class IThesaurus(IObject):
 
     @zope.interface.invariant
     def check_vocabulary(obj):
-        ''' Check that vocabulary exposes a IVocabularyTokenized interface.
-        This cannot be done via IObject's field-aware validators because target
-        interface is not based on IObject.
+        ''' Check that vocabulary provides an IVocabularyTokenized interface.
+        Note that, this cannot be done via IObject's field-wise validators because
+        target interface is not based on IObject.
         '''
         try:
             verifyObject(IVocabularyTokenized, obj.vocabulary)
@@ -86,8 +80,9 @@ class IInspireMetadata(IObject):
         required = False,
         default = datetime.date.today())
 
-    languagecode = zope.schema.Choice(Helper.flatten_dict_vals(Helper.get_vocabulary_terms('languages')),
+    languagecode = zope.schema.Choice(
         title = u'Metadata Language',
+        vocabulary = inspire_vocabularies.get_by_machine_name('languages'),
         description = u"This is the language in which the metadata elements are expressed.The value domain of this metadata element is limited to the official languages of the Community expressed in conformity with ISO 639-2.",
         required = True,
         default = "en")
@@ -124,21 +119,25 @@ class IInspireMetadata(IObject):
             required = True))
 
     resource_language = zope.schema.List(
-        title = u'Resource Language',
+        title = u'Resource Languages',
         description = u"The language(s) used within the resource. The value domain of this metadata element is limited to the languages defined in ISO 639-2.",
         required = False,
-        value_type = zope.schema.Choice(Helper.flatten_dict_vals(Helper.get_vocabulary_terms('languages'))))
+        value_type = zope.schema.Choice(
+            title = u'Resource Language',
+            vocabulary = inspire_vocabularies.get_by_machine_name('languages'),))
     
     # Todo: identtype, textline, choice?? 
 
     # Classification 
 
     topic_category = zope.schema.List(
-        title = u'Topic Category',
+        title = u'Topic Categories',
         description = u"The topic category is a high-level classification scheme to assist in the grouping and topic-based search of available spatial data resources. The value domain of this metadata element is defined in Part D.2.",
         required = True,
         min_length = 1,
-        value_type = zope.schema.Choice(Helper.flatten_dict_vals(Helper.get_vocabulary_terms('topic_category'))))
+        value_type = zope.schema.Choice(
+            title = u'Topic Category',
+            vocabulary = inspire_vocabularies.get_by_machine_name('topic-category')))
     
     # Keywords
 
