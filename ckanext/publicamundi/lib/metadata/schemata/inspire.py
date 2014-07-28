@@ -5,7 +5,6 @@ import re
 import datetime
 
 from ckanext.publicamundi.lib.metadata.helpers import vocabularies
-from ckanext.publicamundi.lib.metadata.helpers import keywords
 from ckanext.publicamundi.lib.metadata.ibase import IObject
 
 from ckanext.publicamundi.lib.metadata.schemata.common import *

@@ -44,4 +44,16 @@ setup(
         [fanstatic.libraries]
 
 	""",
+
+    message_extractors = {
+        'ckanext': [
+            ('**.py', 'python', None),
+            ('**.html', 'ckan', None),
+            ('multilingual/solr/*.txt', 'ignore', None),
+            ('**.txt', 'genshi', {
+                'template_class': 'genshi.template:TextTemplate'
+            }),
+        ]
+    }
+
 )

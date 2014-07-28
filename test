@@ -1,0 +1,1948 @@
+Traceback (most recent call last):
+  File "/var/local/ckan/default/pyenv/bin/nosetests", line 9, in <module>
+    load_entry_point('nose==1.3.0', 'console_scripts', 'nosetests')()
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/nose/core.py", line 118, in __init__
+    **extra_args)
+  File "/usr/lib/python2.7/unittest/main.py", line 94, in __init__
+    self.parseArgs(argv)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/nose/core.py", line 135, in parseArgs
+    self.config.configure(argv, doc=self.usage())
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/nose/config.py", line 345, in configure
+    self.plugins.begin()
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/nose/plugins/manager.py", line 99, in __call__
+    return self.call(*arg, **kw)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/nose/plugins/manager.py", line 167, in simple
+    result = meth(*arg, **kw)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/pylons/test.py", line 74, in begin
+    relative_to=path)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 247, in loadapp
+    return loadobj(APP, uri, name=name, **kw)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 271, in loadobj
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 320, in _loadconfig
+    return loader.get_context(object_type, name, global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 454, in get_context
+    section)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 476, in _context_from_use
+    object_type, name=use, global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 406, in get_context
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 296, in loadcontext
+    global_conf=global_conf)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 317, in _loadconfig
+    loader = ConfigLoader(path)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 391, in __init__
+    self.parser = NicerConfigParser(filename, defaults=defaults)
+  File "/var/local/ckan/default/pyenv/local/lib/python2.7/site-packages/paste/deploy/loadwsgi.py", line 53, in __init__
+    ConfigParser.__init__(self, *args, **kw)
+  File "/usr/lib/python2.7/ConfigParser.py", line 235, in __init__
+    self._sections = self._dict()
+  File "/usr/lib/python2.7/collections.py", line 51, in __init__
+    self.__update(*args, **kwds)
+  File "/var/local/ckan/default/pyenv/lib/python2.7/abc.py", line 151, in __subclasscheck__
+    if subclass in cls._abc_cache:
+  File "/var/local/ckan/default/pyenv/lib/python2.7/_weakrefset.py", line 70, in __contains__
+    wr = ref(item)
+RuntimeError: maximum recursion depth exceeded

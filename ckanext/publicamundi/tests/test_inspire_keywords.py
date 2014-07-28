@@ -264,7 +264,7 @@ insp5 = InspireMetadata(
             reference_date = datetime.date(2000,1,1),
             date_type = 'creation'),
         ThesaurusTerms(
-            terms = [u"time_(chronology)"],
+            terms = [u"time_chronology"],
             thesaurus_name = "gemet_groups",
             title = u"Gemet Groups",
             reference_date = datetime.date(2000,1,1),

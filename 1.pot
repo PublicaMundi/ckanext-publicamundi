@@ -1,0 +1,186 @@
+# Translations template for ckanext-publicamundi.
+# Copyright (C) 2014 ORGANIZATION
+# This file is distributed under the same license as the
+# ckanext-publicamundi project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: ckanext-publicamundi 0.6dev\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2014-07-28 13:42+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.3\n"
+
+#: ckanext/publicamundi/bin/build/pip-delete-this-directory.txt:1
+msgid ""
+"This file is placed here by pip to indicate the source was put\n"
+"here by pip.\n"
+"\n"
+"Once this package is successfully installed this source code will be\n"
+"deleted (unless you remove this file)."
+msgstr ""
+
+#: ckanext/publicamundi/templates/macros/markup_helpers.html:9
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-contact_info.html:5
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-point.html:8
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-comfortable.html:6
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-compact.html:6
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address.html:6
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-temporal_extent.html:6
+msgid "This field is required"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_basic_fields.html:41
+msgid "Organization"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_basic_fields.html:44
+msgid "Select an organization..."
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:34
+msgid "Baz"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:36
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:45
+msgid "a wonderfull thing"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:43
+msgid "Foo/Baz"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/read-bool.html:3
+msgid "Yes"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/read-bool.html:3
+msgid "No"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-contact_info.html:7
+#: ckanext/publicamundi/templates/package/snippets/objects/read-contact_info.html:12
+msgid "Email"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-contact_info.html:8
+#: ckanext/publicamundi/templates/package/snippets/objects/read-postal_address.html:2
+msgid "Postal Address"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-comfortable.html:11
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-comfortable.html:17
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-compact.html:13
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address.html:11
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address.html:17
+msgid "Street Address"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-comfortable.html:16
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-compact.html:12
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address.html:16
+msgid "PaulStrabe 183"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-comfortable.html:23
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address.html:23
+msgid "Postal Code"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-comfortable.html:29
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-compact.html:21
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address.html:29
+msgid "13254"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-comfortable.html:30
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-compact.html:22
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address.html:30
+msgid "Postal (ZIP) Code"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-compact.html:16
+#: ckanext/publicamundi/templates/package/snippets/objects/read-contact_info.html:7
+#: ckanext/publicamundi/templates/package/snippets/objects/read-postal_address.html:6
+msgid "Zip"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-temporal_extent.html:11
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-temporal_extent.html:12
+msgid "Start Date"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-temporal_extent.html:22
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-temporal_extent.html:23
+msgid "End Date"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-foo.html:7
+msgid "Basic"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-foo.html:12
+msgid "Categorization"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-foo.html:17
+msgid "Contact"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-foo.html:22
+msgid "Details"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/read-contact_info.html:2
+msgid "Contact Info"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/read-contact_info.html:5
+msgid "Address"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/read-point.html:2
+msgid "Point"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/read-postal_address.html:8
+msgid "n/a"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/read-temporal_extent.html:2
+msgid "Temporal Extent"
+msgstr ""
+
+#: ckanext/publicamundi/templates/snippets/custom_form_fields.html:23
+#: ckanext/publicamundi/templates/snippets/custom_form_fields.html:40
+msgid "Custom Field"
+msgstr ""
+
+#: ckanext/publicamundi/templates/snippets/organization.html:26
+msgid "read more"
+msgstr ""
+
+#: ckanext/publicamundi/templates/snippets/organization.html:29
+msgid "There is no description for this organization"
+msgstr ""
+
+#: ckanext/publicamundi/templates/snippets/organization.html:34
+msgid "Followers"
+msgstr ""
+
+#: ckanext/publicamundi/templates/snippets/organization.html:38
+msgid "Members"
+msgstr ""
+
+#: ckanext/publicamundi/templates/snippets/organization.html:42
+msgid "Datasets"
+msgstr ""
+
