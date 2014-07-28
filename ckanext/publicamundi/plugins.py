@@ -116,7 +116,6 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         These helpers will be available under the 'h' thread-local global object.
         '''
         return {
-            # define extension-specific helpers
             'publicamundi_helloworld': self.publicamundi_helloworld,
             'random_name': random_name,
             'dataset_type_options': self.dataset_type_options,
@@ -124,7 +123,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'organization_dict_objects': self.organization_dict_objects,
             'markup_for_field': publicamundi_metadata.markup_for_field,
             'markup_for_object': publicamundi_metadata.markup_for_object,
-            # define debug helpers
+            # debug helpers
             'debug_template_vars': self.debug_template_vars,
             'dump_jsonpickle': self.dump_jsonpickle,
         }
