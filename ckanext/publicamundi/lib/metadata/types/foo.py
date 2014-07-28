@@ -19,4 +19,12 @@ class Foo(BaseMetadata):
     contact_info = ContactInfo
     contacts = dict
     geometry = list
-
+    rating = None
+    grade = None
+    notes = None
+    temporal_extent = None
+    reviewed = None
+    created = None
+    published = None
+    password = None
+    wakeup_time = None

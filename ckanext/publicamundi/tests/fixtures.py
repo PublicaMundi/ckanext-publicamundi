@@ -28,17 +28,17 @@ foo1 = Foo(
     title = u'Ababoua Ababoua',
     tags = [ u'alpha', u'beta', u'gamma'],
     url = 'http://example.com',
-    contact_info = ContactInfo(email=u'nomad@somewhere.com'),
+    contact_info = ContactInfo(email=u'nomad@somewhere.com', address=None),
     contacts = {
         'personal':  ContactInfo(email=u'nobody@example.com', address=PostalAddress(address=u'North Pole', postalcode=u'54321')),
-        'office': ContactInfo(address=PostalAddress(address=u'South Pole', postalcode=u'12345')),
+        'office': ContactInfo(email=None, address=PostalAddress(address=u'South Pole', postalcode=u'12345')),
     },
     geometry = [[ poly1, poly2 ]],
     reviewed = False,
     created = datetime.datetime(2014, 06, 11),
     wakeup_time = datetime.time(8, 0, 0),
     notes = u'Hello World',
-    thematic_category = None,
+    thematic_category = 'economy',
     temporal_extent = dt1,
     rating = 0,
     grade = 13.7,
@@ -95,6 +95,5 @@ sr3 = SpatialResolution()
 
 # Validate correct schema
 sr_correct = SpatialResolution(distance = 5, uom = u"lala")
-
 
 

@@ -82,6 +82,10 @@ class IFoo(IBaseMetadata):
     created = zope.schema.Datetime(
         title = u'Created at',
         required = True)
+    
+    published = zope.schema.Datetime(
+        title = u'Published at',
+        required = False)
 
     wakeup_time = zope.schema.Time(
         title = u'Wakeup time',
@@ -110,4 +114,9 @@ class IFoo(IBaseMetadata):
         s = set(obj.tags)
         if len(s) < len(obj.tags):
             raise zope.interface.Invalid('Tags contain duplicates')
-
+    
+    @zope.interface.invariant
+    def check_publication_date(obj):
+        if obj.published and (obj.published < obj.created):
+            raise zope.interface.Invalid('The publication date is before creation date')
+ 

@@ -33,16 +33,22 @@ class Widget(object):
     
     @property
     def qualified_action(self):
+        '''Return a qualified action (as a string) provided by this widget'''
         if self.context:
             return self.context.provided_action.to_string()
         else:
             return QualAction(self.action).to_string()
+    
+    @classmethod
+    def cls_name(cls):
+        '''Return a qualified name for this widget class'''
+        return '%s.%s' %(cls.__module__, cls.__name__)
 
 class FieldWidget(Widget):
     zope.interface.implements(IFieldWidget)
 
-    def __init__(self, field):
-        # Check adaptee: must be a bound field
+    def __init__(self, field, *args):
+        # Check adaptee: 1st argument must be a bound field
         assert isinstance(field, zope.schema.Field)
         assert field.context and isinstance(field.context, FieldContext)
         # Initialize

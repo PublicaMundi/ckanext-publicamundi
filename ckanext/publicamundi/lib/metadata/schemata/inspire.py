@@ -1,48 +1,64 @@
+import datetime
 import zope.interface
+import zope.interface.verify
 import zope.schema
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
-import re
-import datetime
+from zope.schema.interfaces import IVocabularyTokenized
+from zope.interface.verify import verifyObject
 
-from ckanext.publicamundi.lib.metadata.helpers import vocabularies
 from ckanext.publicamundi.lib.metadata.ibase import IObject
-
 from ckanext.publicamundi.lib.metadata.schemata.common import *
+from ckanext.publicamundi.lib.metadata.vocabularies import inspire_vocabularies
+
+class IThesaurus(IObject):
+    
+    title = zope.schema.TextLine(title=u"Title", required = True)
+
+    reference_date = zope.schema.Date(title=u"Date", required=True)
+    
+    date_type = zope.schema.Choice(
+        title = u"Date Type",
+        vocabulary = inspire_vocabularies.get_by_machine_name('date-types'),
+        required = True)
+
+    name = zope.schema.ASCII()
+
+    vocabulary = zope.schema.Object(IVocabularyTokenized, required=True)
+
+    @zope.interface.invariant
+    def check_vocabulary(obj):
+        ''' Check that vocabulary provides an IVocabularyTokenized interface.
+        Note that, this cannot be done via IObject's field-wise validators because
+        target interface is not based on IObject.
+        '''
+        try:
+            verifyObject(IVocabularyTokenized, obj.vocabulary)
+        except Exception as ex:
+            raise zope.interface.Invalid('Found an invalid vocabulary: %s' %(str(ex)))
 
 class IThesaurusTerms(IObject):
 
-    title = zope.schema.TextLine(
-        title = u"Title",
-        required = True)
-
-    reference_date = zope.schema.Date(
-        title = u"Date",
-        required = True)
-
-    date_type = zope.schema.Choice(Helper.flatten_dict_vals(Helper.get_vocabulary_terms('date_types')),
-        title = u"Date Type",
-        required = True)
-
-    thesaurus_name = zope.schema.Choice(vocabulary = SimpleVocabulary((
-            SimpleTerm('gemet_concepts', 'gemet_concepts', u'GEMET Concepts'),
-            SimpleTerm('inspire_feature_concept_dictionary', 'inspire_feature_concept_dictionary', u'Inspire Feature Concept Dictionary'),
-            SimpleTerm('gemet_supergroups', 'gemet_supergroups', u'GEMET Supergroups'),
-            SimpleTerm('gemet_groups', 'gemet_groups', u'GEMET Groups'),
-            SimpleTerm('gemet_inspire_data_themes', 'gemet_inspire_data_themes', u'INSPIRE Data Themes'),
-            SimpleTerm('geoss_societal_benefit_areas', 'geoss_societal_benefit_areas', u'GEOSS Societal Benefit'),
-            SimpleTerm('inspire_glossary', 'inspire_glossary', u'INSPIRE Glossary'),
-            SimpleTerm('geoss_earth_observation_vocabulary', 'geoss_earth_observation_vocabulary', u'GEOSS Earth Observation Vocabulary'),
-            SimpleTerm('gemet_themes', 'gemet_themes', u'GEMET Themes'))),
-        title = u"Machine friendly name",
-        required = True)
-
+    thesaurus = zope.schema.Object(IThesaurus, required=True)
+    
     terms = zope.schema.List(
         title = u"Terms",
-        value_type = zope.schema.TextLine(),
-        #value_type = zope.schema.ASCII(),
-        #zope.schema.Choice(Helper.get_all_keyword_terms()),
+        value_type = zope.schema.ASCII(),
         required = True,
         min_length = 1)
+    
+    @zope.interface.invariant
+    def check_terms(obj):
+        unexpected = []
+        vocabulary = obj.thesaurus.vocabulary
+        for term in obj.terms:
+            try:
+                vocabulary.getTerm(term)
+            except:
+                unexpected.append(term)
+        if unexpected:
+            msg = 'The following terms dont belong to thesaurus "%(thesaurus_name)s": %(terms)s' %(dict(
+                terms = ','.join(unexpected), thesaurus_name = obj.thesaurus.title))
+            raise zope.interface.Invalid(msg)
 
 class IInspireMetadata(IObject):
     zope.interface.taggedValue('recurse-on-invariants', True)
@@ -64,8 +80,9 @@ class IInspireMetadata(IObject):
         required = False,
         default = datetime.date.today())
 
-    languagecode = zope.schema.Choice(Helper.flatten_dict_vals(Helper.get_vocabulary_terms('languages')),
+    languagecode = zope.schema.Choice(
         title = u'Metadata Language',
+        vocabulary = inspire_vocabularies.get_by_machine_name('languages'),
         description = u"This is the language in which the metadata elements are expressed.The value domain of this metadata element is limited to the official languages of the Community expressed in conformity with ISO 639-2.",
         required = True,
         default = "en")
@@ -102,21 +119,25 @@ class IInspireMetadata(IObject):
             required = True))
 
     resource_language = zope.schema.List(
-        title = u'Resource Language',
+        title = u'Resource Languages',
         description = u"The language(s) used within the resource. The value domain of this metadata element is limited to the languages defined in ISO 639-2.",
         required = False,
-        value_type = zope.schema.Choice(Helper.flatten_dict_vals(Helper.get_vocabulary_terms('languages'))))
+        value_type = zope.schema.Choice(
+            title = u'Resource Language',
+            vocabulary = inspire_vocabularies.get_by_machine_name('languages'),))
     
     # Todo: identtype, textline, choice?? 
 
     # Classification 
 
     topic_category = zope.schema.List(
-        title = u'Topic Category',
+        title = u'Topic Categories',
         description = u"The topic category is a high-level classification scheme to assist in the grouping and topic-based search of available spatial data resources. The value domain of this metadata element is defined in Part D.2.",
         required = True,
         min_length = 1,
-        value_type = zope.schema.Choice(Helper.flatten_dict_vals(Helper.get_vocabulary_terms('topic_category'))))
+        value_type = zope.schema.Choice(
+            title = u'Topic Category',
+            vocabulary = inspire_vocabularies.get_by_machine_name('topic-category')))
     
     # Keywords
 
@@ -128,32 +149,15 @@ class IInspireMetadata(IObject):
         value_type = zope.schema.Object(IThesaurusTerms))
 
     @zope.interface.invariant
-    def check_mandatory(obj):
-        found = False
-        #print 'obj ', obj.keywords
+    def check_keywords(obj):
         if obj.keywords:
+            found = False
             for k in obj.keywords:
-                #for k in obj:
-                obj_dict = k.to_dict()
-                #print 'obj_dict = ', obj_dict
-                if 'thesaurus_name' in obj_dict:
-                    if obj_dict.get('thesaurus_name') == 'gemet_inspire_data_themes':
-                        found = True
-                if not found:
-                    raise zope.interface.Invalid('You need to select at least one keyword from INSPIRE data themes')
-
-    @zope.interface.invariant
-    def check_relative_value_type(obj):
-        errors = []
-        if obj.keywords:
-            for k in obj.keywords:
-                obj_dict = k.to_dict()
-                allowed_keywords = Helper.flatten_dict_vals(Helper.get_keyword_terms(obj_dict.get('thesaurus_name')))
-                for key in obj_dict.get('terms'):
-                    if not key in allowed_keywords:
-                        errors.append('Keyword %s does not belong to thesaurus %s' % (key, obj_dict.get('thesaurus_name')))
-            if errors:
-                raise zope.interface.Invalid(errors)
+                if k.thesaurus.name == 'keywords-gemet-inspire-data-themes':
+                    found = True
+                    break
+            if not found:
+                raise zope.interface.Invalid('You need to select at least one keyword from INSPIRE data themes')
 
     # Geographic
 
@@ -191,28 +195,25 @@ class IInspireMetadata(IObject):
 
     @zope.interface.invariant
     def check_creation_publication_order(obj):
-        err_list = []
+        errs = []
+        
         if obj.creation_date and obj.publication_date:
             if obj.creation_date > obj.publication_date:
-                err_list.append('Creation date (%s) later than publication date (%s)' % (obj.creation_date,obj.publication_date))
-            #zope.interface.Invalid('Creation date later than publication date')
+                errs.append('Creation date (%s) is later than publication date (%s)' % (
+                    obj.creation_date,obj.publication_date))
+        
         if obj.publication_date and obj.revision_date:
             if obj.publication_date > obj.revision_date:
-                err_list.append('Publication date (%s) later than last revision date (%s)' % (obj.publication_date,obj.revision_date))
-
+                errs.append('Publication date (%s) is later than last revision date (%s)' % (
+                    obj.publication_date,obj.revision_date))
+        
         if obj.creation_date and obj.revision_date:
             if obj.creation_date > obj.revision_date:
-                err_list.append('Creation date (%s) later than last revision date (%s)' % (obj.creation_date,obj.revision_date))
+                errs.append('Creation date (%s) is later than last revision date (%s)' % (
+                    obj.creation_date,obj.revision_date))
 
-        if err_list:
-            raise zope.interface.Invalid(err_list)
-
-            #raise zope.interface.Invalid('Creation date (%s) later than publication date (%s)' % (obj.creation_date,obj.publication_date))
-
-    #@zope.interface.invariant
-    #def check_publication_revision_order(obj):
-    #    if obj.publication_date > obj.revision_date:
-    #        raise zope.interface.Invalid('Publication date (%s) later than last revision date (%s)' % (obj.publication_date,obj.revision_date))
+        if errs:
+            raise zope.interface.Invalid(errs)
 
     # Quality & Validity
 
@@ -268,3 +269,4 @@ class IInspireMetadata(IObject):
         min_length = 1,
         value_type = zope.schema.Object(IResponsibleParty,
             title = u'Responsible Party'))
+

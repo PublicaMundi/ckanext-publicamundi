@@ -1,18 +1,31 @@
 import zope.interface
+import zope.schema
+from zope.schema.vocabulary import SimpleVocabulary
 
 from ckanext.publicamundi.lib.metadata.base import Object
-from ckanext.publicamundi.lib.metadata.schemata.inspire import IThesaurusTerms, IInspireMetadata
+from ckanext.publicamundi.lib.metadata.schemata.inspire import IThesaurusTerms, IThesaurus
+from ckanext.publicamundi.lib.metadata.schemata.inspire import IInspireMetadata
 from ckanext.publicamundi.lib.metadata.types import object_null_adapter
 from ckanext.publicamundi.lib.metadata.types.common import *
+from ckanext.publicamundi.lib.metadata.vocabularies import inspire_vocabularies
+
+class Thesaurus(Object):
+    zope.interface.implements(IThesaurus)
+
+    title = None
+    reference_date = None
+    date_type = None
+    name = None
+
+    @property
+    def vocabulary(self):
+        return inspire_vocabularies.get_by_machine_name(self.name)
 
 @object_null_adapter(IThesaurusTerms)
 class ThesaurusTerms(Object):
     zope.interface.implements(IThesaurusTerms)
 
-    title = None
-    reference_date = None
-    date_type = None
-    thesaurus_name = None
+    thesaurus = Thesaurus
     terms = list
 
 @object_null_adapter(IInspireMetadata)
@@ -39,7 +52,7 @@ class InspireMetadata(Object):
     spatial_resolution = list
     conformity = list
     access_constraints = list
-    limitation = list
+    limitations = list
     responsible_party = list
 
     def from_xml(self, infile):
@@ -147,7 +160,7 @@ class InspireMetadata(Object):
         self.spatial_resolution = spatial_list
         self.conformity = conf_list
         self.access_constraints = limit_list
-        self.limitation = constr_list
+        self.limitations = constr_list
         self.responsible_party = to_resp_party(md.identification.contact)
 
     def to_xml(self, outfile):

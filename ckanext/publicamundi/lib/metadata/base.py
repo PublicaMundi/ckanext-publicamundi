@@ -1,10 +1,11 @@
 import threading
 import logging
 import json
+import itertools
 import zope.interface
 import zope.interface.verify
 import zope.schema
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 
 from ckanext.publicamundi.lib import dictization
 from ckanext.publicamundi.lib import logger
@@ -17,38 +18,6 @@ from ckanext.publicamundi.lib.metadata.serializers import get_key_tuple_serializ
 _cache = threading.local()
 
 FieldContext = namedtuple('FieldContext', ['key', 'obj'], verbose=False)
-
-def flatten_schema(S):
-    assert S.extends(IObject)
-    res = {}
-    fields = zope.schema.getFields(S)
-    for k,F in fields.items():
-        res1 = flatten_field(F)
-        for k1,F1 in res1.items():
-            res[(k,)+k1] = F1
-    return res
-
-def flatten_field(F):
-    assert isinstance(F, zope.schema.Field)
-    res = None
-    if isinstance(F, zope.schema.Object):
-        res = flatten_schema(F.schema)
-    elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
-        res = {}
-        res1 = flatten_field(F.value_type)
-        for i in range(0, F.max_length):
-            for k1,F1 in res1.items():
-                res[(i,)+k1] = F1
-    elif isinstance(F, zope.schema.Dict):
-        assert isinstance(F.key_type, zope.schema.Choice), 'Only zope.schema.Choice supported for key_type'
-        res = {}
-        res1 = flatten_field(F.value_type)
-        for v in F.key_type.vocabulary:
-            for k1,F1 in res1.items():
-                res[(v.token,)+k1] = F1
-    else:
-        res = { (): F }
-    return res
 
 class Object(object):
     zope.interface.implements(IObject)
@@ -156,8 +125,12 @@ class Object(object):
         cls = type(self)
         S = cls.get_schema()
         for k,F in zope.schema.getFields(S).items():
-            v = kwargs.get(k)
-            if v is None:
+            a = getattr(cls, k)
+            if isinstance(a, property):
+                continue
+            if kwargs.has_key(k):
+                v = kwargs.get(k)
+            else:
                 factory = cls.get_field_factory(k, F)
                 v = factory() if factory else F.default
             setattr(self, k, v)
@@ -210,8 +183,41 @@ class Object(object):
 
     @classmethod
     def get_flattened_fields(cls):
-        S = cls.get_schema()
-        return flatten_schema(S)
+        return cls.flatten_schema(cls.get_schema())
+
+    @staticmethod
+    def flatten_schema(schema):
+        res = {}
+        fields = zope.schema.getFields(schema)
+        for k, F in fields.items():
+            res1 = Object.flatten_field(F)
+            for k1, F1 in res1.items():
+                res[(k,)+k1] = F1
+        return res
+
+    @staticmethod
+    def flatten_field(F):
+        assert isinstance(F, zope.schema.Field)
+        res = None
+        if isinstance(F, zope.schema.Object):
+            res = Object.flatten_schema(F.schema)
+        elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
+            res = {}
+            res1 = Object.flatten_field(F.value_type)
+            for i in range(0, F.max_length):
+                for k1,F1 in res1.items():
+                    res[(i,)+k1] = F1
+        elif isinstance(F, zope.schema.Dict):
+            assert isinstance(F.key_type, zope.schema.Choice), \
+                'Only zope.schema.Choice supported for key_type'
+            res = {}
+            res1 = Object.flatten_field(F.value_type)
+            for v in F.key_type.vocabulary:
+                for k1,F1 in res1.items():
+                    res[(v.token,)+k1] = F1
+        else:
+            res = { (): F }
+        return res
 
     @classmethod
     def get_field_factory(cls, k, F=None):
@@ -221,9 +227,14 @@ class Object(object):
         factory = None
         # Check if a factory is defined explicitly as a class attribute
         if k and hasattr(cls, k):
-            factory = getattr(cls, k)
-            return factory
-        # Find a sensible factory for this field 
+            a = getattr(cls, k)
+            if callable(a):
+                factory = a
+                return factory
+            else:
+                return None
+        # If reached here, there is no hint via class attribute. 
+        # Try to find a factory for this field.
         if not F:
             S = cls.get_schema()
             F = S.get(k)
@@ -283,7 +294,7 @@ class Object(object):
                 except zope.interface.Invalid as ex:
                     ef.append(ex)
                 # If provides, descend into object's schema validation
-                if not ef:
+                if not ef and isinstance(f, Object):
                     cls = type(self)
                     errors = cls(f, self.opts).validate_schema()
                     if errors:
@@ -378,9 +389,10 @@ class Object(object):
 
             # Check own invariants
             try:
-                S.validateInvariants(self.obj)
-            except zope.interface.Invalid as ex:
-                errors.append((None, [ex]))
+                ef = []
+                S.validateInvariants(self.obj, ef)
+            except zope.interface.Invalid:
+                errors.append((None, ef))
 
             return errors
 
@@ -424,61 +436,93 @@ class Object(object):
         return self._dictize_errors(errors)
 
     INVARIANT_ERROR_KEY = '__after'
+    
+    GLOBAL_ERROR_KEY = '__after'
 
     def _dictize_errors(self, errors):
         cls = type(self)
+        invariant_error_key = cls.INVARIANT_ERROR_KEY 
         S = cls.get_schema()
-        res = dict()
+        res = defaultdict(list)
         for k, ef in errors:
-            # Fixme Pick the 1st exception (is this ok?)
-            ex = ef[0]
             if k is None:
-                # Found a failed invariant
-                # Todo: maybe use defaultdict(list)
-                if not res.has_key(cls.INVARIANT_ERROR_KEY):
-                    res[cls.INVARIANT_ERROR_KEY] = list()
-                res[cls.INVARIANT_ERROR_KEY].append(str(ex))
+                # Found failed invariants
+                res[invariant_error_key].extend([str(ex) for ex in ef])
             else:
-                # Found a field-specific error
+                # Found a field-level error
                 F = S.get(k)
                 if not F:
                     continue
                 f = F.get(self)
-                res[k] = self._dictize_errors_for_field(ex, f, F)
+                res[k] = self._dictize_errors_for_field(ef, f, F)
         return res
 
-    def _dictize_errors_for_field(self, ex, f, F):
-        assert isinstance(ex, zope.interface.Invalid), \
-            'Validation errors should derive from Invalid'
+    def _dictize_errors_for_field(self, ef, f, F):
+        '''Build a result for field-level errors from an <ef> structure.
+        This can be either a list of strings (leaf case) or a dict (non-leaf case)
+        '''
         
-        # Check if we must descend 
-        if not (ex.args and isinstance(ex.args[0], list)):
-            # Treat this as a literal, stop descending
-            return '%s: %s' %(type(ex).__name__, str(ex).strip())
+        assert all([ isinstance(ex, zope.interface.Invalid) for ex in ef ])
+         
+        # Decide if this result should be represented by a dict (non-leaf)
+        # or by a simple list of error strings (leaf).
+        # When fine-grained error info exists on subfields (i.e. when an
+        # exception with 1st arg an array of <errors> is encountered), then
+        # we must a use a dict. Otherwise, we simply use a array of strings.
 
-        # If here, we have a valid <errors> list
-        errors = ex.args[0]
+        are_leafs = list([ not(ex.args and isinstance(ex.args[0], list)) for ex in ef ])
+        
+        if all(are_leafs):
+            # Treat as literal strings, stop descending
+            return list([ self._stringify_exception(ex) for ex in ef ])
+        
+        # If here, we must descend (at least once) to field-level errors    
+        
+        # Todo! Refactor from <ex> to <ef>
+        
+        global_error_key = self.GLOBAL_ERROR_KEY
+        
+        res = None
+
         if isinstance(F, zope.schema.Object):
-            # If supports further dictization, descent into object
-            if isinstance(f, Object):
-                return f._dictize_errors(errors)
-            else:
-                return errors
-        elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
-            return self._dictize_errors_for_field_collection(errors, f, F)
-        elif isinstance(F, zope.schema.Dict):
-            return self._dictize_errors_for_field_collection(errors, f, F)
+            res = defaultdict(list)
+            if not isinstance(f, Object):
+                # Return array of exceptions as is (cannot descend into object)
+                return ef
+            # It supports further dictization, descent into object
+            for ex, is_leaf in itertools.izip(ef, are_leafs):
+                if is_leaf:
+                    res[global_error_key].append(self._stringify_exception(ex))
+                else:
+                    # Recurse on an <errors> structure (ex.args[0])
+                    res1 = f._dictize_errors(ex.args[0])
+                    res = dictization.merge_inplace(res, res1) 
+        elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple) or \
+             isinstance(F, zope.schema.Dict):
+            res = defaultdict(list)
+            for ex, is_leaf in itertools.izip(ef, are_leafs): 
+                if is_leaf:
+                    res[global_error_key].append(self._stringify_exception(ex))
+                else:
+                    # Recurse on an <errors> structure (ex.args[0])
+                    res1 = self._dictize_errors_for_field_collection(ex.args[0], f, F)
+                    res = dictization.merge_inplace(res, res1) 
         else:
-            return '%s: %s' %(type(ex).__name__, repr(errors))
+            # This is a field that is not composite (does not contain subfields)
+            res = list([ self._stringify_exception(ex) for ex in ef ])
+
+        return res
 
     def _dictize_errors_for_field_collection(self, errors, f, F):
-        res = {}
+        res = dict()
         for k, ef in errors:
-            # Fixme again, pick the 1st exception
-            ex = ef[0]
-            # Note that here, k will be either an integer or a string
-            res[k] = self._dictize_errors_for_field(ex, f[k], F.value_type)
+            # Here, k will be either an integer or a string
+            res[k] = self._dictize_errors_for_field(ef, f[k], F.value_type)
         return res
+
+    @staticmethod
+    def _stringify_exception(ex):
+        return '%s: %s' %(type(ex).__name__, str(ex).strip())
 
     def flatten_errors(self, errors):
         ''' Convert an <errors> structure to a flattened dict '''
@@ -494,11 +538,16 @@ class Object(object):
             self.opts = opts
 
         def dictize(self):
-            S = self.obj.get_schema()
+            obj = self.obj
+            obj_cls = type(obj)
+            S = obj_cls.get_schema()
             res = {}
             fields = zope.schema.getFields(S)
-            for k,F in fields.items():
-                f = F.get(self.obj)
+            for k, F in fields.items():
+                a = getattr(obj_cls, k)
+                if isinstance(a, property):
+                    continue
+                f = F.get(obj)
                 if f is None:
                     res[k] = None
                 else:
@@ -518,8 +567,12 @@ class Object(object):
 
         def _dictize_field(self, f, F):
             if isinstance(F, zope.schema.Object):
-                cls = type(self)
-                return cls(f, self.opts).dictize()
+                if isinstance(f, Object):
+                    cls = type(self)
+                    return cls(f, self.opts).dictize()
+                else:
+                    # Can only dictize derivatives of Object
+                    return None
             elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
                 a = list()
                 for i,y in enumerate(f):
@@ -535,11 +588,16 @@ class Object(object):
                 return self._get_field_value(f, F)
 
         def flatten(self):
-            S = self.obj.get_schema()
+            obj = self.obj
+            obj_cls = type(obj)
+            S = obj_cls.get_schema()
             res = {}
             fields = zope.schema.getFields(S)
-            for k,F in fields.items():
-                f = F.get(self.obj)
+            for k, F in fields.items():
+                a = getattr(obj_cls, k)
+                if isinstance(a, property):
+                    continue
+                f = F.get(obj)
                 if f is None:
                     pass
                 else:
@@ -550,8 +608,12 @@ class Object(object):
 
         def _flatten_field(self, f, F):
             if isinstance(F, zope.schema.Object):
-                cls = type(self)
-                return cls(f, self.opts).flatten()
+                if isinstance(f, Object):
+                    cls = type(self)
+                    return cls(f, self.opts).flatten()
+                else:
+                    # Can only flatten derivatives of Object (see _dictize_field()) 
+                    return None
             elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
                 return self._flatten_field_items(enumerate(f), F)
             elif isinstance(F, zope.schema.Dict):
@@ -576,10 +638,15 @@ class Object(object):
             self.opts = opts
 
         def load(self, d):
-            S = self.obj.get_schema()
-            for k,F in zope.schema.getFields(S).items():
+            obj = self.obj
+            obj_cls = type(obj)
+            S = obj_cls.get_schema()
+            for k, F in zope.schema.getFields(S).items():
+                a = getattr(obj_cls, k)
+                if isinstance(a, property):
+                    continue
                 v = d.get(k)
-                factory = self.obj.get_field_factory(k, F)
+                factory = obj.get_field_factory(k, F)
                 f = None
                 if v is None:
                     # No value given, use factory (if exists)
@@ -587,7 +654,7 @@ class Object(object):
                 else:
                     # Input provided a value on k
                     f = self._create_field(v, F, factory)
-                setattr(self.obj, k, f)
+                setattr(obj, k, f)
             return
 
         def _create_field(self, v, F, factory=None):
@@ -599,7 +666,11 @@ class Object(object):
             # Create a new field instance
             if isinstance(F, zope.schema.Object):
                 f = factory()
-                cls(f, self.opts).load(v)
+                if isinstance(f, Object):
+                    cls(f, self.opts).load(v)
+                else:
+                    # Can only load derivatives of Object
+                    pass
                 return f
             elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
                 a = list()

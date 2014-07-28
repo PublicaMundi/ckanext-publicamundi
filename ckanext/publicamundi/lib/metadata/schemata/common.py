@@ -1,12 +1,13 @@
-import zope.interface
-import zope.schema
-import z3c.schema.email
 import re
 import datetime
+import zope.interface
+import zope.schema
+import zope.schema.vocabulary
+from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+import z3c.schema.email
 
-from ckanext.publicamundi.lib.metadata.helpers import vocabularies
-from ckanext.publicamundi.lib.metadata.helpers.helper import *
 from ckanext.publicamundi.lib.metadata.ibase import IObject
+from ckanext.publicamundi.lib.metadata.vocabularies import inspire_vocabularies
 
 class IPostalAddress(IObject):
 
@@ -65,8 +66,9 @@ class IResponsibleParty(IObject):
         value_type = z3c.schema.email.RFC822MailAddress(
             title = u'Email'))
 
-    role = zope.schema.Choice(Helper.flatten_dict_vals(Helper.get_vocabulary_terms('party_roles')),
+    role = zope.schema.Choice(
         title = u'Responsible party role',
+        vocabulary = inspire_vocabularies.get_by_machine_name('party-roles'), 
         description = u'This is the role of the responsible organisation.',
         required = True)
 
@@ -86,15 +88,16 @@ class IFreeKeyword(IObject):
         title = u'Reference date',
         required = False)
 
-    date_type = zope.schema.Choice(Helper.flatten_dict_vals(Helper.get_vocabulary_terms('date_types')),
+    date_type = zope.schema.Choice(
         title = u'Date Type',
+        vocabulary = inspire_vocabularies.get_by_machine_name('date-types'),
         required = False)
 
     @zope.interface.invariant
-    def check_case_mandatory(obj):
+    def check_mandatory_parts(obj):
         if obj.value or obj.originating_vocabulary or obj.reference_date or obj.date_type:
             if not obj.value or not obj.originating_vocabulary or not obj.reference_date or not obj.date_type:
-                raise zope.interface.Invalid('You need to fill in the rest Free Keyword fields')
+                raise zope.interface.Invalid('You need to fill in the rest free-keyword fields')
 
 class IGeographicBoundingBox(IObject):
 
@@ -135,7 +138,7 @@ class ITemporalExtent(IObject):
     @zope.interface.invariant
     def check_date_order(obj):
         if obj.start > obj.end:
-            msg = 'The start date (%s) is later than end date (%s)' % (obj.start,obj.end)
+            msg = 'The start-date (%s) is later than end-date (%s)' % (obj.start,obj.end)
             raise zope.interface.Invalid(msg)
 
 class ISpatialResolution(IObject):
@@ -165,15 +168,16 @@ class IConformity(IObject):
 
     date = zope.schema.Date(
         title = u'Date',
-        required = True,
-        )
-
-    date_type = zope.schema.Choice(Helper.flatten_dict_vals(Helper.get_vocabulary_terms('date_types')),
-        title = u'Date type',
         required = True)
 
-    degree = zope.schema.Choice(Helper.flatten_dict_vals(Helper.get_vocabulary_terms('degrees')),
+    date_type = zope.schema.Choice(
+        title = u'Date type',
+        vocabulary = inspire_vocabularies.get_by_machine_name('date-types'),
+        required = True)
+
+    degree = zope.schema.Choice(
         title = u'Degree',
+        vocabulary = inspire_vocabularies.get_by_machine_name('degrees'),
         description = u'This is the degree of conformity of the resource to the implementing rules adopted under Article 7(1) of Directive 2007/2/EC or other specification.',
-        #default = u"not_evaluated",
+        default = "not-evaluated",
         required = True)
