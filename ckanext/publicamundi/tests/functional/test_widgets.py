@@ -111,7 +111,7 @@ class TestController(BaseTestController):
         action = action.split(':')[0]
         x = getattr(fixtures, fixture_name)
         f = x.get_field(k)
-        markup = markup_for_field(action, f, fixture_name, data)
+        markup = markup_for_field(action, f, name_prefix=fixture_name, data=data)
         log1.info('Generated %s markup for %r:\n%s' %(action, f, markup))
         assert markup
         pq = pyquery.PyQuery(unicode(markup))
@@ -162,7 +162,7 @@ class TestController(BaseTestController):
     def _test_markup_for_object(self, fixture_name, action, data={}):
         '''Render an object widget'''
         obj = getattr(fixtures, fixture_name)
-        markup = markup_for_object(action, obj, fixture_name, data)
+        markup = markup_for_object(action, obj, name_prefix=fixture_name, data=data)
         log1.info('Generated %s markup for object %r:\n%s' %(action, obj, markup))
         assert markup
         pq = pyquery.PyQuery(unicode(markup))

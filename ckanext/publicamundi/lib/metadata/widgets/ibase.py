@@ -1,5 +1,8 @@
 import zope.interface
 import zope.schema
+import zope.schema.interfaces
+
+from ckanext.publicamundi.lib.metadata.ibase import IObject, IErrorDict
 
 action_field = zope.schema.Choice(('read', 'edit'), required=True)
 
@@ -46,6 +49,8 @@ class IWidget(zope.interface.Interface):
 
     context = zope.schema.Object(ILookupContext, required=False)
 
+    errors = zope.schema.Object(IErrorDict, required=False)
+
     def get_template():
         '''Return a filename for a template'''
 
@@ -57,6 +62,8 @@ class IWidget(zope.interface.Interface):
 
 class IFieldWidget(IWidget):
     '''The interface for a widget adapter for a zope.schema-based field'''
+    
+    field = zope.schema.Object(zope.schema.interfaces.IField, required=True)
 
     def prepare_template_vars(name_prefix, data):
         '''Prepare context before rendering the widget'''
@@ -66,11 +73,12 @@ class IFieldWidget(IWidget):
 
 class IObjectWidget(IWidget):
     '''The interface for a widget adapter for a IObject-based object'''
-        
+    
+    obj = zope.schema.Object(IObject, required=True)
+
     def prepare_template_vars(name_prefix, data):
         '''Prepare context before rendering the widget'''
 
     def render(name_prefix, data):
         '''Generate markup'''
-
 

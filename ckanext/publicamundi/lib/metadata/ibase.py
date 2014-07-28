@@ -1,4 +1,5 @@
 import zope.interface
+import zope.schema
 
 class ISerializer(zope.interface.Interface):
 
@@ -50,4 +51,23 @@ class IObject(zope.interface.Interface):
         determine if input should be considered as flattened/nested.
         '''
 
+class IErrorDict(zope.interface.Interface):
 
+    global_key = zope.schema.ASCII(
+        required = True,
+        default = None,
+        description = u'A key that denotes an error not specific to a field (i.e. global)')
+
+    def get(key=None):
+        '''Get error info for a field keyed at param key.
+        A key of None should fetch global (non field-specific) errors.
+
+        This method should return 
+         - an IErrorDict-compatible object, if key represents a non-leaf field
+         - a list of error strings, if key represents a leaf field or the global key 
+         - None, if nothing is found at key 
+        '''
+
+    def keys():
+        '''Return a list of available keys (including the global one, if that exists).
+        '''

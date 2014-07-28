@@ -21,6 +21,8 @@ class Widget(object):
     action = None
 
     context = None
+
+    errors = None
     
     def get_template(self):
         raise NotImplementedError('Method should be implemented in a derived class')
@@ -53,6 +55,8 @@ class FieldWidget(Widget):
         assert field.context and isinstance(field.context, FieldContext)
         # Initialize
         self.field = field
+        self.context = None
+        self.errors = None
         name = field.getName()
         if name:
             # This is a named field, used as an attribute in a
@@ -116,6 +120,8 @@ class ObjectWidget(Widget):
     def __init__(self, obj):
         assert isinstance(obj, Object)
         self.obj = obj
+        self.context = None
+        self.errors = None
 
     def get_glue_template(self):
         '''Provide a template responsible to glue (rendered) fields together'''
@@ -196,7 +202,7 @@ class ObjectWidget(Widget):
                 q = QualAction(self.action, qualifier=qf).to_string()
                 return {
                     'field': f,
-                    'markup': markup_for_field(q, f, name_prefix, {}) 
+                    'markup': markup_for_field(q, f, name_prefix=name_prefix, data={}) 
                 }
             field_names = set(self.obj.get_field_names()) - \
                 set(self.get_omitted_fields())
@@ -260,7 +266,7 @@ class ListFieldWidgetTraits(FieldWidget):
             yf = field.value_type.bind(FieldContext(key=i, obj=value))
             return {
                 'index': i,
-                'markup': markup_for_field(q, yf, qname, {
+                'markup': markup_for_field(q, yf, name_prefix=qname, data={
                     'title': '%s #%d' %(yf.title, i) 
                 }),
             }
@@ -293,7 +299,7 @@ class DictFieldWidgetTraits(FieldWidget):
             term = field.key_type.vocabulary.getTerm(k)
             return {
                 'key': term,
-                'markup': markup_for_field(q, yf, qname, {
+                'markup': markup_for_field(q, yf, name_prefix=qname, data={
                     'title': term.title or term.token
                 }),
             }
@@ -333,7 +339,7 @@ class ObjectFieldWidgetTraits(FieldWidget):
         q = self.context.requested_action.to_string()
         data.update({
             'obj': {
-                'markup': markup_for_object(q, value, qname, data1)
+                'markup': markup_for_object(q, value, name_prefix=qname, data=data1)
             }
         })
         return data
