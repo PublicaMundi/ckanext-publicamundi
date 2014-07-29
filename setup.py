@@ -42,18 +42,20 @@ setup(
 
         publicamundi = ckanext.publicamundi.commands:Command
         
-        [fanstatic.libraries]
+        [babel.extractors]
 
-	""",
+        publicamundi_extract_json = ckanext.publicamundi.lib.metadata.vocabularies.babel_extractors:extract_json
 
+        """,
     message_extractors = {
         'ckanext': [
-            ('**.py', 'python', None),
-            ('**.html', 'ckan', None),
-            ('multilingual/solr/*.txt', 'ignore', None),
-            ('**.txt', 'genshi', {
-                'template_class': 'genshi.template:TextTemplate'
-            }),
+            ('publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json', 'publicamundi_extract_json', None),
+            #('**.py', 'python', None),
+            #('**.html', 'ckan', None),
+            #('multilingual/solr/*.txt', 'ignore', None),
+            #('**.txt', 'genshi', {
+            #    'template_class': 'genshi.template:TextTemplate'
+            #}),
         ]
     }
 
