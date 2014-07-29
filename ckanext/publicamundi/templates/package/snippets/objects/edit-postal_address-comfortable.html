@@ -1,6 +1,5 @@
-{% set error = None -%}
 
-<div class="{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
+<div class="{{ " error" if errors }}{{ " " ~ classes | join(' ') }}">
  
     <h3>
         {% if required %}<span title="{{ _("This field is required") }}" class="control-required">*</span>{% endif -%}
@@ -13,7 +12,7 @@
             <input type="text" id="input-{{ qname }}.address"  name="{{ qname }}.address"
                 class="input-large"
                 value="{{ obj.address | empty_and_escape }}" 
-                placeholder="{{ _('PaulStrabe 183') }}"
+                placeholder="{{ _('Patission 183') }}"
                 title="{{ _('Street Address') }}"
             />
         </div>
@@ -32,8 +31,8 @@
         </div>
     </div>
     
-    {% if error and error is iterable %}
-    <span class="error-block">{{ error | join(', ') }}</span>
+    {% if errors %}
+    <span class="help">{{ errors | join(', ') }}</span>
     {% endif %}
 
 </div>

@@ -65,6 +65,7 @@ class ContactInfoEditWidget(base_widgets.EditObjectWidget):
 
     def get_field_qualifiers(self):
         return {
+            'address': 'compact',
             'email': 'email'
         }
     

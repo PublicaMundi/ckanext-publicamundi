@@ -298,6 +298,9 @@ class Object(object):
                 # If provides, descend into object's schema validation
                 if not ef and isinstance(f, Object):
                     cls = type(self)
+                    # Note: Here, maybe we should just validate().
+                    # It depends on if we consider a failed invariant on a 
+                    # field as a schema error on our level. 
                     errors = cls(f, self.opts).validate_schema()
                     if errors:
                         ef.append(zope.interface.Invalid(errors))
@@ -444,6 +447,8 @@ class Object(object):
         for k, ef in errors:
             if k is None:
                 # Found failed invariants
+                if not global_key in res:
+                    res[global_key] = []
                 res[global_key].extend([str(ex) for ex in ef])
             else:
                 # Found a field-level error
@@ -467,7 +472,7 @@ class Object(object):
         # exception with 1st arg an array of <errors> is encountered), then
         # we must a use a dict. Otherwise, we simply use a array of strings.
 
-        are_leafs = list(not(ex.args and isinstance(ex.args[0], list)) for ex in ef)
+        are_leafs = [ not(ex.args and isinstance(ex.args[0], list)) for ex in ef ]
         
         if all(are_leafs):
             # Treat as literal strings, stop descending
@@ -476,7 +481,7 @@ class Object(object):
         # If here, we must descend (at least once) to field-level errors    
         
         global_key = ErrorDict.global_key
-        
+
         res = None
         if isinstance(F, zope.schema.Object):
             res = ErrorDict()
@@ -486,6 +491,8 @@ class Object(object):
             # It supports further dictization, descent into object
             for ex, is_leaf in itertools.izip(ef, are_leafs):
                 if is_leaf:
+                    if not global_key in res:
+                        res[global_key] = []
                     res[global_key].append(stringify_exception(ex))
                 else:
                     # Recurse on an <errors> structure (ex.args[0])
@@ -496,6 +503,8 @@ class Object(object):
             res = ErrorDict()
             for ex, is_leaf in itertools.izip(ef, are_leafs): 
                 if is_leaf:
+                    if not global_key in res:
+                        res[global_key] = []
                     res[global_key].append(stringify_exception(ex))
                 else:
                     # Recurse on an <errors> structure (ex.args[0])
@@ -552,7 +561,10 @@ class Object(object):
             if self.opts.get('serialize-values'):
                 serializer = get_field_serializer(F)
                 if serializer:
-                    v = serializer.dumps(f)
+                    try:
+                        v = serializer.dumps(f)
+                    except:
+                        v = None
             return v
 
         def _dictize_field(self, f, F):
@@ -680,7 +692,10 @@ class Object(object):
                 if self.opts.get('unserialize-values'):
                     serializer = get_field_serializer(F)
                     if serializer:
-                        f = serializer.loads(v)
+                        try:
+                            f = serializer.loads(v)
+                        except:
+                            f = None
                 return f
 
     class Factory(object):
@@ -714,11 +729,8 @@ class Object(object):
         cls = type(self)
         return cls.Loader(self, opts).load(d)
 
-class ErrorDict(defaultdict):
+class ErrorDict(dict):
     zope.interface.implements(IErrorDict)
-
-    def __init__(self, leaf_type=list):
-        defaultdict.__init__(self, leaf_type)
 
     global_key = '__after'
 

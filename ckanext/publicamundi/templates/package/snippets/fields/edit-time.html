@@ -2,12 +2,11 @@
 
 {% set placeholder = placeholder or field.default -%}
 {% set input_classes = [ 'input-small' ] if input_classes is not defined -%}
-{% set error = None -%}
 {% set format = format or '24h' %}
 
 {% set time_format = 'HH:mm:ss PP' if format == '12h' else 'hh:mm:ss' %}
 
-<div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
+<div class="control-group{{ " error" if errors }}{{ " " ~ classes | join(' ') }}">
     <label class="control-label" for="{{ 'input-' ~ qname }}">
         {{ title }}{{ markup_helpers.mark_required(required) }}
     </label>
@@ -27,8 +26,8 @@
               <i data-time-icon="icon-time"></i>
             </span>
         </div>
-        {% if error and error is iterable -%}
-        <span class="error-block">{{ error | join(', ') }}</span>
+        {% if errors  -%}
+        <span class="help-inline">{{ errors | join(', ') }}</span>
         {% endif -%}
     </div>
 </div>

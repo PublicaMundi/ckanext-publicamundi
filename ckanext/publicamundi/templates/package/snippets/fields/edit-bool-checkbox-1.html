@@ -1,6 +1,6 @@
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
-<div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
+<div class="control-group{{ " error" if errors }}{{ " " ~ classes | join(' ') }}">
     <label class="control-label">{{ title }}</label>
     <div class="controls">
         <div class="checkbox">

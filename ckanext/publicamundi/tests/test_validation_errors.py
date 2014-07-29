@@ -153,11 +153,11 @@ def test_valid_x3():
 ## Main ##
 
 if __name__ == '__main__':
-    #test_schema_x11();
-    #test_schema_x12();
-    #test_schema_x13();
-    #test_schema_x14();
-    #test_invariants_x21();
+    test_schema_x11();
+    test_schema_x12();
+    test_schema_x13();
+    test_schema_x14();
+    test_invariants_x21();
     test_invariants_x22();
-    #test_valid_x3();
+    test_valid_x3();
 

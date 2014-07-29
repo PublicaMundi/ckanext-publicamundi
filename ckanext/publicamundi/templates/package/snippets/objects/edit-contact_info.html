@@ -1,15 +1,24 @@
-{% set error = None -%}
+{% import 'macros/markup_helpers.html' as markup_helpers -%}
 
 <div class="{{ " " ~ classes | join(' ') }}">
     <h3>
-        {% if required %}<span title="{{ _("This field is required") }}" class="control-required">*</span>{% endif %}{{ title -}}
+        {{ title }}{{ markup_helpers.mark_required(required) }}
     </h3>
-    {{ h.markup_for_field('edit', obj.get_field('email'), 
-        name_prefix = qname, 
-        data = { 'title': _('Email') }) 
-    -}}
-    {{ h.markup_for_field('edit:compact', obj.get_field('address'), 
-        name_prefix = qname, 
-        data = { 'title': _('Postal Address') }) 
-    -}}
+    
+    {{ markup_helpers.error_messages(errors[errors.global_key]) }} 
+    
+    {{ 
+        h.markup_for_field('edit', obj.get_field('email'), 
+            errors = errors.get('email'),
+            name_prefix = qname, 
+            data = { 'title': _('Email') }) 
+    }}
+    
+    {{ 
+        h.markup_for_field('edit:compact', obj.get_field('address'), 
+            errors = errors.get('address'),
+            name_prefix = qname, 
+            data = { 'title': _('Postal Address') }) 
+    }}
+
 </div>

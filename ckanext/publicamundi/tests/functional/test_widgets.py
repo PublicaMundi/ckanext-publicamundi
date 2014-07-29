@@ -111,7 +111,10 @@ class TestController(BaseTestController):
         action = action.split(':')[0]
         x = getattr(fixtures, fixture_name)
         f = x.get_field(k)
-        markup = markup_for_field(action, f, name_prefix=fixture_name, data=data)
+        errs = x.validate()
+        errs = x.dictize_errors(errs)
+        markup = markup_for_field(action, f,
+            errors=errs, name_prefix=fixture_name, data=data)
         log1.info('Generated %s markup for %r:\n%s' %(action, f, markup))
         assert markup
         pq = pyquery.PyQuery(unicode(markup))

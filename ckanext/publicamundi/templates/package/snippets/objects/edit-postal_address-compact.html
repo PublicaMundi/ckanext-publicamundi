@@ -1,10 +1,12 @@
-{% set error = None -%}
+{% import 'macros/markup_helpers.html' as markup_helpers -%}
 
-<div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
+<div class="control-group{{ " error" if errors }}{{ " " ~ classes | join(' ') }}">
     <label class="control-label" for="input-{{ qname }}.address">
-        {{ title }}
-        {% if required %}<span title="{{ _("This field is required") }}" class="control-required">*</span>{% endif -%}
+        {{ title }}{{ markup_helpers.mark_required(required) }}
     </label>
+    
+    {{ markup_helpers.error_messages(errors[errors.global_key]) }} 
+    
     <div class="controls">
         <input type="text" id="input-{{ qname }}.address"  name="{{ qname }}.address"
             class="input-large"
@@ -21,8 +23,14 @@
             placeholder="{{ _('13254') }}" 
             title="{{ _('Postal (ZIP) Code') }}" 
         />
-        {% if error and error is iterable %}
-        <span class="error-block">{{ error | join(', ') }}</span>
-        {% endif %}
+        
+        {#
+        {% if 'postalcode' in errors -%}
+        <div class="alert alert-error">
+            {{ errors.get('postalcode') | join(', ') }}
+        </div>
+        {% endif -%}
+        #}
+    
     </div>
 </div>

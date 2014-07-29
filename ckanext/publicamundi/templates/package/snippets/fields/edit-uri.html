@@ -3,9 +3,8 @@
 {% set placeholder = placeholder or field.default -%}
 {% if input_classes is not defined %}{% set input_classes = [ 'input-medium' ] %}{% endif -%}
 {% do input_classes.extend(['url']) %}
-{% set error = None -%}
 
-<div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
+<div class="control-group{{ " error" if errors }}{{ " " ~ classes | join(' ') }}">
     <label class="control-label" for="{{ 'input-' ~ qname }}">
         {{ title }}{{ markup_helpers.mark_required(required) }}
     </label>
@@ -14,10 +13,10 @@
             class="{{ input_classes | list | join(" ") }}"
             value="{{ value | empty_and_escape }}" 
             placeholder="{{ placeholder | empty_and_escape }}"
-            {{ markup_helpers.attributes(attrs) -}}
+            {{ attrs | xmlattr -}}
         />
-        {% if error and error is iterable -%}
-        <span class="error-block">{{ error | join(', ') }}</span>
+        {% if errors -%}
+        <span class="help-inline">{{ errors | join(', ') }}</span>
         {% endif -%}
     </div>
 </div>
