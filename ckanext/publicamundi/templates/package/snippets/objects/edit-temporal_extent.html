@@ -4,24 +4,8 @@
 
 <div class="control-group{{ " error" if errors }}{{ " " ~ classes | join(' ') }}">
     <label class="control-label">
-        {{ title }}{{ markup_helpers.mark_required(required) }}
+        {{ title }}{{ markup_helpers.mark_required(required) -}}
     </label>
-    
-    {% if errors -%}
-    <div class="error-1-block alert alert-error"><ul>
-        {% if 'start' in errors -%} 
-        {% for msg in errors.get('start') %}<li>{{ _('Start Date') ~ ': ' ~ msg }}</li>{% endfor %}
-        {% endif -%}
-        
-        {% if 'end' in errors -%} 
-        {% for msg in errors.get('end') %}<li>{{ _('End Date') ~ ': ' ~ msg }}</li>{% endfor %}
-        {% endif -%}
-
-        {% if errors.global_key in errors -%} 
-        {% for msg in errors.get(errors.global_key) %}<li>{{ msg }}</li>{% endfor %}
-        {% endif -%}
-    </ul></div>
-    {% endif -%}
 
     <div class="controls">
        <input type="text" 
@@ -46,7 +30,14 @@
            data-module-format="yyyy-mm-dd"
         >
     </div>
-
+   
+   {{ 
+        markup_helpers.error_messages(errors, titles={
+            'start': _('Start Date'),
+            'end': _('End date'),
+            errors.global_key: _('Extent'),
+        }) 
+   }} 
 </div>
 
 {% resource 'ckanext-publicamundi/datepicker' %}

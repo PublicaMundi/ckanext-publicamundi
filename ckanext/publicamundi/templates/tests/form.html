@@ -18,7 +18,7 @@
     <div class="alert alert-error">
         <strong>Ooops!</strong> The form contains errors!
     </div>
-    <pre>{{ c.form_errors }}</pre>
+    <pre>{{ c.form_errors|pprint }}</pre>
     {% endif %}
     {{ c.form_markup }}
     <input type="submit" name="submit" />

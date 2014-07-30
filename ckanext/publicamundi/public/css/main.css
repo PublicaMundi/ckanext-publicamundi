@@ -23,6 +23,14 @@ input[type="tel"] {
     border-radius: 1px;
 }
 
+.form-horizontal .control-label {
+    width: 127px;
+}
+
+.form-horizontal .controls {
+    margin-left: 137px;
+}
+
 .error-block {
     border-radius: 1px;
     margin: 3px 0px;
