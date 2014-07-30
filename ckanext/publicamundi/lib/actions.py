@@ -14,6 +14,8 @@ import ckan.logic           as logic
 
 import ckanext.publicamundi
 
+log1 = logging.getLogger(__name__)
+
 # Some common MIME types
 mime_types = [
     'text/plain', 'text/html', 'text/xml', 'text/xhtml', 'text/svg', 'text/csv', 'text/json', 'text/javascript',

@@ -1,0 +1,35 @@
+{% import "macros/form.html" as form %}
+
+{% set fields = {
+        'start': { 
+            'placeholder': _('Start Date'),
+            'title':  _('Start Date') },
+        'end': { 
+            'placeholder': _('End Date'),
+            'title':  _('End Date') },
+        }
+%}
+
+<div class="control-group control-small">
+    <label for="field-{{ prefix }}" class="control-label">{{ _('Temporal Extent') }}</label>
+    <div class="controls "> 
+    
+       {% for k in ['start', 'end'] %}
+       <input 
+          type="text" 
+          class="span2"
+          title="{{ fields[k]['title'] }}"
+          placeholder="{{ fields[k]['placeholder'] }}" 
+          value="{{ data.get(prefix ~ '.' ~ k, '') }}" 
+          name="{{ prefix ~ '.' ~ k }}" 
+          id="field-{{ prefix ~ '.' ~ k }}"
+          data-module="datepicker"
+          data-module-dateformat="yyyy-mm-dd"
+       >
+       {#{% if loop.first %}<span>&nbsp;&nbsp;To&nbsp;&nbsp;</span>{% endif %}#}
+       {% endfor %}
+
+    </div>
+</div>
+
+{% resource 'ckanext-publicamundi/datepicker' %}

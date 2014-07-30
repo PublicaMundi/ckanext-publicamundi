@@ -1,36 +1,52 @@
-{% if input_classes is not defined %}{% set input_classes = [ 'input-small' ] -%}{% endif -%}
-{% set error = None -%}
+{% import 'macros/markup_helpers.html' as markup_helpers -%}
 
-<div class="control-group{{ " error" if error }}{{ " " ~ classes | join(' ') }}">
+{% if input_classes is not defined %}{% set input_classes = [ 'input-small' ] -%}{% endif -%}
+
+<div class="control-group{{ " error" if errors }}{{ " " ~ classes | join(' ') }}">
     <label class="control-label">
-        {{ title }}{% if required %}<span title="{{ _("This field is required") }}" class="control-required">*</span>{% endif -%}
+        {{ title }}{{ markup_helpers.mark_required(required) }}
     </label>
+    
+    {% if errors -%}
+    <div class="error-1-block alert alert-error"><ul>
+        {% if 'start' in errors -%} 
+        {% for msg in errors.get('start') %}<li>{{ _('Start Date') ~ ': ' ~ msg }}</li>{% endfor %}
+        {% endif -%}
+        
+        {% if 'end' in errors -%} 
+        {% for msg in errors.get('end') %}<li>{{ _('End Date') ~ ': ' ~ msg }}</li>{% endfor %}
+        {% endif -%}
+
+        {% if errors.global_key in errors -%} 
+        {% for msg in errors.get(errors.global_key) %}<li>{{ msg }}</li>{% endfor %}
+        {% endif -%}
+    </ul></div>
+    {% endif -%}
+
     <div class="controls">
        <input type="text" 
-          class="{{ input_classes | join(' ') }}"
-          title="{{ _('Start Date') }}"
-          placeholder="{{ _('Start Date') }}" 
-          value="{{ obj.start | empty_and_escape }}" 
-          name="{{ qname }}.start" 
-          id="input-{{ qname }}.start"
-          data-module="datepicker"
-          data-module-format="yyyy-mm-dd"
+           class="{{ input_classes | join(' ') }}"
+           title="{{ _('Start Date') }}"
+           placeholder="{{ _('Start Date') }}" 
+           value="{{ obj.start | empty_and_escape }}" 
+           name="{{ qname }}.start" 
+           id="input-{{ qname }}.start"
+           data-module="datepicker"
+           data-module-format="yyyy-mm-dd"
         >
        &nbsp; 
        <input type="text" 
-          class="{{ input_classes | join(' ') }}"
-          title="{{ _('End Date') }}"
-          placeholder="{{ _('End Date') }}" 
-          value="{{ obj.end | empty_and_escape }}" 
-          name="{{ qname }}.end" 
-          id="input-{{ qname }}.end"
-          data-module="datepicker"
-          data-module-format="yyyy-mm-dd"
+           class="{{ input_classes | join(' ') }}"
+           title="{{ _('End Date') }}"
+           placeholder="{{ _('End Date') }}" 
+           value="{{ obj.end | empty_and_escape }}" 
+           name="{{ qname }}.end" 
+           id="input-{{ qname }}.end"
+           data-module="datepicker"
+           data-module-format="yyyy-mm-dd"
         >
-       {% if error and error is iterable %}
-       <span class="error-block">{{ error | join(', ') }}</span>
-       {% endif %}
     </div>
+
 </div>
 
 {% resource 'ckanext-publicamundi/datepicker' %}

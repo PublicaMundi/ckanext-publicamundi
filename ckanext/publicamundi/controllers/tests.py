@@ -11,6 +11,7 @@ import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
 
+from ckanext.publicamundi.lib.util import object_to_json
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata import types
 from ckanext.publicamundi.lib.metadata.types import Object
@@ -62,9 +63,9 @@ class TestsController(BaseController):
             c.form_sections.append({
                 'heading': toolkit.literal('<h3>Field <code>%s</code></h3>' %(k)),
                 'body': \
-                    markup_for_field('edit', f, 'foo1', data) + \
+                    markup_for_field('edit', f, name_prefix='foo1', data=data) + \
                     toolkit.literal('<hr/>') + \
-                    markup_for_field('read:bar', f, 'foo1', data)
+                    markup_for_field('read:bar', f, name_prefix='foo1', data=data)
             })
         #raise Exception('Break')
         c.form_class = 'form-horizontal' # 'form-horizontal'
@@ -94,30 +95,50 @@ class TestsController(BaseController):
         c.form_sections.append({
             'heading': toolkit.literal('<h3>Object <code>Point</code></h3>'),
             'body': \
-                markup_for_object('edit:baz', obj, 'pt1', data) + \
+                markup_for_object('edit:baz', obj, name_prefix='pt1', data=data) + \
                 toolkit.literal('<hr/>') + \
-                markup_for_object('read:boz', obj, 'pt1', { 'title': u'Point B' })
+                markup_for_object('read:boz', obj, name_prefix='pt1', data={'title': u'Point B'})
         })
         
-        # 2. A TemporalExtent object
+        # 2.1 A TemporalExtent object
         obj = fixtures.dt1
         assert isinstance(obj, types.TemporalExtent)
         c.form_sections.append({
             'heading': toolkit.literal('<h3>Object <code>TemporalExtent</code></h3>'),
             'body': \
-                markup_for_object('edit:faz.baz', obj, 'dt1', { 'title': u'Extent A' }) + \
+                markup_for_object('edit:faz.baz', obj, 
+                    name_prefix='dt1', data={'title': u'Extent A'}) + \
                 toolkit.literal('<hr/>') + \
-                markup_for_object('read', obj, 'dt1', { 'title': u'Extent B' })
+                markup_for_object('read', obj, 
+                    name_prefix='dt1', data={ 'title': u'Extent B' })
         })
         
+        # 2.2 A TemporalExtent object (with errors)
+        obj = types.TemporalExtent(
+            start=datetime.date(2014, 1, 1), end=datetime.date(2013, 1, 1))
+        errs = obj.validate()
+        errs = obj.dictize_errors(errs)
+        assert isinstance(obj, types.TemporalExtent)
+        c.form_sections.append({
+            'heading': toolkit.literal('<h3>Object <code>TemporalExtent</code></h3>'),
+            'body': \
+                markup_for_object('edit:faz.baz', obj, 
+                    errors=errs, name_prefix='dt1', data={'title': u'Extent A'}) + \
+                toolkit.literal('<hr/>') + \
+                markup_for_object('read', obj, 
+                    errors=errs, name_prefix='dt1', data={ 'title': u'Extent B' })
+        })
+       
         # 3. A PostalAddress object
         obj = types.PostalAddress(address=u'22 Acacia Avenue', postalcode=u'12345')
         c.form_sections.append({
             'heading': toolkit.literal('<h3>Object <code>PostalAddress</code></h3>'),
             'body': \
-                markup_for_object('edit:comfortable', obj, 'contact_info', { 'title': u'Address A' }) + \
+                markup_for_object('edit:comfortable', obj, 
+                    name_prefix='contact_info', data={'title': u'Address A'}) + \
                 toolkit.literal('<hr/>') + \
-                markup_for_object('read', obj, 'contact_info', { 'title': u'Address B' })
+                markup_for_object('read', obj, 
+                    name_prefix='contact_info', data={'title': u'Address B'})
         })
         
         # Render
@@ -127,27 +148,53 @@ class TestsController(BaseController):
     def edit_foo(self, id='foo1'):
         obj = getattr(fixtures, id)
         assert isinstance(obj, types.Foo)
+        
+        errors = obj.validate()
+        errors = obj.dictize_errors(errors)
+
+        # Examine POSTed data
         if request.method == 'POST':
-            d = dict(request.params.items())
-            factory = Object.Factory(schemata.IFoo)
-            o = factory().from_dict(d, is_flat=True, opts={
+            # Parse request, filter-out empty values
+            d = dict(filter(lambda t: t[1], request.params.items()))
+            # Create a factory for this 
+            factory = Object.Factory(schemata.IFoo, opts={
                 'unserialize-keys': True,
                 'unserialize-values': True,
             })
-            response.headers['Content-Type'] = 'application/json' 
-            return o.to_json()
-        else:
-            c.form_class = 'form-horizontal'
-            c.form_markup = markup_for_object('edit', obj, name_prefix='', data={ 
-                'title': u'Foo #1' 
-            })
-            return render('tests/form.html')
+            obj = factory(d, is_flat=True)
+            errors = obj.validate()
+            if not errors:
+                # Output a JSON dump of a valid object
+                response.headers['Content-Type'] = 'application/json' 
+                out = { 'status': 'success', 'obj': obj.to_dict() } 
+                return object_to_json(out)
+            else:
+                # Prepare error dict for display
+                errors = obj.dictize_errors(errors)
+                #response.headers['Content-Type'] = 'application/json' 
+                #out = { 'status': 'failure', 'errors': errors, 'obj': obj.to_dict() } 
+                #return object_to_json(out)
+
+        # Display form
+        c.form_class = 'form-horizontal'
+        c.form_errors = errors
+        c.form_markup = markup_for_object('edit', obj, 
+            errors = errors,
+            name_prefix = '', 
+            data = { 'title': u'Foo #1' }
+        )
+        return render('tests/form.html')
 
     def show_foo(self, id='foo1'):
         obj = getattr(fixtures, id)
         assert isinstance(obj, types.Foo)
-        c.markup = markup_for_object('read', obj, 'a.foo1', { 'title': u'Foo #2' })
+        c.markup = markup_for_object('read', obj, 
+            name_prefix='a.foo1', data={'title': u'Foo #2'})
         return render('tests/page.html')
+
+    def test_template(self):
+        '''A test tube for jinja2 templates ''' 
+        return render('tests/test.html')
 
     def test_accordion_form(self):
         c.form_sections = []

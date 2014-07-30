@@ -117,7 +117,7 @@ def object_widget_adapter(object_iface, qualifiers=[], is_fallback=False):
 
 # Utilities
 
-def widget_for_object(qualified_action, obj):
+def widget_for_object(qualified_action, obj, errors=None):
     '''Find and instantiate a widget to adapt an object to a widget interface.
     '''
     
@@ -138,6 +138,7 @@ def widget_for_object(qualified_action, obj):
     
     if widget:
         widget.context = LookupContext(requested=q, provided=candidate)
+        widget.errors = errors
     else:
         raise WidgetNotFound(qualified_action, obj)
     
@@ -145,7 +146,7 @@ def widget_for_object(qualified_action, obj):
     assert zope.interface.verify.verifyObject(IObjectWidget, widget)
     return widget
 
-def widget_for_field(qualified_action, field):
+def widget_for_field(qualified_action, field, errors=None):
     '''Find and instantiate a widget to adapt a field to a widget interface.
     The given field should be a bound instance of zope.schema.Field.
     '''
@@ -179,6 +180,7 @@ def widget_for_field(qualified_action, field):
     
     if widget:
         widget.context = LookupContext(requested=q, provided=candidate)
+        widget.errors = errors
     else:
         raise WidgetNotFound(qualified_action, field)
     
@@ -186,14 +188,14 @@ def widget_for_field(qualified_action, field):
     assert zope.interface.verify.verifyObject(IFieldWidget, widget)
     return widget
 
-def markup_for_field(qualified_action, field, name_prefix='', data={}):
+def markup_for_field(qualified_action, field, errors=None, name_prefix='', data={}):
     assert isinstance(field, zope.schema.Field)
-    widget = widget_for_field(qualified_action, field)
+    widget = widget_for_field(qualified_action, field, errors)
     return widget.render(name_prefix, data)
 
-def markup_for_object(qualified_action, obj, name_prefix='', data={}):
+def markup_for_object(qualified_action, obj, errors=None, name_prefix='', data={}):
     assert isinstance(obj, Object)
-    widget = widget_for_object(qualified_action, obj)
+    widget = widget_for_object(qualified_action, obj, errors)
     return widget.render(name_prefix, data)
 
 # Import actual widgets

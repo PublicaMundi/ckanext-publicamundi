@@ -20,4 +20,3 @@ this.ckan.module('datepicker', function ($, _) {
     },
   }
 })
-

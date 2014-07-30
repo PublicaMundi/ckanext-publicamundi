@@ -1,11 +1,11 @@
 {% import 'macros/accordion.html' as accordion -%}
-{% set error = None -%}
+{% import 'macros/markup_helpers.html' as markup_helpers -%}
 
 {% set groups = [
         { 
             'name': 'basic',
             'heading': _('Basic'),
-            'fields': ['url', 'notes', 'baz']
+            'fields': ['title', 'url', 'notes', 'baz']
         },
         { 
             'name': 'categorization',
@@ -20,15 +20,17 @@
         { 
             'name': 'details',
             'heading': _('Details'),
-            'fields': ['temporal_extent', 'reviewed', 'created', 'wakeup_time', 
-                'rating', 'grade'],
+            'fields': ['temporal_extent', 'reviewed', 'created', 'published', 
+                'wakeup_time', 'rating', 'grade'],
         },
    ]
 %}
 
 <div class="{{ " " ~ classes | join(' ') }}">
     <h3>{{ title }}</h3>
- 
+    
+    {{ markup_helpers.error_messages(errors[errors.global_key]) }} 
+
     {% call(group_desc) accordion.accordion('foo-fields', groups) %}
         {% for field_name in group_desc.fields -%}
         {% with f = fields[field_name] -%}
@@ -37,5 +39,4 @@
         {% endwith -%}
         {% endfor -%}
     {% endcall %}
-
 </div>

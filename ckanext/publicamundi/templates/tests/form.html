@@ -14,6 +14,12 @@
 {% block primary_content_inner %}
 
 <form method="post" class="{{ c.form_class }}">
+    {% if c.form_errors %}
+    <div class="alert alert-error">
+        <strong>Ooops!</strong> The form contains errors!
+    </div>
+    <pre>{{ c.form_errors }}</pre>
+    {% endif %}
     {{ c.form_markup }}
     <input type="submit" name="submit" />
 </form>

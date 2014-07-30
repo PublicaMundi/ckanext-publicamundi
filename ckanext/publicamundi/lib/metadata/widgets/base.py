@@ -21,6 +21,8 @@ class Widget(object):
     action = None
 
     context = None
+
+    errors = None
     
     def get_template(self):
         raise NotImplementedError('Method should be implemented in a derived class')
@@ -53,6 +55,8 @@ class FieldWidget(Widget):
         assert field.context and isinstance(field.context, FieldContext)
         # Initialize
         self.field = field
+        self.context = None
+        self.errors = None
         name = field.getName()
         if name:
             # This is a named field, used as an attribute in a
@@ -81,6 +85,7 @@ class FieldWidget(Widget):
             'field': self.field,
             'value': self.value,
             'name': self.name,
+            'errors': self.errors,
             'required': self.field.required,
             'title': self.field.title,
             'description': self.field.description,
@@ -116,6 +121,8 @@ class ObjectWidget(Widget):
     def __init__(self, obj):
         assert isinstance(obj, Object)
         self.obj = obj
+        self.context = None
+        self.errors = None
 
     def get_glue_template(self):
         '''Provide a template responsible to glue (rendered) fields together'''
@@ -154,6 +161,7 @@ class ObjectWidget(Widget):
             'requested_action': self.context.requested_action,
             'provided_action': self.context.provided_action,
             'obj': self.obj,
+            'errors': self.errors,
             'schema': self.obj.get_schema(),
             'classes': [],
             'attrs': {},
@@ -194,9 +202,11 @@ class ObjectWidget(Widget):
                     f.queryTaggedValue('widget-qualifier') or \
                     self.context.provided_action.qualifier
                 q = QualAction(self.action, qualifier=qf).to_string()
+                e = self.errors.get(k) if self.errors else None
                 return {
                     'field': f,
-                    'markup': markup_for_field(q, f, name_prefix, {}) 
+                    'markup': markup_for_field(q, f, 
+                        errors=e, name_prefix=name_prefix, data={}) 
                 }
             field_names = set(self.obj.get_field_names()) - \
                 set(self.get_omitted_fields())
@@ -258,11 +268,11 @@ class ListFieldWidgetTraits(FieldWidget):
         def render_item(i, y):
             assert isinstance(i, int)
             yf = field.value_type.bind(FieldContext(key=i, obj=value))
+            e = self.errors.get(i) if self.errors else None
             return {
                 'index': i,
-                'markup': markup_for_field(q, yf, qname, {
-                    'title': '%s #%d' %(yf.title, i) 
-                }),
+                'markup': markup_for_field(q, yf, 
+                    errors=e, name_prefix=qname, data={ 'title': '%s #%d' %(yf.title, i) }),
             }
         data.update({
             'items': [ render_item(i,y) for i,y in enumerate(value) ],
@@ -291,11 +301,11 @@ class DictFieldWidgetTraits(FieldWidget):
             assert isinstance(k, basestring)
             yf = field.value_type.bind(FieldContext(key=k, obj=value))
             term = field.key_type.vocabulary.getTerm(k)
+            e = self.errors.get(k) if self.errors else None
             return {
                 'key': term,
-                'markup': markup_for_field(q, yf, qname, {
-                    'title': term.title or term.token
-                }),
+                'markup': markup_for_field(q, yf, 
+                    errors=e, name_prefix=qname, data={ 'title': term.title or term.token }),
             }
         data.update({
             'items': { k: render_item(k, y) for k, y in value.iteritems() },
@@ -333,7 +343,8 @@ class ObjectFieldWidgetTraits(FieldWidget):
         q = self.context.requested_action.to_string()
         data.update({
             'obj': {
-                'markup': markup_for_object(q, value, qname, data1)
+                'markup': markup_for_object(q, value, 
+                    errors=self.errors, name_prefix=qname, data=data1)
             }
         })
         return data

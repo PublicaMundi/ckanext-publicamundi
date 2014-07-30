@@ -27,4 +27,7 @@ def wkt_to_geojson(s):
 def random_name(l):
     return random.choice(string.lowercase) + \
         ''.join(random.sample(string.lowercase + string.digits, int(l)-1))
-    
+
+def stringify_exception(ex):
+    return '%s: %s' %(type(ex).__name__, str(ex).strip())
+
