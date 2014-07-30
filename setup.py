@@ -46,7 +46,11 @@ setup(
         
         publicamundi_extract_json = ckanext.publicamundi.lib.metadata.vocabularies.babel_extractors:extract_json
         
+        [fanstatic.libraries]
+
         """,
+    # The following only stands as an example. The actual message_extractors should be defined into 
+    # ckan's setup.py (from where message extraction is invoked).
     message_extractors = {
         'ckanext': [
             ('publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json', 'publicamundi_extract_json', None),
@@ -59,5 +63,4 @@ setup(
             #}),
         ]
     }
-
 )
