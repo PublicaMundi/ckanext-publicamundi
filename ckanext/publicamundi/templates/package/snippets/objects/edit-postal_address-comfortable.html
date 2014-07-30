@@ -1,0 +1,43 @@
+{% import 'macros/markup_helpers.html' as markup_helpers -%}
+
+<div class="{{ " error" if (errors and errors.global_key in errors) }}{{ " " ~ classes | join(' ') }}">
+ 
+    <h3>{{ title }}{{ markup_helpers.mark_required(required) }}</h3>
+ 
+    {% with e = errors['address'] -%}
+    <div class="control-group {{ 'error' if e }}">
+        <label class="control-label" for="input-{{ qname }}.address">{{ _('Street Address') }}</label>
+        <div class="controls">
+            <input type="text" id="input-{{ qname }}.address"  name="{{ qname }}.address"
+                class="input-large"
+                value="{{ obj.address | empty_and_escape }}" 
+                placeholder="{{ _('Patission 183') }}"
+                title="{{ _('Street Address') }}"
+            />
+            {% if e -%}<span class="help-inline">{{ e|join(', ') }}</span>{% endif -%}
+        </div>
+    </div>
+    {% endwith -%}
+
+    {% with e = errors['postalcode'] -%}
+    <div class="control-group {{ 'error' if e }}">
+        <label class="control-label" for="input-{{ qname }}.postalcode">{{ _('Postal Code') }}</label>
+        </label>
+        <div class="controls">
+            <input type="text" id="input-{{ qname }}.postalcode"  name="{{ qname }}.postalcode"
+                class="span1"
+                value="{{ obj.postalcode | empty_and_escape }}" 
+                placeholder="{{ _('13254') }}" 
+                title="{{ _('Postal (ZIP) Code') }}" 
+            />
+            {% if e -%}<span class="help-inline">{{ e|join(', ') }}</span>{% endif -%}
+        </div>
+    </div>
+    {% endwith -%}
+    
+    {{ 
+        markup_helpers.error_messages(errors[errors.global_key]) 
+    }} 
+
+</div>
+

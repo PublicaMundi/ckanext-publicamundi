@@ -1,0 +1,33 @@
+{% import 'macros/markup_helpers.html' as markup_helpers -%}
+
+<div class="control-group{{ " error" if errors }}{{ " " ~ classes | join(' ') }}">
+    <label class="control-label" for="input-{{ qname }}.address">
+        {{ title }}{{ markup_helpers.mark_required(required) }}
+    </label>
+        
+    <div class="controls">
+        <input type="text" id="input-{{ qname }}.address"  name="{{ qname }}.address"
+            class="input-large"
+            value="{{ obj.address | empty_and_escape }}" 
+            placeholder="{{ _('Patission 199') }}"
+            title="{{ _('Street Address') }}"
+        />
+        &nbsp;
+        <span>{{ _('Zip') }}:</span>&nbsp;
+        <input type="text" id="input-{{ qname }}.postalcode"  name="{{ qname }}.postalcode"
+            class="span1"
+            value="{{ obj.postalcode | empty_and_escape }}" 
+            placeholder="{{ _('13254') }}" 
+            title="{{ _('Postal (ZIP) Code') }}" 
+        />
+    </div>
+
+    {{ 
+        markup_helpers.error_messages(errors, titles={
+          'address': _('Address'),
+          'postalcode': _('Postal Code'),
+          errors.global_key: _('As a whole'),
+        }) 
+    }} 
+
+</div>

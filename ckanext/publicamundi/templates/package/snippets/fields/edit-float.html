@@ -1,0 +1,23 @@
+{% import 'macros/markup_helpers.html' as markup_helpers -%}
+
+{% set placeholder = placeholder or field.default -%}
+{% if input_classes is not defined %}{% set input_classes = [ 'input-small' ] %}{% endif -%}
+{% do input_classes.extend(['number', 'float']) %}
+
+<div class="control-group{{ " error" if errors }}{{ " " ~ classes | join(' ') }}">
+    <label class="control-label" for="{{ 'input-' ~ qname }}">
+        {{ title }}{{ markup_helpers.mark_required(required) }}
+    </label>
+    <div class="controls">
+        <input type="number" id="{{ 'input-' ~ qname }}"  name="{{ qname }}"
+            class="{{ input_classes | list | join(" ") }}"
+            value="{{ value | float(default=field.default) }}"
+            step="any" min="{{ field.min }}" max="{{ field.max }}"
+            placeholder="{{ placeholder | empty_and_escape }}"
+            {{ attrs | xmlattr -}}
+        />
+        {% if errors -%}
+        <span class="help-inline">{{ errors | join(', ') }}</span>
+        {% endif -%}
+    </div>
+</div>

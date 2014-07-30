@@ -1,0 +1,5 @@
+{% set term = field.vocabulary.getTerm(value) if value -%}
+<div class="{{ classes | join(' ') }}">
+    <dt>{{ title }}</dt>
+    <dd>{{ term.title if term else 'n/a' }}</dd>  
+</div>

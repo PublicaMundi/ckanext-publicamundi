@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '0.3dev'
+version = '0.7dev'
 
 setup(
 	name='ckanext-publicamundi',
@@ -13,13 +13,14 @@ setup(
 	keywords='',
 	author='Michail Alexakis',
 	author_email='alexakis@imis.athena-innovation.gr',
-	url='',
+	url='https://github.com/PublicaMundi/ckanext-publicamundi',
 	license='',
 	packages=find_packages(exclude=['ez_setup', 'examples', 'tests']),
 	namespace_packages=['ckanext', 'ckanext.publicamundi'],
 	include_package_data=True,
+	paster_plugins=['Pylons'],
 	zip_safe=False,
-	install_requires=[
+    install_requires=[
 		# -*- Extra requirements: -*-
         # Note: Moved under pip-requirements.txt
 	],
@@ -34,14 +35,29 @@ setup(
         publicamundi_errorware = ckanext.publicamundi.plugins:ErrorHandler
 
         [paste.paster_command]
-
-        publicamundi-greet = ckanext.publicamundi.commands:Greet
-
+        
         publicamundi-setup = ckanext.publicamundi.commands:Setup
 
         publicamundi-cleanup = ckanext.publicamundi.commands:Cleanup
 
-        [fanstatic.libraries]
+        publicamundi = ckanext.publicamundi.commands:Command
+        
+        [babel.extractors]
+        
+        publicamundi_extract_json = ckanext.publicamundi.lib.metadata.vocabularies.babel_extractors:extract_json
+        
+        """,
+    message_extractors = {
+        'ckanext': [
+            ('publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json', 'publicamundi_extract_json', None),
+            #('publicamundi/lib/metadata/schemata/inspire.py', 'publicamundi_extract_schema_info', None),
+            #('**.py', 'python', None),
+            #('**.html', 'ckan', None),
+            #('multilingual/solr/*.txt', 'ignore', None),
+            #('**.txt', 'genshi', {
+            #    'template_class': 'genshi.template:TextTemplate'
+            #}),
+        ]
+    }
 
-	""",
 )

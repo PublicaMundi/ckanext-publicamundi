@@ -1,0 +1,10 @@
+{% extends 'tests/base.html' %}
+
+{% block primary_content_inner %}
+<form method="post" class="{{ c.form_class }}">
+    {% snippet 'snippets/accordion.html', id='form1', sections=c.form_sections %}
+    <input type="submit" name="submit" />
+</form>
+{% endblock %}
+
+

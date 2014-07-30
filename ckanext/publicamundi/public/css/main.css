@@ -1,0 +1,66 @@
+.datepicker {
+    width: 250px
+}
+
+div.controls .help-block {
+    font-size: 0.85em;
+}
+
+div.accordion-group {
+    border-radius: 1px;
+}
+
+select,
+textarea,
+input[type="text"],
+input[type="password"],
+input[type="number"],
+input[type="tel"] {
+    border-radius: 1px;
+}
+
+.alert {
+    border-radius: 1px;
+}
+
+.error-block {
+    border-radius: 1px;
+    margin: 3px 0px;
+    padding: 5px 15px;
+    width: inherit;
+}
+
+.error-block > ul {
+    margin: 5px 0px; 
+}
+
+.control-group > .alert-error {
+    margin: 3px 0px;
+    font-size: 12px;
+}
+
+.select2-container-multi .select2-choices {
+    border-radius: 1px;
+}
+
+.select2-container-multi .select2-choices .select2-search-choice {
+    border-radius: 1px;
+}
+
+.input-append .add-on:last-child, 
+.input-append .btn:last-child, 
+.input-append .btn-group:last-child > .dropdown-toggle {
+    border-radius: 0 1px 1px 0;
+}
+
+.input-append.datetime .add-on, 
+.input-append.time .add-on,
+.input-append.date .add-on {
+    cursor: pointer;
+}
+
+
+.bootstrap-datetimepicker-widget td, 
+.bootstrap-datetimepicker-widget th {
+    border-radius: 2px;
+}

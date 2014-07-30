@@ -16,8 +16,9 @@ import ckan.logic as logic
 import ckanext.publicamundi.model as publicamundi_model
 import ckanext.publicamundi.lib.util as publicamundi_util
 import ckanext.publicamundi.lib.metadata as publicamundi_metadata
+import ckanext.publicamundi.lib.actions as publicamundi_actions
 
-from ckanext.publicamundi.lib.util import object_to_json
+from ckanext.publicamundi.lib.util import object_to_json, random_name
 from ckanext.publicamundi.lib.metadata import dataset_types
 
 _t = toolkit._
@@ -30,6 +31,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     p.implements(p.IConfigurable, inherit=True)
     p.implements(p.IConfigurer, inherit=True)
     p.implements(p.IDatasetForm, inherit=True)
+    p.implements(p.IRoutes, inherit=True)
+    p.implements(p.IActions, inherit=True)
 
     ## Define helper methods ## 
 
@@ -37,7 +40,6 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     def publicamundi_helloworld(cls):
         ''' This is our simple helper function. '''
         markup = p.toolkit.render_snippet('snippets/hello.html', data={ 'name': 'PublicaMundi' })
-        #markup = '<span>Hello (PublicaMundi) World</span>'
         return p.toolkit.literal(markup)
 
     @classmethod
@@ -94,7 +96,12 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
     @classmethod
     def dump_jsonpickle(cls, obj):
-        return jsonpickle.encode(obj)
+        s = 'undefined'
+        try:
+            s = jsonpickle.encode(obj)
+        except:
+            pass
+        return s
 
     @classmethod
     def dataset_type_options(cls):
@@ -109,12 +116,14 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         These helpers will be available under the 'h' thread-local global object.
         '''
         return {
-            # define externsion-specific helpers
-            'dataset_type_options': self.dataset_type_options,
             'publicamundi_helloworld': self.publicamundi_helloworld,
+            'random_name': random_name,
+            'dataset_type_options': self.dataset_type_options,
             'organization_list_objects': self.organization_list_objects,
             'organization_dict_objects': self.organization_dict_objects,
-            # define debug helpers
+            'markup_for_field': publicamundi_metadata.markup_for_field,
+            'markup_for_object': publicamundi_metadata.markup_for_object,
+            # debug helpers
             'debug_template_vars': self.debug_template_vars,
             'dump_jsonpickle': self.dump_jsonpickle,
         }
@@ -132,6 +141,31 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     def configure(self, config):
         ''' Apply configuration options to this plugin '''
         pass
+
+    ## IRoutes interface ##
+
+    def before_map(self, mapper):
+        ''' Called before routes map is setup. '''
+
+        mapper.connect ('/api/util/resource/mimetype_autocomplete',
+            controller='ckanext.publicamundi.controllers.api:Controller', action='mimetype_autocomplete')
+
+        #mapper.connect('tags', '/tags',
+        #    controller='ckanext.publicamundi.controllers.tags:Controller', action='index')
+
+        mapper.connect('publicamundi-tests', '/testing/publicamundi/{action}/{id}',
+            controller='ckanext.publicamundi.controllers.tests:TestsController',)
+        mapper.connect('publicamundi-tests', '/testing/publicamundi/{action}',
+            controller='ckanext.publicamundi.controllers.tests:TestsController',)
+
+        return mapper
+
+    ## IActions interface ##
+
+    def get_actions(self):
+        return {
+            'mimetype_autocomplete': publicamundi_actions.mimetype_autocomplete,
+        }
 
     ## IDatasetForm interface ##
 
@@ -153,17 +187,17 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         log1.info('_modify_package_schema(): Building schema ...')
 
         import ckanext.publicamundi.lib.metadata.validators as publicamundi_validators
-        
+
         schema['dataset_type'] = [
             toolkit.get_validator('default')('ckan'),
             toolkit.get_converter('convert_to_extras'),
             publicamundi_validators.is_dataset_type,
         ];
- 
+
         # Add field-based validation processors
 
         field_name = 'baz'
-        field = publicamundi_metadata.IInspireMetadata.get(field_name)
+        field = publicamundi_metadata.IFoo.get(field_name)
         if field.default:
             x1 = toolkit.get_validator('default')(field.default)
         elif field.defaultFactory:
@@ -175,24 +209,24 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         x2 = publicamundi_validators.get_field_validator(field)
         x3 = toolkit.get_converter('convert_to_extras')
-        
+
         schema[field_name] = [x1, x2, x3]
 
 
-        schema['foo.0.baz'] = [
-            toolkit.get_converter('convert_to_extras')
-        ]
+        #schema['foo.0.baz'] = [
+        #    toolkit.get_converter('convert_to_extras')
+        #]
 
 
         # Add before/after validation processors
 
         schema['__before'].insert(-1, publicamundi_validators.dataset_preprocess_edit)
-        
+
         if not schema.get('__after'):
             schema['__after'] = []
         schema['__after'].append(publicamundi_validators.dataset_postprocess_edit)
         schema['__after'].append(publicamundi_validators.dataset_validate)
-       
+
         return schema
 
     def create_package_schema(self):
@@ -266,7 +300,6 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
     def history_template(self):
         return super(DatasetForm, self).history_template()
-
 
 class PackageController(p.SingletonPlugin):
     ''' Hook into the package controller '''

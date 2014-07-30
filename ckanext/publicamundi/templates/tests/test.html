@@ -1,0 +1,70 @@
+{% extends 'tests/base.html' %}
+
+{%- macro markup_for_messages(messages, key=None, titles={}) -%}
+    {% if messages -%}
+    {% if key -%}
+    <span class="title">{{ titles.get(key, key|title) }}</span><span>:</span>
+    {% endif -%}
+    {% if messages is mapping -%}
+    <ul>
+        {% for k in messages -%}
+        <li>{{ markup_for_messages(messages[k], k, titles) }}</li>
+        {% endfor -%}
+    </ul>
+    {% elif messages is sequence -%}
+    {% with l = messages|count %}
+    {% if l <= 1 %}
+    <span>{{ messages|first }}</span>
+    {% else %}
+    <ul>
+        {% for msg in messages -%}
+        <li>{{ msg }}</li>
+        {% endfor -%}
+    </ul>
+    {% endif -%}  
+    {% endwith %} {# l #}
+    {% endif -%} {# if mapping #}
+    {% endif -%} {# if messages #}
+{%- endmacro -%}
+
+{% macro error_messages(errors, titles={}) -%}
+    {% if errors -%}
+    <div class="alert alert-error">
+        {{ markup_for_messages(errors, key=None, titles=titles) }}
+    </div>
+    {% endif -%}
+{% endmacro -%}
+
+{% block primary_content_inner %}
+
+{% set 
+   errors1 = [ 
+       'Hello World',
+       'Goodbye World',
+   ] 
+%}
+
+{% set 
+   errors2 = {
+       'foo': {
+          'baz1': ['A Baz-1 error'],
+          'baz2': ['A Baz-2 error', 'Another Baz-2 error'],
+       },
+       'start': ['The date is malformed'],
+       'end': ['The date is out of range'],
+       '__after': ['Something bad'], 
+   }  
+%}
+
+{% set titles = { 'foo': 'Foo', 'start': 'Start Date', '__after': 'As a whole' } %}
+
+{{ error_messages(errors1, titles) }}
+
+{{ error_messages(errors2, titles) }}
+
+{% set errors3 = errors2['start'] + errors2['end'] + errors1 %}
+{{ error_messages(errors3, titles) }}
+
+{{ error_messages([]) }}
+
+{% endblock %}

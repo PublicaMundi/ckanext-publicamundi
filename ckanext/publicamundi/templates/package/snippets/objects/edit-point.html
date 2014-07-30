@@ -1,0 +1,31 @@
+{% if input_classes is not defined %}{% set input_classes = [ 'input-small' ] -%}{% endif -%}
+{% set placeholder = '0.0' -%}
+
+<div class="control-group{{ " error" if errors }}{{ " " ~ classes | join(' ') }}">
+    <label class="control-label">
+        {{ title }}
+        {% if required %}<span title="{{ _("This field is required") }}" class="control-required">*</span>{% endif -%}
+    </label>
+    <div class="controls">
+        <input 
+            id="{{ 'input-' ~ qname ~ '.' ~ 'x' }}" 
+            type="text" 
+            name="{{ qname }}.x"
+            class={{ input_classes | join(' ') }}
+            value="{{ obj.x | empty_and_escape }}" 
+            placeholder="{{ placeholder }}"  
+        />
+        <input 
+            id="{{ 'input-' ~ qname ~ '.' ~ 'y' }}" 
+            type="text" 
+            name="{{ qname }}.y" 
+            class={{ input_classes | join(' ') }}
+            value="{{ obj.y | empty_and_escape }}" 
+            placeholder="{{ placeholder }}"  
+        />
+    </div>        
+    
+    {% if errors -%}
+    <span class="help">{{ errors | join(', ') }}</span>
+    {% endif -%}
+</div>

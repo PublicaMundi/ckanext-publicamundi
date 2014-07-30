@@ -1,0 +1,8 @@
+
+<div class="{{ classes | join(' ') }}">
+    {% if title %}<h3 class="title">{{ title }}</h3>{% endif -%}
+    {% if description %}<div class="description">{{ description }}</div>{% endif -%}
+    <div>
+        {{ obj.markup }}
+    </div>
+</div>

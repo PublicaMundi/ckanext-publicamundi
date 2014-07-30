@@ -1,0 +1,46 @@
+{#
+
+An simple macro for creating accordions.
+Example usage:
+
+{% set sections = [
+        { 
+            'name': 'alpha',
+            'heading': 'Helloooo', 
+            'text': 'I say Hello',
+        },
+        { 
+            'name': 'beta',
+            'heading': 'Goodbyeee',
+            'text': 'I say Goodbye',
+        },
+   }
+%}
+
+{% call(g) accordion.accordion('aa', sections) %}
+    <div><code>{{ g['name'] }}</code>: {{ g['text'] }}</div>
+{% endcall %}
+
+#}
+
+{% macro accordion(id, groups) -%}
+<div class="accordion" id="{{ id }}">
+    {% for group in groups -%}
+    {% with group_id = id ~ '-group-' ~ loop.index -%}
+    {% with heading = group.heading -%}
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#{{ id }}" href="#{{ group_id }}"
+                >{{ heading }}</a>
+        </div>
+        <div id="{{ group_id }}" class="accordion-body collapse {% if loop.first %}in{% endif %}">
+            <div class="accordion-inner">
+                {{ caller(group) }}
+            </div>
+        </div>
+    </div>
+    {% endwith -%} {# heading #}
+    {% endwith -%} {# group_id #}
+    {% endfor -%}
+</div>
+{% endmacro -%}

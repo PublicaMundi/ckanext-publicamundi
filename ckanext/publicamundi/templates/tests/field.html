@@ -1,0 +1,8 @@
+{% extends 'page.html' %}
+
+{% block primary_content_inner %}
+{{ h.markup_for_field('read', field, 
+    name_prefix = 'foo', 
+    data = { 'title': title }) 
+}}
+{% endblock %}

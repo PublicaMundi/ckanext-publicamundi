@@ -1,0 +1,10 @@
+<div class="{{ classes | join(' ') }}">
+    <dt>{{ title or _('Postal Address') }}</dt>
+    <dd>
+       {% if obj.address %}
+       <span>{{ obj.address }}</span>
+       {% if obj.postalcode %}<span>{{ _('Zip') }}: {{ obj.postalcode }}</span></dd>{% endif %}
+       {% else -%}
+       {{ _('n/a') }}
+       {% endif -%}
+</div>

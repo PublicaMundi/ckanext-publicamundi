@@ -1,0 +1,4 @@
+<div class="{{ classes | join(' ') }}">
+    <dt>{{ title or _('Point') }}</dt>
+    <dd>x={{ '%.2f' | format(obj.x) }} y={{ '%.2f' | format(obj.y) }}</dd>
+</div>

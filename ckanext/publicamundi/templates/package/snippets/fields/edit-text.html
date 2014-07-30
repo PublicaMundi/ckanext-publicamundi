@@ -1,0 +1,18 @@
+{% import 'macros/markup_helpers.html' as markup_helpers -%}
+
+{% set placeholder = placeholder or field.default -%}
+{% set classes = classes + [ 'control-full' ] -%}
+
+<div class="control-group{{ " " ~ classes | join(' ') }}">
+    <label class="control-label" for="{{ 'input-' ~ qname }}">
+        {{ title }}{{ markup_helpers.mark_required(required) }}
+    </label>
+    <div class="controls">
+        <textarea id="{{ 'input-' ~ qname }}" name="{{ qname }}" 
+            class="{{ input_classes | list | join(" ") }}"
+            placeholder="{{ placeholder | empty_and_escape }}"  
+            {{ attrs | xmlattr -}}
+          />{{ value | empty_and_escape }}</textarea>
+        {% if description %}<div class="help-block">{{ description }}</div>{% endif %}
+    </div>
+</div>
