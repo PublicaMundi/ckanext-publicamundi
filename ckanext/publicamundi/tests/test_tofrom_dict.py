@@ -41,8 +41,9 @@ def _test_dictization(fixture_name):
     d1f3 = x1.to_dict(flat=True, opts={ 'serialize-keys': True, 'serialize-values': True })
     for k, v in d1f3.items(): 
         assert isinstance(k, basestring)
-        assert isinstance(v, basestring) or isinstance(v, int) or isinstance(v, float) or \
-            isinstance(v, date) or isinstance(v, time) or isinstance(v, datetime)
+        assert isinstance(v, basestring) or isinstance(v, int) or isinstance(v, bool) or \
+            isinstance(v, float) or isinstance(v, date) or isinstance(v, time) or \
+            isinstance(v, datetime)
     print
     print ' -- flat, serialize-keys, serialize-values  --'
     print d1f3

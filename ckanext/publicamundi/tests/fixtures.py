@@ -97,6 +97,7 @@ sr3 = SpatialResolution()
 sr_correct = SpatialResolution(distance = 5, uom = u"lala")
 
 # Thesauri
+
 thesaurus_gemet_concepts = Thesaurus(
     title = u'GEMET Concepts',
     name = 'keywords-gemet-concepts',

@@ -2,7 +2,6 @@ import nose.tools
 import re
 import json
 
-@nose.tools.nottest
 def assert_faulty_keys(x, expected_keys=[], expected_invariants=[]):
     '''Verify that a set of fields (given with their keys) fail to validate'''
 

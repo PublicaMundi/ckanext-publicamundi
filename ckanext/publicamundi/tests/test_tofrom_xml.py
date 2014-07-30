@@ -3,6 +3,7 @@ import zope.schema
 import copy
 import json
 import datetime
+import nose.tools
 
 from ckanext.publicamundi.lib.metadata.types.inspire import InspireMetadata, ThesaurusTerms, Thesaurus
 from ckanext.publicamundi.lib.metadata.types.common import *
@@ -10,14 +11,7 @@ from ckanext.publicamundi.lib.metadata.base import *
 from ckanext.publicamundi.tests.helpers import assert_faulty_keys
 from ckanext.publicamundi.tests.fixtures import *
 
-infile = "tests/samples/corine_2000.xml"
-outfile = "out.xml" 
-
-insp_xml = InspireMetadata()
-insp_xml.from_xml(infile)
-#print repr(insp_xml)
-
-insp8 = InspireMetadata(
+insp1 = InspireMetadata(
     contact = [
         ResponsibleParty(organization=u"Org", email=[u"email@asd.gr"], role="pointofcontact")],
     datestamp = datetime.date.today(),
@@ -57,23 +51,30 @@ insp8 = InspireMetadata(
         ResponsibleParty(organization=u"Org", email=[u"email@asd.gr"], role="pointofcontact"), 
         ResponsibleParty(organization=u"Org2", email=[u"email2@asd.gr"], role="pointofcontact")]
 )
-insp8.to_xml(outfile)
-print repr(insp8)
 
-def test_xml():
-    '''Test from xml'''
-    assert_faulty_keys(insp_xml)
+@nose.tools.nottest
+def test_to_xml():
+    yield export_to_xml, insp1, '/tmp/out-1.xml'
 
-    insp8.to_xml(outfile)
+@nose.tools.nottest
+def test_from_xml():
+    yield import_from_xml, 'tests/samples/corine_2000.xml'
+
+def export_to_xml(obj, outfile):
+    '''Test exporting to XML'''
+    
+    obj.to_xml(outfile)
+
+@nose.tools.nottest
+def import_from_xml(infile):
+    '''Test importing from XML'''
+
+    obj = InspireMetadata()
+    obj.from_xml(infile)
+
+    return obj
+
 if __name__ == '__main__':
-    #test_insp11()
-    #test_insp12()
-    #test_insp2()
-    #test_insp3()
-    #test_insp4()
-    #test_insp5()
-    #test_insp6()
-    test_xml()
-    #test_insp8()
-
-
+    #export_to_xml(insp1, '/tmp/out-1.xml')
+    #import_from_xml('tests/samples/corine_2000.xml')
+    pass
