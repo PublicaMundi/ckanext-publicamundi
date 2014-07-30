@@ -43,13 +43,14 @@ setup(
         publicamundi = ckanext.publicamundi.commands:Command
         
         [babel.extractors]
-
+        
         publicamundi_extract_json = ckanext.publicamundi.lib.metadata.vocabularies.babel_extractors:extract_json
-
+        
         """,
     message_extractors = {
         'ckanext': [
             ('publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json', 'publicamundi_extract_json', None),
+            #('publicamundi/lib/metadata/schemata/inspire.py', 'publicamundi_extract_schema_info', None),
             #('**.py', 'python', None),
             #('**.html', 'ckan', None),
             #('multilingual/solr/*.txt', 'ignore', None),

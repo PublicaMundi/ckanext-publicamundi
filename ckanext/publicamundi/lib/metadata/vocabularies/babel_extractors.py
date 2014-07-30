@@ -24,28 +24,29 @@ def extract_json(fileobj, keywords, comment_tags, options):
     'vocab3':{k1:[i1, i2, i3], k2:[i1, i2, i3]}
     }
     """
+
     i = 0
     for k,v in json.loads(fileobj.read()).iteritems():
         i += 1
         # Case 1: Dictionary
-        if isinstance(v,dict):
+        if isinstance(v, dict):
             for kk,vv in v.iteritems():
                 i += 1
 
-                # Case 1.1 Dictionary with value as list
+                # Case 1.1 Dictionary with list values (vocab1)
                 if isinstance(vv,list):
                     for vvv in vv:
                         i += 1
                         yield (i, 0, vvv, "")
 
-                # Case 1.2 Simple key,value dictionary
+                # Case 1.2 Simple key,value dictionary (vocab2)
                 else:
                     yield (i, 0, vv, "")
 
-        # Case 2: List
+        # Case 2: List (vocab3)
         elif isinstance(v,list):
             for vv in v:
                 i += 1
                 yield (i, 0, vv, "")
-        #else:
-        #    yield (i, 0, v, "")
+
+
