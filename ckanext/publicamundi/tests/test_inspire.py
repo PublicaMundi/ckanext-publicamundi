@@ -8,31 +8,11 @@ from ckanext.publicamundi.lib.metadata.types.inspire_metadata import InspireMeta
 from ckanext.publicamundi.lib.metadata.types.common import *
 from ckanext.publicamundi.lib.metadata.base import *
 from ckanext.publicamundi.tests.helpers import assert_faulty_keys
+from ckanext.publicamundi.tests import fixtures
 
 #
-# INSPIRE fixtures
+# INSPIRE (faulty) fixtures
 #
-
-thesaurus_gemet_concepts = Thesaurus(
-    title = u'GEMET Concepts',
-    name = 'keywords-gemet-concepts',
-    reference_date = datetime.date(2014, 1, 1),
-    date_type = 'creation'
-)
-
-thesaurus_gemet_themes = Thesaurus(
-    title = u'GEMET Themes',
-    name = 'keywords-gemet-themes',
-    reference_date = datetime.date(2014, 5, 1),
-    date_type = 'creation'
-)
-
-thesaurus_gemet_inspire_data_themes = Thesaurus(
-    title = u'GEMET INSPIRE Data Themes',
-    name = 'keywords-gemet-inspire-data-themes',
-    reference_date = datetime.date(2014, 6, 1),
-    date_type = 'publication'
-)
 
 # Missing required title, abstract
 insp11 = InspireMetadata(
@@ -47,11 +27,11 @@ insp11 = InspireMetadata(
         keywords = [
             ThesaurusTerms(
                 terms=["atmosphere"],
-                thesaurus=thesaurus_gemet_concepts
+                thesaurus=fixtures.thesaurus_gemet_concepts
             ),            
             ThesaurusTerms(
                 terms=["land-cover", "land-use"],
-                thesaurus=thesaurus_gemet_inspire_data_themes,
+                thesaurus=fixtures.thesaurus_gemet_inspire_data_themes,
             ),
         ],
         bounding_box = [
@@ -86,11 +66,11 @@ insp12 = InspireMetadata(
     keywords = [
         ThesaurusTerms(
             terms=["atmosphere"],
-            thesaurus=thesaurus_gemet_concepts
+            thesaurus=fixtures.thesaurus_gemet_concepts
         ),
         ThesaurusTerms(
             terms=["land-cover", "land-use"],
-            thesaurus=thesaurus_gemet_inspire_data_themes,
+            thesaurus=fixtures.thesaurus_gemet_inspire_data_themes,
         ),
     ],
     bounding_box = [
@@ -122,11 +102,11 @@ insp2 = InspireMetadata(
     keywords = [
         ThesaurusTerms(
             terms=["buildings"],
-            thesaurus=thesaurus_gemet_inspire_data_themes,
+            thesaurus=fixtures.thesaurus_gemet_inspire_data_themes,
         ),
         ThesaurusTerms(
             terms=["atmosphere"],
-            thesaurus=thesaurus_gemet_concepts)
+            thesaurus=fixtures.thesaurus_gemet_concepts)
     ],
     bounding_box = [
         GeographicBoundingBox(nblat=0.0, sblat=0.0, eblng=0.0, wblng=0.0)],
@@ -160,11 +140,11 @@ insp3 = InspireMetadata(
     keywords = [
         ThesaurusTerms(
             terms=["buildings"],
-            thesaurus=thesaurus_gemet_inspire_data_themes,
+            thesaurus=fixtures.thesaurus_gemet_inspire_data_themes,
         ),
         ThesaurusTerms(
             terms=["atmosphere"],
-            thesaurus=thesaurus_gemet_concepts)
+            thesaurus=fixtures.thesaurus_gemet_concepts)
     ],
     bounding_box = [
         GeographicBoundingBox(nblat=0.0, sblat=0.0, wblng=0.0, eblng=0.0)],
@@ -200,11 +180,11 @@ insp4 = InspireMetadata(
     keywords = [
         ThesaurusTerms(
             terms=["buildings"],
-            thesaurus=thesaurus_gemet_inspire_data_themes,
+            thesaurus=fixtures.thesaurus_gemet_inspire_data_themes,
         ),
         ThesaurusTerms(
             terms=["atmosphere"],
-            thesaurus=thesaurus_gemet_concepts
+            thesaurus=fixtures.thesaurus_gemet_concepts
         ),
     ],
     bounding_box = [
@@ -241,55 +221,17 @@ insp7.temporal_extent = None
 insp7.keywords = [
     ThesaurusTerms(
         terms=["buildings", "addresses"],
-        thesaurus=thesaurus_gemet_inspire_data_themes,
+        thesaurus=fixtures.thesaurus_gemet_inspire_data_themes,
     ),
     ThesaurusTerms(
         terms=["analysis", "foo"], # Term "foo" does not exist
-        thesaurus=thesaurus_gemet_concepts
+        thesaurus=fixtures.thesaurus_gemet_concepts
     ),
 ]
 
-# Everything should be ok 
-insp8 = InspireMetadata(
-    contact = [
-        ResponsibleParty(organization=u"Org", email=[u"email@asd.gr"], role="pointofcontact")],
-    datestamp = datetime.date.today(),
-    languagecode = "el",
-    title = u"Title",
-    identifier = [u"12314213123"],
-    abstract = u"abstracttttttt",
-    locator = ["http://publicamundi.eu", "http://www.google.com", "http://www.ipsyp.gr", "http://www.example.com"],
-    resource_language = ["el"],
-    topic_category = ["biota"],
-    keywords = [
-        ThesaurusTerms(
-            terms=["air", "agriculture", "climate"],
-            thesaurus=thesaurus_gemet_themes
-        ),    
-        ThesaurusTerms(
-            terms=["buildings", "addresses"],
-            thesaurus=thesaurus_gemet_inspire_data_themes,
-        ),
-    ],
-    bounding_box = [
-        GeographicBoundingBox(nblat=0.0, sblat=0.0, wblng=0.0, eblng=0.0)],
-    temporal_extent = [
-        TemporalExtent(start=datetime.date(2012,1,1), end=datetime.date(2014,1,1))],
-    creation_date = datetime.date(2012,1,1),
-    publication_date = datetime.date(2012,1,1),
-    revision_date = datetime.date(2014,1,1),
-    lineage = u"lineaage",
-    denominator = [],
-    spatial_resolution = [
-        SpatialResolution(distance=5, uom=u"meters")],
-    conformity = [
-        Conformity(title=u"specifications blabla", date=datetime.date.today(), date_type="creation", degree="conformant")],
-    access_constraints = [u"lalala1", u"lalala2"],
-    limitations = [u"limit1", u"limit2"],
-    responsible_party = [
-        ResponsibleParty(organization=u"Org", email=[u"email@asd.gr"], role="pointofcontact"), 
-        ResponsibleParty(organization=u"Org2", email=[u"email2@asd.gr"], role="pointofcontact")]
-)
+#
+# Tests
+#
 
 def test_insp11():
     ''' Missing required title, abstract'''
@@ -332,8 +274,9 @@ def test_insp7():
     assert_faulty_keys(insp7,
         expected_keys=set(['keywords']))
 
-def test_insp8():
-    assert_faulty_keys(insp8)
+def test_fixtures_inspire1():
+    '''Everything should be ok'''
+    assert_faulty_keys(fixtures.inspire1)
 
 if __name__ == '__main__':
     #test_insp11()
@@ -344,6 +287,6 @@ if __name__ == '__main__':
     #test_insp5()
     #test_insp6()
     test_insp7()
-    #test_insp8()
-
+    #test_fixtures_inspire1()
+    pass
 
