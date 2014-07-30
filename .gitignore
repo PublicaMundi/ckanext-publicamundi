@@ -1,3 +1,5 @@
 ckanext_publicamundi.egg-info/
 *.pyc
 *.swp
+build
+dist
