@@ -188,8 +188,13 @@ class TestsController(BaseController):
     def show_foo(self, id='foo1'):
         obj = getattr(fixtures, id)
         assert isinstance(obj, types.Foo)
-        c.markup = markup_for_object('read', obj, name_prefix='a.foo1', data={'title': u'Foo #2'})
+        c.markup = markup_for_object('read', obj, 
+            name_prefix='a.foo1', data={'title': u'Foo #2'})
         return render('tests/page.html')
+
+    def test_template(self):
+        '''A test tube for jinja2 templates ''' 
+        return render('tests/test.html')
 
     def test_accordion_form(self):
         c.form_sections = []

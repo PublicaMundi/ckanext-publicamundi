@@ -4,33 +4,30 @@
     <label class="control-label" for="input-{{ qname }}.address">
         {{ title }}{{ markup_helpers.mark_required(required) }}
     </label>
-    
-    {{ markup_helpers.error_messages(errors[errors.global_key]) }} 
-    
+        
     <div class="controls">
         <input type="text" id="input-{{ qname }}.address"  name="{{ qname }}.address"
             class="input-large"
             value="{{ obj.address | empty_and_escape }}" 
-            placeholder="{{ _('PaulStrabe 183') }}"
+            placeholder="{{ _('Patission 199') }}"
             title="{{ _('Street Address') }}"
         />
         &nbsp;
-        <span>{{ _('Zip') }}:</span>
-        &nbsp;
+        <span>{{ _('Zip') }}:</span>&nbsp;
         <input type="text" id="input-{{ qname }}.postalcode"  name="{{ qname }}.postalcode"
             class="span1"
             value="{{ obj.postalcode | empty_and_escape }}" 
             placeholder="{{ _('13254') }}" 
             title="{{ _('Postal (ZIP) Code') }}" 
         />
-        
-        {#
-        {% if 'postalcode' in errors -%}
-        <div class="alert alert-error">
-            {{ errors.get('postalcode') | join(', ') }}
-        </div>
-        {% endif -%}
-        #}
-    
     </div>
+
+    {{ 
+        markup_helpers.error_messages(errors, titles={
+          'address': _('Address'),
+          'postalcode': _('Postal Code'),
+          errors.global_key: _('As a whole'),
+        }) 
+    }} 
+
 </div>
