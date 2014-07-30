@@ -5,8 +5,8 @@ import zope.schema
 
 from zope.schema.vocabulary import SimpleVocabulary
 from ckanext.publicamundi.lib.metadata.base import Object
-from ckanext.publicamundi.lib.metadata.schemata.inspire import IThesaurusTerms, IThesaurus
-from ckanext.publicamundi.lib.metadata.schemata.inspire import IInspireMetadata
+from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import IThesaurusTerms, IThesaurus
+from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import IInspireMetadata
 from ckanext.publicamundi.lib.metadata.types import object_null_adapter
 from ckanext.publicamundi.lib.metadata.types.common import *
 from ckanext.publicamundi.lib.metadata.vocabularies import inspire_vocabularies

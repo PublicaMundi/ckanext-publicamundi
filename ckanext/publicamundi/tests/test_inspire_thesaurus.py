@@ -6,8 +6,8 @@ from zope.interface.verify import verifyObject
 import zope.schema
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
-from ckanext.publicamundi.lib.metadata.schemata.inspire import *
-from ckanext.publicamundi.lib.metadata.types.inspire import *
+from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import *
+from ckanext.publicamundi.lib.metadata.types.inspire_metadata import *
 
 from ckanext.publicamundi.tests.helpers import assert_faulty_keys
 

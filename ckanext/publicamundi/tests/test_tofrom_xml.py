@@ -5,8 +5,9 @@ import json
 import datetime
 import nose.tools
 
-from ckanext.publicamundi.lib.metadata.types.inspire import InspireMetadata, ThesaurusTerms, Thesaurus
 from ckanext.publicamundi.lib.metadata.types.common import *
+from ckanext.publicamundi.lib.metadata.types.inspire_metadata import ThesaurusTerms, Thesaurus
+from ckanext.publicamundi.lib.metadata.types.inspire_metadata import InspireMetadata
 from ckanext.publicamundi.lib.metadata.base import *
 from ckanext.publicamundi.tests.helpers import assert_faulty_keys
 from ckanext.publicamundi.tests.fixtures import *
