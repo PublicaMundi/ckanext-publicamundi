@@ -1,0 +1,3926 @@
+# Translations template for ckanext-publicamundi.
+# Copyright (C) 2014 ORGANIZATION
+# This file is distributed under the same license as the
+# ckanext-publicamundi project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: ckanext-publicamundi 0.7dev\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2014-07-29 15:44+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.3\n"
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:2
+msgid "Belgium"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:3
+msgid "France"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:4
+msgid "Bulgaria"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:5
+msgid "EU-25"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:6
+msgid "Portugal Continental"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:7
+msgid "EU-27"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:8
+msgid "Croatia"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:9
+msgid "Germany"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:10
+msgid "Bosnia and Herzegovina"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:11
+msgid "Spain Continental"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:12
+msgid "Hungary"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:13
+msgid "Canaries"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:14
+msgid "Finland"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:15
+msgid "Belarus"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:16
+msgid "Denmark"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:17
+msgid "Russian Federation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:18
+msgid "Madeira"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:19
+msgid "Netherlands"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:20
+msgid "Portugal"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:21
+msgid "Norway"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:22
+msgid "Turkey"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:23
+msgid "Liechtenstein"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:24
+msgid "Latvia"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:25
+msgid "Saint-Berthelemy"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:26
+msgid "Lithuania"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:27
+msgid "Luxembourg"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:28
+msgid "Gibraltar"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:29
+msgid "Romania"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:30
+msgid "Poland"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:31
+msgid "Holy See Vatican City State"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:32
+msgid "France Continental"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:33
+msgid "Switzerland"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:34
+msgid "Greece"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:35
+msgid "Guadeloupe"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:36
+msgid "Estonia"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:37
+msgid "EU-12"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:38
+msgid "EU-15"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:39
+msgid "Albania"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:40
+msgid "Italy"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:41
+msgid "Czech Republic"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:42
+msgid "Cyprus"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:43
+msgid "Isle of Man"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:44
+msgid "Austria"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:45
+msgid "World"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:46
+msgid "Andorra"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:47
+msgid "Reunion"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:48
+msgid "Ireland"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:49
+msgid "Spain"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:50
+msgid "Moldova"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:51
+msgid "Saint-Martin"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:52
+msgid "Morocco"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:53
+msgid "French Guiana"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:54
+msgid "Azores"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:55
+msgid "Former Yugoslav Republic of Macedonia"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:56
+msgid "Slovakia"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:57
+msgid "Malta"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:58
+msgid "Slovenia"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:59
+msgid "Martinique"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:60
+msgid "San Marino"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:61
+msgid "Ukraine"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:62
+msgid "Sweden"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:63
+msgid "United Kingdom"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:65
+msgid "Farming"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:66
+msgid "Biota"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:67
+msgid "Boundaries"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:68
+msgid "ClimatologyMeteorologyAtmosphere"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:69
+msgid "Economy"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:70
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:381
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:662
+msgid "Elevation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:71
+msgid "Environment"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:72
+msgid "GeoscientificInformation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:73
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:154
+msgid "Health"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:74
+msgid "ImageryBaseMapsEarthCover"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:75
+msgid "IntelligenceMilitary"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:76
+msgid "InlandWaters"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:77
+msgid "Location"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:78
+msgid "Oceans"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:79
+msgid "PlanningCadastre"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:80
+msgid "Society"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:81
+msgid "Structure"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:82
+msgid "Transportation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:83
+msgid "UtilitiesCommunication"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:85
+msgid "Date of Creation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:86
+msgid "Publication Date"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:87
+msgid "Last Revision Date"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:89
+msgid "Greek"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:90
+msgid "English"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:91
+msgid "Italian"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:92
+msgid "Irish"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:93
+msgid "Czech"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:94
+msgid "Estonian"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:95
+msgid "Spanish"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:96
+msgid "Dutch"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:97
+msgid "Portuguese"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:98
+msgid "Latvian"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:99
+msgid "Lithuanian"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:100
+msgid "Romanian"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:101
+msgid "Polish"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:102
+msgid "French"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:103
+msgid "Bulgarian"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:104
+msgid "German"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:105
+msgid "Danish"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:106
+msgid "Finnish"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:107
+msgid "Hungarian"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:108
+msgid "Swedish"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:109
+msgid "Slovak"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:110
+msgid "Maltese"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:111
+msgid "Slovenian"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:113
+msgid "Not evaluated"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:114
+msgid "Conformant"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:115
+msgid "Not conformant"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:118
+msgid "ACCESSORY LISTS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:119
+msgid "HUMAN ACTIVITIES AND PRODUCTS, EFFECTS ON THE ENVIRONMENT"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:120
+msgid "NATURAL ENVIRONMENT, ANTHROPIC ENVIRONMENT"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:121
+msgid "SOCIAL ASPECTS, ENVIRONMENTAL POLICY MEASURES"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:123
+msgid "Accidental death and injury"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:124
+msgid "Adapting to"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:125
+msgid "Agricultural economy and trade"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:126
+msgid "Agriculture"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:127
+msgid "Agriculture, fisheries, forestry"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:128
+msgid "Assessing"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:129
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:627
+msgid "Biodiversity"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:130
+msgid "Birth defects"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:131
+msgid "Cancers"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:132
+msgid "Carbon cycle"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:133
+msgid "Climate"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:134
+msgid "Climate prediction"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:135
+msgid "Coastal hazards, Tsunami"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:136
+msgid "Conservation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:137
+msgid "Disasters"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:138
+msgid "Drought prediction"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:139
+msgid "Earthquakes"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:140
+msgid "Ecosystem and water quality assessment"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:141
+msgid "Ecosystems"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:142
+msgid "Electricity generation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:143
+msgid "Energy"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:144
+msgid "Environmental stress"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:145
+msgid "Extended forecasts"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:146
+msgid "Extreme weather"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:147
+msgid "Fisheries"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:148
+msgid "Fisheries and habitat"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:149
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:673
+msgid "Floods"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:150
+msgid "Food security"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:151
+msgid "Global biogeochemistry"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:152
+msgid "Global energy management"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:153
+msgid "Grazing systems"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:155
+msgid "Heavy rainfall and flood prediction"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:156
+msgid "Human health"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:157
+msgid "Impacts of humans on water cycle"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:158
+msgid "Infectious diseases"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:159
+msgid "Invasive species"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:160
+msgid "Land use planning"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:161
+msgid "Land, river, coast and ocean management"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:162
+msgid "Landslides, subsidence"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:163
+msgid "Management"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:164
+msgid "Medium-range forecasts"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:165
+msgid "Migratory species"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:166
+msgid "Mitigating"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:167
+msgid "Natural resources and services"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:168
+msgid "Nowcasting forecasts"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:169
+msgid "Nutrition"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:170
+msgid "Oil & gas exploration"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:171
+msgid "Pollution events"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:172
+msgid "Predicting"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:173
+msgid "Production of food"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:174
+msgid "Refining and transport operations"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:175
+msgid "Renewable energy operations"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:176
+msgid "Resource management"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:177
+msgid "Respiratory problems"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:178
+msgid "Sea and lake ice"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:179
+msgid "Telecommunication - navigation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:180
+msgid "Timber, fuel and fiber"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:181
+msgid "Tropical cyclones"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:182
+msgid "Understanding"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:183
+msgid "Very short range forecasts"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:184
+msgid "Volcanoes, volcanic ash, aerosols"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:185
+msgid "Water"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:186
+msgid "Water cycle research"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:187
+msgid "Weather"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:188
+msgid "Weather prediction"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:189
+msgid "Wildland fires"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:191
+msgid "Access Restriction"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:192
+msgid "Address"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:193
+msgid "Address Area Name"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:194
+msgid "Address Component"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:195
+msgid "Administrative Unit Name"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:196
+msgid "Administrative boundary"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:197
+msgid "Administrative unit"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:198
+msgid "Aerodrome Area"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:199
+msgid "Aerodrome Category"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:200
+msgid "Aerodrome Node"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:201
+msgid "Aerodrome Type"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:202
+msgid "Air Link"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:203
+msgid "Air Link Sequence"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:204
+msgid "Air Node"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:205
+msgid "Air Route"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:206
+msgid "Air Route Link"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:207
+msgid "Airspace Area"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:208
+msgid "Apron Area"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:209
+msgid "Basic Property Unit"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:210
+msgid "Beacon"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:211
+msgid "Bio-geographic Regions (Bio-geographic Regions)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:212
+msgid "Buoy"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:213
+msgid "CEMT Class"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:214
+msgid "Cableway Link"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:215
+msgid "Cableway Link Sequence"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:216
+msgid "Cableway Link Set"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:217
+msgid "Cableway Node"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:218
+msgid "Cadastral Boundary"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:219
+msgid "Cadastral Parcel"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:220
+msgid "Cadastral Zoning"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:221
+msgid "Condition Of Facility"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:222
+msgid "Condition of Air Facility"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:223
+msgid "Condition of Water Facility"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:224
+msgid "Condominium"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:225
+msgid "Cross Reference"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:226
+msgid "Crossing"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:227
+msgid "Dam or weir"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:228
+msgid "Design Speed"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:229
+msgid "Designated Point"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:230
+msgid "Drainage Basin"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:231
+msgid "E-road"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:232
+msgid "Element Length"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:233
+msgid "Element Width"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:234
+msgid "Embankment"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:235
+msgid "Fairway Area"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:236
+msgid "Falls"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:237
+msgid "Ferry Crossing"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:238
+msgid "Ferry Use"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:239
+msgid "Field Elevation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:240
+msgid "Fluvial point"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:241
+msgid "Ford"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:242
+msgid "Form Of Way"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:243
+msgid "Functional Road Class"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:244
+msgid "Gazetteer"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:245
+msgid "Generalised Link"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:246
+msgid "Grade Separated Crossing"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:247
+msgid "Habitat (Habitats and Biotopes)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:248
+msgid "Hydro Node"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:249
+msgid "Hydro Object"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:250
+msgid "Hydro Point of Interest"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:251
+msgid "Hydro-Power Plant"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:252
+msgid "Inland Waterway"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:253
+msgid "Instrument Approach Procedure"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:254
+msgid "Inundated Land"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:255
+msgid "Land-Water boundary"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:256
+msgid "Link"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:257
+msgid "Link Sequence"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:258
+msgid "Link Set"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:259
+msgid "Location Instance"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:260
+msgid "Location Type"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:261
+msgid "Lower Altitude Limit"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:262
+msgid "Maintenance Authority"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:263
+msgid "Man-made object"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:264
+msgid "Marine Waterway"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:265
+msgid "Marker Post"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:266
+msgid "NUTS region"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:267
+msgid "Named Place"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:268
+msgid "Navaid"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:269
+msgid "Network"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:270
+msgid "Network Area"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:271
+msgid "Network Connection"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:272
+msgid "Network Element"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:273
+msgid "Network Property"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:274
+msgid "Node"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:275
+msgid "Nominal Track Gauge"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:276
+msgid "Number Of Lanes"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:277
+msgid "Number of Tracks"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:278
+msgid "Ocean Region"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:279
+msgid "Owner Authority"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:280
+msgid "Pipe"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:281
+msgid "Port Area"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:282
+msgid "Port Node"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:283
+msgid "Postal Descriptor"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:284
+msgid "Procedure Link"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:285
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:450
+msgid "Protected Site"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:286
+msgid "PumpingStation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:287
+msgid "Railway Area"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:288
+msgid "Railway Electrification"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:289
+msgid "Railway Line"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:290
+msgid "Railway Link"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:291
+msgid "Railway Link Sequence"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:292
+msgid "Railway Node"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:293
+msgid "Railway Station Area"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:294
+msgid "Railway Station Code"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:295
+msgid "Railway Station Node"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:296
+msgid "Railway Type"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:297
+msgid "Railway Use"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:298
+msgid "Railway Yard Area"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:299
+msgid "Railway Yard Node"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:300
+msgid "Rapids"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:301
+msgid "Responsible Agency (Protected Sites)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:302
+msgid "Restriction For Vehicles"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:303
+msgid "Restriction for Water Vehicles"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:304
+msgid "River Basin"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:305
+msgid "Road"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:306
+msgid "Road Area"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:307
+msgid "Road Link"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:308
+msgid "Road Link Sequence"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:309
+msgid "Road Name"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:310
+msgid "Road Node"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:311
+msgid "Road Service Area"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:312
+msgid "Road Service Type"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:313
+msgid "Road Surface Category"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:314
+msgid "Road Width"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:315
+msgid "Runway Area"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:316
+msgid "Runway Centreline Point"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:317
+msgid "Shore"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:318
+msgid "Shoreline construction"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:319
+msgid "Sluice"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:320
+msgid "Species Aggregation Unit (Species Distribution)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:321
+msgid "Species Distribution (Species Distribution)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:322
+msgid "Speed Limit"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:323
+msgid "Standard Instrument Arrival"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:324
+msgid "Standard Instrument Departure"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:325
+msgid "Standing water"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:326
+msgid "Surface Composition"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:327
+msgid "Surface water"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:328
+msgid "Taxiway Area"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:329
+msgid "Thoroughfare Name"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:330
+msgid "Touch Down Lift Off"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:331
+msgid "Traffic Flow Direction"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:332
+msgid "Traffic Separation Scheme"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:333
+msgid "Traffic Separation Scheme Area"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:334
+msgid "Traffic Separation Scheme Crossing"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:335
+msgid "Traffic Separation Scheme Lane"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:336
+msgid "Traffic Separation Scheme Roundabout"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:337
+msgid "Traffic Separation Scheme Separator"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:338
+msgid "Transport Area"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:339
+msgid "Transport Link"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:340
+msgid "Transport Link Sequence"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:341
+msgid "Transport Link Set"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:342
+msgid "Transport Network"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:343
+msgid "Transport Node"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:344
+msgid "Transport Object"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:345
+msgid "Transport Point"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:346
+msgid "Transport Property"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:347
+msgid "Upper Altitude Limit"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:348
+msgid "Use Restriction"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:349
+msgid "Vehicle Traffic Area"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:350
+msgid "Vertical Position"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:351
+msgid "WFD Coastal Water"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:352
+msgid "WFD Ground Water Body"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:353
+msgid "WFD Lake"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:354
+msgid "WFD River"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:355
+msgid "WFD River or Lake"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:356
+msgid "WFD Surface Water Body"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:357
+msgid "WFD Transitional Water"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:358
+msgid "WFD Water Body"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:359
+msgid "Water Link Sequence"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:360
+msgid "Water Node"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:361
+msgid "Water Traffic Flow Direction"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:362
+msgid "Watercourse"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:363
+msgid "Watercourse Link"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:364
+msgid "Watercourse Link Sequence"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:365
+msgid "Watercourse Separated Crossing"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:366
+msgid "Waterway"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:367
+msgid "Waterway Link"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:368
+msgid "Waterway Node"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:369
+msgid "Wetland"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:370
+msgid "lock"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:372
+msgid "Addresses"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:373
+msgid "Administrative units"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:374
+msgid "Agricultural and aquaculture facilities"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:375
+msgid "Area management/restriction/regulation zones and reporting units"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:376
+msgid "Atmospheric conditions"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:377
+msgid "Bio-geographical regions"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:378
+msgid "Buildings"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:379
+msgid "Cadastral parcels"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:380
+msgid "Coordinate reference systems"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:382
+msgid "Energy resources"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:383
+msgid "Environmental monitoring facilities"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:384
+msgid "Geographical grid systems"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:385
+msgid "Geographical names"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:386
+msgid "Geology"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:387
+msgid "Habitats and biotopes"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:388
+msgid "Human health and safety"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:389
+msgid "Hydrography"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:390
+msgid "Land cover"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:391
+msgid "Land use"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:392
+msgid "Meteorological geographical features"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:393
+msgid "Mineral resources"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:394
+msgid "Natural risk zones"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:395
+msgid "Oceanographic geographical features"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:396
+msgid "Orthoimagery"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:397
+msgid "Population distribution & demography"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:398
+msgid "Production and industrial facilities"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:399
+msgid "Protected sites"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:400
+msgid "Sea regions"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:401
+msgid "Soil"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:402
+msgid "Species distribution"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:403
+msgid "Statistical units"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:404
+msgid "Transport networks"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:405
+msgid "Utility and governmental services"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:407
+msgid "Addressable object"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:408
+msgid "Aqueduct"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:409
+msgid "Aquifer"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:410
+msgid "Artificial water body"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:411
+msgid "Bridge"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:412
+msgid "Cistern"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:413
+msgid "Coordinate reference system"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:414
+msgid "Coordinate system"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:415
+msgid "Cross section (watercourse)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:416
+msgid "Culvert"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:417
+msgid "Dam"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:418
+msgid "Datum"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:419
+msgid "Dike / levee"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:420
+msgid "Discharge rate"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:421
+msgid "Dynamic segmentation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:422
+msgid "ESDI"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:423
+msgid "EuroRoadS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:424
+msgid "Eurocontrol"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:425
+msgid "Fictitious"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:426
+msgid "Flow direction"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:427
+msgid "Foreshore"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:428
+msgid "Geodetic datum"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:429
+msgid "Glacier"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:430
+msgid "Grid"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:431
+msgid "Grid point"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:432
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:693
+msgid "Groundwater"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:433
+msgid "Heavily modified"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:434
+msgid "Heavily modified water body"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:435
+msgid "INSPIRE application schema"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:436
+msgid "INSPIRE data specification"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:437
+msgid "Inspire geo-portal"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:438
+msgid "Large lake"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:439
+msgid "Large river"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:440
+msgid "Linear element"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:441
+msgid "Linear referencing"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:442
+msgid "Main lake"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:443
+msgid "Main river"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:444
+msgid "Man made watercourse"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:445
+msgid "Natura2000"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:446
+msgid "Natural watercourse"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:447
+msgid "Postal address"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:448
+msgid "Property"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:449
+msgid "Protected Area"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:451
+msgid "River basin"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:452
+msgid "River basin district"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:453
+msgid "Riverbank"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:454
+msgid "Sluice gate"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:455
+msgid "Snowfield"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:456
+msgid "Spring"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:457
+msgid "Static segmentation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:458
+msgid "Sub-basin"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:459
+msgid "Tank"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:460
+msgid "Well"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:461
+msgid "Wharf"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:462
+msgid "actor"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:463
+msgid "aerodrome reference point"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:464
+msgid "airport/heliport"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:465
+msgid "application data"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:466
+msgid "application schema"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:467
+msgid "bifurcation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:468
+msgid "cadastral gap"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:469
+msgid "cadastral overlap"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:470
+msgid "character string"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:471
+msgid "class"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:472
+msgid "codelist"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:473
+msgid "compound coordinate reference system"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:474
+msgid "conceptual model"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:475
+msgid "conceptual schema"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:476
+msgid "conceptual schema language"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:477
+msgid "confluence"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:478
+msgid "coverage"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:479
+msgid "data harmonisation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:480
+msgid "data interoperability component"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:481
+msgid "data interoperability process"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:482
+msgid "data product"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:483
+msgid "data product specification"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:484
+msgid "data set"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:485
+msgid "data set series"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:486
+msgid "data specification"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:487
+msgid "deep water route"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:488
+msgid "discovery service (discovery)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:489
+msgid "download service (download)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:490
+msgid "endonym"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:491
+msgid "entity"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:492
+msgid "enumeration"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:493
+msgid "exonym"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:494
+msgid "external object identifier"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:495
+msgid "feature"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:496
+msgid "feature catalogue"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:497
+msgid "feature concept"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:498
+msgid "feature concept dictionary"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:499
+msgid "feature-related concepts"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:500
+msgid "free text"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:501
+msgid "gazetteer"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:502
+msgid "general feature model"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:503
+msgid "geodetic coordinate system"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:504
+msgid "geographic identifier"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:505
+msgid "geographical grid system"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:506
+msgid "grid cell"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:507
+msgid "harmonised data product specifications"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:508
+msgid "homologous spatial objects"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:509
+msgid "identifier"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:510
+msgid "infrastructure for spatial information"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:511
+msgid "inter-modal connection"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:512
+msgid "internal object identifier"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:513
+msgid "interoperability"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:514
+msgid "interoperable spatial data"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:515
+msgid "invoke spatial data service (invoke)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:516
+msgid "level of detail"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:517
+msgid "life-cycle information <spatial object>"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:518
+msgid "life-cycle rules <spatial object>"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:519
+msgid "lineage"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:520
+msgid "linear reference system"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:521
+msgid "linguistic text"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:522
+msgid "map projection"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:523
+msgid "metadata"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:524
+msgid "metadata element"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:525
+msgid "metadata element - Conditions for access and use"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:526
+msgid "metadata element - Conformity"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:527
+msgid "metadata element - Coupled resource"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:528
+msgid "metadata element - Geographic bounding box"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:529
+msgid "metadata element - Keyword"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:530
+msgid "metadata element - Limitations on public access"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:531
+msgid "metadata element - Lineage"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:532
+msgid "metadata element - Metadata date"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:533
+msgid "metadata element - Metadata language"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:534
+msgid "metadata element - Metadata point of contact"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:535
+msgid "metadata element - Resource abstract"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:536
+msgid "metadata element - Resource language"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:537
+msgid "metadata element - Resource locator"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:538
+msgid "metadata element - Resource title"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:539
+msgid "metadata element - Resource type"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:540
+msgid "metadata element - Responsible organisation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:541
+msgid "metadata element - Spatial data service type"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:542
+msgid "metadata element - Spatial resolution"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:543
+msgid "metadata element - Temporal reference"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:544
+msgid "metadata element - Topic category"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:545
+msgid "metadata element - Unique resource identifier"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:546
+msgid "multicultural"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:547
+msgid "multilingual"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:548
+msgid "multiple representation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:549
+msgid "namespace"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:550
+msgid "navaid equipment"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:551
+msgid "object"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:552
+msgid "object referencing"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:553
+msgid "ontology"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:554
+msgid "other service (service)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:555
+msgid "profile"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:556
+msgid "public authority"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:557
+msgid "quality"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:558
+msgid "railway yard"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:559
+msgid "reference data"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:560
+msgid "reference model"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:561
+msgid "register"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:562
+msgid "registry"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:563
+msgid "resolution"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:564
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:980
+msgid "resource"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:565
+msgid "scale"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:566
+msgid "significant point"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:567
+msgid "spatial data"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:568
+msgid "spatial data services"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:569
+msgid "spatial data services - classification"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:570
+msgid "spatial data set"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:571
+msgid "spatial data set series"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:572
+msgid "spatial object"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:573
+msgid "spatial object type"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:574
+msgid "spatial reference system"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:575
+msgid "spatial schema"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:576
+msgid "temporal reference system"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:577
+msgid "temporal schema"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:578
+msgid "thematic identifier"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:579
+msgid "theme"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:580
+msgid "third party"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:581
+msgid "topological gap"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:582
+msgid "topological overlap"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:583
+msgid "transformation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:584
+msgid "transformation service (transformation)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:585
+msgid "unique object identifier"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:586
+msgid "unit"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:587
+msgid "universe of discourse"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:588
+msgid "use case"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:589
+msgid "vanishing point"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:590
+msgid "version <spatial object>"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:591
+msgid "view service (view)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:593
+msgid "AEROSOLS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:594
+msgid "AGRICULTURAL AQUATIC SCIENCES"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:595
+msgid "AGRICULTURAL ENGINEERING"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:596
+msgid "AGRICULTURAL PLANT SCIENCE"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:597
+msgid "AGRICULTURE"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:598
+msgid "AIR QUALITY"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:599
+msgid "ANIMAL SCIENCE"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:600
+msgid "ANIMALS/VERTEBRATES"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:601
+msgid "AQUATIC ECOSYSTEMS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:602
+msgid "AQUATIC SCIENCES"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:603
+msgid "ATMOSPHERE"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:604
+msgid "ATMOSPHERIC CHEMISTRY"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:605
+msgid "ATMOSPHERIC PRESSURE"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:606
+msgid "ATMOSPHERIC RADIATION"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:607
+msgid "ATMOSPHERIC TEMPERATURE"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:608
+msgid "ATMOSPHERIC WATER VAPOR"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:609
+msgid "ATMOSPHERIC WINDS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:610
+msgid "ATTITUDES,PREFERENCES,BEHAVIOR"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:611
+msgid "Aerosol Properties"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:612
+msgid "Ambient Nitrogen Dioxide Concentration"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:613
+msgid "Ambient Ozone Concentration"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:614
+msgid "Ambient Particulate Matter (fine) Composition"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:615
+msgid "Ambient Particulate Matter Composition (coarse)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:616
+msgid "Ambient Particulate Matter Concentration (fine)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:617
+msgid "Ambient Sulfur Dioxide Concentration"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:618
+msgid "Ambient Volatile Organic Compounds"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:619
+msgid "Animal activity (range, season length, migration patterns)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:620
+msgid "Aquatic Ecosystem Condition"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:621
+msgid "BACTERIA/ARCHAEA"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:622
+msgid "BATHYMETRY/SEAFLOOR TOPOGRAPHY"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:623
+msgid "BIOLOGICAL CLASSIFICATION"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:624
+msgid "BIOSPHERE"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:625
+msgid "BOUNDARIES"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:626
+msgid "Bathymetry"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:628
+msgid "Biomass"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:629
+msgid "Burned Area/Fires"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:630
+msgid "CLOUDS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:631
+msgid "COASTAL PROCESSES"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:632
+msgid "CRYOSPHERE"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:633
+msgid "Carbon (stores, uptake, flux)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:634
+msgid "Carbon Dioxide Concentration"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:635
+msgid "Carbon Dioxide Partial Pressure"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:636
+msgid "Carbon in Subsurface Ocean"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:637
+msgid "Chlorophyll"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:638
+msgid "Cloud Cover"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:639
+msgid "Cloud Parameters (Other)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:640
+msgid "Cloud Water/Ice Amounts"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:641
+msgid "Column Nitrogen Dioxide Concentration"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:642
+msgid "Column Ozone Concentration"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:643
+msgid "Column Particulate Matter Concentration (coarse)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:644
+msgid "Column Particulate Matter Concentration (fine)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:645
+msgid "Column Sulfur Dioxide Concentration"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:646
+msgid "Contaminants/Pollutants (Inorganic/Organic)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:647
+msgid "Coral Reef Classification/Metabolism"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:648
+msgid "Crop Emergence"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:649
+msgid "Crop Yield"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:650
+msgid "Cultivation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:651
+msgid "Currents"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:652
+msgid "Curvature"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:653
+msgid "Deforestation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:654
+msgid "Density of Animal hosts"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:655
+msgid "Desertification"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:656
+msgid "Direct Normal Irradiation (DNI)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:657
+msgid "ECOLOGICAL DYNAMICS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:658
+msgid "ENVIRONMENTAL IMPACTS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:659
+msgid "EROSION/SEDIMENTATION"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:660
+msgid "Ecosystem Demand for Water"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:661
+msgid "Ecosystem Function/Dynamics"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:663
+msgid "Emissivity"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:664
+msgid "Enhanced Vegetation Index (EVI)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:665
+msgid "Erosion (reefs, sandbars)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:666
+msgid "Evaporation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:667
+msgid "Evapotranspiration"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:668
+msgid "FOREST SCIENCE"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:669
+msgid "FROZEN GROUND"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:670
+msgid "FUNGI"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:671
+msgid "Field Cover (Continuous)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:672
+msgid "Fish Harvest Intensity"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:674
+msgid "Forest Cover"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:675
+msgid "Forest Litter"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:676
+msgid "Forest Management Practices"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:677
+msgid "Forest Structure"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:678
+msgid "Fraction of Absorbed Photosynthetically Active Radiation (FAPAR)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:679
+msgid "Fraction of Photosynthetically Active Radiation (fPAR)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:680
+msgid "Fuel Load/Characteristics"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:681
+msgid "GEODETICS/GRAVITY"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:682
+msgid "GEOMAGNETISM"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:683
+msgid "GEOMORPHOLOGY"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:684
+msgid "GLACIERS/ICE SHEETS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:685
+msgid "GROUND WATER"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:686
+msgid "Geologic Stratification"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:687
+msgid "Glacier/Ice Cap Elevation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:688
+msgid "Glacier/Ice Sheet Depth"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:689
+msgid "Glacier/ice Sheet Extent"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:690
+msgid "Global Horizontal Irradiation (GHI)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:691
+msgid "Gravity Field"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:692
+msgid "Gross Primary Productivity"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:694
+msgid "HABITAT CONVERSION/FRAGMENTATION"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:695
+msgid "HUMAN DIMENSIONS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:696
+msgid "HUMAN HEALTH"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:697
+msgid "Health Care Access"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:698
+msgid "Hydrology"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:699
+msgid "ICE CORE RECORDS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:700
+msgid "Ice"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:701
+msgid "Ice Depth"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:702
+msgid "Impervious Surface Extent"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:703
+msgid "Inundated vegetation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:704
+msgid "LAND SURFACE"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:705
+msgid "LAND TEMPERATURE"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:706
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:707
+msgid "LAND USE/LAND COVER"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:708
+msgid "Lake/Reservoir Levels and Area"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:709
+msgid "Land Cover"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:710
+msgid "Land Surface Temperature"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:711
+msgid "Land Use"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:712
+msgid "Leaf Area Index (LAI)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:713
+msgid "MARINE GEOPHYSICS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:714
+msgid "MARINE SEDIMENTS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:715
+msgid "Magnetic Field"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:716
+msgid "Methane Concentration"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:717
+msgid "NATURAL HAZARDS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:718
+msgid "NATURAL RESOURCES"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:719
+msgid "Net Primary Production"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:720
+msgid "Non-native species"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:721
+msgid "Normalized Difference Vegetation Index (NDVI)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:722
+msgid "Nutrients (Phosphorous, Nitrogen, Potassium, Nitrates,Sulfates)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:723
+msgid "OCEAN CHEMISTRY"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:724
+msgid "OCEAN CIRCULATION"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:725
+msgid "OCEAN HEAT BUDGET"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:726
+msgid "OCEAN OPTICS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:727
+msgid "OCEAN TEMPERATURE"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:728
+msgid "OCEAN WAVES"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:729
+msgid "OCEAN WINDS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:730
+msgid "OCEAN/LAKE RECORDS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:731
+msgid "OCEANS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:732
+msgid "Ocean Salinity"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:733
+msgid "Ocean Topography"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:734
+msgid "Other long-lived GHGs"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:735
+msgid "Outgoing Longwave Radiation (Top of Atmosphere )"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:736
+msgid "PALEOCLIMATE"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:737
+msgid "PLANT COMMODITIES"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:738
+msgid "PLANTS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:739
+msgid "Pathogen Population Dynamic"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:740
+msgid "Permafrost"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:741
+msgid "Phenology"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:742
+msgid "Photosynthetically Active Radiation (PAR)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:743
+msgid "Population"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:744
+msgid "Pore Pressure"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:745
+msgid "Precipitation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:746
+msgid "ROCKS/MINERALS "
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:747
+msgid "River Flow Observations"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:748
+msgid "Rock Strength, Permeability, Spacing, Orientation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:749
+msgid "Runoff"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:750
+msgid "SALINITY/DENSITY"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:751
+msgid "SEA ICE"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:752
+msgid "SEA SURFACE TOPOGRAPHY"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:753
+msgid "SEISMOLOGY"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:754
+msgid "SNOW/ICE"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:755
+msgid "SOILS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:756
+msgid "SOLID EARTH"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:757
+msgid "SURFACE RADIATIVE PROPERTIES"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:758
+msgid "SURFACE WATER"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:759
+msgid "Sea Ice Cover"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:760
+msgid "Sea Ice Surface (Skin) Temperature"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:761
+msgid "Sea Level"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:762
+msgid "Sea Surface Temperature"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:763
+msgid "Slip"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:764
+msgid "Slope Angle"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:765
+msgid "Slope Movement"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:766
+msgid "Snow Cover Extent"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:767
+msgid "Snow Depth"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:768
+msgid "Snow Water Equivalent (SWE)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:769
+msgid "Soil Adjusted Vegetation Index (SAVI)+C29"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:770
+msgid "Soil Carbon"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:771
+msgid "Soil Composition"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:772
+msgid "Soil Moisture"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:773
+msgid "Soil Thaw"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:774
+msgid "Soil Thickness"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:775
+msgid "Soil Type"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:776
+msgid "Source of Drinking Water"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:777
+msgid "Species Composition"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:778
+msgid "Stand Density/Height/Volume"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:779
+msgid "Strain"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:780
+msgid "Stratospheric Ozone"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:781
+msgid "Surface Air Temperature"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:782
+msgid "Surface Albedo"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:783
+msgid "Surface Atmospheric Pressure"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:784
+msgid "Surface Deformation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:785
+msgid "Surface Humidity"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:786
+msgid "Surface Pressure"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:787
+msgid "Surface Radiation Budget"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:788
+msgid "Surface Wind Direction"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:789
+msgid "Surface Wind Speed"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:790
+msgid "Suspended particulates/turbidity/water attenuation coefficient"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:791
+msgid "TECTONICS "
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:792
+msgid "TERRESTRIAL ECOSYSTEMS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:793
+msgid "TERRESTRIAL HYDROSPHERE"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:794
+msgid "TOPOGRAPHY"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:795
+msgid "Thermokarst"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:796
+msgid "Upper Level Humidity"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:797
+msgid "Upper Level Temperature"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:798
+msgid "Upper Level Winds"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:799
+msgid "Urbanization"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:800
+msgid "VEGETATION"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:801
+msgid "Vector Population"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:802
+msgid "Vegetation Cover"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:803
+msgid "Vegetation Type"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:804
+msgid "WATER QUALITY"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:805
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:806
+msgid "WATER QUALITY/WATER CHEMISTRY"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:807
+msgid "Water Algal Blooms"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:808
+msgid "Water Bodies (location)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:809
+msgid "Water Depth (Shallow Near-Shore)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:810
+msgid "Water Infiltration/Percolation-Land Surface"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:811
+msgid "Water Quality & Composition, pH and salinity, Dissolved Oxygen Content"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:812
+msgid "Water Use"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:813
+msgid "Water run-off"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:814
+msgid "Wave Direction"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:815
+msgid "Wave Height"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:816
+msgid "Wave Period"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:818
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:893
+msgid "administration"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:819
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:894
+msgid "agriculture"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:820
+msgid "air"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:821
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:896
+msgid "animal husbandry"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:822
+msgid "biology"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:823
+msgid "building"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:824
+msgid "chemistry"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:825
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:907
+msgid "climate"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:826
+msgid "disasters, accidents, risk"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:827
+msgid "economics"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:828
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:916
+msgid "energy"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:829
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:926
+msgid "environmental policy"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:830
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:934
+msgid "fishery"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:831
+msgid "food, drinking water"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:832
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:935
+msgid "forestry"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:833
+msgid "general"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:834
+msgid "geography"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:835
+msgid "human health"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:836
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:943
+msgid "industry"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:837
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:944
+msgid "information"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:838
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:954
+msgid "legislation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:839
+msgid "materials"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:840
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:961
+msgid "military aspects"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:841
+msgid "natural areas, landscape, ecosystems"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:842
+msgid "natural dynamics"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:843
+msgid "noise, vibrations"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:844
+msgid "physics"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:845
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:975
+msgid "pollution"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:846
+msgid "radiations"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:847
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:979
+msgid "research"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:848
+msgid "resources"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:849
+msgid "social aspects, population"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:850
+msgid "soil"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:851
+msgid "space"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:852
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:993
+msgid "tourism"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:853
+msgid "trade, services"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:854
+msgid "transport"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:855
+msgid "urban environment, urban stress"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:856
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:1000
+msgid "waste"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:857
+msgid "water"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:859
+msgid "ADMINISTRATION, MANAGEMENT, POLICY, POLITICS, INSTITUTIONS, PLANNING"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:860
+msgid "AGRICULTURE, FORESTRY; ANIMAL HUSBANDRY; FISHERY"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:861
+msgid "ANTHROPOSPHERE (built environment, human settlements, land setup)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:862
+msgid "ATMOSPHERE (air, climate)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:863
+msgid "BIOSPHERE (organisms, ecosystems)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:864
+msgid "CHEMISTRY, SUBSTANCES, PROCESSES"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:865
+msgid "ECONOMICS, FINANCE"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:866
+msgid "EFFECTS, IMPACTS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:867
+msgid "ENERGY"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:868
+msgid "ENVIRONMENT (natural environment, anthropic environment)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:869
+msgid "ENVIRONMENTAL POLICY"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:870
+msgid "FUNCTIONAL TERMS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:871
+msgid "GENERAL TERMS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:872
+msgid "HEALTH, NUTRITION"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:873
+msgid "HYDROSPHERE (freshwater, marine water, waters)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:874
+msgid "INDUSTRY, CRAFTS; TECHNOLOGY; EQUIPMENTS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:875
+msgid "INFORMATION, EDUCATION, CULTURE, ENVIRONMENTAL AWARENESS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:876
+msgid "LAND (landscape, geography)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:877
+msgid "LEGISLATION, NORMS, CONVENTIONS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:878
+msgid "LITHOSPHERE (soil, geological processes)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:879
+msgid "PHYSICAL ASPECTS, NOISE, VIBRATIONS, RADIATIONS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:880
+msgid "PRODUCTS, MATERIALS"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:881
+msgid "RECREATION, TOURISM"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:882
+msgid "RESEARCH, SCIENCES"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:883
+msgid "RESOURCES (utilisation of resources)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:884
+msgid "RISKS, SAFETY"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:885
+msgid "SOCIETY"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:886
+msgid "SPACE"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:887
+msgid "TIME (chronology)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:888
+msgid "TRADE, SERVICES"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:889
+msgid "TRAFFIC, TRANSPORTATION"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:890
+msgid "WASTES, POLLUTANTS, POLLUTION"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:892
+msgid "accident"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:895
+msgid "analysis"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:897
+msgid "atmosphere"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:898
+msgid "biochemical process"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:899
+msgid "biosphere"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:900
+msgid "border"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:901
+msgid "built environment"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:902
+msgid "business"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:903
+msgid "chemical"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:904
+msgid "chemical element"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:905
+msgid "chemical process"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:906
+msgid "chemical property"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:908
+msgid "craft"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:909
+msgid "culture (society)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:910
+msgid "demography"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:911
+msgid "disaster"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:912
+msgid "disease"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:913
+msgid "economy"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:914
+msgid "education"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:915
+msgid "effect"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:917
+msgid "environment"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:918
+msgid "environmental assessment"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:919
+msgid "environmental awareness"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:920
+msgid "environmental control"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:921
+msgid "environmental data"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:922
+msgid "environmental economy issue"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:923
+msgid "environmental impact"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:924
+msgid "environmental management"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:925
+msgid "environmental planning"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:927
+msgid "environmental problem solving"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:928
+msgid "environmental protection"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:929
+msgid "equipment"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:930
+msgid "evaluation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:931
+msgid "experiment"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:932
+msgid "finances"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:933
+msgid "firm"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:936
+msgid "geological process"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:937
+msgid "hazard"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:938
+msgid "health"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:939
+msgid "health-environment relationship"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:940
+msgid "hydrosphere"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:941
+msgid "impact source"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:942
+msgid "industrial process"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:945
+msgid "institutional structure"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:946
+msgid "international relations"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:947
+msgid "justice"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:948
+msgid "labour"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:949
+msgid "land"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:950
+msgid "land setup"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:951
+msgid "law (corpus of rules)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:952
+msgid "law (individual)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:953
+msgid "legal form of organisations"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:955
+msgid "lithosphere"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:956
+msgid "management"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:957
+msgid "material"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:958
+msgid "medicine (practice)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:959
+msgid "methodology"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:960
+msgid "military activities"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:962
+msgid "monitoring"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:963
+msgid "nutrition"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:964
+msgid "organisation of the legal system"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:965
+msgid "overburden"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:966
+msgid "parameter"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:967
+msgid "pedosphere"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:968
+msgid "physical process"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:969
+msgid "physical property"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:970
+msgid "physicochemical process"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:971
+msgid "planning"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:972
+msgid "policy"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:973
+msgid "politics"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:974
+msgid "pollutant"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:976
+msgid "product"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:977
+msgid "radiation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:978
+msgid "recreation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:981
+msgid "resource utilisation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:982
+msgid "risk"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:983
+msgid "safety"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:984
+msgid "science"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:985
+msgid "services"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:986
+msgid "society"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:987
+msgid "space (interplanetary)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:988
+msgid "state of matter"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:989
+msgid "statistics"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:990
+msgid "subject"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:991
+msgid "technical regulation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:992
+msgid "technology"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:994
+msgid "trade (services)"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:995
+msgid "trade activity"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:996
+msgid "traffic"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:997
+msgid "transportation"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:998
+msgid "transportation mean"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:999
+msgid "vibration"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:1002
+msgid "Originator"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:1003
+msgid "Publisher"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:1004
+msgid "PointOfContact"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:1005
+msgid "PrincipalInvestigator"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:1006
+msgid "Custodian"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:1007
+msgid "ResourceProvider"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:1008
+msgid "Owner"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:1009
+msgid "User"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:1010
+msgid "Distributor"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:1011
+msgid "Author"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json:1012
+msgid "Processor"
+msgstr ""
+
