@@ -52,6 +52,22 @@ class LongSerializer(BaseSerializer):
     def loads(self, s):
         return long(s)
 
+class BoolSerializer(BaseSerializer):
+
+    def dumps(self, y):
+        assert isinstance(n, bool)
+        return 'true' if y else 'false'
+
+    def loads(self, s):
+        if s is None:
+            return False
+        s = str(s).lower()
+        # Use builtin bool cast, except for string 'false'
+        if s == 'false':
+            return False
+        else:
+            return bool(s)
+
 class FloatSerializer(BaseSerializer):
 
     def dumps(self, f):
@@ -134,7 +150,7 @@ _field_serializers = {
     zope.schema.Bytes: None,
     zope.schema.Int: IntSerializer(),
     zope.schema.Float: FloatSerializer(),
-    zope.schema.Bool: None,
+    zope.schema.Bool: BoolSerializer(),
     zope.schema.Datetime: DatetimeSerializer(),
     zope.schema.Date: DateSerializer(),
     zope.schema.Time: TimeSerializer(),
