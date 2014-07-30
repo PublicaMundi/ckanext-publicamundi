@@ -29,13 +29,13 @@ class IObject(zope.interface.Interface):
         The invariants (keyed at None) are checked only if schema validation (field-based) succeeds.
         '''
 
-    def to_dict(flat, opts=None):
+    def to_dict(flat, opts={}):
         '''Convert to a (flattened or nested) dict.
         This method should *not* alter the object itself.
         '''
 
-    def from_dict(d, is_flat=None, opts=None):
-        '''(Re)construct this object from a (flattened or nested) dict.
+    def from_dict(d, is_flat=None, opts={}):
+        '''Load this object from a (flattened or nested) dict.
         If parameter is_flat is not provided, an input dict d with tuple-typed keys will be
         considered a flattened dict (otherwise, will be considered a nested one).
         '''
@@ -46,9 +46,18 @@ class IObject(zope.interface.Interface):
         '''
 
     def from_json(s, is_flat):
-        '''(Re)construct this object from a (flattened or nested) JSON dump.
+        '''Load this object from a (flattened or nested) JSON dump.
         Note that (unlike from_dict()) an explicit flag (is_flat) should be passed to
         determine if input should be considered as flattened/nested.
+        '''
+    
+    def to_xml(opts={}):
+        '''Convert to XML.
+        This method should *not* alter the object itself.
+        '''
+    
+    def from_xml(xml, opts={}):
+        '''Load this object from an XML dump.
         '''
 
 class IErrorDict(zope.interface.Interface):

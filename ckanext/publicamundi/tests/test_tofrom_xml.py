@@ -10,7 +10,7 @@ from ckanext.publicamundi.lib.metadata.types.inspire_metadata import ThesaurusTe
 from ckanext.publicamundi.lib.metadata.types.inspire_metadata import InspireMetadata
 from ckanext.publicamundi.lib.metadata.base import *
 from ckanext.publicamundi.tests.helpers import assert_faulty_keys
-from ckanext.publicamundi.tests.fixtures import *
+from ckanext.publicamundi.tests import fixtures
 
 insp1 = InspireMetadata(
     contact = [
@@ -53,9 +53,12 @@ insp1 = InspireMetadata(
         ResponsibleParty(organization=u"Org2", email=[u"email2@asd.gr"], role="pointofcontact")]
 )
 
+# Tests
+
 @nose.tools.nottest
 def test_to_xml():
-    yield export_to_xml, insp1, '/tmp/out-1.xml'
+    yield export_to_xml, fixtures.foo1, '/tmp/out-foo-1.xml'
+    yield export_to_xml, insp1, '/tmp/out-inspire-1.xml'
 
 @nose.tools.nottest
 def test_from_xml():

@@ -24,6 +24,8 @@ FieldContext = namedtuple('FieldContext', ['key', 'obj'], verbose=False)
 class Object(object):
     zope.interface.implements(IObject)
 
+    ## Constants
+
     default_factories = {
         zope.schema.TextLine: None,
         zope.schema.Text: None,
@@ -40,7 +42,7 @@ class Object(object):
         zope.schema.Dict: dict,
     }
 
-    KEY_GLUE = '.'
+    key_glue = '.'
 
     ## interface IObject
 
@@ -75,7 +77,7 @@ class Object(object):
         if flat:
             res = self.flatten(opts)
             if 'serialize-keys' in opts:
-                key_serializer = get_key_tuple_serializer(self.KEY_GLUE)
+                key_serializer = get_key_tuple_serializer(self.key_glue)
                 res = { key_serializer.dumps(k): v for k, v in res.items() }
         else:
             res = self.dictize(opts)
@@ -90,7 +92,7 @@ class Object(object):
             is_flat = isinstance(d.iterkeys().next(), tuple)
         if is_flat:
             if 'unserialize-keys' in opts:
-                key_serializer = get_key_tuple_serializer(cls.KEY_GLUE)
+                key_serializer = get_key_tuple_serializer(cls.key_glue)
                 d = dictization.unflatten({
                     key_serializer.loads(k): v for k, v in d.items()
                 })
@@ -121,6 +123,14 @@ class Object(object):
         }
         return self.from_dict(d, is_flat, opts=opts)
 
+    def to_xml(self, opts={}):
+        raise NotImplementedError('Todo')
+        pass
+
+    def from_xml(self, xml, opts={}):
+        raise NotImplementedError('Todo')
+        pass
+    
     ## Constructor based on keyword args 
 
     def __init__(self, **kwargs):
