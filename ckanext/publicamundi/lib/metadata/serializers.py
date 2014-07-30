@@ -55,14 +55,14 @@ class LongSerializer(BaseSerializer):
 class BoolSerializer(BaseSerializer):
 
     def dumps(self, y):
-        assert isinstance(n, bool)
+        assert isinstance(y, bool)
         return 'true' if y else 'false'
 
     def loads(self, s):
         if s is None:
-            return False
+            return None
         s = str(s).lower()
-        # Use builtin bool cast, except for string 'false'
+        # Use bool cast, except for string 'false'
         if s == 'false':
             return False
         else:

@@ -558,7 +558,7 @@ class Object(object):
             Serialize this value if requested so.
             '''
             v = f
-            if self.opts.get('serialize-values'):
+            if (v is not None) and self.opts.get('serialize-values'):
                 serializer = get_field_serializer(F)
                 if serializer:
                     try:
@@ -689,7 +689,7 @@ class Object(object):
             else:
                 # A leaf field (may need to be unserialized)
                 f = v
-                if self.opts.get('unserialize-values'):
+                if (f is not None) and self.opts.get('unserialize-values'):
                     serializer = get_field_serializer(F)
                     if serializer:
                         try:
