@@ -5,7 +5,7 @@ import itertools
 import zope.interface
 import zope.interface.verify
 import zope.schema
-from collections import namedtuple, defaultdict
+from collections import namedtuple
 
 from ckanext.publicamundi.lib import dictization
 from ckanext.publicamundi.lib import logger
@@ -23,22 +23,6 @@ FieldContext = namedtuple('FieldContext', ['key', 'obj'], verbose=False)
 
 class Object(object):
     zope.interface.implements(IObject)
-
-    default_factories = {
-        zope.schema.TextLine: None,
-        zope.schema.Text: None,
-        zope.schema.BytesLine: None,
-        zope.schema.Bytes: None,
-        zope.schema.Int: None,
-        zope.schema.Float: None,
-        zope.schema.Bool: None,
-        zope.schema.Datetime: None,
-        zope.schema.Date: None,
-        zope.schema.Time: None,
-        zope.schema.List: list,
-        zope.schema.Tuple: list,
-        zope.schema.Dict: dict,
-    }
 
     KEY_GLUE = '.'
 
@@ -254,7 +238,7 @@ class Object(object):
         if isinstance(F, zope.schema.Object):
             factory = adapter_registry.lookup([], F.schema)
         else:
-            factory = F.defaultFactory or cls.default_factories.get(type(F))
+            factory = F.defaultFactory
         return factory
 
     ## Validation 
@@ -456,9 +440,7 @@ class Object(object):
         for k, ef in errors:
             if k is None:
                 # Found failed invariants
-                if not global_key in res:
-                    res[global_key] = []
-                res[global_key].extend([str(ex) for ex in ef])
+                res[global_key] = [ str(ex) for ex in ef ]
             else:
                 # Found a field-level error
                 F = S.get(k)
