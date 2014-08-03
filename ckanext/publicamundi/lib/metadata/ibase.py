@@ -51,6 +51,10 @@ class IObject(zope.interface.Interface):
         determine if input should be considered as flattened/nested.
         '''
     
+    def to_xsd(opts={}):
+        '''Generate an XML schema definition (XSD) for this class.
+        '''
+    
     def to_xml(opts={}):
         '''Convert to XML.
         This method should *not* alter the object itself.

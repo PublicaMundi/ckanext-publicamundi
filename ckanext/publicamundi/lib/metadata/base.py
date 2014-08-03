@@ -132,6 +132,10 @@ class Object(object):
         }
         return self.from_dict(d, is_flat, opts=opts)
 
+    def to_xsd(self, opts={}):
+        raise NotImplementedError('Todo')
+        pass
+    
     def to_xml(self, opts={}):
         raise NotImplementedError('Todo')
         pass
@@ -204,10 +208,12 @@ class Object(object):
 
     @classmethod
     def get_flattened_fields(cls):
+        '''Flatten the schema for this class'''
         return cls.flatten_schema(cls.get_schema())
 
     @staticmethod
     def flatten_schema(schema):
+        '''Flatten an arbitrary zope-based schema'''
         res = {}
         fields = zope.schema.getFields(schema)
         for k, F in fields.items():
