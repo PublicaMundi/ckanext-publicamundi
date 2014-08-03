@@ -7,8 +7,7 @@ def assert_faulty_keys(x, expected_keys=[], expected_invariants=[]):
 
     expected_keys = set(expected_keys)
 
-    errs = x.validate()
-    errs_dict = x.dictize_errors(errs)
+    errs_dict = x.validate(dictize_errors=True)
     
     faulty_keys = set(errs_dict.keys())
 

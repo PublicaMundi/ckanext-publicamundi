@@ -56,22 +56,31 @@ class Object(object):
         S = cls.get_schema()
         return S.get(k).bind(FieldContext(key=k, obj=self))
 
-    def validate(self):
-        '''Return a list <errors> structured as:
-
+    def validate(self, dictize_errors=False):
+        '''Validate against all known (schema-based or invariants) rules. 
+        
+        If dictize_errors is unset, return a list <errors> structured as:
           errors ::= [ (k, ef), ... ]
           ef ::= [ ex1, ex2, ...]
           ex ::= Invalid(arg0, arg1, ...)
           arg0 ::= errors
           arg0 ::= <literal-value>
-
-        Notation:
+        where:
           ef : field-errors
           ex : exception (derived from Invalid)
+        
+        If dictize_errors is set, the previous error list is attempted to
+        be converted to a dict of errors (with keys corresponding to
+        object's attributes or keys).
 
         '''
+
         cls = type(self)
-        return cls.Validator(self).validate()
+        errors = cls.Validator(self).validate()
+        if dictize_errors:
+            return self.dictize_errors(errors)
+        else:
+            return errors
 
     def to_dict(self, flat=False, opts={}):
         if flat:
