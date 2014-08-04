@@ -1,4 +1,5 @@
 import datetime
+import pickle
 import zope.interface
 import zope.schema
 import zope.schema.interfaces
@@ -6,6 +7,8 @@ import zope.schema.interfaces
 from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.ibase import ISerializer, ISerializable
 from ckanext.publicamundi.lib.metadata.ibase import IObject
+
+# Decorators for adaptation
 
 def field_serialize_adapter(required_iface):
     assert required_iface.isOrExtends(zope.schema.interfaces.IField)
@@ -26,6 +29,8 @@ def key_tuple_serialize_adapter():
         adapter_registry.register([], ISerializer, 'serialize:key', cls)
         return cls
     return decorate
+
+# Serializers
 
 class BaseSerializer(object):
     zope.interface.implements(ISerializer)
@@ -170,6 +175,8 @@ class KeyTupleSerializer(BaseSerializer):
             s = s[:-len(self.suffix)]
         l = tuple(str(s).split(self.glue))
         return l
+
+# Utilities
 
 def serializer_for_key_tuple():
     '''Get a proper serializer for the tuple-typed keys of a dict.

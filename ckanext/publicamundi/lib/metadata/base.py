@@ -12,12 +12,17 @@ from ckanext.publicamundi.lib import logger
 from ckanext.publicamundi.lib.util import stringify_exception
 from ckanext.publicamundi.lib.json_encoder import JsonEncoder
 from ckanext.publicamundi.lib.metadata import adapter_registry
-from ckanext.publicamundi.lib.metadata.ibase import IObject, IErrorDict
-from ckanext.publicamundi.lib.metadata.ibase import ISerializer
-from ckanext.publicamundi.lib.metadata.serializers import serializer_for_field
-from ckanext.publicamundi.lib.metadata.serializers import serializer_for_key_tuple
+from ckanext.publicamundi.lib.metadata.ibase import \
+    IObject, IErrorDict, ISerializer
+from ckanext.publicamundi.lib.metadata.serializers import \
+    serializer_for_field, serializer_for_key_tuple, object_serialize_adapter, \
+    BaseSerializer
 
 _cache = threading.local()
+
+#
+# Base implementation  
+#
 
 FieldContext = namedtuple('FieldContext', ['key', 'value'], verbose=False)
 
@@ -66,9 +71,8 @@ class Object(object):
         if flat:
             res = self.flatten(opts)
             if 'serialize-keys' in opts:
-                key_serializer = serializer_for_key_tuple()
-                dumps = key_serializer.dumps
-                res = { dumps(k): v for k, v in res.items() }
+                ser = serializer_for_key_tuple()
+                res = { ser.dumps(k): v for k, v in res.items() }
         else:
             res = self.dictize(opts)
         return res
@@ -82,9 +86,10 @@ class Object(object):
             is_flat = isinstance(d.iterkeys().next(), tuple)
         if is_flat:
             if 'unserialize-keys' in opts:
-                key_serializer = serializer_for_key_tuple()
-                loads = key_serializer.loads
-                d = dictization.unflatten({ loads(k): v for k, v in d.items() })
+                ser = serializer_for_key_tuple()
+                d = dictization.unflatten({ 
+                    ser.loads(k): v for k, v in d.items() 
+                })
                 opts.pop('unserialize-keys')
             else:
                 d = dictization.unflatten(d)
@@ -562,10 +567,10 @@ class Object(object):
             '''
             v = f
             if (v is not None) and self.opts.get('serialize-values'):
-                serializer = serializer_for_field(F)
-                if serializer:
+                ser = serializer_for_field(F)
+                if ser:
                     try:
-                        v = serializer.dumps(f)
+                        v = ser.dumps(f)
                     except:
                         v = None
             return v
@@ -693,10 +698,10 @@ class Object(object):
                 # A leaf field (may need to be unserialized)
                 f = v
                 if (f is not None) and self.opts.get('unserialize-values'):
-                    serializer = serializer_for_field(F)
-                    if serializer:
+                    ser = serializer_for_field(F)
+                    if ser:
                         try:
-                            f = serializer.loads(v)
+                            f = ser.loads(v)
                         except:
                             f = None
                 return f
@@ -733,7 +738,37 @@ class Object(object):
         return cls.Loader(self, opts).load(d)
 
 class ErrorDict(dict):
+    '''Provide a simple dict for validation errors.
+    '''
     zope.interface.implements(IErrorDict)
 
     global_key = '__after'
+
+#
+# Serializers
+#
+
+@object_serialize_adapter(IObject)
+class ObjectSerializer(BaseSerializer):
+    '''Provide a simple serializer (JSON) for derivatives of Object
+    '''
+
+    def __init__(self, obj):
+        self.obj = obj
+    
+    def dumps(self, o):
+        assert isinstance(o, Object)
+        return o.to_json()
+        
+    def loads(self, s):
+        factory = type(self.obj)
+        o = factory()
+        return o.from_json(s)
+
+def serializer_for_object(obj):
+    '''Get a proper serializer for an Object instance.
+    ''' 
+    assert isinstance(obj, Object)
+    serializer = adapter_registry.queryMultiAdapter([obj], ISerializer, 'serialize')
+    return serializer
 
