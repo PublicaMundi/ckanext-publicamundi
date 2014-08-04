@@ -55,21 +55,10 @@ class FieldWidget(Widget):
         assert field.context and isinstance(field.context, FieldContext)
         # Initialize
         self.field = field
+        self.name = field.context.key
+        self.value = field.context.value
         self.context = None
         self.errors = None
-        name = field.getName()
-        if name:
-            # This is a named field, used as an attribute in a
-            # schema-providing object
-            assert name == field.context.key
-            self.name = name
-            self.value = field.get(field.context.obj)
-        else:
-            # This is an anonymous field, probably created from
-            # a nested field declaration (e.g. as a List.value_type)
-            self.name = field.context.key
-            self.value = field.context.obj[field.context.key]
-        return
     
     ## IFieldWidget interface ##
     
@@ -267,7 +256,7 @@ class ListFieldWidgetTraits(FieldWidget):
         q = a.to_string()
         def render_item(i, y):
             assert isinstance(i, int)
-            yf = field.value_type.bind(FieldContext(key=i, obj=value))
+            yf = field.value_type.bind(FieldContext(key=i, value=y))
             e = self.errors.get(i) if self.errors else None
             return {
                 'index': i,
@@ -299,7 +288,7 @@ class DictFieldWidgetTraits(FieldWidget):
         q = a.to_string()
         def render_item(k, y):
             assert isinstance(k, basestring)
-            yf = field.value_type.bind(FieldContext(key=k, obj=value))
+            yf = field.value_type.bind(FieldContext(key=k, value=y))
             term = field.key_type.vocabulary.getTerm(k)
             e = self.errors.get(k) if self.errors else None
             return {

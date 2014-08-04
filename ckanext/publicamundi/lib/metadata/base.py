@@ -19,7 +19,7 @@ from ckanext.publicamundi.lib.metadata.serializers import serializer_for_key_tup
 
 _cache = threading.local()
 
-FieldContext = namedtuple('FieldContext', ['key', 'obj'], verbose=False)
+FieldContext = namedtuple('FieldContext', ['key', 'value'], verbose=False)
 
 class Object(object):
     zope.interface.implements(IObject)
@@ -32,9 +32,9 @@ class Object(object):
 
     def get_field(self, k):
         '''Return a bound field for attribute k'''
-        cls = type(self)
-        S = cls.get_schema()
-        return S.get(k).bind(FieldContext(key=k, obj=self))
+        schema = self.get_schema()
+        v = getattr(self, k)
+        return schema.get(k).bind(FieldContext(key=k, value=v))
 
     def validate(self, dictize_errors=False):
         '''Validate against all known (schema-based or invariants) rules. 
