@@ -4,11 +4,21 @@ import zope.schema
 class ISerializer(zope.interface.Interface):
 
     def loads(s, opts=None):
-        '''Load (unserialize) an object a string
+        '''Load (unserialize) and return an object from a string
         '''
 
     def dumps(obj, opts=None):
         '''Dump (serialize) an object as a string
+        '''
+
+class ISerializable(zope.interface.Interface):
+
+    def loads(s, opts=None):
+        '''Load (unserialize) this object from a string
+        '''
+
+    def dumps(opts=None):
+        '''Dump (serialize) this object as a string
         '''
 
 class IObject(zope.interface.Interface):

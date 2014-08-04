@@ -1,20 +1,55 @@
 import datetime
 import zope.interface
 import zope.schema
+import zope.schema.interfaces
 
-from ckanext.publicamundi.lib.metadata.ibase import ISerializer
+from ckanext.publicamundi.lib.metadata import adapter_registry
+from ckanext.publicamundi.lib.metadata.ibase import ISerializer, ISerializable
+from ckanext.publicamundi.lib.metadata.ibase import IObject
+
+def field_serialize_adapter(required_iface):
+    assert required_iface.isOrExtends(zope.schema.interfaces.IField)
+    def decorate(cls):
+        adapter_registry.register([required_iface], ISerializer, 'serialize', cls)
+        return cls
+    return decorate
+
+def object_serialize_adapter(required_iface):
+    assert required_iface.isOrExtends(IObject)
+    def decorate(cls):
+        adapter_registry.register([required_iface], ISerializer, 'serialize', cls)
+        return cls
+    return decorate
+
+def key_tuple_serialize_adapter():
+    def decorate(cls):
+        adapter_registry.register([], ISerializer, 'serialize:key', cls)
+        return cls
+    return decorate
 
 class BaseSerializer(object):
     zope.interface.implements(ISerializer)
+    
+    def dumps(self, o):
+        return pickle.dumps(o)
 
+    def loads(self, s):
+        return pickle.loads(s)
+
+class FieldSerializer(BaseSerializer):
+    
+    def __init__(self, field):
+        self.field = field
+    
     def dumps(self, o):
         return str(o)
 
     def loads(self, s):
         return str(s)
 
-class StringSerializer(BaseSerializer):
-
+@field_serialize_adapter(zope.schema.interfaces.INativeString)
+class StringSerializer(FieldSerializer):
+    
     def dumps(self, s):
         assert isinstance(s, basestring)
         return str(s)
@@ -22,10 +57,11 @@ class StringSerializer(BaseSerializer):
     def loads(self, s):
         return str(s)
 
-class UnicodeSerializer(BaseSerializer):
+@field_serialize_adapter(zope.schema.interfaces.IText)
+@field_serialize_adapter(zope.schema.interfaces.ITextLine)
+class UnicodeSerializer(FieldSerializer):
 
-    def __init__(self, encoding='unicode-escape'):
-        self.encoding = encoding
+    encoding = 'unicode-escape'
 
     def dumps(self, u):
         assert isinstance(u, unicode)
@@ -34,7 +70,8 @@ class UnicodeSerializer(BaseSerializer):
     def loads(self, s):
         return s.decode(self.encoding)
 
-class IntSerializer(BaseSerializer):
+@field_serialize_adapter(zope.schema.interfaces.IInt)
+class IntSerializer(FieldSerializer):
 
     def dumps(self, n):
         assert isinstance(n, int)
@@ -43,16 +80,8 @@ class IntSerializer(BaseSerializer):
     def loads(self, s):
         return int(s)
 
-class LongSerializer(BaseSerializer):
-
-    def dumps(self, n):
-        assert isinstance(n, long)
-        return str(n)
-
-    def loads(self, s):
-        return long(s)
-
-class BoolSerializer(BaseSerializer):
+@field_serialize_adapter(zope.schema.interfaces.IBool)
+class BoolSerializer(FieldSerializer):
 
     def dumps(self, y):
         assert isinstance(y, bool)
@@ -68,7 +97,8 @@ class BoolSerializer(BaseSerializer):
         else:
             return bool(s)
 
-class FloatSerializer(BaseSerializer):
+@field_serialize_adapter(zope.schema.interfaces.IFloat)
+class FloatSerializer(FieldSerializer):
 
     def dumps(self, f):
         assert isinstance(f, float)
@@ -77,11 +107,11 @@ class FloatSerializer(BaseSerializer):
     def loads(self, s):
         return float(s)
 
-class DatetimeSerializer(BaseSerializer):
+@field_serialize_adapter(zope.schema.interfaces.IDatetime)
+class DatetimeSerializer(FieldSerializer):
 
-    def __init__(self, fmt="%Y-%m-%d %H:%M:%S"):
-        self.fmt = fmt
-
+    fmt = "%Y-%m-%d %H:%M:%S"
+   
     def dumps(self, t):
         assert isinstance(t, datetime.datetime)
         return t.strftime(self.fmt)
@@ -89,11 +119,11 @@ class DatetimeSerializer(BaseSerializer):
     def loads(self, s):
         return datetime.datetime.strptime(s, self.fmt)
 
-class DateSerializer(BaseSerializer):
+@field_serialize_adapter(zope.schema.interfaces.IDate)
+class DateSerializer(FieldSerializer):
 
-    def __init__(self, fmt="%Y-%m-%d"):
-        self.fmt = fmt
-
+    fmt = "%Y-%m-%d"
+    
     def dumps(self, t):
         assert isinstance(t, datetime.date)
         return t.strftime(self.fmt)
@@ -102,10 +132,10 @@ class DateSerializer(BaseSerializer):
         t = datetime.datetime.strptime(s, self.fmt)
         return t.date()
 
-class TimeSerializer(BaseSerializer):
+@field_serialize_adapter(zope.schema.interfaces.ITime)
+class TimeSerializer(FieldSerializer):
 
-    def __init__(self, fmt="%H:%M:%S"):
-        self.fmt = fmt
+    fmt = "%H:%M:%S"
 
     def dumps(self, t):
         assert isinstance(t, datetime.time)
@@ -115,12 +145,14 @@ class TimeSerializer(BaseSerializer):
         t = datetime.datetime.strptime(s, self.fmt)
         return t.time()
 
-class KeyTupleSerializer(object):
+@key_tuple_serialize_adapter()
+class KeyTupleSerializer(BaseSerializer):
 
-    def __init__(self, glue, prefix, suffix):
-        self.glue = str(glue)
-        self.prefix = str(prefix or '')
-        self.suffix = str(suffix or '')
+    glue = '.'
+    
+    prefix = ''
+    
+    suffix = ''
 
     def dumps(self, l):
         assert isinstance(l, tuple) or isinstance(l, list)
@@ -131,7 +163,7 @@ class KeyTupleSerializer(object):
 
     def loads(self, s):
         if not s.startswith(self.prefix) or not s.endswith(self.suffix):
-            raise ValueError('The dump is malformed')
+            raise ValueError('The key dump is malformed')
         if self.prefix:
             s = s[len(self.prefix):]
         if self.suffix:
@@ -139,52 +171,17 @@ class KeyTupleSerializer(object):
         l = tuple(str(s).split(self.glue))
         return l
 
-# Todo
-# A better way to map fields to their serializers would be through
-# the existing adapter registry (provide the ISerializer interface)
-
-_field_serializers = {
-    zope.schema.TextLine: UnicodeSerializer(),
-    zope.schema.Text: UnicodeSerializer(),
-    zope.schema.BytesLine: None,
-    zope.schema.Bytes: None,
-    zope.schema.Int: IntSerializer(),
-    zope.schema.Float: FloatSerializer(),
-    zope.schema.Bool: BoolSerializer(),
-    zope.schema.Datetime: DatetimeSerializer(),
-    zope.schema.Date: DateSerializer(),
-    zope.schema.Time: TimeSerializer(),
-    zope.schema.DottedName: StringSerializer(),
-    zope.schema.URI: StringSerializer(),
-    zope.schema.Id: StringSerializer(),
-    zope.schema.Choice: None,
-    zope.schema.List: None,
-    zope.schema.Tuple: None,
-    zope.schema.Dict: None,
-}
-
-# Todo
-# Maybe name as serializer_for() to provide similar naming with other
-# adapters
-
-def get_key_tuple_serializer(glue):
-    '''Get a proper serializer for a dict tuple-typed key
+def serializer_for_key_tuple():
+    '''Get a proper serializer for the tuple-typed keys of a dict.
     '''
-    return KeyTupleSerializer(glue, prefix=None, suffix=None)
+    serializer = adapter_registry.queryMultiAdapter([], ISerializer, 'serialize:key')
+    return serializer
 
-def get_key_string_serializer():
-    '''Get a proper serializer for a dict str-typed key
-    '''
-    return StringSerializer()
-
-def get_field_serializer(F):
-    '''Get a proper serializer for a leaf zope.schema.Field instance
+def serializer_for_field(field):
+    '''Get a proper serializer for a zope.schema.Field instance.
+    Normally, this will be used for leaf (non collection-based) fields.
     ''' 
-    
-    # Note:
-    # Consider using F.fromUnicode as an unserializer.
-    
-    assert isinstance(F, zope.schema.Field)
-    serializer = _field_serializers.get(type(F))
+    assert isinstance(field, zope.schema.Field)
+    serializer = adapter_registry.queryMultiAdapter([field], ISerializer, 'serialize')
     return serializer
 
