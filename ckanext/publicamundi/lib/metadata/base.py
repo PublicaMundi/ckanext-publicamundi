@@ -14,8 +14,8 @@ from ckanext.publicamundi.lib.json_encoder import JsonEncoder
 from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.ibase import IObject, IErrorDict
 from ckanext.publicamundi.lib.metadata.ibase import ISerializer
-from ckanext.publicamundi.lib.metadata.serializers import get_field_serializer
-from ckanext.publicamundi.lib.metadata.serializers import get_key_tuple_serializer
+from ckanext.publicamundi.lib.metadata.serializers import serializer_for_field
+from ckanext.publicamundi.lib.metadata.serializers import serializer_for_key_tuple
 
 _cache = threading.local()
 
@@ -23,8 +23,6 @@ FieldContext = namedtuple('FieldContext', ['key', 'value'], verbose=False)
 
 class Object(object):
     zope.interface.implements(IObject)
-
-    KEY_GLUE = '.'
 
     ## interface IObject
 
@@ -68,8 +66,9 @@ class Object(object):
         if flat:
             res = self.flatten(opts)
             if 'serialize-keys' in opts:
-                key_serializer = get_key_tuple_serializer(self.KEY_GLUE)
-                res = { key_serializer.dumps(k): v for k, v in res.items() }
+                key_serializer = serializer_for_key_tuple()
+                dumps = key_serializer.dumps
+                res = { dumps(k): v for k, v in res.items() }
         else:
             res = self.dictize(opts)
         return res
@@ -83,10 +82,9 @@ class Object(object):
             is_flat = isinstance(d.iterkeys().next(), tuple)
         if is_flat:
             if 'unserialize-keys' in opts:
-                key_serializer = get_key_tuple_serializer(cls.KEY_GLUE)
-                d = dictization.unflatten({
-                    key_serializer.loads(k): v for k, v in d.items()
-                })
+                key_serializer = serializer_for_key_tuple()
+                loads = key_serializer.loads
+                d = dictization.unflatten({ loads(k): v for k, v in d.items() })
                 opts.pop('unserialize-keys')
             else:
                 d = dictization.unflatten(d)
@@ -550,7 +548,7 @@ class Object(object):
             '''
             v = f
             if (v is not None) and self.opts.get('serialize-values'):
-                serializer = get_field_serializer(F)
+                serializer = serializer_for_field(F)
                 if serializer:
                     try:
                         v = serializer.dumps(f)
@@ -681,7 +679,7 @@ class Object(object):
                 # A leaf field (may need to be unserialized)
                 f = v
                 if (f is not None) and self.opts.get('unserialize-values'):
-                    serializer = get_field_serializer(F)
+                    serializer = serializer_for_field(F)
                     if serializer:
                         try:
                             f = serializer.loads(v)
