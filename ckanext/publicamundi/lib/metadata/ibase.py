@@ -11,6 +11,12 @@ class ISerializer(zope.interface.Interface):
         '''Dump (serialize) an object as a string
         '''
 
+class IXmlSerializer(ISerializer):
+
+    def xsd(obj, opts=None):
+        '''Generate an XML Schema document (XSD) for a given object
+        '''
+
 class ISerializable(zope.interface.Interface):
 
     def loads(s, opts=None):

@@ -31,3 +31,5 @@ def random_name(l):
 def stringify_exception(ex):
     return '%s: %s' %(type(ex).__name__, str(ex).strip())
 
+def raise_abstract_method():
+    raise NotImplementedError('Method should be implemented in a derived class')

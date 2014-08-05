@@ -5,8 +5,13 @@ import zope.schema
 import zope.schema.interfaces
 
 from ckanext.publicamundi.lib.metadata import adapter_registry
-from ckanext.publicamundi.lib.metadata.ibase import ISerializer, ISerializable
-from ckanext.publicamundi.lib.metadata.ibase import IObject
+from ckanext.publicamundi.lib.metadata.ibase import ISerializer, IObject
+
+__all__ = [
+    'field_serialize_adapter', 'object_serialize_adapter',
+    'BaseSerializer', 
+    'serializer_for_key_tuple', 'serializer_for_field',
+]
 
 # Decorators for adaptation
 
@@ -41,7 +46,7 @@ class BaseSerializer(object):
     def loads(self, s):
         return pickle.loads(s)
 
-class FieldSerializer(BaseSerializer):
+class BaseFieldSerializer(BaseSerializer):
     
     def __init__(self, field):
         self.field = field
@@ -53,7 +58,8 @@ class FieldSerializer(BaseSerializer):
         return str(s)
 
 @field_serialize_adapter(zope.schema.interfaces.INativeString)
-class StringSerializer(FieldSerializer):
+@field_serialize_adapter(zope.schema.interfaces.IChoice)
+class StringSerializer(BaseFieldSerializer):
     
     def dumps(self, s):
         assert isinstance(s, basestring)
@@ -64,7 +70,7 @@ class StringSerializer(FieldSerializer):
 
 @field_serialize_adapter(zope.schema.interfaces.IText)
 @field_serialize_adapter(zope.schema.interfaces.ITextLine)
-class UnicodeSerializer(FieldSerializer):
+class UnicodeSerializer(BaseFieldSerializer):
 
     encoding = 'unicode-escape'
 
@@ -76,7 +82,7 @@ class UnicodeSerializer(FieldSerializer):
         return s.decode(self.encoding)
 
 @field_serialize_adapter(zope.schema.interfaces.IInt)
-class IntSerializer(FieldSerializer):
+class IntSerializer(BaseFieldSerializer):
 
     def dumps(self, n):
         assert isinstance(n, int)
@@ -86,7 +92,7 @@ class IntSerializer(FieldSerializer):
         return int(s)
 
 @field_serialize_adapter(zope.schema.interfaces.IBool)
-class BoolSerializer(FieldSerializer):
+class BoolSerializer(BaseFieldSerializer):
 
     def dumps(self, y):
         assert isinstance(y, bool)
@@ -103,7 +109,7 @@ class BoolSerializer(FieldSerializer):
             return bool(s)
 
 @field_serialize_adapter(zope.schema.interfaces.IFloat)
-class FloatSerializer(FieldSerializer):
+class FloatSerializer(BaseFieldSerializer):
 
     def dumps(self, f):
         assert isinstance(f, float)
@@ -113,7 +119,7 @@ class FloatSerializer(FieldSerializer):
         return float(s)
 
 @field_serialize_adapter(zope.schema.interfaces.IDatetime)
-class DatetimeSerializer(FieldSerializer):
+class DatetimeSerializer(BaseFieldSerializer):
 
     fmt = "%Y-%m-%d %H:%M:%S"
    
@@ -125,7 +131,7 @@ class DatetimeSerializer(FieldSerializer):
         return datetime.datetime.strptime(s, self.fmt)
 
 @field_serialize_adapter(zope.schema.interfaces.IDate)
-class DateSerializer(FieldSerializer):
+class DateSerializer(BaseFieldSerializer):
 
     fmt = "%Y-%m-%d"
     
@@ -138,7 +144,7 @@ class DateSerializer(FieldSerializer):
         return t.date()
 
 @field_serialize_adapter(zope.schema.interfaces.ITime)
-class TimeSerializer(FieldSerializer):
+class TimeSerializer(BaseFieldSerializer):
 
     fmt = "%H:%M:%S"
 
