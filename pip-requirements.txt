@@ -10,3 +10,4 @@ zope.component==4.1
 zope.dottedname
 z3c.schema
 owslib==0.8.8
+inflection

@@ -3,27 +3,39 @@ import zope.schema
 
 class ISerializer(zope.interface.Interface):
 
-    def loads(s, opts=None):
+    def loads(s):
         '''Load (unserialize) and return an object from a string
         '''
 
-    def dumps(obj, opts=None):
+    def dumps(obj):
         '''Dump (serialize) an object as a string
         '''
 
 class IXmlSerializer(ISerializer):
 
-    def xsd(obj, opts=None):
-        '''Generate an XML Schema document (XSD) for a given object
+    def to_xsd(obj=None):
+        '''Generate an XML Schema document (XSD) for a given object obj.
+        If obj is None, then the inherent schema should be returned.
+
+        This method should return an lxml.etree.Element.
+        '''
+    
+    def to_xml(obj):
+        '''Dump a given object to an XML tree.
+        This method should return an lxml.etree.Element. 
+        '''
+
+    def from_xml(el):
+        '''Load and return an object from an XML tree (el).
         '''
 
 class ISerializable(zope.interface.Interface):
 
-    def loads(s, opts=None):
+    def loads(s):
         '''Load (unserialize) this object from a string
         '''
 
-    def dumps(opts=None):
+    def dumps():
         '''Dump (serialize) this object as a string
         '''
 

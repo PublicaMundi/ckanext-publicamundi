@@ -7,7 +7,7 @@ import ckan.plugins.toolkit as toolkit
 from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.ibase import IObject
 from ckanext.publicamundi.lib.metadata.base import Object, FieldContext
-from ckanext.publicamundi.lib.util import raise_abstract_method
+from ckanext.publicamundi.lib.util import raise_for_stub_method
 from ckanext.publicamundi.lib.metadata.widgets.ibase import IWidget 
 from ckanext.publicamundi.lib.metadata.widgets.ibase import IFieldWidget, IObjectWidget
 from ckanext.publicamundi.lib.metadata.widgets import QualAction, LookupContext
@@ -26,13 +26,13 @@ class Widget(object):
     errors = None
     
     def get_template(self):
-        raise_abstract_method()
+        raise_for_stub_method()
 
     def prepare_template_vars(self, data):
         return copy.deepcopy(data)
 
     def render(self, data):
-        raise_abstract_method()
+        raise_for_stub_method()
     
     @property
     def qualified_action(self):
