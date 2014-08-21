@@ -12,12 +12,16 @@ class ISerializer(zope.interface.Interface):
         '''
 
 class IXmlSerializer(ISerializer):
+    
+    target_namespace = zope.schema.URI(required=True)
 
-    def to_xsd(obj=None):
+    def to_xsd(obj=None, wrap_into_schema=False):
         '''Generate an XML Schema document (XSD) for a given object obj.
         If obj is None, then the inherent schema should be returned.
+        If wrap_into_schema is set, then a valid xs:schema element tree 
+        should be returned (otherwise, only the contained definition).
 
-        This method should return an lxml.etree.Element.
+        In any case, this method should return an lxml.etree.Element.
         '''
     
     def to_xml(obj):

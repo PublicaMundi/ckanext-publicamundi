@@ -11,6 +11,7 @@ __all__ = [
     'field_serialize_adapter', 'object_serialize_adapter',
     'BaseSerializer', 
     'serializer_for_key_tuple', 'serializer_for_field',
+    'serializer_factory_for_key_tuple', 'serializer_factory_for_field',
 ]
 
 # Decorators for adaptation
@@ -197,4 +198,17 @@ def serializer_for_field(field):
     assert isinstance(field, zope.schema.Field)
     serializer = adapter_registry.queryMultiAdapter([field], ISerializer, 'serialize')
     return serializer
+
+def serializer_factory_for_key_tuple():
+    '''Get a proper serializer factory for the tuple-typed keys of a dict.
+    '''
+    factory = adapter_registry.lookup([], ISerializer, 'serialize:key')
+    return factory
+
+def serializer_factory_for_field(field_iface):
+    '''Get a proper serializer factory for a zope.schema.Field interface.
+    ''' 
+    assert field_iface.extends(zope.schema.interfaces.IField)
+    factory = adapter_registry.lookup([field_iface], ISerializer, 'serialize')
+    return factory
 

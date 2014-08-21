@@ -1,5 +1,9 @@
+# -*- encoding: utf-8 -*-
+
 import re
 import datetime
+import pytz
+import isodate
 import lxml.etree
 import json
 import itertools
@@ -7,6 +11,7 @@ import nose.tools
 import zope.interface
 import zope.schema
 from zope.interface.verify import verifyObject
+from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
 from ckanext.publicamundi.lib.metadata import *
 from ckanext.publicamundi.lib.metadata.serializers import *
@@ -37,15 +42,18 @@ def _test_fixture_fields(fixture_name):
     fields = x.get_flattened_fields()
     for k, v in d.items():
         f = fields[k].bind(FieldContext(key=k.join('-'), value=v))
-        yield _test_leaf_field, fixture_name, k, f, v
+        yield _test_field, fixture_name, k, f, v
 
-def _test_leaf_field(fixture_name, k, f, v):
+def _test_field(fixture_name, k, f, v):
+    '''Test XML serializion for an arbitrary field
+    ''' 
     
     ser = xml_serializer_for_field(f)
     assert ser 
+    ser.target_namespace = 'http://example.com/test-field'
     verifyObject(IXmlSerializer, ser)
     
-    xsd = ser.to_xsd()
+    xsd = ser.to_xsd(wrap_into_schema=True)
     print 'XML schema: -' 
     lxml.etree.dump(xsd)
 
@@ -58,9 +66,12 @@ def _test_leaf_field(fixture_name, k, f, v):
     print s1
 
     v1 = ser.loads(s1)
-    assert v1 == v
+    assert unicode(v1) == unicode(v)
 
 def _test_fixture_object(fixture_name):
+    '''Test XML serializion for an arbitrary fixture object.
+    '''
+    
     x = getattr(fixtures, fixture_name)
     # Fixme xml_serializer_for_object
     ser = serializer_for_object(x) 
@@ -84,53 +95,211 @@ def _test_fixture_object(fixture_name):
     for k in keys:
         assert d[k] == d1[k] 
 
+def test_field_nativestring():
+
+    f = zope.schema.NativeString(
+        title = u'Code',
+        required = False,
+        min_length = 8,
+        max_length = 8)
+    v = 'AA123456'
+    f.validate(v)
+
+    yield _test_field, '-', 'code', f, v
+
+def test_field_bool():
+    
+    f = zope.schema.Bool(
+        title = u'Reviewed',
+        description = u'The text is reviewed',
+        required = True)
+
+    v = True
+    f.validate(v)
+    
+    yield _test_field, '-', 'reviewed', f, v
+
+def test_field_float():
+    
+    f = zope.schema.Float(
+        title = u'Price',
+        min = .0,
+        description = u'The price of something',
+        required = True)
+
+    v = 5.78
+    f.validate(v)
+    
+    yield _test_field, '-', 'price', f, v
+
+def test_field_integer():
+    
+    f = zope.schema.Int(
+        title = u'Grade',
+        description = u'The exams grade',
+        min = 0, 
+        max = 20,
+        required = True)
+
+    v = 19
+    f.validate(v)
+
+    yield _test_field, '-', 'grade', f, v
+    
+    f = zope.schema.Int(
+        title = u'Height',
+        description = u'The mountain height',
+        min = 0, 
+        required = True)
+
+    v = 1503
+    f.validate(v)
+
+    yield _test_field, '-', 'height', f, v
+
+def test_field_choice():
+    
+    f = zope.schema.Choice(
+        vocabulary = SimpleVocabulary((
+            SimpleTerm('environment', 'environment', u'Environment'),
+            SimpleTerm('government', 'government', u'Government'),
+            SimpleTerm('health', 'health', u'Health'),
+            SimpleTerm('economy', 'economy', u'Economy'))),
+        title = u'Thematic category',
+        required = True,
+        default = 'economy')
+
+    v = 'health'
+    f.validate(v)
+
+    yield _test_field, '-', 'thematic_category', f, v
+
 def test_field_textline():
 
     f = zope.schema.Text(
-        title=u'Author Notes',
-        min_length=12)
-    v = u'Blaah\nBlaaah'
+        title = u'Author Notes',
+        required = False,
+        min_length = 12)
+    v = u'Αυτο ειναι μια σημειωση'
     f.validate(v)
 
-    yield _test_leaf_field, '-', 'notes', f, v
+    yield _test_field, '-', 'notes', f, v
 
     f = zope.schema.TextLine(
-        title = u'Summary', 
+        title = u'Summary',
+        description = u'A summary of a chapter',
+        required = True,
         min_length = 6, 
         max_length = 128)
     v = u'This is a Hello-World example'
     f = f.bind(FieldContext(key='summary', value=v))
     f.validate(v)
 
-    yield _test_leaf_field, '-', 'summary', f, v
+    yield _test_field, '-', 'summary', f, v
     
     f = zope.schema.TextLine(
-        title = u'Postal Code', 
+        title = u'Postal Code',
+        required = False,
         constraint = re.compile('^[a-z][0-9]{5,5}$', re.IGNORECASE).match)
     v = u'A12345'
     f = f.bind(FieldContext(key='postal_code', value=v))
     f.validate(v)
 
-    yield _test_leaf_field, '-', 'postalcode', f, v
+    yield _test_field, '-', 'postalcode', f, v
 
-@nose.tools.nottest
 def test_field_datetime():
-    f = zope.schema.Datetime(title=u'Created')
+    
+    f = zope.schema.Datetime(
+        title = u'Created',
+        description = u'A timestamp for creation',
+        required = True,
+        min = datetime.datetime(2012, 1, 1))
+
     v = datetime.datetime(2014, 8, 1, 8, 0, 0)
-    f = f.bind(FieldContext(key='created_at', value=v))
     f.validate(v)
     
-    yield _test_leaf_field, '-', 'created_at', f, v
+    yield _test_field, '-', 'created_at', f, v
+
+    f = zope.schema.Datetime(
+        title = u'Created',
+        description = u'A timestamp (with timezone info) for creation',
+        required = True)
+
+    v = datetime.datetime(2014, 8, 1, 8, 0, 0, tzinfo=pytz.timezone('Europe/Athens'))
+    f.validate(v)
+    
+    yield _test_field, '-', 'created_at', f, v
+
+def test_field_date():
+    
+    f = zope.schema.Date(
+        title = u'Created',
+        description = u'A datestamp for creation',
+        required = True,
+        min = datetime.date(2012, 1, 1),
+        max = datetime.date(2014, 1, 1))
+
+    v = datetime.date(2013, 8, 1)
+    f.validate(v)
+    
+    yield _test_field, '-', 'created_at', f, v
+
+def test_field_time():
+    
+    f = zope.schema.Time(
+        title = u'Wakeup Time',
+        description = u'The wakeup time',
+        required = True,
+        min = datetime.time(6, 0, 0),
+        max = datetime.time(8, 30, 0))
+
+    v = datetime.time(7, 20, 0)
+    f.validate(v)
+    
+    yield _test_field, '-', 'wakeup_time', f, v
+
+def test_field_list_of_textline():
+    
+    class IX(zope.interface.Interface):
+    
+        gemet_keywords = zope.schema.List(
+            title = u'Keywords',
+            description = u'A collection of keywords',
+            required = True,
+            value_type = zope.schema.TextLine(
+                #title = u'Keyword'
+            ),
+            min_length = 1,
+            max_length = 12)
+    
+        gemet_keywords.value_type.setTaggedValue('name', 'tag')
+   
+    f = zope.schema.List(
+        title = u'Keywords',
+        description = u'A collection of keywords',
+        required = True,
+        value_type = zope.schema.TextLine(
+            title = u'Keyword'
+        ),
+        min_length = 1,
+        max_length = 12)
+    f.value_type.setTaggedValue('name', 'tag')
+
+    v = [u'alpha', u'beta', u'gamma']
+    f.validate(v)
+    
+    yield _test_field, '-', 'keywords', f, v
+
+    f = IX.get('gemet_keywords') 
+    v = [u'alpha', u'beta', u'gamma']
+    f.validate(v)
+
+    yield _test_field, '-', 'gemet_keywords', f, v
 
 if __name__ == '__main__':
     print ' -- '
-    for tester, name, k, f, v in test_field_textline():
+    for tester, name, k, f, v in test_field_list_of_textline():
         tester(name, k, f, v)
-    print ' -- '
-    #for tester, name, k, f, v in test_field_datetime():
-    #    tester(name, k, f, v)
-    #print ' -- '
-    #test_field_datetime()
     #for tester, name, k, f, v in test_fields():
     #    tester(name, k, f, v)
     #for tester, name in test_objects():
