@@ -306,6 +306,7 @@ def test_field_dict_of_textline():
             title = u'Address'
         ),
         key_type = zope.schema.Choice(
+            title = u'Address Type',
             vocabulary = SimpleVocabulary.fromValues([
                 'work', 'home', 'laboratory',
             ]) 
@@ -323,7 +324,7 @@ def test_field_dict_of_textline():
 
 if __name__ == '__main__':
     print ' -- '
-    for tester, name, k, f, v in test_field_list_of_textline():
+    for tester, name, k, f, v in test_field_dict_of_textline():
         tester(name, k, f, v)
     #for tester, name, k, f, v in test_fields():
     #    tester(name, k, f, v)

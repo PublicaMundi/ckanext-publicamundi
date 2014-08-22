@@ -13,15 +13,28 @@ class ISerializer(zope.interface.Interface):
 
 class IXmlSerializer(ISerializer):
     
-    target_namespace = zope.schema.URI(required=True)
+    target_namespace = zope.schema.URI(required = True)
+    
+    name = zope.schema.NativeString(required=True)
 
-    def to_xsd(obj=None, wrap_into_schema=False):
+    typename = zope.schema.NativeString(required=True)
+
+    def to_xsd(obj=None, wrap_into_schema=False, type_prefix=''):
         '''Generate an XML Schema document (XSD) for a given object obj.
+        
         If obj is None, then the inherent schema should be returned.
-        If wrap_into_schema is set, then a valid xs:schema element tree 
-        should be returned (otherwise, only the contained definition).
+        
+        If wrap_into_schema is True, a valid xs:schema element tree 
+        should be returned.
+        Otherwise, a tuple of (el, defs) should be returned.
+        Where: 
+            - el: is the xs:element element tree that describes structure.
+            - defs: is a list of elements that contain type definitions (e.g. 
+            xs:simpleType or xs:complexType) that el depends on and should be
+            placed at the global scope (as global type definitions).
 
-        In any case, this method should return an lxml.etree.Element.
+        If type_prefix is given, it will prefix (i.e. qualify) all global type 
+        definitions generated. This can be usefull to avoid type-name conflicts.
         '''
     
     def to_xml(obj):
