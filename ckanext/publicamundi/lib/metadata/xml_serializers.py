@@ -82,6 +82,8 @@ class BaseSerializer(object):
         return el
     
     def from_xml(self, el):
+        qname = QName(el.tag)
+        assert qname.localname == self.name and qname.namespace == self.target_namespace
         o = self._from_xml(el)
         return o
        
@@ -92,8 +94,6 @@ class BaseSerializer(object):
 
     def loads(self, s):
         el = etree.fromstring(s)
-        qname = QName(el.tag)
-        assert qname.localname == self.name and qname.namespace == self.target_namespace
         o = self.from_xml(el)
         return o
 
@@ -211,7 +211,7 @@ class BaseFieldSerializer(BaseSerializer):
             return e
 
 @field_xml_serialize_adapter(zope.schema.interfaces.INativeString)
-class StringSerializer(BaseFieldSerializer):
+class StringFieldSerializer(BaseFieldSerializer):
     
     def _to_xsd_type(self):
         xsd_uri = self.nsmap['xs']
@@ -269,7 +269,7 @@ class StringSerializer(BaseFieldSerializer):
         return el.text.encode('utf-8')
 
 @field_xml_serialize_adapter(zope.schema.interfaces.IChoice)
-class ChoiceSerializer(StringSerializer):
+class ChoiceFieldSerializer(StringFieldSerializer):
      
     def _to_xsd_type(self):
         xsd_uri = self.nsmap['xs']
@@ -292,7 +292,7 @@ class ChoiceSerializer(StringSerializer):
   
 @field_xml_serialize_adapter(zope.schema.interfaces.IText)
 @field_xml_serialize_adapter(zope.schema.interfaces.ITextLine)
-class UnicodeSerializer(StringSerializer):
+class UnicodeFieldSerializer(StringFieldSerializer):
 
     def _to_xml(self, u, el):
         assert isinstance(u, unicode)
@@ -302,7 +302,7 @@ class UnicodeSerializer(StringSerializer):
         return unicode(el.text)
 
 @field_xml_serialize_adapter(zope.schema.interfaces.IInt)
-class IntSerializer(BaseFieldSerializer):
+class IntFieldSerializer(BaseFieldSerializer):
     
     def _to_xsd_type(self):
         xsd_uri = self.nsmap['xs']
@@ -337,7 +337,7 @@ class IntSerializer(BaseFieldSerializer):
         return int(el.text)
 
 @field_xml_serialize_adapter(zope.schema.interfaces.IBool)
-class BoolSerializer(BaseFieldSerializer):
+class BoolFieldSerializer(BaseFieldSerializer):
     
     def _to_xsd_type(self):
         xsd_uri = self.nsmap['xs']
@@ -368,7 +368,7 @@ class BoolSerializer(BaseFieldSerializer):
             return None
 
 @field_xml_serialize_adapter(zope.schema.interfaces.IFloat)
-class FloatSerializer(BaseFieldSerializer):
+class FloatFieldSerializer(BaseFieldSerializer):
     
     def _to_xsd_type(self):
         xsd_uri = self.nsmap['xs']
@@ -404,7 +404,7 @@ class FloatSerializer(BaseFieldSerializer):
         return float(el.text)
 
 @field_xml_serialize_adapter(zope.schema.interfaces.IDatetime)
-class DatetimeSerializer(BaseFieldSerializer):
+class DatetimeFieldSerializer(BaseFieldSerializer):
     
     def _to_xsd_type(self):
         xsd_uri = self.nsmap['xs']
@@ -441,7 +441,7 @@ class DatetimeSerializer(BaseFieldSerializer):
         return d
 
 @field_xml_serialize_adapter(zope.schema.interfaces.IDate)
-class DateSerializer(BaseFieldSerializer):
+class DateFieldSerializer(BaseFieldSerializer):
     
     def _to_xsd_type(self):
         xsd_uri = self.nsmap['xs']
@@ -478,7 +478,7 @@ class DateSerializer(BaseFieldSerializer):
         return d
 
 @field_xml_serialize_adapter(zope.schema.interfaces.ITime)
-class TimeSerializer(BaseFieldSerializer):
+class TimeFieldSerializer(BaseFieldSerializer):
     
     def _to_xsd_type(self):
         xsd_uri = self.nsmap['xs']
@@ -515,7 +515,7 @@ class TimeSerializer(BaseFieldSerializer):
         return t
 
 @field_xml_serialize_adapter(zope.schema.interfaces.IList)
-class ListSerializer(BaseFieldSerializer):
+class ListFieldSerializer(BaseFieldSerializer):
 
     def _to_xsd_type(self):
         xsd_uri = self.nsmap['xs']
@@ -557,4 +557,51 @@ class ListSerializer(BaseFieldSerializer):
             l.append(ser.from_xml(p))
         
         return l
+
+@field_xml_serialize_adapter(zope.schema.interfaces.IDict)
+class DictFieldSerializer(BaseFieldSerializer):
+
+    def _to_xsd_type(self):
+        xsd_uri = self.nsmap['xs']
+         
+        # Create an xs:complexType element
+
+        e = Element(QName(xsd_uri, 'complexType'))
+        e1 = SubElement(e, QName(xsd_uri, 'sequence'))
+        
+        yf = self.field.value_type
+
+        ser = serializer_for_field(yf)
+        ser.target_namespace = self.target_namespace
+        ser.max_occurs = 'unbounded'
+
+        e1.append(ser.to_xsd())
+       
+        return e
+    
+    def _to_xml(self, d, el):
+        assert isinstance(d, dict)
+        
+        raise NotImplementedError('Todo')
+
+        #yf = self.field.value_type
+        #ser = serializer_for_field(yf)
+        #ser.target_namespace = self.target_namespace
+       
+        #for y in l:
+        #    el.append(ser.to_xml(y))
+    
+    def _from_xml(self, el):
+        d = dict()
+        
+        raise NotImplementedError('Todo')
+        
+        #yf = self.field.value_type
+        #ser = serializer_for_field(yf)
+        #ser.target_namespace = self.target_namespace
+        
+        #for p in el:
+        #    l.append(ser.from_xml(p))
+        
+        return d
 

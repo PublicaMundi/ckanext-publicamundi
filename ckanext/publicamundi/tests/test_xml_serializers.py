@@ -296,6 +296,31 @@ def test_field_list_of_textline():
 
     yield _test_field, '-', 'gemet_keywords', f, v
 
+def test_field_dict_of_textline():
+    
+    f = zope.schema.Dict(
+        title = u'Addresses',
+        description = u'A collection of addresses',
+        required = True,
+        value_type = zope.schema.TextLine(
+            title = u'Address'
+        ),
+        key_type = zope.schema.Choice(
+            vocabulary = SimpleVocabulary.fromValues([
+                'work', 'home', 'laboratory',
+            ]) 
+        ),
+    )
+    f.value_type.setTaggedValue('name', 'street_address')
+
+    v = {
+        'work': u'Acacia Avenue 22',
+        'home': u'Nowhere Land',
+    }
+    f.validate(v)
+    
+    yield _test_field, '-', 'addresses', f, v
+
 if __name__ == '__main__':
     print ' -- '
     for tester, name, k, f, v in test_field_list_of_textline():
