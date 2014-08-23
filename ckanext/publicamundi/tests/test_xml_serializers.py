@@ -20,8 +20,12 @@ from ckanext.publicamundi.tests import fixtures
 
 @nose.tools.nottest
 def test_objects():
+    #yield _test_fixture_object, 'pt1'    
+    #yield _test_fixture_object, 'contact1'    
+    #yield _test_fixture_object, 'poly1'    
     yield _test_fixture_object, 'foo1'    
-    yield _test_fixture_object, 'thesaurus_gemet_concepts'    
+    #yield _test_fixture_object, 'thesaurus_gemet_concepts'    
+    #yield _test_fixture_object, 'inspire1'    
 
 @nose.tools.nottest
 def test_fields():
@@ -73,16 +77,21 @@ def _test_fixture_object(fixture_name):
     '''
     
     x = getattr(fixtures, fixture_name)
-    # Fixme xml_serializer_for_object
-    ser = serializer_for_object(x) 
+    ser = xml_serializer_for_object(x) 
     assert ser 
+    ser.target_namespace = 'http://example.com/test-fixture-objects'
     verifyObject(IXmlSerializer, ser)
 
+    xsd = ser.to_xsd(wrap_into_schema=True)
+    lxml.etree.dump(xsd)
+    
     s = ser.dumps(x)
     assert s
+    print s
 
     x1 = ser.loads(s)
     assert x1
+    print x1
 
     d = x.to_dict(flat=True)
     d1 = x1.to_dict(flat=True)
@@ -303,7 +312,7 @@ def test_field_dict_of_textline():
         description = u'A collection of addresses',
         required = True,
         value_type = zope.schema.TextLine(
-            title = u'Address'
+            title = u'Street Address'
         ),
         key_type = zope.schema.Choice(
             title = u'Address Type',
@@ -312,7 +321,7 @@ def test_field_dict_of_textline():
             ]) 
         ),
     )
-    f.value_type.setTaggedValue('name', 'street_address')
+    #f.value_type.setTaggedValue('name', 'street_address')
 
     v = {
         'work': u'Acacia Avenue 22',
@@ -324,9 +333,9 @@ def test_field_dict_of_textline():
 
 if __name__ == '__main__':
     print ' -- '
-    for tester, name, k, f, v in test_field_dict_of_textline():
-        tester(name, k, f, v)
+    #for tester, name, k, f, v in test_field_list_of_textline():
+    #    tester(name, k, f, v)
     #for tester, name, k, f, v in test_fields():
     #    tester(name, k, f, v)
-    #for tester, name in test_objects():
-    #    tester(name)
+    for tester, name in test_objects():
+        tester(name)

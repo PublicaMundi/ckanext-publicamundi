@@ -41,7 +41,7 @@ class IFoo(IBaseMetadata):
 
     temporal_extent = zope.schema.Object(ITemporalExtent,
         title = u'Temporal Extent',
-        required = False)
+        required = True)
 
     geometry = zope.schema.List(
         title = u'Geometry',

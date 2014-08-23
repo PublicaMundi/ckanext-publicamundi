@@ -4,11 +4,14 @@ import zope.schema
 class ISerializer(zope.interface.Interface):
 
     def loads(s):
-        '''Load (unserialize) and return an object from a string
+        '''Load (unserialize) and return an object from a string.
         '''
 
-    def dumps(obj):
-        '''Dump (serialize) an object as a string
+    def dumps(obj=None):
+        '''Dump (serialize) an object as a string.
+
+        If obj is None, the object to be serialized is inferred from
+        context (e.g. an adaptee object).
         '''
 
 class IXmlSerializer(ISerializer):
@@ -19,10 +22,9 @@ class IXmlSerializer(ISerializer):
 
     typename = zope.schema.NativeString(required=True)
 
-    def to_xsd(obj=None, wrap_into_schema=False, type_prefix=''):
-        '''Generate an XML Schema document (XSD) for a given object obj.
-        
-        If obj is None, then the inherent schema should be returned.
+    def to_xsd(wrap_into_schema=False, type_prefix=''):
+        '''Generate an XML Schema document (XSD) for the XML documents 
+        that this serializer generates.
         
         If wrap_into_schema is True, a valid xs:schema element tree 
         should be returned.
@@ -37,13 +39,15 @@ class IXmlSerializer(ISerializer):
         definitions generated. This can be usefull to avoid type-name conflicts.
         '''
     
-    def to_xml(obj):
-        '''Dump a given object to an XML tree.
-        This method should return an lxml.etree.Element. 
+    def to_xml(o=None):
+        '''Dump a given object o to an XML tree.
+
+        If o is None, the object to be serialized is inferred from 
+        context (e.g. can be an adaptee object).
         '''
 
-    def from_xml(el):
-        '''Load and return an object from an XML tree (el).
+    def from_xml(e):
+        '''Load and return an object from an XML tree e.
         '''
 
 class ISerializable(zope.interface.Interface):

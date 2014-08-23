@@ -22,13 +22,14 @@ class IPostalAddress(IObject):
 
 class IPoint(IObject):
 
-    x = zope.schema.Float()
-    y = zope.schema.Float()
+    x = zope.schema.Float(required=True)
+    y = zope.schema.Float(required=True)
 
 class IPolygon(IObject):
 
     points = zope.schema.List(
-        value_type = zope.schema.Object(IPoint),
+        title = u'Points',
+        value_type = zope.schema.Object(IPoint, title=u'Point'),
         required = True,
         max_length = 8,
         min_length = 4)
