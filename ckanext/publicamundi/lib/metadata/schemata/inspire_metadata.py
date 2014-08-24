@@ -41,8 +41,8 @@ class IThesaurusTerms(IObject):
     thesaurus = zope.schema.Object(IThesaurus, required=True)
     
     terms = zope.schema.List(
-        title = u"Terms",
-        value_type = zope.schema.ASCII(),
+        title = u'Terms',
+        value_type = zope.schema.NativeString(title=u'Term'),
         required = True,
         min_length = 1)
     
@@ -71,7 +71,7 @@ class IInspireMetadata(IObject):
         required = True,
         min_length = 1,
         value_type = zope.schema.Object(IResponsibleParty,
-            title = u'A Point of Contact',
+            title = u'Point of Contact',
             required = True))
 
     datestamp = zope.schema.Date(
@@ -101,7 +101,8 @@ class IInspireMetadata(IObject):
         description = u"A value uniquely identifying the resource. The value domain of this metadata element is a mandatory character string code, generally assigned by the data owner, and a character string namespace uniquely identifying the context of the identifier code (for example, the data owner).",
         required = True,
         min_length = 1,
-        value_type = zope.schema.TextLine(title = u'Identifier',
+        value_type = zope.schema.TextLine(
+            title = u'Identifier',
             min_length = 5 ))
 
     abstract = zope.schema.Text(
@@ -146,7 +147,9 @@ class IInspireMetadata(IObject):
         description = u'The keyword value is a commonly used word, formalised word or phrase used to describe the subject. While the topic category is too coarse for detailed queries, keywords help narrowing a full text search and they allow for structured keyword search.',
         required = True,
         min_length = 1,
-        value_type = zope.schema.Object(IThesaurusTerms))
+        value_type = zope.schema.Object(
+            IThesaurusTerms,
+            title = u'Keyword'))
 
     @zope.interface.invariant
     def check_keywords(obj):
@@ -223,15 +226,16 @@ class IInspireMetadata(IObject):
         required = False)
 
     denominator = zope.schema.List(
-        title = u'Equivalent scale',
+        title = u'Equivalent Scale',
         required = False,
-        value_type = zope.schema.Int())
+        value_type = zope.schema.Int(title=u'Scale'))
 
     spatial_resolution = zope.schema.List(
         title = u'Spatial resolution',
-        description = u"Spatial resolution refers to the level of detail of the data set. It shall be expressed as a set of zero to many resolution distances (typically for gridded data and imagery-derived products) or equivalent scales (typically for maps or map-derived products). An equivalent scale is generally expressed as an integer value expressing the scale denominator. A resolution distance shall be expressed as a numerical value associated with a unit of length.",
+        description = u'''Spatial resolution refers to the level of detail of the data set. It shall be expressed as a set of zero to many resolution distances (typically for gridded data and imagery-derived products) or equivalent scales (typically for maps or map-derived products). An equivalent scale is generally expressed as an integer value expressing the scale denominator. A resolution distance shall be expressed as a numerical value associated with a unit of length.''',
         required = False,
-        value_type = zope.schema.Object(ISpatialResolution,
+        value_type = zope.schema.Object(
+            ISpatialResolution,
             title = u'Spatial resolution'))
 
     # Conformity

@@ -709,7 +709,8 @@ class Object(object):
     class Factory(object):
 
         def __init__(self, iface, opts={}):
-            assert iface.extends(IObject), 'Expected a schema-providing interface'
+            if not iface.extends(IObject): 
+                raise ValueError('Expected a schema-providing interface based on IObject')
             self.target_iface = iface
             self.target_cls = adapter_registry.lookup([], iface, '')
             if not self.target_cls:

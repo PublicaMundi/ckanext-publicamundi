@@ -28,12 +28,12 @@ class IXmlSerializer(ISerializer):
         
         If wrap_into_schema is True, a valid xs:schema element tree 
         should be returned.
-        Otherwise, a tuple of (el, defs) should be returned.
-        Where: 
-            - el: is the xs:element element tree that describes structure.
-            - defs: is a list of elements that contain type definitions (e.g. 
-            xs:simpleType or xs:complexType) that el depends on and should be
-            placed at the global scope (as global type definitions).
+        Otherwise, a tuple of (<el>, <tdefs>) should be returned, where: 
+            - <el>: is the xs:element element tree that describes structure.
+            - <tdefs>: is a mapping of { <type-name>: <type-def> } that contains type 
+              definitions (e.g. xs:simpleType or xs:complexType) that element <el> 
+              depends on and should be placed at the global scope (as global 
+              type definitions).
 
         If type_prefix is given, it will prefix (i.e. qualify) all global type 
         definitions generated. This can be usefull to avoid type-name conflicts.

@@ -18,16 +18,17 @@ from ckanext.publicamundi.lib.metadata.serializers import *
 from ckanext.publicamundi.lib.metadata.xml_serializers import *
 from ckanext.publicamundi.tests import fixtures
 
-@nose.tools.nottest
+@nose.tools.istest
 def test_objects():
-    #yield _test_fixture_object, 'pt1'    
-    #yield _test_fixture_object, 'contact1'    
-    #yield _test_fixture_object, 'poly1'    
+    yield _test_fixture_object, 'pt1'    
+    yield _test_fixture_object, 'freekeyword1'    
+    yield _test_fixture_object, 'contact1'    
+    yield _test_fixture_object, 'poly1'    
     yield _test_fixture_object, 'foo1'    
-    #yield _test_fixture_object, 'thesaurus_gemet_concepts'    
-    #yield _test_fixture_object, 'inspire1'    
+    yield _test_fixture_object, 'thesaurus_gemet_concepts'    
+    yield _test_fixture_object, 'inspire1'    
 
-@nose.tools.nottest
+@nose.tools.istest
 def test_fields():
     '''Return tuples of (tester, key, field, val) to be tested 
     '''
@@ -45,7 +46,7 @@ def _test_fixture_fields(fixture_name):
     d = x.to_dict(flat=True)
     fields = x.get_flattened_fields()
     for k, v in d.items():
-        f = fields[k].bind(FieldContext(key=k.join('-'), value=v))
+        f = fields[k].bind(FieldContext(key='-'.join(map(str, k)), value=v)) 
         yield _test_field, fixture_name, k, f, v
 
 def _test_field(fixture_name, k, f, v):
@@ -89,6 +90,13 @@ def _test_fixture_object(fixture_name):
     assert s
     print s
 
+    e = lxml.etree.fromstring(s)
+    assert e is not None
+    
+    xsd_validator = lxml.etree.XMLSchema(xsd)
+    assert xsd_validator
+    assert xsd_validator.validate(e)
+
     x1 = ser.loads(s)
     assert x1
     print x1
@@ -100,9 +108,7 @@ def _test_fixture_object(fixture_name):
     keys1 = set(d1.keys())
 
     assert keys == keys1
-
-    for k in keys:
-        assert d[k] == d1[k] 
+    assert all([ d[k] == d1[k] for k in keys ])
 
 def test_field_nativestring():
 
