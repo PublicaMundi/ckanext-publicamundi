@@ -39,11 +39,14 @@ class IXmlSerializer(ISerializer):
         definitions generated. This can be usefull to avoid type-name conflicts.
         '''
     
-    def to_xml(o=None):
+    def to_xml(o=None, nsmap=None):
         '''Dump a given object o to an XML tree.
 
-        If o is None, the object to be serialized is inferred from 
-        context (e.g. can be an adaptee object).
+        If o is None, the object to be serialized is inferred from context 
+        (e.g. can be an adaptee object).
+
+        If nsmap is a mapping { <alias>: <namespace> } , it will be used to override 
+        default namespace aliases.
         '''
 
     def from_xml(e):

@@ -10,8 +10,9 @@ from lxml import etree
 from lxml.etree import \
     Element, SubElement, ElementTree, QName
 
-from ckanext.publicamundi.lib.util import raise_for_stub_method, random_name
+from ckanext.publicamundi.lib.util import raise_for_stub_method
 from ckanext.publicamundi.lib.metadata import adapter_registry
+from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata.ibase import \
     ISerializer, IXmlSerializer, IObject
 from ckanext.publicamundi.lib.metadata import \
@@ -31,14 +32,14 @@ __all__ = [
 def field_xml_serialize_adapter(required_iface):
     assert required_iface.extends(zope.schema.interfaces.IField)
     def decorate(cls):
-        adapter_registry.register([required_iface], IXmlSerializer, 'serialize', cls)
+        adapter_registry.register([required_iface], IXmlSerializer, 'serialize-xml', cls)
         return cls
     return decorate
 
 def object_xml_serialize_adapter(required_iface):
     assert required_iface.isOrExtends(IObject)
     def decorate(cls):
-        adapter_registry.register([required_iface], IXmlSerializer, 'serialize', cls)
+        adapter_registry.register([required_iface], IXmlSerializer, 'serialize-xml', cls)
         return cls
     return decorate
 
@@ -48,28 +49,28 @@ def serializer_for_field(field):
     '''Get an XML serializer for a zope.schema.Field instance.
     ''' 
     assert isinstance(field, zope.schema.Field)
-    serializer = adapter_registry.queryMultiAdapter([field], IXmlSerializer, 'serialize')
+    serializer = adapter_registry.queryMultiAdapter([field], IXmlSerializer, 'serialize-xml')
     return serializer
 
 def serializer_for_object(obj):
     '''Get an XML serializer for an IObject object.
     ''' 
     assert IObject.providedBy(obj)
-    serializer = adapter_registry.queryMultiAdapter([obj], IXmlSerializer, 'serialize')
+    serializer = adapter_registry.queryMultiAdapter([obj], IXmlSerializer, 'serialize-xml')
     return serializer
 
 def serializer_factory_for_field(field_iface):
     '''Get an XML serializer factory for a zope.schema.Field interface.
     ''' 
     assert field_iface.extends(zope.schema.interfaces.IField)
-    factory = adapter_registry.lookup([field_iface], IXmlSerializer, 'serialize')
+    factory = adapter_registry.lookup([field_iface], IXmlSerializer, 'serialize-xml')
     return factory
 
 def serializer_factory_for_object(obj_iface):
     '''Get an XML serializer factory for an IObject-based interface.
     ''' 
     assert obj_iface.isOrExtends(IObject)
-    factory = adapter_registry.lookup([obj_iface], IXmlSerializer, 'serialize')
+    factory = adapter_registry.lookup([obj_iface], IXmlSerializer, 'serialize-xml')
     return factory
 
 xml_serializer_for_field = serializer_for_field
@@ -137,8 +138,8 @@ class BaseSerializer(object):
         else:
             return (e, e1_tdefs)
     
-    def to_xml(self, o=None):
-        e = Element(QName(self.target_namespace, self.name))
+    def to_xml(self, o=None, nsmap=None):
+        e = Element(QName(self.target_namespace, self.name), nsmap=nsmap)
         self._to_xml(o, e)
         return e
     
@@ -149,7 +150,7 @@ class BaseSerializer(object):
         return o
        
     def dumps(self, o=None):
-        e = self.to_xml(o)
+        e = self.to_xml(o, nsmap={ None: self.target_namespace })
         s = etree.tostring(e, pretty_print=True, xml_declaration=True, encoding='utf-8')
         return s
 
@@ -208,16 +209,16 @@ class BaseFieldSerializer(BaseSerializer):
         
         # Try to name this XSD type
 
-        name = None
-        if field.context and hasattr(field.context, 'key'):
-            name = field.context.key
-        else:
-            name = field.getName() or str(inflection.parameterize(field.title))
-            if not name:
-                try:
-                    name = field.getTaggedValue('name')
-                except KeyError:
-                    pass
+        # Note: should we use field.context.key ?
+        # The problem is that when dealing with List/Dict fields, the value_type
+        # field also inherits the parent's context
+
+        name = field.getName() or str(inflection.parameterize(field.title))
+        if not name:
+            try:
+                name = field.getTaggedValue('name')
+            except KeyError:
+                pass
         
         assert name, 'The field should be named'
         
@@ -277,8 +278,8 @@ class BaseFieldSerializer(BaseSerializer):
         else:
             return (e, e2_tdefs)
     
-    def to_xml(self, o=None):
-        e = Element(QName(self.target_namespace, self.name))
+    def to_xml(self, o=None, nsmap=None):
+        e = Element(QName(self.target_namespace, self.name), nsmap=nsmap)
         if o is None:
             o = self.field.context.value
         self._to_xml(o, e)
@@ -295,8 +296,8 @@ class BaseObjectSerializer(BaseSerializer):
         self.typename = inflection.camelize(name)
         self.name = name = inflection.dasherize(name)
     
-    def to_xml(self, o=None):
-        e = Element(QName(self.target_namespace, self.name))
+    def to_xml(self, o=None, nsmap=None):
+        e = Element(QName(self.target_namespace, self.name), nsmap=nsmap)
         if o is None:
             o = self.obj
         self._to_xml(o, e)
@@ -391,6 +392,28 @@ class UnicodeFieldSerializer(StringFieldSerializer):
 
     def _from_xml(self, e):
         return unicode(e.text)
+
+@field_xml_serialize_adapter(zope.schema.interfaces.IURI)
+class UriFieldSerializer(BaseFieldSerializer):
+    
+    def _to_xsd_type(self, type_prefix):
+        xsd_uri = self.nsmap['xs']
+        
+        # Create an xs:simpleType element
+
+        e = Element(QName(xsd_uri, 'simpleType'))
+        e1 = SubElement(e, QName(xsd_uri, 'restriction'), attrib={
+            'base': 'xs:anyURI'
+        })
+
+        return (e, {})
+
+    def _to_xml(self, s, e):
+        assert isinstance(s, str)
+        e.text = s
+
+    def _from_xml(self, e):
+        return str(e.text)
 
 @field_xml_serialize_adapter(zope.schema.interfaces.IInt)
 class IntFieldSerializer(BaseFieldSerializer):
@@ -809,8 +832,8 @@ class ObjectSerializer(BaseObjectSerializer):
          
         # Create an xs:complexType element
 
-        # Note: This type-name will not be prefixed with type_prefix,
-        # as it is inferred from the object's type-name.
+        # Note: This type-name will not be prefixed with type_prefix, as it is
+        # computed from the object's type-name (and we want to re-use it).
         tname = self.typename
         e = Element(QName(xsd_uri, 'complexType'), attrib={ 'name': tname })
         e1 = SubElement(e, QName(xsd_uri, 'all'))
@@ -822,7 +845,8 @@ class ObjectSerializer(BaseObjectSerializer):
         ys_prefix = type_prefix + '_' + self.typename
         tdefs = {}
         for k, yf in obj_cls.get_fields().iteritems():
-            if hasattr(obj_cls, k) and isinstance(getattr(obj_cls, k), property):
+            ya = getattr(obj_cls, k)
+            if isinstance(ya, property):
                 continue
             yf1 = yf.bind(FieldContext(key=k, value=yf.get(self.obj)))
             ys = serializer_for_field(yf1)
@@ -839,7 +863,8 @@ class ObjectSerializer(BaseObjectSerializer):
         assert isinstance(obj, obj_cls)
 
         for k, yf in obj_cls.get_fields().iteritems():
-            if hasattr(obj_cls, k) and isinstance(getattr(obj_cls, k), property):
+            ya = getattr(obj_cls, k)
+            if isinstance(ya, property):
                 continue
             v = yf.get(obj)
             if v is None:
@@ -865,3 +890,8 @@ class ObjectSerializer(BaseObjectSerializer):
             yf.set(obj, ys.from_xml(p))
         
         return obj
+
+@object_xml_serialize_adapter(schemata.IFoo)
+class FooObjectSerializer(ObjectSerializer):
+    pass
+

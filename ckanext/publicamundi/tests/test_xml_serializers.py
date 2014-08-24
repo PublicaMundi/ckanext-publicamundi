@@ -62,11 +62,17 @@ def _test_field(fixture_name, k, f, v):
     print 'XML schema: -' 
     lxml.etree.dump(xsd)
 
+    xsd_validator = lxml.etree.XMLSchema(xsd)
+    assert xsd_validator
+
     e1 = ser.to_xml(v)
+    assert e1 is not None
+    assert xsd_validator.validate(e1)
     print 'XML dump (to_xml): - '
     lxml.etree.dump(e1)
     
     s1 = ser.dumps(v)
+    assert s1
     print 'XML dump (dumps): - '
     print s1
 
@@ -74,13 +80,15 @@ def _test_field(fixture_name, k, f, v):
     assert unicode(v1) == unicode(v)
 
 def _test_fixture_object(fixture_name):
-    '''Test XML serializion for an arbitrary fixture object.
+    '''Test XML serializion for an arbitrary (valid) fixture object.
     '''
     
+    target_namespace = 'http://example.com/test-fixture-objects'
+
     x = getattr(fixtures, fixture_name)
     ser = xml_serializer_for_object(x) 
     assert ser 
-    ser.target_namespace = 'http://example.com/test-fixture-objects'
+    ser.target_namespace = target_namespace
     verifyObject(IXmlSerializer, ser)
 
     xsd = ser.to_xsd(wrap_into_schema=True)
@@ -90,12 +98,18 @@ def _test_fixture_object(fixture_name):
     assert s
     print s
 
-    e = lxml.etree.fromstring(s)
-    assert e is not None
+    e1 = lxml.etree.fromstring(s)
+    assert e1 is not None
+    lxml.etree.dump(e1)
     
+    e2 = ser.to_xml(x, nsmap={ 't': target_namespace })
+    assert e2 is not None
+    lxml.etree.dump(e2)
+
     xsd_validator = lxml.etree.XMLSchema(xsd)
     assert xsd_validator
-    assert xsd_validator.validate(e)
+    assert xsd_validator.validate(e1)
+    assert xsd_validator.validate(e2)
 
     x1 = ser.loads(s)
     assert x1
@@ -215,7 +229,7 @@ def test_field_textline():
     f = zope.schema.TextLine(
         title = u'Postal Code',
         required = False,
-        constraint = re.compile('^[a-z][0-9]{5,5}$', re.IGNORECASE).match)
+        constraint = re.compile('^[A-Za-z][0-9]{5,5}$').match)
     v = u'A12345'
     f = f.bind(FieldContext(key='postal_code', value=v))
     f.validate(v)

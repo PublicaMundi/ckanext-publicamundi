@@ -757,7 +757,9 @@ class ObjectSerializer(BaseSerializer):
     def __init__(self, obj):
         self.obj = obj
     
-    def dumps(self, o):
+    def dumps(self, o=None):
+        if o is None:
+            o = self.obj
         assert isinstance(o, Object)
         return o.to_json()
         
