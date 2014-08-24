@@ -102,19 +102,6 @@ class IObject(zope.interface.Interface):
         Note that (unlike from_dict()) an explicit flag (is_flat) should be passed to
         determine if input should be considered as flattened/nested.
         '''
-    
-    def to_xsd(opts={}):
-        '''Generate an XML schema definition (XSD) for this class.
-        '''
-    
-    def to_xml(opts={}):
-        '''Convert to XML.
-        This method should *not* alter the object itself.
-        '''
-    
-    def from_xml(xml, opts={}):
-        '''Load this object from an XML dump.
-        '''
 
 class IErrorDict(zope.interface.Interface):
 

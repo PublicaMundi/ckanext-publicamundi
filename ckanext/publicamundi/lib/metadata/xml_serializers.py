@@ -15,7 +15,7 @@ from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata.ibase import \
     ISerializer, IXmlSerializer, IObject
-from ckanext.publicamundi.lib.metadata import \
+from ckanext.publicamundi.lib.metadata.base import \
     Object, FieldContext
 
 __all__ = [
@@ -826,6 +826,8 @@ class ObjectFieldSerializer(BaseFieldSerializer):
 
 @object_xml_serialize_adapter(IObject)
 class ObjectSerializer(BaseObjectSerializer):
+    '''Provide an XML serializer for derivatives of Object
+    '''
 
     def _to_xsd_type(self, type_prefix):
         xsd_uri = self.nsmap['xs']
@@ -834,6 +836,7 @@ class ObjectSerializer(BaseObjectSerializer):
 
         # Note: This type-name will not be prefixed with type_prefix, as it is
         # computed from the object's type-name (and we want to re-use it).
+        
         tname = self.typename
         e = Element(QName(xsd_uri, 'complexType'), attrib={ 'name': tname })
         e1 = SubElement(e, QName(xsd_uri, 'all'))

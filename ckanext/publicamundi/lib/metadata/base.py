@@ -15,8 +15,8 @@ from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.ibase import \
     IObject, IErrorDict, ISerializer
 from ckanext.publicamundi.lib.metadata.serializers import \
-    serializer_for_field, serializer_for_key_tuple, object_serialize_adapter, \
-    BaseSerializer
+    serializer_for_field, serializer_for_key_tuple, \
+    object_serialize_adapter, BaseSerializer
 
 _cache = threading.local()
 
@@ -116,18 +116,6 @@ class Object(object):
             'unserialize-values': True,
         }
         return self.from_dict(d, is_flat, opts=opts)
-
-    def to_xsd(self, opts={}):
-        raise NotImplementedError('Todo')
-        pass
-    
-    def to_xml(self, opts={}):
-        raise NotImplementedError('Todo')
-        pass
-
-    def from_xml(self, xml, opts={}):
-        raise NotImplementedError('Todo')
-        pass
     
     ## Constructor based on keyword args 
 
@@ -774,4 +762,10 @@ def serializer_for_object(obj):
     assert isinstance(obj, Object)
     serializer = adapter_registry.queryMultiAdapter([obj], ISerializer, 'serialize')
     return serializer
+
+# Note: We now import xml_serializers after all it's dependencies are loaded
+# (namely Object and FieldContext).
+
+from ckanext.publicamundi.lib.metadata.xml_serializers import \
+    object_xml_serialize_adapter, xml_serializer_for_object
 
