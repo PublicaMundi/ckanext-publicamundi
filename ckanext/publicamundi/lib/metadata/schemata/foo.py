@@ -41,15 +41,15 @@ class IFoo(IBaseMetadata):
 
     temporal_extent = zope.schema.Object(ITemporalExtent,
         title = u'Temporal Extent',
-        required = False)
+        required = True)
 
     geometry = zope.schema.List(
-        title = u'Geometry',
+        title = u'Geometry Feature',
         required = False,
         value_type = zope.schema.List(
-            title = u'A polygon area',
+            title = u'Polygon Area',
             value_type = zope.schema.Object(IPolygon,
-                title = u'A polygon'
+                title = u'Polygon'
             ),
             max_length = 2),
         max_length = 2,)

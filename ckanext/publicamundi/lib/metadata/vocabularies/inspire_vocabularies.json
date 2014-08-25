@@ -1,5 +1,6 @@
 {
     "Countries": {
+        "terms":{
         "BE": "Belgium", 
         "FR": "France", 
         "BG": "Bulgaria", 
@@ -61,14 +62,16 @@
         "SM": "San Marino", 
         "UA": "Ukraine", 
         "SE": "Sweden", 
-        "GB": "United Kingdom"
+        "GB": "United Kingdom"}
     }, 
     "Date Types": {
+        "terms":{
         "creation": "Date of Creation", 
         "publication": "Publication Date", 
-        "revision": "Last Revision Date"
+        "revision": "Last Revision Date"}
     }, 
-    "Topic Category": [
+    "Topic Category": {
+        "terms": [
         "Farming", 
         "Biota", 
         "Boundaries", 
@@ -87,9 +90,10 @@
         "Society", 
         "Structure", 
         "Transportation", 
-        "UtilitiesCommunication"
-    ], 
+        "UtilitiesCommunication"]
+    },
     "Languages": {
+        "terms":{
         "el": "Greek", 
         "en": "English", 
         "it": "Italian", 
@@ -112,15 +116,19 @@
         "sv": "Swedish", 
         "sk": "Slovak", 
         "mt": "Maltese", 
-        "sl": "Slovenian"
-    }, 
-    "Degrees": [
+        "sl": "Slovenian"} 
+    },
+    "Degrees": {
+        "terms": [
         "Not evaluated", 
         "Conformant", 
-        "Not conformant"
-    ], 
+        "Not conformant"]
+    },
     "Keywords": {
         "INSPIRE Glossary": {
+            "reference_date": "2010-01-12",
+            "date_type": "publication",
+            "version":3.0,
             "terms":[
             "Addressable object", 
             "Aqueduct", 
@@ -306,16 +314,22 @@
             "use case", 
             "vanishing point", 
             "version <spatial object>", 
-            "view service (view)"
-        ],}, 
+            "view service (view)"]
+        }, 
         "GEMET Supergroups": {
+            "reference_date": "2010-01-13",
+            "date_type": "publication",
+            "version":2.4,
             "terms":[
             "ACCESSORY LISTS", 
             "HUMAN ACTIVITIES AND PRODUCTS, EFFECTS ON THE ENVIRONMENT", 
             "NATURAL ENVIRONMENT, ANTHROPIC ENVIRONMENT", 
-            "SOCIAL ASPECTS, ENVIRONMENTAL POLICY MEASURES"
-        ],},
+            "SOCIAL ASPECTS, ENVIRONMENTAL POLICY MEASURES"]
+        },
         "INSPIRE Feature Concept Dictionary": {
+            "reference_date": "2010-01-19",
+            "date_type": "publication",
+            "version":3.0,
             "terms":[
             "Access Restriction", 
             "Address", 
@@ -496,9 +510,12 @@
             "Waterway Link", 
             "Waterway Node", 
             "Wetland", 
-            "lock"
-        ],},
+            "lock"]
+        },
         "GEMET INSPIRE Data Themes": {
+            "reference_date": "2008-06-01",
+            "date_type": "publication",
+            "version":1.0,
             "terms":[
             "Addresses", 
             "Administrative units", 
@@ -533,9 +550,12 @@
             "Species distribution", 
             "Statistical units", 
             "Transport networks", 
-            "Utility and governmental services"
-        ],},
+            "Utility and governmental services"]
+        },
         "GEMET Groups": {
+            "reference_date": "2010-01-13",
+            "date_type": "publication",
+            "version":2.4,
             "terms":[
             "ADMINISTRATION, MANAGEMENT, POLICY, POLITICS, INSTITUTIONS, PLANNING", 
             "AGRICULTURE, FORESTRY; ANIMAL HUSBANDRY; FISHERY", 
@@ -568,9 +588,12 @@
             "TIME (chronology)", 
             "TRADE, SERVICES", 
             "TRAFFIC, TRANSPORTATION", 
-            "WASTES, POLLUTANTS, POLLUTION"
-        ],},
+            "WASTES, POLLUTANTS, POLLUTION"]
+        },
         "GEOSS Earth Observation Vocabulary": {
+            "reference_date": "2011-05-01",
+            "date_type": "publication",
+            "version":1.0,
             "terms":[
             "AEROSOLS", 
             "AGRICULTURAL AQUATIC SCIENCES", 
@@ -795,9 +818,12 @@
             "Water run-off", 
             "Wave Direction", 
             "Wave Height", 
-            "Wave Period"
-        ],},
+            "Wave Period"]
+        },
         "GEMET Themes": {
+            "reference_date": "2010-01-13",
+            "date_type": "publication",
+            "version":2.4,
             "terms":[
             "administration", 
             "agriculture", 
@@ -838,9 +864,12 @@
             "transport", 
             "urban environment, urban stress", 
             "waste", 
-            "water"
-        ],},
+            "water"]
+        },
         "GEOSS Societal benefit areas": {
+            "reference_date": "2010-08-25",
+            "date_type": "publication",
+            "version":1.0,
             "terms":[
             "Accidental death and injury", 
             "Adapting to", 
@@ -908,9 +937,12 @@
             "Water cycle research", 
             "Weather", 
             "Weather prediction", 
-            "Wildland fires"
-        ],},
+            "Wildland fires"]
+        },
         "GEMET Concepts": {
+            "reference_date": "2010-01-13",
+            "date_type": "publication",
+            "version":2.4,
             "terms":[
             "accident", 
             "administration", 
@@ -1020,8 +1052,8 @@
             "transportation", 
             "transportation mean", 
             "vibration", 
-            "waste"
-        ]}
+            "waste"]
+        }
     }, 
     "Party Roles": {
         "originator": "Originator", 
@@ -1034,6 +1066,5 @@
         "user": "User", 
         "owner": "Owner", 
         "author": "Author", 
-        "processor": "Processor"
-    }
+        "processor": "Processor"}
 }

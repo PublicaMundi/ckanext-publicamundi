@@ -53,7 +53,7 @@ def test_from_serialized():
         "contacts.office.email": None,
         "contacts.personal.address.postalcode": u"54321",
         "created": u"2014-06-11 00:00:00",
-        "url": u"http://example.com",
+        "url": "http://example.com",
         "baz": u"Bazzz",
         "thematic_category": u"economy",
         "contact_info.address.address": u'Nowhere Land',

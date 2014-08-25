@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import datetime
 import zope.interface
 import zope.schema
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
@@ -40,7 +41,6 @@ def make_vocabulary(data):
     '''
     
     terms = []
-
     if isinstance(data, list):
         for t in data:
             k = munge(t)
@@ -67,14 +67,15 @@ def make_vocabularies():
         k = munge(name)
         vocabularies[k] = {
             'name': name,
-            'vocabulary': make_vocabulary(data.get(name))
+            'vocabulary': make_vocabulary(data.get(name).get('terms'))
         }
-
     keywords_data = data.get('Keywords')
     for name in keywords_data.keys():
         k = munge('Keywords-' + name)
         vocabularies[k] = {
             'name': name,
+            'reference_date': datetime.datetime.strptime(keywords_data.get(name).get('reference_date'), '%Y-%m-%d').date(),
+            'date_type': keywords_data.get(name).get('date_type'),
             'vocabulary': make_vocabulary(keywords_data.get(name).get('terms'))
         }
 

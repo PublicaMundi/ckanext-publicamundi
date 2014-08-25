@@ -5,12 +5,16 @@ import zope.schema
 
 from zope.schema.vocabulary import SimpleVocabulary
 from ckanext.publicamundi.lib.metadata.base import Object
-from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import IThesaurusTerms, IThesaurus
-from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import IInspireMetadata
+from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import \
+    IThesaurusTerms, IThesaurus
+from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import \
+    IInspireMetadata
 from ckanext.publicamundi.lib.metadata.types import object_null_adapter
 from ckanext.publicamundi.lib.metadata.types.common import *
 from ckanext.publicamundi.lib.metadata.vocabularies import inspire_vocabularies
 from ckanext.publicamundi.lib.metadata.vocabularies.inspire_vocabularies import munge
+from ckanext.publicamundi.lib.metadata.xml_serializers import \
+    object_xml_serialize_adapter, ObjectXmlSerializer
 
 class Thesaurus(Object):
     zope.interface.implements(IThesaurus)
@@ -217,3 +221,10 @@ class InspireMetadata(Object):
         fp = open(outfile, "w")
         fp.write(iso_xml)
         fp.close()
+
+# XML serialization
+
+@object_xml_serialize_adapter(IInspireMetadata)
+class InspireMetadataXmlSerializer(ObjectXmlSerializer):
+    pass
+
