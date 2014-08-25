@@ -13,8 +13,8 @@ from ckanext.publicamundi.lib.metadata.types import object_null_adapter
 from ckanext.publicamundi.lib.metadata.types.common import *
 from ckanext.publicamundi.lib.metadata.vocabularies import inspire_vocabularies
 from ckanext.publicamundi.lib.metadata.vocabularies.inspire_vocabularies import munge
-from ckanext.publicamundi.lib.metadata.xml_serializers import \
-    object_xml_serialize_adapter, ObjectXmlSerializer
+from ckanext.publicamundi.lib.metadata import xml_serializers
+from ckanext.publicamundi.lib.metadata.xml_serializers import object_xml_serialize_adapter
 
 class Thesaurus(Object):
     zope.interface.implements(IThesaurus)
@@ -223,6 +223,14 @@ class InspireMetadata(Object):
 # XML serialization
 
 @object_xml_serialize_adapter(IInspireMetadata)
-class InspireMetadataXmlSerializer(ObjectXmlSerializer):
-    pass
+class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
+
+    def to_xsd(self, wrap_into_schema=False, type_prefix='', annotate=False):
+        raise NotImplementedError('Todo')
+    
+    def _to_xml(self, o, e):
+        raise NotImplementedError('Todo')
+    
+    def _from_xml(self, e):
+        raise NotImplementedError('Todo')
 
