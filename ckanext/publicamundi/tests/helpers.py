@@ -8,13 +8,13 @@ def assert_faulty_keys(x, expected_keys=[], expected_invariants=[]):
     expected_keys = set(expected_keys)
 
     errs_dict = x.validate(dictize_errors=True)
-    
+
     faulty_keys = set(errs_dict.keys())
 
     print ' ** Errors:\n%s' %(json.dumps(errs_dict, indent=4))
     print ' ** Keys not expected but failed: %s' %(faulty_keys - expected_keys)
     print ' ** Keys expected but not failed: %s' %(expected_keys - faulty_keys)
-    
+
     if not expected_keys:
         assert not errs_dict
     else:

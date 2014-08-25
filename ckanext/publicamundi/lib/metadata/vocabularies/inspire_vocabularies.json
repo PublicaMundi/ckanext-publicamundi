@@ -120,7 +120,8 @@
         "Not conformant"
     ], 
     "Keywords": {
-        "INSPIRE Glossary": [
+        "INSPIRE Glossary": {
+            "terms":[
             "Addressable object", 
             "Aqueduct", 
             "Aquifer", 
@@ -306,14 +307,16 @@
             "vanishing point", 
             "version <spatial object>", 
             "view service (view)"
-        ], 
-        "GEMET Supergroups": [
+        ],}, 
+        "GEMET Supergroups": {
+            "terms":[
             "ACCESSORY LISTS", 
             "HUMAN ACTIVITIES AND PRODUCTS, EFFECTS ON THE ENVIRONMENT", 
             "NATURAL ENVIRONMENT, ANTHROPIC ENVIRONMENT", 
             "SOCIAL ASPECTS, ENVIRONMENTAL POLICY MEASURES"
-        ], 
-        "INSPIRE Feature Concept Dictionary": [
+        ],},
+        "INSPIRE Feature Concept Dictionary": {
+            "terms":[
             "Access Restriction", 
             "Address", 
             "Address Area Name", 
@@ -494,8 +497,9 @@
             "Waterway Node", 
             "Wetland", 
             "lock"
-        ], 
-        "GEMET INSPIRE Data Themes": [
+        ],},
+        "GEMET INSPIRE Data Themes": {
+            "terms":[
             "Addresses", 
             "Administrative units", 
             "Agricultural and aquaculture facilities", 
@@ -530,8 +534,9 @@
             "Statistical units", 
             "Transport networks", 
             "Utility and governmental services"
-        ], 
-        "GEMET Groups": [
+        ],},
+        "GEMET Groups": {
+            "terms":[
             "ADMINISTRATION, MANAGEMENT, POLICY, POLITICS, INSTITUTIONS, PLANNING", 
             "AGRICULTURE, FORESTRY; ANIMAL HUSBANDRY; FISHERY", 
             "ANTHROPOSPHERE (built environment, human settlements, land setup)", 
@@ -564,8 +569,9 @@
             "TRADE, SERVICES", 
             "TRAFFIC, TRANSPORTATION", 
             "WASTES, POLLUTANTS, POLLUTION"
-        ], 
-        "GEOSS Earth Observation Vocabulary": [
+        ],},
+        "GEOSS Earth Observation Vocabulary": {
+            "terms":[
             "AEROSOLS", 
             "AGRICULTURAL AQUATIC SCIENCES", 
             "AGRICULTURAL ENGINEERING", 
@@ -790,8 +796,9 @@
             "Wave Direction", 
             "Wave Height", 
             "Wave Period"
-        ], 
-        "GEMET Themes": [
+        ],},
+        "GEMET Themes": {
+            "terms":[
             "administration", 
             "agriculture", 
             "air", 
@@ -832,8 +839,9 @@
             "urban environment, urban stress", 
             "waste", 
             "water"
-        ], 
-        "GEOSS Societal benefit areas": [
+        ],},
+        "GEOSS Societal benefit areas": {
+            "terms":[
             "Accidental death and injury", 
             "Adapting to", 
             "Agricultural economy and trade", 
@@ -901,8 +909,9 @@
             "Weather", 
             "Weather prediction", 
             "Wildland fires"
-        ], 
-        "GEMET Concepts": [
+        ],},
+        "GEMET Concepts": {
+            "terms":[
             "accident", 
             "administration", 
             "agriculture", 
@@ -1012,7 +1021,7 @@
             "transportation mean", 
             "vibration", 
             "waste"
-        ]
+        ]}
     }, 
     "Party Roles": {
         "originator": "Originator", 

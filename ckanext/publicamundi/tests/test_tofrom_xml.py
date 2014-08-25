@@ -25,7 +25,7 @@ def test_from_xml():
 
 def export_to_xml(obj, outfile):
     '''Test exporting to XML'''
-    
+
     obj.to_xml(outfile)
 
 @nose.tools.nottest
@@ -38,6 +38,7 @@ def import_from_xml(infile):
     return obj
 
 if __name__ == '__main__':
-    #export_to_xml(insp1, '/tmp/out-1.xml')
-    #import_from_xml('tests/samples/corine_2000.xml')
+    export_to_xml(fixtures.inspire1, 'out-1.xml')
+    #import_from_xml('samples/3.xml')
+
     pass

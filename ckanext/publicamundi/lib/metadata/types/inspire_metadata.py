@@ -88,11 +88,11 @@ class InspireMetadata(Object):
 
         keywords_list = []
         for it in md.identification.keywords:
-            print 'keyword = '
-            print 'title = ', unicode(it['thesaurus']['title'])
-            print 'date = ', to_date(it['thesaurus']['date'])
-            print 'date type = ', it['thesaurus']['datetype']
-            print 'terms = ', it['keywords']
+            #print 'keyword = '
+            #print 'title = ', unicode(it['thesaurus']['title'])
+            #print 'date = ', to_date(it['thesaurus']['date'])
+            #print 'date type = ', it['thesaurus']['datetype']
+            #print 'terms = ', it['keywords']
             #terms_munged = []
             #for t in it['keywords']:
             #    terms_munged.append(munge(t))
@@ -211,7 +211,9 @@ class InspireMetadata(Object):
         import ckan.plugins as p
 
         print 'IN TO XML!'
-        iso_xml = p.toolkit.render('inspire_iso.xml',extra_vars={'data':self})
+        #iso_xml = p.toolkit.render('inspire_iso.xml',extra_vars={'data':self})
+        p.toolkit.render('1.html')
+        print 'after render'
         fp = open(outfile, "w")
         fp.write(iso_xml)
         fp.close()

@@ -49,33 +49,33 @@ def make_vocabulary(data):
         for k, t in data.items():
             k = munge(k)
             terms.append(SimpleTerm(k, k, t))
-            
+
     return SimpleVocabulary(terms, swallow_duplicates=True)
 
 def make_vocabularies():
     '''Load the module-global vocabularies dict with JSON data. 
     '''
-    
+
     path = os.path.dirname(os.path.abspath(__file__))
     data_file = os.path.join(path, DATA_FILE)
 
-    data = None 
+    data = None
     with open(data_file, 'r') as fp:
         data = json.loads(fp.read())
-     
+
     for name in (set(data.keys()) - set(['Keywords'])):
         k = munge(name)
-        vocabularies[k] = { 
+        vocabularies[k] = {
             'name': name,
             'vocabulary': make_vocabulary(data.get(name))
         }
-    
+
     keywords_data = data.get('Keywords')
     for name in keywords_data.keys():
         k = munge('Keywords-' + name)
-        vocabularies[k] = { 
+        vocabularies[k] = {
             'name': name,
-            'vocabulary': make_vocabulary(keywords_data.get(name))
+            'vocabulary': make_vocabulary(keywords_data.get(name).get('terms'))
         }
 
 def get_names():
