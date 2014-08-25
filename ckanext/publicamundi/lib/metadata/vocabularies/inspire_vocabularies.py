@@ -14,7 +14,7 @@ DATA_FILE = 'inspire_vocabularies.json'
 # directly (but via Thesaurus properties).
 
 vocabularies = {}
-
+thesauri = {}
 ## Helpers
 
 def munge(name):
@@ -69,14 +69,22 @@ def make_vocabularies():
             'name': name,
             'vocabulary': make_vocabulary(data.get(name).get('terms'))
         }
+
     keywords_data = data.get('Keywords')
     for name in keywords_data.keys():
+        keywords_name = keywords_data.get(name)
+        keywords_terms = make_vocabulary(keywords_name.get('terms'))
+
         k = munge('Keywords-' + name)
         vocabularies[k] = {
             'name': name,
-            'reference_date': datetime.datetime.strptime(keywords_data.get(name).get('reference_date'), '%Y-%m-%d').date(),
-            'date_type': keywords_data.get(name).get('date_type'),
-            'vocabulary': make_vocabulary(keywords_data.get(name).get('terms'))
+            'vocabulary': keywords_terms
+        }
+        thesauri[k] = {
+            'name': name,
+            'reference_date': datetime.datetime.strptime(keywords_name.get('reference_date'), '%Y-%m-%d').date(),
+            'date_type': keywords_name.get('date_type'),
+            'vocabulary': keywords_terms
         }
 
 def get_names():
@@ -97,7 +105,19 @@ def get_by_machine_name(k):
     spec = vocabularies.get(k)
     return spec['vocabulary'] if spec else None
 
+def get_thesaurus_by_name(name):
+    keys = filter(lambda t: thesauri[t]['name'] == name, thesauri.keys())
+    if keys:
+        k = keys[0]
+        return thesauri[k]
+    else:
+        return None
+
+def get_thesaurus_by_machine_name(k):
+    return thesauri.get(k)
+
+
+
 ## Load vocabularies from JSON data
 
 make_vocabularies()
-
