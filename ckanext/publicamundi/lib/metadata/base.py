@@ -763,9 +763,3 @@ def serializer_for_object(obj):
     serializer = adapter_registry.queryMultiAdapter([obj], ISerializer, 'serialize')
     return serializer
 
-# Note: We now import xml_serializers after all it's dependencies are loaded
-# (namely Object and FieldContext).
-
-from ckanext.publicamundi.lib.metadata.xml_serializers import \
-    object_xml_serialize_adapter, xml_serializer_for_object
-
