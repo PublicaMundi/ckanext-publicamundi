@@ -62,6 +62,11 @@ class InspireMetadata(Object):
     limitations = list
     responsible_party = list
 
+# XML serialization
+
+@object_xml_serialize_adapter(IInspireMetadata)
+class InspireMetadataXmlSerializer(ObjectXmlSerializer):
+
     def from_xml(self, infile):
         ''' Load from a valid ISO XML file'''
 
@@ -180,34 +185,34 @@ class InspireMetadata(Object):
         constr_list = []
         for it in md.identification.otherconstraints:
                 constr_list.append(unicode(it))
-
-        self.contact = to_resp_party(md.contact)
-        self.datestamp = datestamp
-        self.languagecode = md.languagecode
-        self.title = unicode(md.identification.title)
-        self.abstract = unicode(md.identification.abstract)
-        self.identifier = id_list
-        self.locator = url_list
-        self.resource_language = md.identification.resourcelanguage
-        self.topic_category = md.identification.topiccategory
-        self.keywords = keywords_list
-        self.bounding_box = [GeographicBoundingBox(
+        obj = self.obj
+        obj.contact = to_resp_party(md.contact)
+        obj.datestamp = datestamp
+        obj.languagecode = md.languagecode
+        obj.title = unicode(md.identification.title)
+        obj.abstract = unicode(md.identification.abstract)
+        obj.identifier = id_list
+        obj.locator = url_list
+        obj.resource_language = md.identification.resourcelanguage
+        obj.topic_category = md.identification.topiccategory
+        obj.keywords = keywords_list
+        obj.bounding_box = [GeographicBoundingBox(
             nblat = float(md.identification.extent.boundingBox.maxy),
             sblat = float(md.identification.extent.boundingBox.miny),
             eblng = float(md.identification.extent.boundingBox.maxx),
             wblng = float(md.identification.extent.boundingBox.minx))]
         if md.identification.temporalextent_start:
-            self.temporal_extent = temporal_extent
-        self.creation_date = creation_date
-        self.publication_date = publication_date
-        self.revision_date = revision_date
-        self.lineage = unicode(md.dataquality.lineage)
-        self.denominator = denom_list
-        self.spatial_resolution = spatial_list
-        self.conformity = conf_list
-        self.access_constraints = limit_list
-        self.limitations = constr_list
-        self.responsible_party = to_resp_party(md.identification.contact)
+            obj.temporal_extent = temporal_extent
+        obj.creation_date = creation_date
+        obj.publication_date = publication_date
+        obj.revision_date = revision_date
+        obj.lineage = unicode(md.dataquality.lineage)
+        obj.denominator = denom_list
+        obj.spatial_resolution = spatial_list
+        obj.conformity = conf_list
+        obj.access_constraints = limit_list
+        obj.limitations = constr_list
+        obj.responsible_party = to_resp_party(md.identification.contact)
 
     def to_xml(self, outfile):
         '''Convert to ISO XML'''
@@ -222,9 +227,4 @@ class InspireMetadata(Object):
         fp.write(iso_xml)
         fp.close()
 
-# XML serialization
-
-@object_xml_serialize_adapter(IInspireMetadata)
-class InspireMetadataXmlSerializer(ObjectXmlSerializer):
-    pass
 
