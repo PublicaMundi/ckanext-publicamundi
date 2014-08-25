@@ -21,7 +21,7 @@ class IThesaurus(IObject):
         vocabulary = inspire_vocabularies.get_by_machine_name('date-types'),
         required = True)
 
-    name = zope.schema.ASCII()
+    name = zope.schema.NativeString()
 
     vocabulary = zope.schema.Object(IVocabularyTokenized, required=True)
 
