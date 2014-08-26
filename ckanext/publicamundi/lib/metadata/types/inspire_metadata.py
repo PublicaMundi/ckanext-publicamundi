@@ -33,7 +33,7 @@ class Thesaurus(Object):
 
     # Factory for Thesaurus
 
-    @staticmethod
+    @classmethod
     def make(cls, name):
         '''Create a new Thesaurus instance from it's machine-name name.
         '''
