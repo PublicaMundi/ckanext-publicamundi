@@ -61,42 +61,44 @@ def make_vocabularies():
     with open(data_file, 'r') as fp:
         data = json.loads(fp.read())
 
-    for name in (set(data.keys()) - set(['Keywords'])):
-        k = munge(name)
-        vocabularies[k] = {
+    for title in (set(data.keys()) - set(['Keywords'])):
+        name = munge(title)
+        vocabularies[name] = {
             'name': name,
-            'vocabulary': make_vocabulary(data.get(name).get('terms'))
+            'title': title,
+            'vocabulary': make_vocabulary(data.get(title).get('terms'))
         }
 
     keywords_data = data.get('Keywords')
-    for name in keywords_data.keys():
-        keywords = keywords_data.get(name)
+    for title in keywords_data.keys():
+        keywords = keywords_data.get(title)
         keywords_terms = make_vocabulary(keywords.get('terms'))
 
-        k = munge('Keywords-' + name)
-        vocabularies[k] = {
+        name = munge('Keywords-' + title)
+        vocabularies[name] = {
             'name': name,
+            'title': title,
             'reference_date': datetime.strptime(keywords.get('reference_date'), '%Y-%m-%d').date(),
             'date_type': keywords.get('date_type'),
             'vocabulary': make_vocabulary(keywords.get('terms'))
         }
 
-def get_names():
-    return [ vocabularies[k]['name'] for k in vocabularies ]
+def get_titles():
+    return { k: vocabularies[k]['title'] for k in vocabularies }
 
-def get_machine_names():
+def get_names():
     return vocabularies.keys()
 
-def get_by_name(name):
-    keys = filter(lambda t: vocabularies[t]['name'] == name, vocabularies.keys())
+def get_by_title(title):
+    keys = filter(lambda t: vocabularies[t]['title'] == title, vocabularies.keys())
     if keys:
         k = keys[0]
         return vocabularies[k]
     else:
         return None
 
-def get_by_machine_name(k):
-    return vocabularies.get(k)
+def get_by_name(name):
+    return vocabularies.get(name)
 
 ## Load vocabularies from JSON data
 

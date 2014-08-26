@@ -18,6 +18,8 @@ from ckanext.publicamundi.lib.metadata.xml_serializers import object_xml_seriali
 
 class Thesaurus(Object):
     zope.interface.implements(IThesaurus)
+    
+    # Interface IThesaurus
 
     title = None
     reference_date = None
@@ -26,8 +28,27 @@ class Thesaurus(Object):
 
     @property
     def vocabulary(self):
-        spec = inspire_vocabularies.get_by_machine_name(self.name)
-        return spec.get('vocabulary') if spec else None
+        spec = inspire_vocabularies.get_by_name(self.name)
+        return spec.get('vocabulary') if spec else None 
+
+    # Factory for Thesaurus
+
+    @staticmethod
+    def make(cls, name):
+        '''Create a new Thesaurus instance from it's machine-name name.
+        '''
+        spec = inspire_vocabularies.get_by_name(name)
+        if spec:
+            kwargs = {
+               'title': spec.get('title'),
+               'name': spec.get('name'),
+               'reference_date': spec.get('reference_date'),
+               'date_type': spec.get('date_type'),
+            }
+            return cls(**kwargs)
+        else:
+            raise ValueError(
+                'Cannot find an INSPIRE thesaurus named "%s"' %(name))
 
 @object_null_adapter(IThesaurusTerms)
 class ThesaurusTerms(Object):

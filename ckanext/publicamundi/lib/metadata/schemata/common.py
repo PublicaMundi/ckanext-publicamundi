@@ -69,7 +69,7 @@ class IResponsibleParty(IObject):
 
     role = zope.schema.Choice(
         title = u'Responsible party role',
-        vocabulary = inspire_vocabularies.get_by_machine_name('party-roles').get('vocabulary'), 
+        vocabulary = inspire_vocabularies.get_by_name('party-roles').get('vocabulary'), 
         description = u'This is the role of the responsible organisation.',
         required = True)
 
@@ -91,7 +91,7 @@ class IFreeKeyword(IObject):
 
     date_type = zope.schema.Choice(
         title = u'Date Type',
-        vocabulary = inspire_vocabularies.get_by_machine_name('date-types').get('vocabulary'),
+        vocabulary = inspire_vocabularies.get_by_name('date-types').get('vocabulary'),
         required = False)
 
     @zope.interface.invariant
@@ -173,12 +173,12 @@ class IConformity(IObject):
 
     date_type = zope.schema.Choice(
         title = u'Date type',
-        vocabulary = inspire_vocabularies.get_by_machine_name('date-types').get('vocabulary'),
+        vocabulary = inspire_vocabularies.get_by_name('date-types').get('vocabulary'),
         required = True)
 
     degree = zope.schema.Choice(
         title = u'Degree',
-        vocabulary = inspire_vocabularies.get_by_machine_name('degrees').get('vocabulary'),
+        vocabulary = inspire_vocabularies.get_by_name('degrees').get('vocabulary'),
         description = u'This is the degree of conformity of the resource to the implementing rules adopted under Article 7(1) of Directive 2007/2/EC or other specification.',
         default = "not-evaluated",
         required = True)
