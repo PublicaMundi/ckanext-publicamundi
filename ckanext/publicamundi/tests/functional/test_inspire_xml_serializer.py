@@ -15,45 +15,61 @@ from ckanext.publicamundi.lib.metadata.types.inspire_metadata import InspireMeta
 from ckanext.publicamundi.lib.metadata.base import *
 from ckanext.publicamundi.tests.helpers import assert_faulty_keys
 from ckanext.publicamundi.tests import fixtures
-
 from ckanext.publicamundi.lib.metadata import xml_serializers
-from ckanext.publicamundi.lib.metadata.xml_serializers import object_xml_serialize_adapter
 from ckanext.publicamundi.lib.metadata.xml_serializers import xml_serializer_for_object
 
 # Tests
 
 class TestController(BaseTestController):
+    
     @nose.tools.istest
     def test_to_xml(self):
-        yield self._to_xml, fixtures.inspire1, '/tmp/1.xml'
+        yield self._to_xml, 'inspire1', '/tmp/fixture-inspire1.xml'
 
     @nose.tools.istest
     def test_from_xml(self):
-        yield self._from_xml, '../samples/3.xml'
-        yield self._from_xml, '../samples/aktogrammh.xml'
+        yield self._from_xml, 'tests/samples/3.xml'
+        yield self._from_xml, 'tests/samples/aktogrammh.xml'
 
-    @with_request_context('', 'index')
-    def _to_xml(self, obj, outfile):
-        #obj = InspireMetadata()
+    @with_request_context('publicamundi-tests', 'index')
+    def _to_xml(self, fixture_name, outfile):
+        '''Load an InspireMetadata fixture object and dump it as XML.
+        '''
+
+        obj = getattr(fixtures, fixture_name)
+        assert isinstance(obj, InspireMetadata)
         ser = xml_serializer_for_object(obj)
-        #ser.to_xml()
-        iso_xml = ser.dumps()
-        assert isinstance(iso_xml, str)
-        #print '1'
-        #print iso_xml
-        fp = open(outfile, "w")
-        fp.write(iso_xml)
-        fp.close()
+        assert ser
 
+        s = ser.dumps()
+        assert isinstance(s, unicode)
+        
+        with open(outfile, "w") as ofp:
+            ofp.write(s)
+            ofp.close()
+
+        #e = ser.to_xml()
+        #assert e is not None
+
+        return
+
+    @with_request_context('publicamundi-tests', 'index')
     def _from_xml(self, infile):
+        '''Instantiate an InspireMetadata object from an XML dump.
+        '''
+        
         ser = xml_serializer_for_object(InspireMetadata())
 
         e = etree.parse(infile)
         assert isinstance(e, etree._ElementTree)
-        out = ser.from_xml(e)
-        assert isinstance(out, InspireMetadata)
-        #errors = out.validate()
-        #assert not errors
+        
+        o = ser.from_xml(e)
+        assert isinstance(o, InspireMetadata)
+        
+        js = o.to_json(indent=4)
+        print ' -- Loaded object from %s -- ' %(infile)
+        print js
 
-if __name__ == '__main__':
-    pass
+        errors = o.validate(dictize_errors=True)
+        assert not errors
+

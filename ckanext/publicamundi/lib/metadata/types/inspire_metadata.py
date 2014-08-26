@@ -104,7 +104,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         if o is None:
             o = self.obj
 
-        return p.toolkit.render('inspire_iso.xml', extra_vars={ 'data': o })
+        return p.toolkit.render('package/inspire_iso.xml', extra_vars={ 'data': o })
 
     def to_xml(self, o=None, nsmap=None):
         '''Build and return an etree Element to serialize an object (instance of
