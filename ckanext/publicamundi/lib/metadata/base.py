@@ -149,7 +149,7 @@ class Object(object):
     ## Introspective class methods
 
     @classmethod
-    def lookup_schema(cls):
+    def _determine_schema(cls):
         S = None
         for iface in zope.interface.implementedBy(cls):
             if iface.extends(IObject):
@@ -165,7 +165,7 @@ class Object(object):
         try:
             S = _cache.schema[cls]
         except KeyError:
-            S  = cls.lookup_schema()
+            S  = cls._determine_schema()
             _cache.schema[cls] = S
         return S
 
