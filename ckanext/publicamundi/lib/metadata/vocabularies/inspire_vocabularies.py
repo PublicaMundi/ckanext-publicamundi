@@ -1,7 +1,7 @@
 import os
 import re
 import json
-import datetime
+from datetime import datetime
 import zope.interface
 import zope.schema
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
@@ -14,8 +14,6 @@ DATA_FILE = 'inspire_vocabularies.json'
 # directly (but via Thesaurus properties).
 
 vocabularies = {}
-thesauri = {}
-## Helpers
 
 def munge(name):
     ''' Convert human-friendly to machine-friendly names'''
@@ -72,19 +70,15 @@ def make_vocabularies():
 
     keywords_data = data.get('Keywords')
     for name in keywords_data.keys():
-        keywords_name = keywords_data.get(name)
-        keywords_terms = make_vocabulary(keywords_name.get('terms'))
+        keywords = keywords_data.get(name)
+        keywords_terms = make_vocabulary(keywords.get('terms'))
 
         k = munge('Keywords-' + name)
         vocabularies[k] = {
             'name': name,
-            'vocabulary': keywords_terms
-        }
-        thesauri[k] = {
-            'name': name,
-            'reference_date': datetime.datetime.strptime(keywords_name.get('reference_date'), '%Y-%m-%d').date(),
-            'date_type': keywords_name.get('date_type'),
-            'vocabulary': keywords_terms
+            'reference_date': datetime.strptime(keywords.get('reference_date'), '%Y-%m-%d').date(),
+            'date_type': keywords.get('date_type'),
+            'vocabulary': make_vocabulary(keywords.get('terms'))
         }
 
 def get_names():
@@ -97,26 +91,12 @@ def get_by_name(name):
     keys = filter(lambda t: vocabularies[t]['name'] == name, vocabularies.keys())
     if keys:
         k = keys[0]
-        return vocabularies[k]['vocabulary']
+        return vocabularies[k]
     else:
         return None
 
 def get_by_machine_name(k):
-    spec = vocabularies.get(k)
-    return spec['vocabulary'] if spec else None
-
-def get_thesaurus_by_name(name):
-    keys = filter(lambda t: thesauri[t]['name'] == name, thesauri.keys())
-    if keys:
-        k = keys[0]
-        return thesauri[k]
-    else:
-        return None
-
-def get_thesaurus_by_machine_name(k):
-    return thesauri.get(k)
-
-
+    return vocabularies.get(k)
 
 ## Load vocabularies from JSON data
 

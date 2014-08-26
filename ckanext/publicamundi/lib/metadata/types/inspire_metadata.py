@@ -26,7 +26,8 @@ class Thesaurus(Object):
 
     @property
     def vocabulary(self):
-        return inspire_vocabularies.get_by_machine_name(self.name)
+        spec = inspire_vocabularies.get_by_machine_name(self.name)
+        return spec.get('vocabulary') if spec else None
 
 @object_null_adapter(IThesaurusTerms)
 class ThesaurusTerms(Object):
@@ -61,6 +62,9 @@ class InspireMetadata(Object):
     access_constraints = list
     limitations = list
     responsible_party = list
+
+    # Todo: Move functionality from {to/from}_xml methods to a dedicated 
+    # serializer (InspireMetadataXmlSerializer).
 
     def from_xml(self, infile):
         ''' Load from a valid ISO XML file'''
@@ -228,11 +232,25 @@ class InspireMetadata(Object):
 class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
 
     def to_xsd(self, wrap_into_schema=False, type_prefix='', annotate=False):
+        '''Return the XSD document as an etree Element.
+        '''
         raise NotImplementedError('Todo')
     
-    def _to_xml(self, o, e):
+    def dumps(self, o=None):
+        '''Dump object (instance of InspireMetadata) o as an INSPIRE-complant 
+        XML document.
+        '''
         raise NotImplementedError('Todo')
     
-    def _from_xml(self, e):
+    def to_xml(self, o=None, nsmap=None):
+        '''Build and return an etree Element to serialize an object (instance of
+        InspireMetadata) o. 
+        '''
+        raise NotImplementedError('Todo')
+    
+    def from_xml(self, e):
+        '''Build and return an InspireMetadata object serialized as an 
+        etree Element e.
+        '''
         raise NotImplementedError('Todo')
 

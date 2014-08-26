@@ -18,7 +18,7 @@ class IThesaurus(IObject):
     
     date_type = zope.schema.Choice(
         title = u"Date Type",
-        vocabulary = inspire_vocabularies.get_by_machine_name('date-types'),
+        vocabulary = inspire_vocabularies.get_by_machine_name('date-types').get('vocabulary'),
         required = True)
 
     name = zope.schema.NativeString()
@@ -82,7 +82,7 @@ class IInspireMetadata(IObject):
 
     languagecode = zope.schema.Choice(
         title = u'Metadata Language',
-        vocabulary = inspire_vocabularies.get_by_machine_name('languages'),
+        vocabulary = inspire_vocabularies.get_by_machine_name('languages').get('vocabulary'),
         description = u"This is the language in which the metadata elements are expressed.The value domain of this metadata element is limited to the official languages of the Community expressed in conformity with ISO 639-2.",
         required = True,
         default = "en")
@@ -125,7 +125,7 @@ class IInspireMetadata(IObject):
         required = False,
         value_type = zope.schema.Choice(
             title = u'Resource Language',
-            vocabulary = inspire_vocabularies.get_by_machine_name('languages'),))
+            vocabulary = inspire_vocabularies.get_by_machine_name('languages').get('vocabulary'),))
     
     # Todo: identtype, textline, choice?? 
 
@@ -138,7 +138,7 @@ class IInspireMetadata(IObject):
         min_length = 1,
         value_type = zope.schema.Choice(
             title = u'Topic Category',
-            vocabulary = inspire_vocabularies.get_by_machine_name('topic-category')))
+            vocabulary = inspire_vocabularies.get_by_machine_name('topic-category').get('vocabulary'),))
     
     # Keywords
 
