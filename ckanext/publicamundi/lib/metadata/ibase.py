@@ -22,7 +22,7 @@ class IXmlSerializer(ISerializer):
 
     typename = zope.schema.NativeString(required=True)
 
-    def to_xsd(wrap_into_schema=False, type_prefix=''):
+    def to_xsd(wrap_into_schema=False, type_prefix='', annotate=False):
         '''Generate an XML Schema document (XSD) for the XML documents 
         that this serializer generates.
         
@@ -36,7 +36,7 @@ class IXmlSerializer(ISerializer):
               type definitions).
 
         If type_prefix is given, it will prefix (i.e. qualify) all global type 
-        definitions generated. This can be usefull to avoid type-name conflicts.
+        definitions generated. This is usefull to avoid type-name conflicts.
         '''
     
     def to_xml(o=None, nsmap=None):

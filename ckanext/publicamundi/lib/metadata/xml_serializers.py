@@ -21,7 +21,6 @@ from ckanext.publicamundi.lib.metadata.base import \
 __all__ = [
     'field_xml_serialize_adapter',
     'object_xml_serialize_adapter',
-    'ObjectXmlSerializer',
     'xml_serializer_for_field',
     'xml_serializer_factory_for_field',
     'xml_serializer_for_object', 
@@ -104,7 +103,7 @@ class BaseSerializer(object):
     
     name = None
 
-    def to_xsd(self, wrap_into_schema=False, type_prefix=''):
+    def to_xsd(self, wrap_into_schema=False, type_prefix='', annotate=False):
         xsd_uri = self.nsmap['xs']
         
         # Create an xs:element element
@@ -894,8 +893,6 @@ class ObjectSerializer(BaseObjectSerializer):
             yf.set(obj, ys.from_xml(p))
         
         return obj
-
-ObjectXmlSerializer = ObjectSerializer
 
 @object_xml_serialize_adapter(schemata.IFoo)
 class FooObjectSerializer(ObjectSerializer):
