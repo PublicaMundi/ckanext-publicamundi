@@ -62,8 +62,42 @@ class InspireMetadata(Object):
     limitations = list
     responsible_party = list
 
-    def from_xml(self, infile):
-        ''' Load from a valid ISO XML file'''
+# XML serialization
+
+@object_xml_serialize_adapter(IInspireMetadata)
+class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
+
+    def to_xsd(self, wrap_into_schema=False, type_prefix='', annotate=False):
+        '''Return the XSD document as an etree Element.
+        '''
+        raise NotImplementedError('Todo')
+
+    def dumps(self, o=None):
+        '''Dump object (instance of InspireMetadata) o as an INSPIRE-complant XML document.
+        '''
+        #raise NotImplementedError('Todo')
+        #def to_xml(self, outfile):
+        #    '''Convert to ISO XML'''
+
+        import ckan.plugins as p
+
+        if o is None:
+            o = self.obj
+
+        return p.toolkit.render('inspire_iso.xml',extra_vars={'data':o})
+        #print 'after render'
+        #fp = open(outfile, "w")
+        #fp.write(iso_xml)
+        #fp.close()
+
+    def to_xml(self, o=None, nsmap=None):
+        '''Build and return an etree Element to serialize an object (instance of InspireMetadata) o.
+        '''
+        raise NotImplementedError('Todo')
+
+    def from_xml(self, e):
+        '''Build and return an InspireMetadata object serialized as an etree Element e.
+        '''
 
         def to_date(string):
             if isinstance(string, str):
@@ -80,7 +114,8 @@ class InspireMetadata(Object):
                     role = it.role))
             return result
 
-        md = MD_Metadata(etree.parse(infile))
+        #md = MD_Metadata(etree.parse(infile))
+        md = MD_Metadata(e)
         datestamp = to_date(md.datestamp)
         id_list = []
         for it in md.identification.uricode:
@@ -92,14 +127,6 @@ class InspireMetadata(Object):
 
         keywords_list = []
         for it in md.identification.keywords:
-            #print 'keyword = '
-            #print 'title = ', unicode(it['thesaurus']['title'])
-            #print 'date = ', to_date(it['thesaurus']['date'])
-            #print 'date type = ', it['thesaurus']['datetype']
-            #print 'terms = ', it['keywords']
-            #terms_munged = []
-            #for t in it['keywords']:
-            #    terms_munged.append(munge(t))
             kw = ThesaurusTerms(thesaurus = Thesaurus(
                     title = unicode(it['thesaurus']['title']),
                     reference_date = to_date(it['thesaurus']['date']),
@@ -180,7 +207,9 @@ class InspireMetadata(Object):
         constr_list = []
         for it in md.identification.otherconstraints:
                 constr_list.append(unicode(it))
+
         obj = self.obj
+
         obj.contact = to_resp_party(md.contact)
         obj.datestamp = datestamp
         obj.languagecode = md.languagecode
@@ -196,6 +225,10 @@ class InspireMetadata(Object):
             sblat = float(md.identification.extent.boundingBox.miny),
             eblng = float(md.identification.extent.boundingBox.maxx),
             wblng = float(md.identification.extent.boundingBox.minx))]
+        #print 'bbox = '
+        #print obj.bounding_box
+        #print obj.bounding_box[0].nblat
+        #print md.identification.extent.boundingBox.maxy
         if md.identification.temporalextent_start:
             obj.temporal_extent = temporal_extent
         obj.creation_date = creation_date
@@ -209,30 +242,4 @@ class InspireMetadata(Object):
         obj.limitations = constr_list
         obj.responsible_party = to_resp_party(md.identification.contact)
 
-    def to_xml(self, outfile):
-        '''Convert to ISO XML'''
-
-        import ckan.plugins as p
-
-        print 'IN TO XML!'
-        #iso_xml = p.toolkit.render('inspire_iso.xml',extra_vars={'data':self})
-        p.toolkit.render('1.html')
-        print 'after render'
-        fp = open(outfile, "w")
-        fp.write(iso_xml)
-        fp.close()
-
-# XML serialization
-
-@object_xml_serialize_adapter(IInspireMetadata)
-class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
-
-    def to_xsd(self, wrap_into_schema=False, type_prefix='', annotate=False):
-        raise NotImplementedError('Todo')
-    
-    def _to_xml(self, o, e):
-        raise NotImplementedError('Todo')
-    
-    def _from_xml(self, e):
-        raise NotImplementedError('Todo')
-
+        return obj
