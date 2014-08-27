@@ -130,7 +130,7 @@
         ]
     },
     "Keywords": {
-        "INSPIRE Glossary": {
+        "INSPIRE - Glossary": {
             "reference_date": "2010-01-12",
             "date_type": "publication",
             "version":3.0,
@@ -322,7 +322,7 @@
                 "view service (view)"
             ]
         }, 
-        "GEMET Supergroups": {
+        "GEMET - Supergroups": {
             "reference_date": "2010-01-13",
             "date_type": "publication",
             "version":2.4,
@@ -333,7 +333,7 @@
                 "SOCIAL ASPECTS, ENVIRONMENTAL POLICY MEASURES"
             ]
         },
-        "INSPIRE Feature Concept Dictionary": {
+        "INSPIRE - Feature Concept Dictionary": {
             "reference_date": "2010-01-19",
             "date_type": "publication",
             "version":3.0,
@@ -520,7 +520,7 @@
                 "lock"
             ]
         },
-        "GEMET INSPIRE Data Themes": {
+        "GEMET - INSPIRE themes": {
             "reference_date": "2008-06-01",
             "date_type": "publication",
             "version":1.0,
@@ -561,7 +561,7 @@
                 "Utility and governmental services"
             ]
         },
-        "GEMET Groups": {
+        "GEMET - Groups": {
             "reference_date": "2010-01-13",
             "date_type": "publication",
             "version":2.4,
@@ -600,7 +600,7 @@
                 "WASTES, POLLUTANTS, POLLUTION"
             ]
         },
-        "GEOSS Earth Observation Vocabulary": {
+        "GEOSS - Earth Observation Vocabulary": {
             "reference_date": "2011-05-01",
             "date_type": "publication",
             "version":1.0,
@@ -831,7 +831,7 @@
                 "Wave Period"
             ]
         },
-        "GEMET Themes": {
+        "GEMET - Themes": {
             "reference_date": "2010-01-13",
             "date_type": "publication",
             "version":2.4,
@@ -952,7 +952,7 @@
                 "Wildland fires"
             ]
         },
-        "GEMET Concepts": {
+        "GEMET - Concepts": {
             "reference_date": "2010-01-13",
             "date_type": "publication",
             "version":2.4,
