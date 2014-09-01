@@ -3,6 +3,7 @@ from owslib.iso import MD_Metadata
 import zope.interface
 import zope.schema
 import os
+import StringIO
 
 from zope.schema.vocabulary import SimpleVocabulary
 from ckanext.publicamundi.lib.metadata.base import Object
@@ -25,11 +26,12 @@ class Thesaurus(Object):
     reference_date = None
     date_type = None
     name = None
+    version = None
 
     @property
     def vocabulary(self):
         spec = inspire_vocabularies.get_by_name(self.name)
-        return spec.get('vocabulary') if spec else None 
+        return spec.get('vocabulary') if spec else None
 
     # Factory for Thesaurus
 
@@ -43,6 +45,7 @@ class Thesaurus(Object):
                'title': spec.get('title'),
                'name': spec.get('name'),
                'reference_date': spec.get('reference_date'),
+               'version' : spec.get('version'),
                'date_type': spec.get('date_type'),
             }
             return cls(**kwargs)
@@ -92,7 +95,12 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
     def to_xsd(self, wrap_into_schema=False, type_prefix='', annotate=False):
         '''Return the XSD document as an etree Element.
         '''
-        raise NotImplementedError('Todo')
+        data_file = os.path.join(os.path.dirname(__file__), 'isotc211.org-2005/xsd/gmd/metadataEntity.xsd')
+        #data_file = os.path.join(path1, DATA_FILE)
+
+        xsd_doc = etree.parse(data_file)
+        xsd = etree.XMLSchema(xsd_doc)
+        return xsd
 
     def dumps(self, o=None):
         '''Dump object (instance of InspireMetadata) o as an INSPIRE-complant XML 
@@ -168,7 +176,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
                 thes_split = thes_title.split(',')
 
                 # TODO thes_split[1] (=version) can be later used in a get_by_title_and_version to test current thesaurus version
-               thes_title = thes_split[0]
+                thes_title = thes_split[0]
 
                 kw = ThesaurusTerms(thesaurus = Thesaurus.make(inspire_vocabularies.munge('Keywords-' + thes_title)),
                     terms = it['keywords'])

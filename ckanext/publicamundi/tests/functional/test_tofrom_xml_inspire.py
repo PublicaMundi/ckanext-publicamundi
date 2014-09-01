@@ -23,14 +23,19 @@ from ckanext.publicamundi.lib.metadata.xml_serializers import xml_serializer_for
 # Tests
 
 class TestController(BaseTestController):
-    @nose.tools.istest
-    def test_to_xml(self):
-        yield self._to_xml, fixtures.inspire1, '/tmp/inspire1.xml'
+    #@nose.tools.istest
+    #def test_to_xml(self):
+    #    yield self._to_xml, fixtures.inspire1, '/tmp/inspire1.xml'
+
+    #@nose.tools.istest
+    #def test_from_xml(self):
+    #    yield self._from_xml, '../samples/3.xml'
+    #    yield self._from_xml, '../samples/aktogrammh.xml'
 
     @nose.tools.istest
-    def test_from_xml(self):
-        yield self._from_xml, '../samples/3.xml'
-        yield self._from_xml, '../samples/aktogrammh.xml'
+    def test_to_xsd(self):
+        yield self._validate_with_xsd, fixtures.inspire1, '../samples/3.xml'
+        yield self._validate_with_xsd, fixtures.inspire1, '../samples/aktogrammh.xml'
 
     @with_request_context('publicamundi-tests', 'index')
     def _to_xml(self, obj, outfile):
@@ -39,9 +44,8 @@ class TestController(BaseTestController):
         #ser.to_xml()
         iso_xml = ser.dumps()
         #assert isinstance(iso_xml, str)
-
-        print '1'
-        print iso_xml
+        #print '1'
+        #print iso_xml
         fp = open(outfile, "w")
         fp.write(iso_xml)
         fp.close()
@@ -53,6 +57,28 @@ class TestController(BaseTestController):
         assert isinstance(e, etree._ElementTree)
         out = ser.from_xml(e)
         assert isinstance(out, InspireMetadata)
+        #errors = out.validate()
+        #assert not errors
+
+    def _validate_with_xsd(self, obj, xml_file):
+        ser = xml_serializer_for_object(obj)
+        xsd = ser.to_xsd()
+
+        #path = os.path.dirname(os.path.dirname('/home/ckaner/xsd_files/1'))
+        #path = os.path.dirname(os.path.dirname(__file__))
+        #data_file = os.path.join(path, DATA_FILE)
+
+        #print 'validating'
+        xml = etree.parse(xml_file)
+        #print 'validation result:'
+        #assert xsd.validate(xml)
+        if not xsd.validate(xml):
+            log = xsd.error_log
+            #print log
+            raise TypeError('Invalid XML\nerrors:\n',log)
+
+        #out = ser.from_xml(e)
+        #assert isinstance(out, InspireMetadata)
         #errors = out.validate()
         #assert not errors
 

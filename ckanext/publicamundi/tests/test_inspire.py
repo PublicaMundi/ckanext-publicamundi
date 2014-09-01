@@ -9,7 +9,6 @@ from ckanext.publicamundi.lib.metadata.types.common import *
 from ckanext.publicamundi.lib.metadata.base import *
 from ckanext.publicamundi.tests.helpers import assert_faulty_keys
 from ckanext.publicamundi.tests import fixtures
-
 #
 # INSPIRE (faulty) fixtures
 #
@@ -28,7 +27,7 @@ insp11 = InspireMetadata(
             ThesaurusTerms(
                 terms=["atmosphere"],
                 thesaurus=fixtures.thesaurus_gemet_concepts
-            ),            
+            ),
             ThesaurusTerms(
                 terms=["land-cover", "land-use"],
                 thesaurus=fixtures.thesaurus_gemet_inspire_data_themes,
