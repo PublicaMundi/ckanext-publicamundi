@@ -102,10 +102,15 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         except:
             pass
         return s
+    
+    @classmethod
+    def dataset_types(cls):
+        '''Provide a dict of dataset types'''
+        return dataset_types
 
     @classmethod
     def dataset_type_options(cls):
-        '''Provide options for dataset-type (needed for select boxes)'''
+        '''Provide options for dataset-type (needed for select inputs)'''
         for name, spec in dataset_types.items():
             yield { 'value': name, 'text': spec['title'] }
 
@@ -118,6 +123,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         return {
             'publicamundi_helloworld': self.publicamundi_helloworld,
             'random_name': random_name,
+            'dataset_types': self.dataset_types,
             'dataset_type_options': self.dataset_type_options,
             'organization_list_objects': self.organization_list_objects,
             'organization_dict_objects': self.organization_dict_objects,
@@ -185,7 +191,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
     def _modify_package_schema(self, schema):
         log1.info('_modify_package_schema(): Building schema ...')
-
+        
         import ckanext.publicamundi.lib.metadata.validators as publicamundi_validators
 
         schema['dataset_type'] = [
@@ -222,7 +228,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         schema['__before'].insert(-1, publicamundi_validators.dataset_preprocess_edit)
 
-        if not schema.get('__after'):
+        if not schema.has_key('__after'):
             schema['__after'] = []
         schema['__after'].append(publicamundi_validators.dataset_postprocess_edit)
         schema['__after'].append(publicamundi_validators.dataset_validate)
@@ -230,11 +236,16 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         return schema
 
     def create_package_schema(self):
+        log1.info('create_package_schema(): %s' %(toolkit.request.params))
+        
         schema = super(DatasetForm, self).create_package_schema()
         schema = self._modify_package_schema(schema)
         return schema
 
     def update_package_schema(self):
+        log1.info('update_package_schema(): %s...' %(toolkit.request.params))
+        #assert False
+        
         schema = super(DatasetForm, self).update_package_schema()
         schema = self._modify_package_schema(schema)
         return schema

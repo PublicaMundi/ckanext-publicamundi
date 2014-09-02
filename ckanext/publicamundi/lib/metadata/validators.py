@@ -19,12 +19,15 @@ def dataset_postprocess_read(key, data, errors, context):
     logger.debug('Post-processing dataset for reading')
     # Prepare computed fields, reorganize structure etc.
     data[('baz_view',)] = u'I am a read-only Baz'
-    #raise Exception('Break (postprocess read)')
+    raise Exception('Break (postprocess read)')
     pass
 
 def dataset_postprocess_edit(key, data, errors, context):
     assert key[0] == '__after', 'This validator can only be invoked in the __after stage'
     logger.debug('Post-processing dataset for editing')
+    extras = data.get(('extras',))
+    extras.append({
+        'key': 'faz.home', 'value': u'Nowhere Land' })
     #raise Exception('Break (postprocess edit)')
     pass
 

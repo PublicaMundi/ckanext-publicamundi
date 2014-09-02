@@ -47,8 +47,16 @@ input[type="tel"] {
     font-size: 12px;
 }
 
+.select2-container .select2-choice,
 .select2-container-multi .select2-choices {
     border-radius: 1px;
+    line-height:28px;
+    height:28px;
+}
+
+.select2-container-multi .select2-choices {
+    background: none;
+    box-shadow: 0px;
 }
 
 .select2-container-multi .select2-choices .select2-search-choice {
@@ -67,8 +75,15 @@ input[type="tel"] {
     cursor: pointer;
 }
 
-
 .bootstrap-datetimepicker-widget td, 
 .bootstrap-datetimepicker-widget th {
     border-radius: 2px;
 }
+
+.form-horizontal .info-inline {
+    width: 235px;
+}
+
+.form-horizontal .control-group .controls > div.display {
+    padding-top: 5px;
+} 

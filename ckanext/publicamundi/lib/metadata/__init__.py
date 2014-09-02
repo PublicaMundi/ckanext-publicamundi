@@ -27,15 +27,15 @@ from ckanext.publicamundi.lib.metadata.widgets import \
 dataset_types = {
     'ckan': {
         'title': 'CKAN',
-        'cls': CkanMetadata,
+        'schema': ICkanMetadata,
     },
     'inspire': {
         'title': 'INSPIRE',
-        'cls': InspireMetadata,
+        'schema': InspireMetadata,
     },
-    'fgdc': {
-        'title': 'FGDC',
-        'cls': None,
+    'foo': {
+        'title': 'Foo',
+        'schema': IFoo,
     },
 }
 

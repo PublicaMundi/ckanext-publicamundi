@@ -1,66 +1,127 @@
-{% ckan_extends %}
-
-{% import "macros/form.html" as form %}
-
-{# Note: 
- Remove 'free extras' from the package form. If you're using convert_{to/from}_extras() as we are 
- with our 'music_description' field below then you need to remove free extras from the form, or editing 
- your custom field won't work!! 
-#}
-
-{% block custom_fields %}
-{% endblock %}
-
+{% import 'macros/form.html' as form %}
 
 {% block package_metadata_fields %}
-  
-  {#
-  {% if data.get('state') == 'draft' %}
-  {{ form.select('dataset_type', 
-        label = _('Dataset Type'), 
-        options = h.dataset_type_options(), 
-        selected = data.get('dataset_type', 'ckan'), 
-        attrs = { 'data-module': 'no-autocomplete' }) 
-  }}
-  {% else %}
-  {{ form.hidden('dataset_type', data.get('dataset_type')) }}
-  <div><dt>Dataset Type:</dt><dd>{{ data.get('dataset_type') }}</dd></div>
-  {% endif %}
-  #}
 
-  
-  
-  {{ form.input('baz', 
+{{ 
+    form.input('baz', 
         label=_('Baz'), 
         id='field-baz', 
         placeholder=_('a wonderfull thing'), 
         value=data.get('baz'), 
         error=errors.get('baz'), 
         classes=['control-medium']) 
-  }}
-   
-  {{ form.input('foo.0.baz', 
+}}
+
+{{ 
+    form.input('foo.0.baz', 
         label=_('Foo/Baz'), 
         id='field-foo.0.baz', 
         placeholder=_('a wonderfull thing'), 
         value=data.get('foo.0.baz'), 
         error=errors.get('foo.0.baz'), 
         classes=['control-medium']) 
-  }}
- 
-  {#
-  {% set music_genres = data.get('foo', [None]) %}
-  {{ form.select('foo', 
+}}
+
+{#
+{% set music_genres = data.get('foo', [None]) %}
+{{ 
+    form.select('foo', 
         label = _('Foo'), 
         options = h.foo_options(), 
         selected = foo.0, 
         attrs = { 'data-module': 'no-autocomplete' }) 
-  }}
-  #}
-  
-  {{ super() }}
+}}
+#}
 
+{% block package_metadata_fields_url %}
+
+{{ 
+    form.input('url', 
+        label=_('Source'), 
+        id='field-url', 
+        placeholder=_('http://example.com/dataset.json'), 
+        value=data.url, 
+        error=errors.url, 
+        classes=['control-medium']) 
+}}
+
+{% endblock %} {# package_metadata_fields_url #}
+
+{% block package_metadata_fields_version %}
+    
+{{ 
+    form.input('version', 
+        label=_('Version'), 
+        id='field-version', 
+        placeholder=_('1.0'), 
+        value=data.version, 
+        error=errors.version, 
+        classes=['control-medium']) 
+}}
+
+{% endblock %} {# package_metadata_fields_version #}
+
+{% block package_metadata_author %}
+
+{{ 
+    form.input('author', 
+        label=_('Author'), 
+        id='field-author', 
+        placeholder=_('Joe Bloggs'), 
+        value=data.author, 
+        error=errors.author, 
+        classes=['control-medium'])         
+}}
+
+{{ 
+    form.input('author_email', 
+        label=_('Author Email'), 
+        id='field-author-email', 
+        placeholder=_('joe@example.com'), 
+        value=data.author_email, 
+        error=errors.author_email, 
+        classes=['control-medium']) 
+}} 
+
+{% endblock %} {# package_metadata_author #}
+
+{% block package_metadata_fields_maintainer %}
+
+{{ 
+    form.input('maintainer', 
+        label=_('Maintainer'), 
+        id='field-maintainer', 
+        placeholder=_('Joe Bloggs'), 
+        value=data.maintainer, 
+        error=errors.maintainer, 
+        classes=['control-medium']) 
+}}
+
+{{ 
+    form.input('maintainer_email', 
+        label=_('Maintainer Email'), 
+        id='field-maintainer-email', 
+        placeholder=_('joe@example.com'), 
+        value=data.maintainer_email, 
+        error=errors.maintainer_email, 
+        classes=['control-medium']) 
+}}
+
+{% endblock %} {# package_metadata_fields_maintainer #}
+
+{% block package_metadata_fields_custom %}
+
+{# Note: 
+  Remove free extras from the package form. If you're using convert_{to/from}_extras() as we are 
+  with our 'music_description' field below then you need to remove free extras from the form, or editing 
+  your custom field won't work!!   
+#}
+{% block custom_fields %}
+{# {% snippet 'snippets/custom_form_fields.html', extras=data.extras, errors=errors, limit=3 %} #}
+{% endblock %}
+{% endblock %} {# package_metadata_fields_custom #}
+
+{% block dataset_fields %}
 {% endblock %}
 
-
-{% resource 'ckanext-publicamundi/datepicker' %}
+{% endblock %} {# package_metadata_fields #}

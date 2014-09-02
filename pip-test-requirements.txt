@@ -1,2 +1,4 @@
 nose
 pyquery
+docopt
+-e git+https://github.com/ckan/ckanapi#egg=ckanapi
