@@ -95,7 +95,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
     def to_xsd(self, wrap_into_schema=False, type_prefix='', annotate=False):
         '''Return the XSD document as an etree Element.
         '''
-        data_file = os.path.join(os.path.dirname(__file__), 'isotc211.org-2005/xsd/gmd/metadataEntity.xsd')
+        data_file = os.path.join(os.path.dirname(__file__), 'xsd/isotc211.org-2005/gmd/metadataEntity.xsd')
         #data_file = os.path.join(path1, DATA_FILE)
 
         xsd_doc = etree.parse(data_file)
@@ -177,11 +177,11 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
 
                 # TODO thes_split[1] (=version) can be later used in a get_by_title_and_version to test current thesaurus version
                 thes_title = thes_split[0]
+                if inspire_vocabularies.get_by_title(thes_title):
+                    kw = ThesaurusTerms(thesaurus = Thesaurus.make(inspire_vocabularies.munge('Keywords-' + thes_title)),
+                        terms = it['keywords'])
 
-                kw = ThesaurusTerms(thesaurus = Thesaurus.make(inspire_vocabularies.munge('Keywords-' + thes_title)),
-                    terms = it['keywords'])
-
-                keywords_list.append(kw)
+                    keywords_list.append(kw)
         if md.identification.temporalextent_start or md.identification.temporalextent_end:
             temporal_extent = [TemporalExtent(
                 start = to_date(md.identification.temporalextent_start),

@@ -23,19 +23,25 @@ from ckanext.publicamundi.lib.metadata.xml_serializers import xml_serializer_for
 # Tests
 
 class TestController(BaseTestController):
-    #@nose.tools.istest
-    #def test_to_xml(self):
-    #    yield self._to_xml, fixtures.inspire1, '/tmp/inspire1.xml'
+    @nose.tools.istest
+    def test_to_xml(self):
+        yield self._to_xml, fixtures.inspire1, '/tmp/inspire1.xml'
 
-    #@nose.tools.istest
-    #def test_from_xml(self):
-    #    yield self._from_xml, '../samples/3.xml'
-    #    yield self._from_xml, '../samples/aktogrammh.xml'
+    @nose.tools.istest
+    def test_from_xml(self):
+        # 3.xml contains wrong thesaurus name
+        yield self._from_xml, 'tests/samples/3.xml', set(['keywords'])
+        # aktogrammh.xml fails on several fields during validation
+        yield self._from_xml, 'tests/samples/aktogrammh.xml', set(['languagecode', 'locator', 'contact', 'responsible_party', 'identifier', 'resource_language'])
+        # dhmosia_kthria.xml fails on several fields during validation
+        yield self._from_xml, 'tests/samples/dhmosia_kthria.xml', set(['languagecode', 'locator', 'contact', 'responsible_party', 'identifier', 'resource_language'])
+        # full.xml fails during etree parse, why?
+        yield self._from_xml, 'tests/samples/full.xml', set([])
 
     @nose.tools.istest
     def test_to_xsd(self):
-        yield self._validate_with_xsd, fixtures.inspire1, '../samples/3.xml'
-        yield self._validate_with_xsd, fixtures.inspire1, '../samples/aktogrammh.xml'
+        yield self._validate_with_xsd, fixtures.inspire1, 'tests/samples/3.xml', False
+        yield self._validate_with_xsd, fixtures.inspire1, 'tests/samples/aktogrammh.xml', True
 
     @with_request_context('publicamundi-tests', 'index')
     def _to_xml(self, obj, outfile):
@@ -50,17 +56,20 @@ class TestController(BaseTestController):
         fp.write(iso_xml)
         fp.close()
 
-    def _from_xml(self, infile):
+    def _from_xml(self, infile, expected_errs=[]):
         ser = xml_serializer_for_object(InspireMetadata())
 
         e = etree.parse(infile)
         assert isinstance(e, etree._ElementTree)
         out = ser.from_xml(e)
         assert isinstance(out, InspireMetadata)
+        assert_faulty_keys(out,
+        expected_errs)
+
         #errors = out.validate()
         #assert not errors
 
-    def _validate_with_xsd(self, obj, xml_file):
+    def _validate_with_xsd(self, obj, xml_file, expected_valid):
         ser = xml_serializer_for_object(obj)
         xsd = ser.to_xsd()
 
@@ -72,7 +81,7 @@ class TestController(BaseTestController):
         xml = etree.parse(xml_file)
         #print 'validation result:'
         #assert xsd.validate(xml)
-        if not xsd.validate(xml):
+        if not expected_valid == xsd.validate(xml):
             log = xsd.error_log
             #print log
             raise TypeError('Invalid XML\nerrors:\n',log)
