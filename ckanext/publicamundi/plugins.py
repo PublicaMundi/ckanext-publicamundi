@@ -16,6 +16,7 @@ import ckan.logic as logic
 import ckanext.publicamundi.model as publicamundi_model
 import ckanext.publicamundi.lib.util as publicamundi_util
 import ckanext.publicamundi.lib.metadata as publicamundi_metadata
+import ckanext.publicamundi.lib.metadata.validators as publicamundi_validators
 import ckanext.publicamundi.lib.actions as publicamundi_actions
 
 from ckanext.publicamundi.lib.util import object_to_json, random_name
@@ -190,39 +191,40 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         return []
 
     def _modify_package_schema(self, schema):
-        log1.info('_modify_package_schema(): Building schema ...')
-        
-        import ckanext.publicamundi.lib.metadata.validators as publicamundi_validators
-
+        log1.debug(' ** _modify_package_schema(): Building schema ...')
+         
         schema['dataset_type'] = [
             toolkit.get_validator('default')('ckan'),
             toolkit.get_converter('convert_to_extras'),
             publicamundi_validators.is_dataset_type,
-        ];
-
+        ]
+       
         # Add field-based validation processors
 
-        field_name = 'baz'
-        field = publicamundi_metadata.IFoo.get(field_name)
-        if field.default:
-            x1 = toolkit.get_validator('default')(field.default)
-        elif field.defaultFactory:
-            x1 = toolkit.get_validator('default')(field.defaultFactory())
-        elif not field.required:
-            x1 = toolkit.get_validator('ignore_missing')
-        else:
-            x1 = toolkit.get_validator('not_empty')
-
-        x2 = publicamundi_validators.get_field_validator(field)
-        x3 = toolkit.get_converter('convert_to_extras')
-
-        schema[field_name] = [x1, x2, x3]
-
-
-        #schema['foo.0.baz'] = [
-        #    toolkit.get_converter('convert_to_extras')
-        #]
-
+#        field_name = 'baz'
+#        field = publicamundi_metadata.IFoo.get(field_name)
+#        if field.default:
+#            x1 = toolkit.get_validator('default')(field.default)
+#        elif field.defaultFactory:
+#            x1 = toolkit.get_validator('default')(field.defaultFactory())
+#        elif not field.required:
+#            x1 = toolkit.get_validator('ignore_missing')
+#        else:
+#            x1 = toolkit.get_validator('not_empty')
+#
+#        x2 = publicamundi_validators.get_field_validator(field)
+#        x3 = toolkit.get_converter('convert_to_extras')
+#
+#        schema[field_name] = [x1, x2, x3]
+#
+        schema['foo.baz'] = [
+            toolkit.get_validator('ignore_missing'),
+            toolkit.get_converter('convert_to_extras')
+        ]
+        schema['inspire.identifier'] = [
+            toolkit.get_validator('ignore_missing'),
+            toolkit.get_converter('convert_to_extras')
+        ]
 
         # Add before/after validation processors
 
@@ -236,26 +238,21 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         return schema
 
     def create_package_schema(self):
-        log1.info('create_package_schema(): %s' %(toolkit.request.params))
-        
+        log1.debug(' ** create_package_schema(): Building schema ...')
         schema = super(DatasetForm, self).create_package_schema()
         schema = self._modify_package_schema(schema)
         return schema
 
     def update_package_schema(self):
-        log1.info('update_package_schema(): %s...' %(toolkit.request.params))
-        #assert False
-        
+        log1.debug(' ** update_package_schema(): Building schema ...')
         schema = super(DatasetForm, self).update_package_schema()
         schema = self._modify_package_schema(schema)
         return schema
 
     def show_package_schema(self):
         schema = super(DatasetForm, self).show_package_schema()
-
-        import ckanext.publicamundi.lib.metadata.validators as publicamundi_validators
         
-        log1.info(' ** show_package_schema(): Building schema ...')
+        log1.debug(' ** show_package_schema(): Building schema ...')
 
         # Don't show vocab tags mixed in with normal 'free' tags
         # (e.g. on dataset pages, or on the search page)
@@ -264,18 +261,19 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         schema.update({
             'dataset_type': [
                 toolkit.get_converter('convert_from_extras'),
+                toolkit.get_validator('ignore_missing'),
             ],
-            'foo': [
-                toolkit.get_converter('convert_from_tags')('foo'),
+            'foo.baz': [
+                toolkit.get_converter('convert_from_extras'),
                 toolkit.get_validator('ignore_missing')
             ],
-            'baz': [
+            'inspire.identifier': [
                 toolkit.get_converter('convert_from_extras'),
                 toolkit.get_validator('ignore_missing')
             ],
         })
 
-        if not schema.get('__after'):
+        if not schema.has_key('__after'):
             schema['__after'] = []
         schema['__after'].append(publicamundi_validators.dataset_postprocess_read)
 

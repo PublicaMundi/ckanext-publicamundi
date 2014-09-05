@@ -2,6 +2,8 @@
 
 {% block package_metadata_fields %}
 
+{% set dataset_type = data.get('dataset_type', 'none') %}
+
 {{ 
     form.input('baz', 
         label=_('Baz'), 
@@ -12,15 +14,29 @@
         classes=['control-medium']) 
 }}
 
+{% if dataset_type == 'foo' %}
 {{ 
-    form.input('foo.0.baz', 
+    form.input('foo.baz', 
         label=_('Foo/Baz'), 
-        id='field-foo.0.baz', 
+        id='field-foo.baz', 
         placeholder=_('a wonderfull thing'), 
-        value=data.get('foo.0.baz'), 
-        error=errors.get('foo.0.baz'), 
-        classes=['control-medium']) 
+        value=data.get('foo.baz'), 
+        error=errors.get('foo.baz'), 
+        classes=['control-medium'])
 }}
+{% endif %}
+
+{% if dataset_type == 'inspire' %}
+{{
+     form.input('inspire.identifier', 
+        label=_('Inspire/Id'), 
+        id='field-inspire.identifier', 
+        placeholder=_('a wonderfull thing'), 
+        value=data.get('inspire.identifier'), 
+        error=errors.get('inspire.identifier'), 
+        classes=['control-medium'])        
+}}
+{% endif %}
 
 {#
 {% set music_genres = data.get('foo', [None]) %}

@@ -28,14 +28,17 @@ dataset_types = {
     'ckan': {
         'title': 'CKAN',
         'schema': ICkanMetadata,
+        'key_prefix': None, 
     },
     'inspire': {
         'title': 'INSPIRE',
-        'schema': InspireMetadata,
+        'schema': IInspireMetadata,
+        'key_prefix': 'inspire', 
     },
     'foo': {
         'title': 'Foo',
         'schema': IFoo,
+        'key_prefix': 'foo', 
     },
 }
 
