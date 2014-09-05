@@ -1,12 +1,15 @@
 import datetime
 import pickle
+import itertools
 import zope.interface
 import zope.schema
 import zope.schema.interfaces
+from itertools import chain
 
 from ckanext.publicamundi.lib.util import raise_for_stub_method
 from ckanext.publicamundi.lib.metadata import adapter_registry
-from ckanext.publicamundi.lib.metadata.ibase import ISerializer, IObject
+from ckanext.publicamundi.lib.metadata.ibase import \
+    IObject, ISerializer, IKeyTupleSerializer
 
 __all__ = [
     'field_serialize_adapter', 
@@ -36,7 +39,7 @@ def object_serialize_adapter(required_iface):
 
 def key_tuple_serialize_adapter():
     def decorate(cls):
-        adapter_registry.register([], ISerializer, 'serialize-key', cls)
+        adapter_registry.register([], IKeyTupleSerializer, 'serialize-key', cls)
         return cls
     return decorate
 
@@ -45,7 +48,7 @@ def key_tuple_serialize_adapter():
 def serializer_for_key_tuple():
     '''Get a proper serializer for the tuple-typed keys of a dict.
     '''
-    serializer = adapter_registry.queryMultiAdapter([], ISerializer, 'serialize-key')
+    serializer = adapter_registry.queryMultiAdapter([], IKeyTupleSerializer, 'serialize-key')
     return serializer
 
 def serializer_for_field(field):
@@ -208,24 +211,27 @@ class KeyTupleSerializer(BaseSerializer):
 
     glue = '.'
     
-    prefix = ''
+    _prefix = None
+
+    @property
+    def prefix(self):
+        return self._prefix 
     
-    suffix = ''
+    @prefix.setter
+    def prefix(self, value):
+        assert isinstance(value, str) and value.find(self.glue) < 0
+        self._prefix = value
 
     def dumps(self, l):
         assert isinstance(l, tuple) or isinstance(l, list)
-        s = self.prefix
-        s += self.glue.join(map(str, l))
-        s += self.suffix
-        return s
+        q = chain([self._prefix], l) if self._prefix else iter(l)
+        return self.glue.join(map(str, q))
 
     def loads(self, s):
-        if not s.startswith(self.prefix) or not s.endswith(self.suffix):
-            raise ValueError('The key dump is malformed')
-        if self.prefix:
-            s = s[len(self.prefix):]
-        if self.suffix:
-            s = s[:-len(self.suffix)]
-        l = tuple(str(s).split(self.glue))
-        return l
+        q = str(s).split(self.glue)
+        if self._prefix:
+            prefix = q.pop(0)
+            if not prefix == self._prefix:
+                raise ValueError('The key dump is malformed')
+        return tuple(q)
 

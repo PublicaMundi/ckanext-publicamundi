@@ -26,6 +26,24 @@ def test_fields():
     for p in it:
         yield p
 
+def test_key_tuples():
+    '''Test key-tuple serializer'''  
+    
+    x = fixtures.foo1
+    
+    ser = serializer_for_key_tuple()
+    for kt, field in x.get_flattened_fields().items():
+        kt1 = tuple(map(str, kt))
+        k = ser.dumps(kt1)
+        assert ser.loads(k) == kt1
+    
+    ser = serializer_for_key_tuple()
+    ser.prefix = 'boo'
+    for kt, field in x.get_flattened_fields().items():
+        kt1 = tuple(map(str, kt))
+        k = ser.dumps(kt1)
+        assert ser.loads(k) == kt1
+
 def _test_fixture_fields(fixture_name):
     x = getattr(fixtures, fixture_name)
     d = x.to_dict(flat=True)
