@@ -95,11 +95,16 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
     def to_xsd(self, wrap_into_schema=False, type_prefix='', annotate=False):
         '''Return the XSD document as an etree Element.
         '''
-        data_file = os.path.join(os.path.dirname(__file__), 'xsd/isotc211.org-2005/gmd/metadataEntity.xsd')
-        #data_file = os.path.join(path1, DATA_FILE)
 
-        xsd_doc = etree.parse(data_file)
-        xsd = etree.XMLSchema(xsd_doc)
+        # Note We do not support providing parts of it 
+        assert wrap_into_schema
+        
+        here = os.path.dirname(__file__)
+        xsd_file = os.path.join(here, 'xsd/isotc211.org-2005/gmd/metadataEntity.xsd')
+        
+        xsd = None
+        with open(xsd_file, 'r') as fp:
+            xsd = etree.fromstring(fp.read())
         return xsd
 
     def dumps(self, o=None):
@@ -108,15 +113,6 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         '''
 
         import ckan.plugins as p
-
-        #path = os.path.dirname(os.path.abspath(__file__))
-        #path = os.path.dirname(os.path.abspath('ckanext'))
-        #temp_file = os.path.join(path, 'inspire_iso.xml')
-        #temp_file = 'inspire_iso.xml'
-
-        #data = None
-        #with open(temp_file, 'r') as fp:
-        #data = json.loads(fp.read())
 
         if o is None:
             o = self.obj
@@ -155,7 +151,6 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
                     role = it.role))
             return result
 
-        #md = MD_Metadata(etree.parse(infile))
         md = MD_Metadata(e)
 
         datestamp = to_date(md.datestamp)
@@ -169,19 +164,17 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
 
         keywords_list = []
         for it in md.identification.keywords:
-            #print 'thesauri'
-            #print get_titles()
             thes_title = it['thesaurus']['title']
             if thes_title is not None:
                 thes_split = thes_title.split(',')
-
-                # TODO thes_split[1] (=version) can be later used in a get_by_title_and_version to test current thesaurus version
+                # TODO thes_split[1] (=version) can be used in a get_by_title_and_version() 
+                # to enforce a specific thesaurus version.
                 thes_title = thes_split[0]
                 if inspire_vocabularies.get_by_title(thes_title):
-                    kw = ThesaurusTerms(thesaurus = Thesaurus.make(inspire_vocabularies.munge('Keywords-' + thes_title)),
-                        terms = it['keywords'])
-
+                    thes = Thesaurus.make(inspire_vocabularies.munge('Keywords-' + thes_title)),
+                    kw = ThesaurusTerms(thesaurus=thes, terms=it['keywords'])
                     keywords_list.append(kw)
+
         if md.identification.temporalextent_start or md.identification.temporalextent_end:
             temporal_extent = [TemporalExtent(
                 start = to_date(md.identification.temporalextent_start),
@@ -267,10 +260,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
             sblat = float(md.identification.extent.boundingBox.miny),
             eblng = float(md.identification.extent.boundingBox.maxx),
             wblng = float(md.identification.extent.boundingBox.minx))]
-        #print 'bbox = '
-        #print obj.bounding_box
-        #print obj.bounding_box[0].nblat
-        #print md.identification.extent.boundingBox.maxy
+        
         if md.identification.temporalextent_start:
             obj.temporal_extent = temporal_extent
         obj.creation_date = creation_date

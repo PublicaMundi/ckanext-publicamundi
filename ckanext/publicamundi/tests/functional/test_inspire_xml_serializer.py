@@ -71,20 +71,17 @@ class TestController(BaseTestController):
 
     def _validate_with_xsd(self, obj, xml_file, expected_valid):
         ser = xml_serializer_for_object(obj)
-        xsd = ser.to_xsd()
+        xsd = ser.to_xsd(wrap_into_schema=True)
+        xsd_validator = etree.XMLSchema(xsd) 
 
         #path = os.path.dirname(os.path.dirname('/home/ckaner/xsd_files/1'))
         #path = os.path.dirname(os.path.dirname(__file__))
         #data_file = os.path.join(path, DATA_FILE)
 
-        #print 'validating'
         xml = etree.parse(xml_file)
-        #print 'validation result:'
-        #assert xsd.validate(xml)
-        if not expected_valid == xsd.validate(xml):
-            log = xsd.error_log
-            #print log
-            raise TypeError('Invalid XML\nerrors:\n',log)
+        if not expected_valid == xsd_validator.validate(xml):
+            errors = xsd_validator.error_log
+            raise TypeError('Invalid XML\nerrors:\n', errors)
 
         #out = ser.from_xml(e)
         #assert isinstance(out, InspireMetadata)
