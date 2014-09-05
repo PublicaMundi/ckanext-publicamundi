@@ -9,7 +9,6 @@ from ckanext.publicamundi.lib.metadata.types.common import *
 from ckanext.publicamundi.lib.metadata.base import *
 from ckanext.publicamundi.tests.helpers import assert_faulty_keys
 from ckanext.publicamundi.tests import fixtures
-
 #
 # INSPIRE (faulty) fixtures
 #
@@ -28,7 +27,7 @@ insp11 = InspireMetadata(
             ThesaurusTerms(
                 terms=["atmosphere"],
                 thesaurus=fixtures.thesaurus_gemet_concepts
-            ),            
+            ),
             ThesaurusTerms(
                 terms=["land-cover", "land-use"],
                 thesaurus=fixtures.thesaurus_gemet_inspire_data_themes,
@@ -229,6 +228,21 @@ insp7.keywords = [
     ),
 ]
 
+# Wrong Thesaurus Name Provided
+insp8 = copy.deepcopy(fixtures.inspire1)
+insp8.keywords = [
+    ThesaurusTerms(
+        terms=["buildings", "addresses"],
+        thesaurus= Thesaurus(
+            title = u'GEMET INSPIRE Themes',
+            name = 'keywords-gemet-wrong-inspire-themes',
+            reference_date = datetime.date(2014, 1, 1),
+            version = 1.0,
+            date_type = 'creation'
+            )
+        ),
+]
+
 #
 # Tests
 #
@@ -274,6 +288,11 @@ def test_insp7():
     assert_faulty_keys(insp7,
         expected_keys=set(['keywords']))
 
+def test_insp8():
+    '''Wrong Thesaurus name provided'''
+    assert_faulty_keys(insp8,
+        expected_keys=set(['keywords']))
+
 def test_fixtures_inspire1():
     '''Everything should be ok'''
     assert_faulty_keys(fixtures.inspire1)
@@ -287,6 +306,7 @@ if __name__ == '__main__':
     #test_insp5()
     #test_insp6()
     test_insp7()
+    test_insp8()
     #test_fixtures_inspire1()
     pass
 

@@ -16,6 +16,7 @@ thesaurus_gemet_concepts = Thesaurus(
     title = u'GEMET Concepts',
     name = 'keywords-gemet-concepts',
     reference_date = datetime.date(2014, 1, 1),
+    version = 1.0,
     date_type = 'creation'
 )
 
@@ -24,6 +25,7 @@ thesaurus_baz = Thesaurus(
     title = u'Baz',
     name = 'keywords-baz',
     reference_date = datetime.date(2014, 1, 1),
+    version = 1.0,
     date_type = 'creation'
 )
 

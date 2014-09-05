@@ -65,6 +65,7 @@ thesaurus_gemet_concepts = Thesaurus(
     title = u'GEMET Concepts',
     name = 'keywords-gemet-concepts',
     reference_date = datetime.date(2014, 1, 1),
+    #version = 1.0,
     date_type = 'creation'
 )
 
@@ -72,13 +73,15 @@ thesaurus_gemet_themes = Thesaurus(
     title = u'GEMET Themes',
     name = 'keywords-gemet-themes',
     reference_date = datetime.date(2014, 5, 1),
+    #version = 1.0,
     date_type = 'creation'
 )
 
 thesaurus_gemet_inspire_data_themes = Thesaurus(
-    title = u'GEMET INSPIRE Data Themes',
-    name = 'keywords-gemet-inspire-data-themes',
+    title = u'GEMET INSPIRE Themes',
+    name = 'keywords-gemet-inspire-themes',
     reference_date = datetime.date(2014, 6, 1),
+    version = 1.0,
     date_type = 'publication'
 )
 
@@ -105,7 +108,7 @@ inspire1 = InspireMetadata(
         ThesaurusTerms(
             terms=["air", "agriculture", "climate"],
             thesaurus=thesaurus_gemet_themes
-        ),    
+        ),
         ThesaurusTerms(
             terms=["buildings", "addresses"],
             thesaurus=thesaurus_gemet_inspire_data_themes,
