@@ -14,6 +14,12 @@ class ISerializer(zope.interface.Interface):
         context (e.g. an adaptee object).
         '''
 
+class IKeyTupleSerializer(ISerializer):
+
+    prefix = zope.schema.NativeString(required=False)
+    
+    glue = zope.schema.NativeString(required=True, default='.')
+
 class IXmlSerializer(ISerializer):
     
     target_namespace = zope.schema.URI(required = True)
