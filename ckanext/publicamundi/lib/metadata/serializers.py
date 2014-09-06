@@ -219,8 +219,9 @@ class KeyTupleSerializer(BaseSerializer):
     
     @prefix.setter
     def prefix(self, value):
-        assert isinstance(value, str) and value.find(self.glue) < 0
-        self._prefix = value
+        if value is not None:
+            assert isinstance(value, str) and value.find(self.glue) < 0
+            self._prefix = value
 
     def dumps(self, l):
         assert isinstance(l, tuple) or isinstance(l, list)
