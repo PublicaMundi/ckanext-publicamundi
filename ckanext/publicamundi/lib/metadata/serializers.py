@@ -45,10 +45,12 @@ def key_tuple_serialize_adapter():
 
 # Utilities
 
-def serializer_for_key_tuple():
+def serializer_for_key_tuple(key_prefix=None):
     '''Get a proper serializer for the tuple-typed keys of a dict.
     '''
     serializer = adapter_registry.queryMultiAdapter([], IKeyTupleSerializer, 'serialize-key')
+    if key_prefix is not None:
+        serializer.prefix = key_prefix
     return serializer
 
 def serializer_for_field(field):
@@ -225,8 +227,9 @@ class KeyTupleSerializer(BaseSerializer):
     
     @prefix.setter
     def prefix(self, value):
-        assert isinstance(value, str) and value.find(self.glue) < 0
-        self._prefix = value
+        if value is not None:
+            assert isinstance(value, basestring) and value.find(self.glue) < 0
+            self._prefix = str(value)
 
     def dumps(self, l):
         assert isinstance(l, tuple) or isinstance(l, list)

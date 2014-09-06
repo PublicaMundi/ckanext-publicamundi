@@ -44,7 +44,8 @@ class IThesaurusTerms(IObject):
         title = u'Terms',
         value_type = zope.schema.NativeString(title=u'Term'),
         required = True,
-        min_length = 1)
+        min_length = 1,
+        max_length = 12)
     
     @zope.interface.invariant
     def check_terms(obj):
@@ -70,6 +71,7 @@ class IInspireMetadata(IObject):
         description = u"This is the description of the organisation responsible for the creation and maintenance of the metadata. This description shall include:   - the name of the organisation as free text, - a contact e-mail address as a character string.",
         required = True,
         min_length = 1,
+        max_length = 5,
         value_type = zope.schema.Object(IResponsibleParty,
             title = u'Point of Contact',
             required = True))
@@ -101,6 +103,7 @@ class IInspireMetadata(IObject):
         description = u"A value uniquely identifying the resource. The value domain of this metadata element is a mandatory character string code, generally assigned by the data owner, and a character string namespace uniquely identifying the context of the identifier code (for example, the data owner).",
         required = True,
         min_length = 1,
+        max_length = 5,
         value_type = zope.schema.TextLine(
             title = u'Identifier',
             min_length = 5 ))
@@ -115,6 +118,7 @@ class IInspireMetadata(IObject):
         description = u"The resource locator defines the link(s) to the resource and/or the link to additional information about the resource. The value domain of this metadata element is a character string, commonly expressed as uniform resource locator (URL).",
         required = True,
         min_length = 1,
+        max_length = 8,
         value_type = zope.schema.URI(
             title = u'Linkage',
             required = True))
@@ -123,6 +127,7 @@ class IInspireMetadata(IObject):
         title = u'Resource Languages',
         description = u"The language(s) used within the resource. The value domain of this metadata element is limited to the languages defined in ISO 639-2.",
         required = False,
+        max_length = 5,
         value_type = zope.schema.Choice(
             title = u'Resource Language',
             vocabulary = inspire_vocabularies.get_by_name('languages').get('vocabulary'),))
@@ -136,6 +141,7 @@ class IInspireMetadata(IObject):
         description = u"The topic category is a high-level classification scheme to assist in the grouping and topic-based search of available spatial data resources. The value domain of this metadata element is defined in Part D.2.",
         required = True,
         min_length = 1,
+        max_length = 12,
         value_type = zope.schema.Choice(
             title = u'Topic Category',
             vocabulary = inspire_vocabularies.get_by_name('topic-category').get('vocabulary'),))
@@ -147,6 +153,7 @@ class IInspireMetadata(IObject):
         description = u'The keyword value is a commonly used word, formalised word or phrase used to describe the subject. While the topic category is too coarse for detailed queries, keywords help narrowing a full text search and they allow for structured keyword search.',
         required = True,
         min_length = 1,
+        max_length = 12,
         value_type = zope.schema.Object(
             IThesaurusTerms,
             title = u'Keyword'))
@@ -169,8 +176,9 @@ class IInspireMetadata(IObject):
         description = u"This is the extent of the resource in the geographic space, given as a bounding box. The bounding box shall be expressed with westbound and eastbound longitudes, and southbound and northbound latitudes in decimal degrees, with a precision of at least two decimals.",
         required = True,
         min_length = 1,
+        max_length = 8,
         value_type = zope.schema.Object(IGeographicBoundingBox,
-        title = u'Geographic Bounding Box'))
+            title = u'Geographic Bounding Box'))
 
     # Temporal 
 
@@ -178,6 +186,7 @@ class IInspireMetadata(IObject):
         title = u'Temporal Extent',
         description = u"The temporal extent defines the time period covered by the content of the resource. This time period may be expressed as any of the following: - an individual date, - an interval of dates expressed through the starting date and end date of the interval,- a mix of individual dates and intervals of dates.",
         required = False,
+        max_length = 4,
         value_type = zope.schema.Object(ITemporalExtent,
             title = u'Temporal extent'))
 
@@ -228,12 +237,14 @@ class IInspireMetadata(IObject):
     denominator = zope.schema.List(
         title = u'Equivalent Scale',
         required = False,
+        max_length = 4,
         value_type = zope.schema.Int(title=u'Scale'))
 
     spatial_resolution = zope.schema.List(
         title = u'Spatial resolution',
         description = u'''Spatial resolution refers to the level of detail of the data set. It shall be expressed as a set of zero to many resolution distances (typically for gridded data and imagery-derived products) or equivalent scales (typically for maps or map-derived products). An equivalent scale is generally expressed as an integer value expressing the scale denominator. A resolution distance shall be expressed as a numerical value associated with a unit of length.''',
         required = False,
+        max_length = 12,
         value_type = zope.schema.Object(
             ISpatialResolution,
             title = u'Spatial resolution'))
@@ -243,6 +254,7 @@ class IInspireMetadata(IObject):
     conformity = zope.schema.List(
         title = u'Conformity',
         required = False,
+        max_length = 4,
         value_type = zope.schema.Object(IConformity,
             title = u'Conformity'))
 
@@ -255,6 +267,7 @@ class IInspireMetadata(IObject):
         description = u'This metadata element defines the conditions for access and use of spatial data sets and services, and where applicable, corresponding fees as required by Article 5(2)(b) and Article 11(2)(f) of Directive 2007/2/EC. The value domain of this metadata element is free text. \nThe element must have values. If no conditions apply to the access and use of the resource, "no conditions apply" shall be used. If conditions are unknown, "conditions unknown" shall be used. This element shall also provide information on any fees necessary to access and use the resource, if applicable, or refer to a uniform resource locator (URL) where information on fees is available.',
         required = True,
         min_length = 1,
+        max_length = 4,
         value_type = zope.schema.TextLine(title = u'Condition'))
 
     limitations = zope.schema.List(
@@ -262,6 +275,7 @@ class IInspireMetadata(IObject):
         description = u"When Member States limit public access to spatial data sets and spatial data services under Article 13 of Directive 2007/2/EC, this metadata element shall provide information on the limitations and the reasons for them. If there are no limitations on public access, this metadata element shall indicate that fact.\nThe value domain of this metadata element is free text.",
         required = True,
         min_length = 1,
+        max_length = 4,
         value_type = zope.schema.TextLine(title = u'Limitation'))
 
     # Responsible Party
@@ -271,6 +285,7 @@ class IInspireMetadata(IObject):
         description = u'This is the description of the organisation responsible for the establishment, management, maintenance and distribution of the resource.\nThis description shall include:\n- the name of the organisation as free text,\n- a contact e-mail address as a character string.',
         required = True,
         min_length = 1,
+        max_length = 4,
         value_type = zope.schema.Object(IResponsibleParty,
             title = u'Responsible Party'))
 

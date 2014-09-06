@@ -3,6 +3,21 @@
 {% set is_new = data.get('id') is none %}
 {% set is_draft = data.get('state', 'draft') == 'draft' %}
 
+{% block package_basic_fields_autofill %}
+<span class="btn btn-small btn-warning" id="autofill" onclick="javascript:autofill()" >Autofill</span>
+<script type="text/javascript">
+    var autofill = function() {
+        $('#field-title').val('Hello Baz 3')
+        $('#field-name').val('hello-baz-3')
+        $('#field-dataset_type').select2('val', 'foo')
+        $('#field-notes').val('Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.')
+        $('#field-tags').select2('val', ['hello-world', 'test'])
+        $('#field-license').select2('val', 'gfdl')
+        $('#field-version').val('2.5')
+    }
+</script>
+{% endblock %} {# package_basic_fields_autofill #}
+
 {% block package_basic_fields_title %}
   
 {{ 
@@ -46,6 +61,7 @@
 {% if is_new %}
 {{ 
     form.select('dataset_type', 
+        id = 'field-dataset_type',
         label = _('Dataset Type'),
         options = h.dataset_type_options(), 
         selected = 'ckan', 

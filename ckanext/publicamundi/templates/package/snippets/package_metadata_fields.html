@@ -4,16 +4,6 @@
 
 {% set dataset_type = data.get('dataset_type', 'none') %}
 
-{{ 
-    form.input('baz', 
-        label=_('Baz'), 
-        id='field-baz', 
-        placeholder=_('a wonderfull thing'), 
-        value=data.get('baz'), 
-        error=errors.get('baz'), 
-        classes=['control-medium']) 
-}}
-
 {% if dataset_type == 'foo' %}
 {{ 
     form.input('foo.baz', 
@@ -24,30 +14,57 @@
         error=errors.get('foo.baz'), 
         classes=['control-medium'])
 }}
-{% endif %}
+{{ 
+    form.input('foo.rating', 
+        label=_('Foo/Rating'), 
+        id='field-foo.rating', 
+        placeholder=_('5'), 
+        value=data.get('foo.rating'), 
+        error=errors.get('foo.rating'), 
+        classes=['control-small'])
+}}
+
+{% endif %} {# dataset_type == 'foo' #}
 
 {% if dataset_type == 'inspire' %}
-{{
-     form.input('inspire.identifier', 
-        label=_('Inspire/Id'), 
-        id='field-inspire.identifier', 
-        placeholder=_('a wonderfull thing'), 
-        value=data.get('inspire.identifier'), 
-        error=errors.get('inspire.identifier'), 
-        classes=['control-medium'])        
-}}
-{% endif %}
 
-{#
-{% set music_genres = data.get('foo', [None]) %}
+{{
+     form.input('inspire.datestamp', 
+        label=_('Inspire/Date'), 
+        id='field-inspire.datestamp', 
+        placeholder=_('YYYY-MM-DD'), 
+        value=data.get('inspire.datestamp'), 
+        error=errors.get('inspire.datestamp'), 
+        classes=['control-small'],        
+        attrs = { 'data-module': 'datepicker', 'data-module-format': 'yyyy-mm-dd' }) 
+}}
+
+{% resource 'ckanext-publicamundi/datepicker' %}
+
 {{ 
-    form.select('foo', 
-        label = _('Foo'), 
-        options = h.foo_options(), 
-        selected = foo.0, 
+    form.select('inspire.languagecode', 
+        label = _('Inspire/Lang'), 
+        options = [ 
+            {'text': 'English', 'value': 'en'}, 
+            {'text': 'Greek', 'value': 'el'}, 
+            {'text': 'Romanian', 'value': 'ro'}, 
+        ], 
+        selected = data.get('inspire.languagecode'), 
         attrs = { 'data-module': 'no-autocomplete' }) 
 }}
-#}
+
+{% for i in range(2) %}
+{{
+    form.input('inspire.identifier.' ~ i, 
+        label=_('Inspire/Id #' ~ (i+1)), 
+        id='field-inspire.identifier.' ~ i, 
+        value=data.get('inspire.identifier.' ~ i), 
+        error=errors.get('inspire.identifier,' ~ i), 
+        classes=['control-small'])
+}}
+{% endfor %}
+
+{% endif %} {# dataset_type == 'inspire' #}
 
 {% block package_metadata_fields_url %}
 

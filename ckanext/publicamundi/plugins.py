@@ -20,7 +20,9 @@ import ckanext.publicamundi.lib.metadata.validators as publicamundi_validators
 import ckanext.publicamundi.lib.actions as publicamundi_actions
 
 from ckanext.publicamundi.lib.util import object_to_json, random_name
-from ckanext.publicamundi.lib.metadata import dataset_types
+from ckanext.publicamundi.lib.metadata import \
+    dataset_types, Object, ErrorDict, \
+    serializer_for_object, serializer_for_key_tuple
 
 _t = toolkit._
 
@@ -193,48 +195,56 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     def _modify_package_schema(self, schema):
         log1.debug(' ** _modify_package_schema(): Building schema ...')
          
+        ignore_missing = toolkit.get_validator('ignore_missing')
+        ignore_empty = toolkit.get_validator('ignore_empty')
+        default_initializer = toolkit.get_validator('default')
+        extras_converter = toolkit.get_converter('convert_to_extras')
+        dataset_type_checker = publicamundi_validators.is_dataset_type
+
+        # Add dataset-type, the field that distinguishes metadata formats
+        
         schema['dataset_type'] = [
-            toolkit.get_validator('default')('ckan'),
-            toolkit.get_converter('convert_to_extras'),
-            publicamundi_validators.is_dataset_type,
+            default_initializer('ckan'),
+            extras_converter,
+            dataset_type_checker,
         ]
        
-        # Add field-based validation processors
+        # Add field-level validators/converters
+        
+        # Note We provide a union of fields for all supported schemata.
+        # Of course, not all of them will be present in a specific dataset,
+        # so any "required" constraint cannot be applied here.
+        
+        field_validator = publicamundi_validators.get_field_validator
+        field_input_converter = publicamundi_validators.get_field_input_converter
 
-#        field_name = 'baz'
-#        field = publicamundi_metadata.IFoo.get(field_name)
-#        if field.default:
-#            x1 = toolkit.get_validator('default')(field.default)
-#        elif field.defaultFactory:
-#            x1 = toolkit.get_validator('default')(field.defaultFactory())
-#        elif not field.required:
-#            x1 = toolkit.get_validator('ignore_missing')
-#        else:
-#            x1 = toolkit.get_validator('not_empty')
-#
-#        x2 = publicamundi_validators.get_field_validator(field)
-#        x3 = toolkit.get_converter('convert_to_extras')
-#
-#        schema[field_name] = [x1, x2, x3]
-#
-        schema['foo.baz'] = [
-            toolkit.get_validator('ignore_missing'),
-            toolkit.get_converter('convert_to_extras')
-        ]
-        schema['inspire.identifier'] = [
-            toolkit.get_validator('ignore_missing'),
-            toolkit.get_converter('convert_to_extras')
-        ]
+        for dt, dt_spec in dataset_types.items():
+            kser = serializer_for_key_tuple(key_prefix=dt_spec.get('key_prefix'))
+            flattened_fields = dt_spec.get('class').get_flattened_fields()
+            for key, field in flattened_fields.items():
+                field_name = kser.dumps(key)
+                # Build chain of processors for field
+                schema[field_name] = [ 
+                    ignore_missing,
+                    field_input_converter(field),
+                    ignore_empty,
+                    field_validator(field),
+                    extras_converter 
+                ]
+        
+        # Add before/after package-level processors
+        
+        dataset_preprocessor = publicamundi_validators.dataset_preprocess_edit
+        dataset_postprocessor = publicamundi_validators.dataset_postprocess_edit
+        dataset_validator = publicamundi_validators.dataset_validate
 
-        # Add before/after validation processors
-
-        schema['__before'].insert(-1, publicamundi_validators.dataset_preprocess_edit)
+        schema['__before'].insert(-1, dataset_preprocessor)
 
         if not schema.has_key('__after'):
             schema['__after'] = []
-        schema['__after'].append(publicamundi_validators.dataset_postprocess_edit)
-        schema['__after'].append(publicamundi_validators.dataset_validate)
-
+        schema['__after'].append(dataset_postprocessor)
+        schema['__after'].append(dataset_validator)
+        
         return schema
 
     def create_package_schema(self):
@@ -258,25 +268,29 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         # (e.g. on dataset pages, or on the search page)
         schema['tags']['__extras'].append(toolkit.get_converter('free_tags_only'))
         
-        schema.update({
-            'dataset_type': [
-                toolkit.get_converter('convert_from_extras'),
-                toolkit.get_validator('ignore_missing'),
-            ],
-            'foo.baz': [
-                toolkit.get_converter('convert_from_extras'),
-                toolkit.get_validator('ignore_missing')
-            ],
-            'inspire.identifier': [
-                toolkit.get_converter('convert_from_extras'),
-                toolkit.get_validator('ignore_missing')
-            ],
-        })
-
+        empty_checker = toolkit.get_validator('not_empty')
+        ignore_missing = toolkit.get_validator('ignore_missing')
+        extras_converter = toolkit.get_converter('convert_from_extras')
+        
+        schema['dataset_type'] = [ extras_converter, empty_checker ]
+       
+        # Add field-level converters
+         
+        for dt, dt_spec in dataset_types.items():
+            kser = serializer_for_key_tuple(key_prefix=dt_spec.get('key_prefix'))
+            flattened_fields = dt_spec.get('class').get_flattened_fields()
+            for key, field in flattened_fields.items():
+                field_name = kser.dumps(key)
+                schema[field_name] = [ extras_converter, ignore_missing ]
+          
+        # Add before/after package-level processors
+        
+        dataset_postprocessor = publicamundi_validators.dataset_postprocess_read
+        
         if not schema.has_key('__after'):
             schema['__after'] = []
-        schema['__after'].append(publicamundi_validators.dataset_postprocess_read)
-
+        schema['__after'].append(dataset_postprocessor)
+        
         return schema
 
     def setup_template_variables(self, context, data_dict):

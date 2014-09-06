@@ -64,6 +64,7 @@ class IResponsibleParty(IObject):
         title = u'Email',
         required = True,
         min_length = 1,
+        max_length = 2,
         value_type = z3c.schema.email.RFC822MailAddress(
             title = u'Email'))
 
