@@ -97,6 +97,7 @@ class BaseFieldSerializer(BaseSerializer):
         return self._to_string(o)
 
     def loads(self, s):
+        assert isinstance(s, basestring)
         return self._from_string(s)
 
     # Implementation
@@ -129,7 +130,10 @@ class UnicodeFieldSerializer(BaseFieldSerializer):
         return u.encode(self.encoding)
 
     def _from_string(self, s):
-        return s.decode(self.encoding)
+        if isinstance(s, unicode):
+            return s
+        else:
+            return str(s).decode(self.encoding)
 
 @field_serialize_adapter(zope.schema.interfaces.IInt)
 class IntFieldSerializer(BaseFieldSerializer):
@@ -209,6 +213,8 @@ class TimeFieldSerializer(BaseFieldSerializer):
 @key_tuple_serialize_adapter()
 class KeyTupleSerializer(BaseSerializer):
 
+    zope.interface.implements(IKeyTupleSerializer)
+    
     glue = '.'
     
     _prefix = None

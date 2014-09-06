@@ -149,8 +149,7 @@ class TestsController(BaseController):
         obj = getattr(fixtures, id)
         assert isinstance(obj, types.Foo)
         
-        errors = obj.validate()
-        errors = obj.dictize_errors(errors)
+        errors = obj.validate(dictize_errors=True)
 
         # Examine POSTed data
         if request.method == 'POST':
