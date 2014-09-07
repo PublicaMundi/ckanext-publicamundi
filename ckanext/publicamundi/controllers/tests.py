@@ -11,7 +11,7 @@ import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
 
-from ckanext.publicamundi.lib.util import object_to_json
+from ckanext.publicamundi.lib.util import to_json
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata import types
 from ckanext.publicamundi.lib.metadata.types import Object
@@ -166,13 +166,13 @@ class TestsController(BaseController):
                 # Output a JSON dump of a valid object
                 response.headers['Content-Type'] = 'application/json' 
                 out = { 'status': 'success', 'obj': obj.to_dict() } 
-                return object_to_json(out)
+                return to_json(out)
             else:
                 # Prepare error dict for display
                 errors = obj.dictize_errors(errors)
                 #response.headers['Content-Type'] = 'application/json' 
                 #out = { 'status': 'failure', 'errors': errors, 'obj': obj.to_dict() } 
-                #return object_to_json(out)
+                #return to_json(out)
 
         # Display form
         c.form_class = 'form-horizontal'

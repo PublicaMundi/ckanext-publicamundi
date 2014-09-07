@@ -19,7 +19,7 @@ import ckanext.publicamundi.lib.metadata as publicamundi_metadata
 import ckanext.publicamundi.lib.metadata.validators as publicamundi_validators
 import ckanext.publicamundi.lib.actions as publicamundi_actions
 
-from ckanext.publicamundi.lib.util import object_to_json, random_name
+from ckanext.publicamundi.lib.util import to_json, random_name
 from ckanext.publicamundi.lib.metadata import \
     dataset_types, Object, ErrorDict, \
     serializer_for_object, serializer_for_key_tuple
@@ -195,18 +195,22 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     def _modify_package_schema(self, schema):
         log1.debug(' ** _modify_package_schema(): Building schema ...')
          
+        from ckanext.publicamundi.lib.metadata.validators import \
+            is_dataset_type, \
+            get_field_validator, get_field_input_converter, \
+            preprocess_dataset_for_edit, postprocess_dataset_for_edit
+
         ignore_missing = toolkit.get_validator('ignore_missing')
         ignore_empty = toolkit.get_validator('ignore_empty')
+        convert_to_extras = toolkit.get_converter('convert_to_extras')
         default_initializer = toolkit.get_validator('default')
-        extras_converter = toolkit.get_converter('convert_to_extras')
-        dataset_type_checker = publicamundi_validators.is_dataset_type
 
         # Add dataset-type, the field that distinguishes metadata formats
         
         schema['dataset_type'] = [
             default_initializer('ckan'),
-            extras_converter,
-            dataset_type_checker,
+            convert_to_extras,
+            is_dataset_type,
         ]
        
         # Add field-level validators/converters
@@ -214,36 +218,29 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         # Note We provide a union of fields for all supported schemata.
         # Of course, not all of them will be present in a specific dataset,
         # so any "required" constraint cannot be applied here.
-        
-        field_validator = publicamundi_validators.get_field_validator
-        field_input_converter = publicamundi_validators.get_field_input_converter
 
         for dt, dt_spec in dataset_types.items():
-            kser = serializer_for_key_tuple(key_prefix=dt_spec.get('key_prefix'))
-            flattened_fields = dt_spec.get('class').get_flattened_fields()
-            for key, field in flattened_fields.items():
-                field_name = kser.dumps(key)
+            flattened_fields = dt_spec.get('class').get_flattened_fields(opts={
+                'serialize-keys': True,
+                'key-prefix': dt_spec.get('key_prefix', dt)
+            })
+            for field_name, field in flattened_fields.items():
                 # Build chain of processors for field
                 schema[field_name] = [ 
                     ignore_missing,
-                    field_input_converter(field),
+                    get_field_input_converter(field),
                     ignore_empty,
-                    field_validator(field),
-                    extras_converter 
+                    get_field_validator(field), 
+                    #convert_to_extras # XXX Moved to dataset_postprocessor
                 ]
         
         # Add before/after package-level processors
-        
-        dataset_preprocessor = publicamundi_validators.dataset_preprocess_edit
-        dataset_postprocessor = publicamundi_validators.dataset_postprocess_edit
-        dataset_validator = publicamundi_validators.dataset_validate
 
-        schema['__before'].insert(-1, dataset_preprocessor)
+        schema['__before'].insert(-1, preprocess_dataset_for_edit)
 
         if not schema.has_key('__after'):
             schema['__after'] = []
-        schema['__after'].append(dataset_postprocessor)
-        schema['__after'].append(dataset_validator)
+        schema['__after'].append(postprocess_dataset_for_edit)
         
         return schema
 
@@ -263,33 +260,42 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         schema = super(DatasetForm, self).show_package_schema()
         
         log1.debug(' ** show_package_schema(): Building schema ...')
+        
+        from ckanext.publicamundi.lib.metadata.validators import \
+            get_field_from_extras_converter, \
+            preprocess_dataset_for_read, postprocess_dataset_for_read
 
         # Don't show vocab tags mixed in with normal 'free' tags
         # (e.g. on dataset pages, or on the search page)
         schema['tags']['__extras'].append(toolkit.get_converter('free_tags_only'))
         
-        empty_checker = toolkit.get_validator('not_empty')
+        check_not_empty = toolkit.get_validator('not_empty')
         ignore_missing = toolkit.get_validator('ignore_missing')
-        extras_converter = toolkit.get_converter('convert_from_extras')
+        convert_from_extras = toolkit.get_converter('convert_from_extras')
         
-        schema['dataset_type'] = [ extras_converter, empty_checker ]
+        schema['dataset_type'] = [ convert_from_extras, check_not_empty ]
        
         # Add field-level converters
-         
+
         for dt, dt_spec in dataset_types.items():
-            kser = serializer_for_key_tuple(key_prefix=dt_spec.get('key_prefix'))
-            flattened_fields = dt_spec.get('class').get_flattened_fields()
-            for key, field in flattened_fields.items():
-                field_name = kser.dumps(key)
-                schema[field_name] = [ extras_converter, ignore_missing ]
+            flattened_fields = dt_spec.get('class').get_flattened_fields(opts={
+                'serialize-keys': True,
+                'key-prefix': dt_spec.get('key_prefix', dt)
+            })
+            for field_name, field in flattened_fields.items():
+                schema[field_name] = [ 
+                    convert_from_extras, 
+                    ignore_missing, 
+                    get_field_from_extras_converter(field),
+                ]
           
         # Add before/after package-level processors
         
-        dataset_postprocessor = publicamundi_validators.dataset_postprocess_read
+        schema['__before'].insert(-1, preprocess_dataset_for_read)
         
         if not schema.has_key('__after'):
             schema['__after'] = []
-        schema['__after'].append(dataset_postprocessor)
+        schema['__after'].append(postprocess_dataset_for_read)
         
         return schema
 
@@ -302,9 +308,9 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         c.publicamundi_magic_number = 99
 
     # Note for all *_template hooks: 
-    # We choose not to modify the path for each template (so we simply call the super() method). 
-    # If a specific template's behaviour needs to be overriden, this can be done by means of 
-    # template inheritance (e.g. Jinja2 `extends' or CKAN `ckan_extends')
+    # We choose not to modify the path for each template (so we simply call super()). 
+    # If a specific template's behaviour needs to be overriden, this can be done by 
+    # means of template inheritance (e.g. Jinja2 `extends' or CKAN `ckan_extends')
 
     def new_template(self):
         return super(DatasetForm, self).new_template()
@@ -345,7 +351,7 @@ class PackageController(p.SingletonPlugin):
         At this point, the package is possibly in 'draft' state so most Action-API (targeting on the
         package itself) calls will fail.
         '''
-        log1.debug('A package was created: %s', object_to_json(pkg_dict, indent=4))
+        log1.debug('A package was created: %s', to_json(pkg_dict, indent=4))
         self._create_or_update_csw_record(context['session'], pkg_dict)
         pass
 
@@ -354,7 +360,7 @@ class PackageController(p.SingletonPlugin):
         Extensions will receive the validated data dict after the package has been updated
         (Note that the edit method will return a package domain object, which may not include all fields).
         '''
-        log1.debug('A package was updated: %s', object_to_json(pkg_dict, indent=4))
+        log1.debug('A package was updated: %s', to_json(pkg_dict, indent=4))
         self._create_or_update_csw_record(context['session'], pkg_dict)
         pass
 
