@@ -79,7 +79,15 @@ class IObject(zope.interface.Interface):
         '''Return the zope.schema.Field that corresponds to attribute k.
         The returned field instance should be bound to the context of this object.
         '''
-
+    
+    def get_fields():
+        '''Return a map of fields.
+        '''
+    
+    def get_flattened_fields(opts={}):
+        '''Return a flat map of fields.
+        '''
+    
     def validate():
         '''Invoke all validators and return a list structured as
             <errors> ::= [ (<field>, <field-errors>), ... ]
@@ -111,7 +119,7 @@ class IObject(zope.interface.Interface):
 
 class IErrorDict(zope.interface.Interface):
 
-    global_key = zope.schema.ASCII(
+    global_key = zope.schema.NativeString(
         required = True,
         default = None,
         description = u'A key that denotes an error not specific to a field (i.e. global)')

@@ -18,13 +18,13 @@ def print_as_dict(obj):
     for k in sorted(d2):
         print k, ':', d2[k]
 
-def validate(x):
+def _test_validate(x):
     obj = getattr(fixtures, x)
     errors = obj.validate()
     if not errors:
         print_as_dict(obj)
 
-def convert_to_dict(x):
+def _test_convert_to_dict(x):
     obj = getattr(fixtures, x)
 
     d = obj.to_dict()
@@ -39,13 +39,46 @@ def convert_to_dict(x):
     s2 = json.dumps(obj2.to_dict(), cls=JsonEncoder)
     assert s == s2
 
+def _test_schema(x):
+    obj = getattr(fixtures, x)
+    
+    schema = obj.schema()
+    verifyObject(schema, obj)    
+
+    # Test basic schema introspection
+
+    fields = obj.get_fields()
+    assert set(fields.keys()) == set(zope.schema.getFieldNames(schema))
+    print fields
+
+    # Test flattenned schema with a variety of options
+
+    opt_variations = [
+        { 'serialize-keys': True, 'key-prefix': 'baobab', },
+        { 'serialize-keys': True, },
+        { 'serialize-keys': False, },
+        {},
+    ]
+
+    for opts in opt_variations:
+        flattened_fields = obj.get_flattened_fields(opts=opts)
+        print flattened_fields
+        d = obj.to_dict(flat=True, opts=opts) 
+        assert set(d.keys()).issubset(set(flattened_fields.keys()))
+
+    return
+
 def test_validators():
-    yield validate, 'foo1'
+    yield _test_validate, 'foo1'
 
 def test_dict_converters():
-    yield convert_to_dict, 'foo1'
+    yield _test_convert_to_dict, 'foo1'
+
+def test_schema():
+    yield _test_schema, 'foo1'
 
 if __name__  == '__main__':
-    validate('foo1')
-    convert_to_dict('foo1')
+    
+    _test_validate('foo1')
+    _test_convert_to_dict('foo1')
 
