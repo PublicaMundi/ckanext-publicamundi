@@ -23,11 +23,12 @@ from ckanext.publicamundi.lib.metadata.xml_serializers import xml_serializer_for
 # Tests
 
 class TestController(BaseTestController):
-    @nose.tools.istest
+   
+    @nose.tools.nottest
     def test_to_xml(self):
         yield self._to_xml, fixtures.inspire1, '/tmp/inspire1.xml'
 
-    @nose.tools.istest
+    @nose.tools.nottest
     def test_from_xml(self):
         # 3.xml contains wrong thesaurus name
         yield self._from_xml, 'tests/samples/3.xml', set(['keywords'])
@@ -38,7 +39,7 @@ class TestController(BaseTestController):
         # full.xml fails during etree parse, why?
         yield self._from_xml, 'tests/samples/full.xml', set([])
 
-    @nose.tools.istest
+    @nose.tools.nottest
     def test_to_xsd(self):
         yield self._validate_with_xsd, fixtures.inspire1, 'tests/samples/3.xml', False
         yield self._validate_with_xsd, fixtures.inspire1, 'tests/samples/aktogrammh.xml', True

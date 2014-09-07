@@ -20,6 +20,41 @@ from ckanext.publicamundi.lib.metadata.serializers import \
 
 _cache = threading.local()
 
+def flatten_schema(schema):
+    '''Flatten an arbitrary zope-based schema.
+    '''
+
+    res = {}
+    fields = zope.schema.getFields(schema)
+    for k, F in fields.items():
+        res1 = flatten_field(F)
+        for k1, F1 in res1.items():
+            res[(k,)+k1] = F1
+    return res
+
+def flatten_field(F):
+    assert isinstance(F, zope.schema.Field)
+    res = None
+    if isinstance(F, zope.schema.Object):
+        res = flatten_schema(F.schema)
+    elif isinstance(F, (zope.schema.List, zope.schema.Tuple)):
+        res = {}
+        res1 = flatten_field(F.value_type)
+        for i in range(0, F.max_length):
+            for k1,F1 in res1.items():
+                res[(i,)+k1] = F1
+    elif isinstance(F, zope.schema.Dict):
+        assert isinstance(F.key_type, zope.schema.Choice), \
+            'Only zope.schema.Choice supported for key_type'
+        res = {}
+        res1 = flatten_field(F.value_type)
+        for v in F.key_type.vocabulary:
+            for k1,F1 in res1.items():
+                res[(v.token,)+k1] = F1
+    else:
+        res = { (): F }
+    return res
+
 #
 # Base implementation  
 #
@@ -40,6 +75,27 @@ class Object(object):
         schema = self.get_schema()
         v = getattr(self, k)
         return schema.get(k).bind(FieldContext(key=k, value=v))
+    
+    @classmethod
+    def get_fields(cls):
+        '''Return a map of fields for the zope schema of our class.
+        '''
+
+        res = zope.schema.getFields(cls.get_schema())
+        return res
+
+    @classmethod
+    def get_flattened_fields(cls, opts={}):
+        '''Return a map of flattened fields for the zope schema our class.
+        '''
+        
+        res = flatten_schema(cls.get_schema())
+        if opts.get('serialize-keys', False):
+            kser = serializer_for_key_tuple()
+            kser.prefix = opts.get('key-prefix', None)
+            return { kser.dumps(k): F for k, F in res.iteritems() }
+        else:
+            return res
 
     def validate(self, dictize_errors=False):
         '''Validate against all known (schema-based or invariants) rules. 
@@ -69,10 +125,12 @@ class Object(object):
 
     def to_dict(self, flat=False, opts={}):
         if flat:
+            serialize_keys = opts.pop('serialize-keys', False)
             res = self.flatten(opts)
-            if 'serialize-keys' in opts:
-                ser = serializer_for_key_tuple()
-                res = { ser.dumps(k): v for k, v in res.items() }
+            if serialize_keys:
+                kser = serializer_for_key_tuple()
+                kser.prefix = opts.pop('key-prefix', None)
+                res = { kser.dumps(k): v for k, v in res.iteritems() }
         else:
             res = self.dictize(opts)
         return res
@@ -82,20 +140,24 @@ class Object(object):
         cls = type(self)
         
         # Decide if input is a flattened dict
+        
         if is_flat is None:
             is_flat = isinstance(d.iterkeys().next(), tuple)
         if is_flat:
-            if 'unserialize-keys' in opts:
-                ser = serializer_for_key_tuple()
+            unserialize_keys = opts.pop('unserialize-keys', False)
+            if unserialize_keys:
+                kser = serializer_for_key_tuple()
+                kser.prefix = opts.pop('key-prefix', None)
                 d = dictization.unflatten({ 
-                    ser.loads(k): v for k, v in d.items() 
+                    kser.loads(k): v for k, v in d.iteritems() 
                 })
-                opts.pop('unserialize-keys')
             else:
                 d = dictization.unflatten(d)
                 
         # Load self
+        
         self.load(d, opts)
+
         # Allow method chaining
         return self
 
@@ -146,7 +208,7 @@ class Object(object):
         s += '>'
         return s
 
-    ## Introspective class methods
+    ## Introspective helpers
 
     @classmethod
     def _determine_schema(cls):
@@ -173,57 +235,12 @@ class Object(object):
     def get_field_names(cls):
         S = cls.get_schema()
         return zope.schema.getFieldNames(S) 
-
-    @classmethod
-    def get_fields(cls):
-        S = cls.get_schema()
-        return zope.schema.getFields(S)
-
-    @classmethod
-    def get_flattened_fields(cls):
-        '''Flatten the schema for this class'''
-        return cls.flatten_schema(cls.get_schema())
-
-    @staticmethod
-    def flatten_schema(schema):
-        '''Flatten an arbitrary zope-based schema'''
-        res = {}
-        fields = zope.schema.getFields(schema)
-        for k, F in fields.items():
-            res1 = Object.flatten_field(F)
-            for k1, F1 in res1.items():
-                res[(k,)+k1] = F1
-        return res
-
-    @staticmethod
-    def flatten_field(F):
-        assert isinstance(F, zope.schema.Field)
-        res = None
-        if isinstance(F, zope.schema.Object):
-            res = Object.flatten_schema(F.schema)
-        elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
-            res = {}
-            res1 = Object.flatten_field(F.value_type)
-            for i in range(0, F.max_length):
-                for k1,F1 in res1.items():
-                    res[(i,)+k1] = F1
-        elif isinstance(F, zope.schema.Dict):
-            assert isinstance(F.key_type, zope.schema.Choice), \
-                'Only zope.schema.Choice supported for key_type'
-            res = {}
-            res1 = Object.flatten_field(F.value_type)
-            for v in F.key_type.vocabulary:
-                for k1,F1 in res1.items():
-                    res[(v.token,)+k1] = F1
-        else:
-            res = { (): F }
-        return res
-
+         
     @classmethod
     def get_field_factory(cls, k, F=None):
         assert not k or isinstance(k, basestring)
         assert not F or isinstance(F, zope.schema.Field)
-        assert k or F, 'At least one of k(key), F(Field) should be specified'
+        assert k or F, 'At least one of k (=key), F (=field) should be specified'
         factory = None
         # Check if a factory is defined explicitly as a class attribute
         if k and hasattr(cls, k):
@@ -302,7 +319,7 @@ class Object(object):
                     errors = cls(f, self.opts).validate_schema()
                     if errors:
                         ef.append(zope.interface.Invalid(errors))
-            elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
+            elif isinstance(F, (zope.schema.List, zope.schema.Tuple)):
                 # Check is a list type
                 if not (isinstance(f, list) or isinstance(f, tuple)):
                     try:
@@ -409,7 +426,7 @@ class Object(object):
                 errors = cls(f, self.opts).validate_invariants()
                 if errors:
                     ex = zope.interface.Invalid(errors)
-            elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
+            elif isinstance(F, (zope.schema.List, zope.schema.Tuple)):
                 ex = self._validate_invariants_for_field_items(enumerate(f), F)
             elif isinstance(F, zope.schema.Dict):
                 ex = self._validate_invariants_for_field_items(f.iteritems(), F)
@@ -494,8 +511,7 @@ class Object(object):
                     # Recurse on an <errors> structure (ex.args[0])
                     res1 = f._dictize_errors(ex.args[0])
                     res = dictization.merge_inplace(res, res1) 
-        elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple) or \
-             isinstance(F, zope.schema.Dict):
+        elif isinstance(F, (zope.schema.List, zope.schema.Tuple, zope.schema.Dict)):
             res = ErrorDict()
             for ex, is_leaf in itertools.izip(ef, are_leafs): 
                 if is_leaf:
@@ -571,7 +587,7 @@ class Object(object):
                 else:
                     # Can only dictize derivatives of Object
                     return None
-            elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
+            elif isinstance(F, (zope.schema.List, zope.schema.Tuple)):
                 a = list()
                 for i,y in enumerate(f):
                     a.append(self._dictize_field(y, F.value_type))
@@ -612,7 +628,7 @@ class Object(object):
                 else:
                     # Can only flatten derivatives of Object (see _dictize_field()) 
                     return None
-            elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
+            elif isinstance(F, (zope.schema.List, zope.schema.Tuple)):
                 return self._flatten_field_items(enumerate(f), F)
             elif isinstance(F, zope.schema.Dict):
                 return self._flatten_field_items(f.iteritems(), F)
@@ -670,7 +686,7 @@ class Object(object):
                     # Can only load derivatives of Object
                     pass
                 return f
-            elif isinstance(F, zope.schema.List) or isinstance(F, zope.schema.Tuple):
+            elif isinstance(F, (zope.schema.List, zope.schema.Tuple)):
                 a = list()
                 for i,y in enumerate(v):
                     f1 = self._create_field(y, F.value_type)
