@@ -776,6 +776,6 @@ def serializer_for_object(obj):
     '''Get a proper serializer for an Object instance.
     ''' 
     assert isinstance(obj, Object)
-    serializer = adapter_registry.queryMultiAdapter([obj], ISerializer, 'serialize')
+    serializer = adapter_registry.queryMultiAdapter([obj], ISerializer, 'serialize:json')
     return serializer
 

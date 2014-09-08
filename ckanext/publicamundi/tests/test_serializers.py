@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 import datetime
 import json
 import itertools
@@ -88,15 +90,21 @@ def _test_fixture_object(fixture_name):
 def test_field_textline():
     f = zope.schema.TextLine(title=u'Summary')
     
-    ser = serializer_for_field(f)
-    assert ser 
-    verifyObject(ISerializer, ser)
+    for fmt in ['json', 'input']:
+        ser = serializer_for_field(f, fmt=fmt)
+        assert ser 
+        verifyObject(ISerializer, ser)
 
-    s = ser.dumps(u'Hello World')
-    assert s    
+        v = u'Καλημέρα Κόσμε'
+        s = ser.dumps(v)
+        assert s    
 
-    v = ser.loads(s)
-    assert v == u'Hello World'
+        v1 = ser.loads(s)
+        assert v == v1
+  
+    fmt = 'not-existing-format'
+    ser = serializer_for_field(f, fmt=fmt)
+    assert ser is None 
 
 def test_field_datetime():
     f = zope.schema.Datetime(title=u'Created')
