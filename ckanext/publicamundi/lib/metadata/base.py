@@ -165,7 +165,7 @@ class Object(object):
         cls = type(self)
         opts = {
             'serialize-keys': flat,
-            'serialize-values': True,
+            'serialize-values': 'json',
         }
         d = self.to_dict(flat, opts)
         return json.dumps(d, indent=indent)
@@ -175,7 +175,7 @@ class Object(object):
         d = json.loads(s)
         opts = {
             'unserialize-keys': is_flat,
-            'unserialize-values': True,
+            'unserialize-values': 'json',
         }
         return self.from_dict(d, is_flat, opts=opts)
     
@@ -570,8 +570,10 @@ class Object(object):
             Serialize this value if requested so.
             '''
             v = f
-            if (v is not None) and self.opts.get('serialize-values'):
-                ser = serializer_for_field(F)
+            fmt = self.opts.get('serialize-values', False)
+            if (v is not None) and fmt:
+                fmt = 'json' if isinstance(fmt, bool) else str(fmt)
+                ser = serializer_for_field(F, fmt=fmt)
                 if ser:
                     try:
                         v = ser.dumps(f)
@@ -701,8 +703,10 @@ class Object(object):
             else:
                 # A leaf field (may need to be unserialized)
                 f = v
-                if (f is not None) and self.opts.get('unserialize-values'):
-                    ser = serializer_for_field(F)
+                fmt = self.opts.get('unserialize-values', False)
+                if (f is not None) and fmt:
+                    fmt = 'json' if isinstance(fmt, bool) else str(fmt)
+                    ser = serializer_for_field(F, fmt=fmt)
                     if ser:
                         try:
                             f = ser.loads(v)
