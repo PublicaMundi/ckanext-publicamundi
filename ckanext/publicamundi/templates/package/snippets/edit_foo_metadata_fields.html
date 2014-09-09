@@ -54,7 +54,7 @@
             data-module-picktime="true" data-module-pickdate="true" data-module-format="yyyy-MM-dd hh:mm:ss">
             <input type="text" id="input-foo.created"  name="foo.created"
                 class="input-medium"
-                value="{{ data.get('foo.created') }}" />
+                value="{{ data.get('foo.created', '') }}" />
             <span class="add-on">
               <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
             </span>

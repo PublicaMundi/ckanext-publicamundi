@@ -87,8 +87,13 @@ def postprocess_dataset_for_read(key, data, errors, context):
     logger.debug('Post-processing dataset for reading: context=%r' %(
         context.keys()))
     
+    # Note This is not always supplied (?). I suppose this is due to the
+    # fact that package dicts are cached (on their revision-id).
+    requested_with_api = context.has_key('api_version')
+    
     # Prepare computed fields, reorganize structure etc.
-    data[('baz_view',)] = u'I am a read-only Baz'
+    #data[('baz_view',)] = u'I am a read-only Baz'
+    #data[('baz_view',)] = { 'a': 99, 'b': { 'measurements': [ 1, 5, 5, 12 ] } }
 
     #raise Breakpoint('postprocess read')
     pass
@@ -98,12 +103,14 @@ def postprocess_dataset_for_edit(key, data, errors, context):
         'This validator can only be invoked in the __after stage'
     logger.debug('Post-processing dataset for editing: context=%r' %(
         context.keys()))
-        
+    
+    requested_with_api = context.has_key('api_version')
+
     is_new = not context.has_key('package')
     is_draft = data.get(('state',), 'unknown').startswith('draft')
-     
-    if is_new:
-        return # nop: core metadata expected
+
+    if is_new and not requested_with_api:
+        return # noop: core metadata expected
 
     dt = data[('dataset_type',)]
     dt_spec = dataset_types[dt]
