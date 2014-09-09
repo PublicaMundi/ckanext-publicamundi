@@ -37,7 +37,14 @@ def _test_dictization(fixture_name):
     print
     print ' -- flat, serialize-values  --'
     print d1f2
-   
+    
+    d1f2 = x1.to_dict(flat=True, opts={ 'serialize-values': 'json' })
+    for k in d1f2: 
+        assert isinstance(k, tuple)
+    print
+    print ' -- flat, serialize-values:json  --'
+    print d1f2
+
     d1f3 = x1.to_dict(flat=True, opts={ 'serialize-keys': True, 'serialize-values': True })
     for k, v in d1f3.items(): 
         assert isinstance(k, basestring)
