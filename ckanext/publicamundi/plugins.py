@@ -3,7 +3,6 @@
 import time
 import datetime
 import json
-import jsonpickle
 import weberror
 import logging
 import geoalchemy
@@ -71,40 +70,6 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         for org in cls.organization_list_objects(org_names):
             results[org['name']] = org
         return results
-
-    @classmethod
-    def debug_template_vars(cls, debug_info):
-        ''' A debug helper similar to h.debug_full_info_as_list '''
-        out = {}
-        ignored_keys = [
-            'c', 'app_globals', 'g', 'h', 'request', 'tmpl_context', 'actions', 'translator', 'session', 'N_', 'ungettext', 'config', 'response', '_']
-        ignored_context_keys = [
-            '__class__', '__context', '__delattr__', '__dict__', '__doc__', '__format__', '__getattr__', '__getattribute__', '__hash__', '__init__',
-            '__module__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__',
-            '__weakref__', 'action', 'environ', 'pylons', 'start_response', 'userobj', 'page']
-
-        debug_vars = debug_info['vars']
-
-        for key in filter(lambda k: not k in ignored_keys, debug_vars.keys()):
-            out[key] = debug_vars[key]
-
-        if 'tmpl_context' in debug_vars:
-            for key in filter(lambda k: not k in ignored_context_keys, debug_info['c_vars']):
-                val = getattr(debug_vars['tmpl_context'], key)
-                if hasattr(val, '__call__'):
-                    val = repr(val)
-                out['c.%s' % key] = val
-
-        return out
-
-    @classmethod
-    def dump_jsonpickle(cls, obj):
-        s = 'undefined'
-        try:
-            s = jsonpickle.encode(obj)
-        except:
-            pass
-        return s
     
     @classmethod
     def dataset_types(cls):
@@ -132,9 +97,6 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'organization_dict_objects': self.organization_dict_objects,
             'markup_for_field': publicamundi_metadata.markup_for_field,
             'markup_for_object': publicamundi_metadata.markup_for_object,
-            # debug helpers
-            'debug_template_vars': self.debug_template_vars,
-            'dump_jsonpickle': self.dump_jsonpickle,
         }
 
     ## IConfigurer interface ##
@@ -196,8 +158,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         log1.debug(' ** _modify_package_schema(): Building schema ...')
          
         from ckanext.publicamundi.lib.metadata.validators import \
-            is_dataset_type, \
-            get_field_validator, get_field_input_converter, \
+            is_dataset_type, get_field_edit_processor, \
             preprocess_dataset_for_edit, postprocess_dataset_for_edit
 
         ignore_missing = toolkit.get_validator('ignore_missing')
@@ -228,10 +189,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
                 # Build chain of processors for field
                 schema[field_name] = [ 
                     ignore_missing,
-                    get_field_input_converter(field),
-                    ignore_empty,
-                    get_field_validator(field), 
-                    #convert_to_extras # XXX Moved to dataset_postprocessor
+                    get_field_edit_processor(field),
                 ]
         
         # Add before/after package-level processors
@@ -262,7 +220,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         log1.debug(' ** show_package_schema(): Building schema ...')
         
         from ckanext.publicamundi.lib.metadata.validators import \
-            get_field_from_extras_converter, \
+            get_field_read_processor, \
             preprocess_dataset_for_read, postprocess_dataset_for_read
 
         # Don't show vocab tags mixed in with normal 'free' tags
@@ -286,7 +244,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
                 schema[field_name] = [ 
                     convert_from_extras, 
                     ignore_missing, 
-                    get_field_from_extras_converter(field),
+                    get_field_read_processor(field),
                 ]
           
         # Add before/after package-level processors
@@ -303,7 +261,11 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         ''' Setup (add/modify/hide) variables to feed the template engine.
         This is done through through toolkit.c (template thread-local context object).
         '''
+        
         super(DatasetForm, self).setup_template_variables(context, data_dict)
+        
+        #assert False
+
         c = toolkit.c
         c.publicamundi_magic_number = 99
 

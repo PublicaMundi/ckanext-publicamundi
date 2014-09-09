@@ -9,13 +9,6 @@
 
 {% set info_list = request.environ['CKAN_DEBUG_INFO'] %}
 
-<script type="text/javascript">
-    var debug_template_vars = {};
-    {% for info in info_list %}
-    debug_template_vars [{{ h.dump_json(info.template_name)|safe }}] = {{ h.dump_jsonpickle(h.debug_template_vars(info))|safe }};
-    {%- endfor %}
-</script>
-
 {% for info in info_list %}
 <div style="border-top:solid 1px #999">
     <b>Template name</b>: {{ info.template_name }}

@@ -41,7 +41,7 @@ def objectify(factory, data, key_prefix):
     if obj_dict:
         dictz_opts = { 
             'unserialize-keys': True, 
-            'unserialize-values': False, 
+            'unserialize-values': 'json', 
             'key-prefix': key_prefix 
         }
         obj = factory().from_dict(obj_dict, is_flat=True, opts=dictz_opts)
@@ -58,7 +58,7 @@ def dictize_for_extras(obj, key_prefix):
     
     dictz_opts = {
         'serialize-keys': True, 
-        'serialize-values': True, 
+        'serialize-values': 'json',
         'key-prefix': key_prefix,
     }
 
@@ -75,7 +75,8 @@ def is_dataset_type(value, context):
 def preprocess_dataset_for_read(key, data, errors, context):
     assert key[0] == '__before', \
         'This validator can only be invoked in the __before stage'
-    logger.debug('Pre-processing dataset for reading')
+    logger.debug('Pre-processing dataset for reading: context=%r' %(
+        context.keys()))
     
     #raise Breakpoint('preprocess read')
     pass
@@ -83,18 +84,20 @@ def preprocess_dataset_for_read(key, data, errors, context):
 def postprocess_dataset_for_read(key, data, errors, context):
     assert key[0] == '__after', \
         'This validator can only be invoked in the __after stage'
-    logger.debug('Post-processing dataset for reading')
+    logger.debug('Post-processing dataset for reading: context=%r' %(
+        context.keys()))
     
     # Prepare computed fields, reorganize structure etc.
     data[('baz_view',)] = u'I am a read-only Baz'
-    
+
     #raise Breakpoint('postprocess read')
     pass
 
 def postprocess_dataset_for_edit(key, data, errors, context):
     assert key[0] == '__after', \
         'This validator can only be invoked in the __after stage'
-    logger.debug('Post-processing dataset for editing')
+    logger.debug('Post-processing dataset for editing: context=%r' %(
+        context.keys()))
         
     is_new = not context.has_key('package')
     is_draft = data.get(('state',), 'unknown').startswith('draft')
@@ -116,7 +119,7 @@ def postprocess_dataset_for_edit(key, data, errors, context):
 
     if obj:
         validation_errors = obj.validate(dictize_errors=True)
-        # Todo Try to map `validation_errors` to `errors`
+        # Fixme Try to map `validation_errors` to `errors`
         #assert not validation_errors
     else:
         assert is_draft
@@ -129,65 +132,41 @@ def postprocess_dataset_for_edit(key, data, errors, context):
     
     if obj:
         extras_list = data[('extras',)]
-        extra_fields = dictize_for_extras(obj, key_prefix)
-        for key, val in extra_fields.iteritems():
+        extras_dict = dictize_for_extras(obj, key_prefix)
+        for key, val in extras_dict.iteritems():
             extras_list.append({ 'key': key, 'value': val })
         assert check_extras(extras_list)
 
     return
-   
-def validate_dataset(key, data, errors, context):
-    assert key[0] == '__after', \
-        'This validator can only be invoked in the __after stage'
-    logger.debug('Post-processing dataset for editing: validate dataset')
-    
-    is_new = not context.has_key('package')
-    is_draft = data.get(('state',), 'unknown').startswith('draft')
-    
-    dt = data[('dataset_type',)]
-    dt_spec = dataset_types[dt]
-    key_prefix = dt_spec.get('key_prefix', dt)
-    
-               
-    pass
 
 def preprocess_dataset_for_edit(key, data, errors, context):
     assert key[0] == '__before', \
         'This validator can only be invoked in the __before stage'
-    logger.debug('Pre-processing dataset for editing')
+    logger.debug('Pre-processing dataset for editing: context=%r' %(
+        context.keys()))
     
     #raise Exception('Break')
     pass
 
-def get_field_validator(field):
-    '''Get field-level validation wrapped as a CKAN validator function.
-    '''
-
-    def validate(value, context):
-        try: 
-            # Invoke the zope.schema validator
-            field.validate(value)
-        except zope.schema.ValidationError as ex:
-            # Map this exception to the one expected by CKAN's validator
-            raise Invalid(u'Invalid data (%s)' %(type(ex).__name__))
-        return value
-
-    return validate
-
-def get_field_input_converter(field):
-    '''Get field-level input conversion wrapped as a CKAN converter function.
+def get_field_edit_processor(field):
+    '''Get a field-level edit converter wrapped as a CKAN converter function.
     
     This wrapper is intended to be used for a create/update schema converter,
-    i.e. to convert input from a web request.
+    and has to carry out the following basic tasks:
+        - convert input from a web request
+        - validate at field level
+        - convert to a string form and store at data[key] 
     '''
 
-    def convert(value, context):
-        '''Initialize or convert a field's value from the received input.
-        '''
+    def convert(key, data, errors, context):
+        logger.debug('Processing field "%s" for editing' %(key[0]))
+        
+        value = data.get(key)
 
-        if value is missing:
-            # Do not handle missing inputs here
-            return value
+        # We are not supposed to handle missing inputs here
+        assert not value is missing
+        
+        # Convert from input or initialize to defaults
 
         if not value:
             # Determine default value and initialize   
@@ -196,34 +175,55 @@ def get_field_input_converter(field):
             elif field.defaultFactory is not None:
                 value = field.defaultFactory()
         else:
-            # Convert (if needed) from textual input
+            # Convert from string input
             if isinstance(value, basestring):
-                # Note Do we need a specialized input_serializer_for_field ??
-                # Input from web requests does not necessarily have to be serialized
-                # in the same way as for dictization.
-                ser = serializer_for_field(field)
-                value = ser.loads(value)
+                iser = serializer_for_field(field, fmt='input')
+                if iser:
+                    value = iser.loads(value)
+        
+        # Ignore empty values (equivalent to `ignore_empty` validator).
+        # Note If a field is required the check is postponed until the dataset
+        # is validated at object level.  
+        
+        if not value:
+            raise StopOnError
 
-        return value
+        # Validate
+        
+        try: 
+            # Invoke the zope.schema validator
+            field.validate(value)
+        except zope.schema.ValidationError as ex:
+            # Map this exception to the one expected by CKAN
+            raise Invalid(u'Invalid data (%s)' %(type(ex).__name__))
+
+        # Convert to a proper string format
+
+        jser = serializer_for_field(field, fmt='json')
+        if jser:
+            value = jser.dumps(value)
+        
+        data[key] = value
+
+        return
 
     return convert
 
-def get_field_from_extras_converter(field):
-    '''Get field-level output conversion wrapped as a CKAN converter function.
-
-    This wrapper is intended to be used for a read schema converter, i.e. to
-    convert values from package_extra to fields.
+def get_field_read_processor(field):
+    '''Get a field-level converter wrapped as a CKAN converter function.
     '''
 
-    def convert(value, context):
+    def convert(key, data, errors, context):
+        logger.debug('Processing field "%s" for reading' %(key[0]))
+        
+        value = data.get(key)
 
-        assert value and not value is missing
+        assert value and (not value is missing)
         assert isinstance(value, basestring)
+        
+        # noop
 
-        ser = serializer_for_field(field)
-        value = ser.loads(value)
-         
-        return value
+        return
 
     return convert
 
