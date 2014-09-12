@@ -22,7 +22,7 @@ rp2 = ResponsibleParty(organization = u"org",email = [u""])
 rp3 = ResponsibleParty(organization = u"unicode name",email = ["unicodenon@email"],role = u"author")
 
 # No schema errors
-rp_correct = ResponsibleParty(organization = u"org",email = [u"correct@email.com",u"asd@asda.asd",u"asdasd@asdasd.asd"],role = "author")
+rp_correct = ResponsibleParty(organization = u"org",email = [u"correct@email.com",u"asd@asda.asd"],role = "author")
 
 # Tests 
 

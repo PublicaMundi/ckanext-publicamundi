@@ -6,6 +6,8 @@ import json
 import weberror
 import logging
 import geoalchemy
+import itertools
+from itertools import chain, ifilter
 
 import ckan.model as model
 import ckan.plugins as p
@@ -35,6 +37,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     p.implements(p.IDatasetForm, inherit=True)
     p.implements(p.IRoutes, inherit=True)
     p.implements(p.IActions, inherit=True)
+    p.implements(p.IPackageController, inherit=True)
 
     ## Define helper methods ## 
 
@@ -291,6 +294,125 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
     def history_template(self):
         return super(DatasetForm, self).history_template()
+
+    ## IPackageController interface ##
+    
+    def _after_create(self, context, pkg_dict):
+        log1.debug('after_create: Package %s is created', pkg_dict.get('name'))
+        pass
+
+    def _after_update(self, context, pkg_dict):
+        log1.debug('after_update: Package %s is updated', pkg_dict.get('name'))
+        pass
+
+    def after_show(self, context, pkg_dict):
+        '''Convert dataset_type-typed parts of pkg_dict to a nested dict or an object.
+
+        This is for display (template enviroment and api results) purposes only, 
+        and should *not* affect the way the read schema is being used.
+        '''
+
+        is_validated = context.get('validate', True)
+        for_view = context.get('for_view', False)
+        
+        log1.debug('after_show: Package %s is shown: view=%s validated=%s api=%s', 
+            pkg_dict.get('name'), for_view, is_validated, context.get('api_version'))
+        
+        if not is_validated:
+            # Noop: the extras are not yet promoted to 1st-level fields
+            return
+
+        # Determine dataset_type-related parameters for this package
+
+        dt = pkg_dict['dataset_type']
+        dt_spec = dataset_types[dt]
+        key_prefix = dt_spec.get('key_prefix', dt)
+        obj_factory = dt_spec.get('class')
+        
+        # Create a proper object for our dataset_type-typed metadata
+        # (or should we just create a nested dict here ?).
+        # Note If we attempt to pop() flat keys here (e.g. to replace them 
+        # by the nested structure), resource forms clear all extra fields !!
+        
+        prefix = key_prefix + '.'
+        field_keys = filter(lambda k: k.startswith(prefix), pkg_dict.iterkeys())
+        
+        d = { key: pkg_dict[key] for key in field_keys }
+        
+        dictz_opts = {
+            'unserialize-keys': True,
+            'key-prefix': key_prefix,
+            'unserialize-values': 'json',
+        }
+        obj = obj_factory().from_dict(d, is_flat=True, opts=dictz_opts)
+       
+        pkg_dict[key_prefix] = obj
+        
+        # Note We use this bit of hack when package is shown directly from the
+        # HTTP API (normally at /api/action/package_show).
+            
+        r = toolkit.c.environ['pylons.routes_dict']
+        if r['controller'] == 'api' and r.get('action') == 'action' and \
+            r.get('logic_function') in ('package_show', 'package_create', 'package_update'):
+            # Remove flat field values
+            for key in field_keys:
+                pkg_dict.pop(key)
+            # Dictize obj (so that json.dumps can handle it)
+            dictz_opts = { 'serialize-values': 'json' }
+            pkg_dict[key_prefix] = obj.to_dict(flat=False, opts=dictz_opts)
+            
+        return
+        #return pkg_dict
+     
+    def _before_search(self, search_params):
+        #search_params['q'] = 'extras_boo:*';
+        #search_params['extras'] = { 'ext_boo': 'far' }
+        return search_params
+   
+    def _after_search(self, search_results, search_params):
+        #raise Exception('Breakpoint')
+        return search_results
+
+    def _before_index(self, pkg_dict):
+        log1.debug('before_index: Package %s is indexed', pkg_dict.get('name'))
+        
+        #assert False
+        
+        return pkg_dict
+
+    def before_view(self, pkg_dict):
+        log1.debug('before_view: Package %s is prepared for view', pkg_dict.get('name'))
+
+        # An IPackageController can add/hide/transform package fields before sent to the template.
+        
+        # Todo Move as an example to ckanext-helloworld
+        
+        dt = pkg_dict.get('dataset_type') 
+
+        extras = pkg_dict.get('extras', [])
+        if not extras:
+            pkg_dict['extras'] = extras
+
+#        if dt == 'foo': 
+#            extras.append({ 'key': 'Foo/Baz', 'value': pkg_dict.get('foo.baz', 'n/a') })
+#            extras.append({ 'key': 'Foo/Rating', 'value': pkg_dict.get('foo.rating', 'n/a') })
+#            extras.append({ 'key': 'Foo/Category', 'value': pkg_dict.get('foo.thematic_category', 'n/a') })
+#            extras.append({ 'key': 'Foo/Created', 'value': pkg_dict.get('foo.created', 'n/a') })
+#            extras.append({ 'key': 'Foo/T-Extent', 'value': 
+#                pkg_dict.get('foo.temporal_extent.start', '-inf') + ' To ' +
+#                pkg_dict.get('foo.temporal_extent.end', '+inf')
+#            })
+#        
+        # or we can translate keys ...
+        
+        field_key_map = {
+            u'updated_at': _t(u'Updated'),
+            u'created_at': _t(u'Created'),
+        }
+        for item in extras:
+            k = item.get('key')
+            item['key'] = field_key_map.get(k, k)
+        return pkg_dict
 
 class PackageController(p.SingletonPlugin):
     ''' Hook into the package controller '''

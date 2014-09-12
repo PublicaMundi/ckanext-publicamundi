@@ -1,23 +1,44 @@
 {% import 'macros/form.html' as form %}
 
+{% set foo = data.get('foo', {}) %}
+
+{{
+    form.select('foo.thematic_category', 
+        id = 'field-foo.thematic_category',
+        label = _('Foo/Category'),
+        options = [
+            { 'value': 'economy', 'text': 'Economy' },
+            { 'value': 'health', 'text': 'Health' },
+            { 'value': 'environment', 'text': 'Environment' },
+            { 'value': 'government', 'text': 'Government' },
+        ], 
+        selected = foo.thematic_category | default('economy'), 
+        attrs = { 
+            'data-module': 'input-select2',
+        }) 
+}}
+
 {{ 
     form.input('foo.baz', 
         label=_('Foo/Baz'), 
         id='field-foo.baz', 
         placeholder=_('a wonderfull thing'), 
-        value=data.get('foo.baz'), 
+        value=foo.baz, 
         error=errors.get('foo.baz'), 
         classes=['control-medium'])
 }}
+
 {{ 
     form.input('foo.rating', 
         label=_('Foo/Rating'), 
         id='field-foo.rating', 
         placeholder=_('5'), 
-        value=data.get('foo.rating'), 
+        value=foo.rating, 
         error=errors.get('foo.rating'), 
         classes=['control-small'])
 }}
+
+{% set temporal_extent = foo.temporal_extent or {} %} 
 
 <div class="control-group ">
     <label class="control-label">Foo/T-Extent</label>
@@ -26,7 +47,7 @@
            class="input-small"
            title="{{ _('Start Date') }}"
            placeholder="{{ _('Start Date') }}" 
-           value="{{ data.get('foo.temporal_extent.start') | empty_and_escape }}" 
+           value="{{ temporal_extent.start | empty_and_escape }}" 
            name="foo.temporal_extent.start" 
            id="input-foo.temporal_extent.start"
            data-module="datepicker"
@@ -37,7 +58,7 @@
            class="input-small"
            title="{{ _('End Date') }}"
            placeholder="{{ _('End Date') }}" 
-           value="{{ data.get('foo.temporal_extent.end') | empty_and_escape }}" 
+           value="{{ temporal_extent.end | empty_and_escape }}" 
            name="foo.temporal_extent.end" 
            id="input-foo.temporal_extent.end"
            data-module="datepicker"
@@ -54,7 +75,7 @@
             data-module-picktime="true" data-module-pickdate="true" data-module-format="yyyy-MM-dd hh:mm:ss">
             <input type="text" id="input-foo.created"  name="foo.created"
                 class="input-medium"
-                value="{{ data.get('foo.created', '') }}" />
+                value="{{ foo.created }}" />
             <span class="add-on">
               <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
             </span>

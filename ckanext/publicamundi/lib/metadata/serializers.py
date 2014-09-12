@@ -143,18 +143,19 @@ class UnicodeFieldSerializer(BaseFieldSerializer):
         return u.encode(self.encoding)
 
     def _from_string(self, s):
-        if isinstance(s, unicode):
-            return s
-        else:
-            return str(s).decode(self.encoding)
+        return str(s).decode(self.encoding)
 
 @field_serialize_adapter(zope.schema.interfaces.IText, fmt='input')
 @field_serialize_adapter(zope.schema.interfaces.ITextLine, fmt='input')
 class UnicodeInputFieldSerializer(UnicodeFieldSerializer):
 
     encoding = 'utf-8'
-
-    pass
+    
+    def _from_string(self, s):
+        if isinstance(s, unicode):
+            return s
+        else:
+            return str(s).decode(self.encoding)
 
 @field_serialize_adapter(zope.schema.interfaces.IInt, fmt='json')
 @field_serialize_adapter(zope.schema.interfaces.IInt, fmt='input')

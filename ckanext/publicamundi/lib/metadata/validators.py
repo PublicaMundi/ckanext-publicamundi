@@ -9,7 +9,9 @@ import ckan.plugins.toolkit as toolkit
 from ckan.lib.navl.dictization_functions import missing, StopOnError, Invalid
 
 from ckanext.publicamundi.lib import logger
+from ckanext.publicamundi.lib import dictization
 from ckanext.publicamundi.lib.util import Breakpoint
+from ckanext.publicamundi.lib.util import find_all_duplicates
 from ckanext.publicamundi.lib.metadata import \
     dataset_types, Object, ErrorDict, \
     serializer_for_object, serializer_for_field, serializer_for_key_tuple
@@ -75,8 +77,11 @@ def is_dataset_type(value, context):
 def preprocess_dataset_for_read(key, data, errors, context):
     assert key[0] == '__before', \
         'This validator can only be invoked in the __before stage'
-    logger.debug('Pre-processing dataset for reading: context=%r' %(
-        context.keys()))
+    
+    def debug(msg):
+        logger.debug('Pre-processing dataset for reading: %s' %(msg))
+    
+    debug('context=%r' %(context.keys()))
     
     #raise Breakpoint('preprocess read')
     pass
@@ -84,8 +89,11 @@ def preprocess_dataset_for_read(key, data, errors, context):
 def postprocess_dataset_for_read(key, data, errors, context):
     assert key[0] == '__after', \
         'This validator can only be invoked in the __after stage'
-    logger.debug('Post-processing dataset for reading: context=%r' %(
-        context.keys()))
+    
+    def debug(msg):
+        logger.debug('Post-processing dataset for reading: %s' %(msg))
+    
+    debug('context=%r' %(context.keys()))
     
     # Note This is not always supplied (?). I suppose this is due to the
     # fact that package dicts are cached (on their revision-id).
@@ -101,58 +109,90 @@ def postprocess_dataset_for_read(key, data, errors, context):
 def postprocess_dataset_for_edit(key, data, errors, context):
     assert key[0] == '__after', \
         'This validator can only be invoked in the __after stage'
-    logger.debug('Post-processing dataset for editing: context=%r' %(
-        context.keys()))
+    
+    def debug(msg):
+        logger.debug('Post-processing dataset for editing: %s' %(msg))
+ 
+    debug('context=%r' %(context.keys()))
     
     requested_with_api = context.has_key('api_version')
-
     is_new = not context.has_key('package')
     is_draft = data.get(('state',), 'unknown').startswith('draft')
+
+    #raise Breakpoint('postprocess_dataset_for_edit')
 
     if is_new and not requested_with_api:
         return # noop: core metadata expected
 
     dt = data[('dataset_type',)]
-    dt_spec = dataset_types[dt]
+    dt_spec = dataset_types.get(dt)
+    if not dt_spec:
+        raise Invalid('Unknown dataset-type: %s' %(dt))
+    
     key_prefix = dt_spec.get('key_prefix', dt)
     
     # 1. Objectify from flattened fields
     
     obj = objectify(dt_spec.get('class'), data, key_prefix)
 
+    if not obj:
+        # Failed to create one (maybe at resources form (?))
+        return 
+
     data[(key_prefix,)] = obj
     
-    # 3. Validate as an object
+    # 2. Validate as an object
 
-    if obj:
-        validation_errors = obj.validate(dictize_errors=True)
-        # Fixme Try to map `validation_errors` to `errors`
-        #assert not validation_errors
-    else:
-        assert is_draft
+    validation_errors = obj.validate(dictize_errors=True)
+    # Todo Try to map `validation_errors` to `errors`
+    #assert not validation_errors
    
-    # 4. Convert fields to extras
-
-    def check_extras(extras_list):
-        extras_keys = Counter(map(lambda t: t['key'], extras_list))
-        return extras_keys.most_common(1)[0][1] < 2
+    # 3. Convert fields to extras
     
-    if obj:
-        extras_list = data[('extras',)]
-        extras_dict = dictize_for_extras(obj, key_prefix)
-        for key, val in extras_dict.iteritems():
-            extras_list.append({ 'key': key, 'value': val })
-        assert check_extras(extras_list)
+    extras_list = data[('extras',)]
+    extras_dict = dictize_for_extras(obj, key_prefix)
+    for key, val in extras_dict.iteritems():
+        extras_list.append({ 'key': key, 'value': val })
+    assert not find_all_duplicates(map(lambda t: t['key'], extras_list))
 
     return
 
 def preprocess_dataset_for_edit(key, data, errors, context):
     assert key[0] == '__before', \
         'This validator can only be invoked in the __before stage'
-    logger.debug('Pre-processing dataset for editing: context=%r' %(
-        context.keys()))
     
-    #raise Exception('Break')
+    def debug(msg):
+        logger.debug('Pre-processing dataset for editing: %s' %(msg))
+    
+    debug('context=%r' %(context.keys()))
+    
+    received_data = { k:v for k,v in data.iteritems() if not (v is missing) }
+    unexpected_data = received_data.get(('__extras',), {})
+    
+    debug('Received data: %r' %(received_data))
+    debug('Received (but unexpected) data: %r' %(unexpected_data))
+    
+    # Figure-out if a nested dict is supplied (instead of a flat one).
+    
+    # Note This "nested" input format is intended to be used by the action api,
+    # as it is far more natural to the JSON format. Still, this format option is
+    # not restricted to api requests (it is possible to be used even by form-based
+    # requests).
+    
+    dt = received_data.get(('dataset_type',))
+    r = unexpected_data.get(dt) if dt else None
+    if isinstance(r, dict) and dataset_types.has_key(dt):
+        # Looks like a nested dict keyed at key_prefix
+        key_prefix = dataset_types[dt]['key_prefix']
+        debug('Trying to flatten input at %s' %(key_prefix))
+        if any([ k[0].startswith(key_prefix) for k in received_data ]):
+            raise Invalid('Not supported: Detected both nested/flat inputs')
+        # Convert to expected flat fields
+        key_converter = lambda k: '.'.join((key_prefix,) +k)
+        r = dictization.flatten(r, key_converter)
+        data.update({ (k,):v for k, v in r.iteritems() })
+
+    #raise Breakpoint('preprocess_dataset_for_edit')
     pass
 
 def get_field_edit_processor(field):
@@ -221,7 +261,7 @@ def get_field_read_processor(field):
     '''
 
     def convert(key, data, errors, context):
-        logger.debug('Processing field "%s" for reading' %(key[0]))
+        #logger.debug('Processing field "%s" for reading' %(key[0]))
         
         value = data.get(key)
 

@@ -4,7 +4,7 @@
 {% set errors = errors or {} %}
 {% set action = form_action or h.url_for(controller='package', action='new_resource', id=pkg_name) %}
 
-<form class="dataset-form dataset-resource-form form-horizontal" method="post" action="{{ action }}" data-module="basic-form resource-form" enctype="multipart/form-data">
+<form id="resource-form" class="dataset-form dataset-resource-form form-horizontal" method="post" action="{{ action }}" data-module="basic-form resource-form" enctype="multipart/form-data">
   {% block stages %}
     {# An empty stages variable will not show the stages #}
     {% if stage %}
@@ -66,11 +66,11 @@
         <button class="btn" name="save" value="go-dataset" type="submit">{{ _('Previous') }}</button>
       {% endblock %}
       {% block again_button %}
-        <button class="btn" name="save" value="again" type="submit">{{ _('Save & add another') }}</button>
+        <button id="btn-save-again" class="btn" name="save" value="again" type="submit">{{ _('Save & add another') }}</button>
         {% endblock %}
-      <button class="btn btn-primary" name="save" value="go-metadata" type="submit">{% block save_button_text %}{{ _('Next: Additional Info') }}{% endblock %}</button>
+      <button id="btn-save-go-metadata" class="btn btn-primary" name="save" value="go-metadata" type="submit">{% block save_button_text %}{{ _('Next: Additional Info') }}{% endblock %}</button>
     {% else %}
-      <button class="btn btn-primary" name="save" value="go-dataset-complete" type="submit">{{ _('Add') }}</button>
+      <button id="btn-save-go-dataset-complete" class="btn btn-primary" name="save" value="go-dataset-complete" type="submit">{{ _('Add') }}</button>
     {% endif %}
   </div>
 </form>

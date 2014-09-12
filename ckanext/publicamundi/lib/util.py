@@ -3,6 +3,7 @@ import string
 import json
 import geojson
 import shapely
+import collections
 
 from ckanext.publicamundi.lib.json_encoder import JsonEncoder
 
@@ -36,3 +37,8 @@ def stringify_exception(ex):
 
 def raise_for_stub_method():
     raise NotImplementedError('Method should be implemented in a derived class')
+
+def find_all_duplicates(l):
+    counter = collections.Counter(l)
+    dups = { k:n for k,n in counter.items() if n > 1 }
+    return dups

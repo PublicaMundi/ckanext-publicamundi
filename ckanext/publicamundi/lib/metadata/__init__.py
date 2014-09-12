@@ -34,7 +34,6 @@ dataset_types = {
         'description': u'Provide core CKAN metadata',
         'schema': ICkanMetadata,
         'class': CkanMetadata,
-        'key_prefix': None, 
     },
     'inspire': {
         'title': 'INSPIRE',
