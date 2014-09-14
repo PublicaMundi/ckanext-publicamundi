@@ -14,9 +14,9 @@ from ckanext.publicamundi.lib.json_encoder import JsonEncoder
 from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.ibase import \
     IObject, IErrorDict, ISerializer
+from ckanext.publicamundi.lib.metadata import serializers
 from ckanext.publicamundi.lib.metadata.serializers import \
-    serializer_for_field, serializer_for_key_tuple, \
-    object_serialize_adapter, BaseSerializer
+    serializer_for_field, serializer_for_key_tuple
 
 _cache = threading.local()
 
@@ -125,11 +125,11 @@ class Object(object):
 
     def to_dict(self, flat=False, opts={}):
         if flat:
-            serialize_keys = opts.pop('serialize-keys', False)
+            serialize_keys = opts.get('serialize-keys', False)
             res = self.flatten(opts)
             if serialize_keys:
                 kser = serializer_for_key_tuple()
-                kser.prefix = opts.pop('key-prefix', None)
+                kser.prefix = opts.get('key-prefix', None)
                 res = { kser.dumps(k): v for k, v in res.iteritems() }
         else:
             res = self.dictize(opts)
@@ -144,10 +144,10 @@ class Object(object):
         if is_flat is None:
             is_flat = isinstance(d.iterkeys().next(), tuple)
         if is_flat:
-            unserialize_keys = opts.pop('unserialize-keys', False)
+            unserialize_keys = opts.get('unserialize-keys', False)
             if unserialize_keys:
                 kser = serializer_for_key_tuple()
-                kser.prefix = opts.pop('key-prefix', None)
+                kser.prefix = opts.get('key-prefix', None)
                 d = dictization.unflatten({ 
                     kser.loads(k): v for k, v in d.iteritems() 
                 })
@@ -165,7 +165,7 @@ class Object(object):
         cls = type(self)
         opts = {
             'serialize-keys': flat,
-            'serialize-values': 'json',
+            'serialize-values': 'json-s',
         }
         d = self.to_dict(flat, opts)
         return json.dumps(d, indent=indent)
@@ -175,7 +175,7 @@ class Object(object):
         d = json.loads(s)
         opts = {
             'unserialize-keys': is_flat,
-            'unserialize-values': 'json',
+            'unserialize-values': 'json-s',
         }
         return self.from_dict(d, is_flat, opts=opts)
     
@@ -572,7 +572,7 @@ class Object(object):
             v = f
             fmt = self.opts.get('serialize-values', False)
             if (v is not None) and fmt:
-                fmt = 'json' if isinstance(fmt, bool) else str(fmt)
+                fmt = 'default' if isinstance(fmt, (bool, int)) else str(fmt)
                 ser = serializer_for_field(F, fmt=fmt)
                 if ser:
                     try:
@@ -705,7 +705,7 @@ class Object(object):
                 f = v
                 fmt = self.opts.get('unserialize-values', False)
                 if (f is not None) and fmt:
-                    fmt = 'json' if isinstance(fmt, bool) else str(fmt)
+                    fmt = 'default' if isinstance(fmt, (bool, int)) else str(fmt)
                     ser = serializer_for_field(F, fmt=fmt)
                     if ser:
                         try:
@@ -757,9 +757,9 @@ class ErrorDict(dict):
 # Serializers
 #
 
-@object_serialize_adapter(IObject)
-class ObjectSerializer(BaseSerializer):
-    '''Provide a simple serializer (JSON) for derivatives of Object
+@serializers.object_serialize_adapter(IObject, fmt='default')
+class ObjectSerializer(serializers.BaseSerializer):
+    '''Provide a simple serializer (to JSON string) for derivatives of Object
     '''
 
     def __init__(self, obj):
@@ -773,13 +773,13 @@ class ObjectSerializer(BaseSerializer):
         
     def loads(self, s):
         factory = type(self.obj)
-        o = factory()
-        return o.from_json(s)
+        return factory().from_json(s)
 
 def serializer_for_object(obj):
     '''Get a proper serializer for an Object instance.
     ''' 
     assert isinstance(obj, Object)
-    serializer = adapter_registry.queryMultiAdapter([obj], ISerializer, 'serialize:json')
+    serializer = adapter_registry.queryMultiAdapter(
+        [obj], ISerializer, 'serialize:default')
     return serializer
 

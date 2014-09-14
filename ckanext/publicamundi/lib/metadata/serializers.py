@@ -1,7 +1,48 @@
+'''Provide serializers for leaf zope.schema fields
+
+We provide named adapters for ISerializer interface. These adapters are named 
+according to their serialization formats (as "serialize:<fmt>").
+These serializers are str-based, i.e. they always dump to plain str (not unicode).
+
+So far, the formats supported are:
+
+    * default: 
+        Provide basic methods for all leaf fields.
+    
+    * input: 
+        Provide methods needed to load/dump field values from/to web requests.
+        The "input" serializers are mostly needed to decode (i.e. loads) values 
+        from request.param. For the sake of completeness, we also provide the inverse
+        operation (dumps).
+    
+    * json-s: 
+        Provide methods to load/dump field values to a JSON-serializable format
+        understood by json.dumps. This kind of serializer will *not* be registered to
+        handle data types inherently supported by JSON (e.g. like integers and floats).
+
+Note that for a specific format and a field interface, a serializer may not exist:
+this is not an error, it usually means that serialization is not meaningfull in this 
+context (and maybe values should be left unchanged, see examples below).
+
+For example, as integers dont need to be serialized to be understood by JSON:
+    
+    >>> f = zope.schema.Int(title=u'height')
+    >>> ser = serializer_for_field(f, fmt='json-s')
+    >>> assert ser is None 
+
+Of course, if instead we asked for a `default` serializer, we should get one:
+    
+    >>> f = zope.schema.Int(title='height')
+    >>> ser = serializer_for_field(f)
+    >>> assert ser
+    >>> assert ser.dumps(5) == '5'
+     
+'''
+
 import datetime
+import isodate
 import re
 import pickle
-import itertools
 import zope.interface
 import zope.schema
 import zope.schema.interfaces
@@ -13,6 +54,7 @@ from ckanext.publicamundi.lib.metadata.ibase import \
     IObject, ISerializer, IKeyTupleSerializer
 
 __all__ = [
+    'supported_formats',
     'field_serialize_adapter', 
     'object_serialize_adapter',
     'BaseSerializer', 
@@ -24,20 +66,20 @@ __all__ = [
 
 # Decorators for adaptation
 
-re_fmt = re.compile('^[a-z][-a-z0-9]*$')
+supported_formats = [ 'default', 'input', 'json-s' ]
 
-def field_serialize_adapter(required_iface, fmt='json'):
+def field_serialize_adapter(required_iface, fmt='default'):
     assert required_iface.isOrExtends(zope.schema.interfaces.IField)
-    assert re_fmt.match(fmt)
+    assert fmt in supported_formats
     name = 'serialize:%s' % (fmt)
     def decorate(cls):
         adapter_registry.register([required_iface], ISerializer, name, cls)
         return cls
     return decorate
 
-def object_serialize_adapter(required_iface, fmt='json'):
+def object_serialize_adapter(required_iface, fmt='default'):
     assert required_iface.isOrExtends(IObject)
-    assert re_fmt.match(fmt)
+    assert fmt in supported_formats
     name = 'serialize:%s' % (fmt)
     def decorate(cls):
         adapter_registry.register([required_iface], ISerializer, name, cls)
@@ -58,12 +100,12 @@ def serializer_for_key_tuple():
     serializer = adapter_registry.queryMultiAdapter([], IKeyTupleSerializer, 'serialize-key')
     return serializer
 
-def serializer_for_field(field, fmt='json'):
+def serializer_for_field(field, fmt='default'):
     '''Get a proper serializer for a zope.schema.Field instance.
     Normally, this will be used for leaf (non collection-based) fields.
     ''' 
     assert isinstance(field, zope.schema.Field)
-    assert re_fmt.match(fmt)
+    assert fmt in supported_formats
     name = 'serialize:%s' % (fmt)
     serializer = adapter_registry.queryMultiAdapter([field], ISerializer, name)
     return serializer
@@ -74,11 +116,11 @@ def serializer_factory_for_key_tuple():
     factory = adapter_registry.lookup([], ISerializer, 'serialize-key')
     return factory
 
-def serializer_factory_for_field(field_iface, fmt='json'):
+def serializer_factory_for_field(field_iface, fmt='default'):
     '''Get a proper serializer factory for a zope.schema.Field interface.
     ''' 
     assert field_iface.extends(zope.schema.interfaces.IField)
-    assert re_fmt.match(fmt)
+    assert fmt in supported_formats
     name = 'serialize:%s' % (fmt)
     factory = adapter_registry.lookup([field_iface], ISerializer, name)
     return factory
@@ -119,8 +161,10 @@ class BaseFieldSerializer(BaseSerializer):
     def _from_string(self, s):
         raise_for_stub_method()
 
-@field_serialize_adapter(zope.schema.interfaces.INativeString, fmt='json')
-@field_serialize_adapter(zope.schema.interfaces.IChoice, fmt='json')
+@field_serialize_adapter(zope.schema.interfaces.INativeString, fmt='default')
+@field_serialize_adapter(zope.schema.interfaces.IChoice, fmt='default')
+@field_serialize_adapter(zope.schema.interfaces.INativeString, fmt='json-s')
+@field_serialize_adapter(zope.schema.interfaces.IChoice, fmt='json-s')
 class StringFieldSerializer(BaseFieldSerializer):
     
     def _to_string(self, s):
@@ -130,8 +174,8 @@ class StringFieldSerializer(BaseFieldSerializer):
     def _from_string(self, s):
         return str(s)
 
-@field_serialize_adapter(zope.schema.interfaces.IText, fmt='json')
-@field_serialize_adapter(zope.schema.interfaces.ITextLine, fmt='json')
+@field_serialize_adapter(zope.schema.interfaces.IText, fmt='default')
+@field_serialize_adapter(zope.schema.interfaces.ITextLine, fmt='default')
 class UnicodeFieldSerializer(BaseFieldSerializer):
 
     encoding = 'unicode-escape'
@@ -154,7 +198,7 @@ class UnicodeInputFieldSerializer(UnicodeFieldSerializer):
 
     pass
 
-@field_serialize_adapter(zope.schema.interfaces.IInt, fmt='json')
+@field_serialize_adapter(zope.schema.interfaces.IInt, fmt='default')
 @field_serialize_adapter(zope.schema.interfaces.IInt, fmt='input')
 class IntFieldSerializer(BaseFieldSerializer):
 
@@ -165,7 +209,7 @@ class IntFieldSerializer(BaseFieldSerializer):
     def _from_string(self, s):
         return int(s)
 
-@field_serialize_adapter(zope.schema.interfaces.IBool, fmt='json')
+@field_serialize_adapter(zope.schema.interfaces.IBool, fmt='default')
 class BoolFieldSerializer(BaseFieldSerializer):
 
     def _to_string(self, y):
@@ -195,7 +239,7 @@ class BoolInputFieldSerializer(BaseFieldSerializer):
             return None
         return bool(s)
 
-@field_serialize_adapter(zope.schema.interfaces.IFloat, fmt='json')
+@field_serialize_adapter(zope.schema.interfaces.IFloat, fmt='default')
 @field_serialize_adapter(zope.schema.interfaces.IFloat, fmt='input')
 class FloatFieldSerializer(BaseFieldSerializer):
 
@@ -206,9 +250,19 @@ class FloatFieldSerializer(BaseFieldSerializer):
     def _from_string(self, s):
         return float(s)
 
-@field_serialize_adapter(zope.schema.interfaces.IDatetime, fmt='json')
-@field_serialize_adapter(zope.schema.interfaces.IDatetime, fmt='input')
+@field_serialize_adapter(zope.schema.interfaces.IDatetime, fmt='default')
+@field_serialize_adapter(zope.schema.interfaces.IDatetime, fmt='json-s')
 class DatetimeFieldSerializer(BaseFieldSerializer):
+   
+    def _to_string(self, t):
+        assert isinstance(t, datetime.datetime)
+        return t.isoformat()
+
+    def _from_string(self, s):
+        return isodate.parse_datetime(s) 
+
+@field_serialize_adapter(zope.schema.interfaces.IDatetime, fmt='input')
+class DatetimeFormattedFieldSerializer(BaseFieldSerializer):
 
     fmt = "%Y-%m-%d %H:%M:%S"
    
@@ -219,9 +273,19 @@ class DatetimeFieldSerializer(BaseFieldSerializer):
     def _from_string(self, s):
         return datetime.datetime.strptime(s, self.fmt)
 
-@field_serialize_adapter(zope.schema.interfaces.IDate, fmt='json')
-@field_serialize_adapter(zope.schema.interfaces.IDate, fmt='input')
+@field_serialize_adapter(zope.schema.interfaces.IDate, fmt='default')
+@field_serialize_adapter(zope.schema.interfaces.IDate, fmt='json-s')
 class DateFieldSerializer(BaseFieldSerializer):
+    
+    def _to_string(self, t):
+        assert isinstance(t, datetime.date)
+        return t.isoformat()
+
+    def _from_string(self, s):
+        return isodate.parse_date(s)
+
+@field_serialize_adapter(zope.schema.interfaces.IDate, fmt='input')
+class DateFormattedFieldSerializer(BaseFieldSerializer):
 
     fmt = "%Y-%m-%d"
     
@@ -233,9 +297,19 @@ class DateFieldSerializer(BaseFieldSerializer):
         t = datetime.datetime.strptime(s, self.fmt)
         return t.date()
 
-@field_serialize_adapter(zope.schema.interfaces.ITime, fmt='json')
-@field_serialize_adapter(zope.schema.interfaces.ITime, fmt='input')
+@field_serialize_adapter(zope.schema.interfaces.ITime, fmt='default')
+@field_serialize_adapter(zope.schema.interfaces.ITime, fmt='json-s')
 class TimeFieldSerializer(BaseFieldSerializer):
+
+    def _to_string(self, t):
+        assert isinstance(t, datetime.time)
+        return t.isoformat()
+
+    def _from_string(self, s):
+        return isodate.parse_time(s)
+
+@field_serialize_adapter(zope.schema.interfaces.ITime, fmt='input')
+class TimeFormattedFieldSerializer(BaseFieldSerializer):
 
     fmt = "%H:%M:%S"
 
