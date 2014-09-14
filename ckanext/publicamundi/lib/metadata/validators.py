@@ -20,33 +20,25 @@ _t = toolkit._
 
 ## Helpers
 
-def get_field_key_predicate(prefix):
-    name_prefix = prefix + '.'
-    
-    def check(k): 
-        if not k or len(k) > 1:
-            return False
-        return k[0].startswith(name_prefix)
-    
-    return check
-
 def objectify(factory, data, key_prefix):
     '''Build an object from received converter/validator data. 
     '''
 
+    prefix = key_prefix + '.'
+    
+    def is_field_key(k):
+        if not k or len(k) > 1:
+            return False
+        return k[0].startswith(prefix)
+    
     obj = None
-    
-    is_field_key = get_field_key_predicate(key_prefix)
-    field_keys = filter(is_field_key, data.iterkeys())
-    obj_dict = { key[0]: data[key] for key in field_keys }
-    
+    obj_dict = { k[0]: data[k] for k in data if is_field_key(k) }
     if obj_dict:
-        dictz_opts = { 
+        obj = factory().from_dict(obj_dict, is_flat=True, opts={
             'unserialize-keys': True, 
-            'unserialize-values': 'json', 
-            'key-prefix': key_prefix 
-        }
-        obj = factory().from_dict(obj_dict, is_flat=True, opts=dictz_opts)
+            'key-prefix': key_prefix, 
+            'unserialize-values': 'default', 
+        })
 
     assert not obj or isinstance(obj, Object)
     return obj
@@ -60,7 +52,7 @@ def dictize_for_extras(obj, key_prefix):
     
     dictz_opts = {
         'serialize-keys': True, 
-        'serialize-values': 'json',
+        'serialize-values': 'default',
         'key-prefix': key_prefix,
     }
 
@@ -109,7 +101,7 @@ def postprocess_dataset_for_read(key, data, errors, context):
 def postprocess_dataset_for_edit(key, data, errors, context):
     assert key[0] == '__after', \
         'This validator can only be invoked in the __after stage'
-    
+     
     def debug(msg):
         logger.debug('Post-processing dataset for editing: %s' %(msg))
  
@@ -213,8 +205,10 @@ def get_field_edit_processor(field):
         # We are not supposed to handle missing inputs here
         assert not value is missing
         
-        # Convert from input or initialize to defaults
-
+        ser = serializer_for_field(field)
+        
+        # Convert from input/db or initialize to defaults
+        
         if not value:
             # Determine default value and initialize   
             if field.default is not None:
@@ -222,11 +216,9 @@ def get_field_edit_processor(field):
             elif field.defaultFactory is not None:
                 value = field.defaultFactory()
         else:
-            # Convert from string input
-            if isinstance(value, basestring):
-                iser = serializer_for_field(field, fmt='input')
-                if iser:
-                    value = iser.loads(value)
+            # Convert from input or db  
+            if ser and isinstance(value, basestring):
+                value = ser.loads(value)
         
         # Ignore empty values (equivalent to `ignore_empty` validator).
         # Note If a field is required the check is postponed until the dataset
@@ -244,11 +236,10 @@ def get_field_edit_processor(field):
             # Map this exception to the one expected by CKAN
             raise Invalid(u'Invalid data (%s)' %(type(ex).__name__))
 
-        # Convert to a proper string format
+        # Convert to a properly formatted string (for db storage)
 
-        jser = serializer_for_field(field, fmt='json')
-        if jser:
-            value = jser.dumps(value)
+        if ser:
+            value = ser.dumps(value)
         
         data[key] = value
 

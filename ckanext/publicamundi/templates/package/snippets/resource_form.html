@@ -5,16 +5,21 @@
 {% set action = form_action or h.url_for(controller='package', action='new_resource', id=pkg_name) %}
 
 <form id="resource-form" class="dataset-form dataset-resource-form form-horizontal" method="post" action="{{ action }}" data-module="basic-form resource-form" enctype="multipart/form-data">
-  {% block stages %}
+    {% block stages %}
     {# An empty stages variable will not show the stages #}
     {% if stage %}
-      {{ h.snippet('package/snippets/stages.html', stages=stage, pkg_name=pkg_name) }}
+    {{ h.snippet('package/snippets/stages.html', stages=stage, pkg_name=pkg_name) }}
     {% endif %}
-  {% endblock %}
+    {% endblock %}
 
-  {{ form.errors(error_summary) }}
+    {{ form.errors(error_summary) }}
 
-  <input name="id" value="{{ data.id }}" type="hidden"/>
+    <input name="id" value="{{ data.id }}" type="hidden"/>
+
+    {% block package_basic_fields_autofill %}
+    <span class="btn btn-warning hide" data-module="form-autofiller" data-module-formid="resource-form">Auto</span>
+    {% resource 'ckanext-publicamundi/form-autofiller'  %}
+    {% endblock %} {# package_basic_fields_autofill #}
 
     {% block basic_fields_url %}
       {% set is_upload = (data.url_type == 'upload') %}
@@ -37,7 +42,7 @@
       {% endcall %}
     {% endblock %}
 
-  {% block metadata_fields %}
+    {% block metadata_fields %}
     {% if include_metadata %}
       {# TODO: Where do these come from, they don't exist in /package/new_package_form.html #}
       {# {{ form.select('resource_type', id='field-type', label=_('Resource Type'), options=[{'value': 'empty', 'text': _('Select a type…')}], selected="empty", error=errors.type) }} #}
@@ -50,9 +55,9 @@
 
       {{ form.input('mimetype_inner', id='field-mimetype-inner', label=_('MIME Type'), placeholder=_('eg. application/json'), value=data.mimetype_inner, error=errors.mimetype_inner, classes=[]) }}
     {% endif %}
-  {% endblock %}
+    {% endblock %}
 
-  <div class="form-actions">
+    <div class="form-actions">
     {% block delete_button %}
       {% if data.id %}
         {% if h.check_access('resource_delete', {'id': data.id})  %}
@@ -72,5 +77,6 @@
     {% else %}
       <button id="btn-save-go-dataset-complete" class="btn btn-primary" name="save" value="go-dataset-complete" type="submit">{{ _('Add') }}</button>
     {% endif %}
-  </div>
+    </div>
+
 </form>

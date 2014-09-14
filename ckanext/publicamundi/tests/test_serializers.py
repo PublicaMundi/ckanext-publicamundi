@@ -7,9 +7,12 @@ import zope.interface
 import zope.schema
 from zope.interface.verify import verifyObject
 
-from ckanext.publicamundi.lib.metadata import ISerializer, serializer_for_object
+from ckanext.publicamundi.lib.metadata import ISerializer
 from ckanext.publicamundi.lib.metadata.types import Foo
-from ckanext.publicamundi.lib.metadata.serializers import *
+from ckanext.publicamundi.lib.metadata import serializers
+from ckanext.publicamundi.lib.metadata.serializers import \
+    serializer_for_key_tuple, serializer_for_field
+from ckanext.publicamundi.lib.metadata.base import serializer_for_object
 from ckanext.publicamundi.tests import fixtures
 
 def test_objects():
@@ -90,7 +93,7 @@ def _test_fixture_object(fixture_name):
 def test_field_textline():
     f = zope.schema.TextLine(title=u'Summary')
     
-    for fmt in ['json', 'input']:
+    for fmt in ['default']:
         ser = serializer_for_field(f, fmt=fmt)
         assert ser 
         verifyObject(ISerializer, ser)
@@ -103,8 +106,12 @@ def test_field_textline():
         assert v == v1
   
     fmt = 'not-existing-format'
-    ser = serializer_for_field(f, fmt=fmt)
-    assert ser is None 
+    try:
+        ser = serializer_for_field(f, fmt=fmt)
+    except:
+        pass
+    else:
+        assert False, 'Unexpected serialization format'
 
 def test_field_datetime():
     f = zope.schema.Datetime(title=u'Created')
@@ -117,7 +124,7 @@ def test_field_datetime():
 
     s = ser.dumps(dt1)
     print s
-    assert s == '2014-08-01 08:00:00'   
+    assert s == '2014-08-01T08:00:00'   
 
     v = ser.loads(s)
     assert v == dt1

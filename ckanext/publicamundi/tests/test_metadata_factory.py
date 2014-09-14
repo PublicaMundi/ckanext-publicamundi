@@ -59,7 +59,8 @@ def test_from_serialized():
         "contact_info.address.address": u'Nowhere Land',
         "contacts.personal.address.address": u"North Pole",
         "notes": u"Hello World",
-        "wakeup_time": u"08:00:00"
+        "wakeup_time": u"08:00:00",
+        "created": "1997-09-01T00:00:00",
     }
      
     factory = Object.Factory(schemata.IFoo, opts={

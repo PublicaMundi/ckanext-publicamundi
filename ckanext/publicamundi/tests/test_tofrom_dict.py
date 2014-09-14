@@ -1,76 +1,125 @@
 import zope.interface
 import zope.schema
 import json
+import datadiff
+from datadiff.tools import assert_equal
+from datetime import date, time, datetime
+from itertools import chain
 
-from ckanext.publicamundi.lib.metadata.types import *
+
+from ckanext.publicamundi.lib.metadata.base import \
+    Object, serializer_for_object, \
+    serializer_for_field, serializer_for_key_tuple
 from ckanext.publicamundi.tests import fixtures
+
+leaf_types = (basestring, bool, int, long, float,)
 
 def test_objects():
     
-    yield _test_dictization, 'contact1'
-    yield _test_dictization, 'foo1'
+    tests = chain(
+        _test_dictization('bbox1'),
+        _test_dictization('contact1'),
+        _test_dictization('foo1'),
+    )
+    
+    for tester, fixture_name, opts in tests:
+        yield tester, fixture_name, opts
+
+def _test_flattened_dict(fixture_name, opts):
+
+    x = getattr(fixtures, fixture_name)
+    assert isinstance(x, Object)
+    
+    factory = type(x)
+
+    d = x.to_dict(flat=True, opts=opts)
+
+    print
+    print ' -- Dictize: flattened opts=%r' %(opts)
+    print d
+
+    key_type = basestring if opts.get('serialize-keys') else tuple
+    key_prefix = opts.get('key-prefix')
+    
+    expected_keys = x.get_flattened_fields().keys()
+    if key_type is basestring:
+        kser = serializer_for_key_tuple()
+        kser.prefix = key_prefix
+        expected_keys = map(kser.dumps, expected_keys)
+
+    for k in d:
+        assert isinstance(k, key_type)
+        assert k in expected_keys
+
+    if key_prefix:
+        for k in d:
+            assert k.startswith(key_prefix)
+
+    if opts.get('serialize-values'):
+        for v in d.itervalues():
+            assert v is None or isinstance(v, leaf_types)
+
+    opts1 = { 
+        'unserialize-keys': opts.get('serialize-keys', False),
+        'unserialize-values': opts.get('serialize-values', False),
+        'key-prefix': opts.get('key-prefix', None),
+    }
+
+    x1 = factory().from_dict(d, is_flat=True, opts=opts1)
+    d1 = x1.to_dict(flat=True, opts=opts)
+    
+    assert_equal(d, d1)
+
+def _test_nested_dict(fixture_name, opts):
+
+    x = getattr(fixtures, fixture_name)
+    assert isinstance(x, Object)
+    
+    factory = type(x)
+
+    d = x.to_dict(flat=False, opts=opts)
+
+    assert set(d.keys()) == set(x.get_field_names())
+    
+    print
+    print ' -- Dictize: nested opts=%r' %(opts)
+    print d
+    
+    opts1 = { 
+        'unserialize-values': opts.get('serialize-values', False),
+    }
+
+    x1 = factory().from_dict(d, is_flat=False, opts=opts1)
+    d1 = x1.to_dict(flat=False, opts=opts)
+
+    assert_equal(d, d1)
 
 def _test_dictization(fixture_name):
 
-    from datetime import date, time, datetime
-
-    x1 = getattr(fixtures, fixture_name)
-    assert isinstance(x1, Object)
-
-    d1f = x1.to_dict(flat=True)
-    for k in d1f: 
-        assert isinstance(k, tuple)
-    print
-    print ' -- flat --'
-    print d1f
-
-    d1f1 = x1.to_dict(flat=True, opts={ 'serialize-keys': True })
-    for k in d1f1: 
-        assert isinstance(k, basestring)
-    print
-    print ' -- flat, serialize-keys  --'
-    print d1f1
+    opts = {}
+    yield _test_nested_dict, fixture_name, opts
+    yield _test_flattened_dict, fixture_name, opts
     
-    d1f2 = x1.to_dict(flat=True, opts={ 'serialize-values': True })
-    for k in d1f2: 
-        assert isinstance(k, tuple)
-    print
-    print ' -- flat, serialize-values  --'
-    print d1f2
+    opts = { 'serialize-keys': True }
+    yield _test_flattened_dict, fixture_name, opts
     
-    d1f2 = x1.to_dict(flat=True, opts={ 'serialize-values': 'json' })
-    for k in d1f2: 
-        assert isinstance(k, tuple)
-    print
-    print ' -- flat, serialize-values:json  --'
-    print d1f2
-
-    d1f3 = x1.to_dict(flat=True, opts={ 'serialize-keys': True, 'serialize-values': True })
-    for k, v in d1f3.items(): 
-        assert isinstance(k, basestring)
-        assert isinstance(v, basestring) or isinstance(v, int) or isinstance(v, bool) or \
-            isinstance(v, float) or isinstance(v, date) or isinstance(v, time) or \
-            isinstance(v, datetime)
-    print
-    print ' -- flat, serialize-keys, serialize-values  --'
-    print d1f3
-
-    d1r = x1.to_dict(flat=False)
-    assert (set(d1r.keys()) == set(x1.get_field_names()))
-    for k in d1r:
-        assert isinstance(k, basestring)
-    print
-    print ' -- nested --'
-    print d1r
-        
-    d1r1 = x1.to_dict(flat=False, opts={ 'serialize-values': True })
-    assert (set(d1r1.keys()) == set(x1.get_field_names()))
-    for k in d1r1:
-        assert isinstance(k, basestring)
-    print
-    print ' -- nested, serialize-values --'
-    print d1r1
-
+    opts = { 'serialize-values': True }
+    yield _test_nested_dict, fixture_name, opts
+    yield _test_flattened_dict, fixture_name, opts
+    
+    opts = { 'serialize-values': 'json-s' }
+    yield _test_nested_dict, fixture_name, opts
+    yield _test_flattened_dict, fixture_name, opts
+   
+    opts = { 'serialize-keys': True, 'serialize-values': True }
+    yield _test_flattened_dict, fixture_name, opts
+    
+    opts = { 'serialize-keys': True, 'serialize-values': 'json-s' }
+    yield _test_flattened_dict, fixture_name, opts
+    
+    opts = { 'serialize-keys': True, 'key-prefix': 'test1', 'serialize-values': True }
+    yield _test_flattened_dict, fixture_name, opts
+   
 if __name__ == '__main__':
-    for t,x in test_objects():
-        t(x)
+    for t, x, y in test_objects():
+        t(x, y)

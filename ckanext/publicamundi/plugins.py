@@ -306,10 +306,17 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         pass
 
     def after_show(self, context, pkg_dict):
-        '''Convert dataset_type-typed parts of pkg_dict to a nested dict or an object.
+        '''Hook into the validated data dict after the package is ready for display. 
+        
+        The main tasks here are:
+         * Fix types for serialized dataset_type-related values (converted to unicode,
+           whereas should be str).
+         * Convert dataset_type-related parts of pkg_dict to a nested dict or an object.
 
-        This is for display (template enviroment and api results) purposes only, 
-        and should *not* affect the way the read schema is being used.
+        This hook is for reading purposes only, i.e for template variables, api results, 
+        form initial values etc. It should *not* affect the way the read schema is used: 
+        schema items declared at read_package_schema() should not be removed (though their 
+        values can be changed!).
         '''
 
         is_validated = context.get('validate', True)
@@ -323,29 +330,31 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             return
 
         # Determine dataset_type-related parameters for this package
-
+        
         dt = pkg_dict['dataset_type']
         dt_spec = dataset_types[dt]
         key_prefix = dt_spec.get('key_prefix', dt)
-        obj_factory = dt_spec.get('class')
         
-        # Create a proper object for our dataset_type-typed metadata
-        # (or should we just create a nested dict here ?).
-        # Note If we attempt to pop() flat keys here (e.g. to replace them 
-        # by the nested structure), resource forms clear all extra fields !!
+        # Fix types, create flat object dict
         
+        # Note If we attempt to pop() flat keys here (e.g. to replace them by a 
+        # nested structure), resource forms will clear all extra fields !!
+         
         prefix = key_prefix + '.'
-        field_keys = filter(lambda k: k.startswith(prefix), pkg_dict.iterkeys())
+        keys = filter(lambda k: k.startswith(prefix), pkg_dict.iterkeys())
+        obj_dict = {}
+        for k in keys:
+            k1 = k[len(prefix):]
+            obj_dict[k1] = pkg_dict[k] = str(pkg_dict[k])
+
+        # Objectify 
         
-        d = { key: pkg_dict[key] for key in field_keys }
-        
-        dictz_opts = {
+        obj_factory = dt_spec.get('class')
+        obj = obj_factory().from_dict(obj_dict, is_flat=True, opts={
             'unserialize-keys': True,
-            'key-prefix': key_prefix,
-            'unserialize-values': 'json',
-        }
-        obj = obj_factory().from_dict(d, is_flat=True, opts=dictz_opts)
-       
+            'unserialize-values': 'default',
+        })
+
         pkg_dict[key_prefix] = obj
         
         # Note We use this bit of hack when package is shown directly from the
@@ -354,12 +363,13 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         r = toolkit.c.environ['pylons.routes_dict']
         if r['controller'] == 'api' and r.get('action') == 'action' and \
             r.get('logic_function') in ('package_show', 'package_create', 'package_update'):
-            # Remove flat field values
-            for key in field_keys:
-                pkg_dict.pop(key)
-            # Dictize obj (so that json.dumps can handle it)
-            dictz_opts = { 'serialize-values': 'json' }
-            pkg_dict[key_prefix] = obj.to_dict(flat=False, opts=dictz_opts)
+            # Remove flat field values (will not be needed anymore)
+            for k in keys:
+                pkg_dict.pop(k)
+            # Dictize obj so that json.dumps can handle it
+            pkg_dict[key_prefix] = obj.to_dict(flat=False, opts={
+                'serialize-values': 'json-s' 
+            })
             
         return
         #return pkg_dict
@@ -452,9 +462,10 @@ class PackageController(p.SingletonPlugin):
         pass
 
     def after_show(self, context, pkg_dict):
-        '''
-        Extensions will receive the validated data dict after the package is ready for display
-        (Note that the read method will return a package domain object, which may not include all fields).
+        '''Receive the validated data dict after the package is ready for display. 
+        
+        Note that the read method will return a package domain object (which may 
+        not include all fields).
         '''
         #log1.info('A package is shown: %s', pkg_dict)
         pass

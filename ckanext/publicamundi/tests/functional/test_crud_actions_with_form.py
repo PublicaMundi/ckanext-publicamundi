@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 import json
 import webtest
 import nose.tools
@@ -61,7 +63,9 @@ class TestController(BaseTestController):
     
         form1 = res1.forms['package-form'] 
         for k in ['title', 'name', 'dataset_type', 'notes', 'license_id']:
-            form1.set(k, pkg_dict.get(k))
+            v = pkg_dict.get(k)
+            v = v.encode('utf-8') if isinstance(v, unicode) else v
+            form1.set(k, v)
         form1.set('tag_string', ','.join(map(lambda t: t['name'], pkg_dict.get('tags', []))))
         
         res1s = form1.submit('save')
@@ -74,7 +78,9 @@ class TestController(BaseTestController):
         resource_dict = next(iter(pkg_dict['resources'])) # 1st resource
         form2 = res2.forms['resource-form']
         for k in ['description', 'url', 'name', 'format']:
-            form2.set(k, resource_dict.get(k))
+            v = resource_dict.get(k)
+            v = v.encode('utf-8') if isinstance(v, unicode) else v
+            form2.set(k, v)
         
         btns = form2.fields.get('save')
         i2 = next(j for j, b in enumerate(btns) if b.id == 'btn-save-go-metadata')
@@ -87,7 +93,9 @@ class TestController(BaseTestController):
         
         form3 = res3.forms['package-form']
         for k in ['version', 'url', 'author', 'author_email', 'maintainer', 'maintainer_email']:
-            form3.set(k, pkg_dict.get(k))
+            v = pkg_dict.get(k)
+            v = v.encode('utf-8') if isinstance(v, unicode) else v
+            form3.set(k, v)
 
         # 3rd stage - dataset_type-related metadata
 
@@ -124,7 +132,7 @@ class TestController(BaseTestController):
         for k in pkg_dt_dict.keys():
             assert res_dt_dict[k] == pkg_dt_dict[k]
 
-        assert False
+        return
 
 ## Fixtures ##
 
@@ -133,11 +141,11 @@ package_fixtures = {
         'title': u'Hello Foo (1)',
         'name': 'hello-foo-1',
         'notes': u'I am the first _Foo_ dataset!',
-        'author': u'Nowhere Man',
+        'author': u'Λαλάκης',
         'license_id': 'gfdl',
         'version': '1.0.0',
         'maintainer': u'Nowhere Man',
-        'author_email': 'nowhere-man@example.com',
+        'author_email': 'lalakis.1999@example.com',
         'maintainer_email': 'nowhere-man@example.com',
         'url': 'http://example.com/datasets/hello-foo-1',
         'tags': [ 
@@ -149,7 +157,7 @@ package_fixtures = {
         'foo': {
             'baz': u'BaoBab Tree',
             'rating': 9,
-            'created': u'2014-09-13 17:00:00',
+            'created': u'2014-09-13T17:00:00',
             'temporal_extent': { 
                 'start': '2012-01-01',
                 'end': '2013-01-01',

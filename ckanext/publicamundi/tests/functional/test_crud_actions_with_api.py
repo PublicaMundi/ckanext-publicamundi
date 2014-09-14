@@ -61,15 +61,13 @@ class TestController(ckan.tests.TestController):
             'dataset_type': 'foo',
             'foo.baz': u'A second chance',
             'foo.rating': 2,
-            'foo.created': u'2014-08-10 00:00:00',
+            'foo.created': u'2014-08-10T00:00:00',
             'foo.temporal_extent.start': '2012-01-01',
             'foo.temporal_extent.end': '2013-01-01',
             'foo.thematic_category': 'health',
         }
         result1 = self._create(data1)
         result1 = self._show(result1.get('name'))
-
-        # Fixme unicode strings for API results (fix json field serializer)
         
         # Create with flat input (non-ascii strings)
         data2 = copy.deepcopy(data1)
@@ -104,7 +102,7 @@ class TestController(ckan.tests.TestController):
             'foo': {
                 'baz': u'Baobab',
                 'rating': 5,
-                'created': u'2014-08-10 00:00:00',
+                'created': u'2014-08-10T00:00:00',
                 'temporal_extent': { 
                     'start': '2012-01-01',
                     'end': '2013-01-01',
@@ -149,7 +147,7 @@ class TestController(ckan.tests.TestController):
         data.update({            
             'foo.baz': u'Baobab',
             'foo.rating': 9,
-            'foo.created': u'2014-08-10 00:00:00',
+            'foo.created': u'2014-08-10T00:00:00',
             'foo.temporal_extent.start': '1999-01-01',
             'foo.temporal_extent.end': '2000-01-01',
             'foo.thematic_category': 'environment',
@@ -242,18 +240,18 @@ class TestController(ckan.tests.TestController):
 
         result_dict = result[dt_prefix]
         result_obj = obj_factory().from_dict(result_dict, is_flat=False, opts={ 
-            'unserialize-values': 'json' 
+            'unserialize-values': 'json-s' 
         })
         result_flattened_dict = result_obj.to_dict(flat=True, opts={
             'serialize-keys': True, 
-            'serialize-values': 'json', 
+            'serialize-values': 'json-s', 
             'key-prefix': dt_prefix 
         })
         dt_keys = filter(lambda t: t.startswith(dt_prefix + '.'), keys)
         missing_keys = set(dt_keys) - set(result_flattened_dict.keys())
         assert not missing_keys
         for k in dt_keys:
-            assert result_flattened_dict[k] == str(data[k])
+            assert result_flattened_dict[k] == data[k]
 
         return
 
