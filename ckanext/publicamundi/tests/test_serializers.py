@@ -93,7 +93,7 @@ def _test_fixture_object(fixture_name):
 def test_field_textline():
     f = zope.schema.TextLine(title=u'Summary')
     
-    for fmt in ['input', 'default']:
+    for fmt in ['default']:
         ser = serializer_for_field(f, fmt=fmt)
         assert ser 
         verifyObject(ISerializer, ser)

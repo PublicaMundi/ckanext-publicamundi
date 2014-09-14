@@ -110,18 +110,11 @@ def _test_dictization(fixture_name):
     opts = { 'serialize-values': 'json-s' }
     yield _test_nested_dict, fixture_name, opts
     yield _test_flattened_dict, fixture_name, opts
-     
-    opts = { 'serialize-values': 'input' }
-    yield _test_nested_dict, fixture_name, opts
-    yield _test_flattened_dict, fixture_name, opts
    
     opts = { 'serialize-keys': True, 'serialize-values': True }
     yield _test_flattened_dict, fixture_name, opts
     
     opts = { 'serialize-keys': True, 'serialize-values': 'json-s' }
-    yield _test_flattened_dict, fixture_name, opts
-    
-    opts = { 'serialize-keys': True, 'serialize-values': 'input' }
     yield _test_flattened_dict, fixture_name, opts
     
     opts = { 'serialize-keys': True, 'key-prefix': 'test1', 'serialize-values': True }

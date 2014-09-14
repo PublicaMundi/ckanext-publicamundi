@@ -9,12 +9,6 @@ So far, the formats supported are:
     * default: 
         Provide basic methods for all leaf fields.
     
-    * input: 
-        Provide methods needed to load/dump field values from/to web requests.
-        The "input" serializers are mostly needed to decode (i.e. loads) values 
-        from request.param. For the sake of completeness, we also provide the inverse
-        operation (dumps).
-    
     * json-s: 
         Provide methods to load/dump field values to a JSON-serializable format
         understood by json.dumps. This kind of serializer will *not* be registered to
@@ -32,7 +26,7 @@ For example, as integers dont need to be serialized to be understood by JSON:
 
 Of course, if instead we asked for a `default` serializer, we should get one:
     
-    >>> f = zope.schema.Int(title='height')
+    >>> f = zope.schema.Int(title=u'height')
     >>> ser = serializer_for_field(f)
     >>> assert ser
     >>> assert ser.dumps(5) == '5'
@@ -66,7 +60,7 @@ __all__ = [
 
 # Decorators for adaptation
 
-supported_formats = [ 'default', 'input', 'json-s' ]
+supported_formats = [ 'default', 'json-s' ]
 
 def field_serialize_adapter(required_iface, fmt='default'):
     assert required_iface.isOrExtends(zope.schema.interfaces.IField)
@@ -94,10 +88,12 @@ def key_tuple_serialize_adapter():
 
 # Utilities
 
-def serializer_for_key_tuple():
+def serializer_for_key_tuple(key_prefix=None):
     '''Get a proper serializer for the tuple-typed keys of a dict.
     '''
     serializer = adapter_registry.queryMultiAdapter([], IKeyTupleSerializer, 'serialize-key')
+    if key_prefix is not None:
+        serializer.prefix = key_prefix
     return serializer
 
 def serializer_for_field(field, fmt='default'):
@@ -190,16 +186,7 @@ class UnicodeFieldSerializer(BaseFieldSerializer):
         else:
             return str(s).decode(self.encoding)
 
-@field_serialize_adapter(zope.schema.interfaces.IText, fmt='input')
-@field_serialize_adapter(zope.schema.interfaces.ITextLine, fmt='input')
-class UnicodeInputFieldSerializer(UnicodeFieldSerializer):
-
-    encoding = 'utf-8'
-
-    pass
-
 @field_serialize_adapter(zope.schema.interfaces.IInt, fmt='default')
-@field_serialize_adapter(zope.schema.interfaces.IInt, fmt='input')
 class IntFieldSerializer(BaseFieldSerializer):
 
     def _to_string(self, n):
@@ -226,21 +213,7 @@ class BoolFieldSerializer(BaseFieldSerializer):
         else:
             return bool(s)
 
-@field_serialize_adapter(zope.schema.interfaces.IBool, fmt='input')
-class BoolInputFieldSerializer(BaseFieldSerializer):
-    
-    def _to_string(self, y):
-        assert isinstance(y, bool)
-        flag_name = self.field.getName() or 'true'
-        return flag_name if y else ''
-
-    def _from_string(self, s):
-        if s is None:
-            return None
-        return bool(s)
-
 @field_serialize_adapter(zope.schema.interfaces.IFloat, fmt='default')
-@field_serialize_adapter(zope.schema.interfaces.IFloat, fmt='input')
 class FloatFieldSerializer(BaseFieldSerializer):
 
     def _to_string(self, f):
@@ -259,19 +232,14 @@ class DatetimeFieldSerializer(BaseFieldSerializer):
         return t.isoformat()
 
     def _from_string(self, s):
-        return isodate.parse_datetime(s) 
-
-@field_serialize_adapter(zope.schema.interfaces.IDatetime, fmt='input')
-class DatetimeFormattedFieldSerializer(BaseFieldSerializer):
-
-    fmt = "%Y-%m-%d %H:%M:%S"
-   
-    def _to_string(self, t):
-        assert isinstance(t, datetime.datetime)
-        return t.strftime(self.fmt)
-
-    def _from_string(self, s):
-        return datetime.datetime.strptime(s, self.fmt)
+        t = None
+        try:
+            t = isodate.parse_datetime(s)
+        except ValueError:
+            pass
+        if not t:
+            t = datetime.datetime.strptime(s, '%Y-%m-%d %H:%M:%S')
+        return t
 
 @field_serialize_adapter(zope.schema.interfaces.IDate, fmt='default')
 @field_serialize_adapter(zope.schema.interfaces.IDate, fmt='json-s')
@@ -282,20 +250,15 @@ class DateFieldSerializer(BaseFieldSerializer):
         return t.isoformat()
 
     def _from_string(self, s):
-        return isodate.parse_date(s)
-
-@field_serialize_adapter(zope.schema.interfaces.IDate, fmt='input')
-class DateFormattedFieldSerializer(BaseFieldSerializer):
-
-    fmt = "%Y-%m-%d"
-    
-    def _to_string(self, t):
-        assert isinstance(t, datetime.date)
-        return t.strftime(self.fmt)
-
-    def _from_string(self, s):
-        t = datetime.datetime.strptime(s, self.fmt)
-        return t.date()
+        t = None
+        try:
+            t = isodate.parse_date(s)
+        except ValueError:
+            pass
+        if not t:
+            t = datetime.datetime.strptime(s, '%Y-%m-%d')
+            t = t.date()
+        return t
 
 @field_serialize_adapter(zope.schema.interfaces.ITime, fmt='default')
 @field_serialize_adapter(zope.schema.interfaces.ITime, fmt='json-s')
@@ -306,20 +269,15 @@ class TimeFieldSerializer(BaseFieldSerializer):
         return t.isoformat()
 
     def _from_string(self, s):
-        return isodate.parse_time(s)
-
-@field_serialize_adapter(zope.schema.interfaces.ITime, fmt='input')
-class TimeFormattedFieldSerializer(BaseFieldSerializer):
-
-    fmt = "%H:%M:%S"
-
-    def _to_string(self, t):
-        assert isinstance(t, datetime.time)
-        return t.strftime(self.fmt)
-
-    def _from_string(self, s):
-        t = datetime.datetime.strptime(s, self.fmt)
-        return t.time()
+        t = None
+        try:
+            t = isodate.parse_time(s)
+        except ValueError:
+            pass
+        if not t:
+            t = datetime.datetime.strptime(s, '%H:%M:%S')
+            t = t.time()
+        return t
 
 @key_tuple_serialize_adapter()
 class KeyTupleSerializer(BaseSerializer):
@@ -337,8 +295,8 @@ class KeyTupleSerializer(BaseSerializer):
     @prefix.setter
     def prefix(self, value):
         if value is not None:
-            assert isinstance(value, str) and value.find(self.glue) < 0
-            self._prefix = value
+            assert isinstance(value, basestring) and value.find(self.glue) < 0
+            self._prefix = str(value)
 
     def dumps(self, l):
         assert isinstance(l, tuple) or isinstance(l, list)
