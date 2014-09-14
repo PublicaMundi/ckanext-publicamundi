@@ -297,11 +297,11 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
     ## IPackageController interface ##
     
-    def _after_create(self, context, pkg_dict):
+    def after_create(self, context, pkg_dict):
         log1.debug('after_create: Package %s is created', pkg_dict.get('name'))
         pass
 
-    def _after_update(self, context, pkg_dict):
+    def after_update(self, context, pkg_dict):
         log1.debug('after_update: Package %s is updated', pkg_dict.get('name'))
         pass
 
@@ -364,28 +364,23 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         return
         #return pkg_dict
      
-    def _before_search(self, search_params):
+    def before_search(self, search_params):
         #search_params['q'] = 'extras_boo:*';
         #search_params['extras'] = { 'ext_boo': 'far' }
         return search_params
    
-    def _after_search(self, search_results, search_params):
+    def after_search(self, search_results, search_params):
         #raise Exception('Breakpoint')
         return search_results
 
-    def _before_index(self, pkg_dict):
+    def before_index(self, pkg_dict):
         log1.debug('before_index: Package %s is indexed', pkg_dict.get('name'))
-        
-        #assert False
-        
         return pkg_dict
 
     def before_view(self, pkg_dict):
         log1.debug('before_view: Package %s is prepared for view', pkg_dict.get('name'))
 
-        # An IPackageController can add/hide/transform package fields before sent to the template.
-        
-        # Todo Move as an example to ckanext-helloworld
+        # This hook can add/hide/transform package fields before being sent to the template.
         
         dt = pkg_dict.get('dataset_type') 
 
