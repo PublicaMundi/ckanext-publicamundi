@@ -80,6 +80,7 @@ def make_vocabularies():
             'title': title,
             'reference_date': datetime.strptime(keywords.get('reference_date'), '%Y-%m-%d').date(),
             'date_type': keywords.get('date_type'),
+            'version': keywords.get('version'),
             'vocabulary': make_vocabulary(keywords.get('terms'))
         }
 
@@ -103,3 +104,4 @@ def get_by_name(name):
 ## Load vocabularies from JSON data
 
 make_vocabularies()
+get_names()

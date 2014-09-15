@@ -11,17 +11,19 @@ from ckanext.publicamundi.lib.metadata.schemata.common import *
 from ckanext.publicamundi.lib.metadata.vocabularies import inspire_vocabularies
 
 class IThesaurus(IObject):
-    
+
     title = zope.schema.TextLine(title=u"Title", required = True)
 
     reference_date = zope.schema.Date(title=u"Date", required=True)
-    
+
     date_type = zope.schema.Choice(
         title = u"Date Type",
         vocabulary = inspire_vocabularies.get_by_name('date-types').get('vocabulary'),
         required = True)
 
     name = zope.schema.NativeString()
+
+    version = zope.schema.Float(title=u"Version", required = False)
 
     vocabulary = zope.schema.Object(IVocabularyTokenized, required=True)
 
@@ -39,14 +41,14 @@ class IThesaurus(IObject):
 class IThesaurusTerms(IObject):
 
     thesaurus = zope.schema.Object(IThesaurus, required=True)
-    
+
     terms = zope.schema.List(
         title = u'Terms',
         value_type = zope.schema.NativeString(title=u'Term'),
         required = True,
         min_length = 1,
         max_length = 12)
-    
+
     @zope.interface.invariant
     def check_terms(obj):
         unexpected = []
@@ -131,7 +133,7 @@ class IInspireMetadata(IObject):
         value_type = zope.schema.Choice(
             title = u'Resource Language',
             vocabulary = inspire_vocabularies.get_by_name('languages').get('vocabulary'),))
-    
+
     # Todo: identtype, textline, choice?? 
 
     # Classification 
@@ -145,7 +147,7 @@ class IInspireMetadata(IObject):
         value_type = zope.schema.Choice(
             title = u'Topic Category',
             vocabulary = inspire_vocabularies.get_by_name('topic-category').get('vocabulary'),))
-    
+
     # Keywords
 
     keywords = zope.schema.List(
@@ -163,7 +165,7 @@ class IInspireMetadata(IObject):
         if obj.keywords:
             found = False
             for k in obj.keywords:
-                if k.thesaurus.name == 'keywords-gemet-inspire-data-themes':
+                if k.thesaurus.name == 'keywords-gemet-inspire-themes':
                     found = True
                     break
             if not found:

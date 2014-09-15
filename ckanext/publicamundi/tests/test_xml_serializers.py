@@ -26,7 +26,6 @@ def test_objects():
     yield _test_fixture_object, 'poly1'    
     yield _test_fixture_object, 'foo1'    
     yield _test_fixture_object, 'thesaurus_gemet_concepts'    
-    yield _test_fixture_object, 'inspire1'    
 
 @nose.tools.istest
 def test_fields():
