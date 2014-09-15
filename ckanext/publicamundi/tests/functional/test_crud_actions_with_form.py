@@ -157,6 +157,7 @@ package_fixtures = {
         'foo': {
             'baz': u'BaoBab Tree',
             'rating': 9,
+            'grade': 5.12,
             'created': u'2014-09-13T17:00:00',
             'temporal_extent': { 
                 'start': '2012-01-01',

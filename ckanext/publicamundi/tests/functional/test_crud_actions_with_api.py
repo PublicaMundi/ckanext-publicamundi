@@ -61,6 +61,8 @@ class TestController(ckan.tests.TestController):
             'dataset_type': 'foo',
             'foo.baz': u'A second chance',
             'foo.rating': 2,
+            'foo.grade': 4.75,
+            'foo.reviewed': False,
             'foo.created': u'2014-08-10T00:00:00',
             'foo.temporal_extent.start': '2012-01-01',
             'foo.temporal_extent.end': '2013-01-01',
@@ -101,7 +103,9 @@ class TestController(ckan.tests.TestController):
             'dataset_type': 'foo',
             'foo': {
                 'baz': u'Baobab',
+                'reviewed': False,
                 'rating': 5,
+                'grade': 5.72,
                 'created': u'2014-08-10T00:00:00',
                 'temporal_extent': { 
                     'start': '2012-01-01',
@@ -147,6 +151,8 @@ class TestController(ckan.tests.TestController):
         data.update({            
             'foo.baz': u'Baobab',
             'foo.rating': 9,
+            'foo.reviewed': False,
+            'foo.grade': 8.2,
             'foo.created': u'2014-08-10T00:00:00',
             'foo.temporal_extent.start': '1999-01-01',
             'foo.temporal_extent.end': '2000-01-01',

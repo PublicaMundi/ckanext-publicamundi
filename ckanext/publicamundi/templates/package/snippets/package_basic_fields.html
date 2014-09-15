@@ -3,11 +3,6 @@
 {% set is_new = data.get('id') is none %}
 {% set is_draft = data.get('state', 'draft') == 'draft' %}
 
-{% block package_basic_fields_autofill %}
-<span class="btn btn-warning hide" data-module="form-autofiller" data-module-formid="package-form">Auto</span>
-{% resource 'ckanext-publicamundi/form-autofiller'  %}
-{% endblock %} {# package_basic_fields_autofill #}
-
 {% block package_basic_fields_title %}
   
 {{ 
@@ -155,16 +150,4 @@
 {% endif %}
 {% endif %}
 
-{#
-<script type="text/javascript">
-var orgs_available = {{ h.dump_json(orgs_available)|safe }};
-var orgs_available_objs = {{ h.dump_json(orgs_available_objs)|safe }};
-</script>
-#}
-
 {% endblock %}
-
-{% resource 'ckanext-publicamundi/styles' %}
-
-{% resource 'ckanext-publicamundi/scripts' %}
-

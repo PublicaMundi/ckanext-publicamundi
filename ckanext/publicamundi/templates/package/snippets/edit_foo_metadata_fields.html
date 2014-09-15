@@ -29,12 +29,36 @@
 }}
 
 {{ 
-    form.input('foo.rating', 
+    form.input('foo.rating',
+        type='number',
         label=_('Foo/Rating'), 
         id='field-foo.rating', 
         placeholder=_('5'), 
         value=foo.rating, 
         error=errors.get('foo.rating'), 
+        classes=['control-small'],
+        attrs={ 'class':'span2'})
+}}
+
+{{ 
+    form.input('foo.grade',
+        type='number',
+        label=_('Foo/Grade'), 
+        id='field-foo.grade', 
+        placeholder=_('0.0'), 
+        value=foo.grade, 
+        error=errors.get('foo.grade'), 
+        classes=['control-small'],
+        attrs={ 'class':'span2', 'step': 'any'})
+}}
+
+{{
+    form.checkbox('foo.reviewed',
+        label=_('Foo/Reviewed'), 
+        id='field-foo.reviewed',
+        checked=foo.reviewed,
+        value='yes',
+        error=errors.get('foo.reviewed'), 
         classes=['control-small'])
 }}
 
@@ -75,7 +99,7 @@
             data-module-picktime="true" data-module-pickdate="true" data-module-format="yyyy-MM-dd hh:mm:ss">
             <input type="text" id="input-foo.created"  name="foo.created"
                 class="input-medium"
-                value="{{ foo.created }}" />
+                value="{{ foo.created | empty_and_escape }}" />
             <span class="add-on">
               <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
             </span>

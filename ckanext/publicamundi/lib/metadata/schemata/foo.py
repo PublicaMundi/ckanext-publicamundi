@@ -57,6 +57,7 @@ class IFoo(IBaseMetadata):
     reviewed = zope.schema.Bool(
         required = False,
         title = u'Reviewed',
+        default = False,
         description = u'This foo is reviewed by someone',)
 
     notes = zope.schema.Text(

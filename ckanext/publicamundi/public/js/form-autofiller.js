@@ -28,6 +28,7 @@ this.ckan.module('form-autofiller', function ($, _) {
                 'tags': ['hello-world', 'foo', 'lorem-ipsum'],
                 'license': 'gfdl',
                 'version': '1.0.1',
+                'url': 'http://example.com/datasets/foo/1',
                 'author': 'Λαλάκης',
                 'author_email': 'lalakis@example.com',
             },
@@ -39,6 +40,7 @@ this.ckan.module('form-autofiller', function ($, _) {
                 'tags': ['hello-world', 'foo', 'test'],
                 'license': 'cc-by',
                 'version': '1.0.2',
+                'url': 'http://example.com/datasets/foo/1',
                 'author': 'Φουφουτος',
                 'author_email': 'foofootos@example.com',
             },    
@@ -76,9 +78,10 @@ this.ckan.module('form-autofiller', function ($, _) {
                         $form.find('#field-notes').val(data['notes'])
                         $form.find('#field-tags').select2('val', data['tags'])
                         $form.find('#field-license').select2('val', data['license'])
-                        $form.find('#field-version').val(data['license'])
+                        $form.find('#field-version').val(data['version'])
+                        $form.find('#field-url').val(data['url'])
                         $form.find('#field-author').val(data['author'])
-                        $form.find('#field-author_email').val(data['author_email'])
+                        $form.find('#field-author-email').val(data['author_email'])
                     })
                     this.el.css('margin', '0px 5px')
                     this.el.insertBefore($form.find('button.btn-primary[name="save"]').first())

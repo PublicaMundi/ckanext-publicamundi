@@ -13,6 +13,11 @@ then itself be extended to add/remove blocks of functionality. #}
   <input type="hidden" name="pkg_name" value="{{ data.id }}" />
   {% block errors %}{{ form.errors(error_summary) }}{% endblock %}
 
+  {% block package_fields_autofill %}
+  <span class="btn btn-warning hide" data-module="form-autofiller" data-module-formid="package-form">Auto</span>
+  {% resource 'ckanext-publicamundi/form-autofiller'  %}
+  {% endblock %} {# package_basic_autofill #}
+
   {% block basic_fields %}
     {% snippet 'package/snippets/package_basic_fields.html', data=data, errors=errors, licenses=c.licenses, groups_available=c.groups_available %}
   {% endblock %}
@@ -41,3 +46,7 @@ then itself be extended to add/remove blocks of functionality. #}
     </div>
   {% endblock %}
 </form>
+
+{% resource 'ckanext-publicamundi/styles' %}
+{% resource 'ckanext-publicamundi/scripts' %}
+
