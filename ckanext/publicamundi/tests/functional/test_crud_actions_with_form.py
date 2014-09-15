@@ -4,7 +4,10 @@ import json
 import webtest
 import nose.tools
 import inflection
+import datadiff
 import logging
+
+from datadiff.tools import assert_equal
 
 from ckan.tests import CreateTestData
 from ckan.tests import TestController as BaseTestController
@@ -43,19 +46,34 @@ class TestController(BaseTestController):
     def teardown_class(cls):
         pass
 
-    def test_create_package(self):
+    def test_1_create_package(self):
         
         yield self._create_package, 'hello-foo-1'
         
-    def _create_package(self, pkg_name):
+    def test_2_update_package(self):
+    
+        yield self._update_package, 'hello-foo-1', '0..1'
+        yield self._update_package, 'hello-foo-1', '1..2'
+     
+    def test_3_create_resource(self):
+    
+        yield self._create_resource, 'hello-foo-1', 'resource-2'
+        yield self._create_resource, 'hello-foo-1', 'resource-3'
+     
+    def test_4_update_resource(self):
+    
+        yield self._update_resource, 'hello-foo-1', 'resource-1', '0..1'
+        yield self._update_resource, 'hello-foo-1', 'resource-2', '0..1'
+       
+    def _create_package(self, fixture_name):
         
-        pkg_dict = package_fixtures[pkg_name] 
-        assert pkg_dict['name'] == pkg_name
+        pkg_dict = package_fixtures[fixture_name]['0'] 
+        pkg_name = pkg_dict['name']
 
         res1 = self.app.get('/dataset/new', status='*')
         assert res1.status == 200
         
-        dt = pkg_dict.get('dataset_type', 'ckan')
+        dt = pkg_dict['dataset_type']
         dt_spec = dataset_types[dt]
         key_prefix = dt_spec.get('key_prefix', dt)
 
@@ -101,6 +119,7 @@ class TestController(BaseTestController):
 
         for t, v in dictization.flatten(pkg_dict.get(dt)).items():
             k = '.'.join((key_prefix,) + t)
+            v = v.encode('utf-8') if isinstance(v, unicode) else v
             form3.set(k, v)
         
         btns = form3.fields.get('save')
@@ -116,11 +135,7 @@ class TestController(BaseTestController):
 
         # Compare to package_show result
         
-        res5 = self.app.get('/api/action/package_show?id=%s' %(pkg_name))
-        assert res5.json.get('success')
-        
-        res_dict = res5.json.get('result')
-        print json.dumps(res_dict, indent=4)
+        res_dict = self._get_package(pkg_name)
 
         assert res_dict['dataset_type'] == dt
         
@@ -134,10 +149,197 @@ class TestController(BaseTestController):
 
         return
 
+    def _update_package(self, fixture_name, changeset):
+ 
+        pkg_dict = package_fixtures[fixture_name][changeset]
+        pkg_name = package_fixtures[fixture_name]['0']['name']
+        
+        res1 = self.app.get('/dataset/edit/%s' % pkg_name)
+        assert res1.status == 200
+        
+        dt = package_fixtures[fixture_name]['0']['dataset_type']
+        dt_spec = dataset_types[dt]
+        key_prefix = dt_spec.get('key_prefix', dt)
+
+        # Edit core metadata
+        
+        form1 = res1.forms['package-form']
+        for k in self.basic_fields :
+            v = pkg_dict.get(k)
+            if v is not None:
+                v = v.encode('utf-8') if isinstance(v, unicode) else v
+                form1.set(k, v)
+        if 'tags' in pkg_dict:
+            form1.set('tag_string', ','.join(map(lambda t: t['name'], pkg_dict.get('tags', []))))
+        
+        # Edit dataset_type-related metadata
+
+        for t, v in dictization.flatten(pkg_dict.get(dt)).items():
+            k = '.'.join((key_prefix,) + t)
+            v = v.encode('utf-8') if isinstance(v, unicode) else v
+            form1.set(k, v)
+        
+        # Submit
+
+        res1s = form1.submit('save', status='*')
+        assert res1s.status in [301, 302]
+        
+        res2 = res1s.follow()
+        assert res2.status in [200]      
+        assert res2.request.url == '/dataset/%s' %(pkg_name)
+
+    def _create_resource(self, pkg_fixture_name, fixture_name):
+         
+        pkg_name = package_fixtures[pkg_fixture_name]['0']['name']
+        resource_dict = resource_fixtures[fixture_name]['0']
+        resource_name = resource_dict['name']
+        
+        # Fetch initial package dict
+        
+        pkg_dict = self._get_package(pkg_name)
+        
+        dt = pkg_dict['dataset_type']
+
+        # Create resource
+
+        res1 = self.app.get('/dataset/new_resource/%s' % pkg_name)
+        assert res1.status == 200
+
+        form1 = res1.forms['resource-form']
+        for k in ['description', 'url', 'name', 'format']:
+            v = resource_dict.get(k)
+            v = v.encode('utf-8') if isinstance(v, unicode) else v
+            form1.set(k, v)
+        
+        res1s = form1.submit('save', status='*')
+        assert res1s.status in [301, 302]
+        
+        res2 = res1s.follow()
+        assert res2.status in [200]      
+        assert res2.request.url == '/dataset/%s' %(pkg_name)
+
+        # Fetch result package dict
+        
+        res_pkg_dict = self._get_package(pkg_name)
+        res_pkg_resources = res_pkg_dict['resources']
+
+        # Verify resource metadata (changed)
+        
+        res_resource_dict = next(r for r in res_pkg_resources if r['name'] == resource_name)
+        for k in ['url', 'description', 'name']:
+            assert resource_dict[k] == res_resource_dict[k]
+        assert resource_dict['format'] == res_resource_dict['format'].lower()
+
+        # Verify package metadata (not changed)
+
+        for k in self.basic_fields:
+            assert pkg_dict[k] == res_pkg_dict[k] 
+        
+        assert_equal(pkg_dict.get(dt), res_pkg_dict.get(dt))
+
+    def _update_resource(self, pkg_fixture_name, fixture_name, changeset):
+        
+        pkg_name = package_fixtures[pkg_fixture_name]['0']['name']
+        resource_name = resource_fixtures[fixture_name]['0']['name']
+        resource_dict = resource_fixtures[fixture_name][changeset]
+        
+        # Fetch initial package dict
+        
+        pkg_dict = self._get_package(pkg_name)
+        
+        pkg_resources = pkg_dict['resources']
+        dt = pkg_dict['dataset_type']
+        
+        resource_id = next(r for r in pkg_resources if r['name'] == resource_name).get('id')
+        
+        # Update resource
+        
+        res1 = self.app.get('/dataset/%s/resource_edit/%s' % (pkg_name, resource_id))
+        assert res1.status == 200
+        
+        form1 = res1.forms['resource-form']
+        for k in ['description', 'url', 'name', 'format']:
+            v = resource_dict.get(k)
+            if v is not None:
+                v = v.encode('utf-8') if isinstance(v, unicode) else v
+                form1.set(k, v)
+        
+        res1s = form1.submit('save', status='*')
+        assert res1s.status in [301, 302]
+        
+        res2 = res1s.follow()
+        assert res2.status in [200]      
+        assert res2.request.url == '/dataset/%s/resource/%s' %(pkg_name, resource_id)
+
+        # Fetch result package dict
+       
+        res_pkg_dict = self._get_package(pkg_name)
+        res_pkg_resources = res_pkg_dict['resources']
+        
+        # Verify resource metadata (changed)
+        
+        resource_name = resource_dict.get('name', resource_name)
+        res_resource_dict = next(r for r in res_pkg_resources if r['name'] == resource_name)
+        for k in ['url', 'description', 'name']:
+            assert not(k in resource_dict) or (resource_dict[k] == res_resource_dict[k])
+        if 'format' in resource_dict:
+            assert resource_dict['format'] == res_resource_dict['format'].lower()
+    
+        # Verify package metadata (not changed)
+
+        for k in self.basic_fields:
+            assert pkg_dict[k] == res_pkg_dict[k] 
+        
+        assert_equal(pkg_dict.get(dt), res_pkg_dict.get(dt))
+
+    def _get_package(self, pkg_name):
+        
+        res = self.app.get('/api/action/package_show?id=%s' %(pkg_name))
+        assert res.json.get('success')
+        return res.json.get('result')
+
 ## Fixtures ##
 
-package_fixtures = {
-    'hello-foo-1': {
+resource_fixtures = {}
+
+resource_fixtures['resource-1'] = {
+    '0': {
+        'url': 'http://example.com/res/1',
+        'name': u'Example 1',
+        'format': 'html',
+        'description': u'A very important HTML document',
+    },
+    '0..1': {
+        'name': u'Example webpage (1)',
+        'description': u'A quite important HTML document',
+    }
+}
+
+resource_fixtures['resource-2'] = {
+    '0': {
+        'url': 'http://localhost:5001/samples/1.csv',
+        'name': u'Example 2',
+        'format': 'csv',
+        'description': u'A sample CSV file',
+    },
+    '0..1': {
+        'name': 'Example CSV (2)',
+    },
+}
+
+resource_fixtures['resource-3'] = {
+    '0': {
+        'url': 'http://localhost:5001/api/action',
+        'name': u'Example API',
+        'format': 'api',
+        'description': u'An example API endpoint',
+    },
+}
+
+package_fixtures = {}
+
+package_fixtures['hello-foo-1'] = {
+    '0': {
         'title': u'Hello Foo (1)',
         'name': 'hello-foo-1',
         'notes': u'I am the first _Foo_ dataset!',
@@ -158,6 +360,7 @@ package_fixtures = {
             'baz': u'BaoBab Tree',
             'rating': 9,
             'grade': 5.12,
+            'reviewed': False,
             'created': u'2014-09-13T17:00:00',
             'temporal_extent': { 
                 'start': '2012-01-01',
@@ -166,12 +369,27 @@ package_fixtures = {
             'thematic_category': 'health',
         },
         'resources': [
-            {
-                'url': 'http://example.com/res/1',
-                'name': u'Example 1',
-                'format': 'HTML',
-                'description': u'A very important HTML document',
-            },
+            resource_fixtures['resource-1']['0'],
         ],
+    },
+    '0..1': {
+        'license_id': 'cc-by',
+        'version': '1.0.1',
+        'foo': {
+            'baz': u'Ενα δενδρο BaoBab',
+            'grade': 6.89,
+            'reviewed': True,
+            'thematic_category': 'environment',
+        },
+    },
+    '1..2': {
+        'version': '1.0.2',
+        'foo': {
+            'rating': 7,
+            'temporal_extent': {
+                'start': '2012-09-01',
+                'end': '2013-09-01',
+            }, 
+        }, 
     },
 }
