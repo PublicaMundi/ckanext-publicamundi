@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 import datetime
 import copy
 
@@ -25,7 +27,7 @@ dt1 = TemporalExtent(
 
 foo1 = Foo(
     baz = u'Bazzz',
-    title = u'Ababoua Ababoua',
+    title = u'Αβαβουα',
     tags = [ u'alpha', u'beta', u'gamma'],
     url = 'http://example.com',
     contact_info = ContactInfo(email=u'nomad@somewhere.com', address=None),

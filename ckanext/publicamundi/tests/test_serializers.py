@@ -16,6 +16,8 @@ from ckanext.publicamundi.lib.metadata.base import serializer_for_object
 from ckanext.publicamundi.tests import fixtures
 
 def test_objects():
+    yield _test_fixture_object, 'bbox1'    
+    yield _test_fixture_object, 'contact1'    
     yield _test_fixture_object, 'foo1'    
     yield _test_fixture_object, 'thesaurus_gemet_concepts'    
 
