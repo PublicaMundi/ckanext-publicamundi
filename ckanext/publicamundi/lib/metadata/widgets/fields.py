@@ -1,12 +1,13 @@
 import zope.interface
 import zope.schema
 import z3c.schema.email
+import zope.schema.interfaces
 
 from ckan.plugins import toolkit
 
 from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
-from ckanext.publicamundi.lib.metadata.widgets import field_widget_adapter
-from ckanext.publicamundi.lib.metadata.widgets import field_widget_multiadapter
+from ckanext.publicamundi.lib.metadata.widgets import \
+    field_widget_adapter, field_widget_multiadapter
 
 from ckanext.publicamundi.lib import logger
 
@@ -21,7 +22,7 @@ class TextEditWidget(base_widgets.EditFieldWidget):
     def get_template(self):
         return 'package/snippets/fields/edit-text.html'
 
-@field_widget_adapter(zope.schema.interfaces.IBytesLine)
+@field_widget_adapter(zope.schema.interfaces.INativeString)
 @field_widget_adapter(zope.schema.interfaces.ITextLine)
 class TextLineEditWidget(base_widgets.EditFieldWidget):
 
@@ -51,11 +52,11 @@ class PasswordEditWidget(base_widgets.EditFieldWidget):
 class IntEditWidget(base_widgets.EditFieldWidget):
 
     def prepare_template_vars(self, name_prefix, data):
-        data = base_widgets.EditFieldWidget.prepare_template_vars(self, name_prefix, data)
+        tpl_vars = base_widgets.EditFieldWidget.prepare_template_vars(self, name_prefix, data)
         minval, maxval = self.field.min, self.field.max
-        data['input_classes'] = [ \
+        tpl_vars['input_classes'] = [ \
             'span2' if ((minval is None) or (maxval is None) or (maxval - minval > 1e3)) else 'span1' ]
-        return data
+        return tpl_vars
    
     def get_template(self):
         return 'package/snippets/fields/edit-int.html'
@@ -70,11 +71,11 @@ class IntAsTextEditWidget(IntEditWidget):
 class FloatEditWidget(base_widgets.EditFieldWidget):
 
     def prepare_template_vars(self, name_prefix, data):
-        data = base_widgets.EditFieldWidget.prepare_template_vars(self, name_prefix, data)
+        tpl_vars = base_widgets.EditFieldWidget.prepare_template_vars(self, name_prefix, data)
         minval, maxval = self.field.min, self.field.max
-        data['input_classes'] = [ \
+        tpl_vars['input_classes'] = [ \
             'input-small' if ((minval is None) or (maxval is None) or (maxval - minval > 1e3)) else 'span2' ]
-        return data
+        return tpl_vars
    
     def get_template(self):
         return 'package/snippets/fields/edit-float.html'
@@ -134,13 +135,6 @@ class ListEditWidget(base_widgets.EditFieldWidget, base_widgets.ListFieldWidgetT
     def get_template(self):
         return 'package/snippets/fields/edit-list.html'
 
-    def prepare_template_vars(self, name_prefix, data):
-        data = base_widgets.ListFieldWidgetTraits.prepare_template_vars(self, name_prefix, data)
-        data['attrs'].update({
-            'data-disabled-module': 'list',
-        })
-        return data
-
 @field_widget_multiadapter([zope.schema.interfaces.ITuple, zope.schema.interfaces.ITextLine], qualifiers=['tags'])
 @field_widget_multiadapter([zope.schema.interfaces.IList, zope.schema.interfaces.ITextLine], qualifiers=['tags'])
 class TagsEditWidget(base_widgets.EditFieldWidget):
@@ -162,13 +156,6 @@ class DictEditWidget(base_widgets.EditFieldWidget, base_widgets.DictFieldWidgetT
     def get_template(self):
         return 'package/snippets/fields/edit-dict.html'
 
-    def prepare_template_vars(self, name_prefix, data):
-        data = base_widgets.DictFieldWidgetTraits.prepare_template_vars(self, name_prefix, data)
-        data['attrs'].update({
-            'data-disabled-module': 'dict',
-        })
-        return data
-
 @field_widget_adapter(zope.schema.interfaces.IObject)
 class ObjectEditWidget(base_widgets.EditFieldWidget, base_widgets.ObjectFieldWidgetTraits):
 
@@ -179,18 +166,11 @@ class ObjectEditWidget(base_widgets.EditFieldWidget, base_widgets.ObjectFieldWid
     def get_template(self):
         return 'package/snippets/fields/edit-object.html'
 
-    def prepare_template_vars(self, name_prefix, data):
-        data = base_widgets.ObjectFieldWidgetTraits.prepare_template_vars(self, name_prefix, data)
-        data['attrs'].update({
-            'data-disabled-module': 'object',
-        })
-        return data
-
 # Readers #
 
 @field_widget_adapter(zope.schema.interfaces.IText)
 @field_widget_adapter(zope.schema.interfaces.ITextLine)
-@field_widget_adapter(zope.schema.interfaces.IBytesLine)
+@field_widget_adapter(zope.schema.interfaces.INativeString)
 class TextReadWidget(base_widgets.ReadFieldWidget):
 
     def get_template(self):
@@ -275,14 +255,6 @@ class ListReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListFieldWidgetT
     def get_template(self):
         return 'package/snippets/fields/read-list.html'
 
-    def prepare_template_vars(self, name_prefix, data):
-        '''Prepare data for the template'''
-        data = base_widgets.ListFieldWidgetTraits.prepare_template_vars(self, name_prefix, data)
-        data['attrs'].update({
-            'data-disabled-module': 'list',
-        })
-        return data
-
 @field_widget_multiadapter([zope.schema.interfaces.ITuple, zope.schema.interfaces.ITextLine], qualifiers=['tags'])
 @field_widget_multiadapter([zope.schema.interfaces.IList, zope.schema.interfaces.ITextLine], qualifiers=['tags'])
 class TagsReadWidget(base_widgets.ReadFieldWidget):
@@ -304,14 +276,6 @@ class DictReadWidget(base_widgets.ReadFieldWidget, base_widgets.DictFieldWidgetT
     def get_template(self):
         return 'package/snippets/fields/read-dict.html'
 
-    def prepare_template_vars(self, name_prefix, data):
-        '''Prepare data for the template'''
-        data = base_widgets.DictFieldWidgetTraits.prepare_template_vars(self, name_prefix, data)
-        data['attrs'].update({
-            'data-disabled-module': 'dict',
-        })
-        return data
-
 @field_widget_adapter(zope.schema.interfaces.IObject)
 class ObjectReadWidget(base_widgets.ReadFieldWidget, base_widgets.ObjectFieldWidgetTraits):
 
@@ -321,12 +285,4 @@ class ObjectReadWidget(base_widgets.ReadFieldWidget, base_widgets.ObjectFieldWid
     
     def get_template(self):
         return 'package/snippets/fields/read-object.html'
-
-    def prepare_template_vars(self, name_prefix, data):
-        '''Prepare data for the template'''
-        data = base_widgets.ObjectFieldWidgetTraits.prepare_template_vars(self, name_prefix, data)
-        data['attrs'].update({
-            'data-disabled-module': 'object',
-        })
-        return data
 

@@ -7,12 +7,12 @@ import logging
 
 from ckanext.publicamundi.lib import logger
 from ckanext.publicamundi.lib.metadata import adapter_registry
-from ckanext.publicamundi.lib.metadata import IObject
-from ckanext.publicamundi.lib.metadata import Object, FieldContext
+from ckanext.publicamundi.lib.metadata import \
+    IObject, Object, FieldContext
 
-from ckanext.publicamundi.lib.metadata.widgets.ibase import IQualAction, ILookupContext
-from ckanext.publicamundi.lib.metadata.widgets.ibase import IWidget
-from ckanext.publicamundi.lib.metadata.widgets.ibase import IFieldWidget, IObjectWidget
+from ckanext.publicamundi.lib.metadata.widgets.ibase import \
+    IQualAction, ILookupContext, \
+    IWidget, IFieldWidget, IObjectWidget
 
 # Qualified action
 

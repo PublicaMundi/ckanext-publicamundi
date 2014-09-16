@@ -38,6 +38,9 @@ def stringify_exception(ex):
 def raise_for_stub_method():
     raise NotImplementedError('Method should be implemented in a derived class')
 
+def filter_dict(pred, d):
+   return { k: d[k] for k in d if pred(k) }
+
 def find_all_duplicates(l):
     counter = collections.Counter(l)
     dups = { k:n for k,n in counter.items() if n > 1 }
