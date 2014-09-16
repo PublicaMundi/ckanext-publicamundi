@@ -3,8 +3,10 @@
 import datetime
 import json
 import itertools
+import datadiff
 import zope.interface
 import zope.schema
+from datadiff.tools import assert_equal
 from zope.interface.verify import verifyObject
 
 from ckanext.publicamundi.lib.metadata import ISerializer
@@ -16,6 +18,9 @@ from ckanext.publicamundi.lib.metadata.base import serializer_for_object
 from ckanext.publicamundi.tests import fixtures
 
 def test_objects():
+    yield _test_fixture_object, 'contact1'    
+    yield _test_fixture_object, 'contact2'    
+    yield _test_fixture_object, 'bbox1'    
     yield _test_fixture_object, 'foo1'    
     yield _test_fixture_object, 'thesaurus_gemet_concepts'    
 
@@ -50,6 +55,7 @@ def test_key_tuples():
         assert ser.loads(k) == kt1
 
 def _test_fixture_fields(fixture_name):
+    
     x = getattr(fixtures, fixture_name)
     d = x.to_dict(flat=True)
     fields = x.get_flattened_fields()
@@ -68,6 +74,7 @@ def _test_leaf_field(fixture_name, k, f, v):
     assert v1 == v
 
 def _test_fixture_object(fixture_name):
+    
     x = getattr(fixtures, fixture_name)
     ser = serializer_for_object(x)
     assert ser
@@ -79,6 +86,8 @@ def _test_fixture_object(fixture_name):
     x1 = ser.loads(s)
     assert x1
 
+    # Compare flattened dicts
+    
     d = x.to_dict(flat=True)
     d1 = x1.to_dict(flat=True)
     
@@ -86,11 +95,18 @@ def _test_fixture_object(fixture_name):
     keys1 = set(d1.keys())
 
     assert keys == keys1
-
     for k in keys:
         assert d[k] == d1[k] 
+    
+    # Compare nested dicts
+
+    d = x.to_dict(flat=False)
+    d1 = x1.to_dict(flat=False)
+
+    assert_equal(d, d1)
 
 def test_field_textline():
+    
     f = zope.schema.TextLine(title=u'Summary')
     
     for fmt in ['default']:
@@ -114,6 +130,7 @@ def test_field_textline():
         assert False, 'Unexpected serialization format'
 
 def test_field_datetime():
+    
     f = zope.schema.Datetime(title=u'Created')
     
     ser = serializer_for_field(f)

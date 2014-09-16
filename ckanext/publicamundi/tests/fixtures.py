@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 import datetime
 import copy
 
@@ -8,8 +10,12 @@ from ckanext.publicamundi.lib.metadata.types import *
 pt1 = Point(x=0.76, y=0.23)
 
 contact1 = ContactInfo(
-    email = u'somebody@example.com', 
+    email = u'nowhere-man@example.com', 
     address = PostalAddress(address=u'Nowhere Land', postalcode=u'12321'))
+
+contact2 = ContactInfo(
+    email = u'somebody@example.com', 
+    address = PostalAddress(address=u'Ακακίας 22', postalcode=u'54321'))
 
 poly1 = Polygon(name = u'Poly1', points=[
     Point(x=0.6, y=0.5), Point(x=0.7, y=0.1),
@@ -25,7 +31,7 @@ dt1 = TemporalExtent(
 
 foo1 = Foo(
     baz = u'Bazzz',
-    title = u'Ababoua Ababoua',
+    title = u'Αβαβούα',
     tags = [ u'alpha', u'beta', u'gamma'],
     url = 'http://example.com',
     contact_info = ContactInfo(email=u'nomad@somewhere.com', address=None),
