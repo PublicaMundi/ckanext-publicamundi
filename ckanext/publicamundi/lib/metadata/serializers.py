@@ -143,18 +143,18 @@ class BaseFieldSerializer(BaseSerializer):
     def dumps(self, o=None):
         if o is None:
             o = self.field.context.value
-        return self._to_string(o)
+        return self._to(o)
 
     def loads(self, s):
         assert isinstance(s, basestring)
-        return self._from_string(s)
+        return self._from(s)
 
     # Implementation
 
-    def _to_string(self, o):
+    def _to(self, o):
         raise_for_stub_method()
 
-    def _from_string(self, s):
+    def _from(self, s):
         raise_for_stub_method()
 
 @field_serialize_adapter(zope.schema.interfaces.INativeString, fmt='default')
@@ -163,11 +163,11 @@ class BaseFieldSerializer(BaseSerializer):
 @field_serialize_adapter(zope.schema.interfaces.IChoice, fmt='json-s')
 class StringFieldSerializer(BaseFieldSerializer):
     
-    def _to_string(self, s):
+    def _to(self, s):
         assert isinstance(s, basestring)
         return str(s)
 
-    def _from_string(self, s):
+    def _from(self, s):
         return str(s)
 
 @field_serialize_adapter(zope.schema.interfaces.IText, fmt='default')
@@ -176,11 +176,11 @@ class UnicodeFieldSerializer(BaseFieldSerializer):
 
     encoding = 'unicode-escape'
 
-    def _to_string(self, u):
+    def _to(self, u):
         assert isinstance(u, unicode)
         return u.encode(self.encoding)
 
-    def _from_string(self, s):
+    def _from(self, s):
         if isinstance(s, unicode):
             return s
         else:
@@ -189,21 +189,21 @@ class UnicodeFieldSerializer(BaseFieldSerializer):
 @field_serialize_adapter(zope.schema.interfaces.IInt, fmt='default')
 class IntFieldSerializer(BaseFieldSerializer):
 
-    def _to_string(self, n):
+    def _to(self, n):
         assert isinstance(n, int)
         return str(n)
 
-    def _from_string(self, s):
+    def _from(self, s):
         return int(s)
 
 @field_serialize_adapter(zope.schema.interfaces.IBool, fmt='default')
 class BoolFieldSerializer(BaseFieldSerializer):
 
-    def _to_string(self, y):
+    def _to(self, y):
         assert isinstance(y, bool)
         return 'true' if y else 'false'
 
-    def _from_string(self, s):
+    def _from(self, s):
         if s is None:
             return None
         s = str(s).lower()
@@ -216,22 +216,22 @@ class BoolFieldSerializer(BaseFieldSerializer):
 @field_serialize_adapter(zope.schema.interfaces.IFloat, fmt='default')
 class FloatFieldSerializer(BaseFieldSerializer):
 
-    def _to_string(self, f):
+    def _to(self, f):
         assert isinstance(f, float)
         return str(f)
 
-    def _from_string(self, s):
+    def _from(self, s):
         return float(s)
 
 @field_serialize_adapter(zope.schema.interfaces.IDatetime, fmt='default')
 @field_serialize_adapter(zope.schema.interfaces.IDatetime, fmt='json-s')
 class DatetimeFieldSerializer(BaseFieldSerializer):
    
-    def _to_string(self, t):
+    def _to(self, t):
         assert isinstance(t, datetime.datetime)
         return t.isoformat()
 
-    def _from_string(self, s):
+    def _from(self, s):
         t = None
         try:
             t = isodate.parse_datetime(s)
@@ -245,11 +245,11 @@ class DatetimeFieldSerializer(BaseFieldSerializer):
 @field_serialize_adapter(zope.schema.interfaces.IDate, fmt='json-s')
 class DateFieldSerializer(BaseFieldSerializer):
     
-    def _to_string(self, t):
+    def _to(self, t):
         assert isinstance(t, datetime.date)
         return t.isoformat()
 
-    def _from_string(self, s):
+    def _from(self, s):
         t = None
         try:
             t = isodate.parse_date(s)
@@ -264,11 +264,11 @@ class DateFieldSerializer(BaseFieldSerializer):
 @field_serialize_adapter(zope.schema.interfaces.ITime, fmt='json-s')
 class TimeFieldSerializer(BaseFieldSerializer):
 
-    def _to_string(self, t):
+    def _to(self, t):
         assert isinstance(t, datetime.time)
         return t.isoformat()
 
-    def _from_string(self, s):
+    def _from(self, s):
         t = None
         try:
             t = isodate.parse_time(s)
@@ -288,6 +288,16 @@ class KeyTupleSerializer(BaseSerializer):
     
     _prefix = None
 
+    def get_key_predicate(self, key_type):        
+        if not self._prefix:
+            return lambda k: True
+        elif key_type is str:
+            p = self._prefix + self.glue
+            return lambda k: k.startswith(p)                
+        elif key_type is tuple:
+            p = self._prefix
+            return lambda k: k and k[0] == p
+           
     @property
     def prefix(self):
         return self._prefix 
