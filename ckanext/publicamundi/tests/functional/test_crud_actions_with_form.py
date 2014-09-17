@@ -20,7 +20,7 @@ log1 = logging.getLogger(__name__)
 ## Tests ##
 
 class TestController(BaseTestController):
-    
+
     basic_fields = set([
         'name', 'title', 'notes', 
         'maintainer', 'maintainer_email', 'author', 'author_email', 
@@ -28,7 +28,7 @@ class TestController(BaseTestController):
     ])
  
     request_headers = {}
-    
+
     request_environ = {
         'REMOTE_USER': 'tester',
     }
@@ -57,14 +57,22 @@ class TestController(BaseTestController):
      
     def test_3_create_resource(self):
     
+        yield self._create_resource, 'hello-foo-1', 'resource-1'
         yield self._create_resource, 'hello-foo-1', 'resource-2'
-        yield self._create_resource, 'hello-foo-1', 'resource-3'
      
     def test_4_update_resource(self):
     
         yield self._update_resource, 'hello-foo-1', 'resource-1', '0..1'
         yield self._update_resource, 'hello-foo-1', 'resource-2', '0..1'
-       
+
+    def test_5_delete_resource(self):
+    
+        yield self._delete_resource, 'hello-foo-1', 'resource-1'
+ 
+    def test_6_delete_package(self):
+    
+        yield self._delete_package, 'hello-foo-1'
+
     def _create_package(self, fixture_name):
         
         pkg_dict = package_fixtures[fixture_name]['0'] 
@@ -151,6 +159,7 @@ class TestController(BaseTestController):
 
     def _update_package(self, fixture_name, changeset):
  
+        assert fixture_name in package_fixtures
         pkg_dict = package_fixtures[fixture_name][changeset]
         pkg_name = package_fixtures[fixture_name]['0']['name']
         
@@ -188,8 +197,38 @@ class TestController(BaseTestController):
         assert res2.status in [200]      
         assert res2.request.url == '/dataset/%s' %(pkg_name)
 
+    def _delete_package(self, fixture_name):
+ 
+        assert fixture_name in package_fixtures
+        pkg_dict = package_fixtures[fixture_name]
+        pkg_name = package_fixtures[fixture_name]['0']['name']
+        
+        res_pkg_dict = self._get_package(pkg_name)
+        res1 = self.app.get('/dataset/delete/%s' % pkg_name)
+        assert res1.status == 200
+
+        dt = package_fixtures[fixture_name]['0']['dataset_type']
+        dt_spec = dataset_types[dt]
+        key_prefix = dt_spec.get('key_prefix', dt)
+
+        form1 = res1.forms[1]
+        
+        # Confirm
+        res1s = form1.submit('delete', status='*')
+        assert res1s.status in [301, 302]
+
+        res2 = res1s.follow()
+        assert res2.status in [200]
+        assert res2.request.url == '/dataset'
+
+        res = self.app.get('/api/action/package_list')
+        assert res.json.get('success')
+        assert pkg_name not in res.json.get('result')
+
     def _create_resource(self, pkg_fixture_name, fixture_name):
-         
+        
+        assert pkg_fixture_name in package_fixtures
+        assert fixture_name in resource_fixtures
         pkg_name = package_fixtures[pkg_fixture_name]['0']['name']
         resource_dict = resource_fixtures[fixture_name]['0']
         resource_name = resource_dict['name']
@@ -224,7 +263,6 @@ class TestController(BaseTestController):
         res_pkg_resources = res_pkg_dict['resources']
 
         # Verify resource metadata (changed)
-        
         res_resource_dict = next(r for r in res_pkg_resources if r['name'] == resource_name)
         for k in ['url', 'description', 'name']:
             assert resource_dict[k] == res_resource_dict[k]
@@ -239,6 +277,8 @@ class TestController(BaseTestController):
 
     def _update_resource(self, pkg_fixture_name, fixture_name, changeset):
         
+        assert pkg_fixture_name in package_fixtures
+        assert fixture_name in resource_fixtures
         pkg_name = package_fixtures[pkg_fixture_name]['0']['name']
         resource_name = resource_fixtures[fixture_name]['0']['name']
         resource_dict = resource_fixtures[fixture_name][changeset]
@@ -292,6 +332,58 @@ class TestController(BaseTestController):
         
         assert_equal(pkg_dict.get(dt), res_pkg_dict.get(dt))
 
+    def _delete_resource(self, pkg_fixture_name, fixture_name):
+        
+        assert pkg_fixture_name in package_fixtures
+        assert fixture_name in resource_fixtures
+
+        pkg_name = package_fixtures[pkg_fixture_name]['0']['name']
+        resource_name = resource_fixtures[fixture_name]['0']['name']
+        resource_dict = resource_fixtures[fixture_name]
+        
+        # Fetch initial package dict
+        
+        pkg_dict = self._get_package(pkg_name)
+        
+        pkg_resources = pkg_dict['resources']
+        dt = pkg_dict['dataset_type']
+
+        resource_id = next(r for r in pkg_resources if r['name'] == resource_name).get('id')
+        
+        # Delete resource
+        
+        res1 = self.app.get('/dataset/%s/resource_delete/%s' % (pkg_name, resource_id))
+        assert res1.status == 200
+
+        # Note forms[1] is the delete confirmation form
+        form1 = res1.forms[1]
+
+        res1s = form1.submit('delete', status='*')
+        assert res1s.status in [301, 302]
+
+        res12 = self.app.get('/dataset/%s/resource_delete/%s' % (pkg_name, resource_id))
+        assert res12.status == 200
+
+        res2 = res1s.follow()
+        assert res2.status in [200]
+        assert res2.request.url == '/dataset/%s' %(pkg_name)
+
+        # Fetch result package dict
+       
+        res_pkg_dict = self._get_package(pkg_name)
+        res_pkg_resources = res_pkg_dict['resources']
+
+        # Verify resource metadata deleted
+        for res in res_pkg_resources:
+            assert res.get('name') != resource_name
+            
+
+        # Verify package metadata (not changed)
+
+        for k in self.basic_fields:
+            assert pkg_dict[k] == res_pkg_dict[k] 
+        
+        assert_equal(pkg_dict.get(dt), res_pkg_dict.get(dt))
     def _get_package(self, pkg_name):
         
         res = self.app.get('/api/action/package_show?id=%s' %(pkg_name))
