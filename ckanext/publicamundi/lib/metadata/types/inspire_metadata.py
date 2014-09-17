@@ -98,14 +98,14 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
 
         # Note We do not support providing parts of it 
         assert wrap_into_schema
-        
+
         here = os.path.dirname(__file__)
         xsd_file = os.path.join(here, 'xsd/isotc211.org-2005/gmd/metadataEntity.xsd')
-        
+
         xsd = None
         with open(xsd_file, 'r') as fp:
-            xsd = etree.fromstring(fp.read())
-        return xsd
+            xsd = etree.parse(fp)
+        return xsd.getroot()
 
     def dumps(self, o=None):
         '''Dump object (instance of InspireMetadata) o as an INSPIRE-complant XML 
@@ -171,7 +171,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
                 # to enforce a specific thesaurus version.
                 thes_title = thes_split[0]
                 if inspire_vocabularies.get_by_title(thes_title):
-                    thes = Thesaurus.make(inspire_vocabularies.munge('Keywords-' + thes_title)),
+                    thes = Thesaurus.make(inspire_vocabularies.munge('Keywords-' + thes_title))
                     kw = ThesaurusTerms(thesaurus=thes, terms=it['keywords'])
                     keywords_list.append(kw)
 
