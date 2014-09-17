@@ -2,6 +2,7 @@ import threading
 import logging
 import json
 import itertools
+import copy
 import zope.interface
 import zope.interface.verify
 import zope.schema
@@ -26,33 +27,35 @@ def flatten_schema(schema):
 
     res = {}
     fields = zope.schema.getFields(schema)
-    for k, F in fields.items():
-        res1 = flatten_field(F)
-        for k1, F1 in res1.items():
-            res[(k,)+k1] = F1
+    for k, field in fields.items():
+        res1 = flatten_field(field)
+        for k1, field1 in res1.items():
+            res[(k,) +k1] = field1
     return res
 
-def flatten_field(F):
-    assert isinstance(F, zope.schema.Field)
+def flatten_field(field):
+    assert isinstance(field, zope.schema.Field)
     res = None
-    if isinstance(F, zope.schema.Object):
-        res = flatten_schema(F.schema)
-    elif isinstance(F, (zope.schema.List, zope.schema.Tuple)):
+    
+    if isinstance(field, zope.schema.Object):
+        res = flatten_schema(field.schema)
+    elif isinstance(field, (zope.schema.List, zope.schema.Tuple)):
         res = {}
-        res1 = flatten_field(F.value_type)
-        for i in range(0, F.max_length):
-            for k1,F1 in res1.items():
-                res[(i,)+k1] = F1
-    elif isinstance(F, zope.schema.Dict):
-        assert isinstance(F.key_type, zope.schema.Choice), \
+        res1 = flatten_field(field.value_type)
+        for i in range(0, field.max_length):
+            for k1, field1 in res1.items():
+                res[(i,) +k1] = field1
+    elif isinstance(field, zope.schema.Dict):
+        assert isinstance(field.key_type, zope.schema.Choice), \
             'Only zope.schema.Choice supported for key_type'
         res = {}
-        res1 = flatten_field(F.value_type)
-        for v in F.key_type.vocabulary:
-            for k1,F1 in res1.items():
-                res[(v.token,)+k1] = F1
+        res1 = flatten_field(field.value_type)
+        for v in field.key_type.vocabulary:
+            for k1, field1 in res1.items():
+                res[(v.token,) +k1] = field1
     else:
-        res = { (): F }
+        res = { (): field }
+    
     return res
 
 #
@@ -93,7 +96,7 @@ class Object(object):
         if opts.get('serialize-keys', False):
             kser = serializer_for_key_tuple()
             kser.prefix = opts.get('key-prefix', None)
-            return { kser.dumps(k): F for k, F in res.iteritems() }
+            return { kser.dumps(k): field for k, field in res.iteritems() }
         else:
             return res
 
@@ -183,16 +186,16 @@ class Object(object):
 
     def __init__(self, **kwargs):
         cls = type(self)
-        S = cls.get_schema()
-        for k,F in zope.schema.getFields(S).items():
+        schema = cls.get_schema()
+        for k,field in zope.schema.getFields(schema).items():
             a = getattr(cls, k)
             if isinstance(a, property):
                 continue
             if kwargs.has_key(k):
                 v = kwargs.get(k)
             else:
-                factory = cls.get_field_factory(k, F)
-                v = factory() if factory else F.default
+                factory = cls.get_field_factory(k, field)
+                v = factory() if factory else field.default
             setattr(self, k, v)
 
     ## Provide a string representation
@@ -201,8 +204,8 @@ class Object(object):
         cls = type(self)
         typename = cls.__name__ #"%s:%s" %(cls.__module__, cls.__name__)
         s = '<' + typename
-        for k,F in self.get_fields().items():
-            f = F.get(self)
+        for k,field in self.get_fields().items():
+            f = field.get(self)
             if f:
                 s += ' %s=%s' %(k, repr(f))
         s += '>'
@@ -212,36 +215,38 @@ class Object(object):
 
     @classmethod
     def _determine_schema(cls):
-        S = None
+        schema = None
         for iface in zope.interface.implementedBy(cls):
             if iface.extends(IObject):
-                S = iface
+                schema = iface
                 break
-        return S
+        return schema
 
     @classmethod
     def get_schema(cls):
-        S = None
+        schema = None
         if not hasattr(_cache, 'schema'):
             _cache.schema = {}
         try:
-            S = _cache.schema[cls]
+            schema = _cache.schema[cls]
         except KeyError:
-            S  = cls._determine_schema()
-            _cache.schema[cls] = S
-        return S
+            schema  = cls._determine_schema()
+            _cache.schema[cls] = schema
+        return schema
 
     @classmethod
     def get_field_names(cls):
-        S = cls.get_schema()
-        return zope.schema.getFieldNames(S) 
+        schema = cls.get_schema()
+        return zope.schema.getFieldNames(schema) 
          
     @classmethod
-    def get_field_factory(cls, k, F=None):
+    def get_field_factory(cls, k, field=None):
         assert not k or isinstance(k, basestring)
-        assert not F or isinstance(F, zope.schema.Field)
-        assert k or F, 'At least one of k (=key), F (=field) should be specified'
+        assert not field or isinstance(field, zope.schema.Field)
+        assert k or field, 'At least one of {k, field} should be specified'
+        
         factory = None
+        
         # Check if a factory is defined explicitly as a class attribute
         if k and hasattr(cls, k):
             a = getattr(cls, k)
@@ -250,17 +255,19 @@ class Object(object):
                 return factory
             else:
                 return None
+        
         # If reached here, there is no hint via class attribute. 
         # Try to find a factory for this field.
-        if not F:
-            S = cls.get_schema()
-            F = S.get(k)
-            if not F:
-                raise ValueError('Cannot find field %s for schema %s' %(k,S))
-        if isinstance(F, zope.schema.Object):
-            factory = adapter_registry.lookup([], F.schema)
+        if not field:
+            schema = cls.get_schema()
+            field = schema.get(k)
+            if not field:
+                raise ValueError('No field %s for schema %s' %(k, schema))
+        if isinstance(field, zope.schema.Object):
+            factory = adapter_registry.lookup([], field.schema)
         else:
-            factory = F.defaultFactory
+            factory = field.defaultFactory
+        
         return factory
 
     ## Validation 
@@ -283,31 +290,31 @@ class Object(object):
 
         def validate_schema(self):
             '''Return <errors>'''
-            S = self.obj.get_schema()
+            schema = self.obj.get_schema()
             errors = []
-            for k,F in zope.schema.getFields(S).items():
-                f = F.get(self.obj)
-                ef = self._validate_schema_for_field(f, F)
+            for k, field in zope.schema.getFields(schema).items():
+                f = field.get(self.obj)
+                ef = self._validate_schema_for_field(f, field)
                 if ef:
                     errors.append((k, ef))
             return errors
 
-        def _validate_schema_for_field(self, f, F):
+        def _validate_schema_for_field(self, f, field):
             '''Return <ef>, i.e. an array of field-specific exceptions'''
             ef = []
             # Check if empty
             if f is None:
                 # Check if required
                 try:
-                    F.validate(f)
+                    field.validate(f)
                 except zope.interface.Invalid as ex:
                     ef.append(ex)
                 return ef
             # If here, we are processing an non-empty field
-            if isinstance(F, zope.schema.Object):
+            if isinstance(field, zope.schema.Object):
                 # Check interface is provided by instance f 
                 try:
-                    zope.interface.verify.verifyObject(F.schema, f)
+                    zope.interface.verify.verifyObject(field.schema, f)
                 except zope.interface.Invalid as ex:
                     ef.append(ex)
                 # If provides, descend into object's schema validation
@@ -319,67 +326,67 @@ class Object(object):
                     errors = cls(f, self.opts).validate_schema()
                     if errors:
                         ef.append(zope.interface.Invalid(errors))
-            elif isinstance(F, (zope.schema.List, zope.schema.Tuple)):
+            elif isinstance(field, (zope.schema.List, zope.schema.Tuple)):
                 # Check is a list type
                 if not (isinstance(f, list) or isinstance(f, tuple)):
                     try:
-                        F.validate(f)
+                        field.validate(f)
                     except zope.interface.Invalid as ex:
                         ef.append(ex)
                 # If type is ok, proceed to schema validation
                 if not ef:
-                    exs = self._validate_schema_for_field_items(enumerate(f), F)
+                    exs = self._validate_schema_for_field_items(enumerate(f), field)
                     if exs:
                         ef.extend(exs)
-            elif isinstance(F, zope.schema.Dict):
+            elif isinstance(field, zope.schema.Dict):
                 # Check is a dict type
                 if not isinstance(f, dict):
                     try:
-                        F.validate(f)
+                        field.validate(f)
                     except zope.interface.Invalid as ex:
                         ef.append(ex)
                 # If type is ok, proceed to schema validation
                 if not ef:
-                    exs = self._validate_schema_for_field_items(f.iteritems(), F)
+                    exs = self._validate_schema_for_field_items(f.iteritems(), field)
                     if exs:
                         ef.extend(exs)
             else:
                 # A leaf field: validate directly via Field
                 try:
-                    F.validate(f)
+                    field.validate(f)
                 except zope.interface.Invalid as ex:
                     ef.append(ex)
             return ef
 
-        def _validate_schema_for_field_items(self, items, F):
+        def _validate_schema_for_field_items(self, items, field):
             '''Return list of <ex> i.e. a list of Invalid-based exceptions'''
             exs = []
             # Hydrate items (must be re-used)
             items = list(items)
 
             # 1. Validate length contraints
-            if F.min_length and len(items) < F.min_length:
+            if field.min_length and len(items) < field.min_length:
                 exs.append(zope.schema.interfaces.TooShort(
-                    'The collection is too short (< %d)' % (F.min_length)))
+                    'The collection is too short (< %d)' % (field.min_length)))
             
-            if F.max_length and len(items) > F.max_length:
+            if field.max_length and len(items) > field.max_length:
                 exs.append(zope.schema.interfaces.TooBig(
-                    'The collection is too big (> %d)' % (F.max_length)))
+                    'The collection is too big (> %d)' % (field.max_length)))
 
             # 2. Validate items
             errors = []
             # 2.1 Validate item keys (if exist)
-            if hasattr(F, 'key_type') and F.key_type:
-                assert isinstance(F.key_type, zope.schema.Choice)
+            if hasattr(field, 'key_type') and field.key_type:
+                assert isinstance(field.key_type, zope.schema.Choice)
                 for k,y in items:
                     try:
-                        F.key_type.validate(k)
+                        field.key_type.validate(k)
                     except zope.interface.Invalid as ex:
                         errors.append((k, [ex]))
                 pass
             # 2.2 Validate item values
             for k,y in items:
-                ef = self._validate_schema_for_field(y, F.value_type)
+                ef = self._validate_schema_for_field(y, field.value_type)
                 if ef:
                     errors.append((k, ef))
             if errors:
@@ -390,58 +397,58 @@ class Object(object):
         def validate_invariants(self):
             '''Return <errors>'''
             errors = []
-            S = self.obj.get_schema()
+            schema = self.obj.get_schema()
 
             # Descend into field invariants
             recurse = False
             try:
-                recurse = S.getTaggedValue('recurse-on-invariants')
+                recurse = schema.getTaggedValue('recurse-on-invariants')
             except KeyError:
                 pass
             if recurse:
-                for k,F in zope.schema.getFields(S).items():
-                    f = F.get(self.obj)
+                for k, field in zope.schema.getFields(schema).items():
+                    f = field.get(self.obj)
                     if not f:
                         continue
-                    ef = self._validate_invariants_for_field(f, F)
+                    ef = self._validate_invariants_for_field(f, field)
                     if ef:
                         errors.append((k, ef))
 
             # Check own invariants
             try:
                 ef = []
-                S.validateInvariants(self.obj, ef)
+                schema.validateInvariants(self.obj, ef)
             except zope.interface.Invalid:
                 errors.append((None, ef))
 
             return errors
 
-        def _validate_invariants_for_field(self, f, F):
+        def _validate_invariants_for_field(self, f, field):
             '''Returns <ef>, i.e. an array of field-specific exceptions'''
             ef = []
 
             ex  = None
-            if isinstance(F, zope.schema.Object):
+            if isinstance(field, zope.schema.Object):
                 cls = type(self)
                 errors = cls(f, self.opts).validate_invariants()
                 if errors:
                     ex = zope.interface.Invalid(errors)
-            elif isinstance(F, (zope.schema.List, zope.schema.Tuple)):
-                ex = self._validate_invariants_for_field_items(enumerate(f), F)
-            elif isinstance(F, zope.schema.Dict):
-                ex = self._validate_invariants_for_field_items(f.iteritems(), F)
+            elif isinstance(field, (zope.schema.List, zope.schema.Tuple)):
+                ex = self._validate_invariants_for_field_items(enumerate(f), field)
+            elif isinstance(field, zope.schema.Dict):
+                ex = self._validate_invariants_for_field_items(f.iteritems(), field)
 
             if ex:
                 ef.append(ex)
             return ef
 
-        def _validate_invariants_for_field_items(self, items, F):
+        def _validate_invariants_for_field_items(self, items, field):
             '''Return <ex> i.e. an Invalid-based exception'''
             ex = None
             
             errors = []
             for k,y in items:
-                ef = self._validate_invariants_for_field(y, F.value_type)
+                ef = self._validate_invariants_for_field(y, field.value_type)
                 if ef:
                     errors.append((k, ef))
             
@@ -457,7 +464,7 @@ class Object(object):
 
     def _dictize_errors(self, errors):
         global_key = ErrorDict.global_key
-        S = self.get_schema()
+        schema = self.get_schema()
         res = ErrorDict()
         for k, ef in errors:
             if k is None:
@@ -465,14 +472,14 @@ class Object(object):
                 res[global_key] = [ str(ex) for ex in ef ]
             else:
                 # Found a field-level error
-                F = S.get(k)
-                if not F:
+                field = schema.get(k)
+                if not field:
                     continue
-                f = F.get(self)
-                res[k] = self._dictize_errors_for_field(ef, f, F)
+                f = field.get(self)
+                res[k] = self._dictize_errors_for_field(ef, f, field)
         return res
 
-    def _dictize_errors_for_field(self, ef, f, F):
+    def _dictize_errors_for_field(self, ef, f, field):
         '''Build a result for field-level errors from an <ef> structure.
         This can be either a list of strings (leaf case) or a dict (non-leaf case)
         '''
@@ -496,7 +503,7 @@ class Object(object):
         global_key = ErrorDict.global_key
 
         res = None
-        if isinstance(F, zope.schema.Object):
+        if isinstance(field, zope.schema.Object):
             res = ErrorDict()
             if not isinstance(f, Object):
                 # Return array of exceptions as is (cannot descend into object)
@@ -511,7 +518,7 @@ class Object(object):
                     # Recurse on an <errors> structure (ex.args[0])
                     res1 = f._dictize_errors(ex.args[0])
                     res = dictization.merge_inplace(res, res1) 
-        elif isinstance(F, (zope.schema.List, zope.schema.Tuple, zope.schema.Dict)):
+        elif isinstance(field, (zope.schema.List, zope.schema.Tuple, zope.schema.Dict)):
             res = ErrorDict()
             for ex, is_leaf in itertools.izip(ef, are_leafs): 
                 if is_leaf:
@@ -520,7 +527,7 @@ class Object(object):
                     res[global_key].append(stringify_exception(ex))
                 else:
                     # Recurse on an <errors> structure (ex.args[0])
-                    res1 = self._dictize_errors_for_field_collection(ex.args[0], f, F)
+                    res1 = self._dictize_errors_for_field_collection(ex.args[0], f, field)
                     res = dictization.merge_inplace(res, res1) 
         else:
             # This is a field that is not composite (does not contain subfields)
@@ -528,11 +535,11 @@ class Object(object):
 
         return res
 
-    def _dictize_errors_for_field_collection(self, errors, f, F):
+    def _dictize_errors_for_field_collection(self, errors, f, field):
         res = ErrorDict()
         for k, ef in errors:
             # Here, k will be either an integer or a string
-            res[k] = self._dictize_errors_for_field(ef, f[k], F.value_type)
+            res[k] = self._dictize_errors_for_field(ef, f[k], field.value_type)
         return res
 
     def flatten_errors(self, errors):
@@ -543,6 +550,8 @@ class Object(object):
     ## Dictization helpers
 
     class Dictizer(object):
+        
+        max_depth = 16
 
         def __init__(self, obj, opts={}):
             self.obj = obj
@@ -551,21 +560,26 @@ class Object(object):
         def dictize(self):
             obj = self.obj
             obj_cls = type(obj)
-            S = obj_cls.get_schema()
+            schema = obj_cls.get_schema()
+            
+            max_depth = self.opts.get('max-depth', self.max_depth) 
+            assert max_depth > 0
+            
+            fields = zope.schema.getFields(schema)
             res = {}
-            fields = zope.schema.getFields(S)
-            for k, F in fields.items():
+            for k, field in fields.items():
                 a = getattr(obj_cls, k)
                 if isinstance(a, property):
                     continue
-                f = F.get(obj)
+                f = field.get(obj)
                 if f is None:
                     res[k] = None
                 else:
-                    res[k] = self._dictize_field(f, F)
+                    res[k] = self._dictize_field(f, field, max_depth -1)
+            
             return res
 
-        def _get_field_value(self, f, F):
+        def _get_field_value(self, f, field):
             '''Get the value of a field considered as a leaf.
             Serialize this value if requested so.
             '''
@@ -573,7 +587,7 @@ class Object(object):
             fmt = self.opts.get('serialize-values', False)
             if (v is not None) and fmt:
                 fmt = 'default' if isinstance(fmt, (bool, int)) else str(fmt)
-                ser = serializer_for_field(F, fmt=fmt)
+                ser = serializer_for_field(field, fmt=fmt)
                 if ser:
                     try:
                         v = ser.dumps(f)
@@ -581,71 +595,91 @@ class Object(object):
                         v = None
             return v
 
-        def _dictize_field(self, f, F):
-            if isinstance(F, zope.schema.Object):
+        def _dictize_field(self, f, field, max_depth):
+            
+            if max_depth == 0:
+                return self._get_field_value(f, field)
+            
+            # Descend into this field
+            
+            dictize_field = self._dictize_field
+
+            if isinstance(field, zope.schema.Object):
                 if isinstance(f, Object):
                     cls = type(self)
-                    return cls(f, self.opts).dictize()
+                    opts = copy.copy(self.opts)
+                    opts['max-depth'] = max_depth
+                    return cls(f, opts).dictize()
                 else:
-                    # Can only dictize derivatives of Object
+                    # Handle only derivatives of Object
                     return None
-            elif isinstance(F, (zope.schema.List, zope.schema.Tuple)):
-                a = list()
-                for i,y in enumerate(f):
-                    a.append(self._dictize_field(y, F.value_type))
-                return a
-            elif isinstance(F, zope.schema.Dict):
-                d = dict()
-                for k,y in f.items():
-                    d[k] = self._dictize_field(y, F.value_type)
-                return d
+            elif isinstance(field, (zope.schema.List, zope.schema.Tuple)):
+                return [ dictize_field(y, field.value_type, max_depth -1) 
+                    for y in f ]
+            elif isinstance(field, zope.schema.Dict):
+                return { k: dictize_field(y, field.value_type, max_depth -1) 
+                    for k,y in f.items() } 
             else:
-                # A leaf field 
-                return self._get_field_value(f, F)
+                # Handle a leaf field 
+                return self._get_field_value(f, field)
 
         def flatten(self):
             obj = self.obj
             obj_cls = type(obj)
-            S = obj_cls.get_schema()
+            schema = obj_cls.get_schema()
+
+            max_depth = self.opts.get('max-depth', self.max_depth) 
+            assert max_depth > 0
+
+            fields = zope.schema.getFields(schema)
             res = {}
-            fields = zope.schema.getFields(S)
-            for k, F in fields.items():
+            for k, field in fields.items():
                 a = getattr(obj_cls, k)
                 if isinstance(a, property):
                     continue
-                f = F.get(obj)
+                f = field.get(obj)
                 if f is None:
                     pass
                 else:
-                    res1 = self._flatten_field(f, F)
+                    res1 = self._flatten_field(f, field, max_depth -1)
                     for k1,v1 in res1.items():
-                        res[(k,)+k1] = v1
+                        res[(k,) +k1] = v1
+            
             return res
 
-        def _flatten_field(self, f, F):
-            if isinstance(F, zope.schema.Object):
+        def _flatten_field(self, f, field, max_depth):
+            
+            if max_depth == 0:
+                v = self._get_field_value(f, field)
+                return { (): v }
+            
+            # Descend into this field
+           
+            if isinstance(field, zope.schema.Object):
                 if isinstance(f, Object):
                     cls = type(self)
-                    return cls(f, self.opts).flatten()
+                    opts = copy.copy(self.opts)
+                    opts['max-depth'] = max_depth
+                    return cls(f, opts).flatten()
                 else:
-                    # Can only flatten derivatives of Object (see _dictize_field()) 
+                    # Handle only derivatives of Object
                     return None
-            elif isinstance(F, (zope.schema.List, zope.schema.Tuple)):
-                return self._flatten_field_items(enumerate(f), F)
-            elif isinstance(F, zope.schema.Dict):
-                return self._flatten_field_items(f.iteritems(), F)
+            elif isinstance(field, (zope.schema.List, zope.schema.Tuple)):
+                return self._flatten_field_items(enumerate(f), field, max_depth)
+            elif isinstance(field, zope.schema.Dict):
+                return self._flatten_field_items(f.iteritems(), field, max_depth)
             else:
-                # A leaf field
-                v = self._get_field_value(f, F)
+                # Handle a leaf field
+                v = self._get_field_value(f, field)
                 return { (): v }
 
-        def _flatten_field_items(self, items, F):
-            d = dict()
-            for k,y in items:
-                res1 = self._flatten_field(y, F.value_type)
-                for k1,v1 in res1.items():
-                    d[(k,)+k1] = v1
-            return d
+        def _flatten_field_items(self, items, field, max_depth):
+            res = dict()
+            for k, y in items:
+                yres = self._flatten_field(y, field.value_type, max_depth -1)
+                for yk, yv in yres.iteritems():
+                    res[(k,) +yk] = yv
+            return res
 
     class Loader(object):
 
@@ -653,60 +687,67 @@ class Object(object):
             self.obj = obj
             self.opts = opts
 
-        def load(self, d):
+        def load(self, data):
             obj = self.obj
             obj_cls = type(obj)
-            S = obj_cls.get_schema()
-            for k, F in zope.schema.getFields(S).items():
+
+            schema = obj_cls.get_schema()
+            fields = zope.schema.getFields(schema)
+            for k, field in fields.items():
                 a = getattr(obj_cls, k)
                 if isinstance(a, property):
                     continue
-                v = d.get(k)
-                factory = obj.get_field_factory(k, F)
+                v = data.get(k)
+                factory = obj.get_field_factory(k, field)
                 f = None
                 if v is None:
                     # No value given, use factory (if exists)
-                    f = factory() if factory else F.default
+                    f = factory() if factory else field.default
                 else:
-                    # Input provided a value on k
-                    f = self._create_field(v, F, factory)
+                    # An input was provided for k
+                    f = self._create_field(v, field, factory)
                 setattr(obj, k, f)
+
             return
 
-        def _create_field(self, v, F, factory=None):
-            assert isinstance(F, zope.schema.Field)
+        def _create_field(self, v, field, factory=None):
+            assert isinstance(field, zope.schema.Field)
             cls = type(self)
-            # Find a factory (if not given)
+
+            # Find a factory (if not supplied)
             if not factory:
-                factory = self.obj.get_field_factory(None, F)
+                factory = self.obj.get_field_factory(None, field)
+            
             # Create a new field instance
-            if isinstance(F, zope.schema.Object):
-                f = factory()
-                if isinstance(f, Object):
-                    cls(f, self.opts).load(v)
+
+            if isinstance(field, zope.schema.Object):
+                if isinstance(v, dict):
+                    # Load from a dict
+                    f = factory()
+                    if isinstance(f, Object):
+                        cls(f, self.opts).load(v)
+                    else:
+                        # Handle only derivatives of Object
+                        pass
                 else:
-                    # Can only load derivatives of Object
+                    # The supplied value is not a dict, so we cannot invoke Loader
+                    # (maybe product of a depth-limited dictization). Assign it.
+                    f = v 
                     pass
                 return f
-            elif isinstance(F, (zope.schema.List, zope.schema.Tuple)):
-                a = list()
-                for i,y in enumerate(v):
-                    f1 = self._create_field(y, F.value_type)
-                    a.append(f1)
-                return a
-            elif isinstance(F, zope.schema.Dict):
-                d = dict()
-                for k,y in v.items():
-                    f1 = self._create_field(y, F.value_type)
-                    d[k] = f1
-                return d
+            elif isinstance(field, (zope.schema.List, zope.schema.Tuple)):
+                return [ self._create_field(y, field.value_type)
+                    for y in v ]
+            elif isinstance(field, zope.schema.Dict):
+                return { k: self._create_field(y, field.value_type)
+                    for k, y in v.iteritems() }
             else:
-                # A leaf field (may need to be unserialized)
+                # Handle a leaf field (may need to be unserialized)
                 f = v
                 fmt = self.opts.get('unserialize-values', False)
                 if (f is not None) and fmt:
                     fmt = 'default' if isinstance(fmt, (bool, int)) else str(fmt)
-                    ser = serializer_for_field(F, fmt=fmt)
+                    ser = serializer_for_field(field, fmt=fmt)
                     if ser:
                         try:
                             f = ser.loads(v)
@@ -718,11 +759,12 @@ class Object(object):
 
         def __init__(self, iface, opts={}):
             if not iface.extends(IObject): 
-                raise ValueError('Expected a schema-providing interface based on IObject')
+                raise ValueError('Expected an interface based on IObject')
             self.target_iface = iface
             self.target_cls = adapter_registry.lookup([], iface, '')
             if not self.target_cls:
-                raise ValueError('Cannot find a class that implements %s' %(iface))
+                raise ValueError('Cannot find an implementation for %s' %(iface))
+            
             self.opts = {
                 'unserialize-values': False,
             }

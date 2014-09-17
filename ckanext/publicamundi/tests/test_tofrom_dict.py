@@ -32,6 +32,8 @@ def _test_flattened_dict(fixture_name, opts):
     
     factory = type(x)
 
+    # Dictize
+    
     d = x.to_dict(flat=True, opts=opts)
 
     print
@@ -40,15 +42,22 @@ def _test_flattened_dict(fixture_name, opts):
 
     key_type = basestring if opts.get('serialize-keys') else tuple
     key_prefix = opts.get('key-prefix')
+    kser = serializer_for_key_tuple(key_prefix=key_prefix)
     
-    expected_keys = x.get_flattened_fields().keys()
-    if key_type is basestring:
-        kser = serializer_for_key_tuple()
-        kser.prefix = key_prefix
-        expected_keys = map(kser.dumps, expected_keys)
-
     for k in d:
         assert isinstance(k, key_type)
+    
+    expected_keys = x.get_flattened_fields().keys()
+
+    max_depth = opts.get('max-depth')
+    if max_depth is not None:
+        assert max_depth > 0
+        expected_keys = list(set(map(lambda t: t[0:max_depth], expected_keys)))
+
+    if key_type is basestring:
+        expected_keys = map(kser.dumps, expected_keys)
+    
+    for k in d:
         assert k in expected_keys
 
     if key_prefix:
@@ -58,6 +67,8 @@ def _test_flattened_dict(fixture_name, opts):
     if opts.get('serialize-values'):
         for v in d.itervalues():
             assert v is None or isinstance(v, leaf_types)
+
+    # Load
 
     opts1 = { 
         'unserialize-keys': opts.get('serialize-keys', False),
@@ -76,6 +87,8 @@ def _test_nested_dict(fixture_name, opts):
     assert isinstance(x, Object)
     
     factory = type(x)
+    
+    # Dictize
 
     d = x.to_dict(flat=False, opts=opts)
 
@@ -84,6 +97,8 @@ def _test_nested_dict(fixture_name, opts):
     print
     print ' -- Dictize: nested opts=%r' %(opts)
     print d
+    
+    # Load
     
     opts1 = { 
         'unserialize-values': opts.get('serialize-values', False),
@@ -120,6 +135,15 @@ def _test_dictization(fixture_name):
     opts = { 'serialize-keys': True, 'key-prefix': 'test1', 'serialize-values': True }
     yield _test_flattened_dict, fixture_name, opts
    
+    for n in range(1, 5):
+        opts = { 'max-depth': n }
+        yield _test_flattened_dict, fixture_name, opts
+        opts = { 'serialize-keys': True, 'max-depth': n }
+        yield _test_flattened_dict, fixture_name, opts
+        opts = { 'serialize-keys': True, 'key-prefix': 'test1', 'max-depth': n }
+        yield _test_flattened_dict, fixture_name, opts
+
 if __name__ == '__main__':
     for t, x, y in test_objects():
         t(x, y)
+
