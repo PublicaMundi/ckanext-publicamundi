@@ -1,18 +1,19 @@
-from lxml import etree
-from owslib.iso import MD_Metadata
+import os
 import zope.interface
 import zope.schema
-import os
-import StringIO
-
 from zope.schema.vocabulary import SimpleVocabulary
+from lxml import etree
+from owslib.iso import MD_Metadata
+
+from ckanext.publicamundi import reference_data
 from ckanext.publicamundi.lib.metadata.base import Object
 from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import \
     IThesaurusTerms, IThesaurus
 from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import \
     IInspireMetadata
+
 from ckanext.publicamundi.lib.metadata.types import object_null_adapter
-from ckanext.publicamundi.lib.metadata.types.common import *
+from ckanext.publicamundi.lib.metadata.types._common import *
 from ckanext.publicamundi.lib.metadata.vocabularies import inspire_vocabularies
 from ckanext.publicamundi.lib.metadata import xml_serializers
 from ckanext.publicamundi.lib.metadata.xml_serializers import object_xml_serialize_adapter
@@ -99,8 +100,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         # Note We do not support providing parts of it 
         assert wrap_into_schema
 
-        here = os.path.dirname(__file__)
-        xsd_file = os.path.join(here, 'xsd/isotc211.org-2005/gmd/metadataEntity.xsd')
+        xsd_file = reference_data.get_path('xsd/isotc211.org-2005/gmd/metadataEntity.xsd')
 
         xsd = None
         with open(xsd_file, 'r') as fp:

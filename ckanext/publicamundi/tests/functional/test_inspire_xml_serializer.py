@@ -9,10 +9,8 @@ from lxml import etree
 from ckan.tests import TestController as BaseTestController
 from ckanext.publicamundi.tests.functional import with_request_context
 
-from ckanext.publicamundi.lib.metadata.types.common import *
-from ckanext.publicamundi.lib.metadata.types.inspire_metadata import ThesaurusTerms, Thesaurus
-from ckanext.publicamundi.lib.metadata.types.inspire_metadata import InspireMetadata
-from ckanext.publicamundi.lib.metadata.base import *
+from ckanext.publicamundi.lib.metadata.types import \
+    ThesaurusTerms, Thesaurus, InspireMetadata
 from ckanext.publicamundi.tests.helpers import assert_faulty_keys
 from ckanext.publicamundi.tests import fixtures
 
