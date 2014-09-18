@@ -5,7 +5,7 @@ from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
 from ckanext.publicamundi.lib.metadata.ibase import IObject
 from ckanext.publicamundi.lib.metadata.schemata import IBaseMetadata
-from ckanext.publicamundi.lib.metadata.schemata.common import *
+from ckanext.publicamundi.lib.metadata.schemata._common import *
 
 class IFoo(IBaseMetadata):
     zope.interface.taggedValue('recurse-on-invariants', True)

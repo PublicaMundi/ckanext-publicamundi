@@ -11,9 +11,9 @@ class IBaseMetadata(IObject):
         required = True, 
         min_length = 5)
 
-from ckanext.publicamundi.lib.metadata.schemata.common import *
+from ckanext.publicamundi.lib.metadata.schemata._common import *
 from ckanext.publicamundi.lib.metadata.schemata.ckan_metadata import ICkanMetadata
-from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import IThesaurus, IThesaurusTerms
-from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import IInspireMetadata
+from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import \
+    IThesaurus, IThesaurusTerms, IInspireMetadata
 from ckanext.publicamundi.lib.metadata.schemata.foo import IFoo
 

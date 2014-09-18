@@ -19,6 +19,11 @@ class IKeyTupleSerializer(ISerializer):
     prefix = zope.schema.NativeString(required=False)
     
     glue = zope.schema.NativeString(required=True, default='.')
+    
+    def get_key_predicate(key_type):
+        '''Get a predicate function that checks if a given key is valid 
+        for the certain serializer and the certain key_type.  
+        '''
 
 class IXmlSerializer(ISerializer):
     
