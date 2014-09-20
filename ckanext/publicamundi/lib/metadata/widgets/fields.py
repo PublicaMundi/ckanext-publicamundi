@@ -4,6 +4,7 @@ import z3c.schema.email
 
 from ckan.plugins import toolkit
 
+from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 from ckanext.publicamundi.lib.metadata.widgets import field_widget_adapter
 from ckanext.publicamundi.lib.metadata.widgets import field_widget_multiadapter
@@ -15,39 +16,39 @@ from ckanext.publicamundi.lib import logger
 
 # Editors #
 
-@field_widget_adapter(zope.schema.interfaces.IText)
+@field_widget_adapter(ITextField)
 class TextEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/edit-text.html'
 
-@field_widget_adapter(zope.schema.interfaces.IBytesLine)
-@field_widget_adapter(zope.schema.interfaces.ITextLine)
+@field_widget_adapter(ITextLineField)
+@field_widget_adapter(IStringLineField)
 class TextLineEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/edit-textline.html'
 
-@field_widget_adapter(zope.schema.interfaces.ITextLine, qualifiers=['email'])
-@field_widget_adapter(z3c.schema.email.interfaces.IRFC822MailAddress)
+@field_widget_adapter(ITextLineField, qualifiers=['email'])
+@field_widget_adapter(IEmailAddressField)
 class EmailEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/edit-textline-email.html'
 
-@field_widget_adapter(zope.schema.interfaces.IURI)
+@field_widget_adapter(IURIField)
 class UriEditWidget(base_widgets.EditFieldWidget):
    
     def get_template(self):
         return 'package/snippets/fields/edit-uri.html'
 
-@field_widget_adapter(zope.schema.interfaces.IPassword)
+@field_widget_adapter(IPasswordField)
 class PasswordEditWidget(base_widgets.EditFieldWidget):
    
     def get_template(self):
         return 'package/snippets/fields/edit-password.html'
 
-@field_widget_adapter(zope.schema.interfaces.IInt)
+@field_widget_adapter(IIntField)
 class IntEditWidget(base_widgets.EditFieldWidget):
 
     def prepare_template_vars(self, name_prefix, data):
@@ -60,13 +61,13 @@ class IntEditWidget(base_widgets.EditFieldWidget):
     def get_template(self):
         return 'package/snippets/fields/edit-int.html'
 
-@field_widget_adapter(zope.schema.interfaces.IInt, qualifiers=['text'])
+@field_widget_adapter(IIntField, qualifiers=['text'])
 class IntAsTextEditWidget(IntEditWidget):
    
     def get_template(self):
         return 'package/snippets/fields/edit-int-text.html'
 
-@field_widget_adapter(zope.schema.interfaces.IFloat)
+@field_widget_adapter(IFloatField)
 class FloatEditWidget(base_widgets.EditFieldWidget):
 
     def prepare_template_vars(self, name_prefix, data):
@@ -79,50 +80,50 @@ class FloatEditWidget(base_widgets.EditFieldWidget):
     def get_template(self):
         return 'package/snippets/fields/edit-float.html'
 
-@field_widget_adapter(zope.schema.interfaces.IFloat, qualifiers=['text'])
+@field_widget_adapter(IFloatField, qualifiers=['text'])
 class FloatAsTextEditWidget(FloatEditWidget):
    
     def get_template(self):
         return 'package/snippets/fields/edit-float-text.html'
 
-@field_widget_adapter(zope.schema.interfaces.IBool)
+@field_widget_adapter(IBoolField)
 class BoolEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/edit-bool-checkbox-1.html'
 
-@field_widget_adapter(zope.schema.interfaces.IChoice, qualifiers=['select'], is_fallback=True)
+@field_widget_adapter(IChoiceField, qualifiers=['select'], is_fallback=True)
 class ChoiceEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/edit-choice-select.html'
 
-@field_widget_adapter(zope.schema.interfaces.IChoice, qualifiers=['select2'])
+@field_widget_adapter(IChoiceField, qualifiers=['select2'])
 class ChoiceTwoEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/edit-choice-select2.html'
 
-@field_widget_adapter(zope.schema.interfaces.IDate, qualifiers=['datetimepicker'], is_fallback=True)
+@field_widget_adapter(IDateField, qualifiers=['datetimepicker'], is_fallback=True)
 class DateEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/edit-date-datetimepicker.html'
 
-@field_widget_adapter(zope.schema.interfaces.ITime)
+@field_widget_adapter(ITimeField)
 class TimeEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/edit-time.html'
 
-@field_widget_adapter(zope.schema.interfaces.IDatetime)
+@field_widget_adapter(IDatetimeField)
 class DatetimeEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/edit-datetime.html'
 
-@field_widget_adapter(zope.schema.interfaces.IList)
-@field_widget_adapter(zope.schema.interfaces.ITuple)
+@field_widget_adapter(IListField)
+@field_widget_adapter(ITupleField)
 class ListEditWidget(base_widgets.EditFieldWidget, base_widgets.ListFieldWidgetTraits):
 
     def __init__(self, field):
@@ -141,8 +142,8 @@ class ListEditWidget(base_widgets.EditFieldWidget, base_widgets.ListFieldWidgetT
         })
         return data
 
-@field_widget_multiadapter([zope.schema.interfaces.ITuple, zope.schema.interfaces.ITextLine], qualifiers=['tags'])
-@field_widget_multiadapter([zope.schema.interfaces.IList, zope.schema.interfaces.ITextLine], qualifiers=['tags'])
+@field_widget_multiadapter([ITupleField, ITextLineField], qualifiers=['tags'])
+@field_widget_multiadapter([IListField, ITextLineField], qualifiers=['tags'])
 class TagsEditWidget(base_widgets.EditFieldWidget):
 
     def __init__(self, field, *args):
@@ -152,7 +153,7 @@ class TagsEditWidget(base_widgets.EditFieldWidget):
     def get_template(self):
         return 'package/snippets/fields/edit-list-tags.html'
 
-@field_widget_adapter(zope.schema.interfaces.IDict)
+@field_widget_adapter(IDictField)
 class DictEditWidget(base_widgets.EditFieldWidget, base_widgets.DictFieldWidgetTraits):
 
     def __init__(self, field):
@@ -169,7 +170,7 @@ class DictEditWidget(base_widgets.EditFieldWidget, base_widgets.DictFieldWidgetT
         })
         return data
 
-@field_widget_adapter(zope.schema.interfaces.IObject)
+@field_widget_adapter(IObjectField)
 class ObjectEditWidget(base_widgets.EditFieldWidget, base_widgets.ObjectFieldWidgetTraits):
 
     def __init__(self, field):
@@ -188,82 +189,81 @@ class ObjectEditWidget(base_widgets.EditFieldWidget, base_widgets.ObjectFieldWid
 
 # Readers #
 
-@field_widget_adapter(zope.schema.interfaces.IText)
-@field_widget_adapter(zope.schema.interfaces.ITextLine)
-@field_widget_adapter(zope.schema.interfaces.IBytesLine)
+@field_widget_adapter(ITextField)
+@field_widget_adapter(ITextLineField)
 class TextReadWidget(base_widgets.ReadFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/read-text.html'
 
-@field_widget_adapter(zope.schema.interfaces.ITextLine, qualifiers=['item'])
+@field_widget_adapter(ITextLineField, qualifiers=['item'])
 class TextAsItemReadWidget(base_widgets.ReadFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/read-text-item.html'
 
-@field_widget_adapter(zope.schema.interfaces.ITextLine, qualifiers=['email'])
+@field_widget_adapter(ITextLineField, qualifiers=['email'])
 class EmailReadWidget(base_widgets.ReadFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/read-textline-email.html'
 
-@field_widget_adapter(zope.schema.interfaces.IURI)
+@field_widget_adapter(IURIField)
 class UriReadWidget(base_widgets.ReadFieldWidget):
    
     def get_template(self):
         return 'package/snippets/fields/read-uri.html'
 
-@field_widget_adapter(zope.schema.interfaces.IPassword)
+@field_widget_adapter(IPasswordField)
 class PasswordReadWidget(base_widgets.ReadFieldWidget):
    
     def get_template(self):
         return 'package/snippets/fields/read-password.html'
 
-@field_widget_adapter(zope.schema.interfaces.IInt)
+@field_widget_adapter(IIntField)
 class IntReadWidget(base_widgets.ReadFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/read-int.html'
 
-@field_widget_adapter(zope.schema.interfaces.IFloat)
+@field_widget_adapter(IFloatField)
 class FloatReadWidget(base_widgets.ReadFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/read-float.html'
 
-@field_widget_adapter(zope.schema.interfaces.IBool)
+@field_widget_adapter(IBoolField)
 class BoolReadWidget(base_widgets.ReadFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/read-bool.html'
 
-@field_widget_adapter(zope.schema.interfaces.IChoice)
+@field_widget_adapter(IChoiceField)
 class ChoiceReadWidget(base_widgets.ReadFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/read-choice.html'
 
-@field_widget_adapter(zope.schema.interfaces.IDate)
+@field_widget_adapter(IDateField)
 class DateReadWidget(base_widgets.ReadFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/read-date.html'
 
-@field_widget_adapter(zope.schema.interfaces.ITime)
+@field_widget_adapter(ITimeField)
 class TimeReadWidget(base_widgets.ReadFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/read-time.html'
 
-@field_widget_adapter(zope.schema.interfaces.IDatetime)
+@field_widget_adapter(IDatetimeField)
 class DatetimeReadWidget(base_widgets.ReadFieldWidget):
 
     def get_template(self):
         return 'package/snippets/fields/read-datetime.html'
 
-@field_widget_adapter(zope.schema.interfaces.IList)
-@field_widget_adapter(zope.schema.interfaces.ITuple)
+@field_widget_adapter(IListField)
+@field_widget_adapter(ITupleField)
 class ListReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListFieldWidgetTraits):
 
     def __init__(self, field):
@@ -283,8 +283,8 @@ class ListReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListFieldWidgetT
         })
         return data
 
-@field_widget_multiadapter([zope.schema.interfaces.ITuple, zope.schema.interfaces.ITextLine], qualifiers=['tags'])
-@field_widget_multiadapter([zope.schema.interfaces.IList, zope.schema.interfaces.ITextLine], qualifiers=['tags'])
+@field_widget_multiadapter([ITupleField, ITextLineField], qualifiers=['tags'])
+@field_widget_multiadapter([IListField, ITextLineField], qualifiers=['tags'])
 class TagsReadWidget(base_widgets.ReadFieldWidget):
 
     def __init__(self, field, *args):
@@ -294,7 +294,7 @@ class TagsReadWidget(base_widgets.ReadFieldWidget):
     def get_template(self):
         return 'package/snippets/fields/read-list-tags.html'
 
-@field_widget_adapter(zope.schema.interfaces.IDict)
+@field_widget_adapter(IDictField)
 class DictReadWidget(base_widgets.ReadFieldWidget, base_widgets.DictFieldWidgetTraits):
 
     def __init__(self, field):
@@ -312,7 +312,7 @@ class DictReadWidget(base_widgets.ReadFieldWidget, base_widgets.DictFieldWidgetT
         })
         return data
 
-@field_widget_adapter(zope.schema.interfaces.IObject)
+@field_widget_adapter(IObjectField)
 class ObjectReadWidget(base_widgets.ReadFieldWidget, base_widgets.ObjectFieldWidgetTraits):
 
     def __init__(self, field):

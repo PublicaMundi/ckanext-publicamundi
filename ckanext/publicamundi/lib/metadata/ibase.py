@@ -20,7 +20,7 @@ class IKeyTupleSerializer(ISerializer):
     
     glue = zope.schema.NativeString(required=True, default='.')
     
-    def get_key_predicate(key_type):
+    def get_key_predicate(key_type, strict=False):
         '''Get a predicate function that checks if a given key is valid 
         for the certain serializer and the certain key_type.  
         '''
@@ -67,11 +67,32 @@ class IXmlSerializer(ISerializer):
 class ISerializable(zope.interface.Interface):
 
     def loads(s):
-        '''Load (unserialize) this object from a string
+        '''Load (unserialize) this object from a string.
         '''
 
     def dumps():
-        '''Dump (serialize) this object as a string
+        '''Dump (serialize) this object as a string.
+        '''
+
+class IFormatSpec(zope.interface.Interface):
+
+    name = zope.schema.NativeString(required=True)
+
+    opts = zope.schema.Dict(required=False, 
+        key_type = zope.schema.NativeString(),
+        value_type = zope.schema.Field())
+
+    def parse(s):
+        '''Parse this format-spec as a string'''
+
+class IFormatter(zope.interface.Interface):
+    
+    requested_name = zope.schema.NativeString(required=True)
+    
+    def format(value=None, opts={}):
+        '''Format the given value as a unicode string. 
+        If no value is supplied, the formatter should try a meaningfull guess
+        from it's context.
         '''
 
 class IObject(zope.interface.Interface):
@@ -82,24 +103,33 @@ class IObject(zope.interface.Interface):
 
     def get_field(k):
         '''Return the zope.schema.Field that corresponds to attribute k.
-        The returned field instance should be bound to the context of this object.
+        The returned instance should be bound to the context of this object.
         '''
     
-    def get_fields():
+    def get_fields(exclude_properties=False):
         '''Return a map of fields.
         '''
-    
+
+    def iter_fields(exclude_properties=False):
+        '''Return an iterator on (name, field).
+        '''
+   
     def get_flattened_fields(opts={}):
         '''Return a flat map of fields.
         '''
     
-    def validate():
-        '''Invoke all validators and return a list structured as
+    def validate(dictize_errors=False):
+        '''Invoke all validators and return errors. 
+        The invariants are checked only if schema validation (field-based) succeeds. 
+        
+        If dictize_errors is False, a list is returned structured as: 
             <errors> ::= [ (<field>, <field-errors>), ... ]
             <field-errors> ::= [ <ex-1>, ... ]
-        The invariants (keyed at None) are checked only if schema validation (field-based) succeeds.
-        '''
 
+        If dictize_errors is True, a dict is returned with keys corresponding to
+        fields.
+        '''
+    
     def to_dict(flat, opts={}):
         '''Convert to a (flattened or nested) dict.
         This method should *not* alter the object itself.

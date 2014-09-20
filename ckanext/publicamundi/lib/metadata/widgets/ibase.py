@@ -3,6 +3,7 @@ import zope.schema
 import zope.schema.interfaces
 
 from ckanext.publicamundi.lib.metadata.ibase import IObject, IErrorDict
+from ckanext.publicamundi.lib.metadata.fields import IField
 
 action_field = zope.schema.Choice(('read', 'edit'), required=True)
 
@@ -63,7 +64,7 @@ class IWidget(zope.interface.Interface):
 class IFieldWidget(IWidget):
     '''The interface for a widget adapter for a zope.schema-based field'''
     
-    field = zope.schema.Object(zope.schema.interfaces.IField, required=True)
+    field = zope.schema.Object(IField, required=True)
 
     def prepare_template_vars(name_prefix, data):
         '''Prepare context before rendering the widget'''

@@ -33,3 +33,7 @@ def stringify_exception(ex):
 
 def raise_for_stub_method():
     raise NotImplementedError('Method should be implemented in a derived class')
+
+def quote(s):
+    '''A naive routine to enclose a unicode string in double quotes'''
+    return u'"' + s.replace('\\', '\\\\').replace('"', '\\"') + u'"'

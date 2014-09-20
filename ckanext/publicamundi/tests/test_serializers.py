@@ -110,7 +110,7 @@ def test_field_textline():
     f = zope.schema.TextLine(title=u'Summary')
     
     for fmt in ['default']:
-        ser = serializer_for_field(f, fmt=fmt)
+        ser = serializer_for_field(f, fmt)
         assert ser 
         verifyObject(ISerializer, ser)
 
@@ -123,7 +123,7 @@ def test_field_textline():
   
     fmt = 'not-existing-format'
     try:
-        ser = serializer_for_field(f, fmt=fmt)
+        ser = serializer_for_field(f, fmt)
     except:
         pass
     else:

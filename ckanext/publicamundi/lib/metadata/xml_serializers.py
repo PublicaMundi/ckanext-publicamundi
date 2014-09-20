@@ -13,10 +13,9 @@ from lxml.etree import \
 from ckanext.publicamundi.lib.util import raise_for_stub_method
 from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata import schemata
-from ckanext.publicamundi.lib.metadata.ibase import \
-    ISerializer, IXmlSerializer, IObject
-from ckanext.publicamundi.lib.metadata.base import \
-    Object, FieldContext
+from ckanext.publicamundi.lib.metadata.fields import *
+from ckanext.publicamundi.lib.metadata.ibase import IXmlSerializer, IObject
+from ckanext.publicamundi.lib.metadata.base import Object, FieldContext
 
 __all__ = [
     'field_xml_serialize_adapter',
@@ -30,16 +29,18 @@ __all__ = [
 # Decorators for adaptation
 
 def field_xml_serialize_adapter(required_iface):
-    assert required_iface.extends(zope.schema.interfaces.IField)
+    assert required_iface.extends(IField)
     def decorate(cls):
-        adapter_registry.register([required_iface], IXmlSerializer, 'serialize-xml', cls)
+        adapter_registry.register(
+            [required_iface], IXmlSerializer, 'serialize-xml', cls)
         return cls
     return decorate
 
 def object_xml_serialize_adapter(required_iface):
     assert required_iface.isOrExtends(IObject)
     def decorate(cls):
-        adapter_registry.register([required_iface], IXmlSerializer, 'serialize-xml', cls)
+        adapter_registry.register(
+            [required_iface], IXmlSerializer, 'serialize-xml', cls)
         return cls
     return decorate
 
@@ -49,28 +50,32 @@ def serializer_for_field(field):
     '''Get an XML serializer for a zope.schema.Field instance.
     ''' 
     assert isinstance(field, zope.schema.Field)
-    serializer = adapter_registry.queryMultiAdapter([field], IXmlSerializer, 'serialize-xml')
+    serializer = adapter_registry.queryMultiAdapter(
+        [field], IXmlSerializer, 'serialize-xml')
     return serializer
 
 def serializer_for_object(obj):
     '''Get an XML serializer for an IObject object.
     ''' 
     assert IObject.providedBy(obj)
-    serializer = adapter_registry.queryMultiAdapter([obj], IXmlSerializer, 'serialize-xml')
+    serializer = adapter_registry.queryMultiAdapter(
+        [obj], IXmlSerializer, 'serialize-xml')
     return serializer
 
 def serializer_factory_for_field(field_iface):
     '''Get an XML serializer factory for a zope.schema.Field interface.
     ''' 
-    assert field_iface.extends(zope.schema.interfaces.IField)
-    factory = adapter_registry.lookup([field_iface], IXmlSerializer, 'serialize-xml')
+    assert field_iface.extends(IField)
+    factory = adapter_registry.lookup(
+        [field_iface], IXmlSerializer, 'serialize-xml')
     return factory
 
 def serializer_factory_for_object(obj_iface):
     '''Get an XML serializer factory for an IObject-based interface.
     ''' 
     assert obj_iface.isOrExtends(IObject)
-    factory = adapter_registry.lookup([obj_iface], IXmlSerializer, 'serialize-xml')
+    factory = adapter_registry.lookup(
+        [obj_iface], IXmlSerializer, 'serialize-xml')
     return factory
 
 xml_serializer_for_field = serializer_for_field
@@ -303,7 +308,7 @@ class BaseObjectSerializer(BaseSerializer):
         self._to_xml(o, e)
         return e
 
-@field_xml_serialize_adapter(zope.schema.interfaces.INativeString)
+@field_xml_serialize_adapter(INativeStringField)
 class StringFieldSerializer(BaseFieldSerializer):
     
     def _to_xsd_type(self, type_prefix):
@@ -360,7 +365,7 @@ class StringFieldSerializer(BaseFieldSerializer):
     def _from_xml(self, e):
         return e.text.encode('utf-8')
 
-@field_xml_serialize_adapter(zope.schema.interfaces.IChoice)
+@field_xml_serialize_adapter(IChoiceField)
 class ChoiceFieldSerializer(StringFieldSerializer):
      
     def _to_xsd_type(self, type_prefix):
@@ -382,8 +387,8 @@ class ChoiceFieldSerializer(StringFieldSerializer):
         
         return (e, {})
   
-@field_xml_serialize_adapter(zope.schema.interfaces.IText)
-@field_xml_serialize_adapter(zope.schema.interfaces.ITextLine)
+@field_xml_serialize_adapter(ITextField)
+@field_xml_serialize_adapter(ITextLineField)
 class UnicodeFieldSerializer(StringFieldSerializer):
 
     def _to_xml(self, u, e):
@@ -393,7 +398,7 @@ class UnicodeFieldSerializer(StringFieldSerializer):
     def _from_xml(self, e):
         return unicode(e.text)
 
-@field_xml_serialize_adapter(zope.schema.interfaces.IURI)
+@field_xml_serialize_adapter(IURIField)
 class UriFieldSerializer(BaseFieldSerializer):
     
     def _to_xsd_type(self, type_prefix):
@@ -415,7 +420,7 @@ class UriFieldSerializer(BaseFieldSerializer):
     def _from_xml(self, e):
         return str(e.text)
 
-@field_xml_serialize_adapter(zope.schema.interfaces.IInt)
+@field_xml_serialize_adapter(IIntField)
 class IntFieldSerializer(BaseFieldSerializer):
     
     def _to_xsd_type(self, type_prefix):
@@ -450,7 +455,7 @@ class IntFieldSerializer(BaseFieldSerializer):
     def _from_xml(self, e):
         return int(e.text)
 
-@field_xml_serialize_adapter(zope.schema.interfaces.IBool)
+@field_xml_serialize_adapter(IBoolField)
 class BoolFieldSerializer(BaseFieldSerializer):
     
     def _to_xsd_type(self, type_prefix):
@@ -481,7 +486,7 @@ class BoolFieldSerializer(BaseFieldSerializer):
         else:
             return None
 
-@field_xml_serialize_adapter(zope.schema.interfaces.IFloat)
+@field_xml_serialize_adapter(IFloatField)
 class FloatFieldSerializer(BaseFieldSerializer):
     
     def _to_xsd_type(self, type_prefix):
@@ -517,7 +522,7 @@ class FloatFieldSerializer(BaseFieldSerializer):
     def _from_xml(self, e):
         return float(e.text)
 
-@field_xml_serialize_adapter(zope.schema.interfaces.IDatetime)
+@field_xml_serialize_adapter(IDatetimeField)
 class DatetimeFieldSerializer(BaseFieldSerializer):
     
     def _to_xsd_type(self, type_prefix):
@@ -554,7 +559,7 @@ class DatetimeFieldSerializer(BaseFieldSerializer):
         d = isodate.parse_datetime(s)
         return d
 
-@field_xml_serialize_adapter(zope.schema.interfaces.IDate)
+@field_xml_serialize_adapter(IDateField)
 class DateFieldSerializer(BaseFieldSerializer):
     
     def _to_xsd_type(self, type_prefix):
@@ -591,7 +596,7 @@ class DateFieldSerializer(BaseFieldSerializer):
         d = isodate.parse_date(s)
         return d
 
-@field_xml_serialize_adapter(zope.schema.interfaces.ITime)
+@field_xml_serialize_adapter(ITimeField)
 class TimeFieldSerializer(BaseFieldSerializer):
     
     def _to_xsd_type(self, type_prefix):
@@ -628,7 +633,7 @@ class TimeFieldSerializer(BaseFieldSerializer):
         t = isodate.parse_time(s)
         return t
 
-@field_xml_serialize_adapter(zope.schema.interfaces.IList)
+@field_xml_serialize_adapter(IListField)
 class ListFieldSerializer(BaseFieldSerializer):
 
     def _to_xsd_type(self, type_prefix):
@@ -677,7 +682,7 @@ class ListFieldSerializer(BaseFieldSerializer):
         
         return l
 
-@field_xml_serialize_adapter(zope.schema.interfaces.IDict)
+@field_xml_serialize_adapter(IDictField)
 class DictFieldSerializer(BaseFieldSerializer):
 
     def _to_xsd_type(self, type_prefix):
@@ -772,7 +777,7 @@ class DictFieldSerializer(BaseFieldSerializer):
         
         return d
 
-@field_xml_serialize_adapter(zope.schema.interfaces.IObject)
+@field_xml_serialize_adapter(IObjectField)
 class ObjectFieldSerializer(BaseFieldSerializer):
     
     def _to_xsd_type(self, type_prefix):
@@ -842,16 +847,12 @@ class ObjectSerializer(BaseObjectSerializer):
         e1 = SubElement(e, QName(xsd_uri, 'all'))
         
         # Create an xs:element for each field
-
-        obj_cls = type(self.obj) 
         
         ys_prefix = type_prefix + '_' + self.typename
         tdefs = {}
-        for k, yf in obj_cls.get_fields().iteritems():
-            ya = getattr(obj_cls, k)
-            if isinstance(ya, property):
-                continue
-            yf1 = yf.bind(FieldContext(key=k, value=yf.get(self.obj)))
+        for k, yf in self.obj.iter_fields(exclude_properties=True):
+            yv = yf.get(self.obj)
+            yf1 = yf.bind(FieldContext(key=k, value=yv))
             ys = serializer_for_field(yf1)
             ys.target_namespace = self.target_namespace
             ye, ye_tdefs = ys.to_xsd(type_prefix=ys_prefix)
@@ -862,20 +863,16 @@ class ObjectSerializer(BaseObjectSerializer):
         return ('target:' + tname, tdefs)
     
     def _to_xml(self, obj, e):
-        obj_cls = type(self.obj) 
-        assert isinstance(obj, obj_cls)
+        assert isinstance(obj, type(self.obj))
 
-        for k, yf in obj_cls.get_fields().iteritems():
-            ya = getattr(obj_cls, k)
-            if isinstance(ya, property):
+        for k, yf in obj.iter_fields(exclude_properties=True):
+            yv = yf.get(obj)
+            if yv is None:
                 continue
-            v = yf.get(obj)
-            if v is None:
-                continue
-            yf1 = yf.bind(FieldContext(key=k, value=v))
+            yf1 = yf.bind(FieldContext(key=k, value=yv))
             ys = serializer_for_field(yf1)
             ys.target_namespace = self.target_namespace
-            e.append(ys.to_xml(v)) 
+            e.append(ys.to_xml(yv)) 
 
     def _from_xml(self, e):
         schema = self.obj.schema()
