@@ -72,9 +72,16 @@ def _test_object_dictize_with_format(fixture_name):
     
     opts = { 'format-values': 'default:precision=3,aa=1,bb', }
     d = x.to_dict(flat=1, opts=opts)
-    
+     
     opts = { 'serialize-keys': True, 'key-prefix': 'test1', 'format-values': 'default', }
     d = x.to_dict(flat=1, opts=opts)
+
+    for n in range(1,4):
+        opts = { 'format-values': 'default:precision=3,aa=1,bb', 'max-depth': n }
+        d = x.to_dict(flat=1, opts=opts)
+        opts = { 'format-values': 'default:precision=3,aa=1,bb', 'max-depth': n, 'serialize-keys': 1 }
+        d = x.to_dict(flat=1, opts=opts)
+
 
 def test_field_float():
 

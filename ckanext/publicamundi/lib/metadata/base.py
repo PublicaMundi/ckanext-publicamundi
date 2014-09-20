@@ -158,6 +158,8 @@ class Object(object):
                 this has no effect if we ask for a nested dict. 
             * key-prefix: str (default: None)
                 The string prefix for keys if they are to be serialized.
+            * max-depth: int (None)
+                Specify the maximum depth to dive into.
             * serialize-values: bool, str (default: False)
                 Indicate whether we want our values to be serialized. If this 
                 option is given as a string, will be interpreted as a serialization
