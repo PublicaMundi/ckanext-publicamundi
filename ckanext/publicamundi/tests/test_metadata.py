@@ -1,7 +1,10 @@
 import zope.interface
 import zope.schema
-from zope.interface.verify import verifyObject
 import json
+import datadiff
+import copy
+from zope.interface.verify import verifyObject
+from datadiff.tools import assert_equal
 
 from ckanext.publicamundi.lib.json_encoder import JsonEncoder
 from ckanext.publicamundi.lib.metadata import Object
@@ -9,6 +12,7 @@ from ckanext.publicamundi.lib.metadata import types
 from ckanext.publicamundi.tests import fixtures
 
 def print_as_dict(obj):
+    
     assert isinstance(obj, Object)
 
     d1 = obj.to_dict(flat=False)
@@ -19,27 +23,32 @@ def print_as_dict(obj):
         print k, ':', d2[k]
 
 def _test_validate(x):
+    
     obj = getattr(fixtures, x)
     errors = obj.validate()
     if not errors:
         print_as_dict(obj)
 
 def _test_convert_to_dict(x):
+    
     obj = getattr(fixtures, x)
+    factory = type(obj)
 
     d = obj.to_dict()
-    obj1 = types.Foo().from_dict(d)
+    obj1 = factory().from_dict(d)
+
     s = json.dumps(d, cls=JsonEncoder)
     s1 = json.dumps(obj1.to_dict(), cls=JsonEncoder)
     assert s == s1
 
     d = obj.to_dict(flat=True)
-    obj2 = types.Foo().from_dict(d, is_flat=True)
+    obj2 = factory().from_dict(d, is_flat=True)
     s = json.dumps(obj.to_dict(), cls=JsonEncoder)
     s2 = json.dumps(obj2.to_dict(), cls=JsonEncoder)
     assert s == s2
 
 def _test_schema(x):
+    
     obj = getattr(fixtures, x)
     
     schema = obj.schema()
@@ -68,14 +77,38 @@ def _test_schema(x):
 
     return
 
+def _test_copying(x):
+
+    o1 = getattr(fixtures, x)
+    d1 = o1.to_dict()
+    o2 = copy.deepcopy(o1)    
+    d2 = o2.to_dict()
+
+    assert_equal(d1, d2) 
+    
 def test_validators():
+    
+    yield _test_validate, 'bbox1'
     yield _test_validate, 'foo1'
+    yield _test_validate, 'thesaurus_gemet_concepts'
 
 def test_dict_converters():
+    
+    yield _test_convert_to_dict, 'bbox1'
     yield _test_convert_to_dict, 'foo1'
+    yield _test_convert_to_dict, 'thesaurus_gemet_concepts'
 
 def test_schema():
+    
+    yield _test_schema, 'bbox1'
     yield _test_schema, 'foo1'
+    yield _test_schema, 'thesaurus_gemet_concepts'
+
+def test_copying():
+    
+    yield _test_copying, 'bbox1'
+    yield _test_copying, 'foo1'
+    yield _test_copying, 'thesaurus_gemet_concepts'
 
 if __name__  == '__main__':
     

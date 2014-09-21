@@ -5,7 +5,7 @@ from ckanext.publicamundi.lib.metadata.schemata import IFoo
 
 from ckanext.publicamundi.lib.metadata.types import object_null_adapter
 from ckanext.publicamundi.lib.metadata.types import BaseMetadata
-from ckanext.publicamundi.lib.metadata.types.common import *
+from ckanext.publicamundi.lib.metadata.types._common import *
 
 @object_null_adapter(IFoo)
 class Foo(BaseMetadata):
