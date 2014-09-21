@@ -24,6 +24,8 @@ from ckanext.publicamundi.lib.metadata import serializers
 from ckanext.publicamundi.lib.metadata.serializers import (
     serializer_for_field, serializer_for_key_tuple, BaseSerializer)
 
+# Note Not sure if this is really needed, see also:
+# https://docs.python.org/2/glossary.html#term-global-interpreter-lock
 _cache = threading.local()
 
 def flatten_schema(schema):
@@ -943,6 +945,18 @@ class ErrorDict(dict):
     global_key = '__after'
 
 #
+# Named adapters (implementers)
+#
+
+def object_null_adapter(name=''):
+    def decorate(cls):
+        assert issubclass(cls, Object)
+        provided_iface = cls.schema()
+        adapter_registry.register([], provided_iface, name, cls)
+        return cls
+    return decorate
+
+#
 # Serializers
 #
 
@@ -1009,16 +1023,18 @@ class ObjectFormatter(BaseFormatter):
 
     def __init__(self, obj):
         self.obj = obj
-
+    
     def format(self, obj=None, opts={}):
+        if obj is None:
+            obj = self.obj
+        return self._format(obj, opts)
+    
+    def _format(self, obj, opts):
         '''Format the object according to our named format.
         
         If possible, all contained fields will be formatted under the same format, 
         and will be passed the same options.
         '''
-
-        if obj is None:
-            obj = self.obj
        
         # Note We want to pass a 'quote' option to all our fields (this will be
         # interpreted by the field formatter itself). If not allready set, we

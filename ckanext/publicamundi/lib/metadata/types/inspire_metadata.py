@@ -6,19 +6,17 @@ from lxml import etree
 from owslib.iso import MD_Metadata
 
 from ckanext.publicamundi import reference_data
-from ckanext.publicamundi.lib.metadata.base import Object
-from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import \
-    IThesaurusTerms, IThesaurus
-from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import \
-    IInspireMetadata
-
-from ckanext.publicamundi.lib.metadata.types import object_null_adapter
-from ckanext.publicamundi.lib.metadata.types._common import *
+from ckanext.publicamundi.lib.metadata.base import Object, object_null_adapter
+from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import (
+    IThesaurusTerms, IThesaurus, IInspireMetadata)
 from ckanext.publicamundi.lib.metadata.vocabularies import inspire_vocabularies
 from ckanext.publicamundi.lib.metadata import xml_serializers
 from ckanext.publicamundi.lib.metadata.xml_serializers import object_xml_serialize_adapter
 
+from ckanext.publicamundi.lib.metadata.types._common import *
+
 class Thesaurus(Object):
+
     zope.interface.implements(IThesaurus)
 
     # Interface IThesaurus
@@ -54,15 +52,17 @@ class Thesaurus(Object):
             raise ValueError(
                 'Cannot find an INSPIRE thesaurus named "%s"' %(name))
 
-@object_null_adapter(IThesaurusTerms)
+@object_null_adapter()
 class ThesaurusTerms(Object):
+    
     zope.interface.implements(IThesaurusTerms)
 
     thesaurus = Thesaurus
     terms = list
 
-@object_null_adapter(IInspireMetadata)
+@object_null_adapter()
 class InspireMetadata(Object):
+    
     zope.interface.implements(IInspireMetadata)
 
     contact = list
@@ -275,3 +275,4 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         obj.responsible_party = to_resp_party(md.identification.contact)
 
         return obj
+
