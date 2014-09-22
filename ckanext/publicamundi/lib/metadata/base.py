@@ -91,7 +91,7 @@ class Object(object):
             _cache.schema[cls] = schema
         return schema
 
-    def get_field(self, k):
+    def get_field(self, k, bind=True):
         '''Return a bound field for a key k.
 
         Note that, depending on it's type, k will be interpeted as:  
@@ -104,8 +104,12 @@ class Object(object):
             kt = tuple(k)
 
         field, value = self._get_field(kt)
-        return field.bind(FieldContext(key=k, value=value))
-    
+        
+        if bind:
+            return field.bind(FieldContext(key=k, value=value))
+        else:
+            return field
+
     @classmethod
     def get_fields(cls, exclude_properties=False):
         '''Return a map of fields for the zope schema of our class.
@@ -752,6 +756,19 @@ class Object(object):
             
             return res
 
+        def _is_field_accessible(self, field):
+            
+            format_spec = self.opts.get('format-values')
+            if format_spec:
+                # Check if this field allows us to descend in order to format it's
+                # parts (or stop here and format it as a whole).
+                fo_tag = field.queryTaggedValue('format')
+                fo_conf = fo_tag.get(format_spec.name) if fo_tag else None
+                return fo_conf.get('descend-if-dictized', True) if fo_conf else True
+            else:
+                # No formatting takes place
+                return True
+        
         def _get_field_value(self, v, field):
             '''Get the value of a field considered a leaf.
             Serialize or format (not both!) this value, if requested so.
@@ -780,8 +797,16 @@ class Object(object):
                 assert isinstance(format_spec, FormatSpec)
                 fo = formatter_for_field(field, format_spec.name)
                 if fo:
+                    fo_opts = format_spec.opts
+                    ## Fetch any extra field-wise options
+                    fo_tag = field.queryTaggedValue('format')
+                    fo_conf = fo_tag.get(format_spec.name) if fo_tag else None
+                    if fo_conf and 'extra-opts' in fo_conf:
+                        fo_opts = copy.copy(fo_opts)
+                        fo_opts.update(fo_conf.get('extra-opts'))
+                    # Try to format
                     try:
-                        v = fo.format(v, format_spec.opts)
+                        v = fo.format(v, opts=fo_opts)
                     except:
                         logger.warn(
                             'Failed to format value %r for field %r' %(v, field))
@@ -791,7 +816,7 @@ class Object(object):
 
         def _dictize_field(self, f, field, max_depth):
             
-            if max_depth == 0:
+            if max_depth == 0 or not self._is_field_accessible(field):
                 return self._get_field_value(f, field)
             
             # Descend into this field
@@ -837,7 +862,7 @@ class Object(object):
 
         def _flatten_field(self, f, field, max_depth):
             
-            if max_depth == 0:
+            if max_depth == 0 or not self._is_field_accessible(field):
                 v = self._get_field_value(f, field)
                 return { (): v }
             
@@ -1094,11 +1119,22 @@ class ObjectFormatter(BaseFormatter):
         name = self.requested_name
         argv = list()
         for k, field in obj.iter_fields():
-            f = field.get(obj)
-            if f is not None:
-                # Find a proper formatter for field
-                fo = formatter_for_field(field, name)
-                argv.append((k, fo.format(f, opts) if fo else repr(f)))
+            v = field.get(obj)
+            if v is None:
+                continue
+            # Find a proper formatter for field
+            fo = formatter_for_field(field, name)
+            if fo:
+                fo_opts = opts
+                fo_tag = field.queryTaggedValue('format')
+                fo_conf = fo_tag.get(name) if fo_tag else None
+                if fo_conf and 'extra-opts' in fo_conf:
+                    fo_opts = copy.copy(fo_opts)
+                    fo_opts.update(fo_conf.get('extra-opts'))
+                v = fo.format(v, opts=fo_opts)
+            else:
+                v = repr(v)
+            argv.append((k, v))
         
         args = ' '.join(map(lambda t: '%s=%s' % t, argv))
         s = '<%s %s>' % (type(obj).__name__, args)

@@ -10,7 +10,6 @@ from ckanext.publicamundi.lib.metadata.schemata import *
 
 _ = toolkit._
 
-
 @object_null_adapter()
 class PostalAddress(Object):
     
@@ -34,9 +33,6 @@ class Point(Object):
 
     x = None
     y = None
-
-    def __repr__(self):
-        return '<Point x=%.1f y=%.2f>' %(self.x, self.y)
 
     def __eq__(self, other):
         if isinstance(other, Point):
@@ -93,6 +89,8 @@ class TemporalExtent(Object):
 class TemporalExtentFormatter(ObjectFormatter):
 
     def _format(self, obj, opts):
+        # Fixme
+        _ = lambda s: s
         s = _('From %(start)s To %(end)s') % dict(start=obj.start, end=obj.end)
         return u'<%s>' % s if opts.get('quote') else s
 

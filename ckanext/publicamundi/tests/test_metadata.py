@@ -110,7 +110,7 @@ def test_copying():
     yield _test_copying, 'foo1'
     yield _test_copying, 'thesaurus_gemet_concepts'
 
-def test_field_accessor():
+def test_field_accessors():
 
     #yield _test_field_accessor, 'foo1'
     pass
@@ -119,10 +119,6 @@ def test_field_accessors_with_ifoo():
 
     x = fixtures.foo1
     
-    kt = ('baz',)
-    f = x.get_field(kt)
-    print '%s: %s %s' % (kt, f.title, f.context)
-
     try:
         k = ('baz', 'boz')
         f = x.get_field(k)
@@ -130,6 +126,11 @@ def test_field_accessors_with_ifoo():
         pass
     else:
         assert False, 'This should have failed (invalid key)'
+
+    
+    kt = ('baz',)
+    f = x.get_field(kt)
+    print '%s: %s %s' % (kt, f.title, f.context)
 
     kt = 'tags'
     f = x.get_field(kt)
@@ -171,6 +172,17 @@ def test_field_accessors_with_ifoo():
     f = x.get_field(kt)
     print '%s: %s %s' % (kt, f.title, f.context)
 
+    d1 = x.to_dict(flat=1, opts={
+        'max-depth': 1,
+        'format-values': 'default'    
+    })
+   
+    d2 = x.to_dict(flat=1, opts={
+        'max-depth': 2,
+        'format-values': 'default'    
+    })
+
+
 if __name__  == '__main__':
     
-    test_field_accessor()
+    test_field_accessors_with_ifoo()

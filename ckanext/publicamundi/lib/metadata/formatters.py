@@ -239,9 +239,10 @@ class ListFieldFormatter(BaseFieldFormatter):
 
         yf = formatter_for_field(field.value_type, self.requested_name)
         assert yf, 'Cannot find a formatter for %s' %(field.value_type)
-        
-        s = delimiter.join(map(yf.format, values))
-        return u'[ %s ]' % s if opts.get('quote') else s
+        f = lambda t: yf.format(t, opts)
+
+        s = delimiter.join(map(f, values))
+        return u'[%s]' % s if opts.get('quote') else s
 
 @field_format_adapter(IDictField, 'default')
 class DictFieldFormatter(BaseFieldFormatter):
@@ -254,10 +255,10 @@ class DictFieldFormatter(BaseFieldFormatter):
 
         yf = formatter_for_field(field.value_type, self.requested_name)
         assert yf, 'Cannot find a formatter for %s' %(field.value_type)
-        f = lambda t: unicode(t[0]) + ': ' + yf.format(t[1])
+        f = lambda t: unicode(t[0]) + ': ' + yf.format(t[1], opts)
         
         s = delimiter.join(map(f, data.iteritems()))
-        return u'{ %s }' % s if opts.get('quote') else s
+        return u'{%s}' % s if opts.get('quote') else s
 
 @field_format_multiadapter([IListField, IStringLineField], 'default')
 class ListOfStringFieldFormatter(ListFieldFormatter):
@@ -271,7 +272,7 @@ class ListOfStringFieldFormatter(ListFieldFormatter):
         assert isinstance(values, (list, tuple))
         decode, delimiter = self._decode_value, self.delimiter
         s = delimiter.join(map(quote, map(decode, values)))
-        return u'[ %s ]' % s if opts.get('quote') else s
+        return u'[%s]' % s if opts.get('quote') else s
 
 @field_format_multiadapter([IListField, ITextLineField], 'default')
 class ListOfTextFieldFormatter(ListFieldFormatter):
@@ -280,7 +281,7 @@ class ListOfTextFieldFormatter(ListFieldFormatter):
         assert isinstance(values, (list, tuple))
         delimiter = self.delimiter
         s = delimiter.join(map(quote, values))
-        return u'[ %s ]' % s if opts.get('quote') else s
+        return u'[%s]' % s if opts.get('quote') else s
 
 @field_format_multiadapter([IDictField, IStringField], 'default')
 class DictOfStringFieldFormatter(DictFieldFormatter):
@@ -295,7 +296,7 @@ class DictOfStringFieldFormatter(DictFieldFormatter):
         decode, delimiter = self._decode_value, self.delimiter
         f = lambda t: unicode(t[0]) + ': ' + quote(decode(t[1]))
         s = delimiter.join(map(f, data.iteritems()))
-        return u'{ %s }' % s if opts.get('quote') else s
+        return u'{%s}' % s if opts.get('quote') else s
 
 @field_format_multiadapter([IDictField, ITextLineField], 'default')
 class DictOfTextFieldFormatter(DictFieldFormatter):
@@ -305,5 +306,5 @@ class DictOfTextFieldFormatter(DictFieldFormatter):
         delimiter = self.delimiter
         f = lambda t: unicode(t[0]) + ': ' + quote(t[1])
         s = delimiter.join(map(f, data.iteritems()))
-        return u'{ %s }' % s if opts.get('quote') else s
+        return u'{%s}' % s if opts.get('quote') else s
 

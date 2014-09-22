@@ -101,9 +101,10 @@ class IObject(zope.interface.Interface):
         '''Return the schema interface (InterfaceClass) this object is supposed to
         conform to.'''
 
-    def get_field(k):
-        '''Return a bound zope.schema.Field that corresponds to key k.
-        
+    def get_field(k, bind=True):
+        '''Return a zope.schema.Field instance that corresponds to key k.
+        If bind is True, the returned field should be bound to a context. 
+
         This method should regard k as:
             * an attribute k, if k is a string.
             * a path of attributes/keys, if k is a tuple
