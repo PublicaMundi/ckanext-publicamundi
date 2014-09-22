@@ -12,9 +12,9 @@ from ckanext.publicamundi.lib import logger
 from ckanext.publicamundi.lib import dictization
 from ckanext.publicamundi.lib.util import Breakpoint
 from ckanext.publicamundi.lib.util import find_all_duplicates
-from ckanext.publicamundi.lib.metadata import \
-    dataset_types, Object, ErrorDict, \
-    serializer_for_object, serializer_for_field, serializer_for_key_tuple
+from ckanext.publicamundi.lib.metadata import (
+    dataset_types, Object, ErrorDict,
+    serializer_for_object, serializer_for_field, serializer_for_key_tuple)
 
 _t = toolkit._
 

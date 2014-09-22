@@ -19,9 +19,9 @@ def object_null_adapter(iface, name=''):
 
 # Import types into our namespace
 
-from ckanext.publicamundi.lib.metadata.types.common import *
+from ckanext.publicamundi.lib.metadata.types._common import *
 from ckanext.publicamundi.lib.metadata.types.ckan_metadata import CkanMetadata
-from ckanext.publicamundi.lib.metadata.types.inspire_metadata import Thesaurus, ThesaurusTerms
-from ckanext.publicamundi.lib.metadata.types.inspire_metadata import InspireMetadata
+from ckanext.publicamundi.lib.metadata.types.inspire_metadata import \
+    Thesaurus, ThesaurusTerms, InspireMetadata
 from ckanext.publicamundi.lib.metadata.types.foo import Foo
 

@@ -1,23 +1,25 @@
 import re
 import zope.interface
 import zope.interface.verify
-import zope.interface.interfaces
 import zope.schema
 import logging
 
 from ckanext.publicamundi.lib import logger
-from ckanext.publicamundi.lib.metadata import adapter_registry
-from ckanext.publicamundi.lib.metadata import IObject
-from ckanext.publicamundi.lib.metadata import Object, FieldContext
+from ckanext.publicamundi.lib.metadata.fields import *
+from ckanext.publicamundi.lib.metadata import (
+    adapter_registry, IObject, Object, FieldContext)
 
-from ckanext.publicamundi.lib.metadata.widgets.ibase import IQualAction, ILookupContext
-from ckanext.publicamundi.lib.metadata.widgets.ibase import IWidget
-from ckanext.publicamundi.lib.metadata.widgets.ibase import IFieldWidget, IObjectWidget
+from ckanext.publicamundi.lib.metadata.widgets.ibase import (
+    IQualAction, ILookupContext, 
+    IWidget, IFieldWidget, IObjectWidget)
 
 # Qualified action
 
 class QualAction(object):
+    
     zope.interface.implements(IQualAction)
+    
+    __slots__ = ('action', 'qualifier')
 
     def __init__(self, action=None, qualifier=None):
         IQualAction.get('action').validate(action)
@@ -61,8 +63,11 @@ class QualAction(object):
 # Context for widget adaptation
  
 class LookupContext(object):
+    
     zope.interface.implements(ILookupContext)
 
+    __slots__ = ('requested_action', 'provided_action')
+    
     def __init__(self, requested=None, provided=None):
         self.requested_action = requested
         self.provided_action = provided
@@ -97,14 +102,14 @@ def decorator_for_widget_multiadapter(required_ifaces, provided_iface, qualifier
     return decorate
    
 def field_widget_adapter(field_iface, qualifiers=[], is_fallback=False):
-    assert field_iface.extends(zope.schema.interfaces.IField)
+    assert field_iface.extends(IField)
     decorator = decorator_for_widget_multiadapter(
         [field_iface], IFieldWidget, qualifiers, is_fallback)
     return decorator
 
 def field_widget_multiadapter(field_ifaces, qualifiers=[], is_fallback=False):
     for iface in field_ifaces:
-        assert iface.extends(zope.schema.interfaces.IField)
+        assert iface.extends(IField)
     decorator = decorator_for_widget_multiadapter(
         field_ifaces, IFieldWidget, qualifiers, is_fallback)
     return decorator
@@ -158,7 +163,7 @@ def widget_for_field(qualified_action, field, errors=None):
     # Build adaptee vector
     adaptee = [field]
     y = field
-    while zope.schema.interfaces.IContainer.providedBy(y):
+    while IContainerField.providedBy(y):
         adaptee.append(y.value_type)
         y = y.value_type
      

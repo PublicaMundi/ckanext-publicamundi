@@ -7,7 +7,7 @@ from zope.schema.interfaces import IVocabularyTokenized
 from zope.interface.verify import verifyObject
 
 from ckanext.publicamundi.lib.metadata.ibase import IObject
-from ckanext.publicamundi.lib.metadata.schemata.common import *
+from ckanext.publicamundi.lib.metadata.schemata._common import *
 from ckanext.publicamundi.lib.metadata.vocabularies import inspire_vocabularies
 
 class IThesaurus(IObject):

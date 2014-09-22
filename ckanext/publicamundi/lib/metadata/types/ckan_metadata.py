@@ -5,7 +5,6 @@ from ckanext.publicamundi.lib.metadata.schemata.ckan_metadata import ICkanMetada
 
 from ckanext.publicamundi.lib.metadata.types import object_null_adapter
 from ckanext.publicamundi.lib.metadata.types import BaseMetadata
-from ckanext.publicamundi.lib.metadata.types.common import *
 
 @object_null_adapter(ICkanMetadata)
 class CkanMetadata(BaseMetadata):

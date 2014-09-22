@@ -1,11 +1,13 @@
 import zope.interface
 
 from ckanext.publicamundi.lib.metadata import schemata
+from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata.widgets import object_widget_adapter
 from ckanext.publicamundi.lib.metadata.widgets import field_widget_adapter
+from ckanext.publicamundi.lib.metadata.widgets import field_widget_multiadapter
 from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 
-@field_widget_adapter(zope.schema.interfaces.IList, qualifiers=['tags.foo'])
+@field_widget_multiadapter([IListField, ITextLineField], qualifiers=['tags.foo'])
 class TagsEditWidget(base_widgets.EditFieldWidget, base_widgets.ListFieldWidgetTraits):
 
     def __init__(self, field):
@@ -15,7 +17,7 @@ class TagsEditWidget(base_widgets.EditFieldWidget, base_widgets.ListFieldWidgetT
     def get_template(self):
         return 'package/snippets/fields/edit-list-tags-foo.html'
 
-@field_widget_adapter(zope.schema.interfaces.IList, qualifiers=['tags.foo'])
+@field_widget_multiadapter([IListField, ITextLineField], qualifiers=['tags.foo'])
 class TagsReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListFieldWidgetTraits):
 
     def __init__(self, field):
