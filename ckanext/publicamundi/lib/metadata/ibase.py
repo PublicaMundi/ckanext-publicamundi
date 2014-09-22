@@ -99,7 +99,8 @@ class IObject(zope.interface.Interface):
 
     def get_schema():
         '''Return the schema interface (InterfaceClass) this object is supposed to
-        conform to.'''
+        conform to.
+        '''
 
     def get_field(k, bind=True):
         '''Return a zope.schema.Field instance that corresponds to key k.

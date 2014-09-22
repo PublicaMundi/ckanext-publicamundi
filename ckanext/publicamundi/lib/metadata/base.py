@@ -11,6 +11,7 @@ from collections import namedtuple
 from ckanext.publicamundi.lib import dictization
 from ckanext.publicamundi.lib import logger
 from ckanext.publicamundi.lib.util import stringify_exception
+from ckanext.publicamundi.lib.memoizer import memoize
 from ckanext.publicamundi.lib.json_encoder import JsonEncoder
 from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.ibase import (
@@ -23,10 +24,6 @@ from ckanext.publicamundi.lib.metadata.formatters import (
 from ckanext.publicamundi.lib.metadata import serializers
 from ckanext.publicamundi.lib.metadata.serializers import (
     serializer_for_field, serializer_for_key_tuple, BaseSerializer)
-
-# Note Not sure if this is really needed, see also:
-# https://docs.python.org/2/glossary.html#term-global-interpreter-lock
-_cache = threading.local()
 
 def flatten_schema(schema):
     '''Flatten an arbitrary zope-based schema.
@@ -78,18 +75,11 @@ class Object(object):
     ## interface IObject
 
     @classmethod
+    @memoize
     def get_schema(cls):
         '''Get the underlying zope schema for this class.
         '''
-        schema = None
-        if not hasattr(_cache, 'schema'):
-            _cache.schema = {}
-        try:
-            schema = _cache.schema[cls]
-        except KeyError:
-            schema  = cls._determine_schema()
-            _cache.schema[cls] = schema
-        return schema
+        return cls._determine_schema()
 
     def get_field(self, k, bind=True):
         '''Return a bound field for a key k.
