@@ -14,9 +14,9 @@ from ckanext.publicamundi.lib.metadata.serializers import (
     serializer_for_field, serializer_for_key_tuple)
 
 from ckanext.publicamundi.lib.metadata.base import (
-    Object, FieldContext, ErrorDict, 
+    Object, FieldContext, ErrorDict, object_null_adapter,
     object_serialize_adapter, serializer_for_object,
-    object_format_adapter, formatter_for_object)
+    object_format_adapter, formatter_for_object, ObjectFormatter)
 
 from ckanext.publicamundi.lib.metadata.schemata import (
     IFoo, ICkanMetadata, IInspireMetadata)
