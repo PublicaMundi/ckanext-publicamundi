@@ -20,7 +20,8 @@ from ckanext.publicamundi.tests import fixtures
 
 def test_objects():
     
-    for name in ['contact1', 'bbox1', 'foo1', 'thesaurus_gemet_concepts']:
+    for name in [
+            'contact1', 'dt1', 'bbox1', 'foo1', 'thesaurus_gemet_concepts']:
         yield _test_object, name
         yield _test_object_dictize_with_format, name
 
@@ -45,7 +46,7 @@ def _test_object(fixture_name):
 def _test_object_dictize_with_format(fixture_name):
 
     print
-    
+   
     x = getattr(fixtures, fixture_name)
 
     bad_opts = { 'serialize-values': True, 'format-values': 'default',}
@@ -81,7 +82,6 @@ def _test_object_dictize_with_format(fixture_name):
         d = x.to_dict(flat=1, opts=opts)
         opts = { 'format-values': 'default:precision=3,aa=1,bb', 'max-depth': n, 'serialize-keys': 1 }
         d = x.to_dict(flat=1, opts=opts)
-
 
 def test_field_float():
 

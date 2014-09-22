@@ -97,13 +97,18 @@ class IFormatter(zope.interface.Interface):
 
 class IObject(zope.interface.Interface):
 
-    def schema():
+    def get_schema():
         '''Return the schema interface (InterfaceClass) this object is supposed to
-        conform to.'''
+        conform to.
+        '''
 
-    def get_field(k):
-        '''Return the zope.schema.Field that corresponds to attribute k.
-        The returned instance should be bound to the context of this object.
+    def get_field(k, bind=True):
+        '''Return a zope.schema.Field instance that corresponds to key k.
+        If bind is True, the returned field should be bound to a context. 
+
+        This method should regard k as:
+            * an attribute k, if k is a string.
+            * a path of attributes/keys, if k is a tuple
         '''
     
     def get_fields(exclude_properties=False):
