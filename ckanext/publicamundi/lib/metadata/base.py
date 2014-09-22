@@ -78,17 +78,33 @@ class Object(object):
     ## interface IObject
 
     @classmethod
-    def schema(cls):
+    def get_schema(cls):
         '''Get the underlying zope schema for this class.
         '''
-        return cls.get_schema()
+        schema = None
+        if not hasattr(_cache, 'schema'):
+            _cache.schema = {}
+        try:
+            schema = _cache.schema[cls]
+        except KeyError:
+            schema  = cls._determine_schema()
+            _cache.schema[cls] = schema
+        return schema
 
     def get_field(self, k):
-        '''Return a bound field for attribute k
+        '''Return a bound field for a key k.
+
+        Note that, depending on it's type, k will be interpeted as:  
+            * as an direct attribute of this object, if a string
+            * as a path of attributes/indices/keys inside this object, if a tuple
         '''
-        schema = self.get_schema()
-        v = getattr(self, k)
-        return schema.get(k).bind(FieldContext(key=k, value=v))
+        if isinstance(k, basestring):
+            kt = (k,)
+        else:
+            kt = tuple(k)
+
+        field, value = self._get_field(kt)
+        return field.bind(FieldContext(key=k, value=value))
     
     @classmethod
     def get_fields(cls, exclude_properties=False):
@@ -336,18 +352,6 @@ class Object(object):
         return schema
 
     @classmethod
-    def get_schema(cls):
-        schema = None
-        if not hasattr(_cache, 'schema'):
-            _cache.schema = {}
-        try:
-            schema = _cache.schema[cls]
-        except KeyError:
-            schema  = cls._determine_schema()
-            _cache.schema[cls] = schema
-        return schema
-
-    @classmethod
     def get_field_names(cls):
         schema = cls.get_schema()
         return zope.schema.getFieldNames(schema) 
@@ -384,6 +388,48 @@ class Object(object):
             factory = field.defaultFactory
         
         return factory
+
+    ## Field accessors 
+    
+    def _get_field(self, kt):
+        
+        k, kt = kt[0], kt[1:]
+        schema = self.get_schema()
+        field = schema.get(k)
+        value = getattr(self, k)
+        
+        return self._get_field_field(field, value, kt)
+    
+    def _get_field_field(self, field, value, kt):
+
+        if not kt:
+            # Every part of the path is consumed
+            return (field, value)
+        
+        # Descend
+
+        if isinstance(field, zope.schema.Object):
+            if not field.schema.extends(IObject):
+                raise ValueError(
+                    'Unknown structure (not an IObject) at field %r' % (field))
+            if not field.schema.providedBy(value):
+                raise ValueError(
+                    'The object at field %r is invalid' % (field))
+            return value._get_field(kt)
+        elif isinstance(field, (zope.schema.List, zope.schema.Tuple)):
+            if not isinstance(value, (list, tuple)):
+                raise ValueError(
+                    'Invalid structure (not a list or tuple) at %r' % (field))
+            iv = int(kt[0])
+            return self._get_field_field(field.value_type, value[iv], kt[1:])
+        elif isinstance(field, zope.schema.Dict):
+            if not isinstance(value, dict):
+                raise ValueError(
+                    'Invalid structure (not a dict) at %r' % (field))
+            kv = str(kt[0])
+            return self._get_field_field(field.value_type, value[kv], kt[1:])
+        else:
+            raise ValueError('The key path cannot be consumed: %r' % (kt))
 
     ## Validation 
 
@@ -951,7 +997,7 @@ class ErrorDict(dict):
 def object_null_adapter(name=''):
     def decorate(cls):
         assert issubclass(cls, Object)
-        provided_iface = cls.schema()
+        provided_iface = cls.get_schema()
         adapter_registry.register([], provided_iface, name, cls)
         return cls
     return decorate

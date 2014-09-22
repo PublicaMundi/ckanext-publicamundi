@@ -36,7 +36,7 @@ foo1 = Foo(
     url = 'http://example.com',
     contact_info = ContactInfo(email=u'nomad@somewhere.com', address=None),
     contacts = {
-        'personal':  ContactInfo(email=u'nobody@example.com', address=PostalAddress(address=u'North Pole', postalcode=u'54321')),
+        'personal': ContactInfo(email=u'nobody@example.com', address=PostalAddress(address=u'North Pole', postalcode=u'54321')),
         'office': ContactInfo(email=None, address=PostalAddress(address=u'South Pole', postalcode=u'12345')),
     },
     geometry = [[ poly1, poly2 ]],

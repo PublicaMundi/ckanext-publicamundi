@@ -51,7 +51,7 @@ def _test_schema(x):
     
     obj = getattr(fixtures, x)
     
-    schema = obj.schema()
+    schema = obj.get_schema()
     verifyObject(schema, obj)    
 
     # Test basic schema introspection
@@ -85,7 +85,7 @@ def _test_copying(x):
     d2 = o2.to_dict()
 
     assert_equal(d1, d2) 
-    
+
 def test_validators():
     
     yield _test_validate, 'bbox1'
@@ -110,8 +110,67 @@ def test_copying():
     yield _test_copying, 'foo1'
     yield _test_copying, 'thesaurus_gemet_concepts'
 
+def test_field_accessor():
+
+    #yield _test_field_accessor, 'foo1'
+    pass
+
+def test_field_accessors_with_ifoo():
+
+    x = fixtures.foo1
+    
+    kt = ('baz',)
+    f = x.get_field(kt)
+    print '%s: %s %s' % (kt, f.title, f.context)
+
+    try:
+        k = ('baz', 'boz')
+        f = x.get_field(k)
+    except ValueError:
+        pass
+    else:
+        assert False, 'This should have failed (invalid key)'
+
+    kt = 'tags'
+    f = x.get_field(kt)
+    print '%s: %s %s' % (kt, f.title, f.context)
+
+    kt = ('tags',)
+    f = x.get_field(kt)
+    print '%s: %s %s' % (kt, f.title, f.context)
+
+    kt = ('tags', 0)
+    f = x.get_field(kt)
+    print '%s: %s %s' % (kt, f.title, f.context)
+    
+    kt = ('tags', 1)
+    f = x.get_field(kt)
+    print '%s: %s %s' % (kt, f.title, f.context)
+    
+    kt = ('temporal_extent',)
+    f = x.get_field(kt)
+    print '%s: %s %s' % (kt, f.title, f.context)
+
+    kt = ('temporal_extent', 'start')
+    f = x.get_field(kt)
+    print '%s: %s %s' % (kt, f.title, f.context)
+     
+    kt = ('contacts',)
+    f = x.get_field(kt)
+    print '%s: %s %s' % (kt, f.title, f.context)
+    
+    kt = ('contacts', 'personal')
+    f = x.get_field(kt)
+    print '%s: %s %s' % (kt, f.title, f.context)
+    
+    kt = ('contacts', 'personal', 'address')
+    f = x.get_field(kt)
+    print '%s: %s %s' % (kt, f.title, f.context)
+ 
+    kt = ('contacts', 'personal', 'address', 'postalcode')
+    f = x.get_field(kt)
+    print '%s: %s %s' % (kt, f.title, f.context)
+
 if __name__  == '__main__':
     
-    _test_validate('foo1')
-    _test_convert_to_dict('foo1')
-
+    test_field_accessor()

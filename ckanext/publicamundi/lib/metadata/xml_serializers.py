@@ -875,7 +875,7 @@ class ObjectSerializer(BaseObjectSerializer):
             e.append(ys.to_xml(yv)) 
 
     def _from_xml(self, e):
-        schema = self.obj.schema()
+        schema = self.obj.get_schema()
         factory = type(self.obj)
         obj = factory()
 
