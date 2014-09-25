@@ -130,47 +130,47 @@ def test_field_accessors_with_ifoo():
     
     kt = ('baz',)
     f = x.get_field(kt)
-    print '%s: %s %s' % (kt, f.title, f.context)
+    print '%s:\n\t"%s"\n\t%s' % (kt, f.title, f.context)
 
     kt = 'tags'
     f = x.get_field(kt)
-    print '%s: %s %s' % (kt, f.title, f.context)
+    print '%s:\n\t"%s"\n\t%s' % (kt, f.title, f.context)
 
     kt = ('tags',)
     f = x.get_field(kt)
-    print '%s: %s %s' % (kt, f.title, f.context)
+    print '%s:\n\t"%s"\n\t%s' % (kt, f.title, f.context)
 
     kt = ('tags', 0)
     f = x.get_field(kt)
-    print '%s: %s %s' % (kt, f.title, f.context)
+    print '%s:\n\t"%s"\n\t%s' % (kt, f.title, f.context)
     
     kt = ('tags', 1)
     f = x.get_field(kt)
-    print '%s: %s %s' % (kt, f.title, f.context)
+    print '%s:\n\t"%s"\n\t%s' % (kt, f.title, f.context)
     
     kt = ('temporal_extent',)
     f = x.get_field(kt)
-    print '%s: %s %s' % (kt, f.title, f.context)
+    print '%s:\n\t"%s"\n\t%s' % (kt, f.title, f.context)
 
     kt = ('temporal_extent', 'start')
     f = x.get_field(kt)
-    print '%s: %s %s' % (kt, f.title, f.context)
+    print '%s:\n\t"%s"\n\t%s' % (kt, f.title, f.context)
      
     kt = ('contacts',)
     f = x.get_field(kt)
-    print '%s: %s %s' % (kt, f.title, f.context)
+    print '%s:\n\t"%s"\n\t%s' % (kt, f.title, f.context)
     
     kt = ('contacts', 'personal')
     f = x.get_field(kt)
-    print '%s: %s %s' % (kt, f.title, f.context)
+    print '%s:\n\t"%s"\n\t%s' % (kt, f.title, f.context)
     
     kt = ('contacts', 'personal', 'address')
     f = x.get_field(kt)
-    print '%s: %s %s' % (kt, f.title, f.context)
+    print '%s:\n\t"%s"\n\t%s' % (kt, f.title, f.context)
  
     kt = ('contacts', 'personal', 'address', 'postalcode')
     f = x.get_field(kt)
-    print '%s: %s %s' % (kt, f.title, f.context)
+    print '%s:\n\t"%s"\n\t%s' % (kt, f.title, f.context)
 
     d1 = x.to_dict(flat=1, opts={
         'max-depth': 1,

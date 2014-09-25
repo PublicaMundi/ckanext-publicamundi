@@ -6,7 +6,6 @@ import copy
 import zope.interface
 import zope.interface.verify
 import zope.schema
-from collections import namedtuple
 
 from ckanext.publicamundi.lib import dictization
 from ckanext.publicamundi.lib import logger
@@ -66,7 +65,19 @@ def flatten_field(field):
 # Base implementation  
 #
 
-FieldContext = namedtuple('FieldContext', ['key', 'value'], verbose=False)
+class FieldContext(object):
+
+    __slots__ = ('key', 'value', 'display_name')
+
+    def __init__(self, key, value, display_name=None):
+        self.key = key
+        self.value = value
+        self.display_name = display_name
+    
+    def __repr__(self):
+        return u'%s(key=%r, value=%r, display_name=%r)' % (
+            self.__class__.__name__,
+            self.key, self.value, self.display_name)
 
 class Object(object):
     
@@ -81,7 +92,7 @@ class Object(object):
         '''
         return cls._determine_schema()
 
-    def get_field(self, k, bind=True):
+    def get_field(self, k):
         '''Return a bound field for a key k.
 
         Note that, depending on it's type, k will be interpeted as:  
@@ -93,12 +104,8 @@ class Object(object):
         else:
             kt = tuple(k)
 
-        field, value = self._get_field(kt)
-        
-        if bind:
-            return field.bind(FieldContext(key=k, value=value))
-        else:
-            return field
+        field, val = self._get_field(kt)
+        return field
 
     @classmethod
     def get_fields(cls, exclude_properties=False):
@@ -392,38 +399,57 @@ class Object(object):
         field = schema.get(k)
         value = getattr(self, k)
         
-        return self._get_field_field(field, value, kt)
+        if kt:
+            return self._get_field_field(field, value, kt)
+        else:
+            yf = field.bind(FieldContext(key=k, value=value))
+            yf.context.display_name = yf.title
+            return (yf, value)
     
     def _get_field_field(self, field, value, kt):
-
-        if not kt:
-            # Every part of the path is consumed
-            return (field, value)
         
+        assert kt
+
         # Descend
 
+        yf = yv = None
+
+        more = (len(kt) > 1)
+        
         if isinstance(field, zope.schema.Object):
             if not field.schema.extends(IObject):
                 raise ValueError(
                     'Unknown structure (not an IObject) at field %r' % (field))
             if not field.schema.providedBy(value):
-                raise ValueError(
-                    'The object at field %r is invalid' % (field))
-            return value._get_field(kt)
+                raise ValueError('The object at field %r is invalid' % (field))
+            yf, yv = value._get_field(kt)
         elif isinstance(field, (zope.schema.List, zope.schema.Tuple)):
             if not isinstance(value, (list, tuple)):
                 raise ValueError(
                     'Invalid structure (not a list or tuple) at %r' % (field))
             iv = int(kt[0])
-            return self._get_field_field(field.value_type, value[iv], kt[1:])
+            yv = value[iv]
+            if more:
+                yf, yv = self._get_field_field(field.value_type, yv, kt[1:])
+            else:
+                yf = field.value_type.bind(FieldContext(key=iv, value=yv))
+                yf.context.display_name = u'%s #%d' % (yf.title, iv)
         elif isinstance(field, zope.schema.Dict):
             if not isinstance(value, dict):
                 raise ValueError(
                     'Invalid structure (not a dict) at %r' % (field))
             kv = str(kt[0])
-            return self._get_field_field(field.value_type, value[kv], kt[1:])
+            yv = value[kv]
+            if more:
+                yf, yv = self._get_field_field(field.value_type, yv, kt[1:])
+            else:
+                yf = field.value_type.bind(FieldContext(key=kv, value=yv))
+                kn = field.key_type.vocabulary.getTerm(kv).title
+                yf.context.display_name = u'%s - %s' %(yf.title, kn)
         else:
             raise ValueError('The key path cannot be consumed: %r' % (kt))
+        
+        return yf, yv
 
     ## Validation 
 
