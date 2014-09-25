@@ -115,7 +115,7 @@ def field_widget_multiadapter(field_ifaces, qualifiers=[], is_fallback=False):
     return decorator
       
 def object_widget_adapter(object_iface, qualifiers=[], is_fallback=False):
-    assert object_iface.extends(IObject)
+    assert object_iface.isOrExtends(IObject)
     decorator = decorator_for_widget_multiadapter(
         [object_iface], IObjectWidget, qualifiers, is_fallback)
     return decorator

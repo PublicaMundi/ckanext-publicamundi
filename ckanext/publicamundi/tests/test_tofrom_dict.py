@@ -3,9 +3,7 @@ import zope.schema
 import json
 import datadiff
 from datadiff.tools import assert_equal
-from datetime import date, time, datetime
 from itertools import chain
-
 
 from ckanext.publicamundi.lib.metadata.base import \
     Object, serializer_for_object, \

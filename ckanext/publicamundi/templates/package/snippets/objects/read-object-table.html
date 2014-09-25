@@ -1,0 +1,33 @@
+<div class="{{ " " ~ classes | join(' ') }}">
+    <h3>{{ title }}</h3>
+     
+    <table class="table table-bordered table-condensed metadata-table">
+        {% set col_width = 100.0 / (num_cols + 2) %}
+        <colgroup>
+            {%- for j in range(1, num_cols) -%}
+            <col style="width:{{ '%.1f'|format(col_width) }}%"></col>
+            {%- endfor -%}
+            <col style="width:{{ '%.1f'|format(col_width * 3) }}%"></col>
+        </colgroup>    
+        <tbody>
+            {% for row in rows -%}
+            <tr>
+                {%- for r in row -%}
+                {%- set 
+                    attrs = { 
+                        'class': 'value' if loop.last else 'name',
+                        'rowspan': r.rowspan if r.rowspan|int > 1 else None, 
+                        'colspan': r.colspan if r.colspan|int > 1 else None, }
+                -%}
+                {%- if r.tag == 'th' -%}
+                <th {{ attrs|xmlattr }}>{{ r.title or r.data }}</th>
+                {% else %}
+                <td {{ attrs|xmlattr }}>{{ r.data }}</td>
+                {%- endif -%}
+                {%- endfor -%} {# for r in row #}
+            </tr>           
+            {% endfor -%}
+        </tbody>
+    </table>
+  
+</div>

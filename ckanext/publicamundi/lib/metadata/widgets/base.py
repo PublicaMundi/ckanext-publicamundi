@@ -188,7 +188,7 @@ class ObjectWidget(Widget):
             'widget',
             'object-widget',
             'object-%s-widget' %(self.action),
-            'object-qname-%s' %(qname), ]
+            'object-qname-%s' %(qname or 'NONE'), ]
 
         return tpl_vars
 
