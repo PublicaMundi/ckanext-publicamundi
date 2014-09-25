@@ -10,7 +10,7 @@ from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 @field_widget_multiadapter([IListField, ITextLineField], qualifiers=['tags.foo'])
 class TagsEditWidget(base_widgets.EditFieldWidget, base_widgets.ListFieldWidgetTraits):
 
-    def __init__(self, field):
+    def __init__(self, field, *args):
         assert isinstance(field, zope.schema.List)
         base_widgets.EditFieldWidget.__init__(self, field)
 
@@ -20,7 +20,7 @@ class TagsEditWidget(base_widgets.EditFieldWidget, base_widgets.ListFieldWidgetT
 @field_widget_multiadapter([IListField, ITextLineField], qualifiers=['tags.foo'])
 class TagsReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListFieldWidgetTraits):
 
-    def __init__(self, field):
+    def __init__(self, field, *args):
         assert isinstance(field, zope.schema.List)
         base_widgets.ReadFieldWidget.__init__(self, field)
 
