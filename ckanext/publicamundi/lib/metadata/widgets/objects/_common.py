@@ -12,7 +12,7 @@ from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 @object_widget_adapter(schemata.IObject, qualifiers=['table'])
 class ObjectAsTableReadWidget(base_widgets.ReadObjectWidget):
 
-    max_depth = 3
+    max_depth = 2
     
     def get_template(self):
         return 'package/snippets/objects/read-object-table.html'
@@ -31,18 +31,13 @@ class ObjectAsTableReadWidget(base_widgets.ReadObjectWidget):
         
         num_rows, num_cols, rows = cls._tabulate(obj_dict)
        
-        # Replace keys (in TH elements) with human-friendly titles
+        # Provide human-friendly names for TH elements 
         
         for row in rows:
-            for t in filter(lambda t: t.tag == 'th', row):
-                kp = t.key_path()
-                field = self.obj.get_field(kp, bind=False)
-                if field.title:
-                    k = t.key()
-                    if isinstance(k, int):
-                        t.title = u'%s #%d' %(field.title, k)
-                    else:
-                        t.title = field.title
+            for th in filter(lambda t: t.tag == 'th', row):
+                kp = th.key_path()
+                field = self.obj.get_field(kp)
+                th.title = field.context.title or field.title
                 
         # Provide vars to template
 
@@ -57,7 +52,7 @@ class ObjectAsTableReadWidget(base_widgets.ReadObjectWidget):
 
     # Helpers
 
-    class _td(object):
+    class _Td(object):
 
         __slots__ = ('parent', 'data', 'rowspan', 'colspan')
 
@@ -74,7 +69,7 @@ class ObjectAsTableReadWidget(base_widgets.ReadObjectWidget):
                 self.tag.upper(), 
                 self.data, self.rowspan, self.colspan)
         
-    class _th(_td):
+    class _Th(_Td):
         
         __slots__ = ('title',)
 
@@ -110,7 +105,7 @@ class ObjectAsTableReadWidget(base_widgets.ReadObjectWidget):
     @classmethod 
     def _tabulate_rows(cls, x):
         
-        td, th = cls._td, cls._th
+        Td, Th = cls._Td, cls._Th
         
         itr = None
         if isinstance(x, dict):
@@ -124,7 +119,7 @@ class ObjectAsTableReadWidget(base_widgets.ReadObjectWidget):
                 rows = cls._tabulate_rows(val)
                 nr = len(rows)
                 if rows:
-                    parent = th(data=key, rowspan=nr, colspan=1)
+                    parent = Th(data=key, rowspan=nr, colspan=1)
                     # Prepend row grouper to 1st row
                     rows[0].insert(0, parent)
                     rows[0][1].parent = parent
@@ -137,7 +132,7 @@ class ObjectAsTableReadWidget(base_widgets.ReadObjectWidget):
                     res.extend(rows)
         else:
             if x:
-                res.append([td(data=unicode(x), colspan=1)])
+                res.append([Td(data=unicode(x), colspan=1)])
         
         return res
 
