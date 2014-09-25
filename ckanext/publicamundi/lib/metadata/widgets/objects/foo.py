@@ -31,9 +31,9 @@ class TagsReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListFieldWidgetT
 class FooEditWidget(base_widgets.EditObjectWidget):
 
     def prepare_template_vars(self, name_prefix, data):
-        data = base_widgets.EditObjectWidget.prepare_template_vars(self, name_prefix, data)
+        tpl_vars = base_widgets.EditObjectWidget.prepare_template_vars(self, name_prefix, data)
         # Add variables
-        return data
+        return tpl_vars
     
     def get_omitted_fields(self):
         return ['geometry']
@@ -55,9 +55,9 @@ class FooEditWidget(base_widgets.EditObjectWidget):
 class FooReadWidget(base_widgets.ReadObjectWidget):
     
     def prepare_template_vars(self, name_prefix, data):
-        data = base_widgets.ReadObjectWidget.prepare_template_vars(self, name_prefix, data)
+        tpl_vars = base_widgets.ReadObjectWidget.prepare_template_vars(self, name_prefix, data)
         # Add variables
-        return data
+        return tpl_vars
     
     def get_omitted_fields(self):
         return ['geometry']

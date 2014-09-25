@@ -10,7 +10,7 @@ from ckanext.publicamundi.lib.metadata.types._common import *
 
 @object_null_adapter()
 class Foo(BaseMetadata):
-    
+
     zope.interface.implements(IFoo)
 
     title = None

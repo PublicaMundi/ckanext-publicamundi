@@ -11,12 +11,13 @@ import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
 
+from ckanext.publicamundi.lib.util import Breakpoint
 from ckanext.publicamundi.lib.util import to_json
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata import types
 from ckanext.publicamundi.lib.metadata.types import Object
-from ckanext.publicamundi.lib.metadata.widgets import markup_for_field
-from ckanext.publicamundi.lib.metadata.widgets import markup_for_object
+from ckanext.publicamundi.lib.metadata.widgets import \
+    markup_for_field, markup_for_object
 
 from ckanext.publicamundi.tests import fixtures
 
@@ -105,12 +106,9 @@ class TestsController(BaseController):
         assert isinstance(obj, types.TemporalExtent)
         c.form_sections.append({
             'heading': toolkit.literal('<h3>Object <code>TemporalExtent</code></h3>'),
-            'body': \
-                markup_for_object('edit:faz.baz', obj, 
-                    name_prefix='dt1', data={'title': u'Extent A'}) + \
-                toolkit.literal('<hr/>') + \
-                markup_for_object('read', obj, 
-                    name_prefix='dt1', data={ 'title': u'Extent B' })
+            'body': markup_for_object('edit:faz.baz', obj, name_prefix='dt1', data={'title': u'Extent A'}) +
+                toolkit.literal('<hr/>') + 
+                markup_for_object('read', obj, name_prefix='dt1', data={ 'title': u'Extent B' })
         })
         
         # 2.2 A TemporalExtent object (with errors)
@@ -146,6 +144,9 @@ class TestsController(BaseController):
         return render('tests/accordion-form.html')
 
     def edit_foo(self, id='foo1'):
+        '''Grab a Foo fixture and present an edit form 
+        '''
+
         obj = getattr(fixtures, id)
         assert isinstance(obj, types.Foo)
         
@@ -180,17 +181,48 @@ class TestsController(BaseController):
         c.form_markup = markup_for_object('edit', obj, 
             errors = errors,
             name_prefix = '', 
-            data = { 'title': u'Foo #1' }
+            data = { 'title': u'Foo %s' % (id) }
         )
         return render('tests/form.html')
 
     def show_foo(self, id='foo1'):
+        '''Grab a Foo fixture and show it with the requested format
+        '''
+        
         obj = getattr(fixtures, id)
         assert isinstance(obj, types.Foo)
-        c.markup = markup_for_object('read', obj, 
-            name_prefix='a.foo1', data={'title': u'Foo #2'})
-        return render('tests/page.html')
+        
+        read_action = 'read'
+        f = request.params.get('f')
+        if f:
+            read_action = 'read:%s' %(f)
 
+        c.markup = markup_for_object(
+            str(read_action), obj, name_prefix='a.foo1',
+            data={ 'title': u'Foo %s' % (id) })
+        
+        return render('tests/page.html')
+    
+    def show_dataset(self, id):
+        
+        context = { 'model': model, 'session': model.Session }
+        try:
+            pkg_dict = toolkit.get_action('package_show')(context, { 'id': id })
+        except toolkit.ObjectNotFound as ex:  
+            abort(404)
+        
+        k = pkg_dict['dataset_type']
+        obj = pkg_dict[k]
+        
+        #raise Breakpoint('Break')
+
+        c.markup = markup_for_object('read:table', obj, errors={}, name_prefix=k, 
+            data = {
+                'title': u'%s: Metadata' %(pkg_dict['title'])
+            })
+
+        return render('tests/page.html')
+        
     def test_template(self):
         '''A test tube for jinja2 templates ''' 
         return render('tests/test.html')

@@ -46,7 +46,7 @@ def test_inversed_1():
     eq_(s0, s2)
 
 def test_inversed_2():
-    y0  = copy.deepcopy(d)
+    y0 = copy.deepcopy(d)
     y2 = copy.deepcopy(d2)
     y0[u'measurements'][u'samples'].pop('c')
     y2[u'measurements'][u'samples'].pop('c')
