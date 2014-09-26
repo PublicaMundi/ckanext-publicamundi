@@ -2,7 +2,13 @@
 
 {% block package_metadata_fields %}
 
-{% set dataset_type = data.get('dataset_type', 'none') %}
+{% set is_draft = data.get('state', 'draft') == 'draft' %}
+{% set dataset_type = data.get('dataset_type') %}
+
+{# This is a workaround for bug #36 #}
+{% if is_draft %}
+{{ form.hidden('dataset_type', dataset_type) }} 
+{% endif %}
 
 {% if dataset_type == 'foo' %}
 {% snippet 'package/snippets/edit_foo_metadata_fields.html', data=data, errors=errors %}
