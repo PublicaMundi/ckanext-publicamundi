@@ -1,14 +1,16 @@
 import zope.interface
 
-from ckanext.publicamundi.lib.metadata.base import Object
+from ckanext.publicamundi.lib.metadata.base import (
+    Object, object_null_adapter,
+    object_format_adapter, ObjectFormatter)
 from ckanext.publicamundi.lib.metadata.schemata import IFoo
 
-from ckanext.publicamundi.lib.metadata.types import object_null_adapter
 from ckanext.publicamundi.lib.metadata.types import BaseMetadata
 from ckanext.publicamundi.lib.metadata.types._common import *
 
-@object_null_adapter(IFoo)
+@object_null_adapter()
 class Foo(BaseMetadata):
+
     zope.interface.implements(IFoo)
 
     title = None
@@ -28,3 +30,8 @@ class Foo(BaseMetadata):
     published = None
     password = None
     wakeup_time = None
+
+
+@object_format_adapter(IFoo, 'default')
+class FooFormatter(ObjectFormatter):
+    pass

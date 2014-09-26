@@ -218,7 +218,10 @@ def get_field_edit_processor(field):
         else:
             # Convert from input or db  
             if ser and isinstance(value, basestring):
-                value = ser.loads(value)
+                try:
+                    value = ser.loads(value)
+                except Exception as ex:
+                    raise Invalid(u'Invalid input (%s)' % (ex.message))
         
         # Ignore empty values (equivalent to `ignore_empty` validator).
         # Note If a field is required the check is postponed until the dataset
@@ -234,7 +237,7 @@ def get_field_edit_processor(field):
             field.validate(value)
         except zope.schema.ValidationError as ex:
             # Map this exception to the one expected by CKAN
-            raise Invalid(u'Invalid data (%s)' %(type(ex).__name__))
+            raise Invalid(u'Invalid (%s)' % (type(ex).__name__))
 
         # Convert to a properly formatted string (for db storage)
 

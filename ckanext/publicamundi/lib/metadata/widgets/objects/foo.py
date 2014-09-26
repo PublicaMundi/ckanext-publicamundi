@@ -10,7 +10,7 @@ from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 @field_widget_multiadapter([IListField, ITextLineField], qualifiers=['tags.foo'])
 class TagsEditWidget(base_widgets.EditFieldWidget, base_widgets.ListFieldWidgetTraits):
 
-    def __init__(self, field):
+    def __init__(self, field, *args):
         assert isinstance(field, zope.schema.List)
         base_widgets.EditFieldWidget.__init__(self, field)
 
@@ -20,7 +20,7 @@ class TagsEditWidget(base_widgets.EditFieldWidget, base_widgets.ListFieldWidgetT
 @field_widget_multiadapter([IListField, ITextLineField], qualifiers=['tags.foo'])
 class TagsReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListFieldWidgetTraits):
 
-    def __init__(self, field):
+    def __init__(self, field, *args):
         assert isinstance(field, zope.schema.List)
         base_widgets.ReadFieldWidget.__init__(self, field)
 
@@ -31,9 +31,9 @@ class TagsReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListFieldWidgetT
 class FooEditWidget(base_widgets.EditObjectWidget):
 
     def prepare_template_vars(self, name_prefix, data):
-        data = base_widgets.EditObjectWidget.prepare_template_vars(self, name_prefix, data)
+        tpl_vars = base_widgets.EditObjectWidget.prepare_template_vars(self, name_prefix, data)
         # Add variables
-        return data
+        return tpl_vars
     
     def get_omitted_fields(self):
         return ['geometry']
@@ -55,9 +55,9 @@ class FooEditWidget(base_widgets.EditObjectWidget):
 class FooReadWidget(base_widgets.ReadObjectWidget):
     
     def prepare_template_vars(self, name_prefix, data):
-        data = base_widgets.ReadObjectWidget.prepare_template_vars(self, name_prefix, data)
+        tpl_vars = base_widgets.ReadObjectWidget.prepare_template_vars(self, name_prefix, data)
         # Add variables
-        return data
+        return tpl_vars
     
     def get_omitted_fields(self):
         return ['geometry']

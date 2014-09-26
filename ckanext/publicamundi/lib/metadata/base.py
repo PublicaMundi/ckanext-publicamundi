@@ -6,11 +6,11 @@ import copy
 import zope.interface
 import zope.interface.verify
 import zope.schema
-from collections import namedtuple
 
 from ckanext.publicamundi.lib import dictization
 from ckanext.publicamundi.lib import logger
 from ckanext.publicamundi.lib.util import stringify_exception
+from ckanext.publicamundi.lib.memoizer import memoize
 from ckanext.publicamundi.lib.json_encoder import JsonEncoder
 from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.ibase import (
@@ -23,8 +23,6 @@ from ckanext.publicamundi.lib.metadata.formatters import (
 from ckanext.publicamundi.lib.metadata import serializers
 from ckanext.publicamundi.lib.metadata.serializers import (
     serializer_for_field, serializer_for_key_tuple, BaseSerializer)
-
-_cache = threading.local()
 
 def flatten_schema(schema):
     '''Flatten an arbitrary zope-based schema.
@@ -67,7 +65,19 @@ def flatten_field(field):
 # Base implementation  
 #
 
-FieldContext = namedtuple('FieldContext', ['key', 'value'], verbose=False)
+class FieldContext(object):
+
+    __slots__ = ('key', 'value', 'title')
+
+    def __init__(self, key, value, title=None):
+        self.key = key
+        self.value = value
+        self.title = title
+    
+    def __repr__(self):
+        return u'%s(key=%r, value=%r, title=%r)' % (
+            self.__class__.__name__,
+            self.key, self.value, self.title)
 
 class Object(object):
     
@@ -76,18 +86,27 @@ class Object(object):
     ## interface IObject
 
     @classmethod
-    def schema(cls):
+    @memoize
+    def get_schema(cls):
         '''Get the underlying zope schema for this class.
         '''
-        return cls.get_schema()
+        return cls._determine_schema()
 
     def get_field(self, k):
-        '''Return a bound field for attribute k
+        '''Return a bound field for a key k.
+
+        Note that, depending on it's type, k will be interpeted as:  
+            * as an direct attribute of this object, if a string
+            * as a path of attributes/indices/keys inside this object, if a tuple
         '''
-        schema = self.get_schema()
-        v = getattr(self, k)
-        return schema.get(k).bind(FieldContext(key=k, value=v))
-    
+        if isinstance(k, basestring):
+            kt = (k,)
+        else:
+            kt = tuple(k)
+
+        field, val = self._get_field(kt)
+        return field
+
     @classmethod
     def get_fields(cls, exclude_properties=False):
         '''Return a map of fields for the zope schema of our class.
@@ -334,18 +353,6 @@ class Object(object):
         return schema
 
     @classmethod
-    def get_schema(cls):
-        schema = None
-        if not hasattr(_cache, 'schema'):
-            _cache.schema = {}
-        try:
-            schema = _cache.schema[cls]
-        except KeyError:
-            schema  = cls._determine_schema()
-            _cache.schema[cls] = schema
-        return schema
-
-    @classmethod
     def get_field_names(cls):
         schema = cls.get_schema()
         return zope.schema.getFieldNames(schema) 
@@ -382,6 +389,67 @@ class Object(object):
             factory = field.defaultFactory
         
         return factory
+
+    ## Field accessors 
+    
+    def _get_field(self, kt):
+        
+        k, kt = kt[0], kt[1:]
+        schema = self.get_schema()
+        field = schema.get(k)
+        value = getattr(self, k)
+        
+        if kt:
+            return self._get_field_field(field, value, kt)
+        else:
+            yf = field.bind(FieldContext(key=k, value=value))
+            yf.context.title = yf.title
+            return (yf, value)
+    
+    def _get_field_field(self, field, value, kt):
+        
+        assert kt
+
+        # Descend
+
+        yf = yv = None
+
+        more = (len(kt) > 1)
+        
+        if isinstance(field, zope.schema.Object):
+            if not field.schema.extends(IObject):
+                raise ValueError(
+                    'Unknown structure (not an IObject) at field %r' % (field))
+            if not field.schema.providedBy(value):
+                raise ValueError('The object at field %r is invalid' % (field))
+            yf, yv = value._get_field(kt)
+        elif isinstance(field, (zope.schema.List, zope.schema.Tuple)):
+            if not isinstance(value, (list, tuple)):
+                raise ValueError(
+                    'Invalid structure (not a list or tuple) at %r' % (field))
+            iv = int(kt[0])
+            yv = value[iv]
+            if more:
+                yf, yv = self._get_field_field(field.value_type, yv, kt[1:])
+            else:
+                yf = field.value_type.bind(FieldContext(key=iv, value=yv))
+                yf.context.title = u'%s #%d' % (yf.title, iv)
+        elif isinstance(field, zope.schema.Dict):
+            if not isinstance(value, dict):
+                raise ValueError(
+                    'Invalid structure (not a dict) at %r' % (field))
+            kv = str(kt[0])
+            yv = value[kv]
+            if more:
+                yf, yv = self._get_field_field(field.value_type, yv, kt[1:])
+            else:
+                yf = field.value_type.bind(FieldContext(key=kv, value=yv))
+                kn = field.key_type.vocabulary.getTerm(kv).title
+                yf.context.title = u'%s - %s' %(yf.title, kn)
+        else:
+            raise ValueError('The key path cannot be consumed: %r' % (kt))
+        
+        return yf, yv
 
     ## Validation 
 
@@ -704,6 +772,18 @@ class Object(object):
             
             return res
 
+        def _is_field_accessible(self, field):
+            
+            format_spec = self.opts.get('format-values')
+            if format_spec:
+                # Check if this field allows us to descend in order to format it's
+                # parts (or stop here and format it as a whole).
+                fo_conf = formatters.config_for_field(field, format_spec.name)
+                return fo_conf.get('descend-if-dictized', True) if fo_conf else True
+            else:
+                # No formatting takes place
+                return True
+        
         def _get_field_value(self, v, field):
             '''Get the value of a field considered a leaf.
             Serialize or format (not both!) this value, if requested so.
@@ -732,8 +812,15 @@ class Object(object):
                 assert isinstance(format_spec, FormatSpec)
                 fo = formatter_for_field(field, format_spec.name)
                 if fo:
+                    fo_opts = format_spec.opts
+                    # Fetch any extra field-level extra options
+                    fo_conf = formatters.config_for_field(field, format_spec.name)
+                    if fo_conf and 'extra-opts' in fo_conf:
+                        fo_opts = copy.copy(fo_opts)
+                        fo_opts.update(fo_conf.get('extra-opts'))
+                    # Try to format
                     try:
-                        v = fo.format(v, format_spec.opts)
+                        v = fo.format(v, opts=fo_opts)
                     except:
                         logger.warn(
                             'Failed to format value %r for field %r' %(v, field))
@@ -743,7 +830,7 @@ class Object(object):
 
         def _dictize_field(self, f, field, max_depth):
             
-            if max_depth == 0:
+            if max_depth == 0 or not self._is_field_accessible(field):
                 return self._get_field_value(f, field)
             
             # Descend into this field
@@ -789,7 +876,7 @@ class Object(object):
 
         def _flatten_field(self, f, field, max_depth):
             
-            if max_depth == 0:
+            if max_depth == 0 or not self._is_field_accessible(field):
                 v = self._get_field_value(f, field)
                 return { (): v }
             
@@ -943,6 +1030,18 @@ class ErrorDict(dict):
     global_key = '__after'
 
 #
+# Named adapters (implementers)
+#
+
+def object_null_adapter(name=''):
+    def decorate(cls):
+        assert issubclass(cls, Object)
+        provided_iface = cls.get_schema()
+        adapter_registry.register([], provided_iface, name, cls)
+        return cls
+    return decorate
+
+#
 # Serializers
 #
 
@@ -1009,16 +1108,18 @@ class ObjectFormatter(BaseFormatter):
 
     def __init__(self, obj):
         self.obj = obj
-
+    
     def format(self, obj=None, opts={}):
+        if obj is None:
+            obj = self.obj
+        return self._format(obj, opts)
+    
+    def _format(self, obj, opts):
         '''Format the object according to our named format.
         
         If possible, all contained fields will be formatted under the same format, 
         and will be passed the same options.
         '''
-
-        if obj is None:
-            obj = self.obj
        
         # Note We want to pass a 'quote' option to all our fields (this will be
         # interpreted by the field formatter itself). If not allready set, we
@@ -1032,11 +1133,21 @@ class ObjectFormatter(BaseFormatter):
         name = self.requested_name
         argv = list()
         for k, field in obj.iter_fields():
-            f = field.get(obj)
-            if f is not None:
-                # Find a proper formatter for field
-                fo = formatter_for_field(field, name)
-                argv.append((k, fo.format(f, opts) if fo else repr(f)))
+            v = field.get(obj)
+            if v is None:
+                continue
+            # Find a proper formatter for field
+            fo = formatter_for_field(field, name)
+            if fo:
+                fo_opts = opts
+                fo_conf = formatters.config_for_field(field, name)
+                if fo_conf and 'extra-opts' in fo_conf:
+                    fo_opts = copy.copy(fo_opts)
+                    fo_opts.update(fo_conf.get('extra-opts'))
+                v = fo.format(v, opts=fo_opts)
+            else:
+                v = format(v)
+            argv.append((k, v))
         
         args = ' '.join(map(lambda t: '%s=%s' % t, argv))
         s = '<%s %s>' % (type(obj).__name__, args)

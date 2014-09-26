@@ -57,7 +57,7 @@
 }}
 {% else %}
 {% set dataset_type = data.get('dataset_type') %}
-
+{{ form.hidden('dataset_type', dataset_type) }}
 <div class="control-group ">
     <label class="control-label">{{ _('Dataset Type') }}</label>
     <div class="controls "><div class="display">{{ h.dataset_types().get(dataset_type).get('title') }}</div></div>

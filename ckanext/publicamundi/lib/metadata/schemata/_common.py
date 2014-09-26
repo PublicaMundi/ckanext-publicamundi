@@ -130,11 +130,11 @@ class IGeographicBoundingBox(IObject):
 class ITemporalExtent(IObject):
 
     start = zope.schema.Date(
-        title = u'Starting date',
+        title = u'Start Date',
         required = True,)
 
     end = zope.schema.Date(
-        title = u'Ending date',
+        title = u'End Date',
         required = True,)
 
     @zope.interface.invariant

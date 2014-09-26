@@ -394,29 +394,6 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         
         dt = pkg_dict.get('dataset_type') 
 
-        extras = pkg_dict.get('extras', [])
-        if not extras:
-            pkg_dict['extras'] = extras
-
-#        if dt == 'foo': 
-#            extras.append({ 'key': 'Foo/Baz', 'value': pkg_dict.get('foo.baz', 'n/a') })
-#            extras.append({ 'key': 'Foo/Rating', 'value': pkg_dict.get('foo.rating', 'n/a') })
-#            extras.append({ 'key': 'Foo/Category', 'value': pkg_dict.get('foo.thematic_category', 'n/a') })
-#            extras.append({ 'key': 'Foo/Created', 'value': pkg_dict.get('foo.created', 'n/a') })
-#            extras.append({ 'key': 'Foo/T-Extent', 'value': 
-#                pkg_dict.get('foo.temporal_extent.start', '-inf') + ' To ' +
-#                pkg_dict.get('foo.temporal_extent.end', '+inf')
-#            })
-#        
-        # or we can translate keys ...
-        
-        field_key_map = {
-            u'updated_at': _t(u'Updated'),
-            u'created_at': _t(u'Created'),
-        }
-        for item in extras:
-            k = item.get('key')
-            item['key'] = field_key_map.get(k, k)
         return pkg_dict
 
 class PackageController(p.SingletonPlugin):
