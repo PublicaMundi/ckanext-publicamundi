@@ -86,4 +86,9 @@ input[type="tel"] {
 
 .form-horizontal .control-group .controls > div.display {
     padding-top: 5px;
-} 
+}
+
+.table {
+    margin-bottom: 10px;
+    margin-top:10px;
+}

@@ -1,7 +1,5 @@
 
-.widget h3 { font-size: 1.2em; }
+.widget h3 {}
 .widget li > .widget h3 { font-size: 1em; }
 
-.widget.object-read-widget .table.metadata-table {
-
-}
+.widget.object-read-widget .table.metadata-table {}
