@@ -17,7 +17,6 @@ from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.ibase import IFormatSpec, IFormatter
 
 __all__ = [
-    'supported_formats',
     'field_format_adapter',
     'field_format_multiadapter',
     'FormatSpec',
@@ -130,6 +129,10 @@ def formatter_for_field(field, name='default'):
 
     return formatter
 
+def config_for_field(field, name='default'):
+    fo_tag = field.queryTaggedValue('format')
+    return fo_tag.get(name) if fo_tag else None
+    
 # Formatters
 
 class BaseFormatter(object):

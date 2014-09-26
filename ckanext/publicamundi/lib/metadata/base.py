@@ -67,17 +67,17 @@ def flatten_field(field):
 
 class FieldContext(object):
 
-    __slots__ = ('key', 'value', 'display_name')
+    __slots__ = ('key', 'value', 'title')
 
-    def __init__(self, key, value, display_name=None):
+    def __init__(self, key, value, title=None):
         self.key = key
         self.value = value
-        self.display_name = display_name
+        self.title = title
     
     def __repr__(self):
-        return u'%s(key=%r, value=%r, display_name=%r)' % (
+        return u'%s(key=%r, value=%r, title=%r)' % (
             self.__class__.__name__,
-            self.key, self.value, self.display_name)
+            self.key, self.value, self.title)
 
 class Object(object):
     
@@ -403,7 +403,7 @@ class Object(object):
             return self._get_field_field(field, value, kt)
         else:
             yf = field.bind(FieldContext(key=k, value=value))
-            yf.context.display_name = yf.title
+            yf.context.title = yf.title
             return (yf, value)
     
     def _get_field_field(self, field, value, kt):
@@ -433,7 +433,7 @@ class Object(object):
                 yf, yv = self._get_field_field(field.value_type, yv, kt[1:])
             else:
                 yf = field.value_type.bind(FieldContext(key=iv, value=yv))
-                yf.context.display_name = u'%s #%d' % (yf.title, iv)
+                yf.context.title = u'%s #%d' % (yf.title, iv)
         elif isinstance(field, zope.schema.Dict):
             if not isinstance(value, dict):
                 raise ValueError(
@@ -445,7 +445,7 @@ class Object(object):
             else:
                 yf = field.value_type.bind(FieldContext(key=kv, value=yv))
                 kn = field.key_type.vocabulary.getTerm(kv).title
-                yf.context.display_name = u'%s - %s' %(yf.title, kn)
+                yf.context.title = u'%s - %s' %(yf.title, kn)
         else:
             raise ValueError('The key path cannot be consumed: %r' % (kt))
         
@@ -778,8 +778,7 @@ class Object(object):
             if format_spec:
                 # Check if this field allows us to descend in order to format it's
                 # parts (or stop here and format it as a whole).
-                fo_tag = field.queryTaggedValue('format')
-                fo_conf = fo_tag.get(format_spec.name) if fo_tag else None
+                fo_conf = formatters.config_for_field(field, format_spec.name)
                 return fo_conf.get('descend-if-dictized', True) if fo_conf else True
             else:
                 # No formatting takes place
@@ -814,9 +813,8 @@ class Object(object):
                 fo = formatter_for_field(field, format_spec.name)
                 if fo:
                     fo_opts = format_spec.opts
-                    ## Fetch any extra field-wise options
-                    fo_tag = field.queryTaggedValue('format')
-                    fo_conf = fo_tag.get(format_spec.name) if fo_tag else None
+                    # Fetch any extra field-level extra options
+                    fo_conf = formatters.config_for_field(field, format_spec.name)
                     if fo_conf and 'extra-opts' in fo_conf:
                         fo_opts = copy.copy(fo_opts)
                         fo_opts.update(fo_conf.get('extra-opts'))
@@ -1142,14 +1140,13 @@ class ObjectFormatter(BaseFormatter):
             fo = formatter_for_field(field, name)
             if fo:
                 fo_opts = opts
-                fo_tag = field.queryTaggedValue('format')
-                fo_conf = fo_tag.get(name) if fo_tag else None
+                fo_conf = formatters.config_for_field(field, name)
                 if fo_conf and 'extra-opts' in fo_conf:
                     fo_opts = copy.copy(fo_opts)
                     fo_opts.update(fo_conf.get('extra-opts'))
                 v = fo.format(v, opts=fo_opts)
             else:
-                v = repr(v)
+                v = format(v)
             argv.append((k, v))
         
         args = ' '.join(map(lambda t: '%s=%s' % t, argv))
