@@ -49,6 +49,7 @@ class TestController(BaseTestController):
     def test_1_create_package(self):
         
         yield self._create_package, 'hello-foo-1'
+        
     def test_2_update_package(self):
     
         yield self._update_package, 'hello-foo-1', '0..1'
@@ -126,7 +127,6 @@ class TestController(BaseTestController):
         # 3rd stage - dataset_type-related metadata
 
         for t, v in dictization.flatten(pkg_dict.get(dt)).items():
-
             k = '.'.join((key_prefix,) + tuple(map(str,t)))
             v = v.encode('utf-8') if isinstance(v, unicode) else v
             form3.set(k, v)
@@ -264,6 +264,7 @@ class TestController(BaseTestController):
         res_pkg_resources = res_pkg_dict['resources']
 
         # Verify resource metadata (changed)
+
         res_resource_dict = next(r for r in res_pkg_resources if r['name'] == resource_name)
         for k in ['url', 'description', 'name']:
             assert resource_dict[k] == res_resource_dict[k]
@@ -375,6 +376,7 @@ class TestController(BaseTestController):
         res_pkg_resources = res_pkg_dict['resources']
 
         # Verify resource metadata deleted
+
         for res in res_pkg_resources:
             assert res.get('name') != resource_name
             
@@ -450,7 +452,7 @@ package_fixtures['hello-foo-1'] = {
         ],
         'dataset_type': 'foo',
         'foo': {
-            'baz': u'shoort',
+            'baz': u'BaoBab Tree',
             'rating': 9,
             'grade': 5.12,
             'reviewed': False,
