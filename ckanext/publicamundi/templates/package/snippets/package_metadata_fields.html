@@ -2,7 +2,8 @@
 
 {% block package_metadata_fields %}
 
-{% set dataset_type = data.get('dataset_type', 'none') %}
+{% set dataset_type = data.get('dataset_type',) %}
+{{ form.hidden('dataset_type', dataset_type) }} 
 
 {% if dataset_type == 'foo' %}
 {% snippet 'package/snippets/edit_foo_metadata_fields.html', data=data, errors=errors %}
