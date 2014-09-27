@@ -261,9 +261,12 @@ def get_field_read_processor(field):
         
         value = data.get(key)
 
-        assert value and (not value is missing)
+        assert not value is missing
         assert isinstance(value, basestring)
         
+        if not value:
+            logger.warn('Read empty value for field %s' % (key[0]))
+
         # noop
 
         return
