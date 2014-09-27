@@ -5,7 +5,7 @@
 _cache = dict()
 
 def memoize(fn):
-    print 'Creating memoize wrapper for %r ...' %(fn)
+    #print 'Creating memoize wrapper for %r ...' %(fn)
     cached_results = _cache[fn] = dict()
     def wrapped(*args):
         cid = args

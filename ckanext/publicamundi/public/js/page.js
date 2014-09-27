@@ -130,8 +130,8 @@ this.ckan.module('input-select2-tags', function ($, _) {
                 module.el.attr('name', qname + '-' + 'joined')
                 $h.appendTo(module.el.closest('.controls'))
 
-                module.el.on('change', function() {
-                    var $input = $(this)
+                var itemize_tags = function() {
+                    var $input = module.el
                     var $h = $input.closest('.controls').find('.itemized-tags')
                     var tags = $input.val().split(',')
                     tags = $.grep(tags, function (tag) { return tag.length })
@@ -143,8 +143,10 @@ this.ckan.module('input-select2-tags', function ($, _) {
                             .val(tag)
                         $h.append($i)
                     })
-                })
-                module.el.trigger('change')
+                }
+
+                itemize_tags()
+                module.el.on('change', itemize_tags)
             }
 
             // Initialize select2 widget

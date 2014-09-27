@@ -31,7 +31,7 @@ class TagsReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListFieldWidgetT
 class FooEditWidget(base_widgets.EditObjectWidget):
 
     def prepare_template_vars(self, name_prefix, data):
-        tpl_vars = base_widgets.EditObjectWidget.prepare_template_vars(self, name_prefix, data)
+        tpl_vars = super(FooEditWidget, self).prepare_template_vars(name_prefix, data)
         # Add variables
         return tpl_vars
     
@@ -51,11 +51,30 @@ class FooEditWidget(base_widgets.EditObjectWidget):
     def get_template(self):
         return None # use glue template
 
+@object_widget_adapter(schemata.IFoo, qualifiers=['datasetform'])
+class DatasetFooEditWidget(base_widgets.EditObjectWidget):
+    
+    def get_omitted_fields(self):
+        return ['geometry']
+    
+    def get_field_qualifiers(self):
+        return {
+            'tags': 'tags',
+            'thematic_category': 'select2',
+            'contacts': 'contacts.foo',
+        }
+    
+    def get_glue_template(self):
+        return 'package/snippets/objects/glue-edit-foo-datasetform.html'
+        
+    def get_template(self):
+        return None # use glue template
+
 @object_widget_adapter(schemata.IFoo)
 class FooReadWidget(base_widgets.ReadObjectWidget):
     
     def prepare_template_vars(self, name_prefix, data):
-        tpl_vars = base_widgets.ReadObjectWidget.prepare_template_vars(self, name_prefix, data)
+        tpl_vars = super(FooReadWidget, self).prepare_template_vars(name_prefix, data)
         # Add variables
         return tpl_vars
     

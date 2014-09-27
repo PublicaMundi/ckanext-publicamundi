@@ -24,11 +24,11 @@ input[type="tel"] {
 }
 
 .form-horizontal .control-label {
-    width: 127px;
+    width: 140px;
 }
 
 .form-horizontal .controls {
-    margin-left: 137px;
+    margin-left: 146px;
 }
 
 .error-block {
@@ -91,4 +91,9 @@ input[type="tel"] {
 .table {
     margin-bottom: 10px;
     margin-top:10px;
+}
+
+.control-required {
+    font-size: 14px;
+    font-family: menu;
 }

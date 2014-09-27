@@ -20,7 +20,7 @@ class IFoo(IBaseMetadata):
             SimpleTerm('government', 'government', u'Government'),
             SimpleTerm('health', 'health', u'Health'),
             SimpleTerm('economy', 'economy', u'Economy'))),
-        title = u'Thematic Category',
+        title = u'Category',
         required = True,
         default = 'economy')
 
@@ -44,7 +44,7 @@ class IFoo(IBaseMetadata):
 
     temporal_extent = zope.schema.Object(ITemporalExtent,
         title = u'Temporal Extent',
-        required = True)
+        required = False)
     temporal_extent.setTaggedValue('format', {
         'default': { 'descend-if-dictized': False, }
     })

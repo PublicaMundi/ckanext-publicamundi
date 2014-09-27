@@ -1,5 +1,14 @@
 
-.widget h3 {}
-.widget li > .widget h3 { font-size: 1em; }
+.widget h3 { 
+    font-size: 1.05em;
+}
+
+.widget li > .widget h3 { 
+    font-size: 1em; 
+}
+
+.widget .accordion-heading a {
+    font-weight: bold;
+}
 
 .widget.object-read-widget .table.metadata-table {}
