@@ -800,7 +800,8 @@ class Object(object):
                         v = ser.dumps(v)
                     except:
                         logger.warn(
-                            'Failed to serialize value %r for field %r' %(v, field))
+                            'Failed to serialize value %r for field %r (%s)' % (
+                                v, field.__name__, field.__class__.__name__))
                         v = None
                 # Return here, no need to do anything more
                 return v
@@ -823,7 +824,8 @@ class Object(object):
                         v = fo.format(v, opts=fo_opts)
                     except:
                         logger.warn(
-                            'Failed to format value %r for field %r' %(v, field))
+                            'Failed to format value %r for field %r (%s)' % (
+                                v, field.__name__, field.__class__.__name__))
                         v = None
             
             return v
@@ -980,7 +982,8 @@ class Object(object):
                             f = ser.loads(f)
                         except:
                             logger.warn(
-                                'Failed to unserialize value %r for field %r' %(f, field))
+                                'Failed to unserialize value %r for field %r (%s)' % (
+                                    f, field.__name__, field.__class__.__name__))
                             f = None
                 return f
 

@@ -1,25 +1,10 @@
 {% import 'macros/form.html' as form %}
 
-{% block package_metadata_fields %}
+{% block package_metadata_fields scoped %}
 
-{% set is_draft = data.get('state', 'draft') == 'draft' %}
-{% set dataset_type = data.get('dataset_type') %}
-
-{# This is a workaround for bug #36 #}
-{% if is_draft %}
-{{ form.hidden('dataset_type', dataset_type) }} 
-{% endif %}
-
-{% if dataset_type == 'foo' %}
-{% snippet 'package/snippets/edit_foo_metadata_fields.html', data=data, errors=errors %}
-{% endif %} {# dataset_type == 'foo' #}
-
-{% if dataset_type == 'inspire' %}
-{% snippet 'package/snippets/edit_inspire_metadata_fields.html', data=data, errors=errors %}
-{% endif %} {# dataset_type == 'inspire' #}
+{%- set is_draft = data.get('state', 'draft') == 'draft' -%}
 
 {% block package_metadata_fields_url %}
-
 {{ 
     form.input('url', 
         label=_('Source'), 
@@ -29,11 +14,9 @@
         error=errors.url, 
         classes=['control-medium']) 
 }}
-
 {% endblock %} {# package_metadata_fields_url #}
 
-{% block package_metadata_fields_version %}
-    
+{% block package_metadata_fields_version %}  
 {{ 
     form.input('version', 
         label=_('Version'), 
@@ -43,7 +26,6 @@
         error=errors.version, 
         classes=['control-medium']) 
 }}
-
 {% endblock %} {# package_metadata_fields_version #}
 
 {% block package_metadata_author %}
@@ -71,7 +53,6 @@
 {% endblock %} {# package_metadata_author #}
 
 {% block package_metadata_fields_maintainer %}
-
 {{ 
     form.input('maintainer', 
         label=_('Maintainer'), 
@@ -81,7 +62,6 @@
         error=errors.maintainer, 
         classes=['control-medium']) 
 }}
-
 {{ 
     form.input('maintainer_email', 
         label=_('Maintainer Email'), 
@@ -91,15 +71,12 @@
         error=errors.maintainer_email, 
         classes=['control-medium']) 
 }}
-
 {% endblock %} {# package_metadata_fields_maintainer #}
 
 {% block package_metadata_fields_custom %}
-
 {# Note: 
-  Remove free extras from the package form. If you're using convert_{to/from}_extras() as we are 
-  with our 'music_description' field below then you need to remove free extras from the form, or editing 
-  your custom field won't work!!   
+  Remove free extras from the package form. We are using convert_{to/from}_extras(),
+  so we need to remove free extras from the form (or editing breaks!)   
 #}
 {% block custom_fields %}
 {# {% snippet 'snippets/custom_form_fields.html', extras=data.extras, errors=errors, limit=3 %} #}
@@ -107,6 +84,23 @@
 {% endblock %} {# package_metadata_fields_custom #}
 
 {% block dataset_fields %}
-{% endblock %}
+{% set dt = data.get('dataset_type') -%}
+{% set dt_prefix = dt -%}
+{% set obj = data.get(dt_prefix) -%}
+
+{# A workaround for bug #36 #}
+{% if is_draft -%}
+{{ form.hidden('dataset_type', dt) }} 
+{% endif -%}
+
+{% if obj -%}
+{{ 
+    h.markup_for('edit:datasetform', obj, 
+        errors=errors, 
+        name_prefix=dt_prefix, 
+        data={}) 
+}}
+{% endif -%}
+{% endblock %} {# dataset_fields #}
 
 {% endblock %} {# package_metadata_fields #}

@@ -29,15 +29,23 @@ dt1 = TemporalExtent(
     start = datetime.date(2014, 5, 27),
     end = datetime.date(2014, 5, 29))
 
+dt2 = TemporalExtent(
+    start = datetime.date(1999, 5, 1),
+    end = datetime.date.today())
+
 foo1 = Foo(
     baz = u'Bazzz',
     title = u'Αβαβούα',
     tags = [ u'alpha', u'beta', u'gamma'],
-    url = 'http://example.com',
+    url = 'http://example.com/res/1',
     contact_info = ContactInfo(email=u'nomad@somewhere.com', address=None),
     contacts = {
-        'personal': ContactInfo(email=u'nobody@example.com', address=PostalAddress(address=u'North Pole', postalcode=u'54321')),
-        'office': ContactInfo(email=None, address=PostalAddress(address=u'South Pole', postalcode=u'12345')),
+        'personal': ContactInfo(
+            email=u'nobody@example.com', 
+            address=PostalAddress(address=u'North Pole', postalcode=u'54321')),
+        'office': ContactInfo(
+            email=None, 
+            address=PostalAddress(address=u'South Pole', postalcode=u'12345')),
     },
     geometry = [[ poly1, poly2 ]],
     reviewed = False,
@@ -48,6 +56,25 @@ foo1 = Foo(
     temporal_extent = dt1,
     rating = 0,
     grade = 13.7,
+    password = u'secret',
+)
+
+foo2 = Foo(
+    baz = u'Baobab',
+    title = u'Αβαβούα',
+    tags = [ u'alpha', u'beta', u'gamma',],
+    url = 'ftp://example.com/res/2',
+    contact_info = ContactInfo(
+        email=u'nomad@somewhere.com', 
+        address=PostalAddress(address=u'Sahara', postalcode=u'12329')),
+    geometry = [[ poly1 ]],
+    reviewed = True,
+    created = datetime.datetime(2014, 6, 11),
+    wakeup_time = datetime.time(8, 30, 0),
+    thematic_category = 'health',
+    temporal_extent = None,
+    rating = 3,
+    grade = -2.79,
     password = u'secret',
 )
 

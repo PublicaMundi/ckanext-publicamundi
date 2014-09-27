@@ -1,7 +1,6 @@
 <div class="{{ " " ~ classes | join(' ') }}">
-    <h3>{{ title }}</h3>
+    {% if title %}<h3>{{ title }}</h3>{% endif %}
     {% for k, f in fields.items() -%}
-    <hr/>
     {{ f.markup }}
     {% endfor -%}
 </div>
