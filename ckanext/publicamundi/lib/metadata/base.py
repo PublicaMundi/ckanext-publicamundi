@@ -9,7 +9,8 @@ import zope.schema
 
 from ckanext.publicamundi.lib import dictization
 from ckanext.publicamundi.lib import logger
-from ckanext.publicamundi.lib.util import stringify_exception
+from ckanext.publicamundi.lib.util import (
+    stringify_exception, item_setter, attr_setter)
 from ckanext.publicamundi.lib.memoizer import memoize
 from ckanext.publicamundi.lib.json_encoder import JsonEncoder
 from ckanext.publicamundi.lib.metadata import adapter_registry
@@ -198,7 +199,7 @@ class Object(object):
             raise ValueError(
                 'The options `format-values` and `serialize-values` are incompatible.')
         
-        opts = copy.copy(opts) # will modify it ...
+        opts = copy.copy(opts) # to modify it ...
 
         if format_values:
             if isinstance(format_values, FormatSpec):
@@ -232,6 +233,12 @@ class Object(object):
         '''Convert (i.e. load) from a (flat or nested) dict.
         
         The supported options (opts) are:
+            * update: bool, str (default: False)
+                Indicate whether input data should update self's relevant attributes.
+                If this option is:
+                 - not set: self will be fully reloaded from scratch
+                 - set to True or 'shallow': self will be updated in shallow mode
+                 - set to 'deep': self will be updated in deep (recursive) mode
             * unserialize-keys: bool (default: False)
                 Indicate whether keys need to be unserialized before anything else
                 happens. This option has no effect if we are loading from a nested dict.
@@ -245,9 +252,9 @@ class Object(object):
         assert isinstance(d, dict)
         cls = type(self)
         
-        # Preprocess and sanitize opts
+        # Preprocess and sanitize options
 
-        opts = copy.copy(opts) # will modify it    
+        opts = copy.copy(opts) # to modify it    
 
         unserialize_values = opts.get('unserialize-values', False)
         if unserialize_values:
@@ -256,6 +263,16 @@ class Object(object):
             else:
                 unserialize_values = str(unserialize_values)
             opts['unserialize-values'] = unserialize_values
+        
+        update = opts.get('update', False)
+        if update:
+            if isinstance(update, (bool, int)):
+                update = 'shallow'
+            else:
+                update = str(update)
+                if not update in ['shallow', 'deep']:
+                    update = 'shallow'
+            opts['update'] = update
 
         # Decide if input is a flattened dict
         
@@ -341,6 +358,26 @@ class Object(object):
         fo = formatter_for_object(self, p.name)
         return fo.format(self, p.opts) if fo else repr(self)
 
+    ## Equality
+
+    def __eq__(self, other):
+        '''Check if equals to another object'''
+        cls, other_cls = type(self), type(other)
+
+        if not (cls is other_cls):
+            return False
+
+        res = True
+        for k, field in self.iter_fields(exclude_properties=True):
+            if not (field.get(self) == field.get(other)):
+                res = False
+                break
+
+        return res
+   
+    def __ne__(self, other):
+        return not self == other
+
     ## Introspective helpers
 
     @classmethod
@@ -359,9 +396,12 @@ class Object(object):
          
     @classmethod
     def get_field_factory(cls, k, field=None):
+        '''Find a suitable factory to instantiate a field's value.
+        '''
+
         assert not k or isinstance(k, basestring)
         assert not field or isinstance(field, zope.schema.Field)
-        assert k or field, 'At least one of {k, field} should be specified'
+        assert k or field, 'One of {k, field} should be specified'
         
         factory = None
         
@@ -839,13 +879,12 @@ class Object(object):
 
             if isinstance(field, zope.schema.Object):
                 if isinstance(f, Object):
-                    cls = type(self)
+                    dictizer_factory = type(self)
                     opts = copy.copy(self.opts)
                     opts['max-depth'] = max_depth
-                    return cls(f, opts).dictize()
+                    return dictizer_factory(f, opts).dictize()
                 else:
-                    # Handle only derivatives of Object
-                    return None
+                    return None # unknown structure
             elif isinstance(field, (zope.schema.List, zope.schema.Tuple)):
                 return [ dictize_field(y, field.value_type, max_depth -1) 
                     for y in f ]
@@ -884,13 +923,12 @@ class Object(object):
            
             if isinstance(field, zope.schema.Object):
                 if isinstance(f, Object):
-                    cls = type(self)
+                    dictizer_factory = type(self)
                     opts = copy.copy(self.opts)
                     opts['max-depth'] = max_depth
-                    return cls(f, opts).flatten()
+                    return dictizer_factory(f, opts).flatten()
                 else:
-                    # Handle only derivatives of Object
-                    return None
+                    return None # unknown structure
             elif isinstance(field, (zope.schema.List, zope.schema.Tuple)):
                 return self._flatten_field_items(enumerate(f), field, max_depth)
             elif isinstance(field, zope.schema.Dict):
@@ -910,17 +948,40 @@ class Object(object):
 
     class Loader(object):
         
-        __slots__ = ('obj', 'opts')
-
+        __slots__ = ('obj', 'opts', 'recurse_opts')
+               
         def __init__(self, obj, opts={}):
             '''Create a loader for an object.
-
             All received opts may be considered sanitized.
             '''
+
             self.obj = obj
             self.opts = opts
+            
+            recurse_opts = opts
+            if opts.get('update', False) == 'shallow':
+                recurse_opts = copy.copy(opts)
+                recurse_opts.pop('update')
+            self.recurse_opts = recurse_opts 
 
         def load(self, data):
+            res = None
+
+            update = self.opts.get('update', False)
+            if update == 'shallow':
+                res = self._update(data)
+            elif update == 'deep':
+                res = self._update_r(data)
+            else:
+                res = self._reload(data)
+            
+            return res
+        
+        def _reload(self, data):
+            '''Fully reload the target object from input data.
+            If a key is missing from input, its counterpart field will be 
+            (re)initialized to defaults.
+            '''
             obj = self.obj
 
             for k, field in obj.iter_fields(exclude_properties=True):
@@ -935,32 +996,107 @@ class Object(object):
                     f = self._create_field(v, field, factory)
                 setattr(obj, k, f)
 
+            return self
+        
+        def _update(self, data):
+            '''Perform a shallow update of the target object.
+            If a key is missing from input, its counterpart field will be left
+            intact.
+            '''
+            obj = self.obj
+            
+            for k, field in obj.iter_fields(exclude_properties=True):
+                v = data.get(k)
+                if v is None:
+                    continue 
+                f = self._create_field(v, field)
+                setattr(obj, k, f)
+            
+            return self
+
+        def _update_r(self, data):
+            '''Perform a deep (recursive) update of the target object.
+            '''
+            obj = self.obj
+            
+            for k, field in obj.iter_fields(exclude_properties=True):
+                v = data.get(k)
+                if v is None:
+                    continue
+                f = field.get(obj)
+                if f is None:
+                    f = self._create_field(v, field)
+                    setattr(obj, k, f)
+                else:
+                    self._update_field_r(f, v, field, attr_setter(obj, k))
+            
+            return self
+        
+        def _update_field_r(self, f, v, field, setf):
+            loader_cls = type(self)
+
+            # Update field's value (recursive)
+            
+            if isinstance(field, zope.schema.Object):
+                if isinstance(v, dict):
+                    # Load from a dict (if instance of Object)
+                    if isinstance(f, Object):
+                        loader_cls(f, self.recurse_opts).load(v) 
+                else:
+                    # The supplied value is not a dict, cannot invoke Loader
+                    setf(f)
+            elif isinstance(field, (zope.schema.List, zope.schema.Tuple)):
+                if len(v) > len(f):
+                    f.extend([None] * (len(v) - len(f)))
+                for i in xrange(0, len(v)):
+                    self._update_field_r(
+                        f[i], v[i], field.value_type, item_setter(f, i))
+            elif isinstance(field, zope.schema.Dict):
+                for k in v.keys():
+                    self._update_field_r(
+                        f[k], v[k], field.value_type, item_setter(f, k)) 
+            else:
+                f = self._create_leaf_field(v, field)
+                setf(f)
+                
             return
+        
+        def _create_leaf_field(self, v, field):
+            assert v is not None, 'This was supposed to be checked at load()'
+            f = None
+            
+            ser_name = self.opts.get('unserialize-values', False)
+            if ser_name:
+                ser = serializer_for_field(field, ser_name)
+                if ser:
+                    try:
+                        f = ser.loads(v)
+                    except:
+                        logger.warn(
+                            'Failed to unserialize value %r for field %r' %(v, field))
+            
+            if f is None:
+                f = copy.copy(v) # or simply assign it ??
+            
+            return f
 
         def _create_field(self, v, field, factory=None):
-            assert isinstance(field, zope.schema.Field)
-            cls = type(self)
-
-            # Find a factory (if not supplied)
-            if not factory:
-                factory = self.obj.get_field_factory(None, field)
+            loader_cls = type(self)
+            obj_cls = type(self.obj)
             
-            # Create a new field instance
+            # Create a new field value
 
             if isinstance(field, zope.schema.Object):
                 if isinstance(v, dict):
-                    # Load from a dict
+                    # Load from a dict (if instance of Object)
+                    if not factory:
+                        factory = obj_cls.get_field_factory(None, field)
                     f = factory()
                     if isinstance(f, Object):
-                        cls(f, self.opts).load(v)
-                    else:
-                        # Handle only derivatives of Object
-                        pass
+                        loader_cls(f, self.recurse_opts).load(v)
                 else:
-                    # The supplied value is not a dict, so we cannot invoke Loader
-                    # (maybe product of a depth-limited dictization). Assign it.
+                    # The supplied value is not a dict, cannot invoke Loader
                     f = v 
-                    pass
                 return f
             elif isinstance(field, (zope.schema.List, zope.schema.Tuple)):
                 return [ self._create_field(y, field.value_type)
@@ -969,20 +1105,7 @@ class Object(object):
                 return { k: self._create_field(y, field.value_type)
                     for k, y in v.iteritems() }
             else:
-                # Handle a leaf field (may need to be unserialized)
-                f = v
-                assert f is not None, 'This was supposed to be checked at load()'
-                serializer_name = self.opts.get('unserialize-values', False)
-                if serializer_name:
-                    ser = serializer_for_field(field, serializer_name)
-                    if ser:
-                        try:
-                            f = ser.loads(f)
-                        except:
-                            logger.warn(
-                                'Failed to unserialize value %r for field %r' %(f, field))
-                            f = None
-                return f
+                return self._create_leaf_field(v, field)
 
     class Factory(object):
 
@@ -997,9 +1120,7 @@ class Object(object):
             if not self.target_factory:
                 raise ValueError('Cannot find an implementor for %s' %(iface))
             
-            self.opts = {
-                'unserialize-values': False,
-            }
+            self.opts = {'unserialize-values': False}
             self.opts.update(opts)
 
         def from_dict(self, d, is_flat=False):

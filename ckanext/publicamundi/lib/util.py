@@ -37,3 +37,14 @@ def raise_for_stub_method():
 def quote(s):
     '''A naive routine to enclose a unicode string in double quotes'''
     return u'"' + s.replace('\\', '\\\\').replace('"', '\\"') + u'"'
+
+def attr_setter(o, k):
+    def f(v):
+        setattr(o, k, v)
+    return f
+ 
+def item_setter(d, k):
+    def f(v):
+        d[k] = v
+    return f
+
