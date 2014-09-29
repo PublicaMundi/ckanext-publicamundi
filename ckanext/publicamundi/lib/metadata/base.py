@@ -281,12 +281,11 @@ class Object(object):
         if is_flat:
             unserialize_keys = opts.get('unserialize-keys', False)
             if unserialize_keys:
-                kser = serializer_for_key_tuple(opts.get('key-prefix'))
-                d = dictization.unflatten({ 
-                    kser.loads(k): v for k, v in d.iteritems() 
-                })
-            else:
-                d = dictization.unflatten(d)
+                key_prefix = opts.get('key-prefix')
+                kser = serializer_for_key_tuple(key_prefix)
+                is_key = kser.get_key_predicate(str, strict=True)
+                d = { kser.loads(k): v for k, v in d.iteritems() if is_key(k) }
+            d = dictization.unflatten(d)
                 
         # Load self
         

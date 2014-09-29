@@ -17,11 +17,67 @@ from ckanext.publicamundi.tests.helpers import assert_equal, diff_dicts
 
 leaf_types = (basestring, bool, int, long, float,)
 
+def test_objects_update_foo_discard_junk():
+    
+    for name in ['foo1', 'foo2', 'foo3', 'foo4']:
+        for changeset in foo_updates.keys():
+            yield _test_objects_update_foo_discard_junk, name, changeset 
+
 def test_objects_update_foo():
     
     for name in ['foo1', 'foo2', 'foo3', 'foo4']:
         for changeset in foo_updates.keys():
             yield _test_objects_update_foo, name, changeset 
+
+def _test_objects_update_foo_discard_junk(fixture_name, changeset):
+    
+    key_prefix = 'fooo'
+
+    x0 = getattr(fixtures, fixture_name)
+    assert isinstance(x0, types.Foo)
+    d = foo_updates[changeset]
+
+    # Prepend a key-prefix, and then insert some junk items into df
+    
+    df = flatten(d, lambda k: '.' . join(map(str, k)))
+
+    af = []
+    af.extend([ ('%s.%s' % (key_prefix, k), v) for k, v in df.items() ])
+    af.extend([ ('a', 99), ('junk.1', 'something'), ('z.aa', 100), (key_prefix, 'baobab') ])
+    df = dict(af)
+
+    # Load   
+    
+    x1 = copy.deepcopy(x0)
+    x1.from_dict(d, is_flat=0, opts={})
+
+    x2 = copy.deepcopy(x0)
+    x2.from_dict(df, is_flat=1, opts={
+        'unserialize-keys': 1, 'key-prefix': key_prefix })
+    
+    assert x1 == x2
+    
+    # Update in shallow mode 
+    
+    x1 = copy.deepcopy(x0)
+    x1.from_dict(d, is_flat=0, opts={ 'update': 1 })
+
+    x2 = copy.deepcopy(x0)
+    x2.from_dict(df, is_flat=1, opts={
+        'update': 1, 'unserialize-keys': 1, 'key-prefix': key_prefix })
+    
+    assert x1 == x2
+   
+    # Update in deep mode 
+    
+    x1 = copy.deepcopy(x0)
+    x1.from_dict(d, is_flat=0, opts={ 'update': 'deep' })
+
+    x2 = copy.deepcopy(x0)
+    x2.from_dict(df, is_flat=1, opts={
+        'update': 'deep', 'unserialize-keys': 1, 'key-prefix': key_prefix })
+ 
+    assert x1 == x2
 
 def _test_objects_update_foo(fixture_name, changeset):
 
@@ -273,9 +329,11 @@ foo_updates = {
 # Main 
 
 if __name__ == '__main__':
-    
+
     _test_objects_update_foo('foo2', 'upd-4')
-    
+
+    _test_objects_update_foo_discard_junk('foo1', 'upd-1')
+
     for t, x, y in test_objects():
         t(x, y)
 
