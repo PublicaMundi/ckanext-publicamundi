@@ -1006,10 +1006,13 @@ class Object(object):
             obj = self.obj
             
             for k, field in obj.iter_fields(exclude_properties=True):
-                v = data.get(k)
+                if not k in data:
+                    continue
+                v = data[k]
                 if v is None:
-                    continue 
-                f = self._create_field(v, field)
+                    f = None
+                else:
+                    f = self._create_field(v, field)
                 setattr(obj, k, f)
             
             return self
@@ -1020,22 +1023,31 @@ class Object(object):
             obj = self.obj
             
             for k, field in obj.iter_fields(exclude_properties=True):
-                v = data.get(k)
-                if v is None:
+                if not k in data:
                     continue
+                v = data[k]
                 f = field.get(obj)
-                if f is None:
-                    f = self._create_field(v, field)
-                    setattr(obj, k, f)
-                else:
-                    self._update_field_r(f, v, field, attr_setter(obj, k))
+                self._update_field_r(f, v, field, attr_setter(obj, k))
             
             return self
         
         def _update_field_r(self, f, v, field, setf):
             loader_cls = type(self)
+            
+            # When v is None, the field's value is cleared
+            
+            if v is None:
+                setf(None)
+                return
 
-            # Update field's value (recursive)
+            # When f is None, f is created from scratch (from v)
+
+            if f is None:
+                f = self._create_field(v, field)
+                setf(f)
+                return
+            
+            # Update field's value (recursive, both f,v are not None)
             
             if isinstance(field, zope.schema.Object):
                 if isinstance(v, dict):
@@ -1046,15 +1058,16 @@ class Object(object):
                     # The supplied value is not a dict, cannot invoke Loader
                     setf(f)
             elif isinstance(field, (zope.schema.List, zope.schema.Tuple)):
-                if len(v) > len(f):
-                    f.extend([None] * (len(v) - len(f)))
-                for i in xrange(0, len(v)):
+                nv, nf = len(v), len(f)
+                if nv > nf:
+                    f.extend([None] * (nv - nf))
+                for i in xrange(0, nv):
                     self._update_field_r(
                         f[i], v[i], field.value_type, item_setter(f, i))
             elif isinstance(field, zope.schema.Dict):
-                for k in v.keys():
+                for k, yv in v.iteritems():
                     self._update_field_r(
-                        f[k], v[k], field.value_type, item_setter(f, k)) 
+                        f.get(k), yv, field.value_type, item_setter(f, k)) 
             else:
                 f = self._create_leaf_field(v, field)
                 setf(f)
