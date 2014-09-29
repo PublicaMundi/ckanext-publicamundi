@@ -18,7 +18,7 @@ import ckanext.publicamundi.lib.util as publicamundi_util
 import ckanext.publicamundi.lib.metadata as publicamundi_metadata
 import ckanext.publicamundi.lib.actions as publicamundi_actions
 
-from ckanext.publicamundi.lib.util import object_to_json, random_name
+from ckanext.publicamundi.lib.util import to_json, random_name
 from ckanext.publicamundi.lib.metadata import dataset_types
 
 _t = toolkit._
@@ -322,7 +322,7 @@ class PackageController(p.SingletonPlugin):
         At this point, the package is possibly in 'draft' state so most Action-API (targeting on the
         package itself) calls will fail.
         '''
-        log1.debug('A package was created: %s', object_to_json(pkg_dict, indent=4))
+        log1.debug('A package was created: %s', to_json(pkg_dict, indent=4))
         self._create_or_update_csw_record(context['session'], pkg_dict)
         pass
 
@@ -331,7 +331,7 @@ class PackageController(p.SingletonPlugin):
         Extensions will receive the validated data dict after the package has been updated
         (Note that the edit method will return a package domain object, which may not include all fields).
         '''
-        log1.debug('A package was updated: %s', object_to_json(pkg_dict, indent=4))
+        log1.debug('A package was updated: %s', to_json(pkg_dict, indent=4))
         self._create_or_update_csw_record(context['session'], pkg_dict)
         pass
 

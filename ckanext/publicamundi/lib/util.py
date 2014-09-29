@@ -3,10 +3,14 @@ import string
 import json
 import geojson
 import shapely
+import collections
 
 from ckanext.publicamundi.lib.json_encoder import JsonEncoder
 
-def object_to_json(o, indent=None):
+class Breakpoint(Exception):
+    pass
+
+def to_json(o, indent=None):
     return json.dumps(o, cls=JsonEncoder, indent=indent)
 
 def geojson_to_wkt(s):
