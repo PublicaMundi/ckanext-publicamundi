@@ -120,7 +120,7 @@ class Command(CommandDispatcher):
                     if not m:
                         print '  --'
                     for qualified_action, widget_cls in m:
-                        print '  %-22.22s %s' %(qualified_action, widget_cls.cls_name())
+                        print '  %-22.22s %r' %(qualified_action, widget_cls)
         
         #
         # Widgets for objects
@@ -155,7 +155,7 @@ class Command(CommandDispatcher):
                     if not m:
                         print '  --'
                     for qualified_action, widget_cls in m:
-                        print '  %-22.22s %s' %(qualified_action, widget_cls.cls_name())
+                        print '  %-22.22s %r' %(qualified_action, widget_cls)
 
 class Example1(CkanCommand):
     '''This is an example of a publicamundi-specific paster command:

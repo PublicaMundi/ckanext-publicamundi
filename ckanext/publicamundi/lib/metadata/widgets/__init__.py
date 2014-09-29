@@ -18,6 +18,8 @@ from ckanext.publicamundi.lib.metadata.widgets.ibase import (
 class QualAction(object):
     
     zope.interface.implements(IQualAction)
+    
+    __slots__ = ('action', 'qualifier')
 
     def __init__(self, action=None, qualifier=None):
         IQualAction.get('action').validate(action)
@@ -64,6 +66,8 @@ class LookupContext(object):
     
     zope.interface.implements(ILookupContext)
 
+    __slots__ = ('requested_action', 'provided_action')
+    
     def __init__(self, requested=None, provided=None):
         self.requested_action = requested
         self.provided_action = provided
@@ -77,7 +81,7 @@ class WidgetNotFound(Exception):
         self.r = r
 
     def __str__(self):
-        return 'Cannot find a widget for %s for action "%s"' %(
+        return 'Cannot find a widget for %s for action "%s"' % (
             type(self.r).__name__, self.qualified_action)
 
 # Decorators for widget adapters
@@ -111,14 +115,14 @@ def field_widget_multiadapter(field_ifaces, qualifiers=[], is_fallback=False):
     return decorator
       
 def object_widget_adapter(object_iface, qualifiers=[], is_fallback=False):
-    assert object_iface.extends(IObject)
+    assert object_iface.isOrExtends(IObject)
     decorator = decorator_for_widget_multiadapter(
         [object_iface], IObjectWidget, qualifiers, is_fallback)
     return decorator
 
 # Utilities
 
-def widget_for_object(qualified_action, obj, errors=None):
+def widget_for_object(qualified_action, obj, errors={}):
     '''Find and instantiate a widget to adapt an object to a widget interface.
     '''
     
@@ -131,9 +135,9 @@ def widget_for_object(qualified_action, obj, errors=None):
     for candidate in candidates:
         name = candidate.to_string()
         widget = adapter_registry.queryMultiAdapter([obj], IObjectWidget, name)
-        logger.debug('Trying to adapt [%s] to widget for action "%s": %s',
+        logger.debug('Trying to adapt [%s] to widget for action %s: %r',
             type(obj).__name__, name, 
-            widget.cls_name() if widget else 'NONE')
+            widget if widget else None)
         if widget:
             break
     
@@ -147,7 +151,7 @@ def widget_for_object(qualified_action, obj, errors=None):
     assert zope.interface.verify.verifyObject(IObjectWidget, widget)
     return widget
 
-def widget_for_field(qualified_action, field, errors=None):
+def widget_for_field(qualified_action, field, errors={}):
     '''Find and instantiate a widget to adapt a field to a widget interface.
     The given field should be a bound instance of zope.schema.Field.
     '''
@@ -169,9 +173,9 @@ def widget_for_field(qualified_action, field, errors=None):
         for candidate in candidates:
             name = candidate.to_string()
             widget = adapter_registry.queryMultiAdapter(adaptee, IFieldWidget, name)
-            logger.debug('Trying to adapt [%s] to widget for action "%s": %s',
+            logger.debug('Trying to adapt [%s] to widget for action %s: %r',
                 ', '.join([type(x).__name__ for x in adaptee]), name, 
-                widget.cls_name() if widget else 'NONE')
+                widget if widget else None)
             if widget:
                 break
         if widget:
@@ -189,15 +193,17 @@ def widget_for_field(qualified_action, field, errors=None):
     assert zope.interface.verify.verifyObject(IFieldWidget, widget)
     return widget
 
-def markup_for_field(qualified_action, field, errors=None, name_prefix='', data={}):
+def markup_for_field(qualified_action, field, errors={}, name_prefix='', data={}):
     assert isinstance(field, zope.schema.Field)
     widget = widget_for_field(qualified_action, field, errors)
     return widget.render(name_prefix, data)
 
-def markup_for_object(qualified_action, obj, errors=None, name_prefix='', data={}):
+def markup_for_object(qualified_action, obj, errors={}, name_prefix='', data={}):
     assert isinstance(obj, Object)
     widget = widget_for_object(qualified_action, obj, errors)
     return widget.render(name_prefix, data)
+
+markup_for = markup_for_object
 
 # Import actual widgets
 

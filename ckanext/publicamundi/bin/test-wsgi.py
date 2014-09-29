@@ -15,9 +15,9 @@ argp.add_argument("-c", "--config", dest='config_file', type=str,
     default=os.path.join(here, 'development.ini'));
 args = argp.parse_args()
 
-application = loadapp('config:%s' %(args.config_file));
+app = loadapp('config:%s' %(args.config_file));
 
-testapp = TestApp(application)
+testapp = TestApp(app)
 
 res = testapp.get(args.path)
 

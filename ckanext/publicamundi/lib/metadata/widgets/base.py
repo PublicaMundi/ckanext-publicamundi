@@ -8,11 +8,10 @@ from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.ibase import IObject
 from ckanext.publicamundi.lib.metadata.base import Object, FieldContext
 from ckanext.publicamundi.lib.util import raise_for_stub_method
-from ckanext.publicamundi.lib.metadata.widgets.ibase import IWidget 
-from ckanext.publicamundi.lib.metadata.widgets.ibase import IFieldWidget, IObjectWidget
-from ckanext.publicamundi.lib.metadata.widgets import QualAction, LookupContext
-from ckanext.publicamundi.lib.metadata.widgets import markup_for_object
-from ckanext.publicamundi.lib.metadata.widgets import markup_for_field
+from ckanext.publicamundi.lib.metadata.widgets.ibase import (
+    IWidget, IFieldWidget, IObjectWidget)
+from ckanext.publicamundi.lib.metadata.widgets import (
+    QualAction, LookupContext, markup_for_object, markup_for_field)
     
 ## Base
 
@@ -24,7 +23,11 @@ class Widget(object):
     context = None
 
     errors = None
-    
+     
+    _reserved_var_names = [
+        'name_prefix', 'action', 'requested_action', 'provided_action',
+    ]
+   
     def get_template(self):
         raise_for_stub_method()
 
@@ -41,14 +44,15 @@ class Widget(object):
             return self.context.provided_action.to_string()
         else:
             return QualAction(self.action).to_string()
-    
-    @classmethod
-    def cls_name(cls):
-        '''Return a qualified name for this widget class'''
-        return '%s.%s' %(cls.__module__, cls.__name__)
 
 class FieldWidget(Widget):
     zope.interface.implements(IFieldWidget)
+    
+    _reserved_var_names = [
+        'name_prefix', 
+        'action', 'requested_action', 'provided_action',
+        'name', 'field', 'value',
+    ]
 
     def __init__(self, field, *args):
         # Check adaptee: 1st argument must be a bound field
@@ -67,7 +71,7 @@ class FieldWidget(Widget):
         '''Prepare template context'''
 
         # Provide basic variables
-        template_vars = {
+        tpl_vars = {
             'name_prefix': name_prefix,
             'action': self.action,
             'requested_action': self.context.requested_action,
@@ -85,28 +89,37 @@ class FieldWidget(Widget):
         }
 
         # Override with caller's variables
-        template_vars.update(data)
+        
+        for k in data:
+            if not k in self._reserved_var_names:
+                tpl_vars[k] = data[k]
 
         # Provide computed variables or sensible defaults
         qname = "%s%s" %(name_prefix + '.' if name_prefix else '', 
-            template_vars['name'])
-        template_vars['qname'] = qname
-        template_vars['classes'] = template_vars['classes'] + [\
+            tpl_vars['name'])
+        tpl_vars['qname'] = qname
+        tpl_vars['classes'] = tpl_vars['classes'] + [\
             'widget',
             'field-widget', 
             'field-%s-widget' %(self.action),
             'field-qname-%s' %(qname), ]
 
-        return template_vars
+        return tpl_vars
 
     def render(self, name_prefix, data={}):
         tpl = self.get_template()
-        data = self.prepare_template_vars(name_prefix, data)
-        markup = toolkit.render_snippet(tpl, data)
+        tpl_vars = self.prepare_template_vars(name_prefix, data)
+        markup = toolkit.render_snippet(tpl, tpl_vars)
         return toolkit.literal(markup)
 
 class ObjectWidget(Widget):
     zope.interface.implements(IObjectWidget)
+    
+    _reserved_var_names = [
+        'name_prefix', 
+        'action', 'requested_action', 'provided_action',
+        'obj', 'schema',
+    ]
 
     def __init__(self, obj):
         assert isinstance(obj, Object)
@@ -145,7 +158,7 @@ class ObjectWidget(Widget):
         '''Prepare template context'''
 
         # Provide basic variables
-        template_vars = {
+        tpl_vars = {
             'name_prefix': name_prefix,
             'action': self.action,
             'requested_action': self.context.requested_action,
@@ -158,52 +171,54 @@ class ObjectWidget(Widget):
         }
 
         # Override with caller's variables
-        template_vars.update(data)
+        
+        for k in data:
+            if not k in self._reserved_var_names:
+                tpl_vars[k] = data[k]
 
         # Provide computed variables and sensible defaults
         qname = name_prefix
-        template_vars['qname'] = qname
-        template_vars['classes'] = template_vars['classes'] + [\
+        tpl_vars['qname'] = qname
+        tpl_vars['classes'] = tpl_vars['classes'] + [\
             'widget',
             'object-widget',
             'object-%s-widget' %(self.action),
-            'object-qname-%s' %(qname), ]
+            'object-qname-%s' %(qname or 'NONE'), ]
 
-        return template_vars
+        return tpl_vars
 
     def get_template(self):
         return None
 
     def render(self, name_prefix, data={}):
-        data = self.prepare_template_vars(name_prefix, data)
+        
+        tpl_vars = self.prepare_template_vars(name_prefix, data)
         tpl = self.get_template()
+        obj = self.obj
+
         if not tpl:
-            # No template is supplied: use a default template to
-            # glue fields together
+            # No template supplied: use a template to glue fields together.
+            # We must prepare additional vars for this kind of template
             tpl = self.get_glue_template()
-            # Prepare additional vars needed for the this template:
-            # all fields are processed (rendered) and passed to the
-            # glue template
+            
             field_qualifiers = self.get_field_qualifiers()
             q = self.qualified_action
+
             def render_field(k):
-                f = self.obj.get_field(k)
-                qf = field_qualifiers.get(k) or \
-                    f.queryTaggedValue('widget-qualifier') or \
-                    self.context.provided_action.qualifier
+                f = obj.get_field(k)
+                qf = (field_qualifiers.get(k)
+                    or f.queryTaggedValue('widget-qualifier')
+                    or self.context.provided_action.qualifier)
                 q = QualAction(self.action, qualifier=qf).to_string()
-                e = self.errors.get(k) if self.errors else None
-                return {
-                    'field': f,
-                    'markup': markup_for_field(q, f, 
-                        errors=e, name_prefix=name_prefix, data={}) 
-                }
-            field_names = set(self.obj.get_field_names()) - \
-                set(self.get_omitted_fields())
-            data.update({
-                'fields': { k: render_field(k) for k in field_names },
-            })
-        markup = toolkit.render_snippet(tpl, data)
+                ef = self.errors.get(k) if self.errors else None
+                mf = markup_for_field(q, f, 
+                    errors=ef, name_prefix=name_prefix, data={}) 
+                return dict(field=f, markup=mf)
+
+            keys = set(obj.get_field_names()) - set(self.get_omitted_fields())
+            tpl_vars['fields'] = { k: render_field(k) for k in keys }
+
+        markup = toolkit.render_snippet(tpl, tpl_vars)
         return toolkit.literal(markup)
 
 ## Base readers and editors
@@ -247,12 +262,11 @@ class ListFieldWidgetTraits(FieldWidget):
         called, as it will only act as glue.
         '''
         
-        field = self.field
-        value = self.value
+        field, value = self.field, self.value
         
-        data = FieldWidget.prepare_template_vars(self, name_prefix, data)
-        title = data.get('title')
-        qname = data.get('qname')
+        tpl_vars = FieldWidget.prepare_template_vars(self, name_prefix, data)
+        title = tpl_vars.get('title')
+        qname = tpl_vars.get('qname')
         a = self.context.provided_action.make_child('item')
         q = a.to_string()
         def render_item(i, y):
@@ -264,11 +278,11 @@ class ListFieldWidgetTraits(FieldWidget):
                 'markup': markup_for_field(q, yf, 
                     errors=e, name_prefix=qname, data={ 'title': '%s #%d' %(yf.title, i) }),
             }
-        data.update({
+        tpl_vars.update({
             'items': [ render_item(i,y) for i,y in enumerate(value) ],
         })
         
-        return data
+        return tpl_vars
 
 class DictFieldWidgetTraits(FieldWidget):
 
@@ -278,13 +292,12 @@ class DictFieldWidgetTraits(FieldWidget):
         called, as it will only act as glue.
         '''
         
-        field = self.field
-        value = self.value
+        field, value = self.field, self.value
         assert isinstance(field.key_type, zope.schema.Choice)
         
-        data = FieldWidget.prepare_template_vars(self, name_prefix, data)
-        title = data.get('title')
-        qname = data.get('qname')
+        tpl_vars = FieldWidget.prepare_template_vars(self, name_prefix, data)
+        title = tpl_vars.get('title')
+        qname = tpl_vars.get('qname')
         a = self.context.provided_action.make_child('item')
         q = a.to_string()
         def render_item(k, y):
@@ -297,11 +310,11 @@ class DictFieldWidgetTraits(FieldWidget):
                 'markup': markup_for_field(q, yf, 
                     errors=e, name_prefix=qname, data={ 'title': term.title or term.token }),
             }
-        data.update({
+        tpl_vars.update({
             'items': { k: render_item(k, y) for k, y in value.iteritems() },
         })
 
-        return data
+        return tpl_vars
 
 ## Base widgets for fields holding objects
 
@@ -309,33 +322,34 @@ class ObjectFieldWidgetTraits(FieldWidget):
     
     def prepare_template_vars(self, name_prefix, data):
         '''Prepare data for the template.
-        The markup for the contained object will be generated before the 
-        template is called, as it will only act as glue.
+
+        The markup for the object will be generated here, i.e before the 
+        actual template is called to render().
         '''
-        data = FieldWidget.prepare_template_vars(self, name_prefix, data)
-        field = self.field
-        value = self.value
-        qname = data.get('qname')
+
+        tpl_vars = FieldWidget.prepare_template_vars(self, name_prefix, data)
+        field, value = self.field, self.value
+        qname = tpl_vars.get('qname')
+
         # If value is None, pass an empty (but structured) object created
         # from the default factory
         if value is None:
             factory = Object.Factory(self.field.schema)
             value = factory()
+        
         # Build the template context for the object's widget: some variables
-        # are moved to the object's context,
+        # must be moved to the object's context,
         data1 = {}
         for k in ['title', 'description', 'required', 'readonly']:
-            v = data.pop(k, None)
+            v = tpl_vars.pop(k, None)
             if v: 
                 data1[k] = v
-        # Generate markup for the contained object, feed result to
-        # the current template context
+
+        # Generate markup for the object, feed to the current template context
         q = self.context.requested_action.to_string()
-        data.update({
-            'obj': {
-                'markup': markup_for_object(q, value, 
-                    errors=self.errors, name_prefix=qname, data=data1)
-            }
-        })
-        return data
+        markup = markup_for_object(q, value, 
+            errors=self.errors, name_prefix=qname, data=data1)
+        tpl_vars['content'] = { 'markup': markup }
+        
+        return tpl_vars
 

@@ -11,21 +11,21 @@ def flatten(d, key_converter=None):
         res = d1
     return res
 
-def nest(d, key_converter=None):
+def unflatten(d, key_converter=None):
     '''Unflatten a dictionary'''
     res = None
     if key_converter and callable(key_converter):
         d1 = { key_converter(k):v for k,v in d.items() }
     else:
         d1 = d
-    res = _nest(d)
+    res = _unflatten(d)
     return res
 
-unflatten = nest
-
-def _nest(d):
+def _unflatten(d):
     keys = sorted(d)
+    
     # Collect all pairs (k,res1) for this level
+    
     pairs = list()
     is_list, i1, i = True, -1, None
     for k,g in itertools.groupby(keys, lambda t: t[0]):
@@ -42,11 +42,15 @@ def _nest(d):
         if d1.has_key(()):
             res1 = d1.pop(())
         else:
-            res1 = _nest(d1)
+            res1 = _unflatten(d1)
         pairs.append((k, res1))
+    
     # Build result to proper type (dict/list)
+    
     res = None
-    if is_list:
+    if not pairs:
+        res = dict()
+    elif is_list:
         res = [ v for k, v in sorted(pairs) ]
     else:
         res = dict(pairs)
@@ -139,6 +143,3 @@ def merge(a, b):
         # Cannot merge a dict with a non-dict, return a
         return a
    
-
-
-

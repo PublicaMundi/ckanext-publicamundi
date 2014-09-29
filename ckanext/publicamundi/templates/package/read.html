@@ -5,29 +5,6 @@
 {% block package_description %}
     
   {{ super() }}
-  
-  {#
-  <div>
-    <dt>Dataset Type:</dt><dd>{{ pkg.dataset_type | default('<none>') }}</dd>
-  </div>
-  #}
-
-  {#
-  <div><dt>Baz:</dt><dd>{{ pkg.baz | default('<none>') }}</dd></div>
-  #}
-
-  {#
-  <div><dt>Baz (view):</dt><dd>{{ pkg.baz_view | default('<none>') }}</dd></div>
-  #}  
-
-  {# Add our custom "foo" field to the dataset read page. #}
-  {#
-  {% if pkg.get('foo') %}
-    <section id="dataset-foo" class="resources module-content">
-    <p><strong>{{ _('Foo') }}</strong>: {{ pkg.foo.0 }}</p>
-    </section>
-  {% endif %}
-  #}
 
 {% endblock %}
 

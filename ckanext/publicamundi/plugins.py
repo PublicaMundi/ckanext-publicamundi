@@ -3,10 +3,11 @@
 import time
 import datetime
 import json
-import jsonpickle
 import weberror
 import logging
 import geoalchemy
+import itertools
+from itertools import chain, ifilter
 
 import ckan.model as model
 import ckan.plugins as p
@@ -14,12 +15,13 @@ import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
 
 import ckanext.publicamundi.model as publicamundi_model
-import ckanext.publicamundi.lib.util as publicamundi_util
 import ckanext.publicamundi.lib.metadata as publicamundi_metadata
 import ckanext.publicamundi.lib.actions as publicamundi_actions
 
 from ckanext.publicamundi.lib.util import to_json, random_name
-from ckanext.publicamundi.lib.metadata import dataset_types
+from ckanext.publicamundi.lib.metadata import (
+    dataset_types, Object, ErrorDict,
+    serializer_for_object, serializer_for_key_tuple)
 
 _t = toolkit._
 
@@ -33,6 +35,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     p.implements(p.IDatasetForm, inherit=True)
     p.implements(p.IRoutes, inherit=True)
     p.implements(p.IActions, inherit=True)
+    p.implements(p.IPackageController, inherit=True)
 
     ## Define helper methods ## 
 
@@ -59,7 +62,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             elif t is dict:
                 options['organizations'] = map(lambda org: org.get('name'), org_names)
 
-        return logic.get_action('organization_list') (context, options)
+        return logic.get_action('organization_list')(context, options)
 
     @classmethod
     def organization_dict_objects(cls, org_names = []):
@@ -70,42 +73,13 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         return results
 
     @classmethod
-    def debug_template_vars(cls, debug_info):
-        ''' A debug helper similar to h.debug_full_info_as_list '''
-        out = {}
-        ignored_keys = [
-            'c', 'app_globals', 'g', 'h', 'request', 'tmpl_context', 'actions', 'translator', 'session', 'N_', 'ungettext', 'config', 'response', '_']
-        ignored_context_keys = [
-            '__class__', '__context', '__delattr__', '__dict__', '__doc__', '__format__', '__getattr__', '__getattribute__', '__hash__', '__init__',
-            '__module__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__',
-            '__weakref__', 'action', 'environ', 'pylons', 'start_response', 'userobj', 'page']
-
-        debug_vars = debug_info['vars']
-
-        for key in filter(lambda k: not k in ignored_keys, debug_vars.keys()):
-            out[key] = debug_vars[key]
-
-        if 'tmpl_context' in debug_vars:
-            for key in filter(lambda k: not k in ignored_context_keys, debug_info['c_vars']):
-                val = getattr(debug_vars['tmpl_context'], key)
-                if hasattr(val, '__call__'):
-                    val = repr(val)
-                out['c.%s' % key] = val
-
-        return out
-
-    @classmethod
-    def dump_jsonpickle(cls, obj):
-        s = 'undefined'
-        try:
-            s = jsonpickle.encode(obj)
-        except:
-            pass
-        return s
+    def dataset_types(cls):
+        '''Provide a dict of dataset types'''
+        return dataset_types
 
     @classmethod
     def dataset_type_options(cls):
-        '''Provide options for dataset-type (needed for select boxes)'''
+        '''Provide options for dataset-type (needed for select inputs)'''
         for name, spec in dataset_types.items():
             yield { 'value': name, 'text': spec['title'] }
 
@@ -118,14 +92,13 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         return {
             'publicamundi_helloworld': self.publicamundi_helloworld,
             'random_name': random_name,
+            'dataset_types': self.dataset_types,
             'dataset_type_options': self.dataset_type_options,
             'organization_list_objects': self.organization_list_objects,
             'organization_dict_objects': self.organization_dict_objects,
             'markup_for_field': publicamundi_metadata.markup_for_field,
             'markup_for_object': publicamundi_metadata.markup_for_object,
-            # debug helpers
-            'debug_template_vars': self.debug_template_vars,
-            'dump_jsonpickle': self.dump_jsonpickle,
+            'markup_for': publicamundi_metadata.markup_for,
         }
 
     ## IConfigurer interface ##
@@ -184,7 +157,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         return []
 
     def _modify_package_schema(self, schema):
-        log1.info('_modify_package_schema(): Building schema ...')
+        log1.debug(' ** _modify_package_schema(): Building schema ...')
 
         import ckanext.publicamundi.lib.metadata.validators as publicamundi_validators
 
@@ -212,12 +185,6 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         schema[field_name] = [x1, x2, x3]
 
-
-        #schema['foo.0.baz'] = [
-        #    toolkit.get_converter('convert_to_extras')
-        #]
-
-
         # Add before/after validation processors
 
         schema['__before'].insert(-1, publicamundi_validators.dataset_preprocess_edit)
@@ -230,11 +197,13 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         return schema
 
     def create_package_schema(self):
+        log1.debug(' ** create_package_schema(): Building schema ...')
         schema = super(DatasetForm, self).create_package_schema()
         schema = self._modify_package_schema(schema)
         return schema
 
     def update_package_schema(self):
+        log1.debug(' ** update_package_schema(): Building schema ...')
         schema = super(DatasetForm, self).update_package_schema()
         schema = self._modify_package_schema(schema)
         return schema
@@ -274,14 +243,18 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         ''' Setup (add/modify/hide) variables to feed the template engine.
         This is done through through toolkit.c (template thread-local context object).
         '''
+        
         super(DatasetForm, self).setup_template_variables(context, data_dict)
+        
+        #assert False
+
         c = toolkit.c
         c.publicamundi_magic_number = 99
 
     # Note for all *_template hooks: 
-    # We choose not to modify the path for each template (so we simply call the super() method). 
-    # If a specific template's behaviour needs to be overriden, this can be done by means of 
-    # template inheritance (e.g. Jinja2 `extends' or CKAN `ckan_extends')
+    # We choose not to modify the path for each template (so we simply call super()). 
+    # If a specific template's behaviour needs to be overriden, this can be done by 
+    # means of template inheritance (e.g. Jinja2 `extends' or CKAN `ckan_extends')
 
     def new_template(self):
         return super(DatasetForm, self).new_template()
@@ -344,9 +317,10 @@ class PackageController(p.SingletonPlugin):
         pass
 
     def after_show(self, context, pkg_dict):
-        '''
-        Extensions will receive the validated data dict after the package is ready for display
-        (Note that the read method will return a package domain object, which may not include all fields).
+        '''Receive the validated data dict after the package is ready for display. 
+        
+        Note that the read method will return a package domain object (which may 
+        not include all fields).
         '''
         #log1.info('A package is shown: %s', pkg_dict)
         pass

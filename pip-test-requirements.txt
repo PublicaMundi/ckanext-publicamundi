@@ -3,3 +3,5 @@ pyquery
 autopep8
 datadiff
 dictdiffer
+docopt
+-e git+https://github.com/ckan/ckanapi#egg=ckanapi

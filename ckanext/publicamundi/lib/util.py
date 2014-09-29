@@ -42,6 +42,11 @@ def quote(s):
     '''A naive routine to enclose a unicode string in double quotes'''
     return u'"' + s.replace('\\', '\\\\').replace('"', '\\"') + u'"'
 
+def find_all_duplicates(l):
+    counter = collections.Counter(l)
+    dups = { k:n for k,n in counter.items() if n > 1 }
+    return dups
+
 def attr_setter(o, k):
     def f(v):
         setattr(o, k, v)

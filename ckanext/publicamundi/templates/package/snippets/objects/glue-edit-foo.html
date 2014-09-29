@@ -32,11 +32,8 @@
     {{ markup_helpers.error_messages(errors[errors.global_key]) }} 
 
     {% call(group_desc) accordion.accordion('foo-fields', groups) %}
-        {% for field_name in group_desc.fields -%}
-        {% with f = fields[field_name] -%}
-        {{ f.markup }}
-        <hr/>
-        {% endwith -%}
+        {% for k in group_desc.fields -%}
+        {{ fields[k].markup }}
         {% endfor -%}
     {% endcall %}
 </div>
