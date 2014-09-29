@@ -71,7 +71,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         for org in cls.organization_list_objects(org_names):
             results[org['name']] = org
         return results
-    
+
     @classmethod
     def dataset_types(cls):
         '''Provide a dict of dataset types'''
@@ -96,6 +96,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'dataset_type_options': self.dataset_type_options,
             'organization_list_objects': self.organization_list_objects,
             'organization_dict_objects': self.organization_dict_objects,
+            'make_object': publicamundi_metadata.make_object,
             'markup_for_field': publicamundi_metadata.markup_for_field,
             'markup_for_object': publicamundi_metadata.markup_for_object,
             'markup_for': publicamundi_metadata.markup_for,
@@ -265,8 +266,6 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         '''
         
         super(DatasetForm, self).setup_template_variables(context, data_dict)
-        
-        #assert False
 
         c = toolkit.c
         c.publicamundi_magic_number = 99
@@ -336,7 +335,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         
         # Note If we attempt to pop() flat keys here (e.g. to replace them by a 
         # nested structure), resource forms will clear all extra fields !!
-         
+
         prefix = key_prefix + '.'
         keys = filter(lambda k: k.startswith(prefix), pkg_dict.iterkeys())
         obj_dict = {}

@@ -275,7 +275,7 @@ class Object(object):
             opts['update'] = update
 
         # Decide if input is a flattened dict
-        
+
         if is_flat is None:
             is_flat = isinstance(d.iterkeys().next(), tuple)
         if is_flat:
@@ -283,12 +283,12 @@ class Object(object):
             if unserialize_keys:
                 key_prefix = opts.get('key-prefix')
                 kser = serializer_for_key_tuple(key_prefix)
-                is_key = kser.get_key_predicate(str, strict=True)
+                is_key = kser.get_key_predicate(basestring, strict=True)
                 d = { kser.loads(k): v for k, v in d.iteritems() if is_key(k) }
             d = dictization.unflatten(d)
                 
         # Load self
-        
+
         self.load(d, opts)
 
         # Allow method chaining
@@ -1022,7 +1022,7 @@ class Object(object):
             '''Perform a deep (recursive) update of the target object.
             '''
             obj = self.obj
-            
+
             for k, field in obj.iter_fields(exclude_properties=True):
                 if not k in data:
                     continue

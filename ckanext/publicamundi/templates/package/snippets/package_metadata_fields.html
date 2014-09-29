@@ -1,6 +1,6 @@
 {% import 'macros/form.html' as form %}
 
-{% block package_metadata_fields scoped %}
+{% block package_metadata_fields %}
 
 {%- set is_draft = data.get('state', 'draft') == 'draft' -%}
 {% set dataset_type = data.get('dataset_type') %}
@@ -11,11 +11,23 @@
 {% endif %}
 
 {% if dataset_type == 'foo' %}
-{% snippet 'package/snippets/edit_foo_metadata_fields.html', data=data, errors=errors %}
+{% set foo = data.get('foo') or h.make_object('foo') %}
+{% if errors %}
+{% do 
+    foo.from_dict(data, is_flat=true, opts={ 
+        'update': 'deep', 
+        'unserialize-keys': true, 
+        'key-prefix': 'foo', 
+        'unserialize-values': 'default', 
+    }) 
+%}
+{% endif %} {# errors #}
+{% snippet 'package/snippets/edit_foo_metadata_fields.html', data=data, foo=foo, errors=errors %}
 {% endif %} {# dataset_type == 'foo' #}
 
 {% if dataset_type == 'inspire' %}
-{% snippet 'package/snippets/edit_inspire_metadata_fields.html', data=data, errors=errors %}
+{% set inspire = data.get('inspire', {}) %}
+{% snippet 'package/snippets/edit_inspire_metadata_fields.html', data=data, inspire=inspire, errors=errors %}
 {% endif %} {# dataset_type == 'inspire' #}
 
 {% block package_metadata_fields_url %}

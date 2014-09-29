@@ -7,7 +7,7 @@ import collections
 
 from ckanext.publicamundi.lib.json_encoder import JsonEncoder
 
-class Breakpoint(Exception): 
+class Breakpoint(Exception):
     pass
 
 def to_json(o, indent=None):
