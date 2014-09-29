@@ -28,7 +28,7 @@ from ckanext.publicamundi.lib.metadata.xml_serializers import (
     object_xml_serialize_adapter, xml_serializer_for_object)
 
 from ckanext.publicamundi.lib.metadata.widgets import (
-    markup_for_field, markup_for_object,
+    markup_for_field, markup_for_object, markup_for,
     widget_for_field, widget_for_object)
 
 # Declare dataset types (i.e. metadata formats).

@@ -1,13 +1,12 @@
-<div class="{{ " " ~ classes | join(' ') }}">
-    <h3>{{ title }}</h3>
-     
-    <table class="table table-bordered table-condensed metadata-table">
-        {% set col_width = 100.0 / (num_cols + 2) %}
+<div class="{{ " " ~ classes | join(' ') }}">     
+{%- if title %}<h3>{{ title }}</h3>{% endif -%}
+    <table class="table table-bordered metadata-table">
+        {% set col_width = 100.0 / (num_cols + 1.5) %}
         <colgroup>
             {%- for j in range(1, num_cols) -%}
             <col style="width:{{ '%.1f'|format(col_width) }}%"></col>
             {%- endfor -%}
-            <col style="width:{{ '%.1f'|format(col_width * 3) }}%"></col>
+            <col style="width:{{ '%.1f'|format(col_width * (1 + 1.5)) }}%"></col>
         </colgroup>    
         <tbody>
             {% for row in rows -%}
@@ -29,5 +28,4 @@
             {% endfor -%}
         </tbody>
     </table>
-  
 </div>

@@ -58,12 +58,11 @@
 {% else %}
 {% set dataset_type = data.get('dataset_type') %}
 {{ form.hidden('dataset_type', dataset_type) }}
-<div class="control-group ">
+<div class="control-group hide">
     <label class="control-label">{{ _('Dataset Type') }}</label>
     <div class="controls "><div class="display">{{ h.dataset_types().get(dataset_type).get('title') }}</div></div>
 </div>
-
-{% endif %}
+{% endif %} {# if is_new #}
 
 {% endblock %} {# package_basic_fields_dataset_type #}
 

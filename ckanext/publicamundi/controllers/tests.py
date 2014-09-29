@@ -178,7 +178,7 @@ class TestsController(BaseController):
         # Display form
         c.form_class = 'form-horizontal'
         c.form_errors = errors
-        c.form_markup = markup_for_object('edit', obj, 
+        c.form_markup = markup_for_object('edit:datasetform', obj, 
             errors = errors,
             name_prefix = '', 
             data = { 'title': u'Foo %s' % (id) }

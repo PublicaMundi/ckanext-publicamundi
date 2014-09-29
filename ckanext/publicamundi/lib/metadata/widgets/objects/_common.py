@@ -1,16 +1,17 @@
 import itertools
 import zope.interface
-from collections import namedtuple
-from itertools import groupby
 
+from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata.widgets import object_widget_adapter
 from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 
-## IObject - Tabular views ##
+#
+# IObject - Tabular views
+#
 
 @object_widget_adapter(schemata.IObject, qualifiers=['table'])
-class ObjectAsTableReadWidget(base_widgets.ReadObjectWidget):
+class TableObjectReadWidget(base_widgets.ReadObjectWidget):
 
     max_depth = 2
     
@@ -23,7 +24,7 @@ class ObjectAsTableReadWidget(base_widgets.ReadObjectWidget):
 
         # Preprocess self.obj to be displayed as table rows
         
-        max_depth = self.max_depth
+        max_depth = data.get('max_depth', 0) or self.max_depth
 
         obj_dict = self.obj.to_dict(flat=False, opts={ 
             'max-depth': max_depth,
@@ -136,7 +137,9 @@ class ObjectAsTableReadWidget(base_widgets.ReadObjectWidget):
         
         return res
 
-## IPoint ##
+#
+# IPoint
+#
 
 @object_widget_adapter(schemata.IPoint)
 class PointEditWidget(base_widgets.EditObjectWidget):
@@ -150,7 +153,9 @@ class PointReadWidget(base_widgets.ReadObjectWidget):
     def get_template(self):
         return 'package/snippets/objects/read-point.html'
 
-## ITemporalExtent ##
+#
+# ITemporalExtent
+#
 
 @object_widget_adapter(schemata.ITemporalExtent)
 class TemporalExtentEditWidget(base_widgets.EditObjectWidget):
@@ -164,7 +169,9 @@ class TemporalExtentReadWidget(base_widgets.ReadObjectWidget):
     def get_template(self):
         return 'package/snippets/objects/read-temporal_extent.html'
 
-## IPostalAddress ##
+#
+# IPostalAddress
+#
 
 @object_widget_adapter(schemata.IPostalAddress)
 class PostalAddressEditWidget(base_widgets.EditObjectWidget):
@@ -190,14 +197,16 @@ class PostalAddressReadWidget(base_widgets.ReadObjectWidget):
     def get_template(self):
         return 'package/snippets/objects/read-postal_address.html'
 
-## IContactInfo ##
+#
+# IContactInfo
+#
 
 @object_widget_adapter(schemata.IContactInfo)
 class ContactInfoEditWidget(base_widgets.EditObjectWidget):
 
     def get_field_qualifiers(self):
         return {
-            'address': 'comfortable',
+            'address': 'compact',
             'email': 'email'
         }
     
