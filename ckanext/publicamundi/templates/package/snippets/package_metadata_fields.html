@@ -84,6 +84,7 @@
 {% endblock %} {# package_metadata_fields_custom #}
 
 {% block dataset_fields %}
+
 {% set dt = data.get('dataset_type') -%}
 {% set dt_prefix = dt -%}
 {% set obj = data.get(dt_prefix) -%}
@@ -94,13 +95,24 @@
 {% endif -%}
 
 {% if obj -%}
+{% if errors -%}
+{% do 
+    obj.from_dict(data, is_flat=true, opts={ 
+        'update': 'deep', 
+        'unserialize-keys': true, 
+        'key-prefix': dt_prefix, 
+        'unserialize-values': 'default', 
+    }) 
+%}
+{% endif -%} {# if errors #}
 {{ 
     h.markup_for('edit:datasetform', obj, 
         errors=errors, 
         name_prefix=dt_prefix, 
         data={}) 
 }}
-{% endif -%}
+{% endif -%} {# if obj #}
+
 {% endblock %} {# dataset_fields #}
 
 {% endblock %} {# package_metadata_fields #}

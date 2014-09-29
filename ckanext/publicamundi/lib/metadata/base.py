@@ -283,7 +283,7 @@ class Object(object):
             if unserialize_keys:
                 key_prefix = opts.get('key-prefix')
                 kser = serializer_for_key_tuple(key_prefix)
-                is_key = kser.get_key_predicate(str, strict=True)
+                is_key = kser.get_key_predicate(basestring, strict=True)
                 d = { kser.loads(k): v for k, v in d.iteritems() if is_key(k) }
             d = dictization.unflatten(d)
                 

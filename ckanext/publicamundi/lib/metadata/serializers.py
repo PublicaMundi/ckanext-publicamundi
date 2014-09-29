@@ -280,7 +280,7 @@ class KeyTupleSerializer(BaseSerializer):
     def get_key_predicate(self, key_type, strict=False):        
         if not self._prefix:
             return lambda k: True
-        elif key_type is str:
+        elif issubclass(key_type, basestring):
             p = self._prefix + self.glue
             if strict:
                 return lambda k: isinstance(k, key_type) and k.startswith(p)
