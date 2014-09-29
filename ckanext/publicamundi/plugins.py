@@ -71,7 +71,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         for org in cls.organization_list_objects(org_names):
             results[org['name']] = org
         return results
-    
+
     @classmethod
     def dataset_types(cls):
         '''Provide a dict of dataset types'''

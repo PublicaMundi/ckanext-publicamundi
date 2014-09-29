@@ -16,8 +16,8 @@ from ckanext.publicamundi.lib.util import to_json
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata import types
 from ckanext.publicamundi.lib.metadata.types import Object
-from ckanext.publicamundi.lib.metadata.widgets import \
-    markup_for_field, markup_for_object
+from ckanext.publicamundi.lib.metadata.widgets import (
+    markup_for_field, markup_for_object)
 
 from ckanext.publicamundi.tests import fixtures
 
@@ -107,7 +107,7 @@ class TestsController(BaseController):
         c.form_sections.append({
             'heading': toolkit.literal('<h3>Object <code>TemporalExtent</code></h3>'),
             'body': markup_for_object('edit:faz.baz', obj, name_prefix='dt1', data={'title': u'Extent A'}) +
-                toolkit.literal('<hr/>') + 
+                toolkit.literal('<hr/>') +
                 markup_for_object('read', obj, name_prefix='dt1', data={ 'title': u'Extent B' })
         })
         
@@ -200,7 +200,7 @@ class TestsController(BaseController):
         c.markup = markup_for_object(
             str(read_action), obj, name_prefix='a.foo1',
             data={ 'title': u'Foo %s' % (id) })
-        
+
         return render('tests/page.html')
     
     def show_dataset(self, id):
