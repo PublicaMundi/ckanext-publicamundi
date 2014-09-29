@@ -25,6 +25,10 @@ poly2 = Polygon(name = u'Poly2', points=[
     Point(x=7.9, y=0.8), Point(x=1.3, y=0.2),
     Point(x=1.6, y=0.2), Point(x=7.9, y=0.8),])
 
+poly3 = Polygon(name = u'Poly3', points=[
+    Point(x=3.6, y=1.8), Point(x=1.5, y=5.2),
+    Point(x=1.2, y=7.2), Point(x=3.6, y=1.8),])
+
 dt1 = TemporalExtent(
     start = datetime.date(2014, 5, 27),
     end = datetime.date(2014, 5, 29))
@@ -75,8 +79,15 @@ foo2 = Foo(
     temporal_extent = None,
     rating = 3,
     grade = -2.79,
-    password = u'secret',
+    password = u'another-secret',
 )
+
+foo3 = copy.deepcopy(foo1)
+foo3.rating = None
+foo3.grade = None
+
+foo4 = copy.deepcopy(foo1)
+foo4.geometry = None
 
 freekeyword1 = FreeKeyword(
     value = u"atmosphere",
