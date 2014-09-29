@@ -86,6 +86,20 @@ def _test_copying(x):
 
     assert_equal(d1, d2) 
 
+def _test_equality(x):
+
+    o1 = getattr(fixtures, x)
+    o2 = copy.deepcopy(o1)    
+    
+    assert o1 == o2
+
+def _test_inequality(x1, x2):
+
+    o1 = getattr(fixtures, x1)
+    o2 = getattr(fixtures, x2)
+    
+    assert o1 != o2
+
 def test_validators():
     
     yield _test_validate, 'bbox1'
@@ -185,4 +199,10 @@ def test_field_accessors_with_ifoo():
 
 if __name__  == '__main__':
     
+    _test_equality('foo1')
+    
+    _test_inequality('foo1', 'foo2')
+
     test_field_accessors_with_ifoo()
+    
+
