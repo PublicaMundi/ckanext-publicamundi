@@ -44,11 +44,6 @@ class Widget(object):
             return self.context.provided_action.to_string()
         else:
             return QualAction(self.action).to_string()
-    
-    @classmethod
-    def cls_name(cls):
-        '''Return a qualified name for this widget class'''
-        return '%s.%s' %(cls.__module__, cls.__name__)
 
 class FieldWidget(Widget):
     zope.interface.implements(IFieldWidget)
@@ -188,7 +183,7 @@ class ObjectWidget(Widget):
             'widget',
             'object-widget',
             'object-%s-widget' %(self.action),
-            'object-qname-%s' %(qname), ]
+            'object-qname-%s' %(qname or 'NONE'), ]
 
         return tpl_vars
 

@@ -5,16 +5,6 @@
 {% block package_description %}
     
   {{ super() }}
-  
-  {% set dt_spec = h.dataset_types().get(pkg.dataset_type) %}
-  <div>
-    <dt>Dataset Type:</dt>
-    <dd>{{ dt_spec.get('title', '<none>') }}: {{ dt_spec.get('description', 'n/a') }}</dd>
-  </div>
-
-  {#
-  <div><dt>Baz (view):</dt><dd>{{ pkg.baz_view | default('<none>') }}</dd></div>
-  #}  
 
 {% endblock %}
 

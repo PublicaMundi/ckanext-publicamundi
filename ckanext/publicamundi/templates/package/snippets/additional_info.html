@@ -1,12 +1,11 @@
 <section class="additional-info">
-  <h3>{{ _('Additional Info') }}</h3>
-  <table class="table table-striped table-bordered table-condensed">
-    <thead>
-      <tr>
-        <th scope="col">{{ _('Field') }}</th>
-        <th scope="col">{{ _('Value') }}</th>
-      </tr>
-    </thead>
+
+  <h3>{{ _('Basic Metadata') }}</h3>
+  <table class="table table-bordered">
+    <colgroup>
+        <col width="22.1%"></col>
+        <col width="77.9%"></col>
+    </colgroup>
     <tbody>
       {% block package_additional_info %}
         {% if pkg_dict.url %}
@@ -67,4 +66,18 @@
       {% endblock %}
     </tbody>
   </table>
+
+  {%- set dt = pkg_dict.dataset_type -%}
+  {%- set obj = pkg_dict.get(dt) -%}
+  
+  {%- if obj -%}
+  <h3>{{ '%s Metadata' | format(h.dataset_types().get(dt).get('title')) }}</h3> 
+  {{ 
+     h.markup_for('read:table', obj, 
+        errors={}, 
+        name_prefix='', 
+        data={ 'max_depth': 2 },) 
+  }}
+  {%- endif -%} {# if obj #}
+
 </section>

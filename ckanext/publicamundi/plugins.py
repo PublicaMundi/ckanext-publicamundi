@@ -15,15 +15,13 @@ import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
 
 import ckanext.publicamundi.model as publicamundi_model
-import ckanext.publicamundi.lib.util as publicamundi_util
 import ckanext.publicamundi.lib.metadata as publicamundi_metadata
-import ckanext.publicamundi.lib.metadata.validators as publicamundi_validators
 import ckanext.publicamundi.lib.actions as publicamundi_actions
 
 from ckanext.publicamundi.lib.util import to_json, random_name
-from ckanext.publicamundi.lib.metadata import \
-    dataset_types, Object, ErrorDict, \
-    serializer_for_object, serializer_for_key_tuple
+from ckanext.publicamundi.lib.metadata import (
+    dataset_types, Object, ErrorDict,
+    serializer_for_object, serializer_for_key_tuple)
 
 _t = toolkit._
 
@@ -64,7 +62,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             elif t is dict:
                 options['organizations'] = map(lambda org: org.get('name'), org_names)
 
-        return logic.get_action('organization_list') (context, options)
+        return logic.get_action('organization_list')(context, options)
 
     @classmethod
     def organization_dict_objects(cls, org_names = []):
@@ -100,6 +98,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'organization_dict_objects': self.organization_dict_objects,
             'markup_for_field': publicamundi_metadata.markup_for_field,
             'markup_for_object': publicamundi_metadata.markup_for_object,
+            'markup_for': publicamundi_metadata.markup_for,
         }
 
     ## IConfigurer interface ##
@@ -160,9 +159,9 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     def _modify_package_schema(self, schema):
         log1.debug(' ** _modify_package_schema(): Building schema ...')
          
-        from ckanext.publicamundi.lib.metadata.validators import \
-            is_dataset_type, get_field_edit_processor, \
-            preprocess_dataset_for_edit, postprocess_dataset_for_edit
+        from ckanext.publicamundi.lib.metadata.validators import (
+            is_dataset_type, get_field_edit_processor,
+            preprocess_dataset_for_edit, postprocess_dataset_for_edit)
 
         ignore_missing = toolkit.get_validator('ignore_missing')
         ignore_empty = toolkit.get_validator('ignore_empty')
@@ -222,9 +221,9 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         
         log1.debug(' ** show_package_schema(): Building schema ...')
         
-        from ckanext.publicamundi.lib.metadata.validators import \
-            get_field_read_processor, \
-            preprocess_dataset_for_read, postprocess_dataset_for_read
+        from ckanext.publicamundi.lib.metadata.validators import (
+            get_field_read_processor,
+            preprocess_dataset_for_read, postprocess_dataset_for_read)
 
         # Don't show vocab tags mixed in with normal 'free' tags
         # (e.g. on dataset pages, or on the search page)
@@ -392,29 +391,6 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         
         dt = pkg_dict.get('dataset_type') 
 
-        extras = pkg_dict.get('extras', [])
-        if not extras:
-            pkg_dict['extras'] = extras
-
-#        if dt == 'foo': 
-#            extras.append({ 'key': 'Foo/Baz', 'value': pkg_dict.get('foo.baz', 'n/a') })
-#            extras.append({ 'key': 'Foo/Rating', 'value': pkg_dict.get('foo.rating', 'n/a') })
-#            extras.append({ 'key': 'Foo/Category', 'value': pkg_dict.get('foo.thematic_category', 'n/a') })
-#            extras.append({ 'key': 'Foo/Created', 'value': pkg_dict.get('foo.created', 'n/a') })
-#            extras.append({ 'key': 'Foo/T-Extent', 'value': 
-#                pkg_dict.get('foo.temporal_extent.start', '-inf') + ' To ' +
-#                pkg_dict.get('foo.temporal_extent.end', '+inf')
-#            })
-#        
-        # or we can translate keys ...
-        
-        field_key_map = {
-            u'updated_at': _t(u'Updated'),
-            u'created_at': _t(u'Created'),
-        }
-        for item in extras:
-            k = item.get('key')
-            item['key'] = field_key_map.get(k, k)
         return pkg_dict
 
 class PackageController(p.SingletonPlugin):

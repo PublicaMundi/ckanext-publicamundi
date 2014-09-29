@@ -198,14 +198,15 @@ def get_field_edit_processor(field):
     '''
 
     def convert(key, data, errors, context):
-        logger.debug('Processing field "%s" for editing' %(key[0]))
+        logger.debug('Processing field %s for editing' %(key[0]))
         
         value = data.get(key)
-
-        # We are not supposed to handle missing inputs here
-        assert not value is missing
         
         ser = serializer_for_field(field)
+
+        # Not supposed to handle missing inputs here
+        
+        assert not value is missing
         
         # Convert from input/db or initialize to defaults
         
@@ -218,13 +219,17 @@ def get_field_edit_processor(field):
         else:
             # Convert from input or db  
             if ser and isinstance(value, basestring):
-                value = ser.loads(value)
+                try:
+                    value = ser.loads(value)
+                except Exception as ex:
+                    raise Invalid(u'Invalid input (%s)' % (ex.message))
         
-        # Ignore empty values (equivalent to `ignore_empty` validator).
-        # Note If a field is required the check is postponed until the dataset
-        # is validated at object level.  
-        
+        # Ignore empty values (act exactly as the `ignore_empty` validator).
+        # Note If a field is marked as required, the check is postponed until
+        # the dataset is validated at dataset level.
+
         if not value:
+            data.pop(key)
             raise StopOnError
 
         # Validate
@@ -234,7 +239,7 @@ def get_field_edit_processor(field):
             field.validate(value)
         except zope.schema.ValidationError as ex:
             # Map this exception to the one expected by CKAN
-            raise Invalid(u'Invalid data (%s)' %(type(ex).__name__))
+            raise Invalid(u'Invalid (%s)' % (type(ex).__name__))
 
         # Convert to a properly formatted string (for db storage)
 
@@ -252,13 +257,16 @@ def get_field_read_processor(field):
     '''
 
     def convert(key, data, errors, context):
-        #logger.debug('Processing field "%s" for reading' %(key[0]))
+        logger.debug('Processing field %s for reading' %(key[0]))
         
         value = data.get(key)
 
-        assert value and (not value is missing)
+        assert not value is missing
         assert isinstance(value, basestring)
         
+        if not value:
+            logger.warn('Read empty value for field %s' % (key[0]))
+
         # noop
 
         return

@@ -840,7 +840,8 @@ class Object(object):
                         v = ser.dumps(v)
                     except:
                         logger.warn(
-                            'Failed to serialize value %r for field %r' %(v, field))
+                            'Failed to serialize value %r for field %r (%s)' % (
+                                v, field.__name__, field.__class__.__name__))
                         v = None
                 # Return here, no need to do anything more
                 return v
@@ -863,7 +864,8 @@ class Object(object):
                         v = fo.format(v, opts=fo_opts)
                     except:
                         logger.warn(
-                            'Failed to format value %r for field %r' %(v, field))
+                            'Failed to format value %r for field %r (%s)' % (
+                                v, field.__name__, field.__class__.__name__))
                         v = None
             
             return v
@@ -949,7 +951,7 @@ class Object(object):
     class Loader(object):
         
         __slots__ = ('obj', 'opts', 'recurse_opts')
-               
+
         def __init__(self, obj, opts={}):
             '''Create a loader for an object.
             All received opts may be considered sanitized.

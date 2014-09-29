@@ -20,7 +20,7 @@ class IFoo(IBaseMetadata):
             SimpleTerm('government', 'government', u'Government'),
             SimpleTerm('health', 'health', u'Health'),
             SimpleTerm('economy', 'economy', u'Economy'))),
-        title = u'Thematic category',
+        title = u'Category',
         required = True,
         default = 'economy')
 
@@ -39,14 +39,15 @@ class IFoo(IBaseMetadata):
         min_length = 1,
         max_length = 5,)
     tags.setTaggedValue('format', {
-        'default': { 
-            'descend-if-dictized': False, 
-            'extra-opts': {}, }, 
+        'default': { 'descend-if-dictized': False, 'extra-opts': {}, },
     })
 
     temporal_extent = zope.schema.Object(ITemporalExtent,
         title = u'Temporal Extent',
-        required = True)
+        required = False)
+    temporal_extent.setTaggedValue('format', {
+        'default': { 'descend-if-dictized': False, }
+    })
 
     geometry = zope.schema.List(
         title = u'Geometry Feature',
@@ -86,15 +87,15 @@ class IFoo(IBaseMetadata):
         required = True)
     
     created = zope.schema.Datetime(
-        title = u'Created at',
+        title = u'Created',
         required = True)
     
     published = zope.schema.Datetime(
-        title = u'Published at',
+        title = u'Published',
         required = False)
 
     wakeup_time = zope.schema.Time(
-        title = u'Wakeup time',
+        title = u'Wakeup Time',
         required = True)
 
     rating = zope.schema.Int(

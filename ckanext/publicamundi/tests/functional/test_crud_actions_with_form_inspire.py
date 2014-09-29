@@ -48,30 +48,30 @@ class TestController(BaseTestController):
 
     def test_1_create_package(self):
         
-        yield self._create_package, 'hello-foo-1'
-        
+        yield self._create_package, 'hello-inspire-1'
+    
     def test_2_update_package(self):
     
-        yield self._update_package, 'hello-foo-1', '0..1'
-        yield self._update_package, 'hello-foo-1', '1..2'
+        yield self._update_package, 'hello-inspire-1', '0..1'
+        #yield self._update_package, 'hello-foo-1', '1..2'
      
     def test_3_create_resource(self):
     
-        yield self._create_resource, 'hello-foo-1', 'resource-1'
-        yield self._create_resource, 'hello-foo-1', 'resource-2'
+        yield self._create_resource, 'hello-inspire-1', 'resource-1'
+        #yield self._create_resource, 'hello-foo-1', 'resource-2'
      
     def test_4_update_resource(self):
     
-        yield self._update_resource, 'hello-foo-1', 'resource-1', '0..1'
-        yield self._update_resource, 'hello-foo-1', 'resource-2', '0..1'
+        yield self._update_resource, 'hello-inspire-1', 'resource-1', '0..1'
+        #yield self._update_resource, 'hello-foo-1', 'resource-2', '0..1'
 
     def test_5_delete_resource(self):
     
-        yield self._delete_resource, 'hello-foo-1', 'resource-1'
+        yield self._delete_resource, 'hello-inspire-1', 'resource-1'
  
     def test_6_delete_package(self):
     
-        yield self._delete_package, 'hello-foo-1'
+        yield self._delete_package, 'hello-inspire-1'
 
     def _create_package(self, fixture_name):
         
@@ -88,7 +88,6 @@ class TestController(BaseTestController):
         # 1st stage
     
         form1 = res1.forms['package-form'] 
-
         for k in ['title', 'name', 'dataset_type', 'notes', 'license_id']:
             v = pkg_dict.get(k)
             v = v.encode('utf-8') if isinstance(v, unicode) else v
@@ -125,29 +124,28 @@ class TestController(BaseTestController):
             form3.set(k, v)
 
         # 3rd stage - dataset_type-related metadata
-
         for t, v in dictization.flatten(pkg_dict.get(dt)).items():
+
             k = '.'.join((key_prefix,) + tuple(map(str,t)))
             v = v.encode('utf-8') if isinstance(v, unicode) else v
             form3.set(k, v)
 
         btns = form3.fields.get('save')
-        i3 = next(j for j, b in enumerate(btns) if b.id == 'btn-save-finish')
+        i3 =  next(j for j, b in enumerate(btns) if b.id == 'btn-save-finish')
         res3s = form3.submit('save', index=i3, status='*')
         assert res3s.status in [301, 302]
 
         # Finished, return to "view" page
-        
         res4 = res3s.follow()
         assert res4.status in [200]
         assert res4.request.url == '/dataset/%s' %(pkg_name)
 
         # Compare to package_show result
-
+        
         res_dict = self._get_package(pkg_name)
 
         assert res_dict['dataset_type'] == dt
-
+        
         for k in (self.basic_fields & set(res_dict.keys())):
             assert res_dict[k] == pkg_dict[k]
         
@@ -185,7 +183,7 @@ class TestController(BaseTestController):
         # Edit dataset_type-related metadata
 
         for t, v in dictization.flatten(pkg_dict.get(dt)).items():
-            k = '.'.join((key_prefix,) + t)
+            k = '.'.join((key_prefix,) + tuple(map(str,t)))
             v = v.encode('utf-8') if isinstance(v, unicode) else v
             form1.set(k, v)
         
@@ -264,7 +262,6 @@ class TestController(BaseTestController):
         res_pkg_resources = res_pkg_dict['resources']
 
         # Verify resource metadata (changed)
-
         res_resource_dict = next(r for r in res_pkg_resources if r['name'] == resource_name)
         for k in ['url', 'description', 'name']:
             assert resource_dict[k] == res_resource_dict[k]
@@ -376,7 +373,6 @@ class TestController(BaseTestController):
         res_pkg_resources = res_pkg_dict['resources']
 
         # Verify resource metadata deleted
-
         for res in res_pkg_resources:
             assert res.get('name') != resource_name
             
@@ -430,51 +426,95 @@ resource_fixtures['resource-3'] = {
         'description': u'An example API endpoint',
     },
 }
-
 package_fixtures = {}
 
-package_fixtures['hello-foo-1'] = {
+package_fixtures['hello-inspire-1'] = {
     '0': {
-        'title': u'Hello Foo (1)',
-        'name': 'hello-foo-1',
-        'notes': u'I am the first _Foo_ dataset!',
+        'title': u'Hello Inspire',
+        'name': 'hello-inspire-1',
+        'notes': u'I am the first _Inspire_ dataset!',
         'author': u'Λαλάκης',
         'license_id': 'gfdl',
         'version': '1.0.0',
         'maintainer': u'Nowhere Man',
         'author_email': 'lalakis.1999@example.com',
         'maintainer_email': 'nowhere-man@example.com',
-        'url': 'http://example.com/datasets/hello-foo-1',
-        'tags': [ 
+        'url': 'http://example.com/datasets/hello-inspire-1',
+        'tags': [
             { 'name': 'hello-world', 'display_name': 'Hello World', }, 
             { 'name': u'test', 'display_name': 'Test' }, 
-            { 'name': 'foo', 'display_name': 'Foo' }, 
+            { 'name': 'inspire', 'display_name': 'INSPIRE' }, 
         ],
-        'dataset_type': 'foo',
-        'foo': {
-            'baz': u'BaoBab Tree',
-            'rating': 9,
-            'grade': 5.12,
-            'reviewed': False,
-            'created': u'2014-09-13T17:00:00',
-            'temporal_extent': { 
-                'start': '2012-01-01',
-                'end': '2013-01-01',
+        'dataset_type': 'inspire',
+        'inspire': {
+         #   'contact': [{
+         #       'organization': u"Org",
+         #       'email':[u"email@asd.gr"],
+         #       'role':"pointofcontact"
+         #       }],
+            'datestamp': u'2014-01-01',
+            'languagecode': "el",
+         #   'title': u"Title",
+            'identifier': [u"1a2b314df21312a3", u"123sad213531"],
+         #   'abstract': u"This is an abstract description",
+         #   'locator': ["http://publicamundi.eu",
+         #               "http://ipsyp.gr",
+         #               "http://www.example.com"
+         #               ],
+         #   'resource_language': ["el"],
+         #   'topic_category':["biota"],
+         #   'keywords':[{
+         #       'terms':["air", "agriculture", "climate"],
+         #       'thesaurus':'TODO'
+         #       },
+         #       {
+         #       'terms':["buildings", "addresses"],
+         #       'thesaurus': 'TODO'
+         #       }],
+         #   'bounding_box':[{
+         #       'nblat':0.0,
+         #       'sblat':0.0,
+         #       'wblng':0.0,
+         #       'eblng':0.0
+         #       }],
+         #   'temporal_extent': { 
+         #       'start': '2012-01-01',
+         #       'end': '2013-01-01',
+         #   },
+         #   'creation_date':'2012,1,1',
+         #   'publication_date':'2012,1,1',
+         #   'revision_date': '2014,1,1',
+         #   'lineage':u"lineaage",
+         #   'denominator':[],
+         #   'spatial_resolution':[{
+         #       'distance':5,
+         #       'uom':u"meters"
+         #       }],
+         #   'conformity':[{
+         #       'title':u"specifications blabla",
+         #       'date':'2014-09-19',
+         #       'date_type':"creation",
+         #       'degree': "conformant"
+         #       }],
+         #   'access_constraints':[u"lalala1", u"lalala2"],
+         #   'limitations':[u"limit1", u"limit2"],
+         #   'responsible_party':[{
+         #       'organization': u"Org",
+         #       'email':[u"email@asd.gr"],
+         #       'role':"pointofcontact"
+         #       }]
             },
-            'thematic_category': 'health',
-        },
         'resources': [
             resource_fixtures['resource-1']['0'],
         ],
-    },
+
+        },
+
     '0..1': {
         'license_id': 'cc-by',
         'version': '1.0.1',
-        'foo': {
-            'baz': u'Ενα δενδρο BaoBab',
-            'grade': 6.89,
-            'reviewed': True,
-            'thematic_category': 'environment',
+        'inspire': {
+            'languagecode': 'ro'
         },
     },
     '1..2': {
