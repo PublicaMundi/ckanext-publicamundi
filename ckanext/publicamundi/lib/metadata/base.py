@@ -275,7 +275,7 @@ class Object(object):
             opts['update'] = update
 
         # Decide if input is a flattened dict
-        
+
         if is_flat is None:
             is_flat = isinstance(d.iterkeys().next(), tuple)
         if is_flat:
@@ -288,7 +288,7 @@ class Object(object):
             d = dictization.unflatten(d)
                 
         # Load self
-        
+
         self.load(d, opts)
 
         # Allow method chaining
@@ -1022,7 +1022,7 @@ class Object(object):
             '''Perform a deep (recursive) update of the target object.
             '''
             obj = self.obj
-            
+
             for k, field in obj.iter_fields(exclude_properties=True):
                 if not k in data:
                     continue

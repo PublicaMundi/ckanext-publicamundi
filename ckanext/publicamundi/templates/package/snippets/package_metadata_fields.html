@@ -1,8 +1,6 @@
 {% import 'macros/form.html' as form %}
 
-{% block package_metadata_fields scoped %}
-
-{%- set is_draft = data.get('state', 'draft') == 'draft' -%}
+{% block package_metadata_fields %}
 
 {% block package_metadata_fields_url %}
 {{ 
@@ -16,7 +14,7 @@
 }}
 {% endblock %} {# package_metadata_fields_url #}
 
-{% block package_metadata_fields_version %}  
+{% block package_metadata_fields_version %}
 {{ 
     form.input('version', 
         label=_('Version'), 
@@ -29,7 +27,6 @@
 {% endblock %} {# package_metadata_fields_version #}
 
 {% block package_metadata_author %}
-
 {{ 
     form.input('author', 
         label=_('Author'), 
@@ -39,7 +36,6 @@
         error=errors.author, 
         classes=['control-medium'])         
 }}
-
 {{ 
     form.input('author_email', 
         label=_('Author Email'), 
@@ -49,7 +45,6 @@
         error=errors.author_email, 
         classes=['control-medium']) 
 }} 
-
 {% endblock %} {# package_metadata_author #}
 
 {% block package_metadata_fields_maintainer %}
@@ -85,16 +80,17 @@
 
 {% block dataset_fields %}
 
+{%- set is_draft = data.get('state', 'draft') == 'draft' -%}
+
 {% set dt = data.get('dataset_type') -%}
 {% set dt_prefix = dt -%}
-{% set obj = data.get(dt_prefix) -%}
+{% set obj = data.get(dt_prefix) or h.make_object(dt) -%}
 
 {# A workaround for bug #36 #}
 {% if is_draft -%}
 {{ form.hidden('dataset_type', dt) }} 
 {% endif -%}
 
-{% if obj -%}
 {% if errors -%}
 {% do 
     obj.from_dict(data, is_flat=true, opts={ 
@@ -105,13 +101,13 @@
     }) 
 %}
 {% endif -%} {# if errors #}
+
 {{ 
     h.markup_for('edit:datasetform', obj, 
         errors=errors, 
         name_prefix=dt_prefix, 
         data={}) 
 }}
-{% endif -%} {# if obj #}
 
 {% endblock %} {# dataset_fields #}
 
