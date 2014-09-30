@@ -140,6 +140,74 @@ def _test_objects_update_foo(fixture_name, changeset):
     
     pass
 
+def test_objects_update_inspire():
+    
+    for name in ['inspire1']:
+        for changeset in inspire_updates.keys():
+            yield _test_objects_update_inspire, name, changeset 
+
+def _test_objects_update_inspire(fixture_name, changeset):
+
+    x0 = getattr(fixtures, fixture_name)
+    assert isinstance(x0, types.InspireMetadata)
+    df0 = x0.to_dict(flat=1, opts={'serialize-keys': 1})
+    d = inspire_updates[changeset]
+    df = flatten(d, lambda k: '.' . join(map(str, k)))
+    # Test shallow updates
+    
+    x1 = copy.deepcopy(x0)
+    x1.from_dict(d, is_flat=0, opts={ 'update': True })
+    df1 = x1.to_dict(flat=1, opts={'serialize-keys': 1})
+    
+    for k in (set(x0.get_fields()) - set(d.keys())):
+        assert_equal(getattr(x1,k), getattr(x0,k))
+
+    for change, key, desc in dictdiffer.diff(df0, df1):
+        if change == 'change':
+            val0, val1 = desc
+            assert df[key] == val1
+            assert df1[key] == val1
+            assert df0[key] == val0
+        elif change == 'add':
+            for key1, val1 in desc:
+                assert df[key1] == val1
+                assert df1[key1] == val1
+                assert not key1 in df0
+        elif change == 'remove':
+            for key0, val0 in desc:
+                assert df0[key0] == val0
+                assert not key0 in df1
+                assert (not key0 in df) or (df[key0] is None) 
+
+    # Test deep updates
+
+    x2 = copy.deepcopy(x0)
+    x2.from_dict(d, is_flat=0, opts={ 'update': 'deep' })
+    
+    for k in (set(x0.get_fields()) - set(d.keys())):
+        assert_equal(getattr(x2,k), getattr(x0,k))
+   
+    df2 = x2.to_dict(flat=1, opts={'serialize-keys': 1})
+
+    for change, key, desc in dictdiffer.diff(df0, df2):
+        if change == 'change':
+            val0, val2 = desc
+            assert val2 == df[key]
+            assert val0 == df0[key]
+            assert val2 == df2[key]
+        elif change == 'add':
+            for key2, val2 in desc:
+                assert key2 in df.keys()
+                assert df2[key2] == val2
+        elif change == 'remove':
+            for key0, val0 in desc:
+                assert df[key0] is None
+                assert df0[key0] == val0
+
+    pass
+
+
+
 def test_objects():
     
     tests = chain(
@@ -162,9 +230,9 @@ def _test_flattened_dict(fixture_name, opts):
     
     d = x.to_dict(flat=True, opts=opts)
 
-    print
-    print ' -- Dictize: flattened opts=%r' %(opts)
-    print d
+    #print
+    #print ' -- Dictize: flattened opts=%r' %(opts)
+    #print d
 
     key_type = basestring if opts.get('serialize-keys') else tuple
     key_prefix = opts.get('key-prefix')
@@ -221,9 +289,9 @@ def _test_nested_dict(fixture_name, opts):
 
     assert set(d.keys()) == set(x.get_field_names())
     
-    print
-    print ' -- Dictize: nested opts=%r' %(opts)
-    print d
+    #print
+    #print ' -- Dictize: nested opts=%r' %(opts)
+    #print d
     
     # Load
     
@@ -326,11 +394,42 @@ foo_updates = {
     },
 }
 
+inspire_updates = {
+    'upd-1': {
+        'title': u"lala",
+        'denominator': [u"asd"],
+        'lineage': None,
+        'access_constraints': [u"lololo1"]
+    }, 
+    'upd-2': {
+        'bounding_box' : [{
+                'nblat': 1.0,
+                'sblat': 1.0,
+                'wblng': 1.0,
+                'eblng': 1.0,
+            },],
+        'temporal_extent' : [{ 
+            'start': date(1999,1,1), 
+            },]
+    },
+    'upd-3': {
+        'keywords': [{
+            'terms': ["agriculture", "climate"],
+            'thesaurus': {
+                    'name': 'keywords-gemet-concepts',
+                    }
+                }],
+    },
+
+}
+
+
 # Main 
 
 if __name__ == '__main__':
 
     _test_objects_update_foo('foo2', 'upd-4')
+    _test_objects_update_inspire('inspire2', 'upd-2')
 
     _test_objects_update_foo_discard_junk('foo1', 'upd-1')
 

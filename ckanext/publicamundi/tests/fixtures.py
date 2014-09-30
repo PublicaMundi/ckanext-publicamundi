@@ -142,8 +142,8 @@ inspire1 = InspireMetadata(
     identifier = [u"1a2b314df21312a3"],
     abstract = u"This is an abstract description",
     locator = [
-        "http://publicamundi.eu", 
-        "http://www.ipsyp.gr", 
+        "http://publicamundi.eu",
+        "http://www.ipsyp.gr",
         "http://www.example.com"
     ],
     resource_language = ["el"],
@@ -185,3 +185,5 @@ inspire1 = InspireMetadata(
             organization=u"Org2", email=[u"email2@asd.gr"], role="pointofcontact")]
 )
 
+inspire2 = copy.deepcopy(inspire1)
+#inspire2.keywords = None

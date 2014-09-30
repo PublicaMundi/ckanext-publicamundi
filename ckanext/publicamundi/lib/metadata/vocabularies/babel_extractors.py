@@ -19,34 +19,55 @@ def extract_json(fileobj, keywords, comment_tags, options):
     file structure with all possible sub-structures
 
     {
-    'vocab1':[i1, i2, i3],
-    'vocab2':{k1:v1, k2:v2, k3:v3},
-    'vocab3':{k1:[i1, i2, i3], k2:[i1, i2, i3]}
+    'vocab1':{
+        'terms':[i1, i2, i3]
+        },
+    'vocab2':{
+        'terms':{k1:v1, k2:v2, k3:v3}
+        },
+    'vocab3':{
+        'Thes1':{
+            'meta-1':'X',
+            'meta-2':'Y',
+            'terms':[i1, i2, i3],
+        },
+        'Thes2':{
+            'meta-1':'X',
+            'meta-2':'Y',
+            'terms':[i1, i2, i3],
+            },
+        }
     }
     """
 
     i = 0
     for k,v in json.loads(fileobj.read()).iteritems():
         i += 1
-        # Case 1: Dictionary
         if isinstance(v, dict):
             for kk,vv in v.iteritems():
                 i += 1
 
-                # Case 1.1 Dictionary with list values (vocab1)
-                if isinstance(vv,list):
-                    for vvv in vv:
-                        i += 1
-                        yield (i, 0, vvv, "")
+                if kk == 'terms':
+                    # Case 1 Dictionary with list of values (vocab1)
+                    if isinstance(vv, list):
+                        for vvv in vv:
+                            i += 1
+                            yield (i, 0, vvv, "")
 
-                # Case 1.2 Simple key,value dictionary (vocab2)
+                    # Case 2 Simple key,value dictionary (vocab2)
+                    elif isinstance(vv, dict):
+                        for kkk,vvv in vv.iteritems():
+                            i += 1
+                            yield (i, 0, vv, "")
+
                 else:
-                    yield (i, 0, vv, "")
+                    # Case 3 Dictionary with metadata and list of values
+                    for kkkk,vvvv in vv.iteritems():
+                        i += 1
 
-        # Case 2: List (vocab3)
-        elif isinstance(v,list):
-            for vv in v:
-                i += 1
-                yield (i, 0, vv, "")
-
+                        if kkkk == 'terms':
+                            if isinstance(vvvv, list):
+                                for vvvvv in vvvv:
+                                    i += 1
+                                    yield (i, 0, vvvvv, "")
 
