@@ -8,12 +8,14 @@ from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.ibase import IObject
 from ckanext.publicamundi.lib.metadata.base import Object, FieldContext
 from ckanext.publicamundi.lib.util import raise_for_stub_method
-from ckanext.publicamundi.lib.metadata.widgets.ibase import \
-    IWidget, IFieldWidget, IObjectWidget
-from ckanext.publicamundi.lib.metadata.widgets import \
-    QualAction, LookupContext, markup_for_object, markup_for_field
-    
-## Base
+from ckanext.publicamundi.lib.metadata.widgets.ibase import (
+    IWidget, IFieldWidget, IObjectWidget)
+from ckanext.publicamundi.lib.metadata.widgets import (
+    QualAction, LookupContext, markup_for_object, markup_for_field)
+
+#
+# Base
+#
 
 class Widget(object):
     zope.interface.implements(IWidget)
@@ -221,7 +223,9 @@ class ObjectWidget(Widget):
         markup = toolkit.render_snippet(tpl, tpl_vars)
         return toolkit.literal(markup)
 
-## Base readers and editors
+#
+# Base readers and editors
+#
 
 class ReadFieldWidget(FieldWidget):
 
@@ -252,7 +256,9 @@ class EditObjectWidget(ObjectWidget):
                 fields.append(k)
         return fields
 
-## Base widgets for fields holding collections 
+#
+# Base widgets for collections-related fields 
+#
 
 class ListFieldWidgetTraits(FieldWidget):
 
@@ -316,7 +322,9 @@ class DictFieldWidgetTraits(FieldWidget):
 
         return tpl_vars
 
-## Base widgets for fields holding objects
+#
+# Base widgets for object-related fields
+#
 
 class ObjectFieldWidgetTraits(FieldWidget):
     
