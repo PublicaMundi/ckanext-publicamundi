@@ -33,7 +33,9 @@ def test_fields():
     '''
     
     it = itertools.chain(
+        _test_fixture_fields('bbox1'),
         _test_fixture_fields('foo1'),
+        _test_fixture_fields('foo2'),
         _test_fixture_fields('thesaurus_gemet_concepts')
     )
 
@@ -45,6 +47,8 @@ def _test_fixture_fields(fixture_name):
     d = x.to_dict(flat=True)
     fields = x.get_flattened_fields()
     for k, v in d.items():
+        if v is None:
+            continue
         f = fields[k].bind(FieldContext(key='-'.join(map(str, k)), value=v)) 
         yield _test_field, fixture_name, k, f, v
 

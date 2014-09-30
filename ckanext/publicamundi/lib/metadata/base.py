@@ -239,6 +239,10 @@ class Object(object):
                  - not set: self will be fully reloaded from scratch
                  - set to True or 'shallow': self will be updated in shallow mode
                  - set to 'deep': self will be updated in deep (recursive) mode
+            * use-defaults: bool (default: True)
+                Indicate whether a missing/None value should be initialized to a field-wise
+                default value (or instead, be set to None). This option has no effect if an
+                update is carried out (i.e it only affects a reload). 
             * unserialize-keys: bool (default: False)
                 Indicate whether keys need to be unserialized before anything else
                 happens. This option has no effect if we are loading from a nested dict.
@@ -255,7 +259,7 @@ class Object(object):
         # Preprocess and sanitize options
 
         opts = copy.copy(opts) # to modify it    
-
+        
         unserialize_values = opts.get('unserialize-values', False)
         if unserialize_values:
             if isinstance(unserialize_values, (bool, int)):
@@ -395,7 +399,7 @@ class Object(object):
          
     @classmethod
     def get_field_factory(cls, k, field=None):
-        '''Find a suitable factory to instantiate a field's value.
+        '''Find a proper factory to instantiate a field's value.
         '''
 
         assert not k or isinstance(k, basestring)
@@ -407,12 +411,8 @@ class Object(object):
         # Check if a factory is defined explicitly as a class attribute
         
         if k and hasattr(cls, k):
-            a = getattr(cls, k)
-            if callable(a):
-                factory = a
-                return factory
-            else:
-                return None
+            factory = getattr(cls, k)
+            return factory if callable(factory) else None
         
         # If reached here, there is no hint via class attribute. 
         # Try to find a factory for this field.
@@ -804,10 +804,7 @@ class Object(object):
             res = {}
             for k, field in obj.iter_fields(exclude_properties=True):
                 f = field.get(obj)
-                if f is None:
-                    res[k] = None
-                else:
-                    res[k] = self._dictize_field(f, field, max_depth -1)
+                res[k] = self._dictize_field(f, field, max_depth -1)
             
             return res
 
@@ -871,6 +868,9 @@ class Object(object):
 
         def _dictize_field(self, f, field, max_depth):
             
+            if f is None:
+                return None
+            
             if max_depth == 0 or not self._is_field_accessible(field):
                 return self._get_field_value(f, field)
             
@@ -905,16 +905,16 @@ class Object(object):
             res = {}
             for k, field in obj.iter_fields(exclude_properties=True):
                 f = field.get(obj)
-                if f is None:
-                    pass
-                else:
-                    res1 = self._flatten_field(f, field, max_depth -1)
-                    for k1,v1 in res1.items():
-                        res[(k,) +k1] = v1
+                res1 = self._flatten_field(f, field, max_depth -1)
+                for k1, v1 in res1.iteritems():
+                    res[(k,) + k1] = v1
             
             return res
 
         def _flatten_field(self, f, field, max_depth):
+            
+            if f is None:
+                return { (): None }
             
             if max_depth == 0 or not self._is_field_accessible(field):
                 v = self._get_field_value(f, field)
@@ -929,7 +929,7 @@ class Object(object):
                     opts['max-depth'] = max_depth
                     return dictizer_factory(f, opts).flatten()
                 else:
-                    return None # unknown structure
+                    return { (): None } # unknown structure
             elif isinstance(field, (zope.schema.List, zope.schema.Tuple)):
                 return self._flatten_field_items(enumerate(f), field, max_depth)
             elif isinstance(field, zope.schema.Dict):
@@ -944,7 +944,7 @@ class Object(object):
             for k, y in items:
                 yres = self._flatten_field(y, field.value_type, max_depth -1)
                 for yk, yv in yres.iteritems():
-                    res[(k,) +yk] = yv
+                    res[(k,) + yk] = yv
             return res
 
     class Loader(object):
@@ -985,16 +985,21 @@ class Object(object):
             '''
             obj = self.obj
 
+            use_defaults = self.opts.get('use-defaults', True)
+
             for k, field in obj.iter_fields(exclude_properties=True):
                 v = data.get(k)
-                factory = obj.get_field_factory(k, field)
                 f = None
                 if v is None:
-                    # No value given, use factory (if available)
-                    f = factory() if factory else field.default
+                    # No input
+                    if use_defaults:
+                        factory = obj.get_field_factory(k, field)
+                        f = factory() if factory else field.default
+                    else:
+                        f = None
                 else:
                     # An input was provided for k
-                    f = self._create_field(v, field, factory)
+                    f = self._create_field(v, field)
                 setattr(obj, k, f)
 
             return self
@@ -1103,7 +1108,7 @@ class Object(object):
             if isinstance(field, zope.schema.Object):
                 if isinstance(v, dict):
                     # Load from a dict (if instance of Object)
-                    if not factory:
+                    if factory is None:
                         factory = obj_cls.get_field_factory(None, field)
                     f = factory()
                     if isinstance(f, Object):

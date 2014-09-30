@@ -1,3 +1,4 @@
+import nose.tools
 import zope.interface
 import zope.schema
 import json
@@ -17,19 +18,21 @@ from ckanext.publicamundi.tests.helpers import assert_equal, diff_dicts
 
 leaf_types = (basestring, bool, int, long, float,)
 
-def test_objects_update_foo_discard_junk():
-    
-    for name in ['foo1', 'foo2', 'foo3', 'foo4']:
+@nose.tools.istest
+def test_dictize_update_foo_discard_junk():
+   
+    for name in ['foo1', 'foo2', 'foo3', 'foo4', 'foo5', 'foo6', 'foo7']:
         for changeset in foo_updates.keys():
-            yield _test_objects_update_foo_discard_junk, name, changeset 
+            yield _test_dictize_update_foo_discard_junk, name, changeset 
 
-def test_objects_update_foo():
+@nose.tools.istest
+def test_dictize_update_foo():
     
-    for name in ['foo1', 'foo2', 'foo3', 'foo4']:
+    for name in ['foo1', 'foo2', 'foo3', 'foo4', 'foo5', 'foo6', 'foo7']:
         for changeset in foo_updates.keys():
-            yield _test_objects_update_foo, name, changeset 
+            yield _test_dictize_update_foo, name, changeset 
 
-def _test_objects_update_foo_discard_junk(fixture_name, changeset):
+def _test_dictize_update_foo_discard_junk(fixture_name, changeset):
     
     key_prefix = 'fooo'
 
@@ -79,7 +82,7 @@ def _test_objects_update_foo_discard_junk(fixture_name, changeset):
  
     assert x1 == x2
 
-def _test_objects_update_foo(fixture_name, changeset):
+def _test_dictize_update_foo(fixture_name, changeset):
 
     x0 = getattr(fixtures, fixture_name)
     assert isinstance(x0, types.Foo)
@@ -100,19 +103,19 @@ def _test_objects_update_foo(fixture_name, changeset):
     for change, key, desc in dictdiffer.diff(df0, df1):
         if change == 'change':
             val0, val1 = desc
-            assert df[key] == val1
+            assert ((val1 is None) and not (key in df)) or df[key] == val1
             assert df1[key] == val1
             assert df0[key] == val0
         elif change == 'add':
             for key1, val1 in desc:
-                assert df[key1] == val1
+                assert ((val1 is None) and not (key1 in df)) or df[key1] == val1
                 assert df1[key1] == val1
                 assert not key1 in df0
         elif change == 'remove':
             for key0, val0 in desc:
                 assert df0[key0] == val0
                 assert not key0 in df1
-                assert (not key0 in df) or (df[key0] is None) 
+                assert not (key0 in df) or (df[key0] is None) 
 
     # Test deep updates
 
@@ -131,27 +134,36 @@ def _test_objects_update_foo(fixture_name, changeset):
             assert val2 == df2[key]
         elif change == 'add':
             for key2, val2 in desc:
-                assert key2 in df.keys()
+                assert (val2 is None) or (key2 in df)
                 assert df2[key2] == val2
         elif change == 'remove':
             for key0, val0 in desc:
-                assert df[key0] is None
+                assert val0 is None or df[key0] is None
                 assert df0[key0] == val0
     
     pass
 
-def test_objects():
+@nose.tools.istest
+def test_dictize():
     
-    tests = chain(
-        _test_dictization('bbox1'),
-        _test_dictization('contact1'),
-        _test_dictization('foo1'),
-    )
+    fixture_names = [
+        'bbox1', 
+        'contact1', 
+        'foo1', 
+        'foo2', 
+        'foo3', 
+        'foo4',
+        'foo5',
+        'foo6',
+        'foo7',
+        'thesaurus_gemet_themes',
+    ]
     
-    for tester, fixture_name, opts in tests:
-        yield tester, fixture_name, opts
+    for name in fixture_names:
+        for test in _test_dictize(name):
+            yield test
 
-def _test_flattened_dict(fixture_name, opts):
+def _test_dictize_flattened(fixture_name, opts):
 
     x = getattr(fixtures, fixture_name)
     assert isinstance(x, Object)
@@ -184,7 +196,7 @@ def _test_flattened_dict(fixture_name, opts):
         expected_keys = map(kser.dumps, expected_keys)
     
     for k in d:
-        assert k in expected_keys
+        assert (d[k] is None) or (k in expected_keys)
 
     if key_prefix:
         for k in d:
@@ -200,15 +212,20 @@ def _test_flattened_dict(fixture_name, opts):
         'unserialize-keys': opts.get('serialize-keys', False),
         'unserialize-values': opts.get('serialize-values', False),
         'key-prefix': opts.get('key-prefix', None),
+        'use-defaults': False,
     }
 
     x1 = factory().from_dict(d, is_flat=True, opts=opts1)
     d1 = x1.to_dict(flat=True, opts=opts)
     
-    assert_equal(d, d1)
-    assert x == x1
+    for change, key, desc in dictdiffer.diff(d, d1):
+        if change in ['remove', 'add']:
+            for k, v in desc:
+                assert (v is None)
+        else:
+            assert False
 
-def _test_nested_dict(fixture_name, opts):
+def _test_dictize_nested(fixture_name, opts):
 
     x = getattr(fixtures, fixture_name)
     assert isinstance(x, Object)
@@ -219,7 +236,7 @@ def _test_nested_dict(fixture_name, opts):
 
     d = x.to_dict(flat=False, opts=opts)
 
-    assert set(d.keys()) == set(x.get_field_names())
+    assert set(d.keys()) == set(x.get_fields(exclude_properties=1).keys())
     
     print
     print ' -- Dictize: nested opts=%r' %(opts)
@@ -229,47 +246,47 @@ def _test_nested_dict(fixture_name, opts):
     
     opts1 = { 
         'unserialize-values': opts.get('serialize-values', False),
+        'use-defaults': False,
     }
 
     x1 = factory().from_dict(d, is_flat=False, opts=opts1)
     d1 = x1.to_dict(flat=False, opts=opts)
 
     assert_equal(d, d1)
-    assert x == x1
 
-def _test_dictization(fixture_name):
+def _test_dictize(fixture_name):
 
     opts = {}
-    yield _test_nested_dict, fixture_name, opts
-    yield _test_flattened_dict, fixture_name, opts
+    yield _test_dictize_nested, fixture_name, opts
+    yield _test_dictize_flattened, fixture_name, opts
     
     opts = { 'serialize-keys': True }
-    yield _test_flattened_dict, fixture_name, opts
+    yield _test_dictize_flattened, fixture_name, opts
     
     opts = { 'serialize-values': True }
-    yield _test_nested_dict, fixture_name, opts
-    yield _test_flattened_dict, fixture_name, opts
+    yield _test_dictize_nested, fixture_name, opts
+    yield _test_dictize_flattened, fixture_name, opts
     
     opts = { 'serialize-values': 'json-s' }
-    yield _test_nested_dict, fixture_name, opts
-    yield _test_flattened_dict, fixture_name, opts
+    yield _test_dictize_nested, fixture_name, opts
+    yield _test_dictize_flattened, fixture_name, opts
    
     opts = { 'serialize-keys': True, 'serialize-values': True }
-    yield _test_flattened_dict, fixture_name, opts
+    yield _test_dictize_flattened, fixture_name, opts
     
     opts = { 'serialize-keys': True, 'serialize-values': 'json-s' }
-    yield _test_flattened_dict, fixture_name, opts
+    yield _test_dictize_flattened, fixture_name, opts
     
     opts = { 'serialize-keys': True, 'key-prefix': 'test1', 'serialize-values': True }
-    yield _test_flattened_dict, fixture_name, opts
+    yield _test_dictize_flattened, fixture_name, opts
    
     for n in range(1, 5):
         opts = { 'max-depth': n }
-        yield _test_flattened_dict, fixture_name, opts
+        yield _test_dictize_flattened, fixture_name, opts
         opts = { 'serialize-keys': True, 'max-depth': n }
-        yield _test_flattened_dict, fixture_name, opts
+        yield _test_dictize_flattened, fixture_name, opts
         opts = { 'serialize-keys': True, 'key-prefix': 'test1', 'max-depth': n }
-        yield _test_flattened_dict, fixture_name, opts
+        yield _test_dictize_flattened, fixture_name, opts
 
 # Fixtures
 
@@ -329,11 +346,16 @@ foo_updates = {
 # Main 
 
 if __name__ == '__main__':
-
-    _test_objects_update_foo('foo2', 'upd-4')
-
-    _test_objects_update_foo_discard_junk('foo1', 'upd-1')
-
-    for t, x, y in test_objects():
+    
+    x = fixtures.foo2
+    d = x.to_dict(flat=1, opts={})
+    x1 = types.Foo().from_dict(d, is_flat=1, opts={})
+    
+    for t, x, y in test_dictize():
         t(x, y)
+
+    _test_dictize_update_foo('foo2', 'upd-4')
+
+    _test_dictize_update_foo_discard_junk('foo1', 'upd-1')
+
 
