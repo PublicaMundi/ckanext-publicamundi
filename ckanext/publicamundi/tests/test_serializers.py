@@ -106,7 +106,7 @@ def _test_fixture_object(fixture_name):
     assert_equal(d, d1)
 
 def test_field_textline():
-    
+
     f = zope.schema.TextLine(title=u'Summary')
     
     for fmt in ['default']:
