@@ -58,3 +58,9 @@ dataset_types = {
     },
 }
 
+def make_object(t):
+    assert t in dataset_types
+    factory = dataset_types[t]['class']
+    obj = factory()
+    return obj
+

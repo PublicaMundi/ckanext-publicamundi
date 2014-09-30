@@ -11,12 +11,12 @@
 {% endif %}
 
 {% if dataset_type == 'foo' %}
-{% set foo = data.get('foo', {}) %}
+{% set foo = data.get('foo') or h.make_object('foo') %}
 {% if errors %}
 {% do 
-    foo.from_dict(data, is_flat=1, opts={ 
+    foo.from_dict(data, is_flat=true, opts={ 
         'update': 'deep', 
-        'unserialize-keys': 1, 
+        'unserialize-keys': true, 
         'key-prefix': 'foo', 
         'unserialize-values': 'default', 
     }) 

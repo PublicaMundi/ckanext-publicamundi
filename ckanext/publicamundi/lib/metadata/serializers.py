@@ -48,7 +48,7 @@ from ckanext.publicamundi.lib.metadata.ibase import ISerializer, IKeyTupleSerial
 
 __all__ = [
     'supported_formats',
-    'field_serialize_adapter', 
+    'field_serialize_adapter',
     'BaseSerializer', 
     'serializer_for_key_tuple', 
     'serializer_for_field',

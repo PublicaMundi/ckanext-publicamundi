@@ -196,7 +196,6 @@ def test_field_accessors_with_ifoo():
         'format-values': 'default'    
     })
 
-
 if __name__  == '__main__':
     
     _test_equality('foo1')

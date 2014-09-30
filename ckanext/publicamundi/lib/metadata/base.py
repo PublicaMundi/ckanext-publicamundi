@@ -251,7 +251,7 @@ class Object(object):
 
         assert isinstance(d, dict)
         cls = type(self)
-         
+        
         # Preprocess and sanitize options
 
         opts = copy.copy(opts) # to modify it    
