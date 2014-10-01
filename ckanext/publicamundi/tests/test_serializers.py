@@ -60,8 +60,9 @@ def _test_fixture_fields(fixture_name):
     d = x.to_dict(flat=True)
     fields = x.get_flattened_fields()
     for k, v in d.items():
-        f = fields[k]
-        yield _test_leaf_field, fixture_name, k, f, v
+        if not v is None:
+            f = fields[k]
+            yield _test_leaf_field, fixture_name, k, f, v
 
 def _test_leaf_field(fixture_name, k, f, v):
     

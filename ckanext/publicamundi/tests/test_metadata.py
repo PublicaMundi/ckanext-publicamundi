@@ -73,7 +73,8 @@ def _test_schema(x):
         flattened_fields = obj.get_flattened_fields(opts=opts)
         print flattened_fields
         d = obj.to_dict(flat=True, opts=opts) 
-        assert set(d.keys()).issubset(set(flattened_fields.keys()))
+        for k in set(d.keys()) - set(flattened_fields.keys()):
+            assert d[k] is None
 
     return
 
@@ -115,7 +116,9 @@ def test_dict_converters():
 def test_schema():
     
     yield _test_schema, 'bbox1'
+    yield _test_schema, 'contact1'
     yield _test_schema, 'foo1'
+    yield _test_schema, 'foo2'
     yield _test_schema, 'thesaurus_gemet_concepts'
 
 def test_copying():
