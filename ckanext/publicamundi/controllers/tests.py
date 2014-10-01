@@ -2,6 +2,7 @@ import datetime
 import logging
 import copy
 import json
+from collections import namedtuple
 
 from pylons import url
 
@@ -230,7 +231,6 @@ class TestsController(BaseController):
     def test_accordion_form(self):
         c.form_sections = []
 
-        from collections import namedtuple
         P = namedtuple('P', ['heading', 'body'])
         
         def heading_markup(k):
@@ -250,5 +250,4 @@ class TestsController(BaseController):
         #raise Exception('Break')
         c.form_class = 'form-horizontal' # 'form-horizontal'
         return render('tests/accordion-form.html')
-
 

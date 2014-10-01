@@ -89,6 +89,15 @@ foo3.grade = None
 foo4 = copy.deepcopy(foo1)
 foo4.geometry = None
 
+foo5 = copy.deepcopy(foo1)
+foo5.contacts = None
+
+foo6 = copy.deepcopy(foo1)
+foo6.contacts['personal'] = None
+
+foo7 = copy.deepcopy(foo1)
+foo7.tags = None
+
 freekeyword1 = FreeKeyword(
     value = u"atmosphere",
     originating_vocabulary = u"Foo-1",

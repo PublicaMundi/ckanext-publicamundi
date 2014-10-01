@@ -41,6 +41,7 @@ class IFoo(IBaseMetadata):
     tags.setTaggedValue('format', {
         'default': { 'descend-if-dictized': False, 'extra-opts': {}, },
     })
+    tags.setTaggedValue('allow-partial-update', False)
 
     temporal_extent = zope.schema.Object(ITemporalExtent,
         title = u'Temporal Extent',
