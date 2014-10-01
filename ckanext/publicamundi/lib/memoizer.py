@@ -1,11 +1,12 @@
 
-# Note Not sure if _cache is thread-safe. It is supposed to be as of GIL, see:
+# Note Not sure if _cache is thread-safe. 
+# At least for CPython, it is supposed to be safe as of GIL, see:
 # https://docs.python.org/2/glossary.html#term-global-interpreter-lock
 # If not, it should be replaced by a threading.local instance.
 _cache = dict()
 
 def memoize(fn):
-    #print 'Creating memoize wrapper for %r ...' %(fn)
+    #print 'Creating memoize wrapper for %r ...' % (fn)
     cached_results = _cache[fn] = dict()
     def wrapped(*args):
         cid = args

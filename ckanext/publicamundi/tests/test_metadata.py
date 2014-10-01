@@ -199,8 +199,19 @@ def test_field_accessors_with_ifoo():
         'format-values': 'default'    
     })
 
-
 if __name__  == '__main__':
+ 
+    x = fixtures.foo1
+    
+    field1 = x.get_schema().get('contact_info')
+
+    fc1 = x.get_field_factory(key='contact_info')
+    fc2 = x.get_field_factory(field=field1)
+    
+    fc3 = x.get_field_factory('contact_info')
+    fc4 = x.get_field_factory(field=field1)
+
+    _test_schema('foo1')
     
     _test_equality('foo1')
     

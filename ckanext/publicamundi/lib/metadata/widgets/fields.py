@@ -14,7 +14,9 @@ from ckanext.publicamundi.lib import logger
 # Todo: Provide readers/editors for:
 #  - IBytes (upload?)
 
-# Editors #
+#
+# Editors
+#
 
 @field_widget_adapter(ITextField)
 class TextEditWidget(base_widgets.EditFieldWidget):
@@ -166,7 +168,9 @@ class ObjectEditWidget(base_widgets.EditFieldWidget, base_widgets.ObjectFieldWid
     def get_template(self):
         return 'package/snippets/fields/edit-object.html'
 
-# Readers #
+#
+# Readers
+#
 
 @field_widget_adapter(ITextField)
 @field_widget_adapter(ITextLineField)

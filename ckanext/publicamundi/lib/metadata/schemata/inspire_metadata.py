@@ -64,6 +64,7 @@ class IThesaurusTerms(IObject):
             raise zope.interface.Invalid(msg)
 
 class IInspireMetadata(IObject):
+    
     zope.interface.taggedValue('recurse-on-invariants', True)
 
     # Metadata on metadata
@@ -73,6 +74,7 @@ class IInspireMetadata(IObject):
         description = u"This is the description of the organisation responsible for the creation and maintenance of the metadata. This description shall include:   - the name of the organisation as free text, - a contact e-mail address as a character string.",
         required = True,
         min_length = 1,
+        max_length = 5,
         value_type = zope.schema.Object(IResponsibleParty,
             title = u'Point of Contact',
             required = True))
