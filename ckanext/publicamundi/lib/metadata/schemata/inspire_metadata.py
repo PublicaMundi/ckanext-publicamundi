@@ -64,6 +64,7 @@ class IThesaurusTerms(IObject):
             raise zope.interface.Invalid(msg)
 
 class IInspireMetadata(IObject):
+    
     zope.interface.taggedValue('recurse-on-invariants', True)
 
     # Metadata on metadata
