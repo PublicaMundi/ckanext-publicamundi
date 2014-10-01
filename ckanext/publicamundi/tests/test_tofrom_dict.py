@@ -19,27 +19,35 @@ from ckanext.publicamundi.tests.helpers import assert_equal
 
 leaf_types = (basestring, bool, int, long, float,)
 
+#
+# Tests
+#
+
 @nose.tools.istest
 def test_dictize_update_foo_discard_junk():
 
     for name in ['foo1', 'foo2', 'foo3', 'foo4', 'foo5', 'foo6', 'foo7']:
-        for changeset in foo_updates.keys():
-            yield _test_dictize_update_foo_discard_junk, name, changeset 
+        for changeset in updates['foo'].keys():
+            yield _test_dictize_update_discard_junk, name, 'foo', changeset 
 
 @nose.tools.istest
-def test_dictize_update_foo():
+def test_dictize_update():
     
     for name in ['foo1', 'foo2', 'foo3', 'foo4', 'foo5', 'foo6', 'foo7']:
-        for changeset in foo_updates.keys():
-            yield _test_dictize_update_foo, name, changeset 
+        for changeset in updates['foo'].keys():
+            yield _test_dictize_update, name, 'foo', changeset 
+    
+    for name in ['inspire1']:
+        for changeset in updates['inspire'].keys():
+            yield _test_dictize_update, name, 'inspire', changeset 
 
-def _test_dictize_update_foo_discard_junk(fixture_name, changeset):
+def _test_dictize_update_discard_junk(fixture_name, dtype, changeset):
     
     key_prefix = 'fooo'
 
     x0 = getattr(fixtures, fixture_name)
     assert isinstance(x0, types.Foo)
-    d = foo_updates[changeset]
+    d = updates[dtype][changeset]
 
     # Prepend a key-prefix, and then insert some junk items into df
     
@@ -83,13 +91,13 @@ def _test_dictize_update_foo_discard_junk(fixture_name, changeset):
  
     assert x1 == x2
 
-def _test_dictize_update_foo(fixture_name, changeset):
+def _test_dictize_update(fixture_name, dtype, changeset):
 
     x0 = getattr(fixtures, fixture_name)
-    assert isinstance(x0, types.Foo)
+    assert x0
     df0 = x0.to_dict(flat=1, opts={'serialize-keys': 1})
     
-    d = foo_updates[changeset]
+    d = updates[dtype][changeset]
     df = flatten(d, lambda k: '.' . join(map(str, k)))
    
     # Test shallow updates
@@ -132,7 +140,7 @@ def _test_dictize_update_foo(fixture_name, changeset):
         # Check if a None was replaced (in d) with a non-empty thing
         if (df0[k] is None) and dot_lookup(d, k):
             return True
-        # Check if is fully reloaded via its parent
+        # Check if is forced to be reloaded via its parent
         kp = k.split('.')[:-1]
         while kp:
             f = x0.get_field(kp)
@@ -158,7 +166,7 @@ def _test_dictize_update_foo(fixture_name, changeset):
                 #  - an ancestor or self was fully reloaded
                 assert ((key0 in df) and (df[key0] is None)) or is_reloaded(key0)
                 assert df0[key0] == val0
-    
+
     pass
 
 @nose.tools.istest
@@ -167,13 +175,7 @@ def test_dictize():
     fixture_names = [
         'bbox1', 
         'contact1', 
-        'foo1', 
-        'foo2', 
-        'foo3', 
-        'foo4',
-        'foo5',
-        'foo6',
-        'foo7',
+        'foo1', 'foo2', 'foo3', 'foo4', 'foo5', 'foo6', 'foo7',
         'thesaurus_gemet_themes',
     ]
     
@@ -306,9 +308,13 @@ def _test_dictize(fixture_name):
         opts = { 'serialize-keys': True, 'key-prefix': 'test1', 'max-depth': n }
         yield _test_dictize_flattened, fixture_name, opts
 
-# Fixtures
+#
+# Fixture changesets
+#
 
-foo_updates = {
+updates = {}
+
+updates['foo'] = {
     'upd-1': {
         'rating': None,
         'temporal_extent' : { 'start': date(1999,1,1), },
@@ -361,15 +367,43 @@ foo_updates = {
     },
 }
 
+updates['inspire'] = {
+    'upd-1': {
+        'title': u"lala",
+        'denominator': [u"asd"],
+        'lineage': None,
+        'access_constraints': [u"lololo1"]
+    }, 
+    'upd-2': {
+        'bounding_box' : [{
+                'nblat': 1.0,
+                'sblat': 1.0,
+                'wblng': 1.0,
+                'eblng': 1.0,
+            },],
+        'temporal_extent' : [{ 
+            'start': date(1999,1,1), 
+            },]
+    },
+    'upd-3': {
+        'keywords': [{
+            'terms': ["agriculture", "climate"],
+            'thesaurus': { 'name': 'keywords-gemet-concepts', }
+        }],
+    },
+}
+
+#
 # Main 
+#
 
 if __name__ == '__main__':
     
     for t, x, y in test_dictize():
         t(x, y)
 
-    _test_dictize_update_foo('foo2', 'upd-4')
-
-    _test_dictize_update_foo_discard_junk('foo1', 'upd-1')
+    _test_dictize_update('foo2', 'foo', 'upd-4')
+    _test_dictize_update('inspire1', 'inspire', 'upd-3')
+    _test_dictize_update_discard_junk('foo1', 'foo', 'upd-1')
 
 
