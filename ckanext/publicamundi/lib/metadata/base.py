@@ -10,7 +10,7 @@ import zope.schema
 from ckanext.publicamundi.lib import dictization
 from ckanext.publicamundi.lib import logger
 from ckanext.publicamundi.lib.util import (
-    stringify_exception, item_setter, attr_setter)
+    stringify_exception, item_setter, attr_setter, not_a_function)
 from ckanext.publicamundi.lib.memoizer import memoize
 from ckanext.publicamundi.lib.json_encoder import JsonEncoder
 from ckanext.publicamundi.lib.metadata import adapter_registry
@@ -24,6 +24,10 @@ from ckanext.publicamundi.lib.metadata.formatters import (
 from ckanext.publicamundi.lib.metadata import serializers
 from ckanext.publicamundi.lib.metadata.serializers import (
     serializer_for_field, serializer_for_key_tuple, BaseSerializer)
+
+#
+# Utilities
+#
 
 def flatten_schema(schema):
     '''Flatten an arbitrary zope-based schema.
@@ -396,22 +400,27 @@ class Object(object):
     def get_field_names(cls):
         schema = cls.get_schema()
         return zope.schema.getFieldNames(schema) 
-         
+    
     @classmethod
-    def get_field_factory(cls, k, field=None):
+    def get_field_factory(cls, key=None, field=None):
         '''Find a proper factory to instantiate a field's value.
+        If not found, None is returned.
         '''
 
-        assert not k or isinstance(k, basestring)
+        assert not key or isinstance(key, basestring)
         assert not field or isinstance(field, zope.schema.Field)
-        assert k or field, 'One of {k, field} should be specified'
+        assert key or field, 'At least one of (key, field) must be provided'
         
-        factory = None
-        
+        return cls._get_field_factory(key, field)
+
+    @classmethod
+    @memoize
+    def _get_field_factory(cls, key, field):
+
         # Check if a factory is defined explicitly as a class attribute
         
-        if k and hasattr(cls, k):
-            factory = getattr(cls, k)
+        if key and hasattr(cls, key):
+            factory = getattr(cls, key)
             return factory if callable(factory) else None
         
         # If reached here, there is no hint via class attribute. 
@@ -419,9 +428,10 @@ class Object(object):
         
         if not field:
             schema = cls.get_schema()
-            field = schema.get(k)
-            if not field:
-                raise ValueError('No field %s for schema %s' %(k, schema))
+            field = schema.get(key)
+            assert field, 'No field %r in schema %s' % (key, schema)
+
+        factory = None
         if isinstance(field, zope.schema.Object):
             factory = adapter_registry.lookup([], field.schema)
         else:
@@ -999,7 +1009,8 @@ class Object(object):
                         f = None
                 else:
                     # An input was provided for k
-                    f = self._create_field(v, field)
+                    factory = obj.get_field_factory(k, field)
+                    f = self._create_field(v, field, factory)
                 setattr(obj, k, f)
 
             return self
@@ -1116,8 +1127,8 @@ class Object(object):
             if isinstance(field, zope.schema.Object):
                 if isinstance(v, dict):
                     # Load from a dict (if instance of Object)
-                    if factory is None:
-                        factory = obj_cls.get_field_factory(None, field)
+                    if not factory:
+                        factory = obj_cls.get_field_factory(field=field)
                     f = factory()
                     if isinstance(f, Object):
                         loader_cls(f, self.recurse_opts).load(v)
