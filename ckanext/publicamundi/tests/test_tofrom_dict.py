@@ -123,6 +123,17 @@ def _test_objects_update_foo(fixture_name, changeset):
         assert_equal(getattr(x2,k), getattr(x0,k))
    
     df2 = x2.to_dict(flat=1, opts={'serialize-keys': 1})
+
+    def is_reloaded(k):
+        '''Check if this key is fully reloaded via its parent'''
+        kp = k.split('.')[:-1]
+        while kp:
+            f = x0.get_field(kp)
+            if not f.queryTaggedValue('allow-partial-update', True):
+                return True
+            kp.pop()
+        return False
+
     for change, key, desc in dictdiffer.diff(df0, df2):
         if change == 'change':
             val0, val2 = desc
@@ -135,7 +146,9 @@ def _test_objects_update_foo(fixture_name, changeset):
                 assert df2[key2] == val2
         elif change == 'remove':
             for key0, val0 in desc:
-                assert df[key0] is None
+                # A key may be removed either by setting its update to None,
+                # or because its parent was updated as a whole 
+                assert ((key0 in df) and (df[key0] is None)) or is_reloaded(key0)
                 assert df0[key0] == val0
     
     pass
@@ -330,7 +343,7 @@ foo_updates = {
 
 if __name__ == '__main__':
 
-    _test_objects_update_foo('foo2', 'upd-4')
+    _test_objects_update_foo('foo1', 'upd-1')
 
     _test_objects_update_foo_discard_junk('foo1', 'upd-1')
 
