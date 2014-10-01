@@ -4,6 +4,8 @@ import json
 import geojson
 import shapely
 import collections
+from dictdiffer import (
+    dot_lookup, diff as diff_dicts, patch as patch_dict)
 
 from ckanext.publicamundi.lib.json_encoder import JsonEncoder
 

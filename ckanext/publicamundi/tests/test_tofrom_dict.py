@@ -7,6 +7,7 @@ import dictdiffer
 from datetime import date, time, datetime
 from itertools import chain
 
+from ckanext.publicamundi.lib.util import dot_lookup, diff_dicts
 from ckanext.publicamundi.lib.metadata.base import (
     Object, serializer_for_object,
     serializer_for_field, serializer_for_key_tuple)
@@ -14,13 +15,13 @@ from ckanext.publicamundi.lib.dictization import flatten
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata import types
 from ckanext.publicamundi.tests import fixtures
-from ckanext.publicamundi.tests.helpers import assert_equal, diff_dicts
+from ckanext.publicamundi.tests.helpers import assert_equal
 
 leaf_types = (basestring, bool, int, long, float,)
 
 @nose.tools.istest
 def test_dictize_update_foo_discard_junk():
-   
+
     for name in ['foo1', 'foo2', 'foo3', 'foo4', 'foo5', 'foo6', 'foo7']:
         for changeset in foo_updates.keys():
             yield _test_dictize_update_foo_discard_junk, name, changeset 
@@ -126,6 +127,20 @@ def _test_dictize_update_foo(fixture_name, changeset):
         assert_equal(getattr(x2,k), getattr(x0,k))
    
     df2 = x2.to_dict(flat=1, opts={'serialize-keys': 1})
+
+    def is_reloaded(k):
+        # Check if a None was replaced (in d) with a non-empty thing
+        if (df0[k] is None) and dot_lookup(d, k):
+            return True
+        # Check if is fully reloaded via its parent
+        kp = k.split('.')[:-1]
+        while kp:
+            f = x0.get_field(kp)
+            if not f.queryTaggedValue('allow-partial-update', True):
+                return True
+            kp.pop()
+        return False
+
     for change, key, desc in dictdiffer.diff(df0, df2):
         if change == 'change':
             val0, val2 = desc
@@ -138,7 +153,10 @@ def _test_dictize_update_foo(fixture_name, changeset):
                 assert df2[key2] == val2
         elif change == 'remove':
             for key0, val0 in desc:
-                assert val0 is None or df[key0] is None
+                # A key may be removed in the following cases
+                #  - by setting its update to None (df value)
+                #  - an ancestor or self was fully reloaded
+                assert ((key0 in df) and (df[key0] is None)) or is_reloaded(key0)
                 assert df0[key0] == val0
     
     pass
@@ -346,10 +364,6 @@ foo_updates = {
 # Main 
 
 if __name__ == '__main__':
-    
-    x = fixtures.foo2
-    d = x.to_dict(flat=1, opts={})
-    x1 = types.Foo().from_dict(d, is_flat=1, opts={})
     
     for t, x, y in test_dictize():
         t(x, y)

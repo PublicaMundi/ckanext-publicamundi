@@ -13,3 +13,4 @@ owslib==0.8.8
 inflection
 pytz
 isodate
+dictdiffer

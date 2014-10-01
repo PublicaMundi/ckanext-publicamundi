@@ -32,12 +32,6 @@ def assert_faulty_keys(x, expected_keys=[], expected_invariants=[]):
 def assert_equal(d1, d2):
     datadiff.tools.assert_equal(d1, d2)
 
-def diff_dicts(d1, d2):
-    return list(dictdiffer.diff(d1, d2))
-
-def patch_dict(diff_result, d):
-    dictdiffer.patch(diff_result, d)
-
 def pprint_code(s):
     return autopep8.fix_code(s, options=autopep8.parse_args(['-a', '']))
 

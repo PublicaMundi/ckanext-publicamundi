@@ -1053,7 +1053,15 @@ class Object(object):
                 setf(f)
                 return
             
-            # Update field's value (recursive, both f,v are not None)
+            # Check if field is meant to be partially updated
+
+            descend = field.queryTaggedValue('allow-partial-update', True)
+            if not descend:
+                f = self._create_field(v, field)
+                setf(f)
+                return
+
+            # Descend and update field's value (both f,v are not None)
             
             if isinstance(field, zope.schema.Object):
                 if isinstance(v, dict):
