@@ -15,7 +15,7 @@ from ckanext.publicamundi.lib.metadata.serializers import (
 
 from ckanext.publicamundi.lib.metadata.base import (
     Object, FieldContext, ErrorDict, 
-    object_null_adapter, object_factory,
+    object_null_adapter, get_object_factory,
     object_serialize_adapter, serializer_for_object,
     object_format_adapter, formatter_for_object, ObjectFormatter)
 

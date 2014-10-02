@@ -13,26 +13,32 @@ from ckan.tests import TestController as BaseTestController
 from ckanext.publicamundi.tests.functional import with_request_context
 from ckanext.publicamundi.tests import fixtures
 
-from ckanext.publicamundi.lib.metadata import adapter_registry 
+from ckanext.publicamundi.lib.metadata import (
+    adapter_registry, Object, FieldContext)
 from ckanext.publicamundi.lib.metadata.schemata import *
 from ckanext.publicamundi.lib.metadata.types import *
+from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata.widgets import ibase as ibase_widgets
 from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 from ckanext.publicamundi.lib.metadata.widgets import fields as field_widgets
-from ckanext.publicamundi.lib.metadata.widgets import markup_for_field, markup_for_object
-from ckanext.publicamundi.lib.metadata.widgets import field_widget_adapter
+from ckanext.publicamundi.lib.metadata.widgets import (
+    markup_for_field, markup_for_object, widget_for_object, widget_for_field)
+from ckanext.publicamundi.lib.metadata.widgets import (
+    field_widget_adapter, field_widget_multiadapter)
 
 log1 = logging.getLogger(__name__)
 
-## Define widgets ##
+#
+# Define widgets
+#
 
-@field_widget_adapter(zope.schema.interfaces.IBool, qualifiers=['checkbox1'])
+@field_widget_adapter(IBoolField, qualifiers=['checkbox1'])
 class BoolWidget1(base_widgets.EditFieldWidget):
     
     def get_template(self):
         return 'package/snippets/fields/edit-bool-checkbox-1.html'
 
-@field_widget_adapter(zope.schema.interfaces.IBool, qualifiers=['checkbox2'])
+@field_widget_adapter(IBoolField, qualifiers=['checkbox2'])
 class BoolWidget2(base_widgets.EditFieldWidget):
 
     def get_template(self):
@@ -42,33 +48,83 @@ BoolWidget3 = type('BoolWidget3', (base_widgets.EditFieldWidget,), {
     'get_template': None
 })
 BoolWidget3.get_template = lambda t: 'package/snippets/fields/edit-bool-checkbox-3.html'
-BoolWidget3 = \
-    field_widget_adapter(zope.schema.interfaces.IBool, qualifiers=['checkbox3'])\
-    (BoolWidget3)
+BoolWidget3 = field_widget_adapter(IBoolField, qualifiers=['checkbox3'])(BoolWidget3)
 
-## Tests ##
+class DummyImpl(NotImplementedError):
+    pass
+
+@field_widget_multiadapter([IListField, ITextLineField], qualifiers=['questions'])
+class QuestionsWidget(field_widgets.ListEditWidget):
+    
+    def get_template(self):
+        raise DummyImpl('This may be implemented')
+
+@field_widget_multiadapter([IDictField, IContactInfo], qualifiers=['contacts'])
+class ContactsWidget(field_widgets.DictEditWidget):
+    
+    def get_template(self):
+        raise DummyImpl('This may be implemented')
+
+#
+# Tests
+#
 
 class TestController(BaseTestController):
 
     ## Test fields ##
- 
+    
+    @nose.tools.istest
+    def test_multiadapter(self):
+        yield self._test_multiadapter
+     
+    @with_request_context('publicamundi-tests', 'index')
+    def _test_multiadapter(self):
+        '''Test multiadapters on collection-based fields'''
+        
+        # Adapt to (Dict, ContactInfo)
+
+        field = fixtures.foo1.get_field(('contacts',))
+        
+        widget = widget_for_field('edit', field)
+        print widget.render(name_prefix='test1', data={}) 
+        
+        widget = widget_for_field('edit:contacts', field)
+        try:
+            print widget.render(name_prefix='test1', data={}) 
+        except DummyImpl:
+            print '<dummy implementation for edit:contacts for %r>' %(field)
+        else:
+            assert False, 'This should have raised DummyImpl'
+
+        # Adapt to (List, TextLine)
+        
+        field = zope.schema.List(
+            title=u'Questions',
+            value_type=zope.schema.TextLine(title=u'Question'),
+        )
+        field = field.bind(FieldContext(key='q', value=[u'when', u'where']))
+
+        widget = widget_for_field('edit', field)
+        print widget.render(name_prefix='test1', data={}) 
+        
+        widget = widget_for_field('edit:questions', field)
+        try:
+            print widget.render(name_prefix='test1', data={}) 
+        except DummyImpl:
+            print '<dummy implementation for edit:questions for %r>' %(field)
+        else:
+            assert False, 'This should have raised DummyImpl'
+    
     @nose.tools.istest
     def test_registered_field_widgets(self):
         field_ifaces = [
-            zope.schema.interfaces.IBool,
-            zope.schema.interfaces.IChoice,
-            zope.schema.interfaces.IText, 
-            zope.schema.interfaces.ITextLine,
-            zope.schema.interfaces.IURI,
-            zope.schema.interfaces.IInt,
-            zope.schema.interfaces.IFloat,
-            zope.schema.interfaces.IDate,
-            zope.schema.interfaces.IDatetime,
-            zope.schema.interfaces.ITime,
-            zope.schema.interfaces.IList,
-            zope.schema.interfaces.IDict,
-            zope.schema.interfaces.IObject,
-            z3c.schema.email.interfaces.IRFC822MailAddress,
+            IBoolField,
+            IChoiceField, ITextField, ITextLineField,
+            IURIField,
+            IEmailAddressField,
+            IIntField, IFloatField,
+            IDateField, IDatetimeField, ITimeField,
+            IListField, IDictField, IObjectField,
         ]
         for iface in field_ifaces:
             yield self._test_registered_field_widgets, iface
@@ -127,7 +183,6 @@ class TestController(BaseTestController):
             assert e
             assert e.attr('name').startswith('%s.%s' %(fixture_name, k))
             assert e.attr('id').startswith('input-%s.%s' %(fixture_name, k))
-
 
     ## Test objects ##
     

@@ -4,7 +4,7 @@ from zope.interface.verify import verifyObject
 import json
 
 from ckanext.publicamundi.lib.metadata import (
-    Object, object_factory, object_null_adapter)
+    Object, get_object_factory, object_null_adapter)
 from ckanext.publicamundi.lib.metadata import types
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.tests import fixtures
@@ -37,12 +37,12 @@ class AnotherFoo(Object):
 
 def test_factories():
 
-    fc1 = object_factory(schemata.IFoo)
+    fc1 = get_object_factory(schemata.IFoo)
     o1 = fc1()
     verifyObject(schemata.IFoo, o1)
     assert isinstance(o1, types.Foo)
     
-    fc2 = object_factory(schemata.IFoo, name='another-foo')
+    fc2 = get_object_factory(schemata.IFoo, name='another-foo')
     o2 = fc2()
     verifyObject(schemata.IFoo, o2)
     assert isinstance(o2, AnotherFoo)
@@ -52,7 +52,7 @@ def test_factories():
         isinstance(o2.contact_info, types.ContactInfo))
     
     try:
-        fc3 = object_factory(schemata.IFoo, name='a-non-existing-name')
+        fc3 = get_object_factory(schemata.IFoo, name='a-non-existing-name')
     except (ValueError, LookupError) as ex:
         pass
     else:
