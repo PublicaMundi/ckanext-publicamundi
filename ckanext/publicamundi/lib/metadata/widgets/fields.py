@@ -128,10 +128,8 @@ class DatetimeEditWidget(base_widgets.EditFieldWidget):
 @field_widget_adapter(ITupleField)
 class ListEditWidget(base_widgets.EditFieldWidget, base_widgets.ListFieldWidgetTraits):
 
-    def __init__(self, field):
-        assert \
-            isinstance(field, zope.schema.List) or \
-            isinstance(field, zope.schema.Tuple)
+    def __init__(self, field, *args):
+        assert isinstance(field, (ListField, TupleField))
         base_widgets.EditFieldWidget.__init__(self, field)
 
     def get_template(self):
@@ -151,8 +149,8 @@ class TagsEditWidget(base_widgets.EditFieldWidget):
 @field_widget_adapter(IDictField)
 class DictEditWidget(base_widgets.EditFieldWidget, base_widgets.DictFieldWidgetTraits):
 
-    def __init__(self, field):
-        assert isinstance(field, zope.schema.Dict)
+    def __init__(self, field, *args):
+        assert isinstance(field, DictField)
         base_widgets.EditFieldWidget.__init__(self, field)
 
     def get_template(self):

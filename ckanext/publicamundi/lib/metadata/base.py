@@ -1215,9 +1215,13 @@ def object_null_adapter(name=''):
         return cls
     return decorate
 
-def object_factory(schema, name=''):
+@memoize
+def _get_object_factory(schema, name):
     factory = Object.Factory(schema, name)
     return factory.default_factory
+
+def get_object_factory(schema, name=''):
+    return _get_object_factory(schema, name)
 
 #
 # Serializers
