@@ -129,7 +129,7 @@ class Object(object):
                 yield k, field
         else:
             for k, field in fields:
-                a = getattr(cls, k)
+                a = getattr(cls, k, None)
                 if isinstance(a, property):
                     continue
                 yield k, field
@@ -383,7 +383,7 @@ class Object(object):
         return res
    
     def __ne__(self, other):
-        return not self == other
+        return not self.__eq__(other)
 
     ## Introspective helpers
 
@@ -416,9 +416,15 @@ class Object(object):
     @classmethod
     @memoize
     def _get_field_factory(cls, key, field):
-
-        # Check if a factory is defined explicitly as a class attribute
+        '''Find a factory for a field. 
         
+        If key is supplied, we try to find it via a class attribute. If it fails 
+        (or key is not supplied), we fall back to an adapter lookup on field's 
+        schema.
+        '''
+        
+        # Check if a factory is defined explicitly as a class attribute
+
         if key and hasattr(cls, key):
             factory = getattr(cls, key)
             return factory if callable(factory) else None
@@ -1147,23 +1153,32 @@ class Object(object):
 
     class Factory(object):
 
-        __slots__ = ('opts', 'target_iface', 'target_factory')
+        __slots__ = ('opts', 'name', 'target_iface', 'target_factory')
         
-        def __init__(self, iface, opts={}):
+        def __init__(self, iface, name='', opts={}):
             if not iface.extends(IObject): 
                 raise ValueError('Expected an interface based on IObject')
             
             self.target_iface = iface
-            self.target_factory = adapter_registry.lookup([], iface, '')
+            self.name = name
+            self.target_factory = adapter_registry.lookup([], iface, name)
             if not self.target_factory:
-                raise ValueError('Cannot find an implementor for %s' %(iface))
+                raise LookupError('Cannot find an implementor for %s named %r' % (
+                    iface, name))
             
             self.opts = {'unserialize-values': False}
             self.opts.update(opts)
 
+        @property
+        def default_factory(self):
+            return self.target_factory
+
         def from_dict(self, d, is_flat=False):
             obj = self.target_factory()
-            return obj.from_dict(d, is_flat, self.opts)
+            if d:
+                return obj.from_dict(d, is_flat, self.opts)
+            else:
+                return obj
 
         def __call__(self, d={}, is_flat=False):
             return self.from_dict(d, is_flat)
@@ -1199,6 +1214,10 @@ def object_null_adapter(name=''):
         adapter_registry.register([], provided_iface, name, cls)
         return cls
     return decorate
+
+def object_factory(schema, name=''):
+    factory = Object.Factory(schema, name)
+    return factory.default_factory
 
 #
 # Serializers
