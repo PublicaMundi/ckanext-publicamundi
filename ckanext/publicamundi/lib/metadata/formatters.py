@@ -24,7 +24,7 @@ __all__ = [
     'formatter_for_field',
 ]
 
-supported_formats = [ 'default', 'summary', ]
+supported_formats = ['default', 'summary',]
 
 # Format specifiers
 

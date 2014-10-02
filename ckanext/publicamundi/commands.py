@@ -2,23 +2,28 @@ import sys
 import re
 import os.path
 import json
-import logging
 import itertools
 import optparse
+import zope.interface
+import zope.schema
+import logging
 from optparse import make_option 
 from zope.dottedname.resolve import resolve
+from itertools import product, chain
 
 import ckan.model as model
 import ckan.logic as logic
-
 from ckan.logic import get_action, ValidationError
 from ckan.lib.cli import CkanCommand
 
+from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.cli import CommandDispatcher
 
 class Command(CommandDispatcher):
     '''This is a Paster command for several publicamundi-related subcommands
-    >>> paster [PASTER-OPTIONS] publicamundi [--config INI_FILE] [--setup-app] [COMMAND] [COMMAND-OPTIONS]
+    
+    >>> paster [PASTER-OPTS] publicamundi [--config FILE] [--setup-app] [COMMAND] [COMMAND-OPTS]
+    
     '''
 
     summary = '''This is a Paster command for several publicamundi-related subcommands'''
@@ -53,65 +58,57 @@ class Command(CommandDispatcher):
     def print_widget_info(self, opts, *args):
         '''Print information for registered widgets
         '''
-
-        import zope.interface
-        import zope.schema
-        
-        from itertools import product
       
         from ckanext.publicamundi.lib.metadata import adapter_registry 
         from ckanext.publicamundi.lib.metadata import schemata
         from ckanext.publicamundi.lib.metadata import types
         from ckanext.publicamundi.lib.metadata import widgets
-       
+
+        def iter_object_schemata():
+            for name in dir(schemata):
+                x = getattr(schemata, name)
+                if not isinstance(x, zope.interface.interface.InterfaceClass):
+                    continue
+                if not x.extends(schemata.IObject):
+                    continue
+                yield x
+
+        object_schemata = list(iter_object_schemata())
+
         #
         # Widgets for fields
         #
 
         field_cls = None
         if opts.field_cls:
-            assert re.match('zope\.schema\.(\w+)$', opts.field_cls), \
-                'Expected a zope.schema.Field-based field class'
+            assert re.match('zope\.schema\.(\w+)$', opts.field_cls), (
+                'Expected a zope.schema.Field-based field class')
             field_cls = resolve(opts.field_cls)
-            assert isinstance(field_cls, type), \
-                'The name "%s" does not resolve to a class' %(opts.field_cls)
+            assert isinstance(field_cls, type), (
+                'The name "%s" does not resolve to a class' %(opts.field_cls))
         
-        container_field_ifaces = [ 
-            zope.schema.interfaces.IList,
-            zope.schema.interfaces.IDict,
-            #zope.schema.interfaces.ITuple,
+        container_field_ifaces = [
+            IListField, IDictField, #ITupleField,
         ]
 
         leaf_field_ifaces = [
-            zope.schema.interfaces.IBool,
-            zope.schema.interfaces.IBytes,
-            zope.schema.interfaces.IBytesLine,
-            zope.schema.interfaces.IChoice,
-            zope.schema.interfaces.IDate,
-            zope.schema.interfaces.IDatetime,
-            zope.schema.interfaces.IDecimal,
-            zope.schema.interfaces.IDottedName,
-            zope.schema.interfaces.IFloat,
-            zope.schema.interfaces.IId,
-            zope.schema.interfaces.IInt,
-            zope.schema.interfaces.IObject,
-            zope.schema.interfaces.IPassword,
-            zope.schema.interfaces.ITerm,
-            zope.schema.interfaces.IText,
-            zope.schema.interfaces.ITextLine,
-            zope.schema.interfaces.ITime,
-            zope.schema.interfaces.ITimedelta,
-            zope.schema.interfaces.IURI,
+            IBoolField, IDecimalField, IFloatField, IIntField,
+            INativeStringField, INativeStringLineField, IDottedNameField, IChoiceField,
+            IDateField, IDatetimeField, ITimeField, ITimedeltaField,
+            IPasswordField, ITextField, ITextLineField,
+            IURIField, IIdField,
         ]
-
+        
         if opts.show_fields:
-            print
-            print ' == Widgets for zope.schema-based fields == '
-            print
+            print '\n == Widgets for zope.schema-based fields == \n'
             
-            adaptee_vectors = [ (r,) for r in leaf_field_ifaces ] + \
-                list(product(container_field_ifaces, leaf_field_ifaces)) + \
-                list(product(container_field_ifaces, container_field_ifaces, leaf_field_ifaces));
+            g1 = ((r,) for r in leaf_field_ifaces)
+            gf2 = product(container_field_ifaces, leaf_field_ifaces)
+            gs2 = product(container_field_ifaces, object_schemata)
+            gf3 = product(container_field_ifaces, container_field_ifaces, leaf_field_ifaces)
+            gs3 = product(container_field_ifaces, container_field_ifaces, object_schemata)
+
+            adaptee_vectors = chain(g1, gf2, gs2)
             
             for adaptee in adaptee_vectors:
                 if not field_cls or adaptee[0].implementedBy(field_cls): 
@@ -129,28 +126,15 @@ class Command(CommandDispatcher):
         object_cls = None
         if opts.object_cls:
             object_cls = resolve(opts.object_cls)
-            assert isinstance(object_cls, type), \
-                'The name "%s" does not resolve to a class' %(opts.object_cls)
+            assert isinstance(object_cls, type), (
+                'The name "%s" does not resolve to a class' %(opts.object_cls))
        
-        def is_object_iface(x):
-            if not isinstance(x, zope.interface.interface.InterfaceClass):
-                return False
-            if not x.extends(schemata.IObject):
-                return False
-            return True
-
         if opts.show_objects:
-            print
-            print ' == Widgets for object schemata == '
-            print
-            for name in dir(schemata):
-                x = getattr(schemata, name)
-                if not is_object_iface(x):
-                    continue
-                object_iface = x
-                if not object_cls or object_iface.implementedBy(object_cls): 
-                    print '[' + object_iface.__name__ + ']'
-                    adaptee = [object_iface]
+            print '\n == Widgets for object schemata == \n'
+            for iface in object_schemata:
+                if not object_cls or iface.implementedBy(object_cls): 
+                    print '[' + iface.__name__ + ']'
+                    adaptee = [iface]
                     m = adapter_registry.lookupAll(adaptee, widgets.IObjectWidget)
                     if not m:
                         print '  --'

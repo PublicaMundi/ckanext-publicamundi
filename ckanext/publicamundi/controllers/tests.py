@@ -18,13 +18,16 @@ from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata import types
 from ckanext.publicamundi.lib.metadata.types import Object
 from ckanext.publicamundi.lib.metadata.widgets import (
-    markup_for_field, markup_for_object)
+    markup_for_field, markup_for_object, widget_for_object, widget_for_field)
 
 from ckanext.publicamundi.tests import fixtures
 
 log1 = logging.getLogger(__name__)
 
 class TestsController(BaseController):
+
+    def brk(self):
+        raise Breakpoint()
 
     def index(self, id=None):
         return u'Another test!'
