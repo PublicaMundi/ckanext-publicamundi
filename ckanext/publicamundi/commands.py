@@ -9,7 +9,6 @@ import zope.schema
 import logging
 from optparse import make_option 
 from zope.dottedname.resolve import resolve
-from itertools import product, chain
 
 import ckan.model as model
 import ckan.logic as logic
@@ -17,13 +16,19 @@ from ckan.logic import get_action, ValidationError
 from ckan.lib.cli import CkanCommand
 
 from ckanext.publicamundi.lib.metadata.fields import *
+from ckanext.publicamundi.lib.metadata import adapter_registry 
+from ckanext.publicamundi.lib.metadata import schemata 
+from ckanext.publicamundi.lib.metadata import types
 from ckanext.publicamundi.lib.cli import CommandDispatcher
+
+subcommand = CommandDispatcher.subcommand
 
 class Command(CommandDispatcher):
     '''This is a Paster command for several publicamundi-related subcommands
     
-    >>> paster [PASTER-OPTS] publicamundi [--config FILE] [--setup-app] [COMMAND] [COMMAND-OPTS]
-    
+    >>> paster [PASTER-OPTS] publicamundi --config FILE [--setup-app] [COMMAND] [COMMAND-OPTS]
+
+    Invoke with '?' as a COMMAND in order to get a list of available commands.
     '''
 
     summary = '''This is a Paster command for several publicamundi-related subcommands'''
@@ -37,7 +42,7 @@ class Command(CommandDispatcher):
             make_option('--name', type='string', dest='name'),
             make_option('--num', type='int', dest='num', default=5),
         ],
-        'widget-info': [
+        'adapter-registry-info': [
             make_option('--no-fields', action='store_false', dest='show_fields', default=True),
             make_option('--field-cls', type='string', dest='field_cls', 
                 help='Filter results regarding only this field class (e.g. zope.schema.Date)'),
@@ -47,103 +52,110 @@ class Command(CommandDispatcher):
         ], 
     }
 
-    @CommandDispatcher.subcommand(name='greet', options=options_config['greet'])
+    @subcommand(
+        name='greet', options=options_config['greet'])
     def greet(self, opts, *args):
         '''Greet with a helloworld message
         '''
         self.logger.info('Running "greet" with args: %r %r', opts, args)
         print 'Hello %s' %(opts.name)
     
-    @CommandDispatcher.subcommand(name='widget-info', options=options_config['widget-info'])
+    @subcommand(
+        name='formatter-info', options=options_config['adapter-registry-info'])
+    def print_formatter_info(self, opts, *args):
+        '''Print information for registered formatters
+        '''
+       
+        from ckanext.publicamundi.lib.metadata.util import (
+            iter_object_schemata, iter_field_adaptee_vectors)
+        from ckanext.publicamundi.lib.metadata import formatters
+        
+        format_result = lambda qa, cls: '  %-22.20s %s.%s' % (
+            qa, cls.__module__, cls.__name__)
+    
+        object_schemata = list(iter_object_schemata())
+        
+        # Formatters for fields
+
+        field_cls = resolve_field_cls(opts.field_cls) if opts.field_cls else None
+        
+        if opts.show_fields:
+            print '\n == Formatters for zope.schema-based fields == \n'
+            for adaptee in iter_field_adaptee_vectors():
+                if not field_cls or adaptee[0].implementedBy(field_cls): 
+                    m = adapter_registry.lookupAll(adaptee, formatters.IFormatter)
+                    if not m:
+                        continue
+                    print '[' + ', '.join([ir.__name__ for ir in adaptee]) + ']'
+                    for qa, widget_cls in m:
+                        print format_result(qa, widget_cls)
+        
+        # Formatters for objects
+
+        object_cls = resolve_object_cls(opts.object_cls) if opts.object_cls else None
+       
+        if opts.show_objects:
+            print '\n == Formatters for object schemata == \n'
+            for iface in object_schemata:
+                if not object_cls or iface.implementedBy(object_cls): 
+                    adaptee = [iface]
+                    m = adapter_registry.lookupAll(adaptee, formatters.IFormatter)
+                    if not m:
+                        continue
+                    print '[' + iface.__name__ + ']'
+                    for qa, widget_cls in m:
+                        print format_result(qa, widget_cls)
+
+    @subcommand(
+        name='widget-info', options=options_config['adapter-registry-info'])
     def print_widget_info(self, opts, *args):
         '''Print information for registered widgets
         '''
-      
-        from ckanext.publicamundi.lib.metadata import adapter_registry 
-        from ckanext.publicamundi.lib.metadata import schemata
-        from ckanext.publicamundi.lib.metadata import types
+       
+        from ckanext.publicamundi.lib.metadata.util import (
+            iter_object_schemata, iter_field_adaptee_vectors)
         from ckanext.publicamundi.lib.metadata import widgets
-
-        def iter_object_schemata():
-            for name in dir(schemata):
-                x = getattr(schemata, name)
-                if not isinstance(x, zope.interface.interface.InterfaceClass):
-                    continue
-                if not x.extends(schemata.IObject):
-                    continue
-                yield x
+        
+        format_result = lambda qa, cls: '  %-22.20s %s.%s' % (
+            qa, cls.__module__, cls.__name__)
 
         object_schemata = list(iter_object_schemata())
 
-        #
         # Widgets for fields
-        #
-
-        field_cls = None
-        if opts.field_cls:
-            assert re.match('zope\.schema\.(\w+)$', opts.field_cls), (
-                'Expected a zope.schema.Field-based field class')
-            field_cls = resolve(opts.field_cls)
-            assert isinstance(field_cls, type), (
-                'The name "%s" does not resolve to a class' %(opts.field_cls))
         
-        container_field_ifaces = [
-            IListField, IDictField, #ITupleField,
-        ]
-
-        leaf_field_ifaces = [
-            IBoolField, IDecimalField, IFloatField, IIntField,
-            INativeStringField, INativeStringLineField, IDottedNameField, IChoiceField,
-            IDateField, IDatetimeField, ITimeField, ITimedeltaField,
-            IPasswordField, ITextField, ITextLineField,
-            IURIField, IIdField,
-        ]
+        field_cls = resolve_field_cls(opts.field_cls) if opts.field_cls else None
         
         if opts.show_fields:
             print '\n == Widgets for zope.schema-based fields == \n'
-            
-            g1 = ((r,) for r in leaf_field_ifaces)
-            gf2 = product(container_field_ifaces, leaf_field_ifaces)
-            gs2 = product(container_field_ifaces, object_schemata)
-            gf3 = product(container_field_ifaces, container_field_ifaces, leaf_field_ifaces)
-            gs3 = product(container_field_ifaces, container_field_ifaces, object_schemata)
-
-            adaptee_vectors = chain(g1, gf2, gs2)
-            
-            for adaptee in adaptee_vectors:
+            for adaptee in iter_field_adaptee_vectors():
                 if not field_cls or adaptee[0].implementedBy(field_cls): 
-                    print '[' +  ', '.join([ ir.__name__ for ir in adaptee ]) + ']'
                     m = adapter_registry.lookupAll(adaptee, widgets.IFieldWidget)
                     if not m:
-                        print '  --'
-                    for qualified_action, widget_cls in m:
-                        print '  %-22.22s %r' %(qualified_action, widget_cls)
+                        continue
+                    print '[' + ', '.join([ir.__name__ for ir in adaptee]) + ']'
+                    for qa, widget_cls in m:
+                        print format_result(qa, widget_cls)
         
-        #
         # Widgets for objects
-        #
 
-        object_cls = None
-        if opts.object_cls:
-            object_cls = resolve(opts.object_cls)
-            assert isinstance(object_cls, type), (
-                'The name "%s" does not resolve to a class' %(opts.object_cls))
+        object_cls = resolve_object_cls(opts.object_cls) if opts.object_cls else None
        
         if opts.show_objects:
             print '\n == Widgets for object schemata == \n'
             for iface in object_schemata:
                 if not object_cls or iface.implementedBy(object_cls): 
-                    print '[' + iface.__name__ + ']'
                     adaptee = [iface]
                     m = adapter_registry.lookupAll(adaptee, widgets.IObjectWidget)
                     if not m:
-                        print '  --'
-                    for qualified_action, widget_cls in m:
-                        print '  %-22.22s %r' %(qualified_action, widget_cls)
-
+                        continue
+                    print '[' + iface.__name__ + ']'
+                    for qa, widget_cls in m:
+                        print format_result(qa, widget_cls)
+    
 class Example1(CkanCommand):
     '''This is an example of a publicamundi-specific paster command:
-    >>> paster [PASTER-OPTIONS] publicamundi-example1 --config=../ckan/development.ini [COMMAND-OPTIONS]
+
+    >>> paster [PASTER-OPTS] publicamundi-example1 --config=FILE [COMMAND-OPTS]
     '''
 
     summary = 'This is an example of a publicamundi-specific paster command'
@@ -182,7 +194,8 @@ class Example1(CkanCommand):
 
 class Setup(CkanCommand):
     '''Setup publicamundi extension (create tables, populate with initial data).
-    >>> paster [PASTER-OPTIONS] publicamundi-setup --config=../ckan/development.ini [COMMAND-OPTIONS]
+    
+    >>> paster [PASTER-OPTS] publicamundi-setup --config=FILE [COMMAND-OPTS]
     '''
 
     summary = 'Setup publicamundi extension'
@@ -207,7 +220,8 @@ class Setup(CkanCommand):
 
 class Cleanup(CkanCommand):
     '''Cleanup publicamundi extension.
-    >>> paster [PASTER-OPTIONS] publicamundi-cleanup --config=../ckan/development.ini [COMMAND-OPTIONS]
+
+    >>> paster [PASTER-OPTS] publicamundi-cleanup --config=FILE [COMMAND-OPTS]
     '''
 
     summary = 'Cleanup publicamundi extension'
@@ -230,3 +244,25 @@ class Cleanup(CkanCommand):
 
         self.log.info('Cleanup complete')
 
+#
+# Helpers
+#
+
+def resolve_field_cls(name):
+    assert re.match('(zope|z3c)\.schema\.(\w+)$', name), (
+        'The name %r doesnt look like a field class' % (name))
+    field_cls = resolve(name)
+    assert isinstance(field_cls, type), (
+        'The name %r doesnt resolve to a class' %(name))
+    assert issubclass(field_cls, zope.schema.Field), (
+        'Expected a zope.schema.Field-based field class (got %r)' % (field_cls))
+    return field_cls
+
+def resolve_object_cls(name):
+    object_cls = resolve(name)
+    assert isinstance(object_cls, type), (
+        'The name %r doesnt resolve to a class' %(name))
+    assert issubclass(object_cls, types.Object), (
+        'Expected a subclass of %r (got %r)' % (types.Object, field_cls))
+    return object_cls
+    
