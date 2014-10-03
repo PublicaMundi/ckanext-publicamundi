@@ -16,7 +16,7 @@ def parser_error(msg):
 class CommandDispatcher(CkanCommand):
     '''A command dispatcher for various publicamundi-related subcommands'''
 
-    __usage = '''paster [PASTER-OPTIONS] publicamundi [--config INI_FILE] [--setup-app] %(name)s [%(name)s-OPTIONS]'''
+    __usage = '''paster [PASTER-OPTS] publicamundi --config FILE [--setup-app] %(name)s [%(name)s-OPTS]'''
 
     __specs = {}
 
@@ -67,7 +67,7 @@ class CommandDispatcher(CkanCommand):
         self.logger.debug('Remaining args are ' + repr(self.args))
         self.logger.debug('Options are ' + repr(self.options))
 
-        subcommand = self.args.pop(0) if self.args else 'help'
+        subcommand = self.args.pop(0) if self.args else '?'
 
         if subcommand == 'help':
             print self.__doc__
@@ -94,10 +94,11 @@ class CommandDispatcher(CkanCommand):
                     subcommand, opts, args))
                 return method(self, opts, *args)
         else:
-            self.logger.error('Got an unknown subcommand: %s' %(subcommand))
-            print 'The available publicamundi commands are:'
+            if subcommand != '?':
+                self.logger.error('Got an unknown subcommand: %s' %(subcommand))
+            print 'The available publicamundi commands are:\n'
             for k, spec in self.get_subcommand_specs():
                 method = spec['method']    
-                print '  %s: %s' %(k, method.__doc__.split("\n")[0])
+                print ' * %s: %s\n' %(k, method.__doc__.split("\n")[0])
             return
     
