@@ -1,5 +1,10 @@
-'''Import into our namespace a set of commonly used classes/interfaces 
+'''Basic imports for zope-based fields.
+
+1. Import into our namespace a set of commonly used classes/interfaces 
 from zope.schema-related modules.
+
+2. Define field-related utility functions (adaptation helpers etc.)
+
 '''
 
 import zope.interface
@@ -9,7 +14,7 @@ import z3c.schema.email
 
 __all__ = [
     
-    # field interfaces
+    # Export field interfaces
     
     'IField',
     'ITextField',
@@ -40,7 +45,7 @@ __all__ = [
     'IObjectField',
     'IEmailAddressField',
     
-    # fields
+    # Export field classes
     
     'TextField',
     'TextLineField',
@@ -66,8 +71,13 @@ __all__ = [
     'TupleField',
     'ObjectField',
     'EmailAddressField',
-
+    
+    # Export helpers / utilities
 ]
+
+#
+# Imports
+#
 
 from zope.schema.interfaces import (
     IField,
@@ -145,4 +155,69 @@ from zope.schema import (
 
 from z3c.schema.email import (
     RFC822MailAddress as EmailAddressField,)
+
+#
+# Helpers
+#
+
+container_ifaces = [
+    IListField,
+    IDictField,
+    ITupleField,
+]
+
+leaf_ifaces = [
+    IBoolField,
+    IDecimalField,
+    IFloatField,
+    IIntField,
+    INativeStringField,
+    INativeStringLineField,
+    IDottedNameField,
+    IChoiceField,
+    IDateField,
+    IDatetimeField,
+    ITimeField,
+    ITimedeltaField,
+    IPasswordField,
+    ITextField,
+    ITextLineField,
+    IURIField,
+    IIdField,
+]
+
+
+#
+# Utilities
+#
+
+def build_adaptee(field, expand_collection=True):
+    '''Build an adaptee vector for a field instance.
+    
+    This vector is to be used while trying to adapt on fields (for serialization,
+    formatting, widgets etc.).
+    '''
+
+    # Load (if not allready) the object-factory lookup function. 
+    # Note it must be lazily loaded, as is not available at module's load time.
+    from ckanext.publicamundi.lib.metadata import get_object_factory
+    
+    # Build adaptee vector
+
+    adaptee = [field]
+    
+    if not expand_collection:
+        return adaptee
+
+    y = field
+    while IContainerField.providedBy(y):
+        adaptee.append(y.value_type)
+        y = y.value_type
+     
+    if not (y is field) and IObjectField.providedBy(y):
+        # Need a multiadapter for a (probably nested) container of objects:
+        # replace field (instance of ObjectField) with a dummy object
+        adaptee[-1] = get_object_factory(y.schema)()
+
+    return adaptee
 

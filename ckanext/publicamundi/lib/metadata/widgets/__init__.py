@@ -174,6 +174,8 @@ def widget_for_field(qualified_action, field, errors={}):
     The given field should be a bound instance of zope.schema.Field.
     '''
 
+    from ckanext.publicamundi.lib.metadata.fields import build_adaptee
+    
     # Build a list with candidate names
     
     q = QualAction.from_string(qualified_action)
@@ -181,17 +183,7 @@ def widget_for_field(qualified_action, field, errors={}):
 
     # Build adaptee vector
     
-    adaptee = [field]
-
-    y = field
-    while IContainerField.providedBy(y):
-        adaptee.append(y.value_type)
-        y = y.value_type
-     
-    if not (y is field) and IObjectField.providedBy(y):
-        # Need a multiadapter for a (probably nested) container of objects:
-        # replace field (instance of ObjectField) with a dummy object
-        adaptee[-1] = get_object_factory(y.schema)()
+    adaptee = build_adaptee(field, expand_collection=True)
 
     # Lookup registry
     
