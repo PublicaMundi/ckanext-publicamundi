@@ -406,7 +406,7 @@ class Object(object):
         '''Find a proper factory to instantiate a field's value.
         If not found, None is returned.
         '''
-        
+
         assert not key or isinstance(key, basestring)
         assert not field or isinstance(field, zope.schema.Field)
         assert key or field, 'At least one of (key, field) must be provided'
@@ -436,7 +436,7 @@ class Object(object):
             schema = cls.get_schema()
             field = schema.get(key)
             assert field, 'No field %r in schema %s' % (key, schema)
-        
+
         factory = None
         if isinstance(field, zope.schema.Object):
             factory = adapter_registry.lookup([], field.schema)
@@ -444,7 +444,7 @@ class Object(object):
             factory = field.defaultFactory
         
         return factory
-             
+
     ## Field accessors 
     
     def _get_field(self, kt):

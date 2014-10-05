@@ -1,12 +1,16 @@
 {% import "macros/form.html" as form %}
+{% import "macros/markup_helpers.html" as markup_helpers %}
 
 {% set data = data or {} %}
 {% set errors = errors or {} %}
 
 <form id="package-form" class="dataset-form dataset-resource-form form-horizontal" method="post" data-module="basic-form">
   {{ h.snippet('package/snippets/stages.html', stages=['complete', 'complete', 'active'], pkg_name=pkg_name) }}
-  {{ form.errors(error_summary) }}
   
+  {% block errors %}
+  {{ markup_helpers.error_messages(errors) }}
+  {% endblock %}
+
   {% block package_fields_autofill %}
   <span class="btn btn-warning hide" data-module="form-autofiller" data-module-formid="package-form">Auto</span>
   {% resource 'ckanext-publicamundi/form-autofiller'  %}

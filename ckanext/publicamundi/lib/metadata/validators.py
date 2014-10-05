@@ -55,8 +55,8 @@ def dictize_for_extras(obj, key_prefix):
         'serialize-values': 'default',
         'key-prefix': key_prefix,
     }
-
     res = obj.to_dict(flat=True, opts=dictz_opts)
+    res = { k: v for k, v in res.iteritems() if v is not None }
     return res
 
 ## Validators/Converters 
@@ -114,7 +114,7 @@ def postprocess_dataset_for_edit(key, data, errors, context):
     #raise Breakpoint('postprocess_dataset_for_edit')
 
     if is_new and not requested_with_api:
-        return # noop: core metadata expected
+        return # noop: only core metadata expected
 
     dt = data[('dataset_type',)]
     dt_spec = dataset_types.get(dt)
@@ -146,7 +146,8 @@ def postprocess_dataset_for_edit(key, data, errors, context):
     for key, val in extras_dict.iteritems():
         extras_list.append({ 'key': key, 'value': val })
     assert not find_all_duplicates(map(lambda t: t['key'], extras_list))
-
+    
+    debug('Saved %d %s-related fields into extras' % (len(extras_dict), dt))
     return
 
 def preprocess_dataset_for_edit(key, data, errors, context):
@@ -182,7 +183,7 @@ def preprocess_dataset_for_edit(key, data, errors, context):
         # Convert to expected flat fields
         key_converter = lambda k: '.'.join((key_prefix,) +k)
         r = dictization.flatten(r, key_converter)
-        data.update({ (k,):v for k, v in r.iteritems() })
+        data.update({ (k,): v for k, v in r.iteritems() })
 
     #raise Breakpoint('preprocess_dataset_for_edit')
     pass
@@ -198,10 +199,9 @@ def get_field_edit_processor(field):
     '''
 
     def convert(key, data, errors, context):
-        logger.debug('Processing field %s for editing' %(key[0]))
-        
         value = data.get(key)
-        
+        logger.debug('Processing field %s for editing (%r)', key[0], value)
+         
         ser = serializer_for_field(field)
 
         # Not supposed to handle missing inputs here
@@ -257,10 +257,9 @@ def get_field_read_processor(field):
     '''
 
     def convert(key, data, errors, context):
-        logger.debug('Processing field %s for reading' %(key[0]))
-        
         value = data.get(key)
-
+        logger.debug('Processing field %s for reading (%r)', key[0], value)
+        
         assert not value is missing
         assert isinstance(value, basestring)
         

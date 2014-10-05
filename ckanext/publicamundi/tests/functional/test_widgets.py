@@ -50,21 +50,6 @@ BoolWidget3 = type('BoolWidget3', (base_widgets.EditFieldWidget,), {
 BoolWidget3.get_template = lambda t: 'package/snippets/fields/edit-bool-checkbox-3.html'
 BoolWidget3 = field_widget_adapter(IBoolField, qualifiers=['checkbox3'])(BoolWidget3)
 
-class DummyImpl(NotImplementedError):
-    pass
-
-@field_widget_multiadapter([IListField, ITextLineField], qualifiers=['questions'])
-class QuestionsWidget(field_widgets.ListEditWidget):
-    
-    def get_template(self):
-        raise DummyImpl('This may be implemented')
-
-@field_widget_multiadapter([IDictField, IContactInfo], qualifiers=['contacts'])
-class ContactsWidget(field_widgets.DictEditWidget):
-    
-    def get_template(self):
-        raise DummyImpl('This may be implemented')
-
 #
 # Tests
 #
@@ -81,6 +66,20 @@ class TestController(BaseTestController):
     def _test_multiadapter(self):
         '''Test multiadapters on collection-based fields'''
         
+        class DummyImpl(NotImplementedError): pass
+
+        @field_widget_multiadapter([IListField, ITextLineField], qualifiers=['questions'])
+        class QuestionsWidget(field_widgets.ListEditWidget):
+    
+            def get_template(self):
+                raise DummyImpl('This may be implemented')
+
+        @field_widget_multiadapter([IDictField, IContactInfo], qualifiers=['contacts'])
+        class ContactsWidget(field_widgets.DictEditWidget):
+    
+            def get_template(self):
+                raise DummyImpl('This may be implemented')
+
         # Adapt to (Dict, ContactInfo)
 
         field = fixtures.foo1.get_field(('contacts',))
