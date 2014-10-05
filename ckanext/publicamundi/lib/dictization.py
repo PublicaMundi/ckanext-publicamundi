@@ -95,8 +95,7 @@ def merge_inplace(a, b):
         a[k] = b[k]
     
     for k in (ka & kb):
-        ak = a[k]
-        bk = b[k]
+        ak, bk = a[k], b[k]
         if isinstance(ak, dict) and isinstance(bk, dict):
             # Recurse
             merge_inplace(ak, bk)
@@ -143,3 +142,21 @@ def merge(a, b):
         # Cannot merge a dict with a non-dict, return a
         return a
    
+def update_deep(a, b):
+    '''Perform a deep update of a from b
+    '''
+    
+    ka = set(a.keys())
+    kb = set(b.keys())
+    
+    for k in (kb - ka):
+        a[k] = b[k]
+
+    for k in (ka & kb):
+        ak, bk = a[k], b[k]
+        if isinstance(ak, dict) and isinstance(bk, dict):
+            ak = update_deep(ak, bk)
+        else:
+            a[k] = bk
+
+    return a

@@ -45,33 +45,41 @@ class TestController(BaseTestController):
     @classmethod
     def teardown_class(cls):
         pass
-
+    
+    @nose.tools.nottest
     def test_1_create_package(self):
         
         yield self._create_package, 'hello-inspire-1'
     
+    @nose.tools.nottest
     def test_2_update_package(self):
     
         yield self._update_package, 'hello-inspire-1', '0..1'
         #yield self._update_package, 'hello-foo-1', '1..2'
      
+    @nose.tools.nottest
     def test_3_create_resource(self):
     
         yield self._create_resource, 'hello-inspire-1', 'resource-1'
         #yield self._create_resource, 'hello-foo-1', 'resource-2'
      
+    @nose.tools.nottest
     def test_4_update_resource(self):
     
         yield self._update_resource, 'hello-inspire-1', 'resource-1', '0..1'
         #yield self._update_resource, 'hello-foo-1', 'resource-2', '0..1'
 
+    @nose.tools.nottest
     def test_5_delete_resource(self):
     
         yield self._delete_resource, 'hello-inspire-1', 'resource-1'
- 
+        pass
+
+    @nose.tools.nottest
     def test_6_delete_package(self):
     
-        yield self._delete_package, 'hello-inspire-1'
+        #yield self._delete_package, 'hello-inspire-1'
+        pass
 
     def _create_package(self, fixture_name):
         

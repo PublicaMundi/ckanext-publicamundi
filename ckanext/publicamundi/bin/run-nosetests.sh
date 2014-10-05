@@ -2,6 +2,8 @@
 
 nose_opts=
 
+log_level='INFO'
+
 dry_run=
 
 debugger=${TEST_DEBUGGER}
@@ -9,7 +11,7 @@ test -z "${debugger}" && debugger="pdb"
 
 [[ ! "${debugger}" =~ (i)?pdb$ ]] && echo "Unknown debugger: ${debugger}" && exit 1 
 
-while getopts ":pnhs" opt; do
+while getopts ":pnhsd" opt; do
     case $opt in
         s)
             nose_opts="${nose_opts} -s"
@@ -17,14 +19,18 @@ while getopts ":pnhs" opt; do
         n)
             dry_run="yes"
             ;;
+        d)
+            log_level='DEBUG'
+            ;;
         p)
             nose_opts="${nose_opts} --${debugger} --${debugger}-failures"
             ;;
         h)
-            echo "Usage: ${0} [-p] [-s] [-n] [-h] <tests>"
+            echo "Usage: ${0} [-p] [-d] [-s] [-n] [-h] <tests>"
             echo "    -p: Drop to pdb shell (on errors or failures)"
             echo "    -s: Print output messages from tests"
             echo "    -n: Dry run"
+            echo "    -d: Enable logging at DEBUG level (combined with '-s' option)"
             echo "    -h: Print this help"
             exit 0
             ;;
@@ -35,6 +41,8 @@ while getopts ":pnhs" opt; do
 done
 
 shift $((OPTIND-1))
+
+nose_opts="--logging-level=${log_level} ${nose_opts}"
 
 tests=${@} 
 if test -z "${tests}"; then
