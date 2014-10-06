@@ -2,6 +2,7 @@ import datetime
 import logging
 import copy
 import json
+import pprint
 from collections import namedtuple
 
 from pylons import url
@@ -22,13 +23,25 @@ from ckanext.publicamundi.lib.metadata.widgets import (
 
 from ckanext.publicamundi.tests import fixtures
 
+import os.path
+from ckanext.publicamundi.lib.metadata.xml_serializers import *
+from ckanext.publicamundi.lib.metadata.types.inspire_metadata import *
 log1 = logging.getLogger(__name__)
+import shutil
 
+PERMANENT_STORE = '/home/ckaner/uploads'
 class TestsController(BaseController):
+    request_headers = {
+        'Content-Type': 'application/json',
+    }
+
+    request_environ = {
+        'REMOTE_USER': 'tester',
+    }
 
     def index(self, id=None):
         return u'Another test!'
-    
+
     def get_fields_markup(self):
         if request.method == 'POST':
             d = dict(request.params.items())
@@ -250,4 +263,96 @@ class TestsController(BaseController):
         #raise Exception('Break')
         c.form_class = 'form-horizontal' # 'form-horizontal'
         return render('tests/accordion-form.html')
+    
+    def test_upload(self):
+        return render('package/upload_template.html')
 
+    def submit_upload(self):
+        myfile = request.POST['filename']
+        permanent_file = open(os.path.join(PERMANENT_STORE, myfile.filename.lstrip(os.sep)), 'w')
+
+        shutil.copyfileobj(myfile.file, permanent_file)
+        myfile.file.close()
+        permanent_file.close()
+
+        return self.test_fromxml(myfile.filename)
+        #return 'Successfully uploaded: %s' % (myfile.filename)
+
+    def test_fromxml(self, filename):
+        
+        #here = os.path.dirname(os.path.realpath(__file__))
+        #infile = os.path.join(here, filename)
+        infile = open(os.path.join(PERMANENT_STORE, filename), 'r')
+        try:
+            ser = xml_serializer_for_object(InspireMetadata())
+            e = etree.parse(infile)
+            print 'after etree'
+            insp = ser.from_xml(e)
+            errs = insp.validate()
+            log1.debug('Validation Errors: %s' % str(errs))
+
+            return insp.to_json()
+        except:
+            return 'No INSPIRE-compliant file selected'
+
+    def test_create_package(self):
+        #data = fixtures.inspire1
+        #data = fixtures.foo1
+        #print data
+        #insp = data.to_dict(flat=1, opts={'serialize-keys': 1, 'serialize-values':'json-s', 'key-prefix':'foo'})
+        #df = {}
+        #df['name'] = 'test5535'
+        #df['title'] = u'Test 5531'
+        #df['dataset_type'] = 'foo'
+        #df['identifier'] = data.identifier[0]
+        #df = dict(df.items() + insp.items())
+        #pprint.pprint(json.dumps(df))
+        #df['inspire'] = json.dumps(insp.to_dict(flat=0, opts={'serialize-values':'default'}))
+        df = {
+                'name': 'foo001',
+                'title': u'Test Foo',
+                'dataset_type': 'foo',
+                'foo': {
+                    'baz':u'A second chance',
+                    'rating': 2,
+                    },
+                }
+        print 'before create'
+        pprint.pprint(df)
+        created = self._create(df)
+        print 'after create'
+        pprint.pprint(created)
+        show = self._show(df['name'])
+        print 'display created'
+        pprint.pprint(show)
+
+    # Helpers
+
+    def _create(self, data):
+        try:
+            context = { 'model': model, 'session': model.Session, 'ignore_auth': True }
+            pkg = toolkit.get_action ('package_create')(context, data_dict=data)
+        except:
+            pkg = {}
+        return pkg
+
+    def _update(self, data):
+        try:
+            context = { 'model': model, 'session': model.Session, 'ignore_auth':True }
+            pkg = toolkit.get_action ('package_update')(context, data_dict=data)
+        except:
+            pkg = {}
+        return pkg
+
+    def _show(self, name_or_id):
+        try:
+            context = { 'model': model, 'session': model.Session, 'ignore_auth':True }
+            pkg = toolkit.get_action ('package_show') (context, data_dict = {'id': name_or_id})
+        except:
+            pkg = {}
+            pass
+        return pkg
+
+
+    def _check_result_for_read(self, data, result):
+        pass
