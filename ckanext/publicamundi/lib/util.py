@@ -4,15 +4,18 @@ import json
 import geojson
 import shapely
 import collections
+import itertools
 from dictdiffer import (
     dot_lookup, diff as diff_dicts, patch as patch_dict)
 
 from ckanext.publicamundi.lib.json_encoder import JsonEncoder
 
 class Breakpoint(Exception):
+    '''Exception used for Pylons debugging'''
     pass
 
 def to_json(o, indent=None):
+    '''Convert to JSON providing our custom encoder'''
     return json.dumps(o, cls=JsonEncoder, indent=indent)
 
 def geojson_to_wkt(s):
@@ -58,3 +61,22 @@ def item_setter(d, k):
     def f(v):
         d[k] = v
     return f
+
+def const_function(val):
+    '''Create a const function'''
+    return itertools.repeat(val).next 
+
+class falsy_function(object):
+    '''Create a function marked as falsy'''
+
+    def __call__(self, *args, **kwargs):
+        assert False, 'This is not supposed to be called'
+    
+    def __repr__(self):
+        return '<not-a-function>'
+
+    def __nonzero__(self): 
+        return False
+
+not_a_function = falsy_function()
+

@@ -1,24 +1,82 @@
 import zope.interface
 import zope.schema
+from zope.interface.verify import verifyObject
 import json
 
-from ckanext.publicamundi.lib.metadata import Object
+from ckanext.publicamundi.lib.metadata import (
+    Object, get_object_factory, object_null_adapter)
 from ckanext.publicamundi.lib.metadata import types
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.tests import fixtures
 
-def test_tofrom_dicts():
-    x1 = fixtures.foo1
+#
+# Prepare a named null adapter 
+#
 
-    errs = x1.validate()
-    assert not errs
+class Baz(object):
+
+    def __call__(self):
+        return u'Baobab'
+
+baz_factory = Baz()
+
+@object_null_adapter(name='another-foo')
+class AnotherFoo(Object):
+    
+    zope.interface.implements(schemata.IFoo)
+    
+    title = None
+    baz = baz_factory
+    temporal_extent = None
+    contact_info = types.ContactInfo
+    grade = None
+
+#
+# Tests
+#
+
+def test_factories():
+
+    fc1 = get_object_factory(schemata.IFoo)
+    o1 = fc1()
+    verifyObject(schemata.IFoo, o1)
+    assert isinstance(o1, types.Foo)
+    
+    fc2 = get_object_factory(schemata.IFoo, name='another-foo')
+    o2 = fc2()
+    verifyObject(schemata.IFoo, o2)
+    assert isinstance(o2, AnotherFoo)
+    assert (
+        o2.baz == u'Baobab' and 
+        o2.temporal_extent is None and
+        isinstance(o2.contact_info, types.ContactInfo))
+    
+    try:
+        fc3 = get_object_factory(schemata.IFoo, name='a-non-existing-name')
+    except (ValueError, LookupError) as ex:
+        pass
+    else:
+        assert False, 'This should have failed'
+
+def test_tofrom_dicts():
+
+    yield _test_tofrom_dicts, 'bbox1', schemata.IGeographicBoundingBox 
+    yield _test_tofrom_dicts, 'foo1', schemata.IFoo
+    yield _test_tofrom_dicts, 'foo2', schemata.IFoo
+    yield _test_tofrom_dicts, 'foo3', schemata.IFoo
+
+def _test_tofrom_dicts(fixture_name, schema):
+    
+    x1 = getattr(fixtures, fixture_name)
+    verifyObject(schema, x1)
+    
     d1r = x1.to_dict(flat=False)
     d1f = x1.to_dict(flat=True)
 
     s1r = x1.to_json(flat=False)
     s1f = x1.to_json(flat=True)
 
-    factory = Object.Factory(schemata.IFoo)
+    factory = Object.Factory(schema)
 
     x2 = factory.from_dict(d1r, is_flat=False)
     x3 = factory.from_dict(d1f, is_flat=True)
@@ -34,6 +92,7 @@ def test_tofrom_dicts():
     assert s3f == s1f
 
 def test_from_serialized():
+    
     d = {
         "tags.2": u"gamma",
         "tags.1": u"beta",
@@ -76,6 +135,10 @@ def test_from_serialized():
     assert not errors
 
 if __name__ == '__main__':
-    test_tofrom_dicts()
+    
+    test_factories()
+
+    _test_tofrom_dicts('foo1', schemata.IFoo)
+    
     test_from_serialized()
 

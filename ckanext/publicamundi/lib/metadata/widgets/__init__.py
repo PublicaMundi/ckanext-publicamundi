@@ -3,20 +3,22 @@ import zope.interface
 import zope.interface.verify
 import zope.schema
 import logging
+from itertools import islice
 
 from ckanext.publicamundi.lib import logger
+from ckanext.publicamundi.lib.memoizer import memoize
 from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata import (
-    adapter_registry, IObject, Object, FieldContext)
+    adapter_registry, get_object_factory, IObject, Object, FieldContext)
 
 from ckanext.publicamundi.lib.metadata.widgets.ibase import (
     IQualAction, ILookupContext, 
     IWidget, IFieldWidget, IObjectWidget)
 
-# Qualified action
-
 class QualAction(object):
-    
+    '''A qualified action that we need to perform and search a widget for.
+    '''
+
     zope.interface.implements(IQualAction)
     
     __slots__ = ('action', 'qualifier')
@@ -59,10 +61,16 @@ class QualAction(object):
         except:
             action, qualifier = q, None
         return cls(action, qualifier)
-
-# Context for widget adaptation
  
 class LookupContext(object):
+    '''Provide a context for widget adaptation.
+    
+    Essentially, this context is the part of adaptation that does not contain the
+    adaptee vector (which is anyway available to the adapter as an init argument). 
+    
+    It will be available to (successfully adapted) widgets, under their `context`
+    attribute.
+    '''
     
     zope.interface.implements(ILookupContext)
 
@@ -72,10 +80,10 @@ class LookupContext(object):
         self.requested_action = requested
         self.provided_action = provided
 
-# Exception for adaptation failures
+class WidgetNotFound(LookupError):
+    '''An exception that represents a widget lookup (adaptation) failure.
+    '''
 
-class WidgetNotFound(Exception):
-    
     def __init__(self, qualified_action, r):
         self.qualified_action = qualified_action
         self.r = r
@@ -108,8 +116,18 @@ def field_widget_adapter(field_iface, qualifiers=[], is_fallback=False):
     return decorator
 
 def field_widget_multiadapter(field_ifaces, qualifiers=[], is_fallback=False):
-    for iface in field_ifaces:
-        assert iface.extends(IField)
+    nf = len(field_ifaces)
+    assert nf > 1, 'A non-trivial interface vector (length > 1) is needed'
+    
+    for iface in islice(field_ifaces, 0, nf - 1):
+        assert iface.extends(IContainerField), (
+            'The multiadapter decorator is meant to be used for container-based fields')
+    
+    tail_iface = field_ifaces[-1]
+    assert not tail_iface is IObjectField, (
+        'The widget registry will never provide a multiadapter on a zope.schema.IObject '
+        'item. Consider using the underlying schema instead.')
+    
     decorator = decorator_for_widget_multiadapter(
         field_ifaces, IFieldWidget, qualifiers, is_fallback)
     return decorator
@@ -155,19 +173,20 @@ def widget_for_field(qualified_action, field, errors={}):
     '''Find and instantiate a widget to adapt a field to a widget interface.
     The given field should be a bound instance of zope.schema.Field.
     '''
+
+    from ckanext.publicamundi.lib.metadata.fields import build_adaptee
     
-    # Build an array with all candidate names
+    # Build a list with candidate names
+    
     q = QualAction.from_string(qualified_action)
     candidates = list(reversed(q.parents() + [q]))
 
     # Build adaptee vector
-    adaptee = [field]
-    y = field
-    while IContainerField.providedBy(y):
-        adaptee.append(y.value_type)
-        y = y.value_type
-     
+    
+    adaptee = build_adaptee(field, expand_collection=True)
+
     # Lookup registry
+    
     widget = None
     while len(adaptee):
         for candidate in candidates:
@@ -189,7 +208,8 @@ def widget_for_field(qualified_action, field, errors={}):
     else:
         raise WidgetNotFound(qualified_action, field)
     
-    # Found a widget to adapt to field
+    # Found
+    
     assert zope.interface.verify.verifyObject(IFieldWidget, widget)
     return widget
 

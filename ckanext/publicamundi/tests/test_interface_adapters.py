@@ -6,25 +6,20 @@ from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.schemata import *
 from ckanext.publicamundi.lib.metadata.types import *
 
-## Foo1 ##
-
 class Foo1(Object):
+    
     zope.interface.implements(IFoo)
-
-## Foo2 ##
 
 class Foo2(Object):
     pass
 
 zope.interface.classImplements(Foo2, IFoo)
 
-## Foo3 ##
-
 Foo3 = type('Foo3', (Object,), {})
 
 zope.interface.classImplements(Foo3, IFoo)
 
-## Tests ##
+# Tests 
 
 def test_adapter_registry():
     info1 = adapter_registry.queryMultiAdapter([], IContactInfo)
@@ -41,8 +36,8 @@ def test_adapter_registry():
 
 def _test_field_factory(cls_name, k):
     cls = globals().get(cls_name)
-    factory = cls.get_field_factory(k)
-    if not (factory is None):
+    factory = cls.get_field_factory(k, None)
+    if factory:
         assert callable(factory)
         f = factory()
         assert not (f is None)

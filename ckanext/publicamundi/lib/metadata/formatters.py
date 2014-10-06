@@ -24,7 +24,7 @@ __all__ = [
     'formatter_for_field',
 ]
 
-supported_formats = [ 'default', 'summary', ]
+supported_formats = ['default', 'summary',]
 
 # Format specifiers
 
@@ -97,26 +97,23 @@ def field_format_multiadapter(required_ifaces, name):
 def formatter_for_field(field, name='default'):
     '''Get a proper formatter for a zope.schema.Field instance.
     ''' 
+    
+    from ckanext.publicamundi.lib.metadata.fields import build_adaptee
+    
     assert isinstance(field, zope.schema.Field)
     
-    # Note You can relax the following and return None
+    # Note Maybe relax this and return None
     assert name in supported_formats
     
-    requested_name = name
-    name = 'format:%s' % (name)
-    
-    formatter = None
-
     # Build adaptee vector
     
-    adaptee = [field]
-    y = field
-    while IContainerField.providedBy(y):
-        adaptee.append(y.value_type)
-        y = y.value_type
+    adaptee = build_adaptee(field, expand_collection=True)
 
     # Lookup
 
+    requested_name, name = name, 'format:%s' % (name)
+    
+    formatter = None
     while len(adaptee):
         formatter = adapter_registry.queryMultiAdapter(adaptee, IFormatter, name)
         if formatter:
