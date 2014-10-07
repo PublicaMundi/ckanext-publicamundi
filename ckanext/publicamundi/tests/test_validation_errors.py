@@ -93,6 +93,19 @@ x21 = Foo(
 x22 = copy.deepcopy(x21)
 x22.published = datetime.datetime(2014, 4, 15) # before creation date
 
+x23 = copy.deepcopy(x21)
+x23.tags = [u'hello-world', u'goodbye'] 
+x23.contacts = { 
+    'office': ContactInfo(address=PostalAddress(address=u'Nowhere-Land', postalcode=u'12345')),
+    'personal': None,
+}
+
+x24 = copy.deepcopy(x21)
+x24.tags = [u'hello-world', u'goodbye'] 
+x24.contacts = { 
+    'office': ContactInfo(address=PostalAddress(address=u'Nowhere-Land', postalcode=u'12345')),
+}
+
 # Fixture x3: valid (fix errors on x21)
 
 x3 = copy.deepcopy(x21)
@@ -145,6 +158,14 @@ def test_invariants_x22():
     errs = x22.validate()
     errs_dict = x22.dictize_errors(errs)
     assert len(errs_dict['__after']) >= 2
+
+def test_invariants_x23():
+    helpers.assert_faulty_keys(x23,
+        expected_keys = set(['contact_info', 'temporal_extent']))
+
+def test_invariants_x24():
+    helpers.assert_faulty_keys(x24,
+        expected_keys = set(['contact_info', 'temporal_extent']))
 
 def test_valid_x3():
     '''Verify a valid object'''
