@@ -143,7 +143,7 @@ thesaurus_gemet_inspire_data_themes = Thesaurus(
 inspire1 = InspireMetadata(
     contact = [
         ResponsibleParty(
-            organization=u"Org", email=[u"email@asd.gr"], role="pointofcontact")
+            organization=u"Org", email=u"email@asd.gr", role="pointofcontact")
     ],
     datestamp = datetime.date.today(),
     languagecode = "el",
@@ -189,9 +189,9 @@ inspire1 = InspireMetadata(
     limitations = [u"limit1", u"limit2"],
     responsible_party = [
         ResponsibleParty(
-            organization=u"Org", email=[u"email@asd.gr"], role="pointofcontact"), 
+            organization=u"Org", email=u"email@asd.gr", role="pointofcontact"), 
         ResponsibleParty(
-            organization=u"Org2", email=[u"email2@asd.gr"], role="pointofcontact")]
+            organization=u"Org2", email=u"email2@asd.gr", role="pointofcontact")]
 )
 
 inspire2 = copy.deepcopy(inspire1)

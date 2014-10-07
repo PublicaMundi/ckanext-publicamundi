@@ -60,13 +60,15 @@ class IResponsibleParty(IObject):
         required = True,
         min_length = 1)
 
-    email = zope.schema.List(
-        title = u'Email',
-        required = True,
-        min_length = 1,
-        max_length = 2,
-        value_type = z3c.schema.email.RFC822MailAddress(
-            title = u'Email'))
+    #email = zope.schema.List(
+    email = z3c.schema.email.RFC822MailAddress(
+            title = u'Email',
+            #title = u'Email',
+            required = True)
+            #min_length = 1,
+            #max_length = 2,
+            #value_type = z3c.schema.email.RFC822MailAddress(
+            #title = u'Email'))
 
     role = zope.schema.Choice(
         title = u'Responsible party role',

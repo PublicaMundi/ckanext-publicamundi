@@ -25,6 +25,7 @@ class TestController(BaseTestController):
     @nose.tools.istest
     def test_to_xml(self):
         yield self._to_xml, 'inspire1', '/tmp/inspire1.xml'
+        yield self._from_xml, '/tmp/inspire1.xml'
 
     @nose.tools.istest
     def test_from_xml(self):

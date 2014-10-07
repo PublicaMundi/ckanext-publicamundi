@@ -15,7 +15,7 @@ from ckanext.publicamundi.tests import fixtures
 # Missing required title, abstract
 insp11 = InspireMetadata(
         contact = [
-            ResponsibleParty(organization=u"Org", email=[u"email@asd.gr"], role="pointofcontact")],
+            ResponsibleParty(organization=u"Org", email=u"email@asd.gr", role="pointofcontact")],
         datestamp = datetime.date.today(),
         languagecode = "el",
         identifier = [u"12314213123"],
@@ -47,13 +47,13 @@ insp11 = InspireMetadata(
         access_constraints = [u"lalala1", u"lalala2"],
         limitations = [u"limit1", u"limit2"],
         responsible_party = [
-            ResponsibleParty(organization=u"Org", email=[u"email@asd.gr"], role="pointofcontact"), 
-            ResponsibleParty(organization=u"Org2", email=[u"email2@asd.gr"], role="pointofcontact")])
+            ResponsibleParty(organization=u"Org", email=u"email@asd.gr", role="pointofcontact"), 
+            ResponsibleParty(organization=u"Org2", email=u"email2@asd.gr", role="pointofcontact")])
 
 # Missing required topic_category, responsible_party
 insp12 = InspireMetadata(
     contact = [
-        ResponsibleParty(organization=u"Org", email=[u"email@asd.gr"], role="pointofcontact")],
+        ResponsibleParty(organization=u"Org", email=u"email@asd.gr", role="pointofcontact")],
     datestamp = datetime.date.today(),
     languagecode = "el",
     title = u"Title",
@@ -88,7 +88,7 @@ insp12 = InspireMetadata(
 
 # Creation, publication, revision wrong date ranges & temporal extent start, end (invariant)
 insp2 = InspireMetadata(
-    contact = [ResponsibleParty(organization=u"Org", email=[u"email@asd.gr"], role="pointofcontact")],
+    contact = [ResponsibleParty(organization=u"Org", email=u"email@asd.gr", role="pointofcontact")],
     datestamp = datetime.date.today(),
     languagecode = "el",
     title = u"Title",
@@ -122,7 +122,7 @@ insp2 = InspireMetadata(
     access_constraints = [u"lalala1", u"lalala2"],
     limitations = [u"limit1", u"limit2"],
     responsible_party = [
-        ResponsibleParty(organization=u"Org", email=[u"email@asd.gr"], role="pointofcontact")])
+        ResponsibleParty(organization=u"Org", email=u"email@asd.gr", role="pointofcontact")])
 
 # Min_length of contact, locator smaller than one 
 insp3 = InspireMetadata(
@@ -160,13 +160,13 @@ insp3 = InspireMetadata(
     access_constraints = [u"lalala1", u"lalala2"],
     limitations = [u"limit1", u"limit2"],
     responsible_party = [
-        ResponsibleParty(organization=u"Org", email=[u"email@asd.gr"], role="pointofcontact"), 
-        ResponsibleParty(organization=u"Org2", email=[u"email2@asd.gr"], role="pointofcontact")])
+        ResponsibleParty(organization=u"Org", email=u"email@asd.gr", role="pointofcontact"), 
+        ResponsibleParty(organization=u"Org2", email=u"email2@asd.gr", role="pointofcontact")])
 
 # Temporal-Extent start field (required field in ITemporalExtent) missing
 insp4 = InspireMetadata(
     contact = [
-        ResponsibleParty(organization=u"Org", email=[u"email@asd.gr"], role="pointofcontact")],
+        ResponsibleParty(organization=u"Org", email=u"email@asd.gr", role="pointofcontact")],
     datestamp = datetime.date.today(),
     languagecode = "el",
     title = u"Title",
@@ -201,8 +201,8 @@ insp4 = InspireMetadata(
     access_constraints = [u"lalala1" ,u"lalala2"],
     limitations = [u"limit1", u"limit2"],
     responsible_party = [
-        ResponsibleParty(organization=u"Org", email=[u"email@asd.gr"], role="pointofcontact"), 
-        ResponsibleParty(organization=u"Org2", email=[u"email2@asd.gr"], role="pointofcontact")])
+        ResponsibleParty(organization=u"Org", email=u"email@asd.gr", role="pointofcontact"), 
+        ResponsibleParty(organization=u"Org2", email=u"email2@asd.gr", role="pointofcontact")])
 
 # Temporal-Extent (not required field) missing 
 insp5 = copy.deepcopy(insp4)

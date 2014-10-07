@@ -29,15 +29,8 @@ from ckanext.publicamundi.lib.metadata.types.inspire_metadata import *
 log1 = logging.getLogger(__name__)
 import shutil
 
-PERMANENT_STORE = '/home/ckaner/uploads'
+PERMANENT_STORE = '/var/local/ckan/default/ofs/storage'
 class TestsController(BaseController):
-    request_headers = {
-        'Content-Type': 'application/json',
-    }
-
-    request_environ = {
-        'REMOTE_USER': 'tester',
-    }
 
     def brk(self):
         raise Breakpoint()
@@ -266,7 +259,17 @@ class TestsController(BaseController):
         #raise Exception('Break')
         c.form_class = 'form-horizontal' # 'form-horizontal'
         return render('tests/accordion-form.html')
+  
+    @classmethod
+    def _get_action_context(cls):
+        return {
+            'model': model, 
+            'session': model.Session, 
+            'ignore_auth':True, 
+            'api_version': 3,
+        }
     
+  
     def test_upload(self):
         return render('package/upload_template.html')
 
@@ -282,80 +285,91 @@ class TestsController(BaseController):
         #return 'Successfully uploaded: %s' % (myfile.filename)
 
     def test_fromxml(self, filename):
-        
-        #here = os.path.dirname(os.path.realpath(__file__))
-        #infile = os.path.join(here, filename)
-        infile = open(os.path.join(PERMANENT_STORE, filename), 'r')
+
         try:
-            ser = xml_serializer_for_object(InspireMetadata())
-            e = etree.parse(infile)
-            print 'after etree'
-            insp = ser.from_xml(e)
-            errs = insp.validate()
-            log1.debug('Validation Errors: %s' % str(errs))
-
-            return insp.to_json()
+            infile = open(os.path.join(PERMANENT_STORE, filename), 'r')
         except:
-            return 'No INSPIRE-compliant file selected'
+            log1.info('Exception %s' % ex)
+            return render('package/page_error.html', extra_vars={ 'errors': u"Cannot open file"})
 
-    def test_create_package(self):
-        #data = fixtures.inspire1
-        #data = fixtures.foo1
-        #print data
-        #insp = data.to_dict(flat=1, opts={'serialize-keys': 1, 'serialize-values':'json-s', 'key-prefix':'foo'})
-        #df = {}
-        #df['name'] = 'test5535'
-        #df['title'] = u'Test 5531'
-        #df['dataset_type'] = 'foo'
-        #df['identifier'] = data.identifier[0]
-        #df = dict(df.items() + insp.items())
-        #pprint.pprint(json.dumps(df))
-        #df['inspire'] = json.dumps(insp.to_dict(flat=0, opts={'serialize-values':'default'}))
-        df = {
-                'name': 'foo001',
-                'title': u'Test Foo',
-                'dataset_type': 'foo',
-                'foo': {
-                    'baz':u'A second chance',
-                    'rating': 2,
-                    },
-                }
-        print 'before create'
-        pprint.pprint(df)
-        created = self._create(df)
-        print 'after create'
-        pprint.pprint(created)
-        show = self._show(df['name'])
-        print 'display created'
-        pprint.pprint(show)
+        ser = xml_serializer_for_object(InspireMetadata())
+        try:
+            e = etree.parse(infile)
+        except Exception as ex:
+            log1.info('Exception %s' % ex)
+            return render('package/page_error.html', extra_vars={ 'errors': u"No XML file selected. Try again"})
+
+        try:
+            insp = ser.from_xml(e)
+            errors = insp.validate()
+        except Exception as ex:
+            log1.info('Exception %s' % ex)
+            return render('package/page_error.html', extra_vars={ 'errors': u"XML file validation failure: %s" % ex})
+
+        if errors:
+            #return 'Validation failure, please correct errors %s' % errors
+            if self._package_exists(inspire_vocabularies.munge(insp.title)):
+                pkg = self._show(inspire_vocabularies.munge(insp.title))
+            else:
+                pkg = self._create_inspire_draft(insp)
+            return toolkit.redirect_to('dataset_edit', id=pkg.get('name'))
+        else:
+            if self._package_exists(inspire_vocabularies.munge(insp.title)):
+                pkg = self._show(inspire_vocabularies.munge(insp.title))
+            else:
+                pkg = self._create_inspire_draft(insp)
+            return toolkit.redirect_to('dataset_read', id=pkg.get('name'))
 
     # Helpers
 
-    def _create(self, data):
-        try:
-            context = { 'model': model, 'session': model.Session, 'ignore_auth': True }
-            pkg = toolkit.get_action ('package_create')(context, data_dict=data)
-        except:
-            pkg = {}
+    def _create_inspire(self, insp):
+        data = insp.to_dict(flat=1, opts={'serialize-keys': True, 'serialize-values':'default'})
+
+        pkg_data = {}
+        pkg_data['title'] = data.get('title')
+        pkg_data['name'] = inspire_vocabularies.munge(data.get('title'))
+        pkg_data['dataset_type'] = 'inspire'
+        pkg_data['inspire'] = data
+
+        pkg = toolkit.get_action ('package_create')(self._get_action_context(), data_dict=pkg_data)
+        log1.info('Created package %s' % pkg_data['name'])
+        #except:
+        #    pkg = {}
+        return pkg
+    
+    def _create_inspire_draft(self, insp):
+        #data = insp.to_dict(flat=1, opts={'serialize-keys': True, 'serialize-values':'default'})
+
+        pkg_data = {}
+        pkg_data['title'] = insp.title
+        pkg_data['name'] = inspire_vocabularies.munge(insp.title)
+        pkg_data['dataset_type'] = 'inspire'
+        #pkg_data['inspire'] = data
+
+        pkg = toolkit.get_action ('package_create')(self._get_action_context(), data_dict=pkg_data)
+        log1.info('Created package %s' % pkg_data['name'])
+        #except:
+        #    pkg = {}
         return pkg
 
-    def _update(self, data):
+    def _update(self, insp):
         try:
-            context = { 'model': model, 'session': model.Session, 'ignore_auth':True }
-            pkg = toolkit.get_action ('package_update')(context, data_dict=data)
+            data = insp.to_dict(flat=1, opts={'serialize-keys': True, 'serialize-values':'default'})
+
+            pkg = toolkit.get_action ('package_update')(self._get_action_context(), data_dict=data)
         except:
             pkg = {}
         return pkg
 
     def _show(self, name_or_id):
-        try:
-            context = { 'model': model, 'session': model.Session, 'ignore_auth':True }
-            pkg = toolkit.get_action ('package_show') (context, data_dict = {'id': name_or_id})
-        except:
-            pkg = {}
-            pass
-        return pkg
 
+        return toolkit.get_action ('package_show') (self._get_action_context(), data_dict = {'id': name_or_id})
+
+    def _package_exists(self, name_or_id):
+        if  name_or_id in toolkit.get_action ('package_list')(self._get_action_context(), data_dict={}):
+            return True
+        else:
+            return False
 
     def _check_result_for_read(self, data, result):
         pass

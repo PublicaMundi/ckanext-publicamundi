@@ -147,7 +147,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
             for it in alist:
                 result.append(ResponsibleParty(
                     organization = unicode(it.organization),
-                    email = [unicode(it.email)],
+                    email = unicode(it.email),
                     role = it.role))
             return result
 
@@ -170,8 +170,13 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
                 # TODO thes_split[1] (=version) can be used in a get_by_title_and_version() 
                 # to enforce a specific thesaurus version.
                 thes_title = thes_split[0]
-                if inspire_vocabularies.get_by_title(thes_title):
+                try:
                     thes = Thesaurus.make(inspire_vocabularies.munge('Keywords-' + thes_title))
+                except:
+                    pass
+                if thes:
+                    #thes = Thesaurus.make(thes_dict)
+                    #thes = Thesaurus.make(inspire_vocabularies.munge('Keywords-' + thes_title))
                     kw = ThesaurusTerms(thesaurus=thes, terms=it['keywords'])
                     keywords_list.append(kw)
 
@@ -215,27 +220,33 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         else:
             for i in range(0,len(md.identification.distance)):
                 spatial_list.append(SpatialResolution(
-                    distance = md.identification.distance[i],
-                    uom = md.identification.uom[i]))
+                    distance = int(md.identification.distance[i]),
+                    uom = unicode(md.identification.uom[i])))
 
         conf_list = []
 
-        if len(md.dataquality.conformancedate) != len(md.dataquality.conformancedatetype):
-            raise Exception('unequal list lengths conformance date,conformancedatetype','!')
+        if len(md.dataquality.conformancedate) != len(md.dataquality.conformancedatetype) or len(md.dataquality.conformancedate) != len(md.dataquality.conformancedegree) or len(md.dataquality.conformancedatetype) != len(md.dataquality.conformancedegree):
+            raise Exception('unequal list lengths conformance date,conformancedatetype, conformancedegree','!')
         else:
-            if md.dataquality.conformancedegree:
+            if md.dataquality.conformancedate:
                 for i in range(0,len(md.dataquality.conformancedate)):
+
+                    date = to_date(md.dataquality.conformancedate[i])
+
+                    #date_type = md.dataquality.conformancedatetype[i],
+                    # TODO md.dataquality.conformancedatetype returns empty
+                    date_type = 'creation'
+                    degree = md.dataquality.conformancedegree[i]
+
+
                     if md.dataquality.conformancetitle[i]:
-                        conf_list.append(Conformity(
-                        title = unicode(md.dataquality.conformancetitle[i]),
-                        date = to_date(md.dataquality.conformancedate[i]),
-                        date_type = md.dataquality.conformancedatetype[i],
-                        degree = md.dataquality.conformancedegree[i]))
+                        title = unicode(md.dataquality.conformancetitle[i])
+                        conf_list.append(Conformity(title=title, date=date, date_type=date_type, degree=degree))
+
                     else:
-                        conf_list.append(Conformance(
-                            date = to_datemd.dataquality.conformancedate[i]),
-                            date_type = md.dataquality.conformancedatetype[i],
-                            degree = md.dataquality.conformancedegree[i])
+
+                        conf_list.append(Conformity(date=date, date_type=date_type, degree=degree))
+
         limit_list = []
         for it in md.identification.uselimitation:
                 limit_list.append(unicode(it))

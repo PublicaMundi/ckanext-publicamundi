@@ -20,7 +20,7 @@
           <gmd:address>
             <gmd:CI_Address>
               <gmd:electronicMailAddress>
-                <gco:CharacterString>[u&#39;email@asd.gr&#39;]</gco:CharacterString>
+                <gco:CharacterString>email@asd.gr</gco:CharacterString>
               </gmd:electronicMailAddress>
             </gmd:CI_Address>
           </gmd:address>
@@ -69,7 +69,7 @@
               <gmd:address>
                 <gmd:CI_Address>
                   <gmd:electronicMailAddress>
-                    <gco:CharacterString>[u&#39;email@asd.gr&#39;]</gco:CharacterString>
+                    <gco:CharacterString>email@asd.gr</gco:CharacterString>
                   </gmd:electronicMailAddress>
                 </gmd:CI_Address>
               </gmd:address>
@@ -90,7 +90,7 @@
               <gmd:address>
                 <gmd:CI_Address>
                   <gmd:electronicMailAddress>
-                    <gco:CharacterString>[u&#39;email2@asd.gr&#39;]</gco:CharacterString>
+                    <gco:CharacterString>email2@asd.gr</gco:CharacterString>
                   </gmd:electronicMailAddress>
                 </gmd:CI_Address>
               </gmd:address>
