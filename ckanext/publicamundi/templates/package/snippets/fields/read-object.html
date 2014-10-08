@@ -1,8 +1,8 @@
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
-<div class="{{ classes | join(' ') }}" {{ attrs | xmlattr }} >
-    <h3 class="title">{{ title }}</h3>
-    {% if description %}<div class="description">{{ description }}</div>{% endif -%}
+<div class="{{ classes|join(' ') }}" {{ attrs|xmlattr }} >
+    {%- if title  %}<h3 class="title">{{ title }}</h3>{% endif -%}
+    {%- if description %}<div class="description">{{ description }}</div>{% endif -%}
     <div>
         {{ content.markup }}
     </div>

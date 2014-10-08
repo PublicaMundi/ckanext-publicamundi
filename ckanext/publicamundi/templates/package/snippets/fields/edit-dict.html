@@ -1,10 +1,15 @@
 
 <div class="{{ classes | join(' ') }}">
     {% if title %}<h3 class="title">{{ title }}</h3>{% endif -%}
-    {% if description %}<div class="description">{{ description }}</div>{% endif -%}
-    <ul>
+    {%- if description %}<div class="description">{{ description }}</div>{% endif -%}
+        
+    <script type="x-template-mustache" id="{{ qname }}-item-template">
+        {{ item_template.markup|safe -}}
+    </script>
+
+    <ul id="{{ qname }}-items">
         {% for k, y in items.items() -%}
-        <li>{{ y.markup }}</li>
-        {% endfor -%}
+        <li data-key="{{ k }}">{{ y.markup }}</li>
+        {%- endfor %}
     </ul>
 </div>

@@ -81,8 +81,8 @@ class IFoo(IBaseMetadata):
                 SimpleTerm('office', 'office', u'Office'))),
             title = u'The type of contact'),
         value_type = zope.schema.Object(IContactInfo,
-            title = u'Contact', 
-            required=False))
+            title = u'Contact',
+            required = True))
 
     contact_info = zope.schema.Object(IContactInfo,
         title = u'Contact Info',
