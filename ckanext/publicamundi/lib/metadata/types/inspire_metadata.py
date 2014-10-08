@@ -172,14 +172,14 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
                 thes_title = thes_split[0]
                 try:
                     thes = Thesaurus.make(inspire_vocabularies.munge('Keywords-' + thes_title))
+                    if thes:
+                        #thes = Thesaurus.make(thes_dict)
+                        #thes = Thesaurus.make(inspire_vocabularies.munge('Keywords-' + thes_title))
+                        kw = ThesaurusTerms(thesaurus=thes, terms=it['keywords'])
+                        keywords_list.append(kw)
                 except:
                     pass
-                if thes:
-                    #thes = Thesaurus.make(thes_dict)
-                    #thes = Thesaurus.make(inspire_vocabularies.munge('Keywords-' + thes_title))
-                    kw = ThesaurusTerms(thesaurus=thes, terms=it['keywords'])
-                    keywords_list.append(kw)
-
+                
         if md.identification.temporalextent_start or md.identification.temporalextent_end:
             temporal_extent = [TemporalExtent(
                 start = to_date(md.identification.temporalextent_start),

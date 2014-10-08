@@ -301,28 +301,24 @@ class TestsController(BaseController):
 
         try:
             insp = ser.from_xml(e)
-            errors = insp.validate()
+            errors = insp.validate(dictize_errors=True)
         except Exception as ex:
             log1.info('Exception %s' % ex)
             return render('package/page_error.html', extra_vars={ 'errors': u"XML file validation failure: %s" % ex})
 
         if errors:
-            #return 'Validation failure, please correct errors %s' % errors
-            if self._package_exists(inspire_vocabularies.munge(insp.title)):
-                pkg = self._show(inspire_vocabularies.munge(insp.title))
-            else:
-                pkg = self._create_inspire_draft(insp)
+            # If there are validation redirect to edit page for corrections 
+            # TODO Need to map data to edit form
+            pkg = self._prepare_inspire_draft(insp, errors)
             return toolkit.redirect_to('dataset_edit', id=pkg.get('name'))
         else:
-            if self._package_exists(inspire_vocabularies.munge(insp.title)):
-                pkg = self._show(inspire_vocabularies.munge(insp.title))
-            else:
-                pkg = self._create_inspire_draft(insp)
+            # Else package should be created correctly and user redirected to view page
+            pkg = self._prepare_inspire(insp)
             return toolkit.redirect_to('dataset_read', id=pkg.get('name'))
 
     # Helpers
 
-    def _create_inspire(self, insp):
+    def _prepare_inspire(self, insp):
         data = insp.to_dict(flat=1, opts={'serialize-keys': True, 'serialize-values':'default'})
 
         pkg_data = {}
@@ -331,14 +327,10 @@ class TestsController(BaseController):
         pkg_data['dataset_type'] = 'inspire'
         pkg_data['inspire'] = data
 
-        pkg = toolkit.get_action ('package_create')(self._get_action_context(), data_dict=pkg_data)
-        log1.info('Created package %s' % pkg_data['name'])
-        #except:
-        #    pkg = {}
+        pkg = self._create_or_update(pkg_data)
         return pkg
-    
-    def _create_inspire_draft(self, insp):
-        #data = insp.to_dict(flat=1, opts={'serialize-keys': True, 'serialize-values':'default'})
+
+    def _prepare_inspire_draft(self, insp, errors):
 
         pkg_data = {}
         pkg_data['title'] = insp.title
@@ -346,30 +338,27 @@ class TestsController(BaseController):
         pkg_data['dataset_type'] = 'inspire'
         #pkg_data['inspire'] = data
 
-        pkg = toolkit.get_action ('package_create')(self._get_action_context(), data_dict=pkg_data)
-        log1.info('Created package %s' % pkg_data['name'])
-        #except:
-        #    pkg = {}
+        pkg = self._create_or_update(pkg_data)
+
         return pkg
 
-    def _update(self, insp):
-        try:
-            data = insp.to_dict(flat=1, opts={'serialize-keys': True, 'serialize-values':'default'})
 
+    def _create_or_update(self, data):
+
+        if self._package_exists(data.get('name')):
             pkg = toolkit.get_action ('package_update')(self._get_action_context(), data_dict=data)
-        except:
-            pkg = {}
+            log1.info('Created package %s' % pkg['name'])
+        else:
+            pkg = toolkit.get_action ('package_create')(self._get_action_context(), data_dict=data)
+            log1.info('Updated package %s' % pkg['name'])
         return pkg
+
 
     def _show(self, name_or_id):
-
         return toolkit.get_action ('package_show') (self._get_action_context(), data_dict = {'id': name_or_id})
 
     def _package_exists(self, name_or_id):
-        if  name_or_id in toolkit.get_action ('package_list')(self._get_action_context(), data_dict={}):
-            return True
-        else:
-            return False
+        return  name_or_id in toolkit.get_action ('package_list')(self._get_action_context(), data_dict={})
 
     def _check_result_for_read(self, data, result):
         pass
