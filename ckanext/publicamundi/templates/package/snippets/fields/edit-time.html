@@ -1,10 +1,9 @@
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
-{% set placeholder = placeholder or field.default -%}
-{% set input_classes = [ 'input-small' ] if input_classes is not defined -%}
-{% set format = format or '24h' %}
-
-{% set time_format = 'HH:mm:ss PP' if format == '12h' else 'hh:mm:ss' %}
+{%- set placeholder = placeholder or field.default -%}
+{%- set input_classes = [ 'input-small' ] if input_classes is not defined -%}
+{%- set format = format or '24h' %}
+{%- set time_format = 'HH:mm:ss PP' if format == '12h' else 'hh:mm:ss' -%}
 
 <div class="control-group{{ " error" if errors }}{{ " " ~ classes | join(' ') }}">
     <label class="control-label" for="{{ 'input-' ~ qname }}">
@@ -16,20 +15,20 @@
             data-module-picktime="true" data-module-pickdate="false" 
             data-module-pick12hourformat="{{ 'true' if format == '12h' else 'false' }}"
             data-module-format="{{ time_format }}" 
-             >
+           >
             <input type="text" id="{{ 'input-' ~ qname }}"  name="{{ qname }}"
-                class={{ input_classes | list | join(" ") }}
-                value="{{ value | empty_and_escape }}" 
-                placeholder="{{ placeholder | empty_and_escape }}"
+                class="{{ input_classes|join(" ") }}"
+                value="{{ value|empty_and_escape }}" 
+                placeholder="{{ placeholder|empty_and_escape }}"
             />
             <span class="add-on">
               <i data-time-icon="icon-time"></i>
             </span>
         </div>
         {% if errors  -%}
-        <span class="help-inline">{{ errors | join(', ') }}</span>
-        {% endif -%}
+        <span class="help-inline">{{ errors|join(', ') }}</span>
+        {%- endif %}
     </div>
 </div>
 
-{% resource 'ckanext-publicamundi/datetimepicker' %}
+{%- resource 'ckanext-publicamundi/datetimepicker' %}

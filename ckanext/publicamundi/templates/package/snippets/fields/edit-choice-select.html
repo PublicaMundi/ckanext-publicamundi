@@ -1,22 +1,20 @@
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
-{% set classes = classes + [ 'control-select' ] -%}
+{%- set classes = classes + [ 'control-select' ] -%}
 
-<div class="control-group{{ " " ~ classes | join(' ') }}">
+<div class="control-group{{ " " ~ classes|join(' ') }}">
     <label class="control-label" for="{{ 'input-' ~ qname }}">
-        {{ title }}{{ markup_helpers.mark_required(required) }}
-    </label>
+        {{- title }}{{ markup_helpers.mark_required(required) }}</label>
     <div class="controls">
-        <select name="{{ qname }}" id="{{ 'input-' ~ qname }}" {{ attrs | xmlattr }} />
-            {% if not required -%}
+        <select name="{{ qname }}" id="{{ 'input-' ~ qname }}" {{ attrs|xmlattr }} >
+            {%- if not required -%}
             <option value=""></option>
-            {% endif -%}
+            {%- endif %}
             {% for option in field.vocabulary -%}
-            <option value="{{ option.value }}" {% if option.value == value %}selected="selected"{% endif %}
-                >{{ option.title or option.value }}</option>
+            <option value="{{ option.value }}" {% if option.value == value %}selected="selected"{% endif %}>
+                {{- option.title or option.value -}}
+            </option>
             {% endfor -%}
         </select>
     </div>
 </div>
-
-

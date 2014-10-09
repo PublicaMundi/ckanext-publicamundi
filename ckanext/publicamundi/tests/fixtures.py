@@ -98,6 +98,9 @@ foo6.contacts['personal'] = None
 foo7 = copy.deepcopy(foo1)
 foo7.tags = None
 
+foo8 = copy.deepcopy(foo1)
+foo8.contacts.pop('personal')
+
 freekeyword1 = FreeKeyword(
     value = u"atmosphere",
     originating_vocabulary = u"Foo-1",

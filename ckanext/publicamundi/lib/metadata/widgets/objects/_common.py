@@ -5,15 +5,16 @@ from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata.widgets import (
     object_widget_adapter, field_widget_adapter, field_widget_multiadapter)
-from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
-from ckanext.publicamundi.lib.metadata.widgets import fields as field_widgets
+from ckanext.publicamundi.lib.metadata.widgets.base import (
+    ReadObjectWidget, EditObjectWidget,
+    ReadFieldWidget, EditFieldWidget)
 
 #
 # IObject - Tabular views
 #
 
 @object_widget_adapter(schemata.IObject, qualifiers=['table'])
-class TableObjectReadWidget(base_widgets.ReadObjectWidget):
+class TableObjectReadWidget(ReadObjectWidget):
 
     max_depth = 2
     
@@ -144,13 +145,13 @@ class TableObjectReadWidget(base_widgets.ReadObjectWidget):
 #
 
 @object_widget_adapter(schemata.IPoint)
-class PointEditWidget(base_widgets.EditObjectWidget):
+class PointEditWidget(EditObjectWidget):
 
     def get_template(self):
         return 'package/snippets/objects/edit-point.html'
 
 @object_widget_adapter(schemata.IPoint)
-class PointReadWidget(base_widgets.ReadObjectWidget):
+class PointReadWidget(ReadObjectWidget):
 
     def get_template(self):
         return 'package/snippets/objects/read-point.html'
@@ -160,13 +161,13 @@ class PointReadWidget(base_widgets.ReadObjectWidget):
 #
 
 @object_widget_adapter(schemata.ITemporalExtent)
-class TemporalExtentEditWidget(base_widgets.EditObjectWidget):
+class TemporalExtentEditWidget(EditObjectWidget):
 
     def get_template(self):
         return 'package/snippets/objects/edit-temporal_extent.html'
 
 @object_widget_adapter(schemata.ITemporalExtent)
-class TemporalExtentReadWidget(base_widgets.ReadObjectWidget):
+class TemporalExtentReadWidget(ReadObjectWidget):
 
     def get_template(self):
         return 'package/snippets/objects/read-temporal_extent.html'
@@ -176,25 +177,25 @@ class TemporalExtentReadWidget(base_widgets.ReadObjectWidget):
 #
 
 @object_widget_adapter(schemata.IPostalAddress)
-class PostalAddressEditWidget(base_widgets.EditObjectWidget):
+class PostalAddressEditWidget(EditObjectWidget):
 
     def get_template(self):
         return 'package/snippets/objects/edit-postal_address.html'
 
 @object_widget_adapter(schemata.IPostalAddress, qualifiers=['compact'])
-class PostalAddressCompactEditWidget(base_widgets.EditObjectWidget):
+class PostalAddressCompactEditWidget(EditObjectWidget):
 
     def get_template(self):
         return 'package/snippets/objects/edit-postal_address-compact.html'
 
 @object_widget_adapter(schemata.IPostalAddress, qualifiers=['comfortable'])
-class PostalAddressComfortableEditWidget(base_widgets.EditObjectWidget):
+class PostalAddressComfortableEditWidget(EditObjectWidget):
 
     def get_template(self):
         return 'package/snippets/objects/edit-postal_address-comfortable.html'
 
 @object_widget_adapter(schemata.IPostalAddress)
-class PostalAddressReadWidget(base_widgets.ReadObjectWidget):
+class PostalAddressReadWidget(ReadObjectWidget):
 
     def get_template(self):
         return 'package/snippets/objects/read-postal_address.html'
@@ -204,7 +205,7 @@ class PostalAddressReadWidget(base_widgets.ReadObjectWidget):
 #
 
 @object_widget_adapter(schemata.IContactInfo)
-class ContactInfoEditWidget(base_widgets.EditObjectWidget):
+class ContactInfoEditWidget(EditObjectWidget):
 
     def get_field_qualifiers(self):
         return {
@@ -217,7 +218,7 @@ class ContactInfoEditWidget(base_widgets.EditObjectWidget):
         #return 'package/snippets/objects/edit-contact_info.html'
 
 @object_widget_adapter(schemata.IContactInfo)
-class ContactInfoReadWidget(base_widgets.ReadObjectWidget):
+class ContactInfoReadWidget(ReadObjectWidget):
     
     def get_field_qualifiers(self):
         return {

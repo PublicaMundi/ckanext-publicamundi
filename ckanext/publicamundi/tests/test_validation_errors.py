@@ -3,6 +3,7 @@ import zope.schema
 import copy
 import json
 import datetime
+import nose.tools
 
 from ckanext.publicamundi.lib.metadata.types import *
 
@@ -93,6 +94,21 @@ x21 = Foo(
 x22 = copy.deepcopy(x21)
 x22.published = datetime.datetime(2014, 4, 15) # before creation date
 
+x23 = copy.deepcopy(x21)
+x23.tags = [u'hello-world', u'goodbye'] 
+x23.contacts = { 
+    'office': ContactInfo(address=PostalAddress(address=u'Nowhere-Land', postalcode=u'12345')),
+    # Note validator should skip this (when required=False)
+    'personal': None, 
+}
+
+x24 = copy.deepcopy(x21)
+x24.tags = [u'hello-world', u'goodbye'] 
+x24.contacts = { 
+    'office': ContactInfo(address=PostalAddress(address=u'Nowhere-Land', postalcode=u'12345')),
+    # Note validator should not be affected by the absence of this key
+}
+
 # Fixture x3: valid (fix errors on x21)
 
 x3 = copy.deepcopy(x21)
@@ -145,6 +161,16 @@ def test_invariants_x22():
     errs = x22.validate()
     errs_dict = x22.dictize_errors(errs)
     assert len(errs_dict['__after']) >= 2
+
+def test_invariants_x23():
+    IFoo.get('contacts').value_type.required = False
+    helpers.assert_faulty_keys(x23,
+        expected_keys = set(['contact_info', 'temporal_extent']))
+    IFoo.get('contacts').value_type.required = True # dont affect others
+
+def test_invariants_x24():
+    helpers.assert_faulty_keys(x24,
+        expected_keys = set(['contact_info', 'temporal_extent']))
 
 def test_valid_x3():
     '''Verify a valid object'''

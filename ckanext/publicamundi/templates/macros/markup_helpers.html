@@ -1,8 +1,8 @@
 
 {%- macro mark_required(required, msg=None) -%}
-    {% if required -%}
-    <span title="{{ msg or _("This field is required") }}" class="control-required">*</span>
-   {% endif -%}
+   {%- if required -%}
+   <span title="{{ msg or _("This field is required") }}" class="control-required">*</span>
+   {%- endif -%}
 {%- endmacro -%}
 
 {%- macro markup_for_messages(messages, key=None, titles={}) -%}

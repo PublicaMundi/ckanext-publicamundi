@@ -1,20 +1,19 @@
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
-{% set placeholder = placeholder or field.default -%}
-{% if input_classes is not defined %}{% set input_classes = [ 'input-medium' ] %}{% endif -%}
+{%- set placeholder = placeholder or field.default -%}
+{%- if input_classes is not defined %}{% set input_classes = [ 'input-medium' ] %}{% endif -%}
 
-<div class="control-group{{ " error" if errors }}{{ " " ~ classes | join(' ') }}">
+<div class="control-group{{ " error" if errors }}{{ " " ~ classes|join(' ') }}">
     <label class="control-label" for="{{ 'input-' ~ qname }}">
-        {{ title }}{{ markup_helpers.mark_required(required) }}
-    </label>
+        {{- title }}{{ markup_helpers.mark_required(required) }}</label>
     <div class="controls">
         <div class="input-append datetime"
             data-module="datetimepicker" 
             data-module-picktime="true" data-module-pickdate="true" data-module-format="yyyy-MM-dd hh:mm:ss"
-             >
+           >
             <input type="text" id="{{ 'input-' ~ qname }}"  name="{{ qname }}"
-                class="{{ input_classes | list | join(" ") }}"
-                value="{{ value | empty_and_escape }}" 
+                class="{{ input_classes|join(" ") }}"
+                value="{{ value|empty_and_escape }}" 
                 placeholder="{{ placeholder | empty_and_escape }}"
             />
             <span class="add-on">
@@ -22,9 +21,9 @@
             </span>
         </div>
         {% if errors -%}
-        <span class="help-inline">{{ errors | join(', ') }}</span>
+        <span class="help-inline">{{ errors|join(', ') }}</span>
         {% endif -%}
     </div>
 </div>
 
-{% resource 'ckanext-publicamundi/datetimepicker' %}
+{%- resource 'ckanext-publicamundi/datetimepicker' %}

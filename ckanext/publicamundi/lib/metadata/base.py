@@ -653,8 +653,6 @@ class Object(object):
             if recurse:
                 for k, field in obj.iter_fields():
                     f = field.get(obj)
-                    if not f:
-                        continue
                     ef = self._validate_invariants_for_field(f, field)
                     if ef:
                         errors.append((k, ef))
@@ -672,7 +670,14 @@ class Object(object):
         def _validate_invariants_for_field(self, f, field):
             '''Returns <ef>, i.e. an array of field-specific exceptions'''
             ef = []
-
+            
+            # Check if empty
+            
+            if not f:
+                return ef
+            
+            # Descend into field
+            
             ex  = None
             if isinstance(field, zope.schema.Object):
                 cls = type(self)

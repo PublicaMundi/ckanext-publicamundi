@@ -2,33 +2,43 @@ import zope.interface
 
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata.fields import *
-from ckanext.publicamundi.lib.metadata.widgets import object_widget_adapter
-from ckanext.publicamundi.lib.metadata.widgets import field_widget_adapter
-from ckanext.publicamundi.lib.metadata.widgets import field_widget_multiadapter
+from ckanext.publicamundi.lib.metadata.widgets import (
+    object_widget_adapter, field_widget_adapter, field_widget_multiadapter)
 from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
+from ckanext.publicamundi.lib.metadata.widgets.base import (
+    EditFieldWidget, EditObjectWidget, 
+    ReadFieldWidget, ReadObjectWidget,
+    ListFieldWidgetTraits, DictFieldWidgetTraits)
 
 @field_widget_multiadapter([IListField, ITextLineField], qualifiers=['tags.foo'])
-class TagsEditWidget(base_widgets.EditFieldWidget, base_widgets.ListFieldWidgetTraits):
+class TagsEditWidget(EditFieldWidget, ListFieldWidgetTraits):
 
     def __init__(self, field, *args):
         assert isinstance(field, zope.schema.List)
-        base_widgets.EditFieldWidget.__init__(self, field)
+        EditFieldWidget.__init__(self, field)
 
     def get_template(self):
         return 'package/snippets/fields/edit-list-tags-foo.html'
 
 @field_widget_multiadapter([IListField, ITextLineField], qualifiers=['tags.foo'])
-class TagsReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListFieldWidgetTraits):
+class TagsReadWidget(ReadFieldWidget, ListFieldWidgetTraits):
 
     def __init__(self, field, *args):
         assert isinstance(field, zope.schema.List)
-        base_widgets.ReadFieldWidget.__init__(self, field)
+        ReadFieldWidget.__init__(self, field)
 
     def get_template(self):
         return 'package/snippets/fields/read-list-tags-foo.html'
 
+@field_widget_multiadapter([IDictField, schemata.IContactInfo],
+    qualifiers=['contacts.foo'], is_fallback=True)
+class DictOfContactsEditWidget(EditFieldWidget, DictFieldWidgetTraits):
+ 
+    def get_template(self):
+        return 'package/snippets/fields/edit-dict-contacts-foo.html'
+
 @object_widget_adapter(schemata.IFoo)
-class FooEditWidget(base_widgets.EditObjectWidget):
+class FooEditWidget(EditObjectWidget):
 
     def prepare_template_vars(self, name_prefix, data):
         tpl_vars = super(FooEditWidget, self).prepare_template_vars(name_prefix, data)
@@ -52,7 +62,7 @@ class FooEditWidget(base_widgets.EditObjectWidget):
         return None # use glue template
 
 @object_widget_adapter(schemata.IFoo, qualifiers=['datasetform'])
-class DatasetFooEditWidget(base_widgets.EditObjectWidget):
+class DatasetFooEditWidget(EditObjectWidget):
     
     def get_omitted_fields(self):
         return ['geometry']
@@ -71,7 +81,7 @@ class DatasetFooEditWidget(base_widgets.EditObjectWidget):
         return None # use glue template
 
 @object_widget_adapter(schemata.IFoo)
-class FooReadWidget(base_widgets.ReadObjectWidget):
+class FooReadWidget(ReadObjectWidget):
     
     def prepare_template_vars(self, name_prefix, data):
         tpl_vars = super(FooReadWidget, self).prepare_template_vars(name_prefix, data)
