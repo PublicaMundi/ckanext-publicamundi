@@ -7,7 +7,7 @@
         {{ item_template.markup|safe -}}
     </script>
 
-    <ul id="{{ qname }}-items">
+    <ul id="{{ qname }}-items" >
         {% for k, y in items.items() -%}
         <li data-key="{{ k }}">{{ y.markup }}</li>
         {%- endfor %}

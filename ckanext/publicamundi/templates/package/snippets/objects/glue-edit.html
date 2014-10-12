@@ -1,7 +1,7 @@
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
 <div class="{{ " " ~ classes|join(' ') }}">
-    {% if title %}<h3>{{ title }}</h3>{% endif -%}
+    <header>{% if title %}<h3>{{ title }}</h3>{% endif %}</header>
     {{- markup_helpers.error_messages(errors[errors.global_key]) -}} 
     {%- for k, f in fields.items() -%}
     {{ f.markup }}

@@ -1,6 +1,4 @@
-/* 
- * javascript needed by ckanext-publicamundi forms
- */
-jQuery(document).ready ((function ($) {
-    // Todo ...
-})(jQuery))
+
+jQuery(document).ready (function ($) {
+    // Todo
+})

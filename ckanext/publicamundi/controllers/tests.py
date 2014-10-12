@@ -76,12 +76,17 @@ class TestsController(BaseController):
         c.form_class = 'form-horizontal' # 'form-horizontal'
         return render('tests/accordion-form.html')
 
-    def get_field_markup_with_helper(self):
-        x = fixtures.foo1
-        k = 'title'
+    def get_field_markup_with_helper(self, id):
+        x = getattr(fixtures, id)
+        k = request.params.get('field', 'title')
+        action = request.params.get('action', 'edit')
+        prefix = request.params.get('prefix', 'booo')
+        title = request.params.get('title')
         return render('tests/field.html', extra_vars = {
             'field': x.get_field(k),
-            'title': u'Title',
+            'action': str(action),
+            'name_prefix': str(prefix),
+            'title': title, 
         })
 
     def get_objects_markup(self):
