@@ -1,5 +1,5 @@
 
-this.ckan.module('input-contacts-foo', function ($, _) {
+this.ckan.module('edit-dict-items', function ($, _) {
         
     return {
         options: {
@@ -30,11 +30,11 @@ this.ckan.module('input-contacts-foo', function ($, _) {
                 $y.itemEditor(yopts)
             }
             
-            window.console.log('Initialized module: input-contacts-foo')
+            window.console.log('Initialized module: edit-dict-items')
         },
 
         teardown: function () { 
-            window.console.log('Tearing down module: input-contacts-foo')
+            window.console.log('Tearing down module: edit-dict-items')
         },
     }
 })
