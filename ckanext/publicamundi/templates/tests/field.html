@@ -1,14 +1,14 @@
 {% extends 'tests/base.html' %}
 
-{% block scripts %}
-{{ super() }}
-{% resource 'ckanext-publicamundi/scratch' %}
-{% endblock %}
-
 {% block primary_content_inner %}
-{{ 
-    h.markup_for_field(action|default('edit'), field, 
-        name_prefix = name_prefix, 
-        data = { 'title': title|default('A title goes here') }) 
-}}
+<form>
+    {{ 
+        h.markup_for_field(action|default('edit'), field, 
+            name_prefix = name_prefix, 
+            data = { 'title': title|default('A title goes here') }) 
+    }}
+    <hr/>
+    <button type="submit" name="submit" class="btn btn-primary" >Submit</button>
+</form>
+{% resource 'ckanext-publicamundi/scratch' %}
 {% endblock %}
