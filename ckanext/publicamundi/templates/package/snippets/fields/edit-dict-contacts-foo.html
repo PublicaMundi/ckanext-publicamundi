@@ -1,16 +1,16 @@
 
-<div class="{{ classes | join(' ') }}"
-    data-module="input-contacts-foo" 
+<div class="{{ classes|join(' ') }}"
+    data-module="edit-dict-items" 
     data-module-qname="{{ qname }}" 
     data-module-terms="{{ h.dump_json(terms) }}"
-  >
+   >
     {% if title %}<h3 class="title">{{ title }}</h3>{% endif -%}
-    {%- if description %}<div class="description">{{ description }}</div>{% endif %}
+    {%- if description %}<div class="description">{{ description }}</div>{% endif -%}
 
     <script type="x-template-mustache" id="{{ qname }}-item-template">
-        {{ item_template.markup| safe }}
-    </script>    
-    
+        {{ item_template.markup|safe }}
+    </script>
+
     <ul id="{{ qname }}-items">
         {% for k, y in items.items() -%}
         <li data-key="{{ k }}">{{ y.markup }}</li>
@@ -18,4 +18,4 @@
     </ul>
 </div>
 
-{% resource 'ckanext-publicamundi/dataset-foo' %}
+{% resource 'ckanext-publicamundi/item-editor' %}

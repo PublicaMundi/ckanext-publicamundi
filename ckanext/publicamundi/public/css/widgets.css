@@ -18,6 +18,7 @@ li .widget.object-edit-widget {
 .widget.field-edit-widget > ul > li header > a.btn.btn-small {
     margin: 5px 0px 0px 0px;
 }
+
 .widget.field-edit-widget > ul > li header > a.btn.remove-object {
     color: brown;
 }
