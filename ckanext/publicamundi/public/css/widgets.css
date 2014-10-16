@@ -15,12 +15,20 @@ li .widget.object-edit-widget {
     /*padding: 0px 0px;*/
 }
 
-.widget.field-edit-widget > ul > li header > a.btn.btn-small {
-    margin: 5px 0px 0px 0px;
+.widget.field-edit-widget > ul > li header > .btn.btn-small {
 }
 
-.widget.field-edit-widget > ul > li header > a.btn.remove-object {
+.widget.field-edit-widget > ul > li header > .btn.remove,
+.widget.field-edit-widget > ul > li header > .btn-group.remove-opts > button {
     color: brown;
+}
+.widget.field-edit-widget > ul > li header > .btn-group.remove-opts .dropdown-menu a {
+    cursor: pointer;
+    color: brown;
+}
+.widget.field-edit-widget > ul > li header > .btn-group.remove-opts .dropdown-menu a:hover {
+    background-image: none;
+    background-color: #f5f3f3;
 }
 
 .widget.object-read-widget .table.metadata-table {}

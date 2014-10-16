@@ -15,7 +15,8 @@ this.ckan.module('edit-all-dict-items', function ($, _) {
             for (var key in opts.terms) {
                 var yopts = { 
                     qname: qname + '.' + key, 
-                    title: opts.terms[key].title
+                    title: opts.terms[key].title,
+                    allowDelete: true,
                 }
                 var $y = $list.children('li')
                     .filter(function () { return $(this).data('key') == key })
@@ -28,6 +29,9 @@ this.ckan.module('edit-all-dict-items', function ($, _) {
                     $.extend(yopts, { template: 'default', disabled: true })
                 }
                 $y.itemEditor(yopts)
+                $y.on('publicamundi-item_editor-destroyed', function (ev) {
+                    $(this).remove()
+                })
             }
             
             window.console.log('Initialized module: edit-all-dict-items')

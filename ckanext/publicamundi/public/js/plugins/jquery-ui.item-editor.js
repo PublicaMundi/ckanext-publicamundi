@@ -245,16 +245,31 @@ jQuery(document).ready(function ($) {
         widgetEventPrefix: 'publicamundi-item_editor-',
         
         options: {
-            placeholder: true, // Use a placeholder when detached (disabled mode)
+            placeholder: true, // Whether to use a placeholder when widget is disabled
+            allowDelete: false, // Whether user is allowed to delete this item (and destroy the widget)
             defaultTemplate: function (name) { 
                 return 'script#' 
                     + name.namePrefix.replace(/[.]/g, '\\.') + '-item-template' 
             },
+            editorCssClasses: {
+                removeBtn: 'pull-right',
+                removeBtnGroup: 'pull-right',
+                editBtn: 'pull-right',
+            },
             editorTemplates: {
                 removeBtn:
-                    '<a class="btn btn-small" title="{{title}}"><i class="icon-remove"></i> {{label}}</a>',
+                    '<button class="btn btn-small {{removeActionClass}}"><i class="icon-remove"></i> {{label}}</button>',
+                removeBtnGroup:
+                    '<div class="btn-group {{removeGroupClass}}">' +
+                        '<button class="btn btn-small {{removeActionClass}}"><i class="icon-remove"></i> {{label}}</button>' +
+                        '<button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>' +
+                        '<ul class="dropdown-menu">' +
+                            '<li><a class="btn-small {{removeActionClass}}">{{removeLabel}}</a></li>' +
+                            '<li><a class="btn-small {{deleteActionClass}}">{{deleteLabel}}</a></li>' +
+                        '</ul>' +
+                    '</div>',
                 editBtn:
-                    '<a class="btn btn-small" title="{{title}}"><i class="icon-pencil"></i> {{label}}</a>',
+                    '<button class="btn btn-small {{editActionClass}}"><i class="icon-pencil"></i> {{label}}</button>',
                 placeholder:
                     '<h3 class="inline">{{title}}</h3><span class="label not-available">n/a</span>',
             },
@@ -263,7 +278,17 @@ jQuery(document).ready(function ($) {
          
         _destroy: function()
         {
-            // Empty everything (?), even if not created from template
+            // Empty everything 
+            
+            this.$widget.remove()
+
+            if (this.$placeholder) {
+                this.$placeholder.remove()
+            }
+
+            this.$editBtn.remove()
+            this.$removeBtn.remove()
+
             this.element.empty()
         },
        
@@ -324,17 +349,36 @@ jQuery(document).ready(function ($) {
         
         _generateAdditionalControls: function()
         {
-            var templates = this.options.editorTemplates,
+            var opts = this.options,
+                css_classes = opts.editorCssClasses,
+                templates = opts.editorTemplates,
                 $remove_btn = null, 
                 $edit_btn = null, 
                 $placeholder = null
-
-            $remove_btn = $(render(templates.removeBtn, { label: 'Remove' }))
-            $remove_btn.addClass('remove-object pull-right')
+            
+            if (!opts.allowDelete) {
+                $remove_btn = $(render(templates.removeBtn, { 
+                    label: 'Remove', 
+                    removeActionClass: 'remove' 
+                }))
+                $remove_btn.addClass(css_classes.removeBtn)
+            } else {
+                $remove_btn = $(render(templates.removeBtnGroup, { 
+                    label: 'Remove',
+                    removeGroupClass: 'remove-opts',
+                    removeLabel: 'Mark as not available',
+                    removeActionClass: 'remove',
+                    deleteLabel: 'Remove the item entirely', 
+                    deleteActionClass: 'delete', 
+                })) 
+                $remove_btn.addClass(css_classes.removeBtnGroup)
+            }
             this.$removeBtn = $remove_btn
             
-            $edit_btn = $(render(templates.editBtn, { label: 'Edit' }))
-            $edit_btn.addClass('edit-object pull-right')
+            $edit_btn = $(render(templates.editBtn, { 
+                label: 'Edit', 
+                editActionClass: 'edit' }))
+            $edit_btn.addClass(css_classes.editBtn)
             this.$editBtn = $edit_btn
             
             if (this.options.placeholder) {
@@ -358,13 +402,14 @@ jQuery(document).ready(function ($) {
             // Bind event handlers
             
             this._on(true, this.element, {
-                'click header > .edit-object': this.enable,
+                'click header .edit': this.enable,
             })
 
             this._on(false, this.element, {
-                'click header > .remove-object': this.disable,
-                'mouseover header > .remove-object': handle_remove_hover,
-                'mouseout  header > .remove-object': handle_remove_hover,
+                'click header .remove': this.disable,
+                'click header .delete': this.destroy,
+                'mouseover header button.remove': handle_remove_hover,
+                'mouseout  header button.remove': handle_remove_hover,
             })
         },
 
