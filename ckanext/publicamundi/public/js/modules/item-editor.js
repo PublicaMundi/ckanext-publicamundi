@@ -1,5 +1,5 @@
 
-this.ckan.module('edit-dict-items', function ($, _) {
+this.ckan.module('edit-all-dict-items', function ($, _) {
         
     return {
         options: {
@@ -25,16 +25,16 @@ this.ckan.module('edit-dict-items', function ($, _) {
                 } else {
                     // No item: create a <li> container, use the templated editor
                     $y = $('<li/>').data('key', key).appendTo($list)
-                    $.extend(yopts, { template: 'default' })
+                    $.extend(yopts, { template: 'default', disabled: true })
                 }
                 $y.itemEditor(yopts)
             }
             
-            window.console.log('Initialized module: edit-dict-items')
+            window.console.log('Initialized module: edit-all-dict-items')
         },
 
         teardown: function () { 
-            window.console.log('Tearing down module: edit-dict-items')
+            window.console.log('Tearing down module: edit-all-dict-items')
         },
     }
 })

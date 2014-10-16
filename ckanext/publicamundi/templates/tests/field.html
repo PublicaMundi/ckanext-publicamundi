@@ -1,7 +1,7 @@
 {% extends 'tests/base.html' %}
 
 {% block primary_content_inner %}
-<form>
+<form method="post">
     {{ 
         h.markup_for_field(action|default('edit'), field, 
             name_prefix = name_prefix, 

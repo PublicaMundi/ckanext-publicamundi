@@ -12,6 +12,7 @@ import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
 
+from ckanext.publicamundi.lib.dictization import unflatten
 from ckanext.publicamundi.lib.util import Breakpoint
 from ckanext.publicamundi.lib.util import to_json
 from ckanext.publicamundi.lib.metadata import schemata
@@ -78,16 +79,23 @@ class TestsController(BaseController):
 
     def get_field_markup_with_helper(self, id):
         x = getattr(fixtures, id)
-        k = request.params.get('field', 'title')
-        action = request.params.get('action', 'edit')
-        prefix = request.params.get('prefix', 'booo')
-        title = request.params.get('title')
-        return render('tests/field.html', extra_vars = {
-            'field': x.get_field(k),
-            'action': str(action),
-            'name_prefix': str(prefix),
-            'title': title, 
-        })
+       
+        if request.method == 'POST':
+            response.headers['Content-Type'] = 'application/json' 
+            out = { tuple(k.split('.')): v for k, v in request.params.items() } 
+            out = unflatten(out)
+            return to_json(out)
+        else:
+            k = request.params.get('field', 'title')
+            action = request.params.get('action', 'edit')
+            prefix = request.params.get('prefix', 'booo')
+            title = request.params.get('title')
+            return render('tests/field.html', extra_vars = {
+                'field': x.get_field(k),
+                'action': str(action),
+                'name_prefix': str(prefix),
+                'title': title, 
+            })
 
     def get_objects_markup(self):
         markup = ''
