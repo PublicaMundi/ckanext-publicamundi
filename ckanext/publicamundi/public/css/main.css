@@ -117,3 +117,7 @@ input[type="tel"] {
     font-size: 14px;
     font-family: menu;
 }
+
+.dropdown-menu {
+    border-radius: 4px;
+}

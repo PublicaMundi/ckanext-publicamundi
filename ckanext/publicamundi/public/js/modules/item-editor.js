@@ -1,6 +1,8 @@
 
 this.ckan.module('edit-all-dict-items', function ($, _) {
-        
+    
+    var debug = $.proxy(window.console, 'debug')
+
     return {
         options: {
             qname: null,
@@ -9,8 +11,12 @@ this.ckan.module('edit-all-dict-items', function ($, _) {
 
         initialize: function () 
         {
-            var module = this, opts = this.options, qname = opts.qname, $el = this.el
-            var $list = $el.children('ul')
+            var module = this,
+                $el = this.el,
+                opts = this.options, 
+                qname = opts.qname, 
+                $list = $el.children('ul'),
+                remove_self = function () { $(this).remove() }
             
             for (var key in opts.terms) {
                 var yopts = { 
@@ -29,17 +35,33 @@ this.ckan.module('edit-all-dict-items', function ($, _) {
                     $.extend(yopts, { template: 'default', disabled: true })
                 }
                 $y.itemEditor(yopts)
-                $y.on('publicamundi-item_editor-destroyed', function (ev) {
-                    $(this).remove()
-                })
+                $y.on('publicamundi-item_editor:destroy', remove_self)
             }
             
-            window.console.log('Initialized module: edit-all-dict-items')
+            debug('Initialized module: edit-all-dict-items')
         },
 
         teardown: function () { 
-            window.console.log('Tearing down module: edit-all-dict-items')
+            debug('Tearing down module: edit-all-dict-items')
         },
     }
 })
 
+
+this.ckan.module('ababoua', function ($, _) {
+    var debug = $.proxy(window.console, 'debug')
+
+    return {
+        options: {
+            boo: 'Boo',
+        },
+
+        initialize: function () 
+        {
+            debug('Initialized module: ababoua', this.options)
+        },
+        teardown: function () { 
+            debug('Tearing down module: ababoua', this.options)
+        },
+    };
+})

@@ -2,15 +2,23 @@
 jQuery(document).ready(function ($) {
     
     var console = window.console
+        debug = $.proxy(console, 'debug') 
+        warn = $.proxy(console, 'warn')
+        error = $.proxy(console, 'error')
+        assert = $.proxy(console, 'assert')
 
-    var debug = $.proxy(console, 'debug') 
-    var warn = $.proxy(console, 'warn')
-    var error = $.proxy(console, 'error')
-    var assert = $.proxy(console, 'assert')
-    
     var render = Mustache.render 
-
-    var parseName = function (qname) {
+    
+    // Enumerate events emitted by following widgets
+    var widget_events = {
+        Create: 'create',
+        Destroy: 'destroy',
+        Enable: 'enable',
+        Disable: 'disable',
+    }
+    
+    // Parse a dot-delimited qialified name
+    var parse_name = function (qname) {
         var i = qname.lastIndexOf('.')
         return {
             qname: qname,
@@ -18,6 +26,8 @@ jQuery(document).ready(function ($) {
             nameKey: (i > 0)? qname.substring(i + 1) : qname,
         }
     }
+
+    // Define widgets
 
     $.widget('publicamundi.fieldwidget', {
         options: {
@@ -28,15 +38,15 @@ jQuery(document).ready(function ($) {
                 return 'script#' + name.qname.replace(/[.]/g, '\\.') + '-template' 
             },
             classPrefix: 'field-qname-',
-            hide: { duration: 400, },
-            show: { duration: 400, easing: 'swing' },
+            hide: { duration: 600, delay: 0 },
+            show: { duration: 600, delay: 0, easing: 'swing' },
         },
 
         _create: function()
         {
             var opts = this.options, tpl = null, dat = null
             
-            this.name = parseName(opts.qname)
+            this.name = parse_name(opts.qname)
             this.title = opts.title
             
             // Preprocess template-related options
@@ -64,16 +74,14 @@ jQuery(document).ready(function ($) {
                 }
             }     
             
-            // Create in the requested (enabled/disabled) mode, fire the proper events
+            // Create in the requested (enabled/disabled) mode, fire proper events
 
             if (opts.disabled) {
                 this._createDisabled(tpl, dat)
-                this._trigger('created')
-                this._trigger('disabled')
+                this._trigger(widget_events.Disable)
             } else {
                 this._createEnabled(tpl, dat)
-                this._trigger('created')
-                this._trigger('enabled')
+                this._trigger(widget_events.Enable)
             }
             
             // Setup (delegated) event handlers
@@ -97,10 +105,10 @@ jQuery(document).ready(function ($) {
         destroy: function()
         {
             // Cleanup events and attributes.
-            // Note: It will delegate to _destroy() for widget-specific cleanup
+            // Note: It will delegate to this._destroy() for widget-specific cleanup
             this._super()
-            // When finished, fire a proper event
-            this._trigger('destroyed')
+            // When finished, fire the proper event
+            this._trigger(widget_events.Destroy)
         },
 
         _destroy: function()
@@ -139,58 +147,87 @@ jQuery(document).ready(function ($) {
 
         enable: function()
         {
-            if (this.options.disabled) {
-                this._enable()
-                this.options.disabled = false
-                this._trigger('enabled')
+            var p = true
+
+            if (this.options.disabled === true) {
+                this.options.disabled = undefined // in progress
+                p = this._enable()
+                p.done(function () {
+                    this.options.disabled = false
+                    this._trigger(widget_events.Enable)
+                })
             }
+
+            return p
         },
        
         disable: function()
         {
-            if (!this.options.disabled) {
-                this._disable()
-                this.options.disabled = true
-                this._trigger('disabled')
+            var p = true
+            
+            if (this.options.disabled === false) {
+                this.options.disabled = undefined // in progress
+                p = this._disable()
+                p.done(function () {
+                    this.options.disabled = true
+                    this._trigger(widget_events.Disable)
+                })
             }
+
+            return p
         },
 
         // Base implementation
 
         _generateControlFromTemplate: function (tpl, data)
         {
-            var $w = null
-
-            $.extend(data, this._getTemplateVars())
-            $w = $(render(tpl, data))
+            var $control = null,
+                widget = this,
+                event_prefix = this.widgetEventPrefix
             
-            assert($w.hasClass('field-widget'))
-            assert($w.hasClass(this.options.classPrefix + this.name.qname))
+            // Generate from template
 
-            return $w
+            this._debug('About to generate control')
+            
+            $.extend(data, this._getTemplateVars())
+            $control = $(render(tpl, data))
+            
+            assert($control.hasClass('field-widget'))
+            assert($control.hasClass(this.options.classPrefix + this.name.qname))
+
+            // Instantiate ckan module instances (when enabled)
+
+            this.element.one(event_prefix + widget_events.Enable, function () {
+                widget._debug('About to instantiate ckan modules')
+                $control.find('[data-module]').each(function (i, el) {
+                    ckan.module.initializeElement(el)
+                })
+            })
+
+            return $control
         },
 
         _queryControl: function ()
         {
-            var qname = this.name.qname, opts = this.options, $w = null
+            var qname = this.name.qname, opts = this.options, $control = null
             var selector = '.field-widget'
                 + ('.' + opts.classPrefix + qname.replace(/[.]/g, '\\.'))
             
-            $w = this.element.children(selector)
-            assert($w.length == 1)
+            $control = this.element.children(selector)
+            assert($control.length == 1)
 
-            return $w
+            return $control
         },
 
         _createEnabled: function (tpl, data)
         {
             if (tpl) {
                 // Generate from template
-                this.$widget = this._generateControlFromTemplate(tpl, data)
-                this.element.empty().append(this.$widget)
+                this.$control = this._generateControlFromTemplate(tpl, data)
+                this.element.empty().append(this.$control)
             } else {
                 // The field-widget already exists, use it
-                this.$widget = this._queryControl()
+                this.$control = this._queryControl()
             }
         },
         
@@ -198,26 +235,38 @@ jQuery(document).ready(function ($) {
         {
             // In this base implementation, we just create our widget in enabled mode,
             // and then we immediately disable it. But, a derived widget may choose to
-            // do different things (such as to lazily load actual this.$widget when this
+            // do different things (such as to lazily load actual this.$control when this
             // is really needed).
             
             this._createEnabled(tpl, data)
-            this._disable()
+            this._disable(true)
         },
 
         _setupEvents: function()
         {
-            $.noop() // Override
+           // To override
         },
 
-        _enable: function() 
+        _enable: function(now) 
         { 
-            this._show(this.element, this.options.show)
+            var widget = this, dfd = new $.Deferred()
+            var finish = function () { dfd.resolveWith(widget) }
+            
+            now = (now == null)? false : Boolean(now)
+            this._show(this.element, (now)? false: this.options.show, finish)
+            
+            return dfd.promise()
         },
 
-        _disable: function() 
-        { 
-            this._hide(this.element, this.options.hide)
+        _disable: function(now) 
+        {
+            var widget = this, dfd = new $.Deferred()
+            var finish = function () { dfd.resolveWith(widget) }
+
+            now = (now == null)? false : Boolean(now)
+            this._hide(this.element, (now)? false: this.options.hide, finish)
+            
+            return dfd.promise()
         },
 
         _getTemplateVars: function() 
@@ -232,21 +281,33 @@ jQuery(document).ready(function ($) {
         _extractTitle: function()
         {
             // Try to extract title from contained widget
-            var title = null 
-            var $header = this.$widget.children('header')
+            var title = null, 
+                $header = this.$control.children('header')
+            
             if ($header.length) {
                title = $header.children('h1,h2,h3,h4,h5').text()
             }
             return title
         },
+
+        // Helpers
+
+        _debug: function ()
+        {
+            var args1 = [].slice.call(arguments, 1),
+                msg_prefix = this.widgetFullName
+            console.debug.apply(console, 
+                ['[%s] ' + arguments[0]].concat([msg_prefix], args1))
+        },
     }) 
     
     $.widget('publicamundi.itemEditor', $.publicamundi.fieldwidget, {
-        widgetEventPrefix: 'publicamundi-item_editor-',
+        widgetEventPrefix: 'publicamundi-item_editor:',
         
         options: {
-            placeholder: true, // Whether to use a placeholder when widget is disabled
-            allowDelete: false, // Whether user is allowed to delete this item (and destroy the widget)
+            placeholder: true, // Use a placeholder when the widget is disabled
+            allowDelete: true, // Allow to delete this item (self-destroys the widget)
+            allowRemove: true, // Allow to remove this item (disables the widget, can be re-enabled)
             defaultTemplate: function (name) { 
                 return 'script#' 
                     + name.namePrefix.replace(/[.]/g, '\\.') + '-item-template' 
@@ -258,20 +319,28 @@ jQuery(document).ready(function ($) {
             },
             editorTemplates: {
                 removeBtn:
-                    '<button class="btn btn-small {{removeActionClass}}"><i class="icon-remove"></i> {{label}}</button>',
+                    '<button class="btn btn-small {{removeActionClass}}">' + 
+                       '<i class="icon-remove"></i> {{label}}</button>',
                 removeBtnGroup:
                     '<div class="btn-group {{removeGroupClass}}">' +
-                        '<button class="btn btn-small {{removeActionClass}}"><i class="icon-remove"></i> {{label}}</button>' +
-                        '<button class="btn btn-small dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>' +
+                        '<button class="btn btn-small {{removeActionClass}}">' + 
+                            '<i class="icon-remove"></i> {{label}}</button>' +
+                        '<button class="btn btn-small dropdown-toggle" data-toggle="dropdown">' + 
+                            '<span class="caret"></span></button>' +
                         '<ul class="dropdown-menu">' +
-                            '<li><a class="btn-small {{removeActionClass}}">{{removeLabel}}</a></li>' +
-                            '<li><a class="btn-small {{deleteActionClass}}">{{deleteLabel}}</a></li>' +
+                            '<li>' + 
+                                '<a class="btn-link btn-small {{removeActionClass}}">{{removeLabel}}</a>' + 
+                            '</li><li>' + 
+                                '<a class="btn-link btn-small {{deleteActionClass}}">{{deleteLabel}}</a>' + 
+                            '</li>' +
                         '</ul>' +
                     '</div>',
                 editBtn:
-                    '<button class="btn btn-small {{editActionClass}}"><i class="icon-pencil"></i> {{label}}</button>',
+                    '<button class="btn btn-small {{editActionClass}}">' + 
+                        '<i class="icon-pencil"></i> {{label}}</button>',
                 placeholder:
-                    '<h3 class="inline">{{title}}</h3><span class="label not-available">n/a</span>',
+                    '<h3 class="inline">{{title}}</h3>' + 
+                    '<span class="label not-available">n/a</span>',
             },
             editorSelector: '.object-edit-widget',
         },
@@ -280,7 +349,7 @@ jQuery(document).ready(function ($) {
         {
             // Empty everything 
             
-            this.$widget.remove()
+            this.$control.remove()
 
             if (this.$placeholder) {
                 this.$placeholder.remove()
@@ -294,15 +363,15 @@ jQuery(document).ready(function ($) {
        
         _createEnabled: function (tpl, data)
         {
-            var opts = this.options, $w, $editor
+            var opts = this.options, $editor = null
             
             if (tpl) {
                 // Generate from template
-                this.$widget = this._generateControlFromTemplate(tpl, data)
-                this.element.empty().append(this.$widget)
+                this.$control = this._generateControlFromTemplate(tpl, data)
+                this.element.empty().append(this.$control)
             } else {
                 // The field-widget already exists, use it
-                this.$widget = this._queryControl()
+                this.$control = this._queryControl()
             }
 
             this._generateAdditionalControls()
@@ -310,7 +379,7 @@ jQuery(document).ready(function ($) {
                 this.$placeholder.append(this.$editBtn)
             }
    
-            $editor = this.$widget.children(opts.editorSelector)
+            $editor = this.$control.children(opts.editorSelector)
             $editor.children('header').append(this.$removeBtn)
         },
         
@@ -324,7 +393,7 @@ jQuery(document).ready(function ($) {
                 // Defer actual generation of the basic field-widget.
                 
                 this.element.empty()
-                this.$widget = $()
+                this.$control = $()
                 
                 this._generateAdditionalControls()
                 this.$placeholder.append(this.$editBtn)
@@ -334,17 +403,17 @@ jQuery(document).ready(function ($) {
                 var _enable = this._enable
                 this._enable = function () {
                     // Generate  
-                    this.$widget = this._generateControlFromTemplate(tpl, data)
-                    var $editor = this.$widget.children(this.options.editorSelector)
+                    this.$control = this._generateControlFromTemplate(tpl, data)
+                    var $editor = this.$control.children(this.options.editorSelector)
                     $editor.children('header').append(this.$removeBtn)
 
                     // Restore _enable and invoke immediately
                     this._enable = _enable
-                    this._enable()
+                    return this._enable()
                 }
             }
 
-            this._disable()
+            this._disable(true)
         },
         
         _generateAdditionalControls: function()
@@ -356,10 +425,10 @@ jQuery(document).ready(function ($) {
                 $edit_btn = null, 
                 $placeholder = null
             
-            if (!opts.allowDelete) {
+            if (!opts.allowDelete || !opts.allowRemove) {
                 $remove_btn = $(render(templates.removeBtn, { 
                     label: 'Remove', 
-                    removeActionClass: 'remove' 
+                    removeActionClass: (opts.allowDelete)? 'delete' : 'remove'
                 }))
                 $remove_btn.addClass(css_classes.removeBtn)
             } else {
@@ -390,67 +459,100 @@ jQuery(document).ready(function ($) {
 
         _setupEvents: function()
         {
-            var handle_remove_hover = function (ev) {
+            var handle_edit, 
+                handle_remove, 
+                handle_delete, 
+                handle_remove_hovered
+            
+            // Create handlers
+
+            handle_remove_hovered = function (ev) {
                 if (ev.type == 'mouseover') {
-                    this.$widget.css({ 'background-color': '#f7f7f7' })
+                    this.$control.addClass('remove-hover')
                 } else if (ev.type == 'mouseout') {
-                    this.$widget.css({ 'background-color': 'inherit' })
+                    this.$control.removeClass('remove-hover')
                 }
                 return false
             }
-        
-            // Bind event handlers
             
+            handle_edit = this.enable
+
+            handle_remove = this.disable
+            
+            handle_delete = function () {
+                // Start self-destroy using with the same effect as disable
+                var f = function () { this.destroy() }
+                this._hide(this.$control, this.options.hide, $.proxy(f, this))
+            }
+
+            // Bind handlers to this.element (delegated events)
+
             this._on(true, this.element, {
-                'click header .edit': this.enable,
+                'click header .edit': handle_edit,
             })
 
             this._on(false, this.element, {
-                'click header .remove': this.disable,
-                'click header .delete': this.destroy,
-                'mouseover header button.remove': handle_remove_hover,
-                'mouseout  header button.remove': handle_remove_hover,
+                'click header .remove': handle_remove,
+                'click header .delete': handle_delete,
+                'mouseover header button.remove': handle_remove_hovered,
+                'mouseout  header button.remove': handle_remove_hovered,
             })
         },
 
-        _enable: function()
+        _enable: function(now)
         {
-            var opts = this.options 
+            var widget = this, 
+                opts = this.options,
+                dfd = new $.Deferred()
+                
+            var finish = function () { dfd.resolveWith(widget) }
+
+            now = (now == null)? false : Boolean(now)
 
             if (this.$placeholder) {
                 this.$placeholder.detach()
-                this.$widget.hide()
-                this.element.append(this.$widget)
-                this.$widget.fadeIn(opts.show)
+                this._hide(this.$control, false)
+                this.element.append(this.$control)
+                this._show(this.$control, (now)? false : opts.show, finish)
             } else {
-                var $editor = this.$widget.children(opts.editorSelector)
+                var $editor = this.$control.children(opts.editorSelector)
                 var $header = $editor.children('header')
                 this.$editBtn.detach()
-                this.$removeBtn.hide()
+                this._hide(this.$removeBtn, false)
                 $editor.find(':input').attr('disabled', null)
                 $header.append(this.$removeBtn)
-                this.$removeBtn.fadeIn(opts.show)
+                this._show(this.$removeBtn, !now, finish)
             }
+
+            return dfd.promise()
         },
        
-        _disable: function()
+        _disable: function(now)
         {
-            var opts = this.options
-            
+            var widget = this,
+                opts = this.options,
+                dfd = new $.Deferred()
+                
+            var finish = function () { dfd.resolveWith(widget) }
+
+            now = (now == null)? false : Boolean(now)
+
             if (this.$placeholder) {
-                this.$widget.detach()
-                this.$placeholder.hide()
+                this.$control.detach()
+                this._hide(this.$placeholder, false)
                 this.element.append(this.$placeholder)
-                this.$placeholder.fadeIn(opts.show)
+                this._show(this.$placeholder, (now)? false : opts.show, finish)
             } else {
-                var $editor = this.$widget.children(opts.editorSelector)
+                var $editor = this.$control.children(opts.editorSelector)
                 var $header = $editor.children('header')
                 this.$removeBtn.detach()
-                this.$editBtn.hide()
+                this._hide(this.$editBtn, false)
                 $editor.find(':input').attr('disabled', 'disabled')
                 $header.append(this.$editBtn)
-                this.$editBtn.fadeIn(opts.show)
+                this._show(this.$editBtn, !now, finish)
             }
+            
+            return dfd.promise()
         },
 
         _getTemplateVars: function() 
@@ -462,8 +564,8 @@ jQuery(document).ready(function ($) {
         _extractTitle: function()
         {
             var title = null,
-                $w1 = this.$widget.children(this.options.editorSelector),
-                $header = $w1.children('header')
+                $editor = this.$control.children(this.options.editorSelector),
+                $header = $editor.children('header')
             
             if ($header.length) {
                title = $header.children('h1,h2,h3,h4,h5').text()

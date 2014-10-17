@@ -19,16 +19,20 @@ li .widget.object-edit-widget {
 }
 
 .widget.field-edit-widget > ul > li header > .btn.remove,
+.widget.field-edit-widget > ul > li header > .btn.delete,
 .widget.field-edit-widget > ul > li header > .btn-group.remove-opts > button {
     color: brown;
 }
 .widget.field-edit-widget > ul > li header > .btn-group.remove-opts .dropdown-menu a {
-    cursor: pointer;
+    /*cursor: pointer;*/
     color: brown;
 }
 .widget.field-edit-widget > ul > li header > .btn-group.remove-opts .dropdown-menu a:hover {
     background-image: none;
     background-color: #f5f3f3;
+}
+.widget.field-edit-widget.remove-hover {
+    background-color: #f7f7f5;
 }
 
 .widget.object-read-widget .table.metadata-table {}

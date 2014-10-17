@@ -26,7 +26,7 @@ from ckanext.publicamundi.tests import fixtures
 log1 = logging.getLogger(__name__)
 
 class TestsController(BaseController):
-
+ 
     def brk(self):
         raise Breakpoint()
 
@@ -89,7 +89,7 @@ class TestsController(BaseController):
             k = request.params.get('field', 'title')
             action = request.params.get('action', 'edit')
             prefix = request.params.get('prefix', 'booo')
-            title = request.params.get('title')
+            title = request.params.get('title', k)
             return render('tests/field.html', extra_vars = {
                 'field': x.get_field(k),
                 'action': str(action),
