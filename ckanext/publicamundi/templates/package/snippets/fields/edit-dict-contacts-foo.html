@@ -1,8 +1,17 @@
+{% set 
+    messages = 
+    {
+        'select-label': 'Specify the type of contact ...',
+        'add-label': 'Add',
+    } 
+-%}
 
 <div class="{{ classes|join(' ') }}"
-    data-module="edit-all-dict-items" 
+    data-module="edit-selected-dict-items" 
     data-module-qname="{{ qname }}" 
     data-module-terms="{{ h.dump_json(terms) }}"
+    data-module-messages="{{ h.dump_json(messages) }}"
+    data-module-select="select2"
    >
     {% if title %}<h3 class="title">{{ title }}</h3>{% endif -%}
     {%- if description %}<div class="description">{{ description }}</div>{% endif -%}

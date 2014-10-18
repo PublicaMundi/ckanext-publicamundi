@@ -1,5 +1,13 @@
 {% extends 'tests/base.html' %}
 
+{% block scripts %}
+{{ super() }}
+<style>
+   form > .field-widget > h3 { font-size: 1.5em; }
+</style>
+{% endblock %}
+
+
 {% block primary_content_inner %}
 <form method="post">
     {{ 

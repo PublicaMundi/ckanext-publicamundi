@@ -1,7 +1,3 @@
-//                                                       //
-// Modules needed by every page in ckanext-publicamundi  //
-//                                                       //
-
 /*
  * Provide support for select2-based inputs.
  * This module only acts as a (simplified) wrapper to select2
