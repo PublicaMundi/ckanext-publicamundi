@@ -1,3 +1,16 @@
+header > h1.inline,
+header > h2.inline,
+header > h3.inline,
+header > h4.inline,
+header > h5.inline,
+header > h6.inline { 
+    display: inline-block 
+} 
+
+.btn-small {
+    padding: 4px 9px 4px 9px;
+}
+
 .datepicker {
     width: 250px
 }
@@ -8,6 +21,13 @@ div.controls .help-block {
 
 div.accordion-group {
     border-radius: 1px;
+}
+
+span.label.not-available {
+    padding: 3px 5px;
+    margin: 0px 7px;
+    font-size: 11px;
+    font-family: monospace;
 }
 
 select,
@@ -45,6 +65,10 @@ input[type="tel"] {
 .control-group > .alert-error {
     margin: 3px 0px;
     font-size: 12px;
+}
+
+.select2-container {
+    margin-top: 0px;
 }
 
 .select2-container .select2-choice,
@@ -96,4 +120,8 @@ input[type="tel"] {
 .control-required {
     font-size: 14px;
     font-family: menu;
+}
+
+.dropdown-menu {
+    border-radius: 4px;
 }

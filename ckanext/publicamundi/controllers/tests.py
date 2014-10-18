@@ -12,6 +12,7 @@ import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
 
+from ckanext.publicamundi.lib.dictization import unflatten
 from ckanext.publicamundi.lib.util import Breakpoint
 from ckanext.publicamundi.lib.util import to_json
 from ckanext.publicamundi.lib.metadata import schemata
@@ -25,7 +26,7 @@ from ckanext.publicamundi.tests import fixtures
 log1 = logging.getLogger(__name__)
 
 class TestsController(BaseController):
-
+ 
     def brk(self):
         raise Breakpoint()
 
@@ -76,13 +77,25 @@ class TestsController(BaseController):
         c.form_class = 'form-horizontal' # 'form-horizontal'
         return render('tests/accordion-form.html')
 
-    def get_field_markup_with_helper(self):
-        x = fixtures.foo1
-        k = 'title'
-        return render('tests/field.html', extra_vars = {
-            'field': x.get_field(k),
-            'title': u'Title',
-        })
+    def get_field_markup_with_helper(self, id):
+        x = getattr(fixtures, id)
+       
+        if request.method == 'POST':
+            response.headers['Content-Type'] = 'application/json' 
+            out = { tuple(k.split('.')): v for k, v in request.params.items() } 
+            out = unflatten(out)
+            return to_json(out)
+        else:
+            k = request.params.get('field', 'title')
+            action = request.params.get('action', 'edit')
+            prefix = request.params.get('prefix', 'booo')
+            title = request.params.get('title', k)
+            return render('tests/field.html', extra_vars = {
+                'field': x.get_field(k),
+                'action': str(action),
+                'name_prefix': str(prefix),
+                'title': title, 
+            })
 
     def get_objects_markup(self):
         markup = ''

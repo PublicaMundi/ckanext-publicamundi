@@ -1,15 +1,15 @@
-<div class="{{ classes | join(' ') }}">
+<div class="{{ classes|join(' ') }}">
     <h3>{{ title or _('Contact Info') }}</h3>
     
-    {% if obj.address -%}
+    {%- if obj.address -%}
     <dt>{{ _('Address') }}</dt>
     <dd>
        {{ obj.address.address }} {{ _('Zip') }}: {{ obj.address.postalcode }}
     </dd>
-    {% endif -%}
+    {%- endif -%}
     
-    {% if obj.email -%}
+    {% -if obj.email -%}
     <dt>{{ _('Email') }}</dt>
     <dd><a href="mailto:{{ obj.mail}}">{{ obj.email }}</a></dd>
-    {% endif -%}
+    {%- endif -%}
 </div>

@@ -1,8 +1,22 @@
-{% extends 'page.html' %}
+{% extends 'tests/base.html' %}
+
+{% block scripts %}
+{{ super() }}
+<style>
+   form > .field-widget > h3 { font-size: 1.5em; }
+</style>
+{% endblock %}
+
 
 {% block primary_content_inner %}
-{{ h.markup_for_field('read', field, 
-    name_prefix = 'foo', 
-    data = { 'title': title }) 
-}}
+<form method="post">
+    {{ 
+        h.markup_for_field(action|default('edit'), field, 
+            name_prefix = name_prefix, 
+            data = { 'title': title|default('A title goes here') }) 
+    }}
+    <hr/>
+    <button type="submit" name="submit" class="btn btn-primary" >Submit</button>
+</form>
+{% resource 'ckanext-publicamundi/scratch' %}
 {% endblock %}

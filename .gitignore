@@ -3,3 +3,5 @@ ckanext_publicamundi.egg-info/
 *.swp
 build
 dist
+
+ckanext/publicamundi/public/js/scratch.js

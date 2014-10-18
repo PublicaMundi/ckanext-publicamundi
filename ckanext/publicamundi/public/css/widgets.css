@@ -1,14 +1,53 @@
 
 .widget h3 { 
-    font-size: 1.05em;
+    font-size: 1.1em;
+    color: #555;
 }
 
 .widget li > .widget h3 { 
     font-size: 1em; 
+    color: inherit;
 }
 
 .widget .accordion-heading a {
     font-weight: bold;
+    font-size: 1.1em;
+}
+
+li .widget.object-edit-widget {
+    /*padding: 0px 0px;*/
+}
+
+.widget.field-edit-widget > ul > li header > .btn.btn-small {
+}
+
+.widget.field-edit-widget > ul > li header > .btn.remove,
+.widget.field-edit-widget > ul > li header > .btn.delete,
+.widget.field-edit-widget > ul > li header > .btn-group.remove-opts > button {
+    color: brown;
+}
+.widget.field-edit-widget > ul > li header > .btn-group.remove-opts .dropdown-menu a {
+    /*cursor: pointer;*/
+    color: brown;
+}
+.widget.field-edit-widget > ul > li header > .btn-group.remove-opts .dropdown-menu a:hover {
+    background-image: none;
+    background-color: #f5f3f3;
+}
+.widget.field-edit-widget.remove-hover {
+    background-color: #f7f7f5;
+}
+
+.field-edit-widget > .add-item {
+    margin: 5px 0px;
+}
+.field-edit-widget > .add-item select.select-key {
+    margin-right: 5px;
+    vertical-align: top;
+} 
+.field-edit-widget > .add-item .select2-container.select-key {
+    margin-right: 5px;
+    vertical-align: top;
 }
 
 .widget.object-read-widget .table.metadata-table {}

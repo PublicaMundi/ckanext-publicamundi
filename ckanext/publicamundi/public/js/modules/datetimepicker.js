@@ -10,8 +10,8 @@ this.ckan.module('datetimepicker', function ($, _) {
     },
     initialize: function() {
         var module = this
+        var $el = $(this.el) 
         if ($.fn.datetimepicker) {
-            var $el = $(this.el) 
             var $input = $el.find('input')
             $input.data('format', module.options.format)
             $el.datetimepicker({
@@ -23,7 +23,7 @@ this.ckan.module('datetimepicker', function ($, _) {
         } else {
             window.console.error('The jQuery extension "bootstrap-datetimepicker" is not loaded')
         }
-        window.console.log('Initialized module: datetimepicker')
+        window.console.log('Initialized module for ' + $el.find('input').attr('name') + ': datetimepicker')
     },
     teardown: function() { 
         window.console.log('Tearing down module: datetimepicker')

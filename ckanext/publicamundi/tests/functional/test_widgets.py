@@ -22,9 +22,12 @@ from ckanext.publicamundi.lib.metadata.widgets import ibase as ibase_widgets
 from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 from ckanext.publicamundi.lib.metadata.widgets import fields as field_widgets
 from ckanext.publicamundi.lib.metadata.widgets import (
-    markup_for_field, markup_for_object, widget_for_object, widget_for_field)
+    QualAction, markup_for_field, markup_for_object,
+    widget_for_object, widget_for_field)
 from ckanext.publicamundi.lib.metadata.widgets import (
     field_widget_adapter, field_widget_multiadapter)
+from ckanext.publicamundi.lib.metadata.widgets.util import (
+    to_c14n_markup, to_tidy_markup)
 
 log1 = logging.getLogger(__name__)
 
@@ -140,48 +143,72 @@ class TestController(BaseTestController):
     @nose.tools.istest
     def test_read_field_widgets(self):
         '''Generate markup for reading fields'''
-        for k in ['title', 'reviewed', 'notes', 'thematic_category', 'wakeup_time', 'created', 'rating', 'grade', 'url']:
-            yield self._test_markup_for_field, 'foo1', k, 'read'
-            yield self._test_markup_for_field, 'foo1', k, 'read', { 'title': u'X1' }
+        for fixture_name in ['foo1', 'foo2']:
+            for k in [
+                    'title', 'reviewed', 'notes', 'thematic_category', 'wakeup_time', 
+                    'created', 'rating', 'grade', 'url', 'contacts', 'contact_info',
+                    'tags']:
+                yield self._test_markup_for_field, fixture_name, k, 'read'
+                yield self._test_markup_for_field, fixture_name, k, 'read', { 'title': u'X1' }
 
     @nose.tools.istest
     def test_edit_field_widgets(self):
         '''Generate markup for editing fields'''
-        for k in ['title', 'reviewed', 'notes', 'thematic_category', 'wakeup_time', 'created', 'rating', 'grade', 'url']:
-            yield self._test_markup_for_field, 'foo1', k, 'edit'
-            yield self._test_markup_for_field, 'foo1', k, 'edit', { 'title': u'Another Title' }
-            yield self._test_markup_for_field, 'foo1', k, 'edit', { 'required': False }
-        for k in ['reviewed']:
-            yield self._test_markup_for_field, 'foo1', k, 'edit:checkbox_1'
-            yield self._test_markup_for_field, 'foo1', k, 'edit:checkbox_2'
-            yield self._test_markup_for_field, 'foo1', k, 'edit:checkbox_3'
-            yield self._test_markup_for_field, 'foo1', k, 'edit:checkbox_3.bar.baz'
-        for k in ['tags']:
-            yield self._test_markup_for_field, 'foo1', k, 'edit:baz'
-            yield self._test_markup_for_field, 'foo1', k, 'edit:tags'
+        for fixture_name in ['foo1', 'foo2']:
+            for k in [
+                    'title', 'reviewed', 'notes', 'thematic_category', 'wakeup_time', 
+                    'created', 'rating', 'grade', 'url', 'contacts', 'contact_info']:
+                yield self._test_markup_for_field, fixture_name, k, 'edit'
+                yield self._test_markup_for_field, fixture_name, k, 'edit', { 'title': u'Another Title' }
+                yield self._test_markup_for_field, fixture_name, k, 'edit', { 'required': False }
+            for k in ['reviewed']:
+                yield self._test_markup_for_field, fixture_name, k, 'edit:checkbox_1'
+                yield self._test_markup_for_field, fixture_name, k, 'edit:checkbox_2'
+                yield self._test_markup_for_field, fixture_name, k, 'edit:checkbox_3'
+                yield self._test_markup_for_field, fixture_name, k, 'edit:checkbox_3.bar.baz'
+            for k in ['tags']:
+                yield self._test_markup_for_field, fixture_name, k, 'edit:baz'
+                yield self._test_markup_for_field, fixture_name, k, 'edit:tags'
+            for k in ['thematic_category']:
+                yield self._test_markup_for_field, fixture_name, k, 'edit:select'
+                yield self._test_markup_for_field, fixture_name, k, 'edit:select2' 
 
     @with_request_context('publicamundi-tests', 'index')
     def _test_markup_for_field(self, fixture_name, k, action, data={}):
         '''Render a field widget'''
-        action = action.split(':')[0]
+        
+        qa = QualAction.from_string(action)
         x = getattr(fixtures, fixture_name)
         f = x.get_field(k)
-        errs = x.validate()
-        errs = x.dictize_errors(errs)
-        markup = markup_for_field(action, f,
+        
+        errs = x.validate(dictize_errors=True)
+        
+        markup = markup_for_field(str(qa), f,
             errors=errs, name_prefix=fixture_name, data=data)
-        log1.info('Generated %s markup for %r:\n%s' %(action, f, markup))
+        log1.info('Generated %s markup for %r:\n%s' % (qa, f, markup))
         assert markup
+        canonicalized_markup = to_c14n_markup(markup, pretty=1)
+        log1.info('Generated %s markup for %r (tidy-ed):\n%s' % (
+            qa, f, to_tidy_markup(markup)))
+        
         pq = pyquery.PyQuery(unicode(markup))
         assert pq
         assert pq.is_('div')
         assert pq.is_('.field-qname-%s\\.%s' %(fixture_name, k))
-        assert pq.is_('.field-%s-widget' %(action))
-        if action.startswith('edit'):
+        assert pq.is_('.field-%s-widget' %(qa.action))
+        
+        if qa.action == 'edit':
             e = pq.find('input') or pq.find('textarea') or pq.find('select')
-            assert e
-            assert e.attr('name').startswith('%s.%s' %(fixture_name, k))
-            assert e.attr('id').startswith('input-%s.%s' %(fixture_name, k))
+            if not e:
+                # This can only happen on empty container fields that provide a 
+                # javascript template for editing
+                assert (
+                    isinstance(f, (DictField, ListField))
+                    and pq.find('script[type="x-template-mustache"]'))
+            else:
+                # This is a normal input and should have a proper id and name
+                assert e.attr('name').startswith('%s.%s' %(fixture_name, k))
+                assert e.attr('id').startswith('input-%s.%s' %(fixture_name, k))
 
     ## Test objects ##
     
@@ -218,10 +245,12 @@ class TestController(BaseTestController):
     @with_request_context('publicamundi-tests', 'index')
     def _test_markup_for_object(self, fixture_name, action, data={}):
         '''Render an object widget'''
+
         obj = getattr(fixtures, fixture_name)
         markup = markup_for_object(action, obj, name_prefix=fixture_name, data=data)
         log1.info('Generated %s markup for object %r:\n%s' %(action, obj, markup))
         assert markup
+        
         pq = pyquery.PyQuery(unicode(markup))
         assert pq
         assert pq.is_('div')

@@ -1,23 +1,27 @@
 import zope.interface
 import zope.schema
+import zope.schema.vocabulary
 import copy
 
 import ckan.plugins.toolkit as toolkit
 
+from ckanext.publicamundi.lib import logger
+from ckanext.publicamundi.lib.util import raise_for_stub_method
 from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.ibase import IObject
 from ckanext.publicamundi.lib.metadata.base import Object, FieldContext
-from ckanext.publicamundi.lib.util import raise_for_stub_method
 from ckanext.publicamundi.lib.metadata.widgets.ibase import (
     IWidget, IFieldWidget, IObjectWidget)
 from ckanext.publicamundi.lib.metadata.widgets import (
     QualAction, LookupContext, markup_for_object, markup_for_field)
+from ckanext.publicamundi.lib.metadata.widgets.util import to_c14n_markup
 
 #
 # Base
 #
 
 class Widget(object):
+    
     zope.interface.implements(IWidget)
     
     action = None
@@ -48,6 +52,7 @@ class Widget(object):
             return QualAction(self.action).to_string()
 
 class FieldWidget(Widget):
+    
     zope.interface.implements(IFieldWidget)
     
     _reserved_var_names = [
@@ -97,6 +102,7 @@ class FieldWidget(Widget):
                 tpl_vars[k] = data[k]
 
         # Provide computed variables or sensible defaults
+        
         qname = "%s%s" %(name_prefix + '.' if name_prefix else '', 
             tpl_vars['name'])
         tpl_vars['qname'] = qname
@@ -112,9 +118,10 @@ class FieldWidget(Widget):
         tpl = self.get_template()
         tpl_vars = self.prepare_template_vars(name_prefix, data)
         markup = toolkit.render_snippet(tpl, tpl_vars)
-        return toolkit.literal(markup)
+        return markup
 
 class ObjectWidget(Widget):
+    
     zope.interface.implements(IObjectWidget)
     
     _reserved_var_names = [
@@ -203,6 +210,9 @@ class ObjectWidget(Widget):
             # We must prepare additional vars for this kind of template
             tpl = self.get_glue_template()
             
+            errors = self.errors
+            error_dict = errors if isinstance(errors, dict) else None
+
             field_qualifiers = self.get_field_qualifiers()
             q = self.qualified_action
 
@@ -212,16 +222,15 @@ class ObjectWidget(Widget):
                     or f.queryTaggedValue('widget-qualifier')
                     or self.context.provided_action.qualifier)
                 q = QualAction(self.action, qualifier=qf).to_string()
-                ef = self.errors.get(k) if self.errors else None
-                mf = markup_for_field(q, f, 
-                    errors=ef, name_prefix=name_prefix, data={}) 
+                ef = error_dict.get(k) if error_dict else None
+                mf = markup_for_field(q, f, errors=ef, name_prefix=name_prefix)
                 return dict(field=f, markup=mf)
             
             keys = set(obj.get_field_names()) - set(self.get_omitted_fields())
             tpl_vars['fields'] = { k: render_field(k) for k in keys }
         
         markup = toolkit.render_snippet(tpl, tpl_vars)
-        return toolkit.literal(markup)
+        return markup
 
 #
 # Base readers and editors
@@ -257,7 +266,7 @@ class EditObjectWidget(ObjectWidget):
         return fields
 
 #
-# Base widgets for collections-related fields 
+# Base widgets for container fields 
 #
 
 class ListFieldWidgetTraits(FieldWidget):
@@ -269,23 +278,40 @@ class ListFieldWidgetTraits(FieldWidget):
         '''
         
         field, value = self.field, self.value
-        
+        errors = self.errors
+        error_dict = errors if isinstance(errors, dict) else None
+
         tpl_vars = FieldWidget.prepare_template_vars(self, name_prefix, data)
         title = tpl_vars.get('title')
         qname = tpl_vars.get('qname')
         a = self.context.provided_action.make_child('item')
         q = a.to_string()
+        
+        items = enumerate(value) if value else ()
+
+        def render_item_template():
+            yf = field.value_type.bind(FieldContext(key='{{index}}', value=None))
+            yd = { 'title': '%s #{{index1}}' % (yf.title) }
+            return {
+                'index': 'index', # placeholder
+                'markup': to_c14n_markup(
+                    markup_for_field(q, yf, name_prefix=qname, data=yd),
+                    with_comments=False)
+            }
+        
         def render_item(i, y):
-            assert isinstance(i, int)
             yf = field.value_type.bind(FieldContext(key=i, value=y))
-            e = self.errors.get(i) if self.errors else None
+            ye = error_dict.get(i) if error_dict else None
+            yd = { 'title': '%s #%d' % (yf.title, i + 1) }
             return {
                 'index': i,
-                'markup': markup_for_field(q, yf, 
-                    errors=e, name_prefix=qname, data={ 'title': '%s #%d' %(yf.title, i) }),
+                'markup': markup_for_field(
+                    q, yf, errors=ye, name_prefix=qname, data=yd)
             }
+        
         tpl_vars.update({
-            'items': [ render_item(i,y) for i,y in enumerate(value) ],
+            'item_template': render_item_template(),
+            'items': [render_item(i,y) for i, y in items],
         })
         
         return tpl_vars
@@ -301,25 +327,47 @@ class DictFieldWidgetTraits(FieldWidget):
         field, value = self.field, self.value
         assert isinstance(field.key_type, zope.schema.Choice)
         
+        errors = self.errors
+        error_dict = errors if isinstance(errors, dict) else None
+
         tpl_vars = FieldWidget.prepare_template_vars(self, name_prefix, data)
         title = tpl_vars.get('title')
         qname = tpl_vars.get('qname')
         a = self.context.provided_action.make_child('item')
         q = a.to_string()
-        def render_item(k, y):
-            assert isinstance(k, basestring)
-            yf = field.value_type.bind(FieldContext(key=k, value=y))
-            term = field.key_type.vocabulary.getTerm(k)
-            e = self.errors.get(k) if self.errors else None
+        
+        terms = field.key_type.vocabulary.by_value
+        items = value.items() if value else ()
+        
+        def render_item_template():
+            yf = field.value_type.bind(FieldContext(key='{{key}}', value=None))
+            yd = { 'title': '{{title}}' }
             return {
-                'key': term,
-                'markup': markup_for_field(q, yf, 
-                    errors=e, name_prefix=qname, data={ 'title': term.title or term.token }),
+                'key': 'key', # a placeholder
+                'markup': to_c14n_markup(
+                    markup_for_field(q, yf, name_prefix=qname, data=yd),
+                    with_comments=False)
             }
-        tpl_vars.update({
-            'items': { k: render_item(k, y) for k, y in value.iteritems() },
-        })
 
+        def render_item(k, y):
+            yf = field.value_type.bind(FieldContext(key=k, value=y))
+            term = terms.get(k)
+            ye = error_dict.get(k) if error_dict else None
+            yd = { 'title': term.title or term.token }
+            return {
+                'key': k,
+                'key_term': term,
+                'markup': markup_for_field(
+                    q, yf, errors=ye, name_prefix=qname, data=yd),
+            }
+
+        tpl_vars.update({
+            'terms': { k: { 'title': v.title, 'token': v.token } 
+                for k, v in terms.iteritems() },
+            'item_template': render_item_template(),
+            'items': { k: render_item(k,y) for k,y in items if k in terms },
+        })
+        
         return tpl_vars
 
 #
