@@ -1,17 +1,14 @@
 {% set 
     messages = 
     {
-        'select-label': 'Specify the type of contact ...',
         'add-label': 'Add',
     } 
 -%}
 
 <div class="{{ classes|join(' ') }}"
-    data-module="edit-selected-dict-items" 
+    data-module="edit-list-items" 
     data-module-qname="{{ qname }}" 
-    data-module-terms="{{ h.dump_json(terms) }}"
     data-module-messages="{{ h.dump_json(messages) }}"
-    data-module-select="select"
    >
     {% if title %}<h3 class="title">{{ title }}</h3>{% endif -%}
     {%- if description %}<div class="description">{{ description }}</div>{% endif -%}
@@ -20,11 +17,11 @@
         {{ item_template.markup|safe }}
     </script>
 
-    <ul id="{{ qname }}-items">
-        {% for k, y in items.items() -%}
-        <li data-key="{{ k }}">{{ y.markup }}</li>
+    <ol id="{{ qname }}-items">
+        {% for y in items -%}
+        <li data-key="{{ loop.index0 }}">{{ y.markup }}</li>
         {%- endfor %}
-    </ul>
+    </ol>
 </div>
 
 {% resource 'ckanext-publicamundi/item-editor' %}

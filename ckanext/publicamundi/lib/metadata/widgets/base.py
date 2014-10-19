@@ -294,10 +294,10 @@ class ListFieldWidgetTraits(ContainerFieldWidgetTraits):
         items = enumerate(value) if value else ()
 
         def render_item_template():
-            yf = field.value_type.bind(FieldContext(key='{{key}}', value=None))
+            yf = field.value_type.bind(FieldContext(key='{{index}}', value=None))
             yd = { 'title': '{{title}}' }
             return {
-                'key': 'key', # placeholder
+                'variables': ['index', 'title'],
                 'markup': to_c14n_markup(
                     markup_for_field(qa, yf, name_prefix=qname, data=yd),
                     with_comments=False)
@@ -346,7 +346,7 @@ class DictFieldWidgetTraits(ContainerFieldWidgetTraits):
             yf = field.value_type.bind(FieldContext(key='{{key}}', value=None))
             yd = { 'title': '{{title}}' }
             return {
-                'key': 'key', # a placeholder
+                'variables': ['key', 'title'],
                 'markup': to_c14n_markup(
                     markup_for_field(qa, yf, name_prefix=qname, data=yd),
                     with_comments=False)

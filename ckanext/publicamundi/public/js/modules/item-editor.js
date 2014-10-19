@@ -39,7 +39,6 @@ this.ckan.module('edit-all-dict-items', function ($, _) {
                 }
                 $y = $list.children('li').filter(has_key(key))
                 if (!$y.length) {
-                    // The item is missing: create <li> container, use the templated editor
                     $y = $('<li/>').data('key', key).appendTo($list)
                     $.extend(yopts, { template: 'default', disabled: true })
                 }
@@ -194,6 +193,31 @@ this.ckan.module('edit-selected-dict-items', function ($, _) {
         teardown: function () 
         { 
             debug('Tearing down module: edit-selected-dict-items', this.options)
+        },
+    };
+})
+
+this.ckan.module('edit-list-items', function ($, _) {
+    
+    var debug = $.proxy(window.console, 'debug')
+
+    return {
+        options: {
+            qname: null,
+            messages: {},
+        },
+
+        initialize: function () 
+        {
+            var module = this,
+                $el = this.el,
+                opts = this.options 
+            
+            debug('Initialized module: edit-list-items opts=', this.options)
+        },
+        teardown: function () 
+        { 
+            debug('Tearing down module: edit-list-items', this.options)
         },
     };
 })

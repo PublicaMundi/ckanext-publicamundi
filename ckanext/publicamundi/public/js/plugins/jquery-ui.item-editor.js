@@ -26,6 +26,13 @@ jQuery(document).ready(function ($) {
             nameKey: (i > 0)? qname.substring(i + 1) : qname,
         }
     }
+    
+    // A name filter for elements
+    var name_filter = function (name) {
+        return function () {
+            return $(this).attr('name') == name
+        }
+    }
 
     // Define widgets
 
@@ -573,6 +580,90 @@ jQuery(document).ready(function ($) {
             return title
         },
 
+        _checkSource: function (src)
+        {
+            var $src = null
+
+            if (src instanceof $.publicamundi.itemEditor) {
+                $src = src.element
+            } else {
+                $src = (src instanceof jQuery)? src.first() : $(src).first()
+                src = $src.data(this.widgetFullName)
+            }
+            
+            // Sanity checks
+            
+            if (!$src.length) {
+                throw new Error('Cannot copy: empty element')
+            } else if (!src) {
+                throw new Error('Cannot copy: ' +
+                    'source doesnt seem to be an publicamundi.itemEditor widget')
+            } else if (src == this) { 
+                throw new Error('Unwilling to copy: ' + 
+                    'source is same as destination') 
+            } else if (src.name.namePrefix != this.name.namePrefix) {
+                throw new Error('Unwilling to copy: ' + 
+                    'source item seems to belong to another collection')
+            }
+            
+            return src
+        },
+
+        // Custom widget-specific methods
+   
+        copyValues: function (other)
+        {
+            // Copy input values from another instance of this widget
+            
+            var name_prefix = this.name.namePrefix,
+                key = this.name.nameKey
+            
+            var src_widget = this._checkSource(other)
+            var src_key = src_widget.name.nameKey
+           
+            var $input = this.element.find('[name]:input')
+
+            src_widget.element.find('[name]:input').each(function (i, src) {
+                var $src = $(src), $dst = null, name_path = null
+                    
+                name_path = $src.attr('name').substr(name_prefix.length).split('.')
+                assert(name_path[0] == '' && name_path[1] == src_key)
+
+                $dst = $input.filter(name_filter(
+                    name_prefix + ['', key].concat(name_path.slice(2)).join('.')
+                ))
+                assert($dst.length > 0) 
+
+                debug('Copying input from "%s" to "%s"', 
+                    $src.attr('name'), $dst.attr('name'))
+     
+                if ($src.is('[type=checkbox]')) {
+                    // Copy "checked" property
+                    $dst.prop('checked', $src.prop('checked'))
+                } else {
+                    // Copy value
+                    $dst.val($src.val())
+                }
+                
+                $dst.trigger('change')
+            })
+        },
+        
+        swapValues: function (other)
+        {
+            // Swap input values with another instance of this widget
+            
+            var widget = this,
+                name_prefix = this.name.namePrefix,
+                key = this.name.nameKey
+            
+            var other_widget = this._checkSource(other)
+            var other_key = other_widget.name.nameKey
+           
+            var $input = this.element.find('[name]:input')
+            
+            // Todo
+        },
+
     })
 });
-
