@@ -83,7 +83,7 @@ this.ckan.module('edit-selected-dict-items', function ($, _) {
                 '</button>',
             selectContainer: 
                 '<div class="add-item add-item-of-{{qname}}">' +
-                    '<select class="placeholder" /> <button class="placeholder" />' + 
+                    '{{{select}}} {{{add}}}' + 
                 '</div>', 
         },
 
@@ -107,13 +107,16 @@ this.ckan.module('edit-selected-dict-items', function ($, _) {
             var $list, $select_container, $select, $add_btn
 
             $list = $el.children('ul')
-            $select_container = $(render(templates.selectContainer, { qname: qname }))
+            $select_container = $(render(templates.selectContainer, { 
+                qname: qname, 
+                select: '<select id="placeholder-1"></select>',
+                add: '<button id="placeholder-2"></button>', }))
             $select = $(render(templates.select, { 
                 label: opts.messages['select-label'] || 'Specify a key' }))
             $add_btn = $(render(templates.addBtn, { 
                 label: opts.messages['add-label'] || 'Add' }))
-            $select_container.find('select.placeholder').replaceWith($select)
-            $select_container.find('button.placeholder').replaceWith($add_btn)
+            $select_container.find('#placeholder-1').replaceWith($select)
+            $select_container.find('#placeholder-2').replaceWith($add_btn)
             $select_container.insertBefore($list)
             
             switch (opts.select) {
@@ -136,8 +139,7 @@ this.ckan.module('edit-selected-dict-items', function ($, _) {
                 var $item = $(this).filter('li'),
                     key = $item.data('key')
                 if ($item.length) {
-                    $('<option/>')
-                        .attr('value', key)
+                    $('<option/>', { value: key })
                         .text(opts.terms[key].title)
                         .appendTo($select)
                     $item.remove()
@@ -155,8 +157,7 @@ this.ckan.module('edit-selected-dict-items', function ($, _) {
                         allowDelete: 1, })
                     $item.on('publicamundi-item_editor:destroy', handle_destroy)
                 } else {
-                    $('<option/>')
-                        .attr('value', key)
+                    $('<option/>', { value: key })
                         .text(title)
                         .appendTo($select)
                 }
