@@ -213,6 +213,9 @@ class ContactInfoEditWidget(EditObjectWidget):
             'email': 'email'
         }
     
+    def get_glue_template(self):
+        return 'package/snippets/objects/glue-edit-contact_info.html'
+        
     def get_template(self):
         return None # use glue template
         #return 'package/snippets/objects/edit-contact_info.html'

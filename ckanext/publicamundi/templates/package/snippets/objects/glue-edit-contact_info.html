@@ -1,0 +1,9 @@
+{% import 'macros/markup_helpers.html' as markup_helpers -%}
+
+<div class="{{ " " ~ classes|join(' ') }}">
+    <header>{% if title %}<h3 class="inline">{{ title }}</h3>{% endif %}</header>
+    {{- markup_helpers.error_messages(errors[errors.global_key]) -}} 
+    {%- for k in ['publish', 'email', 'address'] -%}
+    {{ fields[k].markup }}
+    {%- endfor %}
+</div>

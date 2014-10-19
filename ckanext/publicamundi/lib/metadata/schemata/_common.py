@@ -47,6 +47,9 @@ class IContactInfo(IObject):
         description=u'Electronic mail address', required=False)
 
     address = zope.schema.Object(IPostalAddress, title=u"Postal Address", required=False)
+    
+    publish = zope.schema.Bool(title=u'Publish', 
+        description=u'This information can be safely published', required=False)
 
     @zope.interface.invariant
     def not_empty(obj):

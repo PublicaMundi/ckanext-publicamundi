@@ -322,6 +322,7 @@ updates['foo'] = {
         'grade': 5.33,
         'contacts': { 
             'personal': { 
+                'publish': True,
                 'email': 'malex@example.com', 
                 'address': { 'address': u'Sahara Desert', 'postalcode': u'11223' } } },
     },

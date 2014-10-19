@@ -45,9 +45,11 @@ foo1 = Foo(
     contact_info = ContactInfo(email=u'nomad@somewhere.com', address=None),
     contacts = {
         'personal': ContactInfo(
+            publish=False,
             email=u'nobody@example.com', 
             address=PostalAddress(address=u'North Pole', postalcode=u'54321')),
         'office': ContactInfo(
+            publish=True,
             email=None, 
             address=PostalAddress(address=u'South Pole', postalcode=u'12345')),
     },

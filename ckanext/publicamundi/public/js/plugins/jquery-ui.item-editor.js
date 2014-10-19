@@ -653,16 +653,43 @@ jQuery(document).ready(function ($) {
         {
             // Swap input values with another instance of this widget
             
-            var widget = this,
+            var w1 = this,
                 name_prefix = this.name.namePrefix,
-                key = this.name.nameKey
+                k1 = this.name.nameKey
             
-            var other_widget = this._checkSource(other)
-            var other_key = other_widget.name.nameKey
+            var w2 = this._checkSource(other)
+            var k2 = w2.name.nameKey
            
-            var $input = this.element.find('[name]:input')
+            var $inp1 = w1.element.find('[name]:input')
+            var $inp2 = w2.element.find('[name]:input')
             
-            // Todo
+            $inp1.each(function (i, x1) {
+                var $x1 = $(x1), v1 = null, $x2 = null, name_path = null
+
+                name_path = $x1.attr('name').substr(name_prefix.length).split('.')
+                assert(name_path[0] == '' && name_path[1] == k1)
+
+                $x2 = $inp2.filter(name_filter(
+                    name_prefix + ['', k2].concat(name_path.slice(2)).join('.')
+                ))
+                assert($x2.length > 0) 
+                
+                debug('Swaping input between "%s" and "%s"', 
+                    $x1.attr('name'), $x2.attr('name'))
+                
+                if ($x1.is('[type=checkbox]')) {
+                    v1 = $x1.prop('checked')
+                    $x1.prop('checked', $x2.prop('checked'))
+                    $x2.prop('checked', v1)
+                } else {
+                    v1 = $x1.val()
+                    $x1.val($x2.val())
+                    $x2.val(v1)
+                }
+
+                $x1.trigger('change')
+                $x2.trigger('change')
+            })
         },
 
     })
