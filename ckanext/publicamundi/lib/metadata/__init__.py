@@ -20,10 +20,10 @@ from ckanext.publicamundi.lib.metadata.base import (
     object_format_adapter, formatter_for_object, ObjectFormatter)
 
 from ckanext.publicamundi.lib.metadata.schemata import (
-    IFoo, ICkanMetadata, IInspireMetadata)
+    IFoo, IBaz, ICkanMetadata, IInspireMetadata)
 
 from ckanext.publicamundi.lib.metadata.types import (
-    Foo, CkanMetadata, InspireMetadata)
+    Foo, Baz, CkanMetadata, InspireMetadata)
 
 from ckanext.publicamundi.lib.metadata.xml_serializers import (
     object_xml_serialize_adapter, xml_serializer_for_object)
@@ -56,6 +56,13 @@ dataset_types = {
         'schema': IFoo,
         'class': Foo,
         'key_prefix': 'foo', 
+    },
+    'baz': { 
+        'title': 'Baz',
+        'description': u'Provide metadata according to an arbitrary "baz" schema',
+        'schema': IBaz,
+        'class': Baz,
+        'key_prefix': 'bazz', 
     },
 }
 

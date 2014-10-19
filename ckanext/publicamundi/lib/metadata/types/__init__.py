@@ -16,3 +16,4 @@ from ckanext.publicamundi.lib.metadata.types.ckan_metadata import CkanMetadata
 from ckanext.publicamundi.lib.metadata.types.inspire_metadata import (
     Thesaurus, ThesaurusTerms, InspireMetadata)
 from ckanext.publicamundi.lib.metadata.types.foo import Foo
+from ckanext.publicamundi.lib.metadata.types.baz import Baz

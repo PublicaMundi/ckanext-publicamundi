@@ -16,4 +16,5 @@ from ckanext.publicamundi.lib.metadata.schemata.ckan_metadata import ICkanMetada
 from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import \
     IThesaurus, IThesaurusTerms, IInspireMetadata
 from ckanext.publicamundi.lib.metadata.schemata.foo import IFoo
+from ckanext.publicamundi.lib.metadata.schemata.baz import IBaz
 

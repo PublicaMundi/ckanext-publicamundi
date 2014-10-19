@@ -101,6 +101,11 @@ foo7.tags = None
 foo8 = copy.deepcopy(foo1)
 foo8.contacts.pop('personal')
 
+baz1 = Baz(
+    url = 'http://baz.example.com',
+    contacts = [contact1, contact2]
+)
+
 freekeyword1 = FreeKeyword(
     value = u"atmosphere",
     originating_vocabulary = u"Foo-1",
