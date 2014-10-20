@@ -18,7 +18,7 @@ class IBaz(IBaseMetadata):
         title = u'Contacts',
         required = False,
         min_length = 1,
-        max_length = 10,
+        max_length = 5,
         value_type = zope.schema.Object(IContactInfo,
             title = u'Contact',
             required = True))

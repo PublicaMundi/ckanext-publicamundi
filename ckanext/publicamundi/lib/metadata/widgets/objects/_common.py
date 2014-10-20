@@ -99,7 +99,7 @@ class TableObjectReadWidget(ReadObjectWidget):
         
         rows = cls._tabulate_rows(d)
         num_rows = len(rows)
-        num_cols = max(map(len, rows))
+        num_cols = max(map(len, rows)) if rows else 0
 
         for row in rows:
             row[-1].colspan += num_cols - len(row)

@@ -11,10 +11,11 @@ jQuery(document).ready(function ($) {
     
     // Enumerate events emitted by following widgets
     var widget_events = {
-        Create: 'create',
-        Destroy: 'destroy',
-        Enable: 'enable',
-        Disable: 'disable',
+        Create: 'create',   // when was (fully) created
+        Remove: 'remove',   // when is requested to be removed (but not destroyed yet) 
+        Destroy: 'destroy', // when was destroyed
+        Enable: 'enable',   // when was enabled
+        Disable: 'disable', // when was disabled
     }
     
     // Parse a dot-delimited qialified name
@@ -313,8 +314,9 @@ jQuery(document).ready(function ($) {
         
         options: {
             placeholder: true, // Use a placeholder when the widget is disabled
-            allowDelete: true, // Allow to delete this item (self-destroys the widget)
-            allowRemove: true, // Allow to remove this item (disables the widget, can be re-enabled)
+            allowDelete: true, // Allow to delete this item (see onRemove)
+            allowDisable: true, // Allow to disable this item (possibly hidden, can be re-enabled)
+            onDelete: 'self-destroy', // Choose: noop | self-destroy
             defaultTemplate: function (name) { 
                 return 'script#' 
                     + name.namePrefix.replace(/[.]/g, '\\.') + '-item-template' 
@@ -327,24 +329,24 @@ jQuery(document).ready(function ($) {
             editorTemplates: {
                 removeBtn:
                     '<button class="btn btn-small {{removeActionClass}}">' + 
-                       '<i class="icon-remove"></i> {{label}}</button>',
+                       '<i class="icon-remove"></i>{{label}}</button>',
                 removeBtnGroup:
                     '<div class="btn-group {{removeGroupClass}}">' +
-                        '<button class="btn btn-small {{removeActionClass}}">' + 
-                            '<i class="icon-remove"></i> {{label}}</button>' +
+                        '<button class="btn btn-small {{disableActionClass}}">' + 
+                            '<i class="icon-remove"></i>{{label}}</button>' +
                         '<button class="btn btn-small dropdown-toggle" data-toggle="dropdown">' + 
                             '<span class="caret"></span></button>' +
                         '<ul class="dropdown-menu">' +
                             '<li>' + 
-                                '<a class="btn-link btn-small {{removeActionClass}}">{{removeLabel}}</a>' + 
+                                '<a class="btn-link btn-small {{disableActionClass}}">{{disableLabel}}</a>' + 
                             '</li><li>' + 
-                                '<a class="btn-link btn-small {{deleteActionClass}}">{{deleteLabel}}</a>' + 
+                                '<a class="btn-link btn-small {{removeActionClass}}">{{removeLabel}}</a>' + 
                             '</li>' +
                         '</ul>' +
                     '</div>',
                 editBtn:
                     '<button class="btn btn-small {{editActionClass}}">' + 
-                        '<i class="icon-pencil"></i> {{label}}</button>',
+                        '<i class="icon-pencil"></i>{{label}}</button>',
                 placeholder:
                     '<h3 class="inline">{{title}}</h3>' + 
                     '<span class="label not-available">n/a</span>',
@@ -432,20 +434,20 @@ jQuery(document).ready(function ($) {
                 $edit_btn = null, 
                 $placeholder = null
             
-            if (!opts.allowDelete || !opts.allowRemove) {
+            if (!opts.allowDelete || !opts.allowDisable) {
                 $remove_btn = $(render(templates.removeBtn, { 
                     label: 'Remove', 
-                    removeActionClass: (opts.allowDelete)? 'delete' : 'remove'
+                    removeActionClass: (opts.allowDelete)? 'remove delete' : 'remove disable'
                 }))
                 $remove_btn.addClass(css_classes.removeBtn)
             } else {
                 $remove_btn = $(render(templates.removeBtnGroup, { 
                     label: 'Remove',
                     removeGroupClass: 'remove-opts',
-                    removeLabel: 'Mark as not available',
-                    removeActionClass: 'remove',
-                    deleteLabel: 'Remove the item entirely', 
-                    deleteActionClass: 'delete', 
+                    disableLabel: 'Mark as not available',
+                    disableActionClass: 'remove disable',
+                    removeLabel: 'Remove this item', 
+                    removeActionClass: 'remove delete', 
                 })) 
                 $remove_btn.addClass(css_classes.removeBtnGroup)
             }
@@ -467,7 +469,7 @@ jQuery(document).ready(function ($) {
         _setupEvents: function()
         {
             var handle_edit, 
-                handle_remove, 
+                handle_disable, 
                 handle_delete, 
                 handle_remove_hovered
             
@@ -484,12 +486,23 @@ jQuery(document).ready(function ($) {
             
             handle_edit = this.enable
 
-            handle_remove = this.disable
+            handle_disable = this.disable
             
             handle_delete = function () {
-                // Start self-destroy using with the same effect as disable
-                var f = function () { this.destroy() }
-                this._hide(this.$control, this.options.hide, $.proxy(f, this))
+                switch (this.options.onDelete) {
+                    case 'noop':
+                        // Do nothing, a parent element will probably handle
+                        break;
+                    case 'self-destroy':
+                    default:
+                        // Start self-destruction using with the same effect as disable
+                        var f = $.proxy(this.destroy, this)
+                        this._hide(this.$control, this.options.hide, f)
+                        break;
+                }
+                // Always trigger a `remove` event
+                this._trigger(widget_events.Remove)
+                return false
             }
 
             // Bind handlers to this.element (delegated events)
@@ -499,8 +512,8 @@ jQuery(document).ready(function ($) {
             })
 
             this._on(false, this.element, {
-                'click header .remove': handle_remove,
-                'click header .delete': handle_delete,
+                'click header .remove.disable': handle_disable,
+                'click header .remove.delete': handle_delete,
                 'mouseover header button.remove': handle_remove_hovered,
                 'mouseout  header button.remove': handle_remove_hovered,
             })

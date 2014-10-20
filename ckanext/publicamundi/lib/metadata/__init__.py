@@ -62,7 +62,7 @@ dataset_types = {
         'description': u'Provide metadata according to an arbitrary "baz" schema',
         'schema': IBaz,
         'class': Baz,
-        'key_prefix': 'bazz', 
+        'key_prefix': 'baz', 
     },
 }
 

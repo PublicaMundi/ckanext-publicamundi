@@ -1,13 +1,23 @@
 {% set 
     messages = 
     {
-        'add-label': 'Add',
+        'add-label': 'New',
+        'add-title': 'Add another contact', 
+        'clear-label': 'Clear all contacts',
+        'clear-title': 'Clear all contacts!',
+        'reorder-label': 'Reorder',
+        'reorder-title': 'Reorder the following contacts',
+        'add-description': none,
+        'maxlength-alert': 'You cannot add more than {{maxlength}} contacts',
+        'clear-alert': 'Are you sure you want to clear all ({{num}}) contacts ?',
     } 
 -%}
 
 <div class="{{ classes|join(' ') }}"
     data-module="edit-list-items" 
-    data-module-qname="{{ qname }}" 
+    data-module-qname="{{ qname }}"
+    data-module-title="Contact"
+    data-module-maxlength="{{ field.max_length }}" 
     data-module-messages="{{ h.dump_json(messages) }}"
    >
     {% if title %}<h3 class="title">{{ title }}</h3>{% endif -%}
@@ -19,7 +29,7 @@
 
     <ol id="{{ qname }}-items">
         {% for y in items -%}
-        <li data-key="{{ loop.index0 }}">{{ y.markup }}</li>
+        <li data-index="{{ loop.index0 }}">{{ y.markup }}</li>
         {%- endfor %}
     </ol>
 </div>
