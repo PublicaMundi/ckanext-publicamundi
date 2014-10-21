@@ -1,0 +1,65 @@
+{% import 'macros/accordion.html' as accordion -%}
+{% import 'macros/markup_helpers.html' as markup_helpers -%}
+
+{% set groups = [
+        { 
+            'name': 'metadata',
+            'heading': _('Metadata on Metadata'),
+            'fields': ['languagecode', 'datestamp']
+        },
+        { 
+            'name': 'identification',
+            'heading': _('Identification'),
+            'fields': [],
+        },
+        { 
+            'name': 'classification',
+            'heading': _('Classification'),
+            'fields': [],
+        },
+        { 
+            'name': 'keywords',
+            'heading': _('Keywords'),
+            'fields': [],
+        },
+        { 
+            'name': 'geographic',
+            'heading': _('Geographic'),
+            'fields': [],
+        },
+        { 
+            'name': 'temporal',
+            'heading': _('Temporal'),
+            'fields': [],
+        },
+        { 
+            'name': 'quality',
+            'heading': _('Quality and Validity'),
+            'fields': [],
+        },
+        { 
+            'name': 'conformity',
+            'heading': _('Conformity'),
+            'fields': [],
+        },
+        { 
+            'name': 'constraints',
+            'heading': _('Constraints'),
+            'fields': [],
+        },
+        { 
+            'name': 'responsible-party',
+            'heading': _('Responsible Party'),
+            'fields': [],
+        },
+   ]
+%}
+
+<div class="{{ " " ~ classes|join(' ') }}">
+    {% if title %}<h3>{{ title }}</h3>{% endif %}
+    {% call(group_desc) accordion.accordion('inspire-fields', groups) %}
+        {% for fname in group_desc.fields -%}
+        {{ fields[fname].markup }}
+        {% endfor -%}
+    {% endcall %}
+</div>

@@ -83,7 +83,7 @@ class IInspireMetadata(IObject):
         title = u'Metadata Date',
         description = u"The date which specifies when the metadata record was created or updated. This date shall be expressed in conformity with ISO 8601.",
         required = False,
-        default = datetime.date.today())
+        defaultFactory = datetime.date.today)
 
     languagecode = zope.schema.Choice(
         title = u'Metadata Language',

@@ -107,11 +107,11 @@ class FieldWidget(Widget):
         qname = "%s%s" %(name_prefix + '.' if name_prefix else '', 
             tpl_vars['name'])
         tpl_vars['qname'] = qname
-        tpl_vars['classes'] = tpl_vars['classes'] + [\
+        tpl_vars['classes'] = tpl_vars['classes'] + [
             'widget',
             'field-widget', 
             'field-%s-widget' %(self.action),
-            'field-qname-%s' %(qname), ]
+            'field-qname-%s' %(qname),]
 
         return tpl_vars
 
@@ -202,11 +202,11 @@ class ObjectWidget(Widget):
         # Provide computed variables and sensible defaults
         qname = name_prefix
         tpl_vars['qname'] = qname
-        tpl_vars['classes'] = tpl_vars['classes'] + [\
+        tpl_vars['classes'] = tpl_vars['classes'] + [
             'widget',
             'object-widget',
             'object-%s-widget' %(self.action),
-            'object-qname-%s' %(qname or 'NONE'), ]
+            'object-qname-%s' %(qname or 'NONE'),]
 
         return tpl_vars
 

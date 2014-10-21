@@ -26,6 +26,9 @@ class InspireEditWidget(EditObjectWidget):
             ('datestamp', None),
         ])
         
+    def get_glue_template(self):
+        return 'package/snippets/objects/glue-edit-inspire-datasetform.html'
+    
     def get_template(self):
         return None # use glue template
 
