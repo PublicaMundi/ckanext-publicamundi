@@ -1,4 +1,5 @@
 import zope.interface
+from collections import OrderedDict
 
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata.fields import *
@@ -18,16 +19,12 @@ class InspireEditWidget(EditObjectWidget):
         tpl_vars = super(InspireEditWidget, self).prepare_template_vars(name_prefix, data)
         # Add variables
         return tpl_vars
-    
-    def get_omitted_fields(self):
-        return [
-            'bounding_box'
-        ]
 
     def get_field_qualifiers(self):
-        return {
-            # Todo
-        }
+        return OrderedDict([
+            ('languagecode', 'select2'),
+            ('datestamp', None),
+        ])
         
     def get_template(self):
         return None # use glue template
@@ -40,15 +37,11 @@ class InspireReadWidget(ReadObjectWidget):
         # Add variables
         return tpl_vars
      
-    def get_omitted_fields(self):
-        return [
-            'bounding_box'
-        ]
-  
     def get_field_qualifiers(self):
-        return {
-            # Todo
-        }
+        return OrderedDict([
+            ('languagecode', None),
+            ('datestamp', None),
+        ])
 
     def get_template(self):
         return None # use glue template

@@ -110,6 +110,13 @@ class IObject(zope.interface.Interface):
             * a path of attributes/keys, if k is a tuple
         '''
     
+    def get_field_names(order=False):
+        '''Return a list of field names.
+
+        If order is True, field names should be returned in the order that they 
+        were defined (at schema definition).
+        '''
+
     def get_fields(exclude_properties=False):
         '''Return a map of fields.
         '''

@@ -1,4 +1,5 @@
 import zope.interface
+from collections import OrderedDict
 
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata.fields import *
@@ -19,32 +20,24 @@ class ListOfContactsEditWidget(EditFieldWidget, ListFieldWidgetTraits):
 
 @object_widget_adapter(schemata.IBaz, qualifiers=['datasetform'], is_fallback=True)
 class BazEditWidget(EditObjectWidget):
-
-    def prepare_template_vars(self, name_prefix, data):
-        tpl_vars = super(BazEditWidget, self).prepare_template_vars(name_prefix, data)
-        # Add variables
-        return tpl_vars
     
     def get_field_qualifiers(self):
-        return {
-            'contacts': 'contacts.baz',
-        }
+        return OrderedDict([
+            ('url', None),
+            ('contacts', 'contacts.baz'),
+        ])
         
     def get_template(self):
         return None # use glue template
 
 @object_widget_adapter(schemata.IBaz)
 class BazReadWidget(ReadObjectWidget):
-    
-    def prepare_template_vars(self, name_prefix, data):
-        tpl_vars = super(BazReadWidget, self).prepare_template_vars(name_prefix, data)
-        # Add variables
-        return tpl_vars
    
     def get_field_qualifiers(self):
-        return {
-            'contacts': 'contacts.baz',
-        }
+        return OrderedDict([
+            ('url', None),
+            ('contacts', 'contacts.baz'),
+        ])
 
     def get_template(self):
         return None # use glue template

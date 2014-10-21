@@ -1,5 +1,6 @@
 import itertools
 import zope.interface
+from collections import OrderedDict
 
 from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata import schemata
@@ -208,25 +209,25 @@ class PostalAddressReadWidget(ReadObjectWidget):
 class ContactInfoEditWidget(EditObjectWidget):
 
     def get_field_qualifiers(self):
-        return {
-            'address': 'compact',
-            'email': 'email'
-        }
-    
-    def get_glue_template(self):
-        return 'package/snippets/objects/glue-edit-contact_info.html'
+        return OrderedDict([
+            ('email', 'email'),
+            ('address', 'compact'),
+            ('publish', None),
+        ])
         
     def get_template(self):
-        return None # use glue template
+        return None # use default glue template
         #return 'package/snippets/objects/edit-contact_info.html'
 
 @object_widget_adapter(schemata.IContactInfo)
 class ContactInfoReadWidget(ReadObjectWidget):
     
     def get_field_qualifiers(self):
-        return {
-            'email': 'email'
-        }
+        return OrderedDict([
+            ('publish', None),
+            ('email', 'email'),
+            ('address', None),
+        ])
 
     def get_template(self):
         return None # use glue template
