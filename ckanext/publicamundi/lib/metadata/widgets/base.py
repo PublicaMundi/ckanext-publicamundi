@@ -2,6 +2,7 @@ import zope.interface
 import zope.schema
 import zope.schema.vocabulary
 import copy
+from collections import OrderedDict
 
 import ckan.plugins.toolkit as toolkit
 
@@ -142,24 +143,37 @@ class ObjectWidget(Widget):
             dict(action=self.action))
 
     def get_field_qualifiers(self):
-        '''Return a map of (field, qualifier) items.
+        '''Return an ordered map of (field, qualifier) items to be used in glue
+        templates.
 
-        If no valid template is provided (via get_template()) then we attempt to 
+        If no valid template is provided (via get_template()), then we attempt to 
         render a  widget by glue-ing its fields together. In this case, each field is 
         rendered using a "proper" qualifier for it. 
+        
+        If a certain field is not contained (as a key) in this map, it will not be 
+        rendered (when using the glue template). If the relevant key exists, but the
+        value is considered zero (e.g. None or '') then we fallback to other ways of
+        determining the "proper" qualifier for the field.
 
         We search for a "proper" qualifier by examining the following (in this order):
 
-         * a qualifier returned by get_field_qualifiers()
-         * a qualifier tagged directly to the field as 'widget-qualifier'
+         * a non-zero qualifier returned by get_field_qualifiers()
+         * a non-zero qualifier tagged directly to the field as 'widget-qualifier'
          * the qualifier used at self.provided_action
+        
+        Example:
+
+        >>> widget1.get_field_qualifiers()
+        OrderedDict([('title', None), ('url', None), ('contacts', 'contacts.foo')])
 
         '''
-        return {}
-    
-    def get_omitted_fields(self):
-        '''Return a list of fields that should be omitted from rendering'''
-        return None
+        
+        # This base implementation returns all fields mapped to a zero qualifier.
+        # Note that this result maintains the order that fields had when defined 
+        # at the original schema definition.
+        
+        keys = self.obj.get_field_names(order=True)
+        return OrderedDict(((k, None) for k in keys))
 
     ## IObjectWidget interface ##
 
@@ -207,26 +221,27 @@ class ObjectWidget(Widget):
 
         if not tpl:
             # No template supplied: use a template to glue fields together.
-            # We must prepare additional vars for this kind of template
+            # Prepare all additional vars needed for this kind of template.
             tpl = self.get_glue_template()
             
             errors = self.errors
             error_dict = errors if isinstance(errors, dict) else None
 
-            field_qualifiers = self.get_field_qualifiers()
+            field_qualifiers = self.get_field_qualifiers().iteritems()
 
-            def render_field(k):
+            def render_field(k, qf):
                 f = obj.get_field(k)
-                qf = (field_qualifiers.get(k)
-                    or f.queryTaggedValue('widget-qualifier')
-                    or self.context.provided_action.qualifier)
-                qa = QualAction(self.action, qualifier=qf).to_string()
+                if not qf:
+                    qf = f.queryTaggedValue('widget-qualifier')
+                if not qf:
+                    qf = self.context.provided_action.qualifier
+                qa = QualAction(self.action, qualifier=qf)
                 ef = error_dict.get(k) if error_dict else None
                 mf = markup_for_field(qa, f, errors=ef, name_prefix=name_prefix)
                 return dict(field=f, markup=mf)
             
-            keys = set(obj.get_field_names()) - set(self.get_omitted_fields())
-            tpl_vars['fields'] = { k: render_field(k) for k in keys }
+            tpl_vars['fields'] = OrderedDict(
+                ((k, render_field(k, qf)) for k, qf in field_qualifiers))
         
         markup = toolkit.render_snippet(tpl, tpl_vars)
         return markup
@@ -247,15 +262,9 @@ class ReadObjectWidget(ObjectWidget):
 
     action = 'read'
 
-    def get_omitted_fields(self):
-        return []
-
 class EditObjectWidget(ObjectWidget):
 
     action = 'edit'
-    
-    def get_omitted_fields(self):
-        return []
 
     def get_readonly_fields(self):
         fields = []
@@ -265,7 +274,7 @@ class EditObjectWidget(ObjectWidget):
         return fields
 
 #
-# Base widgets for container fields 
+# Base widget mixins for container fields 
 #
 
 class ContainerFieldWidgetTraits(FieldWidget):
@@ -289,7 +298,7 @@ class ListFieldWidgetTraits(ContainerFieldWidgetTraits):
         tpl_vars = FieldWidget.prepare_template_vars(self, name_prefix, data)
         title = tpl_vars.get('title')
         qname = tpl_vars.get('qname')
-        qa = QualAction(self.action, self.get_item_qualifier()).to_string()
+        qa = QualAction(self.action, self.get_item_qualifier())
         
         items = enumerate(value) if value else ()
 
@@ -337,7 +346,7 @@ class DictFieldWidgetTraits(ContainerFieldWidgetTraits):
         tpl_vars = FieldWidget.prepare_template_vars(self, name_prefix, data)
         title = tpl_vars.get('title')
         qname = tpl_vars.get('qname')
-        qa = QualAction(self.action, self.get_item_qualifier()).to_string()
+        qa = QualAction(self.action, self.get_item_qualifier())
         
         terms = field.key_type.vocabulary.by_value
         items = value.items() if value else ()
@@ -405,7 +414,7 @@ class ObjectFieldWidgetTraits(FieldWidget):
                 data1[k] = v
         
         # Generate markup for the object, feed to the current template context
-        qa = self.context.requested_action.to_string()
+        qa = self.context.requested_action
         markup = markup_for_object(qa, value, 
             errors=self.errors, name_prefix=qname, data=data1)
         tpl_vars['content'] = { 'markup': markup }

@@ -11,32 +11,36 @@ from ckanext.publicamundi.lib.metadata.widgets.base import (
     ReadFieldWidget, ReadObjectWidget,
     ListFieldWidgetTraits, DictFieldWidgetTraits)
 
-@field_widget_multiadapter([IListField, schemata.IContactInfo],
-    qualifiers=['contacts.baz'], is_fallback=True)
-class ListOfContactsEditWidget(EditFieldWidget, ListFieldWidgetTraits):
- 
-    def get_template(self):
-        return 'package/snippets/fields/edit-list-contacts-baz.html'
+@object_widget_adapter(schemata.IInspireMetadata, 
+    qualifiers=['datasetform'], is_fallback=True)
+class InspireEditWidget(EditObjectWidget):
 
-@object_widget_adapter(schemata.IBaz, qualifiers=['datasetform'], is_fallback=True)
-class BazEditWidget(EditObjectWidget):
-    
+    def prepare_template_vars(self, name_prefix, data):
+        tpl_vars = super(InspireEditWidget, self).prepare_template_vars(name_prefix, data)
+        # Add variables
+        return tpl_vars
+
     def get_field_qualifiers(self):
         return OrderedDict([
-            ('url', None),
-            ('contacts', 'contacts.baz'),
+            ('languagecode', 'select2'),
+            ('datestamp', None),
         ])
         
     def get_template(self):
         return None # use glue template
 
-@object_widget_adapter(schemata.IBaz)
-class BazReadWidget(ReadObjectWidget):
-   
+@object_widget_adapter(schemata.IInspireMetadata)
+class InspireReadWidget(ReadObjectWidget):
+    
+    def prepare_template_vars(self, name_prefix, data):
+        tpl_vars = super(InspireReadWidget, self).prepare_template_vars(name_prefix, data)
+        # Add variables
+        return tpl_vars
+     
     def get_field_qualifiers(self):
         return OrderedDict([
-            ('url', None),
-            ('contacts', 'contacts.baz'),
+            ('languagecode', None),
+            ('datestamp', None),
         ])
 
     def get_template(self):

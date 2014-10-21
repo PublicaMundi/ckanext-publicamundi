@@ -397,9 +397,13 @@ class Object(object):
         return schema
 
     @classmethod
-    def get_field_names(cls):
+    def get_field_names(cls, order=False):
         schema = cls.get_schema()
-        return zope.schema.getFieldNames(schema) 
+        if not order:
+            names = zope.schema.getFieldNames(schema)
+        else:
+            names = zope.schema.getFieldNamesInOrder(schema)
+        return names
     
     @classmethod
     def get_field_factory(cls, key=None, field=None):
