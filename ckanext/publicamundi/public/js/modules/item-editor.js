@@ -88,6 +88,12 @@
 
     this.ckan.module('edit-selected-dict-items', function ($, _) {
 
+        var editor_defaults = {
+            hasOrder: false,
+            allowDelete: true,
+            onDelete: 'self-destroy',
+        }
+        
         return {
             options: {
                 title: null,
@@ -189,10 +195,10 @@
                     var title = opts.terms[key].title
                     var $item = $list.children('li').filter(data_filter('key', key))
                     if ($item.length) {
-                        $item.itemEditor({ 
+                        $item.itemEditor($.extend({}, editor_defaults, { 
                             qname: opts.qname + '.' + key, 
-                            title: title, 
-                            allowDelete: true, })
+                            title: title,
+                        }))
                         $item.on('publicamundi-item_editor:destroy', handle_destroy)
                     } else {
                         $('<option/>', { value: key })
@@ -213,14 +219,13 @@
                     .attr('disabled', 'disabled')
                     .on('click', function (ev) {
                         var key = $select.val(), 
-                            title = opts.terms[key].title,
-                            $item = null
-                        $item = $('<li/>').data('key', key).appendTo($list)
-                        $item.itemEditor({ 
+                            title = opts.terms[key].title
+                        var $item = $('<li/>').data('key', key).appendTo($list)
+                        $item.itemEditor($.extend({}, editor_defaults, { 
                             qname: opts.qname + '.' + key, 
                             title: title,
                             template: 'default',
-                            allowDelete: true, })
+                        }))
                         $item.on('publicamundi-item_editor:destroy', handle_destroy)
                         $select.find(':selected').remove()
                         $select.val('').trigger('change')
@@ -238,6 +243,12 @@
     })
 
     this.ckan.module('edit-list-items', function ($, _) {
+
+        var editor_defaults = {
+            hasOrder: true,
+            allowDisable: false,
+            onDelete: 'noop',
+        }
 
         return {
             options: {
@@ -369,22 +380,16 @@
                 $list.children('li').each(function (i, li) {
                     var $item = $(li)
                     assert(i == $item.data('index'))
-                    $item.itemEditor({
+                    $item.itemEditor($.extend({}, editor_defaults, {
                         qname: opts.qname + '.' + i.toString(),
                         title: opts.title + ' #' + (i + 1).toString(),
-                        allowDisable: false,
-                        onDelete: 'noop',
-                    })
+                        canMoveUp: (i > 0),
+                    }))
                     $item.on('publicamundi-item_editor:remove', handle_remove)
                     num_items += 1
                 })
 
                 // Bind event handlers
-                
-                $reorder_btn.on('click', function () {
-                    alert('Not implemented yet')
-                    return false
-                })
                 
                 $add_btn.on('click', function () {
                     var i = num_items
@@ -394,18 +399,19 @@
                     } else {
                         var $item = $('<li/>')
                             .data('index', i)
-                            .itemEditor({
+                            .itemEditor($.extend({}, editor_defaults, {
                                 qname: opts.qname + '.' + i.toString(),
                                 title: opts.title + ' #' + (i + 1).toString(),
+                                canMoveUp: (i > 0),
                                 template: 'default',
-                                allowDisable: false,
-                                onDelete: 'noop',
-                             })
+                             }))
                             .on('publicamundi-item_editor:remove', handle_remove)
                             .appendTo($list)
                         num_items += 1
                         setTimeout(function () {
-                            $item.find(':input:eq(0)').focus()
+                            $item.find(':input')
+                                .not('.btn').not('[type=checkbox]').first()
+                                .focus()
                         }, 500)
                     }
                     return false
@@ -449,6 +455,15 @@
                         return false 
                     }) 
                     return false
+                })
+
+                $list.on('publicamundi-item_editor:move-up', function (ev) {
+                    var $item = $(ev.target),
+                        i = $item.data('index')
+                    assert(i > 0)
+                    var $prev_item = $(this).children('li').eq(i - 1)
+                    $item.itemEditor('swapValues', $prev_item)
+                    return false;
                 })
 
                 debug('Initialized module: edit-list-items opts=', this.options)

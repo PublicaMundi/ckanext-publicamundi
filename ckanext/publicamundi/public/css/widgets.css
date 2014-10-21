@@ -20,19 +20,20 @@ li .widget.object-edit-widget {
 .field-edit-widget > ul > li header > .btn.btn-small {
 }
 
-.field-edit-widget > ul > li header > .btn.disable,
-.field-edit-widget > ol > li header > .btn.disable,
-.field-edit-widget > ul > li header > .btn.delete,
-.field-edit-widget > ol > li header > .btn.delete,
-.field-edit-widget > ul > li header > .btn-group.remove-opts > button,
-.field-edit-widget > ol > li header > .btn-group.remove-opts > button {
+.field-edit-widget > ul > li header .btn.disable,
+.field-edit-widget > ol > li header .btn.disable,
+.field-edit-widget > ul > li header .btn.delete,
+.field-edit-widget > ol > li header .btn.delete,
+.field-edit-widget > ul > li header .btn-group.remove-opts > button,
+.field-edit-widget > ol > li header .btn-group.remove-opts > button {
     color: brown;
 }
-.field-edit-widget > ul > li header > .btn-group.remove-opts .dropdown-menu a {
-    /*cursor: pointer;*/
+.field-edit-widget > ol > li header .btn-group.remove-opts .dropdown-menu a,
+.field-edit-widget > ul > li header .btn-group.remove-opts .dropdown-menu a {
     color: brown;
 }
-.field-edit-widget > ul > li header > .btn-group.remove-opts .dropdown-menu a:hover {
+.field-edit-widget > ol > li header .btn-group.remove-opts .dropdown-menu a:hover,
+.field-edit-widget > ul > li header .btn-group.remove-opts .dropdown-menu a:hover {
     background-image: none;
     background-color: #f5f3f3;
 }

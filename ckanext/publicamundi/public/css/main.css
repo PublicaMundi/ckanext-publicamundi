@@ -22,6 +22,10 @@ header > h6.inline {
     padding: 4px 9px 4px 9px;
 }
 
+.btn-mini {
+    padding: 3px 6px;
+}
+
 .datepicker {
     width: 250px
 }
