@@ -152,7 +152,7 @@ class ObjectWidget(Widget):
 
          * a qualifier returned by get_field_qualifiers()
          * a qualifier tagged directly to the field as 'widget-qualifier'
-         * a qualifier specified by self.qualified_action
+         * the qualifier used at self.provided_action
 
         '''
         return {}
@@ -214,16 +214,15 @@ class ObjectWidget(Widget):
             error_dict = errors if isinstance(errors, dict) else None
 
             field_qualifiers = self.get_field_qualifiers()
-            q = self.qualified_action
 
             def render_field(k):
                 f = obj.get_field(k)
                 qf = (field_qualifiers.get(k)
                     or f.queryTaggedValue('widget-qualifier')
                     or self.context.provided_action.qualifier)
-                q = QualAction(self.action, qualifier=qf).to_string()
+                qa = QualAction(self.action, qualifier=qf).to_string()
                 ef = error_dict.get(k) if error_dict else None
-                mf = markup_for_field(q, f, errors=ef, name_prefix=name_prefix)
+                mf = markup_for_field(qa, f, errors=ef, name_prefix=name_prefix)
                 return dict(field=f, markup=mf)
             
             keys = set(obj.get_field_names()) - set(self.get_omitted_fields())
@@ -269,7 +268,13 @@ class EditObjectWidget(ObjectWidget):
 # Base widgets for container fields 
 #
 
-class ListFieldWidgetTraits(FieldWidget):
+class ContainerFieldWidgetTraits(FieldWidget):
+    
+    def get_item_qualifier(self):
+        qa = self.context.provided_action.make_child('item')
+        return qa.qualifier
+        
+class ListFieldWidgetTraits(ContainerFieldWidgetTraits):
 
     def prepare_template_vars(self, name_prefix, data):
         '''Prepare data for the template.
@@ -284,18 +289,17 @@ class ListFieldWidgetTraits(FieldWidget):
         tpl_vars = FieldWidget.prepare_template_vars(self, name_prefix, data)
         title = tpl_vars.get('title')
         qname = tpl_vars.get('qname')
-        a = self.context.provided_action.make_child('item')
-        q = a.to_string()
+        qa = QualAction(self.action, self.get_item_qualifier()).to_string()
         
         items = enumerate(value) if value else ()
 
         def render_item_template():
-            yf = field.value_type.bind(FieldContext(key='{{index}}', value=None))
-            yd = { 'title': '%s #{{index1}}' % (yf.title) }
+            yf = field.value_type.bind(FieldContext(key='{{key}}', value=None))
+            yd = { 'title': '{{title}}' }
             return {
-                'index': 'index', # placeholder
+                'variables': ['key', 'title'],
                 'markup': to_c14n_markup(
-                    markup_for_field(q, yf, name_prefix=qname, data=yd),
+                    markup_for_field(qa, yf, name_prefix=qname, data=yd),
                     with_comments=False)
             }
         
@@ -306,7 +310,7 @@ class ListFieldWidgetTraits(FieldWidget):
             return {
                 'index': i,
                 'markup': markup_for_field(
-                    q, yf, errors=ye, name_prefix=qname, data=yd)
+                    qa, yf, errors=ye, name_prefix=qname, data=yd)
             }
         
         tpl_vars.update({
@@ -316,7 +320,7 @@ class ListFieldWidgetTraits(FieldWidget):
         
         return tpl_vars
 
-class DictFieldWidgetTraits(FieldWidget):
+class DictFieldWidgetTraits(ContainerFieldWidgetTraits):
 
     def prepare_template_vars(self, name_prefix, data):
         '''Prepare data for the template.
@@ -333,8 +337,7 @@ class DictFieldWidgetTraits(FieldWidget):
         tpl_vars = FieldWidget.prepare_template_vars(self, name_prefix, data)
         title = tpl_vars.get('title')
         qname = tpl_vars.get('qname')
-        a = self.context.provided_action.make_child('item')
-        q = a.to_string()
+        qa = QualAction(self.action, self.get_item_qualifier()).to_string()
         
         terms = field.key_type.vocabulary.by_value
         items = value.items() if value else ()
@@ -343,9 +346,9 @@ class DictFieldWidgetTraits(FieldWidget):
             yf = field.value_type.bind(FieldContext(key='{{key}}', value=None))
             yd = { 'title': '{{title}}' }
             return {
-                'key': 'key', # a placeholder
+                'variables': ['key', 'title'],
                 'markup': to_c14n_markup(
-                    markup_for_field(q, yf, name_prefix=qname, data=yd),
+                    markup_for_field(qa, yf, name_prefix=qname, data=yd),
                     with_comments=False)
             }
 
@@ -358,7 +361,7 @@ class DictFieldWidgetTraits(FieldWidget):
                 'key': k,
                 'key_term': term,
                 'markup': markup_for_field(
-                    q, yf, errors=ye, name_prefix=qname, data=yd),
+                    qa, yf, errors=ye, name_prefix=qname, data=yd),
             }
 
         tpl_vars.update({
@@ -402,8 +405,8 @@ class ObjectFieldWidgetTraits(FieldWidget):
                 data1[k] = v
         
         # Generate markup for the object, feed to the current template context
-        q = self.context.requested_action.to_string()
-        markup = markup_for_object(q, value, 
+        qa = self.context.requested_action.to_string()
+        markup = markup_for_object(qa, value, 
             errors=self.errors, name_prefix=qname, data=data1)
         tpl_vars['content'] = { 'markup': markup }
         

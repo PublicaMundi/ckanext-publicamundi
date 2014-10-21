@@ -17,6 +17,10 @@ contact2 = ContactInfo(
     email = u'somebody@example.com', 
     address = PostalAddress(address=u'Ακακίας 22', postalcode=u'54321'))
 
+contact3 = ContactInfo(
+    email = u'penguin@example.com', 
+    address = PostalAddress(address=u'North Pole', postalcode=u'91911'))
+
 poly1 = Polygon(name = u'Poly1', points=[
     Point(x=0.6, y=0.5), Point(x=0.7, y=0.1),
     Point(x=1.6, y=0.2), Point(x=0.6, y=0.5),])
@@ -45,9 +49,11 @@ foo1 = Foo(
     contact_info = ContactInfo(email=u'nomad@somewhere.com', address=None),
     contacts = {
         'personal': ContactInfo(
+            publish=False,
             email=u'nobody@example.com', 
             address=PostalAddress(address=u'North Pole', postalcode=u'54321')),
         'office': ContactInfo(
+            publish=True,
             email=None, 
             address=PostalAddress(address=u'South Pole', postalcode=u'12345')),
     },
@@ -100,6 +106,11 @@ foo7.tags = None
 
 foo8 = copy.deepcopy(foo1)
 foo8.contacts.pop('personal')
+
+baz1 = Baz(
+    url = 'http://baz.example.com',
+    contacts = [contact1, contact2, contact3]
+)
 
 freekeyword1 = FreeKeyword(
     value = u"atmosphere",

@@ -25,6 +25,7 @@ class ContactInfo(Object):
 
     email = None
     address = None
+    publish = None
 
 @object_null_adapter()
 class Point(Object):

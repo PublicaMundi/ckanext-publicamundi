@@ -9,7 +9,7 @@
 
 
 {% block primary_content_inner %}
-<form method="post">
+<form method="post" class="form form-horizontal">
     {{ 
         h.markup_for_field(action|default('edit'), field, 
             name_prefix = name_prefix, 

@@ -9,7 +9,7 @@
 
     <ol id="{{ qname }}-items">
         {% for y in items -%}
-        <li data-key="{{ loop.index0 }}">{{ y.markup }}</li>
+        <li data-index="{{ loop.index0 }}">{{ y.markup }}</li>
         {%- endfor %}
     </ol>
 </div>
