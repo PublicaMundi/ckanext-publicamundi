@@ -119,6 +119,10 @@ input[type="tel"] {
     border-radius: 2px;
 }
 
+.form-horizontal .control-group {
+    margin-bottom: 14px;
+}
+
 .form-horizontal .info-inline {
     width: 235px;
 }

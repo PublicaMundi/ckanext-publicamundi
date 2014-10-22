@@ -1071,16 +1071,16 @@
     }, 
     "Party Roles": {
         "terms": {
-            "originator": "Originator", 
             "publisher": "Publisher", 
-            "pointofcontact": "PointOfContact", 
-            "investigator": "PrincipalInvestigator", 
+            "pointofcontact": "Point of Contact", 
+            "author": "Author", 
+            "resourceprovider": "Resource Provider", 
+            "owner": "Owner", 
+            "originator": "Originator", 
+            "investigator": "Principal Investigator", 
             "custodian": "Custodian", 
-            "resourceprovider": "ResourceProvider", 
             "distributor": "Distributor", 
             "user": "User", 
-            "owner": "Owner", 
-            "author": "Author", 
             "processor": "Processor"
         }
     }

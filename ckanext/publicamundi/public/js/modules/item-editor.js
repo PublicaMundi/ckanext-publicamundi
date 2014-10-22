@@ -89,7 +89,7 @@
     this.ckan.module('edit-selected-dict-items', function ($, _) {
 
         var editor_defaults = {
-            hasOrder: false,
+            index: null,
             allowDelete: true,
             onDelete: 'self-destroy',
         }
@@ -245,7 +245,7 @@
     this.ckan.module('edit-list-items', function ($, _) {
 
         var editor_defaults = {
-            hasOrder: true,
+            index: -1,
             allowDisable: false,
             onDelete: 'noop',
         }
@@ -269,7 +269,7 @@
                     '</button>',
                 clearBtn: 
                     '<button class="btn btn-small clear-items" title="{{title}}">' + 
-                        '<i class="icon-fire"></i>{{label}}' + 
+                        '<i class="icon-eraser"></i>{{label}}' + 
                     '</button>',
                 pane: 
                     '<div class="add-item add-item-of-{{qname}}">' +
@@ -382,7 +382,7 @@
                     assert(i == $item.data('index'))
                     $item.itemEditor($.extend({}, editor_defaults, {
                         qname: opts.qname + '.' + i.toString(),
-                        title: opts.title + ' #' + (i + 1).toString(),
+                        index: i,
                         canMoveUp: (i > 0),
                     }))
                     $item.on('publicamundi-item_editor:remove', handle_remove)
@@ -401,7 +401,7 @@
                             .data('index', i)
                             .itemEditor($.extend({}, editor_defaults, {
                                 qname: opts.qname + '.' + i.toString(),
-                                title: opts.title + ' #' + (i + 1).toString(),
+                                index: i,
                                 canMoveUp: (i > 0),
                                 template: 'default',
                              }))

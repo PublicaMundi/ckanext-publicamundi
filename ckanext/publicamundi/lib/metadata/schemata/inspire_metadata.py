@@ -71,7 +71,7 @@ class IInspireMetadata(IObject):
 
     contact = zope.schema.List(
         title = u'Metadata Point of Contact',
-        description = u"This is the description of the organisation responsible for the creation and maintenance of the metadata. This description shall include:   - the name of the organisation as free text, - a contact e-mail address as a character string.",
+        description = u'The organisations responsible for the creation and maintenance of the metadata.',
         required = True,
         min_length = 1,
         max_length = 5,
@@ -88,15 +88,15 @@ class IInspireMetadata(IObject):
     languagecode = zope.schema.Choice(
         title = u'Metadata Language',
         vocabulary = inspire_vocabularies.get_by_name('languages').get('vocabulary'),
-        description = u"This is the language in which the metadata elements are expressed.The value domain of this metadata element is limited to the official languages of the Community expressed in conformity with ISO 639-2.",
+        description = u"This is the language in which the metadata elements are expressed. The value domain of this metadata element is limited to the official languages of the Community expressed in conformity with ISO 639-2.",
         required = True,
-        default = "en")
+        default = 'en')
 
     # Identification 
 
     title = zope.schema.TextLine(
         title = u'Resource Title',
-        description = u"This a characteristic, and often unique, name by which the resource is known.                                                       The value domain of this metadata element is free text.",
+        description = u"This a characteristic, and often unique, name by which the resource is known. The value domain of this metadata element is free text.",
         required = True)
 
     # Todo: What constraints are needed for identifier??

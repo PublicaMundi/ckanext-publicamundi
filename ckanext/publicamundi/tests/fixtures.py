@@ -118,11 +118,20 @@ freekeyword1 = FreeKeyword(
     reference_date = datetime.date.today(),
     date_type = 'creation')
 
+party1 = ResponsibleParty(
+    organization = u"Acme Org", 
+    email = u"someone@acme.org", role = "pointofcontact"
+)
+
 bbox1 = GeographicBoundingBox(nblat = -50.0, sblat = -20.12, wblng = 15.0, eblng = 1.0)
 
 textent1 = TemporalExtent(start = datetime.date.today(), end = datetime.date(2015,01,01))
 
-conformity1 = Conformity(title = u"lala",date = datetime.date.today(),date_type = "creation", degree = "conformant")
+conformity1 = Conformity(
+    title = u"lala",
+    date = datetime.date.today(), 
+    date_type = "creation", 
+    degree = "conformant")
 
 spatialres1 = SpatialResolution(distance = 5, uom = u"lala")
 
@@ -155,10 +164,7 @@ thesaurus_gemet_inspire_data_themes = Thesaurus(
 # INSPIRE metadata
 
 inspire1 = InspireMetadata(
-    contact = [
-        ResponsibleParty(
-            organization=u"Org", email=[u"email@asd.gr"], role="pointofcontact")
-    ],
+    contact = [party1],
     datestamp = datetime.date.today(),
     languagecode = "el",
     title = u"Title",
@@ -203,10 +209,11 @@ inspire1 = InspireMetadata(
     limitations = [u"limit1", u"limit2"],
     responsible_party = [
         ResponsibleParty(
-            organization=u"Org", email=[u"email@asd.gr"], role="pointofcontact"), 
+            organization=u"Acme Org", email=u"a@acme.example.com", role="originator"), 
         ResponsibleParty(
-            organization=u"Org2", email=[u"email2@asd.gr"], role="pointofcontact")]
+            organization=u"Coyote Org", email=u"b@coyote.example.com", role="pointofcontact")]
 )
 
 inspire2 = copy.deepcopy(inspire1)
 #inspire2.keywords = None
+

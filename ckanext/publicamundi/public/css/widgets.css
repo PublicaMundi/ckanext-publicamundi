@@ -14,7 +14,8 @@
 }
 
 li .widget.object-edit-widget {
-    /*padding: 0px 0px;*/
+    padding: 0px 0px 4px 0px;
+    margin: 4px 0px;
 }
 
 .field-edit-widget > ul > li header > .btn.btn-small {

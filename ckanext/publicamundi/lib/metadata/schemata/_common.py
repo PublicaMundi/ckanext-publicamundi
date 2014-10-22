@@ -59,22 +59,19 @@ class IContactInfo(IObject):
 class IResponsibleParty(IObject):
 
     organization = zope.schema.TextLine(
-        title = u'Organization name',
+        title = u'Organization Name',
         required = True,
-        min_length = 1)
+        min_length = 2)
 
-    email = zope.schema.List(
+    email = z3c.schema.email.RFC822MailAddress(
         title = u'Email',
-        required = True,
-        min_length = 1,
-        max_length = 2,
-        value_type = z3c.schema.email.RFC822MailAddress(
-            title = u'Email'))
+        required = True)
 
     role = zope.schema.Choice(
-        title = u'Responsible party role',
+        title = u'Responsible Party Role',
         vocabulary = inspire_vocabularies.get_by_name('party-roles').get('vocabulary'), 
         description = u'This is the role of the responsible organisation.',
+        default = 'pointofcontact',
         required = True)
 
 class IFreeKeyword(IObject):

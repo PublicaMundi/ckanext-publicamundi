@@ -1,6 +1,8 @@
 import zope.interface
 from collections import OrderedDict
 
+from ckan.plugins import toolkit
+
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata.widgets import (
@@ -11,6 +13,15 @@ from ckanext.publicamundi.lib.metadata.widgets.base import (
     ReadFieldWidget, ReadObjectWidget,
     ListFieldWidgetTraits, DictFieldWidgetTraits)
 
+_ = toolkit._
+
+@field_widget_multiadapter([IListField, schemata.IResponsibleParty],
+    qualifiers=['contacts.inspire'], is_fallback=False)
+class ListOfContactsEditWidget(EditFieldWidget, ListFieldWidgetTraits):
+ 
+    def get_template(self):
+        return 'package/snippets/fields/edit-list-contacts-inspire.html'
+
 @object_widget_adapter(schemata.IInspireMetadata, 
     qualifiers=['datasetform'], is_fallback=True)
 class InspireEditWidget(EditObjectWidget):
@@ -19,9 +30,28 @@ class InspireEditWidget(EditObjectWidget):
         tpl_vars = super(InspireEditWidget, self).prepare_template_vars(name_prefix, data)
         # Add variables
         return tpl_vars
+    
+    def get_field_data(self):
+        
+        # Note We are going to override some field titles because their full names 
+        # seem quite verbose when placed in our form (as inputs are allready grouped
+        # in accordion sections).
+        
+        return {
+            'languagecode': {
+                'title': _('Language'),
+            },
+            'datestamp': {
+                'title': _('Date Updated'),
+            },
+            'contact': {
+                'title': _('Contact Points'),
+            },
+        }
 
     def get_field_qualifiers(self):
         return OrderedDict([
+            ('contact', 'contacts.inspire'),
             ('languagecode', 'select2'),
             ('datestamp', None),
         ])

@@ -144,7 +144,7 @@ class ObjectWidget(Widget):
 
     def get_field_qualifiers(self):
         '''Return an ordered map of (field, qualifier) items to be used in glue
-        templates.
+        template.
 
         If no valid template is provided (via get_template()), then we attempt to 
         render a  widget by glue-ing its fields together. In this case, each field is 
@@ -174,6 +174,16 @@ class ObjectWidget(Widget):
         
         keys = self.obj.get_field_names(order=True)
         return OrderedDict(((k, None) for k in keys))
+    
+    def get_field_data(self):
+        '''Return a map of (field, data) to be used as template variables in glue 
+        template.
+
+        Note: 
+        For reasons of caching, a derived schema-specific widget may choose to 
+        re-define this method as a classmethod (perhaps combined with a memoizer?).
+        '''
+        return {}
 
     ## IObjectWidget interface ##
 
@@ -228,6 +238,7 @@ class ObjectWidget(Widget):
             error_dict = errors if isinstance(errors, dict) else None
 
             field_qualifiers = self.get_field_qualifiers().iteritems()
+            field_data = self.get_field_data()
 
             def render_field(k, qf):
                 f = obj.get_field(k)
@@ -237,7 +248,9 @@ class ObjectWidget(Widget):
                     qf = self.context.provided_action.qualifier
                 qa = QualAction(self.action, qualifier=qf)
                 ef = error_dict.get(k) if error_dict else None
-                mf = markup_for_field(qa, f, errors=ef, name_prefix=name_prefix)
+                df = field_data.get(k, {})
+                mf = markup_for_field(qa, f, 
+                    errors=ef, name_prefix=name_prefix, data=df)
                 return dict(field=f, markup=mf)
             
             tpl_vars['fields'] = OrderedDict(
@@ -285,6 +298,13 @@ class ContainerFieldWidgetTraits(FieldWidget):
         
 class ListFieldWidgetTraits(ContainerFieldWidgetTraits):
 
+    def get_item_data(self, index=None):
+        return {
+            'title': '%s #%s' % (
+                self.field.value_type.title, 
+                str(index + 1) if isinstance(index, int) else '{{index1}}'),
+        }
+        
     def prepare_template_vars(self, name_prefix, data):
         '''Prepare data for the template.
         The markup for items will be generated before the template is
@@ -304,9 +324,9 @@ class ListFieldWidgetTraits(ContainerFieldWidgetTraits):
 
         def render_item_template():
             yf = field.value_type.bind(FieldContext(key='{{key}}', value=None))
-            yd = { 'title': '{{title}}' }
+            yd = self.get_item_data(index=None)
             return {
-                'variables': ['key', 'title'],
+                'variables': ['key', 'title', 'index', 'index1'],
                 'markup': to_c14n_markup(
                     markup_for_field(qa, yf, name_prefix=qname, data=yd),
                     with_comments=False)
@@ -315,7 +335,7 @@ class ListFieldWidgetTraits(ContainerFieldWidgetTraits):
         def render_item(i, y):
             yf = field.value_type.bind(FieldContext(key=i, value=y))
             ye = error_dict.get(i) if error_dict else None
-            yd = { 'title': '%s #%d' % (yf.title, i + 1) }
+            yd = self.get_item_data(index=i)
             return {
                 'index': i,
                 'markup': markup_for_field(

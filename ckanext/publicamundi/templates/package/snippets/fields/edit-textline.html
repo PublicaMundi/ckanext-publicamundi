@@ -1,7 +1,7 @@
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
 {%- set placeholder = placeholder or field.default -%}
-{%- if input_classes is not defined %}{% set input_classes = [ 'input-medium' ] %}{% endif -%}
+{%- if input_classes is not defined %}{% set input_classes = ['input-medium'] %}{% endif -%}
 
 <div class="control-group{{ " error" if errors }}{{ " " ~ classes|join(' ') }}">
     <label class="control-label" for="{{ 'input-' ~ qname }}">

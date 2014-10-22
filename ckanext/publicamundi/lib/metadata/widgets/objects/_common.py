@@ -2,6 +2,8 @@ import itertools
 import zope.interface
 from collections import OrderedDict
 
+from ckan.plugins import toolkit
+
 from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata.widgets import (
@@ -9,6 +11,8 @@ from ckanext.publicamundi.lib.metadata.widgets import (
 from ckanext.publicamundi.lib.metadata.widgets.base import (
     ReadObjectWidget, EditObjectWidget,
     ReadFieldWidget, EditFieldWidget)
+
+_ = toolkit._
 
 #
 # IObject - Tabular views
@@ -232,4 +236,43 @@ class ContactInfoReadWidget(ReadObjectWidget):
     def get_template(self):
         return None # use glue template
         #return 'package/snippets/objects/read-contact_info.html'
+
+#
+# IResponsibleParty
+#
+
+@object_widget_adapter(schemata.IResponsibleParty)
+class ResponsiblePartyEditWidget(EditObjectWidget):
+
+    def get_field_data(self):
+        return {
+            'role': {
+                'title': _('Party Role'),
+            },
+            'organization': {
+                'title': _('Organization Name'),
+                'placeholder': u'Acme Widgits',
+                'input_classes': ['input-large'],
+            },
+            'email': {
+                'placeholder': 'info@example.com',
+                'input_classes': ['input-large'],
+            },
+        }
+    
+    def get_field_qualifiers(self):
+        return OrderedDict([
+            ('organization', None),
+            ('email', None),
+            ('role', 'select2'),
+        ])
+        
+    def get_template(self):
+        return None 
+
+@object_widget_adapter(schemata.IResponsibleParty)
+class ResponsiblePartyReadWidget(ReadObjectWidget):
+
+    def get_template(self):
+        return None 
 
