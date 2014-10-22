@@ -49,7 +49,7 @@ class FooEditWidget(EditObjectWidget):
         # Add variables
         return tpl_vars
    
-    def get_field_data(self):
+    def get_field_template_vars(self):
         return {
             'url': {
                 'title': _('Web Site'),

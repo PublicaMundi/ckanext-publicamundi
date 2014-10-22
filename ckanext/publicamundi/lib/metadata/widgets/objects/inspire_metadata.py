@@ -31,7 +31,7 @@ class InspireEditWidget(EditObjectWidget):
         # Add variables
         return tpl_vars
     
-    def get_field_data(self):
+    def get_field_template_vars(self):
         
         # Note We are going to override some field titles because their full names 
         # seem quite verbose when placed in our form (as inputs are allready grouped

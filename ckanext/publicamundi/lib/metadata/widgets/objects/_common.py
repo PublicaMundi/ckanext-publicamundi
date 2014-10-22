@@ -244,19 +244,20 @@ class ContactInfoReadWidget(ReadObjectWidget):
 @object_widget_adapter(schemata.IResponsibleParty)
 class ResponsiblePartyEditWidget(EditObjectWidget):
 
-    def get_field_data(self):
+    def get_field_template_vars(self):
         return {
             'role': {
                 'title': _('Party Role'),
+                'input_classes': ['span3'],
             },
             'organization': {
                 'title': _('Organization Name'),
                 'placeholder': u'Acme Widgits',
-                'input_classes': ['input-large'],
+                'input_classes': ['span4'],
             },
             'email': {
                 'placeholder': 'info@example.com',
-                'input_classes': ['input-large'],
+                'input_classes': ['span3'],
             },
         }
     
