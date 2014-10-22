@@ -39,7 +39,6 @@
         
         return {
             options: {
-                title: null,
                 qname: null,
                 terms: null,
                 messages: {},
@@ -96,7 +95,6 @@
         
         return {
             options: {
-                title: null,
                 qname: null,
                 terms: null,
                 messages: {},
@@ -252,7 +250,6 @@
 
         return {
             options: {
-                title: null,
                 qname: null,
                 maxlength: 6,
                 messages: {},

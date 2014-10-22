@@ -12,25 +12,4 @@
         'clear-alert': 'Are you sure you want to clear all ({{num}}) contacts ?',
     } 
 -%}
-
-<div class="{{ classes|join(' ') }}"
-    data-module="edit-list-items" 
-    data-module-qname="{{ qname }}"
-    data-module-maxlength="{{ field.max_length }}" 
-    data-module-messages="{{ h.dump_json(messages) }}"
-   >
-    {% if title %}<h3 class="title">{{ title }}</h3>{% endif -%}
-    {%- if description %}<div class="description">{{ description }}</div>{% endif -%}
-
-    <script type="x-template-mustache" id="{{ qname }}-item-template">
-        {{ item_template.markup|safe }}
-    </script>
-
-    <ol id="{{ qname }}-items">
-        {% for y in items -%}
-        <li data-index="{{ loop.index0 }}">{{ y.markup }}</li>
-        {%- endfor %}
-    </ol>
-</div>
-
-{% resource 'ckanext-publicamundi/item-editor' %}
+{% extends 'package/snippets/fields/edit-list-items.html' %}
