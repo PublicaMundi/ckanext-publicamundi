@@ -131,6 +131,10 @@ input[type="tel"] {
     padding-top: 5px;
 }
 
+.tag {
+    border-radius: 2px;
+}
+
 .table {
     margin-bottom: 10px;
     margin-top:10px;
