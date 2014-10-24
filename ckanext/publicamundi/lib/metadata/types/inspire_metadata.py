@@ -69,7 +69,7 @@ class InspireMetadata(Object):
     datestamp = None
     languagecode = None
     title = None
-    identifier = list
+    identifier = None
     abstract = None
     locator = list
     resource_language = list
@@ -147,16 +147,14 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
             for it in alist:
                 result.append(ResponsibleParty(
                     organization = unicode(it.organization),
-                    email = [unicode(it.email)],
+                    email = unicode(it.email),
                     role = it.role))
             return result
 
         md = MD_Metadata(e)
 
         datestamp = to_date(md.datestamp)
-        id_list = []
-        for it in md.identification.uricode:
-            id_list.append(unicode(it))
+        id_list = md.identification.uricode
 
         url_list = []
         for it in md.distribution.online:
@@ -250,7 +248,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         obj.languagecode = md.languagecode
         obj.title = unicode(md.identification.title)
         obj.abstract = unicode(md.identification.abstract)
-        obj.identifier = id_list
+        obj.identifier = id_list[0]
         obj.locator = url_list
         obj.resource_language = md.identification.resourcelanguage
         obj.topic_category = md.identification.topiccategory

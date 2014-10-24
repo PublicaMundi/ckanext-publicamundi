@@ -96,32 +96,25 @@ class IInspireMetadata(IObject):
 
     title = zope.schema.TextLine(
         title = u'Resource Title',
-        description = u"This a characteristic, and often unique, name by which the resource is known. The value domain of this metadata element is free text.",
+        description = u"This a characteristic (and often unique) name by which the resource is known.",
         required = True)
 
-    # Todo: What constraints are needed for identifier??
-
-    identifier = zope.schema.List(
+    identifier = zope.schema.URI(
         title = u'Identifier',
-        description = u"A value uniquely identifying the resource. The value domain of this metadata element is a mandatory character string code, generally assigned by the data owner, and a character string namespace uniquely identifying the context of the identifier code (for example, the data owner).",
-        required = True,
-        min_length = 1,
-        max_length = 5,
-        value_type = zope.schema.TextLine(
-            title = u'Identifier',
-            min_length = 5 ))
+        description = u"A value uniquely identifying the dataset. The value domain of this metadata element is a mandatory character string code, generally assigned by the data owner, and a character string namespace uniquely identifying the context of the identifier code (for example, the data owner).",
+        required = True)
 
     abstract = zope.schema.Text(
         title = u"Resource Abstract",
-        description = u"This is a brief narrative summary of the content of the resource. The value domain of this metadata element is free text.",
+        description = u"This is a brief narrative summary of the contents of this dataset.",
         required = True)
 
     locator = zope.schema.List(
-        title = u'Resource locator',
+        title = u'Resource Locator',
         description = u"The resource locator defines the link(s) to the resource and/or the link to additional information about the resource. The value domain of this metadata element is a character string, commonly expressed as uniform resource locator (URL).",
         required = True,
         min_length = 1,
-        max_length = 8,
+        max_length = 5,
         value_type = zope.schema.URI(
             title = u'Linkage',
             required = True))
@@ -267,7 +260,7 @@ class IInspireMetadata(IObject):
 
     access_constraints = zope.schema.List(
         title = u'Conditions applying to access and use',
-        description = u'This metadata element defines the conditions for access and use of spatial data sets and services, and where applicable, corresponding fees as required by Article 5(2)(b) and Article 11(2)(f) of Directive 2007/2/EC. The value domain of this metadata element is free text. \nThe element must have values. If no conditions apply to the access and use of the resource, "no conditions apply" shall be used. If conditions are unknown, "conditions unknown" shall be used. This element shall also provide information on any fees necessary to access and use the resource, if applicable, or refer to a uniform resource locator (URL) where information on fees is available.',
+        description = u'Define the conditions for access and use of spatial data sets and services, and where applicable, corresponding fees as required by Article 5(2)(b) and Article 11(2)(f) of Directive 2007/2/EC. The value domain of this metadata element is free text. The element must have values. If no conditions apply to the access and use of the resource, "no conditions apply" shall be used. If conditions are unknown, "conditions unknown" shall be used. This element shall also provide information on any fees necessary to access and use the resource, if applicable, or refer to a uniform resource locator (URL) where information on fees is available.',
         required = True,
         min_length = 1,
         max_length = 4,
@@ -275,7 +268,7 @@ class IInspireMetadata(IObject):
 
     limitations = zope.schema.List(
         title = u'Limitations on public access',
-        description = u"When Member States limit public access to spatial data sets and spatial data services under Article 13 of Directive 2007/2/EC, this metadata element shall provide information on the limitations and the reasons for them. If there are no limitations on public access, this metadata element shall indicate that fact.\nThe value domain of this metadata element is free text.",
+        description = u"When member states limit public access to spatial data sets and spatial data services under Article 13 of Directive 2007/2/EC, this metadata element shall provide information on the limitations and the reasons for them. If there are no limitations on public access, this metadata element shall indicate that fact. The value domain of this metadata element is free text.",
         required = True,
         min_length = 1,
         max_length = 4,
@@ -285,10 +278,10 @@ class IInspireMetadata(IObject):
 
     responsible_party = zope.schema.List(
         title = u'Responsible Party',
-        description = u'This is the description of the organisation responsible for the establishment, management, maintenance and distribution of the resource.\nThis description shall include:\n- the name of the organisation as free text,\n- a contact e-mail address as a character string.',
+        description = u'The responsible party names the organisation responsible for the establishment, management, maintenance and distribution of resources contained in this dataset.',
         required = True,
         min_length = 1,
-        max_length = 4,
+        max_length = 3,
         value_type = zope.schema.Object(IResponsibleParty,
-            title = u'Responsible Party'))
+            title = u'Party'))
 

@@ -7,7 +7,7 @@
     <label class="control-label" for="{{ 'input-' ~ qname }}">
         {{- title }}{{ markup_helpers.mark_required(required) }}</label>
     <div class="controls">
-        <input type="text" id="{{ 'input-' ~ qname }}"  name="{{ qname }}"
+        <input type="{{ input_type|default('text') }}" id="{{ 'input-' ~ qname }}"  name="{{ qname }}"
             class="{{ input_classes|join(" ") }}"
             value="{{ value|empty_and_escape }}" 
             placeholder="{{ placeholder|empty_and_escape }}"

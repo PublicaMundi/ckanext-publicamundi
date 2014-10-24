@@ -127,6 +127,8 @@ def field_widget_multiadapter(field_ifaces, qualifiers=[], is_fallback=False):
     assert not tail_iface is IObjectField, (
         'The widget registry will never provide a multiadapter on a zope.schema.IObject '
         'item. Consider using the underlying schema instead.')
+    assert tail_iface.extends(IField) or tail_iface.isOrExtends(IObject), (
+        '%r is not a suitable interface' % (tail_iface))
     
     decorator = decorator_for_widget_multiadapter(
         field_ifaces, IFieldWidget, qualifiers, is_fallback)

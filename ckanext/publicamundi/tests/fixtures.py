@@ -120,7 +120,8 @@ freekeyword1 = FreeKeyword(
 
 party1 = ResponsibleParty(
     organization = u"Acme Org", 
-    email = u"someone@acme.org", role = "pointofcontact"
+    email = u"someone@acme.org", 
+    role = "pointofcontact"
 )
 
 bbox1 = GeographicBoundingBox(nblat = -50.0, sblat = -20.12, wblng = 15.0, eblng = 1.0)
@@ -168,7 +169,7 @@ inspire1 = InspireMetadata(
     datestamp = datetime.date.today(),
     languagecode = "el",
     title = u"Title",
-    identifier = [u"1a2b314df21312a3"],
+    identifier = "http://acme.example.com/datasets/91b54070-5adb-11e4-8ed6-0800200c9a66",
     abstract = u"This is an abstract description",
     locator = [
         "http://publicamundi.eu",

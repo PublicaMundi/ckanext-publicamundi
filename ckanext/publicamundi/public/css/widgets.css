@@ -1,6 +1,6 @@
 
 .widget h3 { 
-    font-size: 1.1em;
+    font-size: 1.05em;
     color: #555;
 }
 
@@ -10,7 +10,7 @@
 
 .widget .accordion-heading a {
     font-weight: bold;
-    font-size: 1.1em;
+    font-size: 1.05em;
 }
 
 li .widget.object-edit-widget {

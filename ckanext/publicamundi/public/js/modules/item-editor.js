@@ -474,26 +474,4 @@
         };
     })
 
-    this.ckan.module('ababoua', function ($, _) {
-
-        return {
-            options: {
-                boo: 'Boo',
-            },
-
-            initialize: function () 
-            {
-                var module = this,
-                    $el = this.el,
-                    opts = this.options 
-                
-                debug('Initialized module: ababoua opts=', opts)
-            },
-            teardown: function () 
-            { 
-                debug('Tearing down module: ababoua', this.options)
-            },
-        };
-    })
-
 }).apply(this)  

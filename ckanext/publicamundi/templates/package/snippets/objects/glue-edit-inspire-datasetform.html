@@ -1,16 +1,84 @@
 {% import 'macros/accordion.html' as accordion -%}
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
-{% set groups = [
-        { 
-            'name': 'metadata',
-            'heading': _('Metadata on Metadata'),
-            'fields': ['languagecode', 'datestamp', 'contact']
+{# Start workaround for issue #13 
+   
+   The following fields should be initialized as read-only parts of information
+   that exists elsewhere (e.g. in core metadata or in resource metadata).
+#}
+
+{%- do 
+    fields.update({ 
+        'locator': { 
+            'markup': h.markup_for_field('edit:locator.inspire', 
+                obj.get_field('locator'),
+                name_prefix=name_prefix, 
+                data={ 
+                    'pkg_dict': pkg_dict, 
+                    'title': _('Locator'),
+                    'input_classes': ['span5'] }),
         },
+        'resource_language': {
+            'markup': h.markup_for_field('edit:resource_language.inspire',
+                obj.get_field('resource_language'),
+                name_prefix=name_prefix,
+                data={ 
+                    'pkg_dict': pkg_dict, 
+                    'title': _('Language') })
+        },
+        'title': {
+            'markup': h.markup_for_field('edit:title.inspire',
+                obj.get_field('title'),
+                name_prefix=name_prefix,
+                data={ 
+                    'title': _('Title'),
+                    'input_classes': ['span4'],
+                    'attrs': { 
+                        'data-module': 'form-linked-fields',
+                        'data-module-target': 'title',
+                        'data-module-name': 'title', }}),
+        },
+        'identifier': {
+            'markup': h.markup_for_field('edit:identifier.inspire',
+                obj.get_field('identifier'),
+                name_prefix=name_prefix,
+                data={ 
+                    'title': _('Identifier'),
+                    'input_classes': ['span5'],
+                    'attrs': {
+                        'data-module': 'form-linked-fields',
+                        'data-module-target': 'name',
+                        'data-module-name': 'name' }}),
+        },
+        'abstract': {
+            'markup': h.markup_for_field('edit:abstract.inspire',
+                obj.get_field('abstract'),
+                name_prefix=name_prefix,
+                data={ 
+                    'title': _('Abstract'),
+                    'description': none,
+                    'attrs': {
+                        'data-module': 'form-linked-fields',
+                        'data-module-target': 'notes',
+                        'data-module-name': 'description' }}),
+        },
+    }) 
+-%}
+
+{# End workaround #}
+
+{%- set 
+    ungrouped_fields = []
+-%}
+
+{%- set 
+    grouped_fields = [
         { 
             'name': 'identification',
             'heading': _('Identification'),
-            'fields': [],
+            'fields': [
+                'identifier', 'title', 'abstract', 
+                'locator', 'resource_language'],
         },
         { 
             'name': 'classification',
@@ -50,16 +118,35 @@
         { 
             'name': 'responsible-party',
             'heading': _('Responsible Party'),
-            'fields': [],
+            'fields': ['responsible_party'],
+        },
+        {
+            'name': 'contact',
+            'heading': _('Contact Points'),
+            'fields': ['contact']
+        },
+        { 
+            'name': 'metadata',
+            'heading': _('Metadata on Metadata'),
+            'fields': ['languagecode', 'datestamp',]
         },
    ]
-%}
+-%}
 
 <div class="{{ " " ~ classes|join(' ') }}">
     {% if title %}<h3>{{ title }}</h3>{% endif %}
-    {% call(group_desc) accordion.accordion('inspire-fields', groups) %}
+    
+    {# ungrouped #}
+    {%- for fname in ungrouped_fields -%}
+    {{ fields[fname].markup }}
+    {% endfor -%}
+    
+    {# grouped in accordion sections #}
+    {%- call(group_desc) accordion.accordion('inspire-fields', grouped_fields) %}
         {% for fname in group_desc.fields -%}
         {{ fields[fname].markup }}
         {% endfor -%}
-    {% endcall %}
+    {% endcall -%}
 </div>
+
+{% resource 'ckanext-publicamundi/form-linked-fields' %}

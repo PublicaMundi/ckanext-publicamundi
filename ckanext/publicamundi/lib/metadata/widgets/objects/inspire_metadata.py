@@ -17,10 +17,25 @@ _ = toolkit._
 
 @field_widget_multiadapter([IListField, schemata.IResponsibleParty],
     qualifiers=['contacts.inspire'], is_fallback=False)
-class ListOfContactsEditWidget(EditFieldWidget, ListFieldWidgetTraits):
+class ContactsEditWidget(EditFieldWidget, ListFieldWidgetTraits):
  
     def get_template(self):
         return 'package/snippets/fields/edit-list-contacts-inspire.html'
+
+@field_widget_multiadapter([IListField, IURIField],
+    qualifiers=['locator.inspire'], is_fallback=False)
+class ResourceLocatorsEditWidget(EditFieldWidget):
+ 
+    def get_template(self):
+        return 'package/snippets/fields/edit-list-locator-inspire.html'
+
+@field_widget_multiadapter([IListField, IChoiceField],
+    qualifiers=['resource_language.inspire'], is_fallback=False)
+class ResourceLanguagesEditWidget(EditFieldWidget):
+ 
+    def get_template(self):
+        return 'package/snippets/fields/edit-list-resource_language-inspire.html'
+
 
 @object_widget_adapter(schemata.IInspireMetadata, 
     qualifiers=['datasetform'], is_fallback=True)
@@ -38,6 +53,27 @@ class InspireEditWidget(EditObjectWidget):
         # in accordion sections).
         
         return {
+            'identifier': {
+                'input_classes': ['input-xlarge'],
+                'placeholder': 'Linked to <package.url>',
+                'attrs': { 
+                    'disabled': 'disabled' },
+            },
+            'title': {
+                'title': _('Title'), # not to be confused with resource title
+                'placeholder': 'Linked to <package.title>',
+                'input_classes': ['input-xlarge'],
+                'attrs': { 
+                    'disabled': 'disabled' },
+            },
+            'abstract': {
+                'title': _('Abstract'), # not to be confused with resource description
+                'placeholder': 'Linked to <package.description>',
+                'description': None,
+                'attrs': { 
+                    'disabled': 'disabled',
+                    'rows': 4 },
+            },
             'languagecode': {
                 'title': _('Language'),
             },
@@ -51,6 +87,10 @@ class InspireEditWidget(EditObjectWidget):
 
     def get_field_qualifiers(self):
         return OrderedDict([
+            #('identifier', 'identifier.inspire'),
+            #('title', 'title.inspire'),
+            #('abstract', 'abstract.inspire'),
+            ('responsible_party', 'contacts.inspire'),
             ('contact', 'contacts.inspire'),
             ('languagecode', 'select2'),
             ('datestamp', None),
