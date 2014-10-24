@@ -15,24 +15,31 @@
 
             templates: {
                 help:
-                    '<div class="help-block">This field is linked to <a href="#{{id}}">{{name}}</a></div>',
+                    '<div class="help-block">' + 
+                        'This field is linked to <a class="target-field btn-link">{{name}}</a></div>',
             },
 
             initialize: function () 
             {
                 var module = this,
-                    opts = this.options,
-                    $target = null
+                    opts = this.options
                 
-                $target = $('.dataset-form [name="'+opts.target+'"]')
+                var $target = $('.dataset-form [name="'+opts.target+'"]')
+                
+                var $help = $(render(module.templates.help, { name: opts.name }))
                 
                 module.el
                     .val($target.val())
+                    .after($help)
                     .prop('disabled', 'disabled')
-
-                module.el.after(
-                    $(render(module.templates.help, { 
-                        name: opts.name, id: $target.attr('id') })))
+                
+                $help.find('a.target-field')
+                    .on('click', function () {
+                        var $a = $target.is(':visible') ?
+                            $target : $target.closest(':visible')
+                        window.location.assign('#' + $a.attr('id'))
+                        return false
+                    })
 
                 $target.on('change', function () {
                     module.el.val($(this).val())
