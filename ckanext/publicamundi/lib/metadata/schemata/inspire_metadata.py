@@ -7,8 +7,9 @@ from zope.schema.interfaces import IVocabularyTokenized
 from zope.interface.verify import verifyObject
 
 from ckanext.publicamundi.lib.metadata.ibase import IObject
-from ckanext.publicamundi.lib.metadata.schemata._common import *
 from ckanext.publicamundi.lib.metadata.vocabularies import inspire_vocabularies
+from ckanext.publicamundi.lib.metadata.schemata import IBaseMetadata
+from ckanext.publicamundi.lib.metadata.schemata._common import *
 
 class IThesaurus(IObject):
 
@@ -63,7 +64,7 @@ class IThesaurusTerms(IObject):
                 terms = ','.join(unexpected), thesaurus_name = obj.thesaurus.title))
             raise zope.interface.Invalid(msg)
 
-class IInspireMetadata(IObject):
+class IInspireMetadata(IBaseMetadata):
     
     zope.interface.taggedValue('recurse-on-invariants', True)
 

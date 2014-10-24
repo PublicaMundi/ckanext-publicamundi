@@ -13,6 +13,7 @@ from ckanext.publicamundi.lib.metadata.vocabularies import inspire_vocabularies
 from ckanext.publicamundi.lib.metadata import xml_serializers
 from ckanext.publicamundi.lib.metadata.xml_serializers import object_xml_serialize_adapter
 
+from ckanext.publicamundi.lib.metadata.types import BaseMetadata
 from ckanext.publicamundi.lib.metadata.types._common import *
 
 class Thesaurus(Object):
@@ -61,7 +62,7 @@ class ThesaurusTerms(Object):
     terms = list
 
 @object_null_adapter()
-class InspireMetadata(Object):
+class InspireMetadata(BaseMetadata):
     
     zope.interface.implements(IInspireMetadata)
 

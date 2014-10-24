@@ -4,6 +4,7 @@ import zope.schema
 from ckanext.publicamundi.lib.metadata.ibase import IObject
 
 class IBaseMetadata(IObject):
+    
     zope.interface.taggedValue('recurse-on-invariants', False)
 
     title = zope.schema.TextLine(

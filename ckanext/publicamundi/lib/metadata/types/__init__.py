@@ -6,6 +6,7 @@ from ckanext.publicamundi.lib.metadata.schemata import *
 
 
 class BaseMetadata(Object):
+    
     zope.interface.implements(IBaseMetadata)
 
 
