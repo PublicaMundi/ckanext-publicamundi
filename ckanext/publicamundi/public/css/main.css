@@ -61,6 +61,19 @@ input[type="tel"] {
     border-radius: 1px;
 }
 
+label.checkbox {
+    font-weight: inherit;
+    margin-top: 4px;
+}
+
+.controls.checkboxes label.checkbox {
+    padding-left: 0px;
+}
+
+input[type='checkbox'], input[type='radio'] {
+    top: 5px;
+}
+
 .form-horizontal .control-label {
     width: 140px;
 }

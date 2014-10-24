@@ -36,6 +36,13 @@ class ResourceLanguagesEditWidget(EditFieldWidget):
     def get_template(self):
         return 'package/snippets/fields/edit-list-resource_language-inspire.html'
 
+@field_widget_multiadapter([IListField, IChoiceField],
+    qualifiers=['topic_category.inspire'], is_fallback=False)
+class TopicCategoryEditWidget(EditFieldWidget):
+ 
+    def get_template(self):
+        return 'package/snippets/fields/edit-list-tags.html'
+
 
 @object_widget_adapter(schemata.IInspireMetadata, 
     qualifiers=['datasetform'], is_fallback=True)
@@ -74,6 +81,12 @@ class InspireEditWidget(EditObjectWidget):
                     'disabled': 'disabled',
                     'rows': 4 },
             },
+            'topic_category': {
+                'title': _('Topic Category'),
+                #'input_classes': ['span5'],
+                'verbose': True,
+                #'size': 12,
+            },
             'languagecode': {
                 'title': _('Language'),
             },
@@ -90,6 +103,7 @@ class InspireEditWidget(EditObjectWidget):
             #('identifier', 'identifier.inspire'),
             #('title', 'title.inspire'),
             #('abstract', 'abstract.inspire'),
+            ('topic_category', 'checkbox'),
             ('responsible_party', 'contacts.inspire'),
             ('contact', 'contacts.inspire'),
             ('languagecode', 'select2'),

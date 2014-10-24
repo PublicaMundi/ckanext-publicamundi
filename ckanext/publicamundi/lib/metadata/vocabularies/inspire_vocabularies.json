@@ -73,27 +73,27 @@
         }
     }, 
     "Topic Category": {
-        "terms": [
-            "Farming", 
-            "Biota", 
-            "Boundaries", 
-            "ClimatologyMeteorologyAtmosphere", 
-            "Economy", 
-            "Elevation", 
-            "Environment", 
-            "GeoscientificInformation", 
-            "Health", 
-            "ImageryBaseMapsEarthCover", 
-            "IntelligenceMilitary", 
-            "InlandWaters", 
-            "Location", 
-            "Oceans", 
-            "PlanningCadastre", 
-            "Society", 
-            "Structure", 
-            "Transportation", 
-            "UtilitiesCommunication"
-        ]
+        "terms": {
+            "farming": "Farming", 
+            "biota": "Biota", 
+            "boundaries": "Boundaries", 
+            "climatology-meteorology-atmosphere": "Climatology - Meteorology - Atmosphere", 
+            "economy": "Economy", 
+            "elevation": "Elevation", 
+            "environment": "Environment", 
+            "geoscientific-information": "Geoscientific Information", 
+            "health": "Health", 
+            "imagery-base-maps-earth-cover": "Imagery Base - Maps Earth Cover", 
+            "intelligence-military": "Intelligence - Military", 
+            "inland-waters": "Inland Waters", 
+            "location": "Location", 
+            "oceans": "Oceans", 
+            "planning-cadastre": "Planning Cadastre", 
+            "society": "Society", 
+            "structure": "Structure", 
+            "transportation": "Transportation", 
+            "utilities-communication": "Utilities - Communication"
+        }
     },
     "Languages": {
         "terms":{

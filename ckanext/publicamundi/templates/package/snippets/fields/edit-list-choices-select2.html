@@ -1,0 +1,9 @@
+{%- if attrs is not defined %}{% set attrs = {} %}{% endif -%}
+{%- do 
+    attrs.update({
+        'data-module': 'input-select-choices',
+        'data-module-select': 'select2'
+    }) 
+-%}
+
+{% extends 'package/snippets/fields/edit-list-choices.html' %}

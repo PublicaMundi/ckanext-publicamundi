@@ -94,7 +94,13 @@ class IInspireMetadata(IBaseMetadata):
         default = 'en')
 
     # Identification 
-
+    
+    identtype = zope.schema.DottedName(
+        title = u'Type',
+        required = True,
+        default = 'dataset',
+    )
+    
     title = zope.schema.TextLine(
         title = u'Resource Title',
         description = u"This a characteristic (and often unique) name by which the resource is known.",
@@ -129,8 +135,6 @@ class IInspireMetadata(IBaseMetadata):
             title = u'Resource Language',
             vocabulary = inspire_vocabularies.get_by_name('languages').get('vocabulary'),))
 
-    # Todo: identtype, textline, choice?? 
-
     # Classification 
 
     topic_category = zope.schema.List(
@@ -138,7 +142,7 @@ class IInspireMetadata(IBaseMetadata):
         description = u"The topic category is a high-level classification scheme to assist in the grouping and topic-based search of available spatial data resources. The value domain of this metadata element is defined in Part D.2.",
         required = True,
         min_length = 1,
-        max_length = 12,
+        max_length = 6,
         value_type = zope.schema.Choice(
             title = u'Topic Category',
             vocabulary = inspire_vocabularies.get_by_name('topic-category').get('vocabulary'),))

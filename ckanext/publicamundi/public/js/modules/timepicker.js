@@ -4,19 +4,23 @@ this.ckan.module('timepicker', function ($, _) {
     options: {
         showMeridian: false,
     },
-    initialize: function() {
+    
+    initialize: function() 
+    {
         var module = this
-        /*
+        
         if ($.fn.timepicker) {
             $(this.el).timepicker({
                 showMeridian: this.options.showMeridian,
             })
         }
-        */
-        window.console.log('Initialized module: timepicker')
+        
+        window.console.debug('Initialized module: timepicker')
     },
-    teardown: function() { 
-        window.console.log('Tearing down module: timepicker')
+
+    teardown: function() 
+    { 
+        window.console.debug('Tearing down module: timepicker')
     },
   }
 })

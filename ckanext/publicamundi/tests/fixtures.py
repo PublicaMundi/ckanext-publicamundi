@@ -177,7 +177,7 @@ inspire1 = InspireMetadata(
         "http://www.example.com"
     ],
     resource_language = ["el"],
-    topic_category = ["biota"],
+    topic_category = ["biota", "farming", "economy"],
     keywords = [
         ThesaurusTerms(
             terms=["air", "agriculture", "climate"],

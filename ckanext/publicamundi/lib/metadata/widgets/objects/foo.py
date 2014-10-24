@@ -15,7 +15,7 @@ from ckanext.publicamundi.lib.metadata.widgets.base import (
 _ = toolkit._
 
 @field_widget_multiadapter([IListField, ITextLineField], qualifiers=['tags.foo'])
-class TagsEditWidget(EditFieldWidget, ListFieldWidgetTraits):
+class TagsEditWidget(EditFieldWidget):
 
     def __init__(self, field, *args):
         assert isinstance(field, zope.schema.List)
@@ -25,7 +25,7 @@ class TagsEditWidget(EditFieldWidget, ListFieldWidgetTraits):
         return 'package/snippets/fields/edit-list-tags-foo.html'
 
 @field_widget_multiadapter([IListField, ITextLineField], qualifiers=['tags.foo'])
-class TagsReadWidget(ReadFieldWidget, ListFieldWidgetTraits):
+class TagsReadWidget(ReadFieldWidget):
 
     def __init__(self, field, *args):
         assert isinstance(field, zope.schema.List)
