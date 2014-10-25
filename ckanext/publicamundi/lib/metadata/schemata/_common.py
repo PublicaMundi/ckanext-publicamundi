@@ -165,7 +165,7 @@ class ISpatialResolution(IObject):
 class IConformity(IObject):
 
     title = zope.schema.TextLine(
-        title = u'Specifications',
+        title = u'Specification',
         required = True)
 
     date = zope.schema.Date(

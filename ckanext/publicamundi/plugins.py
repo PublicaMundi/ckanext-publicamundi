@@ -121,15 +121,29 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     def before_map(self, mapper):
         ''' Called before routes map is setup. '''
 
-        mapper.connect ('/api/util/resource/mimetype_autocomplete',
-            controller='ckanext.publicamundi.controllers.api:Controller', action='mimetype_autocomplete')
-
+        api_controller = 'ckanext.publicamundi.controllers.api:Controller'
+        
+        mapper.connect(
+            '/api/util/resource/mimetype_autocomplete',
+            controller=api_controller, action='mimetype_autocomplete')
+         
+        mapper.connect('publicamundi-list-vocabularies',
+            '/api/publicamundi/vocabularies',
+            controller=api_controller, action='vocabularies_list')
+         
+        mapper.connect('publicamundi-get-vocabulary',
+            '/api/publicamundi/vocabularies/{name}',
+            controller=api_controller, action='vocabulary_get')
+      
         #mapper.connect('tags', '/tags',
         #    controller='ckanext.publicamundi.controllers.tags:Controller', action='index')
 
-        mapper.connect('publicamundi-tests', '/testing/publicamundi/{action}/{id}',
+        mapper.connect('publicamundi-tests', 
+            '/testing/publicamundi/{action}/{id}',
             controller='ckanext.publicamundi.controllers.tests:TestsController',)
-        mapper.connect('publicamundi-tests', '/testing/publicamundi/{action}',
+        
+        mapper.connect('publicamundi-tests', 
+            '/testing/publicamundi/{action}',
             controller='ckanext.publicamundi.controllers.tests:TestsController',)
 
         return mapper

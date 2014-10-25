@@ -7,59 +7,14 @@ from owslib.iso import MD_Metadata
 
 from ckanext.publicamundi import reference_data
 from ckanext.publicamundi.lib.metadata.base import Object, object_null_adapter
-from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import (
-    IThesaurusTerms, IThesaurus, IInspireMetadata)
+from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import IInspireMetadata
 from ckanext.publicamundi.lib.metadata.vocabularies import inspire_vocabularies
 from ckanext.publicamundi.lib.metadata import xml_serializers
 from ckanext.publicamundi.lib.metadata.xml_serializers import object_xml_serialize_adapter
 
 from ckanext.publicamundi.lib.metadata.types import BaseMetadata
+from ckanext.publicamundi.lib.metadata.types.thesaurus import Thesaurus, ThesaurusTerms
 from ckanext.publicamundi.lib.metadata.types._common import *
-
-class Thesaurus(Object):
-
-    zope.interface.implements(IThesaurus)
-
-    # Interface IThesaurus
-
-    title = None
-    reference_date = None
-    date_type = None
-    name = None
-    version = None
-
-    @property
-    def vocabulary(self):
-        spec = inspire_vocabularies.get_by_name(self.name)
-        return spec.get('vocabulary') if spec else None
-
-    # Factory for Thesaurus
-
-    @classmethod
-    def make(cls, name):
-        '''Create a new Thesaurus instance from it's machine-name name.
-        '''
-        spec = inspire_vocabularies.get_by_name(name)
-        if spec:
-            kwargs = {
-               'title': spec.get('title'),
-               'name': spec.get('name'),
-               'reference_date': spec.get('reference_date'),
-               'version' : spec.get('version'),
-               'date_type': spec.get('date_type'),
-            }
-            return cls(**kwargs)
-        else:
-            raise ValueError(
-                'Cannot find an INSPIRE thesaurus named "%s"' %(name))
-
-@object_null_adapter()
-class ThesaurusTerms(Object):
-    
-    zope.interface.implements(IThesaurusTerms)
-
-    thesaurus = Thesaurus
-    terms = list
 
 @object_null_adapter()
 class InspireMetadata(BaseMetadata):

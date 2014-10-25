@@ -6,14 +6,10 @@ import zope.interface
 import zope.schema
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
-DATA_FILE = 'inspire_vocabularies.json'
+from ckanext.publicamundi import reference_data
+from ckanext.publicamundi.lib.metadata.vocabularies import vocabularies
 
-# Note: 
-# These exported vocabularies are intended to be read-only instances
-# of SimpleVocabulary. In most cases, there will be no need to access
-# directly (but via Thesaurus properties).
-
-vocabularies = {}
+DATA_FILE = 'inspire-vocabularies.json'
 
 def munge(name):
     ''' Convert human-friendly to machine-friendly names'''
@@ -51,11 +47,10 @@ def make_vocabulary(data):
     return SimpleVocabulary(terms, swallow_duplicates=True)
 
 def make_vocabularies():
-    '''Load the module-global vocabularies dict with JSON data. 
+    '''Load the module-global vocabularies dict from JSON data. 
     '''
 
-    path = os.path.dirname(os.path.abspath(__file__))
-    data_file = os.path.join(path, DATA_FILE)
+    data_file = reference_data.get_path(DATA_FILE)
 
     data = None
     with open(data_file, 'r') as fp:
@@ -104,4 +99,3 @@ def get_by_name(name):
 ## Load vocabularies from JSON data
 
 make_vocabularies()
-get_names()
