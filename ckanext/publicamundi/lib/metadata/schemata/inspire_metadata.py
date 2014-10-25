@@ -2,6 +2,7 @@ import datetime
 import zope.interface
 import zope.schema
 
+from ckanext.publicamundi.lib.metadata import vocabularies
 from ckanext.publicamundi.lib.metadata.schemata import IBaseMetadata
 from ckanext.publicamundi.lib.metadata.schemata._common import *
 from ckanext.publicamundi.lib.metadata.schemata.thesaurus import (
@@ -32,7 +33,7 @@ class IInspireMetadata(IBaseMetadata):
 
     languagecode = zope.schema.Choice(
         title = u'Metadata Language',
-        vocabulary = inspire_vocabularies.get_by_name('languages').get('vocabulary'),
+        vocabulary = vocabularies.get_by_name('languages').get('vocabulary'),
         description = u"This is the language in which the metadata elements are expressed. The value domain of this metadata element is limited to the official languages of the Community expressed in conformity with ISO 639-2.",
         required = True,
         default = 'en')
@@ -77,7 +78,7 @@ class IInspireMetadata(IBaseMetadata):
         max_length = 5,
         value_type = zope.schema.Choice(
             title = u'Resource Language',
-            vocabulary = inspire_vocabularies.get_by_name('languages').get('vocabulary'),))
+            vocabulary = vocabularies.get_by_name('languages').get('vocabulary'),))
 
     # Classification 
 
@@ -89,7 +90,7 @@ class IInspireMetadata(IBaseMetadata):
         max_length = 6,
         value_type = zope.schema.Choice(
             title = u'Topic Category',
-            vocabulary = inspire_vocabularies.get_by_name('topic-category').get('vocabulary'),))
+            vocabulary = vocabularies.get_by_name('topic-category').get('vocabulary'),))
 
     # Keywords
 

@@ -5,7 +5,7 @@ from zope.schema.interfaces import IVocabularyTokenized
 from zope.interface.verify import verifyObject
 
 from ckanext.publicamundi.lib.metadata.ibase import IObject
-from ckanext.publicamundi.lib.metadata.vocabularies import inspire_vocabularies
+from ckanext.publicamundi.lib.metadata import vocabularies
 
 class IThesaurus(IObject):
 
@@ -15,7 +15,7 @@ class IThesaurus(IObject):
 
     date_type = zope.schema.Choice(
         title = u"Date Type",
-        vocabulary = inspire_vocabularies.get_by_name('date-types').get('vocabulary'),
+        vocabulary = vocabularies.get_by_name('date-types').get('vocabulary'),
         required = True)
 
     name = zope.schema.NativeString()

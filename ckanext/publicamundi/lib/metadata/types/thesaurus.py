@@ -3,7 +3,7 @@ import zope.interface
 import zope.schema
 from zope.schema.vocabulary import SimpleVocabulary
 
-from ckanext.publicamundi.lib.metadata.vocabularies import inspire_vocabularies
+from ckanext.publicamundi.lib.metadata import vocabularies
 from ckanext.publicamundi.lib.metadata.base import Object, object_null_adapter
 from ckanext.publicamundi.lib.metadata.schemata.thesaurus import (
     IThesaurusTerms, IThesaurus)
@@ -22,7 +22,7 @@ class Thesaurus(Object):
 
     @property
     def vocabulary(self):
-        spec = inspire_vocabularies.get_by_name(self.name)
+        spec = vocabularies.get_by_name(self.name)
         return spec.get('vocabulary') if spec else None
 
     # Factory for Thesaurus
@@ -31,7 +31,7 @@ class Thesaurus(Object):
     def make(cls, name):
         '''Create a new Thesaurus instance from it's machine-name name.
         '''
-        spec = inspire_vocabularies.get_by_name(name)
+        spec = vocabularies.get_by_name(name)
         if spec:
             kwargs = {
                'title': spec.get('title'),

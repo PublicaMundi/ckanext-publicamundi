@@ -8,7 +8,7 @@ from owslib.iso import MD_Metadata
 from ckanext.publicamundi import reference_data
 from ckanext.publicamundi.lib.metadata.base import Object, object_null_adapter
 from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import IInspireMetadata
-from ckanext.publicamundi.lib.metadata.vocabularies import inspire_vocabularies
+from ckanext.publicamundi.lib.metadata import vocabularies
 from ckanext.publicamundi.lib.metadata import xml_serializers
 from ckanext.publicamundi.lib.metadata.xml_serializers import object_xml_serialize_adapter
 
@@ -124,8 +124,8 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
                 # TODO thes_split[1] (=version) can be used in a get_by_title_and_version() 
                 # to enforce a specific thesaurus version.
                 thes_title = thes_split[0]
-                if inspire_vocabularies.get_by_title(thes_title):
-                    thes = Thesaurus.make(inspire_vocabularies.munge('Keywords-' + thes_title))
+                if vocabularies.get_by_title(thes_title):
+                    thes = Thesaurus.make(vocabularies.munge('Keywords-' + thes_title))
                     kw = ThesaurusTerms(thesaurus=thes, terms=it['keywords'])
                     keywords_list.append(kw)
 
