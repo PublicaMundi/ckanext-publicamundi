@@ -1,14 +1,16 @@
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
 {%- set classes = classes + [ 'control-select' ] -%}
+{%- if input_classes is not defined %}{% set input_classes = [] %}{% endif -%}
 
 <div class="control-group{{ " " ~ classes|join(' ') }}">
     <label class="control-label" for="{{ 'input-' ~ qname }}">
         {{- title }}{{ markup_helpers.mark_required(required) }}</label>
     <div class="controls">
-        <select name="{{ qname }}" id="{{ 'input-' ~ qname }}" {{ attrs|xmlattr }} 
+        <select name="{{ qname }}" id="{{ 'input-' ~ qname }}" 
+            class="{{ ' ' ~ input_classes|join(' ') }}" {{ attrs|xmlattr }} 
             data-module="input-select2" 
-            data-module-width="element"
+            data-module-width="{{ width|default('element') }}"
             data-module-minimumresultsforsearch="12"
             data-module-placeholder="{{ placeholder }}"
          > <!-- options from vocabulary -->

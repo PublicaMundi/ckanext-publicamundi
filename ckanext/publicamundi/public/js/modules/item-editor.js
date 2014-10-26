@@ -39,7 +39,6 @@
         
         return {
             options: {
-                title: null,
                 qname: null,
                 terms: null,
                 messages: {},
@@ -89,18 +88,18 @@
     this.ckan.module('edit-selected-dict-items', function ($, _) {
 
         var editor_defaults = {
-            hasOrder: false,
+            index: null,
             allowDelete: true,
             onDelete: 'self-destroy',
         }
         
         return {
             options: {
-                title: null,
                 qname: null,
                 terms: null,
                 messages: {},
-                select: 'select', // select|select2
+                select: 'select', // select | select2
+                selectClass: 'span4',
             },
 
             templates: {
@@ -132,7 +131,8 @@
                 var $select = $(render(templates.select, { 
                     label: opts.messages['select-label'] || 'Specify a key' 
                 }))
-                
+                $select.addClass(opts.selectClass)
+
                 var $add_btn = $(render(templates.addBtn, { 
                     label: opts.messages['add-label'] || 'Add' }))
                 
@@ -144,7 +144,7 @@
                 switch (opts.select) {
                     case 'select2':
                         $select.select2({
-                            placeholder: 0,
+                            placeholder: false,
                             width: 'element', 
                             minimumResultsForSearch: 12, 
                             allowClear: 1, 
@@ -168,7 +168,7 @@
 
                 var $list = $el.children('ul'),
                     $pane = this._buildPanel($list),
-                    $select = $pane.find('.select-key'),
+                    $select = $pane.find('select.select-key'),
                     $add_btn = $pane.find('.add-item')
                 
                 $list.addClass('edit-selected-dict-items')
@@ -245,14 +245,13 @@
     this.ckan.module('edit-list-items', function ($, _) {
 
         var editor_defaults = {
-            hasOrder: true,
+            index: -1,
             allowDisable: false,
             onDelete: 'noop',
         }
 
         return {
             options: {
-                title: null,
                 qname: null,
                 maxlength: 6,
                 messages: {},
@@ -269,7 +268,7 @@
                     '</button>',
                 clearBtn: 
                     '<button class="btn btn-small clear-items" title="{{title}}">' + 
-                        '<i class="icon-fire"></i>{{label}}' + 
+                        '<i class="icon-eraser"></i>{{label}}' + 
                     '</button>',
                 pane: 
                     '<div class="add-item add-item-of-{{qname}}">' +
@@ -382,7 +381,7 @@
                     assert(i == $item.data('index'))
                     $item.itemEditor($.extend({}, editor_defaults, {
                         qname: opts.qname + '.' + i.toString(),
-                        title: opts.title + ' #' + (i + 1).toString(),
+                        index: i,
                         canMoveUp: (i > 0),
                     }))
                     $item.on('publicamundi-item_editor:remove', handle_remove)
@@ -401,7 +400,7 @@
                             .data('index', i)
                             .itemEditor($.extend({}, editor_defaults, {
                                 qname: opts.qname + '.' + i.toString(),
-                                title: opts.title + ' #' + (i + 1).toString(),
+                                index: i,
                                 canMoveUp: (i > 0),
                                 template: 'default',
                              }))
@@ -473,28 +472,6 @@
             { 
                 this.el.children('ul').removeClass('edit-list-items')
                 debug('Tearing down module: edit-list-items', this.options)
-            },
-        };
-    })
-
-    this.ckan.module('ababoua', function ($, _) {
-
-        return {
-            options: {
-                boo: 'Boo',
-            },
-
-            initialize: function () 
-            {
-                var module = this,
-                    $el = this.el,
-                    opts = this.options 
-                
-                debug('Initialized module: ababoua opts=', opts)
-            },
-            teardown: function () 
-            { 
-                debug('Tearing down module: ababoua', this.options)
             },
         };
     })

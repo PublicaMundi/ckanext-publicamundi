@@ -206,12 +206,15 @@ jQuery(document).ready(function ($) {
             assert($control.hasClass('field-widget'))
             assert($control.hasClass(this.options.classPrefix + this.name.qname))
 
-            // Instantiate ckan module instances (when enabled)
+            // Instantiate ckan module instances (after enabled)
 
             this.element.one(event_prefix + widget_events.Enable, function () {
                 widget._debug('About to instantiate ckan modules')
                 $control.find('[data-module]').each(function (i, el) {
-                    ckan.module.initializeElement(el)
+                    // Instantiate just after the current "enable" is dispatched
+                    setTimeout(function () { 
+                        ckan.module.initializeElement(el)
+                    }, 0)
                 })
             })
 
@@ -316,13 +319,14 @@ jQuery(document).ready(function ($) {
         widgetEventPrefix: 'publicamundi-item_editor:',
         
         options: {
-            placeholder: true,   // Use a placeholder when the widget is disabled
-            allowDelete: true,   // Allow to delete this item (see onDelete)
-            allowDisable: true,  // Allow to disable this item (possibly hidden, can be re-enabled)
-            onDelete: 'self-destroy', // Choose: noop | self-destroy
-            hasOrder: false,     // Whether this item participates in an ordered collection
+            placeholder: true,   // boolean: Use a placeholder when the widget is disabled
+            allowDelete: true,   // boolean: Allow to delete this item (see onDelete)
+            allowDisable: true,  // boolean: Allow to disable this item (possibly hidden, can be re-enabled)
+            onDelete: 'self-destroy', // 'noop' | 'self-destroy'
+            index: null,         // null | integer: If this is an non-negative integer, it suggests that 
+                                 // this item participates in an ordered collection
             canMoveUp: false,    // Whether this item can be re-ordered by moving it one position 
-                                 // towards the beginning, aka upwards (meaningfull only if hasOrder) 
+                                 // towards the beginning, aka upwards (meaningfull only if index is non null) 
             defaultTemplate: function (name) { 
                 return 'script#' 
                     + name.namePrefix.replace(/[.]/g, '\\.') + '-item-template' 
@@ -370,7 +374,7 @@ jQuery(document).ready(function ($) {
 
             this._super()
 
-            if (!opts.disabled && opts.hasOrder) {
+            if (!opts.disabled && (opts.index != null)) {
                 this.$control.find('header .item-actions .btn.move-up')
                     .attr('disabled', (opts.canMoveUp)? null : 'disabled')
             }
@@ -484,7 +488,7 @@ jQuery(document).ready(function ($) {
             }
             $buttons.prepend($remove_btn)
             
-            if (opts.hasOrder) {
+            if (opts.index != null) {
                 $move_btn = $(render(templates.moveUpBtn, {
                     moveUpActionClass: 'move-up',
                     label: 'Up',
@@ -639,8 +643,18 @@ jQuery(document).ready(function ($) {
 
         _getTemplateVars: function() 
         { 
-            var vars = this._super()
-            return $.extend(vars, { key: this.name.nameKey })
+            var vars = null, i = null
+            
+            vars = this._super()
+            
+            $.extend(vars, { key: this.name.nameKey })
+            
+            i = parseInt(this.options.index)
+            if (!isNaN(i)) {
+                $.extend(vars, { index: i, index1: i + 1, })
+            }
+
+            return vars
         },
 
         _extractTitle: function()

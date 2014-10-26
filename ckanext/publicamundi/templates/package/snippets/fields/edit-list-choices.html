@@ -1,0 +1,21 @@
+{% import 'macros/markup_helpers.html' as markup_helpers -%}
+
+{%- set classes = classes + ['control-select'] -%}
+{%- if input_classes is not defined %}{% set input_classes = [] %}{% endif -%}
+
+<div class="control-group{{ " " ~ classes|join(' ') }}">
+    {% if verbose and description %}<div class="description">{{ description }}</div>{% endif -%}
+    <label class="control-label" for="{{ 'input-' ~ qname }}">
+        {{- title }}{{ markup_helpers.mark_required(required) }}</label>
+    <div class="controls">
+        <select multiple="multiple" size="{{ size|default('5') }}" name="{{ qname }}" id="{{ 'input-' ~ qname }}" 
+            class="{{ ' ' ~ input_classes|join(' ') }}" 
+            {{ attrs|xmlattr -}}
+          >
+            {% for option in field.value_type.vocabulary -%}
+            <option value="{{ option.value }}" {% if option.value in value %}selected="selected"{% endif -%}
+                >{{- option.title or option.value -}}</option>
+            {% endfor -%}
+        </select>
+    </div>
+</div>

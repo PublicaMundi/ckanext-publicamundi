@@ -7,10 +7,10 @@ from beaker.cache import (cache_regions, cache_region)
 from pylons import g
 from pylons.i18n import _
 
-import ckan.model           as model
-import ckan.plugins         as p
+import ckan.model as model
+import ckan.plugins as p
 import ckan.plugins.toolkit as toolkit
-import ckan.logic           as logic
+import ckan.logic as logic
 
 import ckanext.publicamundi
 
@@ -18,15 +18,42 @@ log1 = logging.getLogger(__name__)
 
 # Some common MIME types
 mime_types = [
-    'text/plain', 'text/html', 'text/xml', 'text/xhtml', 'text/svg', 'text/csv', 'text/json', 'text/javascript',
-    'application/zip', 'application/x-gzip', 'application/x-tar', 'application/x-bzip2', 'application/json',
-    'application/vnd.ms-excel', 'application/ms-word', 'application/vnd.ms-powerpoint',
+    'text/plain', 
+    'text/html', 
+    'text/xml', 
+    'text/xhtml', 
+    'text/svg', 
+    'text/csv', 
+    'text/json', 
+    'text/javascript',
+    'application/zip', 
+    'application/x-gzip', 
+    'application/x-tar', 
+    'application/x-bzip2', 
+    'application/json',
+    'application/vnd.ms-excel', 
+    'application/ms-word', 
+    'application/vnd.ms-powerpoint',
     'application/pdf',
-    'application/octet-stream', 'image/x-dwg', 'application/dwg', 'application/x-dwg', 'application/x-autocad', 'image/vnd.dwg', 'drawing/dwg',
-    'application/vnd.oasis.opendocument.text', 'application/vnd.oasis.opendocument.presentation', 'application/vnd.oasis.opendocument.spreadsheet',
-    'image/png', 'image/jpeg', 'image/bmp', 'image/tiff', 'image/gif',
-    'video/avi', 'video/mpeg',
-    'audio/mpeg', 'audio/vorbis',
+    'application/octet-stream', 
+    'image/x-dwg', 
+    'application/dwg', 
+    'application/x-dwg', 
+    'application/x-autocad', 
+    'image/vnd.dwg', 
+    'drawing/dwg',
+    'application/vnd.oasis.opendocument.text',
+    'application/vnd.oasis.opendocument.presentation', 
+    'application/vnd.oasis.opendocument.spreadsheet',
+    'image/png',
+    'image/jpeg',
+    'image/bmp',
+    'image/tiff',
+    'image/gif',
+    'video/avi',
+    'video/mpeg',
+    'audio/mpeg',
+    'audio/vorbis',
 ];
 
 @logic.side_effect_free

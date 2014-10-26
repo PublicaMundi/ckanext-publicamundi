@@ -6,8 +6,8 @@ import zope.schema.vocabulary
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 import z3c.schema.email
 
+from ckanext.publicamundi.lib.metadata import vocabularies
 from ckanext.publicamundi.lib.metadata.ibase import IObject
-from ckanext.publicamundi.lib.metadata.vocabularies import inspire_vocabularies
 
 class IPostalAddress(IObject):
 
@@ -59,22 +59,19 @@ class IContactInfo(IObject):
 class IResponsibleParty(IObject):
 
     organization = zope.schema.TextLine(
-        title = u'Organization name',
+        title = u'Organization Name',
         required = True,
-        min_length = 1)
+        min_length = 2)
 
-    email = zope.schema.List(
+    email = z3c.schema.email.RFC822MailAddress(
         title = u'Email',
-        required = True,
-        min_length = 1,
-        max_length = 2,
-        value_type = z3c.schema.email.RFC822MailAddress(
-            title = u'Email'))
+        required = True)
 
     role = zope.schema.Choice(
-        title = u'Responsible party role',
-        vocabulary = inspire_vocabularies.get_by_name('party-roles').get('vocabulary'), 
+        title = u'Responsible Party Role',
+        vocabulary = vocabularies.get_by_name('party-roles').get('vocabulary'), 
         description = u'This is the role of the responsible organisation.',
+        default = 'pointofcontact',
         required = True)
 
 class IFreeKeyword(IObject):
@@ -95,7 +92,7 @@ class IFreeKeyword(IObject):
 
     date_type = zope.schema.Choice(
         title = u'Date Type',
-        vocabulary = inspire_vocabularies.get_by_name('date-types').get('vocabulary'),
+        vocabulary = vocabularies.get_by_name('date-types').get('vocabulary'),
         required = False)
 
     @zope.interface.invariant
@@ -168,7 +165,7 @@ class ISpatialResolution(IObject):
 class IConformity(IObject):
 
     title = zope.schema.TextLine(
-        title = u'Specifications',
+        title = u'Specification',
         required = True)
 
     date = zope.schema.Date(
@@ -177,12 +174,12 @@ class IConformity(IObject):
 
     date_type = zope.schema.Choice(
         title = u'Date type',
-        vocabulary = inspire_vocabularies.get_by_name('date-types').get('vocabulary'),
+        vocabulary = vocabularies.get_by_name('date-types').get('vocabulary'),
         required = True)
 
     degree = zope.schema.Choice(
         title = u'Degree',
-        vocabulary = inspire_vocabularies.get_by_name('degrees').get('vocabulary'),
+        vocabulary = vocabularies.get_by_name('degrees').get('vocabulary'),
         description = u'This is the degree of conformity of the resource to the implementing rules adopted under Article 7(1) of Directive 2007/2/EC or other specification.',
         default = "not-evaluated",
         required = True)

@@ -6,18 +6,12 @@ import zope.interface
 import zope.schema
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
-DATA_FILE = 'inspire_vocabularies.json'
-
-# Note: 
-# These exported vocabularies are intended to be read-only instances
-# of SimpleVocabulary. In most cases, there will be no need to access
-# directly (but via Thesaurus properties).
-
-vocabularies = {}
-
 def munge(name):
-    ''' Convert human-friendly to machine-friendly names'''
+    '''Convert human-friendly to machine-friendly terms.
     
+    Needed when a machine-friendly version is not supplied.
+    '''
+
     re_bad = re.compile('[\(\),]+')
     re_delim = re.compile('[ \t_-]+')
     
@@ -50,12 +44,11 @@ def make_vocabulary(data):
 
     return SimpleVocabulary(terms, swallow_duplicates=True)
 
-def make_vocabularies():
-    '''Load the module-global vocabularies dict with JSON data. 
-    '''
+def make_vocabularies(data_file):
+    '''Load vocabularies from JSON data.
 
-    path = os.path.dirname(os.path.abspath(__file__))
-    data_file = os.path.join(path, DATA_FILE)
+    Return tuples of (<name>, <vocabulary-descriptor>).
+    '''
 
     data = None
     with open(data_file, 'r') as fp:
@@ -63,11 +56,12 @@ def make_vocabularies():
 
     for title in (set(data.keys()) - set(['Keywords'])):
         name = munge(title)
-        vocabularies[name] = {
+        desc = {
             'name': name,
             'title': title,
             'vocabulary': make_vocabulary(data.get(title).get('terms'))
         }
+        yield (name, desc)
 
     keywords_data = data.get('Keywords')
     for title in keywords_data.keys():
@@ -75,7 +69,7 @@ def make_vocabularies():
         keywords_terms = make_vocabulary(keywords.get('terms'))
 
         name = munge('Keywords-' + title)
-        vocabularies[name] = {
+        desc = {
             'name': name,
             'title': title,
             'reference_date': datetime.strptime(keywords.get('reference_date'), '%Y-%m-%d').date(),
@@ -83,25 +77,5 @@ def make_vocabularies():
             'version': keywords.get('version'),
             'vocabulary': make_vocabulary(keywords.get('terms'))
         }
+        yield (name, desc)
 
-def get_titles():
-    return { k: vocabularies[k]['title'] for k in vocabularies }
-
-def get_names():
-    return vocabularies.keys()
-
-def get_by_title(title):
-    keys = filter(lambda t: vocabularies[t]['title'] == title, vocabularies.keys())
-    if keys:
-        k = keys[0]
-        return vocabularies[k]
-    else:
-        return None
-
-def get_by_name(name):
-    return vocabularies.get(name)
-
-## Load vocabularies from JSON data
-
-make_vocabularies()
-get_names()

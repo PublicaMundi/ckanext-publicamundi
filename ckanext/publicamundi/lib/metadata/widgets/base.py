@@ -107,11 +107,11 @@ class FieldWidget(Widget):
         qname = "%s%s" %(name_prefix + '.' if name_prefix else '', 
             tpl_vars['name'])
         tpl_vars['qname'] = qname
-        tpl_vars['classes'] = tpl_vars['classes'] + [\
+        tpl_vars['classes'] = tpl_vars['classes'] + [
             'widget',
             'field-widget', 
             'field-%s-widget' %(self.action),
-            'field-qname-%s' %(qname), ]
+            'field-qname-%s' %(qname),]
 
         return tpl_vars
 
@@ -144,7 +144,7 @@ class ObjectWidget(Widget):
 
     def get_field_qualifiers(self):
         '''Return an ordered map of (field, qualifier) items to be used in glue
-        templates.
+        template.
 
         If no valid template is provided (via get_template()), then we attempt to 
         render a  widget by glue-ing its fields together. In this case, each field is 
@@ -174,6 +174,16 @@ class ObjectWidget(Widget):
         
         keys = self.obj.get_field_names(order=True)
         return OrderedDict(((k, None) for k in keys))
+    
+    def get_field_template_vars(self):
+        '''Return a map of (field, data) to be used as template variables in glue 
+        template.
+
+        Note: 
+        For reasons of caching, a derived schema-specific widget may choose to 
+        re-define this method as a classmethod (perhaps combined with a memoizer?).
+        '''
+        return {}
 
     ## IObjectWidget interface ##
 
@@ -202,11 +212,11 @@ class ObjectWidget(Widget):
         # Provide computed variables and sensible defaults
         qname = name_prefix
         tpl_vars['qname'] = qname
-        tpl_vars['classes'] = tpl_vars['classes'] + [\
+        tpl_vars['classes'] = tpl_vars['classes'] + [
             'widget',
             'object-widget',
             'object-%s-widget' %(self.action),
-            'object-qname-%s' %(qname or 'NONE'), ]
+            'object-qname-%s' %(qname or 'NONE'),]
 
         return tpl_vars
 
@@ -228,6 +238,7 @@ class ObjectWidget(Widget):
             error_dict = errors if isinstance(errors, dict) else None
 
             field_qualifiers = self.get_field_qualifiers().iteritems()
+            field_data = self.get_field_template_vars()
 
             def render_field(k, qf):
                 f = obj.get_field(k)
@@ -237,7 +248,9 @@ class ObjectWidget(Widget):
                     qf = self.context.provided_action.qualifier
                 qa = QualAction(self.action, qualifier=qf)
                 ef = error_dict.get(k) if error_dict else None
-                mf = markup_for_field(qa, f, errors=ef, name_prefix=name_prefix)
+                df = field_data.get(k, {})
+                mf = markup_for_field(qa, f, 
+                    errors=ef, name_prefix=name_prefix, data=df)
                 return dict(field=f, markup=mf)
             
             tpl_vars['fields'] = OrderedDict(
@@ -279,12 +292,26 @@ class EditObjectWidget(ObjectWidget):
 
 class ContainerFieldWidgetTraits(FieldWidget):
     
+    def get_item_template_vars(self, key=None):
+        '''Return template vars to be used for item keyed at key.
+        '''
+        return {}
+    
     def get_item_qualifier(self):
+        '''Return a action qualifier to be used for all items.
+        '''
         qa = self.context.provided_action.make_child('item')
         return qa.qualifier
         
 class ListFieldWidgetTraits(ContainerFieldWidgetTraits):
 
+    def get_item_template_vars(self, index=None):
+        return {
+            'title': '%s #%s' % (
+                self.field.value_type.title, 
+                str(index + 1) if isinstance(index, int) else '{{index1}}'),
+        }
+        
     def prepare_template_vars(self, name_prefix, data):
         '''Prepare data for the template.
         The markup for items will be generated before the template is
@@ -304,9 +331,9 @@ class ListFieldWidgetTraits(ContainerFieldWidgetTraits):
 
         def render_item_template():
             yf = field.value_type.bind(FieldContext(key='{{key}}', value=None))
-            yd = { 'title': '{{title}}' }
+            yd = self.get_item_template_vars(index=None)
             return {
-                'variables': ['key', 'title'],
+                'variables': ['key', 'title', 'index', 'index1'],
                 'markup': to_c14n_markup(
                     markup_for_field(qa, yf, name_prefix=qname, data=yd),
                     with_comments=False)
@@ -315,7 +342,7 @@ class ListFieldWidgetTraits(ContainerFieldWidgetTraits):
         def render_item(i, y):
             yf = field.value_type.bind(FieldContext(key=i, value=y))
             ye = error_dict.get(i) if error_dict else None
-            yd = { 'title': '%s #%d' % (yf.title, i + 1) }
+            yd = self.get_item_template_vars(index=i)
             return {
                 'index': i,
                 'markup': markup_for_field(
@@ -330,6 +357,17 @@ class ListFieldWidgetTraits(ContainerFieldWidgetTraits):
         return tpl_vars
 
 class DictFieldWidgetTraits(ContainerFieldWidgetTraits):
+    
+    def get_item_template_vars(self, key=None, term=None):
+        tpl_vars = {}
+        
+        if key is None:
+            # a placeholder for Mustache templates
+            tpl_vars['title'] = '{{title}}'
+        else:
+            tpl_vars['title'] = (term.title or term.token) if term else key
+        
+        return tpl_vars
 
     def prepare_template_vars(self, name_prefix, data):
         '''Prepare data for the template.
@@ -353,7 +391,7 @@ class DictFieldWidgetTraits(ContainerFieldWidgetTraits):
         
         def render_item_template():
             yf = field.value_type.bind(FieldContext(key='{{key}}', value=None))
-            yd = { 'title': '{{title}}' }
+            yd = self.get_item_template_vars(key=None)
             return {
                 'variables': ['key', 'title'],
                 'markup': to_c14n_markup(
@@ -365,7 +403,7 @@ class DictFieldWidgetTraits(ContainerFieldWidgetTraits):
             yf = field.value_type.bind(FieldContext(key=k, value=y))
             term = terms.get(k)
             ye = error_dict.get(k) if error_dict else None
-            yd = { 'title': term.title or term.token }
+            yd = self.get_item_template_vars(key=k, term=term)
             return {
                 'key': k,
                 'key_term': term,
@@ -406,7 +444,7 @@ class ObjectFieldWidgetTraits(FieldWidget):
             value = factory()
         
         # Build the template context for the object's widget: some variables
-        # must be moved to the object's context,
+        # must be moved from current field context to the object's context
         data1 = {}
         for k in ['title', 'description', 'required', 'readonly']:
             v = tpl_vars.pop(k, None)

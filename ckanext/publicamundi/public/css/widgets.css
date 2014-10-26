@@ -1,6 +1,6 @@
 
 .widget h3 { 
-    font-size: 1.1em;
+    font-size: 1.05em;
     color: #555;
 }
 
@@ -10,11 +10,12 @@
 
 .widget .accordion-heading a {
     font-weight: bold;
-    font-size: 1.1em;
+    font-size: 1.05em;
 }
 
 li .widget.object-edit-widget {
-    /*padding: 0px 0px;*/
+    padding: 0px 0px 4px 0px;
+    margin: 4px 0px;
 }
 
 .field-edit-widget > ul > li header > .btn.btn-small {
@@ -69,3 +70,16 @@ li .widget.object-edit-widget {
 }
 
 .widget.object-read-widget .table.metadata-table {}
+
+/* 
+ * Custom styles for specific fields/objects.
+ * Fixme: Move to a separate stylesheet.
+ */
+
+.widget.field-widget.field-edit-widget.field-qname-booo\.keywords\.keywords-gemet-themes {
+    /*border: solid 1px wheat;*/
+}
+
+.widget.field-widget.field-edit-widget.ababoua-1  {
+    border: solid 1px wheat;
+}

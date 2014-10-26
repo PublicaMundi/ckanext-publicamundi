@@ -2,13 +2,17 @@ import itertools
 import zope.interface
 from collections import OrderedDict
 
+from ckan.plugins import toolkit
+
 from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata.widgets import (
     object_widget_adapter, field_widget_adapter, field_widget_multiadapter)
 from ckanext.publicamundi.lib.metadata.widgets.base import (
-    ReadObjectWidget, EditObjectWidget,
-    ReadFieldWidget, EditFieldWidget)
+    ReadObjectWidget, EditObjectWidget, ReadFieldWidget, EditFieldWidget,
+    ListFieldWidgetTraits, DictFieldWidgetTraits)
+
+_ = toolkit._
 
 #
 # IObject - Tabular views
@@ -232,4 +236,95 @@ class ContactInfoReadWidget(ReadObjectWidget):
     def get_template(self):
         return None # use glue template
         #return 'package/snippets/objects/read-contact_info.html'
+
+#
+# IResponsibleParty
+#
+
+@object_widget_adapter(schemata.IResponsibleParty)
+class ResponsiblePartyEditWidget(EditObjectWidget):
+
+    def get_field_template_vars(self):
+        return {
+            'role': {
+                'title': _('Party Role'),
+                'input_classes': ['span3'],
+            },
+            'organization': {
+                'title': _('Organization Name'),
+                'placeholder': u'Acme Widgits',
+                'input_classes': ['span4'],
+            },
+            'email': {
+                'placeholder': 'info@example.com',
+                'input_classes': ['span3'],
+            },
+        }
+    
+    def get_field_qualifiers(self):
+        return OrderedDict([
+            ('organization', None),
+            ('email', None),
+            ('role', 'select2'),
+        ])
+        
+    def get_template(self):
+        return None 
+
+@object_widget_adapter(schemata.IResponsibleParty)
+class ResponsiblePartyReadWidget(ReadObjectWidget):
+
+    def get_template(self):
+        return None 
+
+#
+# IThesaurusTerms
+#
+
+@object_widget_adapter(schemata.IThesaurusTerms, 
+    qualifiers=['select'], is_fallback=True)
+class ThesaurusTermsEditWidget(EditObjectWidget):
+        
+    def get_template(self):
+        return 'package/snippets/objects/edit-thesaurus_terms-select.html' 
+
+@object_widget_adapter(schemata.IThesaurusTerms, 
+    qualifiers=['select2'], is_fallback=False)
+class ThesaurusTermsS2EditWidget(EditObjectWidget):
+        
+    def get_template(self):
+        return 'package/snippets/objects/edit-thesaurus_terms-select2.html' 
+
+@object_widget_adapter(schemata.IThesaurusTerms)
+class ThesaurusTermsReadWidget(ReadObjectWidget):
+        
+    def get_template(self):
+        return None 
+
+@field_widget_multiadapter([IDictField, schemata.IThesaurusTerms],
+    qualifiers=['select'], is_fallback=True)
+class DictOfThesaurusTermsEditWidget(EditFieldWidget, DictFieldWidgetTraits):
+ 
+    def get_item_qualifier(self):
+        return 'select' 
+    
+    def get_template(self):
+        return 'package/snippets/fields/edit-dict-thesaurus_terms.html'
+
+@field_widget_multiadapter([IDictField, schemata.IThesaurusTerms],
+    qualifiers=['select2'], is_fallback=False)
+class DictOfThesaurusTermsS2EditWidget(EditFieldWidget, DictFieldWidgetTraits):
+ 
+    def get_item_template_vars(self, key=None, term=None):
+        tpl_vars = DictFieldWidgetTraits.get_item_template_vars(self, key, term)
+        tpl_vars.update({
+            # 'classes': ['ababoua-1', 'ababoua-2']
+        })
+        return tpl_vars
+    
+    def get_item_qualifier(self):
+        return 'select2' 
+    
+    def get_template(self):
+        return 'package/snippets/fields/edit-dict-thesaurus_terms.html'
 

@@ -1,0 +1,18 @@
+{% import 'macros/markup_helpers.html' as markup_helpers -%}
+
+<div class="control-group{{ "error" if errors }}{{ " " ~ classes|join(' ') }}">
+    <label>{{ title }}{{ markup_helpers.mark_required(required) }}</label>
+    {% if verbose and description %}<div class="description">{{ description }}</div>{% endif -%}
+    <div class="controls checkboxes" 
+        data-module="input-checkbox-choices"
+        data-module-qname="{{ qname }}"
+     >
+        {% for option in field.value_type.vocabulary -%}
+        <label class="checkbox">
+            <input type="checkbox" name="{{ qname }}" id="input-{{ qname }}.{{ loop.index0 }}" 
+            value="{{ option.value }}" {% if option.value in value %}checked="checked"{% endif -%}
+            />{{ option.title or option.value -}} 
+         </label>
+         {% endfor -%}
+    </div>
+</div>

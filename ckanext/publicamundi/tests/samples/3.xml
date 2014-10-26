@@ -80,7 +80,7 @@
           <gmd:identifier>
             <gmd:RS_Identifier>
               <gmd:code>
-                <gco:CharacterString>12314213123</gco:CharacterString>
+                <gco:CharacterString>http://acme.example.com/datasets/12314213123</gco:CharacterString>
               </gmd:code>
             </gmd:RS_Identifier>
           </gmd:identifier>

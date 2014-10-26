@@ -1,5 +1,7 @@
 import zope.interface
 
+from ckan.plugins import toolkit
+
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata.widgets import (
@@ -10,8 +12,10 @@ from ckanext.publicamundi.lib.metadata.widgets.base import (
     ReadFieldWidget, ReadObjectWidget,
     ListFieldWidgetTraits, DictFieldWidgetTraits)
 
+_ = toolkit._
+
 @field_widget_multiadapter([IListField, ITextLineField], qualifiers=['tags.foo'])
-class TagsEditWidget(EditFieldWidget, ListFieldWidgetTraits):
+class TagsEditWidget(EditFieldWidget):
 
     def __init__(self, field, *args):
         assert isinstance(field, zope.schema.List)
@@ -21,7 +25,7 @@ class TagsEditWidget(EditFieldWidget, ListFieldWidgetTraits):
         return 'package/snippets/fields/edit-list-tags-foo.html'
 
 @field_widget_multiadapter([IListField, ITextLineField], qualifiers=['tags.foo'])
-class TagsReadWidget(ReadFieldWidget, ListFieldWidgetTraits):
+class TagsReadWidget(ReadFieldWidget):
 
     def __init__(self, field, *args):
         assert isinstance(field, zope.schema.List)
@@ -45,6 +49,13 @@ class FooEditWidget(EditObjectWidget):
         # Add variables
         return tpl_vars
    
+    def get_field_template_vars(self):
+        return {
+            'url': {
+                'title': _('Web Site'),
+            },
+        }
+    
     def get_field_qualifiers(self):
 
         qualifiers = super(FooEditWidget, self).get_field_qualifiers()

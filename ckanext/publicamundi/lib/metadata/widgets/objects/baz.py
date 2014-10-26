@@ -21,10 +21,18 @@ class ListOfContactsEditWidget(EditFieldWidget, ListFieldWidgetTraits):
 @object_widget_adapter(schemata.IBaz, qualifiers=['datasetform'], is_fallback=True)
 class BazEditWidget(EditObjectWidget):
     
+    def get_field_template_vars(self):
+        return {
+            'keywords': {
+                'classes': ['control-group']
+            }
+        }
+    
     def get_field_qualifiers(self):
         return OrderedDict([
             ('url', None),
             ('contacts', 'contacts.baz'),
+            ('keywords', 'select2'),
         ])
         
     def get_template(self):

@@ -13,16 +13,16 @@ from ckanext.publicamundi.lib.metadata.types import *
 # Fixtures 
 
 # Schema validation errors, name, email not list
-rp1 = ResponsibleParty(organization = "Non unicode name", email = "non unicode email",role = "Author")
+rp1 = ResponsibleParty(organization = "Non unicode name", email = "non unicode email", role = "Author")
 
 # Schema validation errors, empty fields
-rp2 = ResponsibleParty(organization = u"org",email = [u""])
+rp2 = ResponsibleParty(organization = u"org")
 
 # Schema validation errors, email not correct
-rp3 = ResponsibleParty(organization = u"unicode name",email = ["unicodenon@email"],role = u"author")
+rp3 = ResponsibleParty(organization = u"unicode name", email = "unicodenon@email", role = u"author")
 
 # No schema errors
-rp_correct = ResponsibleParty(organization = u"org",email = [u"correct@email.com",u"asd@asda.asd"],role = "author")
+rp_correct = ResponsibleParty(organization = u"org", email = u"correct@email.com", role = "author")
 
 # Tests 
 
@@ -32,7 +32,7 @@ def test_rp1():
 
 def test_rp2():
     ''' Responsible Party validation errors, empty fields'''
-    assert_faulty_keys(rp2, expected_keys=set(['email', 'role']))
+    assert_faulty_keys(rp2, expected_keys=set(['email']))
 
 def test_rp3():
     ''' Responsible Party validation errors, email not correct'''

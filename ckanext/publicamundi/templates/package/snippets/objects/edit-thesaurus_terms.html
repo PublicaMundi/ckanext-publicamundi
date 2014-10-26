@@ -1,0 +1,38 @@
+{% import 'macros/markup_helpers.html' as markup_helpers -%}
+
+{%- set classes = classes + ['control-select'] -%}
+{%- if input_classes is not defined %}{% set input_classes = ['span4'] %}{% endif -%}
+{%- if control_attrs is not defined %}{% set control_attrs = {} %}{% endif -%}
+
+<div class="{{ classes|join(' ') }}"> 
+    {#- Do we need a control-group here ? -#}
+    <header><h3 class="inline">{{ title }}</h3></header>
+    {% if verbose and description %}<div class="description">{{ description }}</div>{% endif -%}
+    <label class="control-label" for="input-{{ qname }}.terms">
+        {{- _('Keywords') }}{{ markup_helpers.mark_required(required) }}</label>
+    <div class="controls"
+        data-module="input-thesaurus-terms"
+        data-module-qname="{{ qname }}"
+        data-module-thesaurus-name="{{ obj.thesaurus.name or thesaurus_name or '' }}"
+        {{ control_attrs|xmlattr -}}
+     >
+        {# Select thesaurus terms -#}
+        <select multiple="multiple" size="{{ size|default('8') }}" 
+            name="{{ qname }}.terms" id="input-{{ qname }}.terms" class="{{ input_classes|join(' ') }}" 
+         >
+            {% if obj.thesaurus.name -%}
+            {% for option in obj.thesaurus.vocabulary -%}
+            <option value="{{ option.value }}" {% if option.value in obj.terms %}selected="selected"{% endif -%}
+                >{{- option.title or option.value -}}</option>
+            {% endfor -%}
+            {%- endif -%} {# if obj.thesaurus.name #}
+        </select>
+        {# Submit thesaurus metadata -#}
+        {% for k in ['name', 'title', 'date_type', 'reference_date', 'version'] -%}
+        <input type="hidden" 
+            name="{{ qname }}.thesaurus.{{ k }}" value="{{ obj.thesaurus|attr(k)|empty_and_escape }}" />
+        {% endfor -%}
+    </div>
+</div>
+
+{%- resource 'ckanext-publicamundi/thesaurus-terms' %}

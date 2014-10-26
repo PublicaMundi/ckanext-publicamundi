@@ -1,0 +1,24 @@
+{% import 'macros/markup_helpers.html' as markup_helpers -%}
+
+{%- set resource_languages = ['en'] %}
+
+{%- for r in pkg_dict.resources -%}
+{%- if r.language is defined and r.language not in resource_languages %}
+{%- do resource_languages.append(r.language) %}
+{%- endif -%}
+{%- endfor -%}
+
+<div class="control-group{{ " " ~ classes|join(' ') }}">
+    <label class="control-label">{{ title }}</label>
+    <div class="controls">
+        {%- for langcode in resource_languages %}
+        <input type="text" id="{{ 'input-' ~ qname }}"  name="{{ qname }}"
+            class="{{ input_classes|join(" ") }}"
+            value="{{ field.value_type.vocabulary.by_value[langcode].title }} ({{ langcode }})" 
+            disabled="disabled"
+        />
+        {% endfor -%}
+        <div class="help-block"
+         >The resource language information is automatically extracted from resource metadata and is not to be supplied here.</div>
+    </div>
+</div>

@@ -106,7 +106,7 @@
     h.markup_for('edit:datasetform', obj, 
         errors=errors, 
         name_prefix=dt_prefix, 
-        data={}) 
+        data={ 'pkg_dict': data }) 
 }}
 
 {% endblock %} {# dataset_fields #}

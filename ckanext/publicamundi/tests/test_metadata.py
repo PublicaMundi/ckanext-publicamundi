@@ -120,6 +120,7 @@ def test_schema():
     yield _test_schema, 'foo1'
     yield _test_schema, 'foo2'
     yield _test_schema, 'thesaurus_gemet_concepts'
+    yield _test_schema, 'inspire1'
 
 def test_copying():
     

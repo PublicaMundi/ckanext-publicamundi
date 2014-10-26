@@ -86,16 +86,44 @@ class TestsController(BaseController):
             out = unflatten(out)
             return to_json(out)
         else:
-            k = request.params.get('field', 'title')
-            action = request.params.get('action', 'edit')
-            prefix = request.params.get('prefix', 'booo')
-            title = request.params.get('title', k)
-            return render('tests/field.html', extra_vars = {
-                'field': x.get_field(k),
+            params = dict(request.params)
+            
+            k = params.pop('field', 'title')
+            field = x.get_field(k)
+            
+            action = params.pop('action', 'edit')
+            prefix = params.pop('prefix', 'booo')
+            
+            extra_vars = copy.deepcopy(params) 
+            extra_vars.update({
+                'helper': True,
+                'field': field,
                 'action': str(action),
                 'name_prefix': str(prefix),
-                'title': title, 
             })
+            
+            return render('tests/field.html', extra_vars=extra_vars)
+    
+    def get_field_markup(self, id):
+        x = getattr(fixtures, id)
+       
+        if request.method == 'POST':
+            response.headers['Content-Type'] = 'application/json' 
+            out = { tuple(k.split('.')): v for k, v in request.params.items() } 
+            out = unflatten(out)
+            return to_json(out)
+        else:
+            params = dict(request.params)
+            k = params.pop('field', 'title')
+            action = params.pop('action', 'edit')
+            prefix = params.pop('prefix', 'booo')
+            
+            field = x.get_field(k)
+            field_markup = markup_for_field(str(action),
+                field, name_prefix=str(prefix), errors=None, data=params)
+            
+            return render('tests/field.html', extra_vars={ 
+                'field_markup': field_markup })
 
     def get_objects_markup(self):
         markup = ''

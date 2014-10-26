@@ -1,0 +1,19 @@
+
+{%- set 
+    messages = 
+    {
+        'add-label': 'New',
+        'add-title': 'Add another contact', 
+        'clear-label': 'Clear all',
+        'clear-title': 'Clear all contacts!',
+        'reorder-label': 'Reorder',
+        'reorder-title': 'Reorder the following contacts',
+        'add-description': none,
+        'maxlength-alert': 'You cannot add more than {{maxlength}} contacts',
+        'clear-alert': 'Are you sure you want to clear all ({{num}}) contacts ?',
+    } 
+-%}
+
+{%- set title = none -%} {# the accordion section header is fine #}
+
+{% extends 'package/snippets/fields/edit-list-items.html' %}

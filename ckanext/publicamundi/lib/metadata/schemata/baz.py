@@ -6,8 +6,10 @@ from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from ckanext.publicamundi.lib.metadata.ibase import IObject
 from ckanext.publicamundi.lib.metadata.schemata import IBaseMetadata
 from ckanext.publicamundi.lib.metadata.schemata._common import *
+from ckanext.publicamundi.lib.metadata.schemata.thesaurus import IThesaurusTerms
 
 class IBaz(IBaseMetadata):
+    
     zope.interface.taggedValue('recurse-on-invariants', True)
 
     url = zope.schema.URI(
@@ -22,4 +24,7 @@ class IBaz(IBaseMetadata):
         value_type = zope.schema.Object(IContactInfo,
             title = u'Contact',
             required = True))
-
+    
+    keywords = zope.schema.Object(IThesaurusTerms,
+        title = u'Baz Keywords',
+        required = False)
