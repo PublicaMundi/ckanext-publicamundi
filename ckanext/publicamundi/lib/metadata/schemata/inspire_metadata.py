@@ -24,7 +24,7 @@ class IInspireMetadata(IBaseMetadata):
         description = u'The organisations responsible for the creation and maintenance of the metadata.',
         required = True,
         min_length = 1,
-        max_length = 5,
+        max_length = 4,
         value_type = zope.schema.Object(IResponsibleParty,
             title = u'Point of Contact',
             required = True))
@@ -70,7 +70,7 @@ class IInspireMetadata(IBaseMetadata):
         description = u"The resource locator defines the link(s) to the resource and/or the link to additional information about the resource. The value domain of this metadata element is a character string, commonly expressed as uniform resource locator (URL).",
         required = True,
         min_length = 1,
-        max_length = 5,
+        max_length = 6,
         value_type = zope.schema.URI(
             title = u'Linkage',
             required = True))
@@ -103,12 +103,12 @@ class IInspireMetadata(IBaseMetadata):
         description = u'The keyword value is a commonly used word, formalised word or phrase used to describe the subject. While the topic category is too coarse for detailed queries, keywords help narrowing a full text search and they allow for structured keyword search.',
         required = True,
         key_type = zope.schema.Choice(
-            vocabulary=SimpleVocabulary(
-                (SimpleTerm(k, k, vocabularies.get_by_name(k).get('title'))
+            vocabulary = SimpleVocabulary(
+                tuple(SimpleTerm(k, k, vocabularies.get_by_name(k).get('title'))
                     for k in keyword_thesaurus_names)), 
-            title=u'Keyword Thesaurus'),
+            title = u'Keyword Thesaurus'),
         value_type = zope.schema.Object(IThesaurusTerms, 
-            title=u'Keywords'))
+            title = u'Keywords'))
 
     @zope.interface.invariant
     def check_keywords(obj):
@@ -129,7 +129,7 @@ class IInspireMetadata(IBaseMetadata):
         description = u"This is the extent of the resource in the geographic space, given as a bounding box. The bounding box shall be expressed with westbound and eastbound longitudes, and southbound and northbound latitudes in decimal degrees, with a precision of at least two decimals.",
         required = True,
         min_length = 1,
-        max_length = 8,
+        max_length = 6,
         value_type = zope.schema.Object(IGeographicBoundingBox,
             title = u'Geographic Bounding Box'))
 

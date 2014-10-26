@@ -16,6 +16,19 @@ from ckanext.publicamundi.lib.metadata.types import BaseMetadata
 from ckanext.publicamundi.lib.metadata.types.thesaurus import Thesaurus, ThesaurusTerms
 from ckanext.publicamundi.lib.metadata.types._common import *
 
+class KeywordsFactory(object):
+    
+    __slots__ = ('_name',)
+
+    def __init__(self, thesaurus_name='keywords-gemet-inspire-themes'):
+        self._name = thesaurus_name
+    
+    def __call__(self):
+        keywords = {}
+        keywords[self._name] = ThesaurusTerms(
+            terms=[], thesaurus=Thesaurus.make(self._name))
+        return keywords
+
 @object_null_adapter()
 class InspireMetadata(BaseMetadata):
     
@@ -24,24 +37,34 @@ class InspireMetadata(BaseMetadata):
     contact = list
     datestamp = None
     languagecode = None
+    
     title = None
     identifier = None
     abstract = None
     locator = list
     resource_language = list
+    
     topic_category = list
-    keywords = dict
+    
+    keywords = KeywordsFactory()
+    
     bounding_box = list
+    
     temporal_extent = list
+    
     creation_date = None
     publication_date = None
     revision_date = None
     lineage = None
+    
     denominator = list
     spatial_resolution = list
+    
     conformity = list
+    
     access_constraints = list
     limitations = list
+    
     responsible_party = list
 
 # XML serialization

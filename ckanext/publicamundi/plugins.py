@@ -19,6 +19,7 @@ import ckanext.publicamundi.lib.metadata as publicamundi_metadata
 import ckanext.publicamundi.lib.actions as publicamundi_actions
 
 from ckanext.publicamundi.lib.util import to_json, random_name
+from ckanext.publicamundi.lib.util import Breakpoint
 from ckanext.publicamundi.lib.metadata import (
     dataset_types, Object, ErrorDict,
     serializer_for_object, serializer_for_key_tuple)
@@ -216,7 +217,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         if not schema.has_key('__after'):
             schema['__after'] = []
         schema['__after'].append(postprocess_dataset_for_edit)
-        
+
         return schema
 
     def create_package_schema(self):

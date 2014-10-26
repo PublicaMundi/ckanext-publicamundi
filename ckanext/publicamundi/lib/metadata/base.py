@@ -38,7 +38,7 @@ def flatten_schema(schema):
     for k, field in fields.items():
         res1 = flatten_field(field)
         for k1, field1 in res1.items():
-            res[(k,) +k1] = field1
+            res[(k,) + k1] = field1
     return res
 
 def flatten_field(field):
@@ -52,7 +52,7 @@ def flatten_field(field):
         res1 = flatten_field(field.value_type)
         for i in range(0, field.max_length):
             for k1, field1 in res1.items():
-                res[(i,) +k1] = field1
+                res[(i,) + k1] = field1
     elif isinstance(field, zope.schema.Dict):
         assert isinstance(field.key_type, zope.schema.Choice), \
             'Only zope.schema.Choice supported for key_type'
@@ -60,7 +60,7 @@ def flatten_field(field):
         res1 = flatten_field(field.value_type)
         for v in field.key_type.vocabulary:
             for k1, field1 in res1.items():
-                res[(v.token,) +k1] = field1
+                res[(v.token,) + k1] = field1
     else:
         res = { (): field }
     
@@ -136,7 +136,7 @@ class Object(object):
 
     @classmethod
     def get_flattened_fields(cls, opts={}):
-        '''Return a map of flattened fields for the zope schema our class.
+        '''Return a map of flattened fields for the schema of our class.
         '''
         
         schema = cls.get_schema()

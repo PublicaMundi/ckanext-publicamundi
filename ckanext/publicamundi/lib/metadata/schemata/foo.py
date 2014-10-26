@@ -78,6 +78,7 @@ class IFoo(IBaseMetadata):
         key_type = zope.schema.Choice(
             vocabulary = SimpleVocabulary((
                 SimpleTerm('personal', 'personal', u'Personal'), 
+                SimpleTerm('personal-alt', 'personal-alt', u'Personal (alt)'), 
                 SimpleTerm('office', 'office', u'Office'))),
             title = u'The type of contact'),
         value_type = zope.schema.Object(IContactInfo,
