@@ -93,6 +93,7 @@ this.ckan.module('package-form-autofiller', function ($, _) {
                         $form.find('#field-url').val(data['url'])
                         $form.find('#field-author').val(data['author'])
                         $form.find('#field-author-email').val(data['author_email'])
+                        return false
                     })
                     this.el.css('margin', '0px 5px')
                     this.el.insertBefore($form.find('button.btn-primary[name="save"]').first())
@@ -108,6 +109,7 @@ this.ckan.module('package-form-autofiller', function ($, _) {
                         $form.find('#field-name').val(data['name'])
                         $form.find('#field-description').val(data['description'])
                         $form.find('#field-format').select2('val', data['format'])
+                        return false
                     })
                     this.el.css('margin', '0px 5px')
                     this.el.insertBefore($form.find('button.btn-primary[name="save"]').first())
