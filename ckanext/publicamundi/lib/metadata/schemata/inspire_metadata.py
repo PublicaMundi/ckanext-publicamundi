@@ -1,6 +1,7 @@
 import datetime
 import zope.interface
 import zope.schema
+from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
 from ckanext.publicamundi.lib.metadata import vocabularies
 from ckanext.publicamundi.lib.metadata.schemata import IBaseMetadata
@@ -8,6 +9,9 @@ from ckanext.publicamundi.lib.metadata.schemata._common import *
 from ckanext.publicamundi.lib.metadata.schemata.thesaurus import (
     IThesaurus, IThesaurusTerms
 )
+
+keyword_thesaurus_names = filter(
+    lambda t: t.startswith('keywords-'), vocabularies.get_names())
 
 class IInspireMetadata(IBaseMetadata):
     
@@ -94,26 +98,29 @@ class IInspireMetadata(IBaseMetadata):
 
     # Keywords
 
-    keywords = zope.schema.List(
-        title = u'Keyword value',
+    keywords = zope.schema.Dict(
+        title = u'Keywords',
         description = u'The keyword value is a commonly used word, formalised word or phrase used to describe the subject. While the topic category is too coarse for detailed queries, keywords help narrowing a full text search and they allow for structured keyword search.',
         required = True,
-        min_length = 1,
-        max_length = 12,
-        value_type = zope.schema.Object(
-            IThesaurusTerms,
-            title = u'Keyword'))
+        key_type = zope.schema.Choice(
+            vocabulary=SimpleVocabulary(
+                (SimpleTerm(k, k, vocabularies.get_by_name(k).get('title'))
+                    for k in keyword_thesaurus_names)), 
+            title=u'Keyword Thesaurus'),
+        value_type = zope.schema.Object(IThesaurusTerms, 
+            title=u'Keywords'))
 
     @zope.interface.invariant
     def check_keywords(obj):
         if obj.keywords:
             found = False
-            for k in obj.keywords:
-                if k.thesaurus.name == 'keywords-gemet-inspire-themes':
+            for name, kw in obj.keywords.items():
+                if kw.thesaurus.name == 'keywords-gemet-inspire-themes':
                     found = True
                     break
             if not found:
-                raise zope.interface.Invalid('You need to select at least one keyword from INSPIRE data themes')
+                raise zope.interface.Invalid(
+                    'You need to select at least one keyword from INSPIRE data themes')
 
     # Geographic
 

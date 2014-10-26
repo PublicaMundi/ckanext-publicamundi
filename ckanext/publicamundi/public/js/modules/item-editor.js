@@ -98,7 +98,8 @@
                 qname: null,
                 terms: null,
                 messages: {},
-                select: 'select', // select|select2
+                select: 'select', // select | select2
+                selectClass: 'span4',
             },
 
             templates: {
@@ -130,7 +131,8 @@
                 var $select = $(render(templates.select, { 
                     label: opts.messages['select-label'] || 'Specify a key' 
                 }))
-                
+                $select.addClass(opts.selectClass)
+
                 var $add_btn = $(render(templates.addBtn, { 
                     label: opts.messages['add-label'] || 'Add' }))
                 
@@ -142,7 +144,7 @@
                 switch (opts.select) {
                     case 'select2':
                         $select.select2({
-                            placeholder: 0,
+                            placeholder: false,
                             width: 'element', 
                             minimumResultsForSearch: 12, 
                             allowClear: 1, 
@@ -166,7 +168,7 @@
 
                 var $list = $el.children('ul'),
                     $pane = this._buildPanel($list),
-                    $select = $pane.find('.select-key'),
+                    $select = $pane.find('select.select-key'),
                     $add_btn = $pane.find('.add-item')
                 
                 $list.addClass('edit-selected-dict-items')

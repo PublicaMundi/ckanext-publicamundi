@@ -1,3 +1,4 @@
+import re
 import zope.interface
 import zope.interface.verify
 import zope.schema
@@ -9,9 +10,9 @@ from ckanext.publicamundi.lib.metadata import vocabularies
 
 class IThesaurus(IObject):
 
-    title = zope.schema.TextLine(title=u"Title", required = True)
+    title = zope.schema.TextLine(title=u'Title', required = True)
 
-    reference_date = zope.schema.Date(title=u"Date", required=True)
+    reference_date = zope.schema.Date(title=u'Date', required=True)
 
     date_type = zope.schema.Choice(
         title = u"Date Type",
@@ -20,9 +21,13 @@ class IThesaurus(IObject):
 
     name = zope.schema.NativeString()
 
-    version = zope.schema.Float(title=u"Version", required = False)
+    version = zope.schema.DottedName(
+        title = u'Version',
+        constraint = re.compile('^\d+\.\d+(\.[a-z0-9]+)*$').match,
+        required = False)
 
-    vocabulary = zope.schema.Object(IVocabularyTokenized, required=True)
+    vocabulary = zope.schema.Object(IVocabularyTokenized, 
+        required=True)
 
     @zope.interface.invariant
     def check_vocabulary(obj):
@@ -56,7 +61,7 @@ class IThesaurusTerms(IObject):
             except:
                 unexpected.append(term)
         if unexpected:
-            msg = 'The following terms dont belong to thesaurus "%(thesaurus_name)s": %(terms)s' %(dict(
-                terms = ','.join(unexpected), thesaurus_name = obj.thesaurus.title))
+            msg = 'The following terms dont belong to thesaurus %r: %s' % (
+                obj.thesaurus.title, ','.join(unexpected))
             raise zope.interface.Invalid(msg)
 

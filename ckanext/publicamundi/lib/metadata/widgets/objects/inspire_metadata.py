@@ -36,14 +36,6 @@ class ResourceLanguagesEditWidget(EditFieldWidget):
     def get_template(self):
         return 'package/snippets/fields/edit-list-resource_language-inspire.html'
 
-@field_widget_multiadapter([IListField, IChoiceField],
-    qualifiers=['topic_category.inspire'], is_fallback=False)
-class TopicCategoryEditWidget(EditFieldWidget):
- 
-    def get_template(self):
-        return 'package/snippets/fields/edit-list-tags.html'
-
-
 @object_widget_adapter(schemata.IInspireMetadata, 
     qualifiers=['datasetform'], is_fallback=True)
 class InspireEditWidget(EditObjectWidget):

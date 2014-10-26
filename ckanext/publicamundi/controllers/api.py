@@ -13,7 +13,7 @@ import ckan.logic as logic
 
 import ckanext.publicamundi
 from ckanext.publicamundi.lib.util import to_json
-from ckanext.publicamundi.lib.metadata.vocabularies import vocabularies 
+from ckanext.publicamundi.lib.metadata import vocabularies
 
 log1 = logging.getLogger(__name__)
 
@@ -53,14 +53,14 @@ class Controller(BaseController):
 
     def vocabularies_list(self):
         response.headers['Content-Type'] = content_types['json']
-        return [json.dumps(vocabularies.keys())]
+        return [json.dumps(vocabularies.get_names())]
 
     def vocabulary_get(self, name):
         name = str(name)
         r = None
         
-        if name in vocabularies:
-            vocab = vocabularies[name]
+        vocab = vocabularies.get_by_name(name)
+        if vocab:
             terms = vocab['vocabulary'].by_value
             r = {
                 'date_type': vocab.get('date_type'),

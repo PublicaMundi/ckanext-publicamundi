@@ -9,8 +9,8 @@ from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata.widgets import (
     object_widget_adapter, field_widget_adapter, field_widget_multiadapter)
 from ckanext.publicamundi.lib.metadata.widgets.base import (
-    ReadObjectWidget, EditObjectWidget,
-    ReadFieldWidget, EditFieldWidget)
+    ReadObjectWidget, EditObjectWidget, ReadFieldWidget, EditFieldWidget,
+    ListFieldWidgetTraits, DictFieldWidgetTraits)
 
 _ = toolkit._
 
@@ -276,4 +276,27 @@ class ResponsiblePartyReadWidget(ReadObjectWidget):
 
     def get_template(self):
         return None 
+
+#
+# IThesaurusTerms
+#
+
+@object_widget_adapter(schemata.IThesaurusTerms)
+class ThesaurusTermsEditWidget(EditObjectWidget):
+        
+    def get_template(self):
+        return 'package/snippets/objects/edit-thesaurus_terms.html' 
+
+@object_widget_adapter(schemata.IThesaurusTerms)
+class ThesaurusTermsReadWidget(ReadObjectWidget):
+        
+    def get_template(self):
+        return None 
+
+@field_widget_multiadapter([IDictField, schemata.IThesaurusTerms],
+    qualifiers=['thesaurus_terms'], is_fallback=True)
+class DictOfThesaurusTermsEditWidget(EditFieldWidget, DictFieldWidgetTraits):
+ 
+    def get_template(self):
+        return 'package/snippets/fields/edit-dict-thesaurus_terms.html'
 

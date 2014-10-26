@@ -426,7 +426,7 @@ class ObjectFieldWidgetTraits(FieldWidget):
             value = factory()
         
         # Build the template context for the object's widget: some variables
-        # must be moved to the object's context,
+        # must be moved from current field context to the object's context
         data1 = {}
         for k in ['title', 'description', 'required', 'readonly']:
             v = tpl_vars.pop(k, None)

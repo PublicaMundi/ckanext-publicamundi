@@ -1,7 +1,6 @@
 import zope.interface
 
-from ckanext.publicamundi.lib.metadata.base import (
-    Object, object_null_adapter)
+from ckanext.publicamundi.lib.metadata.base import Object, object_null_adapter
 from ckanext.publicamundi.lib.metadata.schemata import IBaz
 
 from ckanext.publicamundi.lib.metadata.types import BaseMetadata
@@ -13,4 +12,4 @@ class Baz(BaseMetadata):
 
     url = None
     contacts = list
-
+    keywords = None

@@ -1,9 +1,5 @@
 
-<div class="{{ classes|join(' ') }}"
-    data-module="edit-all-dict-items" 
-    data-module-qname="{{ qname }}" 
-    data-module-terms="{{ h.dump_json(terms) }}"
-   >
+<div class="{{ classes|join(' ') }}">
     {% if title %}<h3 class="title">{{ title }}</h3>{% endif -%}
     {%- if description %}<div class="description">{{ description }}</div>{% endif -%}
 
@@ -17,5 +13,3 @@
         {%- endfor %}
     </ul>
 </div>
-
-{% resource 'ckanext-publicamundi/item-editor' %}

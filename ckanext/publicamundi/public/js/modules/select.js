@@ -10,7 +10,9 @@ this.ckan.module('input-select-choices', function ($, _) {
   
       options: {
           itemize: true,
-          select: 'select' // select | select2
+          select: 'select', // select | select2
+          placeholder: 'Enter ...',
+          width: null,
       },
       
       initialize: function() 
@@ -31,13 +33,15 @@ this.ckan.module('input-select-choices', function ($, _) {
   
               var itemize = function() {
                   var choices = $el.val()
-                  var $h = $el.closest('.controls').find('.itemized-choices')
-                  $h.empty()
-                  $.each(choices, function (i, choice) {
-                      var $inp = $('<input/>', { type: 'hidden', name: qname + '.' + i.toString() })
-                      $inp.val(choice)
-                      $h.append($inp)
-                  })
+                  if (choices) {
+                      var $h = $el.closest('.controls').find('.itemized-choices')
+                      $h.empty()
+                      $.each(choices, function (i, choice) {
+                          $('<input/>', { type: 'hidden', name: qname + '.' + i.toString() })
+                            .val(choice)
+                            .appendTo($h)
+                      })
+                  }
               }
   
               itemize()
@@ -46,7 +50,10 @@ this.ckan.module('input-select-choices', function ($, _) {
               // Transform to a proper widget, if needed
   
               if ($.fn.select2 && opts.select == 'select2') {
-                  $el.select2()
+                  $el.select2({
+                      width: opts.width || 'resolve', 
+                      placeholder: opts.placeholder 
+                  })
               }
   
           } else {
@@ -207,11 +214,10 @@ this.ckan.module('input-select2-tags', function ($, _) {
                       tags = $.grep(tags, function (tag) { return tag.length })
                       $h.empty()
                       $.each(tags, function (i, tag) {
-                          var $i = $('<input>')
-                              .attr('type', 'hidden')
+                          $('<input>', { type: 'hidden' })
                               .attr('name', qname + '.' + i.toString())
                               .val(tag)
-                          $h.append($i)
+                              .appendTo($h)
                       })
                   }
   

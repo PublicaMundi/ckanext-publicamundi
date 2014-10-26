@@ -30,7 +30,7 @@ class InspireMetadata(BaseMetadata):
     locator = list
     resource_language = list
     topic_category = list
-    keywords = list
+    keywords = dict
     bounding_box = list
     temporal_extent = list
     creation_date = None
