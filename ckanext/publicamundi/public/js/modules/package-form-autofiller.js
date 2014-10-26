@@ -1,5 +1,5 @@
 
-this.ckan.module('form-autofiller', function ($, _) {
+this.ckan.module('package-form-autofiller', function ($, _) {
     
   return {
     
@@ -116,10 +116,10 @@ this.ckan.module('form-autofiller', function ($, _) {
                 break;
         }
 
-        window.console.log('Initialized module: form-autofiller')
+        window.console.debug('Initialized module: package-form-autofiller')
     },
     teardown: function() { 
-        window.console.log('Tearing down module: form-autofiller')
+        window.console.debug('Tearing down module: package-form-autofiller')
     },
   }
 })

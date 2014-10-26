@@ -7,6 +7,10 @@ header > h6.inline {
     display: inline-block 
 } 
 
+.btn {
+    font-weight: normal;
+}
+
 .popover {
     width: inherit;
     max-width: 400px;

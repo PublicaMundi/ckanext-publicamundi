@@ -53,25 +53,13 @@ class InspireEditWidget(EditObjectWidget):
         
         return {
             'identifier': {
-                'input_classes': ['input-xlarge'],
-                'placeholder': 'Linked to <package.url>',
-                'attrs': { 
-                    'disabled': 'disabled' },
+                # Note: Not generated here (see glue template)
             },
             'title': {
-                'title': _('Title'), # not to be confused with resource title
-                'placeholder': 'Linked to <package.title>',
-                'input_classes': ['input-xlarge'],
-                'attrs': { 
-                    'disabled': 'disabled' },
+                # Note: Not generated here (see glue template)
             },
             'abstract': {
-                'title': _('Abstract'), # not to be confused with resource description
-                'placeholder': 'Linked to <package.description>',
-                'description': None,
-                'attrs': { 
-                    'disabled': 'disabled',
-                    'rows': 4 },
+                # Note: Not generated here (see glue template)
             },
             'topic_category': {
                 'title': _('Topic Category'),
