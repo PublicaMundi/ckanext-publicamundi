@@ -142,21 +142,9 @@ thesaurus_gemet_concepts = Thesaurus(
     date_type = 'creation'
 )
 
-thesaurus_gemet_themes = Thesaurus(
-    title = u'GEMET Themes',
-    name = 'keywords-gemet-themes',
-    reference_date = datetime.date(2014, 5, 1),
-    version = '1.0',
-    date_type = 'creation'
-)
+thesaurus_gemet_themes = Thesaurus.make('keywords-gemet-themes')
 
-thesaurus_gemet_inspire_data_themes = Thesaurus(
-    title = u'GEMET INSPIRE Themes',
-    name = 'keywords-gemet-inspire-themes',
-    reference_date = datetime.date(2014, 6, 1),
-    version = '1.0',
-    date_type = 'publication'
-)
+thesaurus_gemet_inspire_data_themes = Thesaurus.make('keywords-gemet-inspire-themes')
 
 # Baz 
 

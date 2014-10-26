@@ -4,7 +4,7 @@
 {%- if input_classes is not defined %}{% set input_classes = ['span4'] %}{% endif -%}
 {%- if control_attrs is not defined %}{% set control_attrs = {} %}{% endif -%}
 
-<div class="{{ " " ~ classes|join(' ') }}"> 
+<div class="{{ classes|join(' ') }}"> 
     {#- Do we need a control-group here ? -#}
     <header><h3 class="inline">{{ title }}</h3></header>
     {% if verbose and description %}<div class="description">{{ description }}</div>{% endif -%}

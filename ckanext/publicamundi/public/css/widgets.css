@@ -70,3 +70,16 @@ li .widget.object-edit-widget {
 }
 
 .widget.object-read-widget .table.metadata-table {}
+
+/* 
+ * Custom styles for specific fields/objects.
+ * Fixme: Move to a separate stylesheet.
+ */
+
+.widget.field-widget.field-edit-widget.field-qname-booo\.keywords\.keywords-gemet-themes {
+    /*border: solid 1px wheat;*/
+}
+
+.widget.field-widget.field-edit-widget.ababoua-1  {
+    border: solid 1px wheat;
+}

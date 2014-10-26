@@ -13,8 +13,8 @@
                     'version', 'title', 'name', 'reference_date', 'date_type'],  
                 thesaurusName: null,
                 select: 'select', // select | select2
-                placeholder: 'Enter a keyword ...',
-                width: null
+                placeholder: 'Enter a keyword ...',  // select2
+                width: null, // select2 
             },
             
             _getVocabulary: function (name)
@@ -39,12 +39,9 @@
                 // Initialize multiple select
                 
                 var $select = $el.children('select[multiple]')
-                var $opts = $select.children('option')
-                
-                // Load inputs
 
-                if (!$opts.length) {
-                    // Find out which is the name of our thesaurus
+                if (!$select.children('option').length) {
+                    // Find out the machine-friendly name of our thesaurus
                     var name = null
 
                     if (typeof(opts.thesaurusName) == 'string') { 

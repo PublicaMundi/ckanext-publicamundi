@@ -79,6 +79,10 @@ class InspireEditWidget(EditObjectWidget):
                 'verbose': True,
                 #'size': 12,
             },
+            'keywords': {
+                'title': None, #_('Keywords'),
+                'verbose': True,
+            },
             'languagecode': {
                 'title': _('Language'),
             },
@@ -96,6 +100,7 @@ class InspireEditWidget(EditObjectWidget):
             #('title', 'title.inspire'),
             #('abstract', 'abstract.inspire'),
             ('topic_category', 'checkbox'),
+            ('keywords', None),
             ('responsible_party', 'contacts.inspire'),
             ('contact', 'contacts.inspire'),
             ('languagecode', 'select2'),

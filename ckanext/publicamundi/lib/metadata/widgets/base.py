@@ -292,7 +292,14 @@ class EditObjectWidget(ObjectWidget):
 
 class ContainerFieldWidgetTraits(FieldWidget):
     
+    def get_item_template_vars(self, key=None):
+        '''Return template vars to be used for item keyed at key.
+        '''
+        return {}
+    
     def get_item_qualifier(self):
+        '''Return a action qualifier to be used for all items.
+        '''
         qa = self.context.provided_action.make_child('item')
         return qa.qualifier
         
@@ -350,6 +357,17 @@ class ListFieldWidgetTraits(ContainerFieldWidgetTraits):
         return tpl_vars
 
 class DictFieldWidgetTraits(ContainerFieldWidgetTraits):
+    
+    def get_item_template_vars(self, key=None, term=None):
+        tpl_vars = {}
+        
+        if key is None:
+            # a placeholder for Mustache templates
+            tpl_vars['title'] = '{{title}}'
+        else:
+            tpl_vars['title'] = (term.title or term.token) if term else key
+        
+        return tpl_vars
 
     def prepare_template_vars(self, name_prefix, data):
         '''Prepare data for the template.
@@ -373,7 +391,7 @@ class DictFieldWidgetTraits(ContainerFieldWidgetTraits):
         
         def render_item_template():
             yf = field.value_type.bind(FieldContext(key='{{key}}', value=None))
-            yd = { 'title': '{{title}}' }
+            yd = self.get_item_template_vars(key=None)
             return {
                 'variables': ['key', 'title'],
                 'markup': to_c14n_markup(
@@ -385,7 +403,7 @@ class DictFieldWidgetTraits(ContainerFieldWidgetTraits):
             yf = field.value_type.bind(FieldContext(key=k, value=y))
             term = terms.get(k)
             ye = error_dict.get(k) if error_dict else None
-            yd = { 'title': term.title or term.token }
+            yd = self.get_item_template_vars(key=k, term=term)
             return {
                 'key': k,
                 'key_term': term,

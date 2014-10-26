@@ -1,0 +1,8 @@
+{%- if control_attrs is not defined %}{% set control_attrs = {} %}{% endif -%}
+{%- do
+    control_attrs.update({
+        'data-module-select': 'select',
+    })
+-%}
+
+{%- extends 'package/snippets/objects/edit-thesaurus_terms.html' %}

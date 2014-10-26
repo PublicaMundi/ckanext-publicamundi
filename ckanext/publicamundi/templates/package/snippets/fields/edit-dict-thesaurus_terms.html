@@ -5,4 +5,8 @@
         'add-label': 'Add',
     } 
 -%}
-{% extends 'package/snippets/fields/edit-dict-selected-items.html' %}
+{%- set
+    select_control = 'select'
+-%}
+
+{%- extends 'package/snippets/fields/edit-dict-selected-items.html' %}

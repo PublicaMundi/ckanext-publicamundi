@@ -39,6 +39,12 @@ div.accordion-group {
     border-radius: 1px;
 }
 
+/* workaround for dropdown-menu buttons croped inside 
+ * accordion bodies */
+div.accordion-body .pull-right > .btn-group > ul.dropdown-menu {
+    left: -70%;
+}
+
 span.label.not-available {
     padding: 3px 5px;
     margin: 0px 7px;
@@ -174,3 +180,12 @@ textarea:disabled {
 .dropdown-menu {
     border-radius: 4px;
 }
+
+/* Well, normally we would just use Bootstrap's .clearfix, but there are some 
+ * cases that we only want the :after part */
+.clear-after:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+

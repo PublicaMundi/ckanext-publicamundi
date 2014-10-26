@@ -10,7 +10,9 @@ from ckanext.publicamundi.lib.metadata import vocabularies
 
 class IThesaurus(IObject):
 
-    title = zope.schema.TextLine(title=u'Title', required = True)
+    name = zope.schema.NativeString(title=u'Name (machine-friendly)', required=True)
+    
+    title = zope.schema.TextLine(title=u'Title', required=True)
 
     reference_date = zope.schema.Date(title=u'Date', required=True)
 
@@ -19,15 +21,14 @@ class IThesaurus(IObject):
         vocabulary = vocabularies.get_by_name('date-types').get('vocabulary'),
         required = True)
 
-    name = zope.schema.NativeString()
-
-    version = zope.schema.DottedName(
+    version = zope.schema.NativeString(
         title = u'Version',
         constraint = re.compile('^\d+\.\d+(\.[a-z0-9]+)*$').match,
         required = False)
 
     vocabulary = zope.schema.Object(IVocabularyTokenized, 
-        required=True)
+        title = u'Vocabulary',
+        required = True)
 
     @zope.interface.invariant
     def check_vocabulary(obj):
@@ -42,26 +43,28 @@ class IThesaurus(IObject):
 
 class IThesaurusTerms(IObject):
 
-    thesaurus = zope.schema.Object(IThesaurus, required=True)
+    thesaurus = zope.schema.Object(IThesaurus, 
+        title = u'Thesaurus',
+        required = True)
 
     terms = zope.schema.List(
         title = u'Terms',
         value_type = zope.schema.NativeString(title=u'Term'),
         required = True,
         min_length = 1,
-        max_length = 12)
+        max_length = 8)
 
     @zope.interface.invariant
     def check_terms(obj):
-        unexpected = []
+        unexpected_terms = []
         vocabulary = obj.thesaurus.vocabulary
         for term in obj.terms:
             try:
                 vocabulary.getTerm(term)
             except:
-                unexpected.append(term)
-        if unexpected:
-            msg = 'The following terms dont belong to thesaurus %r: %s' % (
-                obj.thesaurus.title, ','.join(unexpected))
+                unexpected_terms.append(term)
+        if unexpected_terms:
+            msg = 'The following terms do not belong to named Thesaurus %r: %s' % (
+                obj.thesaurus.title, ','.join(unexpected_terms))
             raise zope.interface.Invalid(msg)
 

@@ -30,6 +30,9 @@ class Thesaurus(Object):
     @classmethod
     def make(cls, name):
         '''Create a new Thesaurus instance from it's machine-name name.
+        The metadata for this thesaurus are queried from vocabularies module.
+
+        Note: Maybe rename this class-method to lookup
         '''
         spec = vocabularies.get_by_name(name)
         if spec:
@@ -50,6 +53,8 @@ class ThesaurusTerms(Object):
     
     zope.interface.implements(IThesaurusTerms)
 
-    thesaurus = Thesaurus
+    # Fixme: Maybe point here to a factory for named Thesaurus objects
+    thesaurus = Thesaurus 
+    
     terms = list
 

@@ -5,8 +5,8 @@
     data-module-qname="{{ qname }}" 
     data-module-terms="{{ h.dump_json(terms) }}"
     data-module-messages="{{ h.dump_json(messages) }}"
-    data-module-select="select"
-    data-module-select-class="span4"
+    data-module-select="{{ select_control|default('select') }}"
+    data-module-select-class="{{ select_class|default('span4') }}"
  >
     {% if title %}<h3 class="title">{{ title }}</h3>{% endif -%}
     {%- if description %}<div class="description">{{ description }}</div>{% endif -%}

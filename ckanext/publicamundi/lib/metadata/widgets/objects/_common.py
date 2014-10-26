@@ -281,11 +281,19 @@ class ResponsiblePartyReadWidget(ReadObjectWidget):
 # IThesaurusTerms
 #
 
-@object_widget_adapter(schemata.IThesaurusTerms)
+@object_widget_adapter(schemata.IThesaurusTerms, 
+    qualifiers=['select'], is_fallback=True)
 class ThesaurusTermsEditWidget(EditObjectWidget):
         
     def get_template(self):
-        return 'package/snippets/objects/edit-thesaurus_terms.html' 
+        return 'package/snippets/objects/edit-thesaurus_terms-select.html' 
+
+@object_widget_adapter(schemata.IThesaurusTerms, 
+    qualifiers=['select2'], is_fallback=False)
+class ThesaurusTermsS2EditWidget(EditObjectWidget):
+        
+    def get_template(self):
+        return 'package/snippets/objects/edit-thesaurus_terms-select2.html' 
 
 @object_widget_adapter(schemata.IThesaurusTerms)
 class ThesaurusTermsReadWidget(ReadObjectWidget):
@@ -294,9 +302,29 @@ class ThesaurusTermsReadWidget(ReadObjectWidget):
         return None 
 
 @field_widget_multiadapter([IDictField, schemata.IThesaurusTerms],
-    qualifiers=['thesaurus_terms'], is_fallback=True)
+    qualifiers=['select'], is_fallback=True)
 class DictOfThesaurusTermsEditWidget(EditFieldWidget, DictFieldWidgetTraits):
  
+    def get_item_qualifier(self):
+        return 'select' 
+    
+    def get_template(self):
+        return 'package/snippets/fields/edit-dict-thesaurus_terms.html'
+
+@field_widget_multiadapter([IDictField, schemata.IThesaurusTerms],
+    qualifiers=['select2'], is_fallback=False)
+class DictOfThesaurusTermsS2EditWidget(EditFieldWidget, DictFieldWidgetTraits):
+ 
+    def get_item_template_vars(self, key=None, term=None):
+        tpl_vars = DictFieldWidgetTraits.get_item_template_vars(self, key, term)
+        tpl_vars.update({
+            # 'classes': ['ababoua-1', 'ababoua-2']
+        })
+        return tpl_vars
+    
+    def get_item_qualifier(self):
+        return 'select2' 
+    
     def get_template(self):
         return 'package/snippets/fields/edit-dict-thesaurus_terms.html'
 
