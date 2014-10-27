@@ -16,7 +16,7 @@ thesaurus_gemet_concepts = Thesaurus(
     title = u'GEMET Concepts',
     name = 'keywords-gemet-concepts',
     reference_date = datetime.date(2014, 1, 1),
-    version = 1.0,
+    version = '1.0',
     date_type = 'creation'
 )
 
@@ -25,7 +25,7 @@ thesaurus_baz = Thesaurus(
     title = u'Baz',
     name = 'keywords-baz',
     reference_date = datetime.date(2014, 1, 1),
-    version = 1.0,
+    version = '1.0',
     date_type = 'creation'
 )
 
@@ -57,7 +57,7 @@ def test_12():
 
     assert_faulty_keys(terms12,
         expected_keys = ['__after'], 
-        expected_invariants=['The following terms dont belong to thesaurus'])
+        expected_invariants=['The following terms do not belong'])
 
 def test_13():
     terms13 = ThesaurusTerms() 

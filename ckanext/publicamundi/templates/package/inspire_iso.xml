@@ -131,15 +131,15 @@
           <gmd:thesaurusName>
             <gmd:CI_Citation>
               <gmd:title>
-                <gco:CharacterString>{{ k['name'] }}</gco:CharacterString>
+                <gco:CharacterString>{{ k['thesaurus']['title'] }}</gco:CharacterString>
               </gmd:title>
               <gmd:date>
                 <gmd:CI_Date>
                   <gmd:date>
-                    <gco:Date>{{ k['date'] }}</gco:Date>
+                    <gco:Date>{{ k['thesaurus']['reference_date'] }}</gco:Date>
                   </gmd:date>
                   <gmd:dateType>
-                    <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue={{ "\"%s\""|safe % k['datetype'] }}>{{ k['datetype'] }}</gmd:CI_DateTypeCode>
+                    <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue={{ "\"%s\""|safe % k['datetype'] }}>{{ k['thesaurus']['date_type'] }}</gmd:CI_DateTypeCode>
                   </gmd:dateType>
                 </gmd:CI_Date>
               </gmd:date>
