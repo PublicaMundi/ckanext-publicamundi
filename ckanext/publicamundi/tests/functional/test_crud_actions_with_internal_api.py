@@ -15,7 +15,7 @@ from ckanext.publicamundi.lib import dictization
 from ckanext.publicamundi.lib.metadata import types
 from ckanext.publicamundi.lib.metadata import dataset_types, Object
 from ckanext.publicamundi.tests.functional import with_request_context
-
+from ckanext.publicamundi.tests import fixtures
 class TestController(ckan.tests.TestController):
     
     core_keys = set([
@@ -42,6 +42,7 @@ class TestController(ckan.tests.TestController):
         yield self._create, 'foo', 'hello-foo-i-1' 
         yield self._create, 'foo', 'hello-foo-i-2' 
         yield self._create, 'foo', 'hello-foo-i-3' 
+        #yield self._create, 'inspire', 'inspire-1'
         yield self._create_invalid, 'foo', 'hello-boo', set(['dataset_type'])
         yield self._create_invalid, 'foo', 'hello-foo-i-4', set(['foo.baz', 'foo.rating'])
         pass
@@ -321,8 +322,19 @@ foo_fixtures = {
     },
 }
 
+#inspire_fixtures = {
+#        'inspire-1':{
+#            '0':{
+#                'title': u'Inspire-test-1',
+#                'name': 'inspire-test-1',
+#                'dataset_type': 'inspire',
+#                'inspire': fixtures.inspire1
+#                }
+#            }
+#        }
 pkg_fixtures = {
     'foo': foo_fixtures,
     'ckan': ckan_fixtures,
+#    'inspire': inspire_fixtures
 }
 
