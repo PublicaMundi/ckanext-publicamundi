@@ -182,20 +182,13 @@ class IInspireMetadata(IBaseMetadata):
         description = u"This is a statement on process history and/or overall quality of the spatial data set. Where appropriate it may include a statement whether the data set has been validated or quality assured, whether it is the official version (if multiple versions exist), and whether it has legal validity. The value domain of this metadata element is free text.",
         required = False)
 
-    denominator = zope.schema.List(
-        title = u'Equivalent Scale',
-        required = False,
-        max_length = 4,
-        value_type = zope.schema.Int(title=u'Scale'))
-
     spatial_resolution = zope.schema.List(
-        title = u'Spatial resolution',
+        title = u'Spatial Resolution',
         description = u'''Spatial resolution refers to the level of detail of the data set. It shall be expressed as a set of zero to many resolution distances (typically for gridded data and imagery-derived products) or equivalent scales (typically for maps or map-derived products). An equivalent scale is generally expressed as an integer value expressing the scale denominator. A resolution distance shall be expressed as a numerical value associated with a unit of length.''',
         required = False,
-        max_length = 12,
-        value_type = zope.schema.Object(
-            ISpatialResolution,
-            title = u'Spatial resolution'))
+        max_length = 6,
+        value_type = zope.schema.Object(ISpatialResolution,
+            title = u'Spatial Resolution'))
 
     # Conformity
 
@@ -208,7 +201,7 @@ class IInspireMetadata(IBaseMetadata):
 
     # Constraints 
     
-    # Todo: Do we need other_constraints ??
+    # Todo: The following fields should have suggestions (autocompleted?) values.
 
     access_constraints = zope.schema.List(
         title = u'Conditions applying to access and use',

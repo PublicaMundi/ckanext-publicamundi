@@ -62,7 +62,9 @@ conformity1 = Conformity(
     date_type = "creation", 
     degree = "conformant")
 
-spatialres1 = SpatialResolution(distance=5, uom=u"lala")
+spatialres1 = SpatialResolution(distance=5, uom=u"m")
+
+spatialres2 = SpatialResolution(denominator=1000)
 
 # Foo
 
@@ -195,9 +197,8 @@ inspire1 = InspireMetadata(
     publication_date = datetime.date(2012,1,1),
     revision_date = datetime.date(2014,1,1),
     lineage = u"lineaage",
-    denominator = [],
     spatial_resolution = [
-        SpatialResolution(distance=5, uom=u"meters")],
+        SpatialResolution(distance=5, uom=u"meters", denominator=5000)],
     conformity = [
         Conformity(
             title = u"specifications blabla", 
