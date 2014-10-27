@@ -2,7 +2,7 @@
 
 <div class="control-group{{ "error" if errors }}{{ " " ~ classes|join(' ') }}">
     <label>{{ title }}{{ markup_helpers.mark_required(required) }}</label>
-    {% if verbose and description %}<div class="description">{{ description }}</div>{% endif -%}
+    {% if verbose and description %}<p class="description">{{ description }}</p>{% endif -%}
     <div class="controls checkboxes" 
         data-module="input-checkbox-choices"
         data-module-qname="{{ qname }}"

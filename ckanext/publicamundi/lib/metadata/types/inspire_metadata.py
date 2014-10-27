@@ -29,6 +29,11 @@ class KeywordsFactory(object):
             terms=[], thesaurus=Thesaurus.make(self._name))
         return keywords
 
+class TemporalExtentFactory(object):
+    
+    def __call__(self):
+        return [TemporalExtent()]
+
 @object_null_adapter()
 class InspireMetadata(BaseMetadata):
     
@@ -50,7 +55,7 @@ class InspireMetadata(BaseMetadata):
     
     bounding_box = list
     
-    temporal_extent = list
+    temporal_extent = TemporalExtentFactory()
     
     creation_date = None
     publication_date = None

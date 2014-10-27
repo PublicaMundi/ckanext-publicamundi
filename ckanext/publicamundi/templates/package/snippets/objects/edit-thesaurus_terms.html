@@ -4,10 +4,9 @@
 {%- if input_classes is not defined %}{% set input_classes = ['span4'] %}{% endif -%}
 {%- if control_attrs is not defined %}{% set control_attrs = {} %}{% endif -%}
 
-<div class="{{ classes|join(' ') }}"> 
-    {#- Do we need a control-group here ? -#}
+<div class="control-group {{ classes|join(' ') }}"> 
     <header><h3 class="inline">{{ title }}</h3></header>
-    {% if verbose and description %}<div class="description">{{ description }}</div>{% endif -%}
+    {% if verbose and description %}<p class="description">{{ description }}</p>{% endif -%}
     <label class="control-label" for="input-{{ qname }}.terms">
         {{- _('Keywords') }}{{ markup_helpers.mark_required(required) }}</label>
     <div class="controls"

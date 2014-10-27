@@ -171,6 +171,12 @@ class TemporalExtentEditWidget(EditObjectWidget):
     def get_template(self):
         return 'package/snippets/objects/edit-temporal_extent.html'
 
+@object_widget_adapter(schemata.ITemporalExtent, qualifiers=['item'])
+class TemporalExtentAsItemEditWidget(EditObjectWidget):
+
+    def get_template(self):
+        return 'package/snippets/objects/edit-temporal_extent-item.html'
+
 @object_widget_adapter(schemata.ITemporalExtent)
 class TemporalExtentReadWidget(ReadObjectWidget):
 

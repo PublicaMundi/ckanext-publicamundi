@@ -22,6 +22,16 @@ class ContactsEditWidget(EditFieldWidget, ListFieldWidgetTraits):
     def get_template(self):
         return 'package/snippets/fields/edit-list-contacts-inspire.html'
 
+@field_widget_multiadapter([IListField, schemata.ITemporalExtent],
+    qualifiers=['temporal_extent.inspire'], is_fallback=False)
+class TemporalExtentsEditWidget(EditFieldWidget, ListFieldWidgetTraits):
+ 
+    def get_item_qualifier(self):
+        return 'item'
+    
+    def get_template(self):
+        return 'package/snippets/fields/edit-list-temporal_extent-inspire.html'
+
 @field_widget_multiadapter([IListField, IURIField],
     qualifiers=['locator.inspire'], is_fallback=False)
 class ResourceLocatorsEditWidget(EditFieldWidget):
@@ -71,6 +81,14 @@ class InspireEditWidget(EditObjectWidget):
                 'title': None, #_('Keywords'),
                 'verbose': True,
             },
+            'temporal_extent': {
+            },
+            'creation_date': {
+            },
+            'publication_date': {
+            },
+            'revision_date': {
+            },
             'languagecode': {
                 'title': _('Language'),
             },
@@ -89,6 +107,10 @@ class InspireEditWidget(EditObjectWidget):
             #('abstract', 'abstract.inspire'),
             ('topic_category', 'checkbox'),
             ('keywords', None),
+            ('temporal_extent', 'temporal_extent.inspire'),
+            ('creation_date', None),
+            ('publication_date', None),
+            ('revision_date', None),
             ('responsible_party', 'contacts.inspire'),
             ('contact', 'contacts.inspire'),
             ('languagecode', 'select2'),

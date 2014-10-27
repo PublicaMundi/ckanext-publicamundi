@@ -167,6 +167,15 @@ textarea:disabled {
     margin-top: 5px;
 }
 
+.form-horizontal .controls input + input.inline-control {
+    display: inline-block;
+    margin-top: inherit;
+}
+
+.form-horizontal .controls input + .input-separator-x1 { padding: 0px 4px }
+.form-horizontal .controls input + .input-separator-x2 { padding: 0px 8px }
+.form-horizontal .controls input + .input-separator-x3 { padding: 0px 12px }
+
 .tag {
     border-radius: 2px;
 }

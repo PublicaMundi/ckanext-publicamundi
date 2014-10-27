@@ -2,9 +2,10 @@
 
 {%- if input_classes is not defined %}{% set input_classes = ['input-small'] -%}{% endif -%}
 
-<div class="control-group{{ " error" if errors }}{{ " " ~ classes|join(' ') }}">
-    <label class="control-label">
-        {{- title }}{{ markup_helpers.mark_required(required) }}</label>
+<div class="control-group {{ "error" if errors }} {{ classes|join(' ') }}">
+    <header><h3 class="inline">{{ title }}</h3></header>
+    {#- what about "required" marker? -#}
+    <label class="control-label">{{- _('Extent') }}</label>
     <div class="controls">
        <input type="text" class="{{ input_classes|join(' ') }}" id="input-{{ qname }}.start"
            title="{{ _('Start Date') }}"

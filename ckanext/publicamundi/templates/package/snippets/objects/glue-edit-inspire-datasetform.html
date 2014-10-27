@@ -83,58 +83,98 @@
         { 
             'name': 'identification',
             'heading': _('Identification'),
-            'fields': [
-                'identifier', 'title', 'abstract', 'locator', 'resource_language'],
+            'subgroups': [
+                {
+                    'fields': [
+                        'identifier', 'title', 'abstract', 'locator', 'resource_language'],
+                },
+            ]
         },
         { 
             'name': 'classification',
             'heading': _('Classification'),
-            'fields': ['topic_category'],
+            'subgroups': [
+                {
+                    'fields': ['topic_category'],
+                },
+             ],
         },
         { 
             'name': 'keywords',
-            'heading': _('Keywords'),
-            'fields': ['keywords'],
+            'heading': _('Keywords'),           
+            'subgroups': [
+                {
+                    'fields': ['keywords'],
+                },
+             ],
         },
         { 
             'name': 'geographic',
             'heading': _('Geographic'),
-            'fields': [],
+            'subgroups': [
+                {
+                    'fields': [],
+                },
+             ],
         },
         { 
             'name': 'temporal',
             'heading': _('Temporal'),
-            'fields': [],
+            'subgroups': [
+                {
+                    'heading': none,
+                    'fields': ['temporal_extent'],
+                },
+                {
+                    'heading': _('Significant Dates'),
+                    'description': _(
+                        'The creation/publication/revision dates are the most significant dates in a dataset\'s lifecycle.'),
+                    'fields': [
+                        'creation_date', 'publication_date', 'revision_date'],
+                },
+            ]
         },
         { 
             'name': 'quality',
             'heading': _('Quality and Validity'),
-            'fields': [],
+            'subgroups': []
         },
         { 
             'name': 'conformity',
             'heading': _('Conformity'),
-            'fields': [],
+            'subgroups': []
         },
         { 
             'name': 'constraints',
             'heading': _('Constraints'),
-            'fields': [],
+            'subgroups': []
         },
         { 
             'name': 'responsible-party',
             'heading': _('Responsible Party'),
-            'fields': ['responsible_party'],
+            'subgroups': [
+                {
+                    'fields': ['responsible_party'],
+                },
+            ],
         },
         {
             'name': 'contact',
             'heading': _('Contact Points'),
-            'fields': ['contact']
+            'subgroups': [
+                {
+                    'fields': ['contact'],
+                },
+            ],
         },
         { 
             'name': 'metadata',
             'heading': _('Metadata on Metadata'),
-            'fields': ['languagecode', 'datestamp',]
+            'subgroups': [
+                {
+                    'fields': ['languagecode', 'datestamp'],
+                },
+            ],
         },
    ]
 -%}
@@ -149,8 +189,15 @@
     
     {# grouped in accordion sections #}
     {%- call(group_desc) accordion.accordion('inspire-fields', grouped_fields) %}
-        {% for fname in group_desc.fields -%}
-        {{ fields[fname].markup }}
+        {%- for subg in group_desc.subgroups %}
+            {% if not loop.first %}<hr/>{% endif -%}
+            {% if subg.heading %}<h3>{{ subg.heading }}</h3>{% endif %}
+            {% if subg.description -%}
+            <p class="description">{{ subg.description }}</p>
+            {% endif -%}
+            {%- for fname in subg.fields %}
+                {{ fields[fname].markup }}
+            {% endfor -%}
         {% endfor -%}
     {% endcall -%}
 </div>
