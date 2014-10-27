@@ -27,40 +27,47 @@
                     'title': _('Language') })
         },
         'title': {
-            'markup': h.markup_for_field('edit:title.inspire',
+            'markup': h.markup_for_field('edit',
                 obj.get_field('title'),
                 name_prefix=name_prefix,
                 data={ 
                     'title': _('Title'),
                     'input_classes': ['span4'],
                     'attrs': { 
-                        'data-module': 'form-linked-fields',
-                        'data-module-target': 'title',
-                        'data-module-name': 'title', }}),
+                        'data-module': 'package-form-linked-fields',
+                        'data-module-target': h.dump_json({ 
+                            'name': 'title', 
+                            'value': pkg_dict.title, 
+                            'title': 'title', })}})
         },
         'identifier': {
-            'markup': h.markup_for_field('edit:identifier.inspire',
+            'markup': h.markup_for_field('edit',
                 obj.get_field('identifier'),
                 name_prefix=name_prefix,
                 data={ 
                     'title': _('Identifier'),
                     'input_classes': ['span5'],
                     'attrs': {
-                        'data-module': 'form-linked-fields',
-                        'data-module-target': 'name',
-                        'data-module-name': 'name' }}),
+                        'data-module': 'package-form-linked-fields',
+                        'data-module-target': h.dump_json({ 
+                            'name': 'name', 
+                            'value': pkg_dict.name, 
+                            'title': 'name', })}}),
         },
         'abstract': {
-            'markup': h.markup_for_field('edit:abstract.inspire',
+            'markup': h.markup_for_field('edit',
                 obj.get_field('abstract'),
                 name_prefix=name_prefix,
                 data={ 
                     'title': _('Abstract'),
                     'description': none,
                     'attrs': {
-                        'data-module': 'form-linked-fields',
-                        'data-module-target': 'notes',
-                        'data-module-name': 'description' }}),
+                        'rows': 4,
+                        'data-module': 'package-form-linked-fields',
+                        'data-module-target': h.dump_json({
+                            'name': 'notes',
+                            'value': pkg_dict.notes,
+                            'title': 'description', })}}),
         },
     }) 
 -%}
@@ -76,58 +83,102 @@
         { 
             'name': 'identification',
             'heading': _('Identification'),
-            'fields': [
-                'identifier', 'title', 'abstract', 'locator', 'resource_language'],
+            'subgroups': [
+                {
+                    'fields': [
+                        'identifier', 'title', 'abstract', 'locator', 'resource_language'],
+                },
+            ]
         },
         { 
             'name': 'classification',
             'heading': _('Classification'),
-            'fields': ['topic_category'],
+            'subgroups': [
+                {
+                    'fields': ['topic_category'],
+                },
+             ],
         },
         { 
             'name': 'keywords',
-            'heading': _('Keywords'),
-            'fields': ['keywords'],
+            'heading': _('Keywords'),           
+            'subgroups': [
+                {
+                    'fields': ['keywords'],
+                },
+             ],
         },
         { 
             'name': 'geographic',
             'heading': _('Geographic'),
-            'fields': [],
+            'subgroups': [
+                {
+                    'fields': ['bounding_box'],
+                },
+             ],
         },
         { 
             'name': 'temporal',
             'heading': _('Temporal'),
-            'fields': [],
+            'subgroups': [
+                {
+                    'heading': none,
+                    'fields': ['temporal_extent'],
+                },
+                {
+                    'heading': _('Significant Dates'),
+                    'description': _(
+                        'Provide the significant dates in this dataset\'s lifecycle.'),
+                    'fields': [
+                        'creation_date', 'publication_date', 'revision_date'],
+                },
+            ]
         },
         { 
             'name': 'quality',
             'heading': _('Quality and Validity'),
-            'fields': [],
+            'subgroups': [
+                {
+                    'fields': ['lineage'],
+                }
+            ]
         },
         { 
             'name': 'conformity',
             'heading': _('Conformity'),
-            'fields': [],
+            'subgroups': []
         },
         { 
             'name': 'constraints',
             'heading': _('Constraints'),
-            'fields': [],
+            'subgroups': []
         },
         { 
             'name': 'responsible-party',
             'heading': _('Responsible Party'),
-            'fields': ['responsible_party'],
+            'subgroups': [
+                {
+                    'fields': ['responsible_party'],
+                },
+            ],
         },
         {
             'name': 'contact',
             'heading': _('Contact Points'),
-            'fields': ['contact']
+            'subgroups': [
+                {
+                    'fields': ['contact'],
+                },
+            ],
         },
         { 
             'name': 'metadata',
             'heading': _('Metadata on Metadata'),
-            'fields': ['languagecode', 'datestamp',]
+            'subgroups': [
+                {
+                    'fields': ['languagecode', 'datestamp'],
+                },
+            ],
         },
    ]
 -%}
@@ -142,10 +193,17 @@
     
     {# grouped in accordion sections #}
     {%- call(group_desc) accordion.accordion('inspire-fields', grouped_fields) %}
-        {% for fname in group_desc.fields -%}
-        {{ fields[fname].markup }}
+        {%- for subg in group_desc.subgroups %}
+            {% if not loop.first %}<hr/>{% endif -%}
+            {% if subg.heading %}<h3>{{ subg.heading }}</h3>{% endif %}
+            {% if subg.description -%}
+            <p class="description">{{ subg.description }}</p>
+            {% endif -%}
+            {%- for fname in subg.fields %}
+                {{ fields[fname].markup }}
+            {% endfor -%}
         {% endfor -%}
     {% endcall -%}
 </div>
 
-{% resource 'ckanext-publicamundi/form-linked-fields' %}
+{% resource 'ckanext-publicamundi/package-form-linked-fields' %}

@@ -7,6 +7,10 @@ header > h6.inline {
     display: inline-block 
 } 
 
+.btn {
+    font-weight: normal;
+}
+
 .popover {
     width: inherit;
     max-width: 400px;
@@ -162,6 +166,15 @@ textarea:disabled {
     display: block;
     margin-top: 5px;
 }
+
+.form-horizontal .controls input + input.inline-control {
+    display: inline-block;
+    margin-top: inherit;
+}
+
+.space-x1 { padding: 0px 4px }
+.space-x2 { padding: 0px 8px }
+.space-x3 { padding: 0px 12px }
 
 .tag {
     border-radius: 2px;

@@ -171,6 +171,12 @@ class TemporalExtentEditWidget(EditObjectWidget):
     def get_template(self):
         return 'package/snippets/objects/edit-temporal_extent.html'
 
+@object_widget_adapter(schemata.ITemporalExtent, qualifiers=['item'])
+class TemporalExtentAsItemEditWidget(EditObjectWidget):
+
+    def get_template(self):
+        return 'package/snippets/objects/edit-temporal_extent-item.html'
+
 @object_widget_adapter(schemata.ITemporalExtent)
 class TemporalExtentReadWidget(ReadObjectWidget):
 
@@ -327,4 +333,43 @@ class DictOfThesaurusTermsS2EditWidget(EditFieldWidget, DictFieldWidgetTraits):
     
     def get_template(self):
         return 'package/snippets/fields/edit-dict-thesaurus_terms.html'
+
+#
+# ISpatialResolution
+#
+
+@object_widget_adapter(schemata.ISpatialResolution)
+class SpatialResolutionEditWidget(EditObjectWidget):
+        
+    def get_template(self):
+        return 'package/snippets/objects/edit-spatial_resolution.html' 
+
+@object_widget_adapter(schemata.ISpatialResolution)
+class SpatialResolutionReadWidget(ReadObjectWidget):
+        
+    def get_template(self):
+        return None 
+
+#
+# IGeographicBoundingBox
+#
+
+@object_widget_adapter(schemata.IGeographicBoundingBox)
+class GeographicBoundingBoxEditWidget(EditObjectWidget):
+        
+    def get_template(self):
+        return 'package/snippets/objects/edit-geographic_bbox.html' 
+
+@object_widget_adapter(schemata.IGeographicBoundingBox,
+    qualifiers=['item'], is_fallback=False)
+class GeographicBoundingBoxAsItemEditWidget(EditObjectWidget):
+        
+    def get_template(self):
+        return 'package/snippets/objects/edit-geographic_bbox-item.html' 
+
+@object_widget_adapter(schemata.IGeographicBoundingBox)
+class GeographicBoundingBoxReadWidget(ReadObjectWidget):
+        
+    def get_template(self):
+        return None 
 

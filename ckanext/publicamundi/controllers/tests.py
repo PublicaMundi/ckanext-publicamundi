@@ -92,7 +92,7 @@ class TestsController(BaseController):
             field = x.get_field(k)
             
             action = params.pop('action', 'edit')
-            prefix = params.pop('prefix', 'booo')
+            prefix = params.pop('prefix', id)
             
             extra_vars = copy.deepcopy(params) 
             extra_vars.update({
@@ -116,7 +116,7 @@ class TestsController(BaseController):
             params = dict(request.params)
             k = params.pop('field', 'title')
             action = params.pop('action', 'edit')
-            prefix = params.pop('prefix', 'booo')
+            prefix = params.pop('prefix', id)
             
             field = x.get_field(k)
             field_markup = markup_for_field(str(action),

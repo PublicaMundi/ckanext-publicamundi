@@ -307,9 +307,9 @@ class ListFieldWidgetTraits(ContainerFieldWidgetTraits):
 
     def get_item_template_vars(self, index=None):
         return {
-            'title': '%s #%s' % (
+            'title': toolkit.literal('%s <code>#%s</code>' % (
                 self.field.value_type.title, 
-                str(index + 1) if isinstance(index, int) else '{{index1}}'),
+                str(index + 1) if isinstance(index, int) else '{{index1}}')),
         }
         
     def prepare_template_vars(self, name_prefix, data):

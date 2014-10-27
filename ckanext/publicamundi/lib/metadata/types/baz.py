@@ -5,6 +5,7 @@ from ckanext.publicamundi.lib.metadata.schemata import IBaz
 
 from ckanext.publicamundi.lib.metadata.types import BaseMetadata
 from ckanext.publicamundi.lib.metadata.types import Thesaurus, ThesaurusTerms
+from ckanext.publicamundi.lib.metadata.types._common import *
 
 thesaurus_gemet_themes = Thesaurus.make('keywords-gemet-themes')
 
@@ -22,6 +23,9 @@ class Baz(BaseMetadata):
     zope.interface.implements(IBaz)
 
     url = None
+    
     contacts = list
+    
     keywords = KeywordsFactory(thesaurus_gemet_themes)
-
+    
+    bbox = GeographicBoundingBox

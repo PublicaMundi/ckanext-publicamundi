@@ -1,6 +1,6 @@
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
-<div class="{{ " " ~ classes | join(' ') }}">
+<div class="{{ classes|join(' ') }}">
     <h3>{{ title }}{{ markup_helpers.mark_required(required) }}</h3>
     {{ markup_helpers.error_messages(errors[errors.global_key]) -}} 
     {{-

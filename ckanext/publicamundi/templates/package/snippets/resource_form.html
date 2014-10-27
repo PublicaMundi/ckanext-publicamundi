@@ -17,8 +17,8 @@
     <input name="id" value="{{ data.id }}" type="hidden"/>
 
     {% block package_basic_fields_autofill %}
-    <span class="btn btn-warning hide" data-module="form-autofiller" data-module-formid="resource-form">Auto</span>
-    {% resource 'ckanext-publicamundi/form-autofiller'  %}
+    <button class="btn btn-warning hide" data-module="package-form-autofiller" data-module-formid="resource-form">Auto</button>
+    {% resource 'ckanext-publicamundi/package-form-autofiller'  %}
     {% endblock %} {# package_basic_fields_autofill #}
 
     {% block basic_fields_url %}

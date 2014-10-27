@@ -22,6 +22,26 @@ class ContactsEditWidget(EditFieldWidget, ListFieldWidgetTraits):
     def get_template(self):
         return 'package/snippets/fields/edit-list-contacts-inspire.html'
 
+@field_widget_multiadapter([IListField, schemata.ITemporalExtent],
+    qualifiers=['temporal_extent.inspire'], is_fallback=False)
+class TemporalExtentsEditWidget(EditFieldWidget, ListFieldWidgetTraits):
+ 
+    def get_item_qualifier(self):
+        return 'item'
+    
+    def get_template(self):
+        return 'package/snippets/fields/edit-list-temporal_extent-inspire.html'
+
+@field_widget_multiadapter([IListField, schemata.IGeographicBoundingBox],
+    qualifiers=['bounding_box.inspire'], is_fallback=False)
+class BoundingBoxEditWidget(EditFieldWidget, ListFieldWidgetTraits):
+ 
+    def get_item_qualifier(self):
+        return 'item'
+    
+    def get_template(self):
+        return 'package/snippets/fields/edit-list-bounding_box-inspire.html'
+
 @field_widget_multiadapter([IListField, IURIField],
     qualifiers=['locator.inspire'], is_fallback=False)
 class ResourceLocatorsEditWidget(EditFieldWidget):
@@ -39,11 +59,6 @@ class ResourceLanguagesEditWidget(EditFieldWidget):
 @object_widget_adapter(schemata.IInspireMetadata, 
     qualifiers=['datasetform'], is_fallback=True)
 class InspireEditWidget(EditObjectWidget):
-
-    def prepare_template_vars(self, name_prefix, data):
-        tpl_vars = super(InspireEditWidget, self).prepare_template_vars(name_prefix, data)
-        # Add variables
-        return tpl_vars
     
     def get_field_template_vars(self):
         
@@ -53,35 +68,32 @@ class InspireEditWidget(EditObjectWidget):
         
         return {
             'identifier': {
-                'input_classes': ['input-xlarge'],
-                'placeholder': 'Linked to <package.url>',
-                'attrs': { 
-                    'disabled': 'disabled' },
+                # Note: Not generated here (see glue template)
             },
             'title': {
-                'title': _('Title'), # not to be confused with resource title
-                'placeholder': 'Linked to <package.title>',
-                'input_classes': ['input-xlarge'],
-                'attrs': { 
-                    'disabled': 'disabled' },
+                # Note: Not generated here (see glue template)
             },
             'abstract': {
-                'title': _('Abstract'), # not to be confused with resource description
-                'placeholder': 'Linked to <package.description>',
-                'description': None,
-                'attrs': { 
-                    'disabled': 'disabled',
-                    'rows': 4 },
+                # Note: Not generated here (see glue template)
             },
             'topic_category': {
                 'title': _('Topic Category'),
-                #'input_classes': ['span5'],
                 'verbose': True,
+                #'input_classes': ['span5'],
                 #'size': 12,
             },
             'keywords': {
                 'title': None, #_('Keywords'),
                 'verbose': True,
+            },
+            'temporal_extent': {},
+            'creation_date': {},
+            'publication_date': {},
+            'revision_date': {},
+            'lineage': {
+                'attrs': {
+                    'rows': 4,
+                }
             },
             'languagecode': {
                 'title': _('Language'),
@@ -101,6 +113,12 @@ class InspireEditWidget(EditObjectWidget):
             #('abstract', 'abstract.inspire'),
             ('topic_category', 'checkbox'),
             ('keywords', None),
+            ('bounding_box', 'bounding_box.inspire'),
+            ('temporal_extent', 'temporal_extent.inspire'),
+            ('creation_date', None),
+            ('publication_date', None),
+            ('revision_date', None),
+            ('lineage', None),
             ('responsible_party', 'contacts.inspire'),
             ('contact', 'contacts.inspire'),
             ('languagecode', 'select2'),

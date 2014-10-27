@@ -113,12 +113,7 @@ class IInspireMetadata(IBaseMetadata):
     @zope.interface.invariant
     def check_keywords(obj):
         if obj.keywords:
-            found = False
-            for name, kw in obj.keywords.items():
-                if kw.thesaurus.name == 'keywords-gemet-inspire-themes':
-                    found = True
-                    break
-            if not found:
+            if not ('keywords-gemet-inspire-themes' in obj.keywords):
                 raise zope.interface.Invalid(
                     'You need to select at least one keyword from INSPIRE data themes')
 
@@ -129,32 +124,32 @@ class IInspireMetadata(IBaseMetadata):
         description = u"This is the extent of the resource in the geographic space, given as a bounding box. The bounding box shall be expressed with westbound and eastbound longitudes, and southbound and northbound latitudes in decimal degrees, with a precision of at least two decimals.",
         required = True,
         min_length = 1,
-        max_length = 6,
+        max_length = 4,
         value_type = zope.schema.Object(IGeographicBoundingBox,
             title = u'Geographic Bounding Box'))
 
     # Temporal 
 
     temporal_extent = zope.schema.List(
-        title = u'Temporal Extent',
+        title = u'Temporal Extents',
         description = u"The temporal extent defines the time period covered by the content of the resource. This time period may be expressed as any of the following: - an individual date, - an interval of dates expressed through the starting date and end date of the interval,- a mix of individual dates and intervals of dates.",
         required = False,
-        max_length = 4,
+        max_length = 3,
         value_type = zope.schema.Object(ITemporalExtent,
-            title = u'Temporal extent'))
+            title = u'Temporal Extent'))
 
     creation_date = zope.schema.Date(
-        title = u'Date of creation',
+        title = u'Creation Date',
         description = u"This is the date of creation of the resource. There shall not be more than one date of creation.",
         required = False)
 
     publication_date = zope.schema.Date(
-        title = u'Date of publication',
+        title = u'Publication Date',
         description = u"This is the date of publication of the resource when available, or the date of entry into force. There may be more than one date of publication.",
         required = False)
 
     revision_date = zope.schema.Date(
-        title = u'Date of last revision',
+        title = u'Revision Date',
         description = u"This is the date of last revision of the resource, if the resource has been revised. There shall not be more than one date of last revision.",
         required = False)
 
@@ -187,20 +182,13 @@ class IInspireMetadata(IBaseMetadata):
         description = u"This is a statement on process history and/or overall quality of the spatial data set. Where appropriate it may include a statement whether the data set has been validated or quality assured, whether it is the official version (if multiple versions exist), and whether it has legal validity. The value domain of this metadata element is free text.",
         required = False)
 
-    denominator = zope.schema.List(
-        title = u'Equivalent Scale',
-        required = False,
-        max_length = 4,
-        value_type = zope.schema.Int(title=u'Scale'))
-
     spatial_resolution = zope.schema.List(
-        title = u'Spatial resolution',
+        title = u'Spatial Resolution',
         description = u'''Spatial resolution refers to the level of detail of the data set. It shall be expressed as a set of zero to many resolution distances (typically for gridded data and imagery-derived products) or equivalent scales (typically for maps or map-derived products). An equivalent scale is generally expressed as an integer value expressing the scale denominator. A resolution distance shall be expressed as a numerical value associated with a unit of length.''',
         required = False,
-        max_length = 12,
-        value_type = zope.schema.Object(
-            ISpatialResolution,
-            title = u'Spatial resolution'))
+        max_length = 6,
+        value_type = zope.schema.Object(ISpatialResolution,
+            title = u'Spatial Resolution'))
 
     # Conformity
 
@@ -213,7 +201,7 @@ class IInspireMetadata(IBaseMetadata):
 
     # Constraints 
     
-    # Todo: Do we need other_constraints ??
+    # Todo: The following fields should have suggestions (autocompleted?) values.
 
     access_constraints = zope.schema.List(
         title = u'Conditions applying to access and use',

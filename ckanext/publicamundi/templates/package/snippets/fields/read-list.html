@@ -2,7 +2,7 @@
 
 <div class="{{ classes | join(' ') }}" {{ attrs | xmlattr }} >
     <h3 class="title">{{ title }}</h3>
-    {% if description %}<div class="description">{{ description }}</div>{% endif -%}
+    {% if description %}<p class="description">{{ description }}</p>{% endif -%}
     <ol>
         {% for y in items -%}
         <li>{{ y.markup }}</li>

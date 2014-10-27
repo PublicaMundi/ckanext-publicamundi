@@ -4,7 +4,7 @@
 {%- if input_classes is not defined %}{% set input_classes = [] %}{% endif -%}
 
 <div class="control-group{{ " " ~ classes|join(' ') }}">
-    {% if verbose and description %}<div class="description">{{ description }}</div>{% endif -%}
+    {% if verbose and description %}<p class="description">{{ description }}</p>{% endif -%}
     <label class="control-label" for="{{ 'input-' ~ qname }}">
         {{- title }}{{ markup_helpers.mark_required(required) }}</label>
     <div class="controls">

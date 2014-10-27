@@ -102,30 +102,46 @@ class IFreeKeyword(IObject):
                 raise zope.interface.Invalid('You need to fill in the rest free-keyword fields')
 
 class IGeographicBoundingBox(IObject):
+    
+    sblat = zope.schema.Float(
+        title = u'South Bound Latitude',
+        min = -90.0,
+        max = 90.0,
+        default = .0,
+        required = True)
 
     nblat = zope.schema.Float(
         title = u'North Bound Latitude',
         min = -90.0,
         max = 90.0,
+        default = .0,
         required = True)
-
-    sblat = zope.schema.Float(
-        title = u'South Bound Latitude',
-        min = -90.0,
-        max = 90.0,
+    
+    wblng = zope.schema.Float(
+        title = u'West Bound Longitude',
+        min = -180.0,
+        max = 180.0,
+        default = .0,
         required = True)
 
     eblng = zope.schema.Float(
         title = u'East Bound Longitude',
         min = -180.0,
         max = 180.0,
+        default = .0,
         required = True)
 
-    wblng = zope.schema.Float(
-        title = u'West Bound Longitude',
-        min = -180.0,
-        max = 180.0,
-        required = True)
+    @zope.interface.invariant
+    def check_wb_eb(obj):
+        if (obj.wblng > obj.eblng):
+            raise zope.interface.Invalid(
+                'The east bound must be greater than the west bound')
+    
+    @zope.interface.invariant
+    def check_sb_nb(obj):
+        if (obj.sblat > obj.nblat):
+            raise zope.interface.Invalid(
+                'The north bound must be greater than the south bound')
 
 class ITemporalExtent(IObject):
 
@@ -140,27 +156,34 @@ class ITemporalExtent(IObject):
     @zope.interface.invariant
     def check_date_order(obj):
         if obj.start > obj.end:
-            msg = 'The start-date (%s) is later than end-date (%s)' % (obj.start,obj.end)
+            msg = 'The start-date (%s) is later than end-date (%s)' % (obj.start, obj.end)
             raise zope.interface.Invalid(msg)
-
+    
 class ISpatialResolution(IObject):
+    
+    denominator = zope.schema.Int(
+        title = u'Equivalent Scale',
+        min = 1, # positive integer
+        required = False)
 
     distance = zope.schema.Int(
-        title = u'Resolution distance',
-        required = True)
+        title = u'Resolution Distance',
+        min = 1, # positive integer
+        required = False)
 
     uom = zope.schema.TextLine(
-        title = u'Unit of measure',
-        required = True,
+        title = u'Unit of Measure',
+        required = False,
         min_length = 2)
 
-    '''
     @zope.interface.invariant
-    def check_case_mandatory(obj):
-        if obj.distance or obj.uom:
-            if not obj.distance or not obj.uom:
-                raise zope.interface.Invalid('You need to fill in the rest Spatial Resolution fields')
-    '''
+    def check(obj):
+        # A valid spatial-resolution must have at least one of the following:
+        # (i) a denominator, or (ii) a distance with a specified unit
+        if not obj.denominator:
+            if not (obj.distance and obj.uom):
+                raise zope.interface.Invalid(
+                    'At least of one of (i) a denominator, or (ii) a distance must be given.')
 
 class IConformity(IObject):
 
@@ -173,7 +196,7 @@ class IConformity(IObject):
         required = True)
 
     date_type = zope.schema.Choice(
-        title = u'Date type',
+        title = u'Date Type',
         vocabulary = vocabularies.get_by_name('date-types').get('vocabulary'),
         required = True)
 

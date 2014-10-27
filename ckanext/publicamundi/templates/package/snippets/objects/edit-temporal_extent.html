@@ -1,36 +1,30 @@
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
-{% if input_classes is not defined %}{% set input_classes = [ 'input-small' ] -%}{% endif -%}
+{%- if input_classes is not defined %}{% set input_classes = ['input-small'] -%}{% endif -%}
 
-<div class="control-group{{ " error" if errors }}{{ " " ~ classes | join(' ') }}">
+<div class="control-group {{ "error" if errors }} {{ classes|join(' ') }}">
+    {% if heading %}<header><h3 class="inline">{{ heading }}</h3></header>{% endif -%}
     <label class="control-label">
-        {{ title }}{{ markup_helpers.mark_required(required) -}}
-    </label>
-
+        {{- title }}{{ markup_helpers.mark_required(required) }}</label>
     <div class="controls">
-       <input type="text" 
-           class="{{ input_classes | join(' ') }}"
+       <input type="text" class="{{ input_classes|join(' ') }}" id="input-{{ qname }}.start"
            title="{{ _('Start Date') }}"
-           placeholder="{{ _('Start Date') }}" 
-           value="{{ obj.start | empty_and_escape }}" 
+           value="{{ obj.start|empty_and_escape }}" 
            name="{{ qname }}.start" 
-           id="input-{{ qname }}.start"
+           placeholder="{{ _('Start Date') }}" 
            data-module="datepicker"
            data-module-format="yyyy-mm-dd"
-        >
-       &nbsp; 
-       <input type="text" 
-           class="{{ input_classes | join(' ') }}"
+        />{#- -#}
+       <span class="space-x2">{{ _('To') }}</span>{# -#}
+       <input type="text" class="{{ input_classes|join(' ') }} inline-control" id="input-{{ qname }}.end"
            title="{{ _('End Date') }}"
-           placeholder="{{ _('End Date') }}" 
-           value="{{ obj.end | empty_and_escape }}" 
+           value="{{ obj.end|empty_and_escape }}" 
            name="{{ qname }}.end" 
-           id="input-{{ qname }}.end"
+           placeholder="{{ _('End Date') }}" 
            data-module="datepicker"
            data-module-format="yyyy-mm-dd"
-        >
+        />
     </div>
-   
    {{ 
         markup_helpers.error_messages(errors, titles={
             'start': _('Start Date'),
@@ -40,4 +34,4 @@
    }} 
 </div>
 
-{% resource 'ckanext-publicamundi/datepicker' %}
+{%- resource 'ckanext-publicamundi/datepicker' %}
