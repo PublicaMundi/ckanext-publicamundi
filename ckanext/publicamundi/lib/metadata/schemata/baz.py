@@ -28,3 +28,8 @@ class IBaz(IBaseMetadata):
     keywords = zope.schema.Object(IThesaurusTerms,
         title = u'Baz Keywords',
         required = False)
+
+    bbox = zope.schema.Object(IGeographicBoundingBox,
+        title = u'Baz BBox',
+        required = True)
+

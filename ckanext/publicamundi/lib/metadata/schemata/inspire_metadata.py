@@ -113,8 +113,7 @@ class IInspireMetadata(IBaseMetadata):
     @zope.interface.invariant
     def check_keywords(obj):
         if obj.keywords:
-            found = any([k == 'keywords-gemet-inspire-themes' for k in obj.keywords])
-            if not found:
+            if not ('keywords-gemet-inspire-themes' in obj.keywords):
                 raise zope.interface.Invalid(
                     'You need to select at least one keyword from INSPIRE data themes')
 
@@ -125,7 +124,7 @@ class IInspireMetadata(IBaseMetadata):
         description = u"This is the extent of the resource in the geographic space, given as a bounding box. The bounding box shall be expressed with westbound and eastbound longitudes, and southbound and northbound latitudes in decimal degrees, with a precision of at least two decimals.",
         required = True,
         min_length = 1,
-        max_length = 6,
+        max_length = 4,
         value_type = zope.schema.Object(IGeographicBoundingBox,
             title = u'Geographic Bounding Box'))
 

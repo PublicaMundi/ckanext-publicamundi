@@ -33,6 +33,7 @@ class BazEditWidget(EditObjectWidget):
             ('url', None),
             ('contacts', 'contacts.baz'),
             ('keywords', 'select2'),
+            ('bbox', None),
         ])
         
     def get_template(self):

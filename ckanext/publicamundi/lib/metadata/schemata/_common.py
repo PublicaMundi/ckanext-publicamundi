@@ -102,30 +102,46 @@ class IFreeKeyword(IObject):
                 raise zope.interface.Invalid('You need to fill in the rest free-keyword fields')
 
 class IGeographicBoundingBox(IObject):
+    
+    sblat = zope.schema.Float(
+        title = u'South Bound Latitude',
+        min = -90.0,
+        max = 90.0,
+        default = .0,
+        required = True)
 
     nblat = zope.schema.Float(
         title = u'North Bound Latitude',
         min = -90.0,
         max = 90.0,
+        default = .0,
         required = True)
-
-    sblat = zope.schema.Float(
-        title = u'South Bound Latitude',
-        min = -90.0,
-        max = 90.0,
+    
+    wblng = zope.schema.Float(
+        title = u'West Bound Longitude',
+        min = -180.0,
+        max = 180.0,
+        default = .0,
         required = True)
 
     eblng = zope.schema.Float(
         title = u'East Bound Longitude',
         min = -180.0,
         max = 180.0,
+        default = .0,
         required = True)
 
-    wblng = zope.schema.Float(
-        title = u'West Bound Longitude',
-        min = -180.0,
-        max = 180.0,
-        required = True)
+    @zope.interface.invariant
+    def check(obj):
+        err_messages = [] 
+        if (obj.sblat > obj.nblat):
+            err_messages.append(
+                'The north bound must be greater than the south bound')
+        if (obj.wblng > obj.eblng):
+            err_messages.append(
+                'The east bound must be greater than the west bound')
+        if err_messages:
+            raise zope.interface.Invalid(err_messages)
 
 class ITemporalExtent(IObject):
 
@@ -140,7 +156,7 @@ class ITemporalExtent(IObject):
     @zope.interface.invariant
     def check_date_order(obj):
         if obj.start > obj.end:
-            msg = 'The start-date (%s) is later than end-date (%s)' % (obj.start,obj.end)
+            msg = 'The start-date (%s) is later than end-date (%s)' % (obj.start, obj.end)
             raise zope.interface.Invalid(msg)
 
 class ISpatialResolution(IObject):

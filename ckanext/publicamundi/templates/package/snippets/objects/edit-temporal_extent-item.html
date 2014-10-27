@@ -1,37 +1,7 @@
-{% import 'macros/markup_helpers.html' as markup_helpers -%}
 
-{%- if input_classes is not defined %}{% set input_classes = ['input-small'] -%}{% endif -%}
+{%- set heading = title -%}
+{%- set title = _('Extent') %}
 
-<div class="control-group {{ "error" if errors }} {{ classes|join(' ') }}">
-    <header><h3 class="inline">{{ title }}</h3></header>
-    {#- what about "required" marker? -#}
-    <label class="control-label">{{- _('Extent') }}</label>
-    <div class="controls">
-       <input type="text" class="{{ input_classes|join(' ') }}" id="input-{{ qname }}.start"
-           title="{{ _('Start Date') }}"
-           value="{{ obj.start|empty_and_escape }}" 
-           name="{{ qname }}.start" 
-           placeholder="{{ _('Start Date') }}" 
-           data-module="datepicker"
-           data-module-format="yyyy-mm-dd"
-        />{#- -#}
-       <span class="input-separator-x2">{{ _('To') }}</span>{# -#}
-       <input type="text" class="{{ input_classes|join(' ') }} inline-control" id="input-{{ qname }}.end"
-           title="{{ _('End Date') }}"
-           value="{{ obj.end|empty_and_escape }}" 
-           name="{{ qname }}.end" 
-           placeholder="{{ _('End Date') }}" 
-           data-module="datepicker"
-           data-module-format="yyyy-mm-dd"
-        />
-    </div>
-   {{ 
-        markup_helpers.error_messages(errors, titles={
-            'start': _('Start Date'),
-            'end': _('End date'),
-            errors.global_key: _('Extent'),
-        }) 
-   }} 
-</div>
+{#- What about the "required" flag for an item? -#}
 
-{%- resource 'ckanext-publicamundi/datepicker' %}
+{%- extends 'package/snippets/objects/edit-temporal_extent.html' -%}

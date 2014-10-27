@@ -2,7 +2,8 @@
 
 {%- if input_classes is not defined %}{% set input_classes = ['input-small'] -%}{% endif -%}
 
-<div class="control-group{{ " error" if errors }}{{ " " ~ classes|join(' ') }}">
+<div class="control-group {{ "error" if errors }} {{ classes|join(' ') }}">
+    {% if heading %}<header><h3 class="inline">{{ heading }}</h3></header>{% endif -%}
     <label class="control-label">
         {{- title }}{{ markup_helpers.mark_required(required) }}</label>
     <div class="controls">
@@ -14,7 +15,7 @@
            data-module="datepicker"
            data-module-format="yyyy-mm-dd"
         />{#- -#}
-       <span class="input-separator-x2">{{ _('To') }}</span>{# -#}
+       <span class="space-x2">{{ _('To') }}</span>{# -#}
        <input type="text" class="{{ input_classes|join(' ') }} inline-control" id="input-{{ qname }}.end"
            title="{{ _('End Date') }}"
            value="{{ obj.end|empty_and_escape }}" 

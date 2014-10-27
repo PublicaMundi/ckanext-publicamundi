@@ -113,7 +113,7 @@
             'heading': _('Geographic'),
             'subgroups': [
                 {
-                    'fields': [],
+                    'fields': ['bounding_box'],
                 },
              ],
         },
@@ -128,7 +128,7 @@
                 {
                     'heading': _('Significant Dates'),
                     'description': _(
-                        'The creation/publication/revision dates are the most significant dates in a dataset\'s lifecycle.'),
+                        'Provide the significant dates in this dataset\'s lifecycle.'),
                     'fields': [
                         'creation_date', 'publication_date', 'revision_date'],
                 },
@@ -137,7 +137,11 @@
         { 
             'name': 'quality',
             'heading': _('Quality and Validity'),
-            'subgroups': []
+            'subgroups': [
+                {
+                    'fields': ['lineage'],
+                }
+            ]
         },
         { 
             'name': 'conformity',
