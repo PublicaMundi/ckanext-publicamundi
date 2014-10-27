@@ -1,0 +1,11 @@
+{% extends 'page.html' %}
+
+{% block primary_content_inner %}
+<form action="submit_upload" method="post"
+    enctype="multipart/form-data">
+    <label for="file">Filename</label>
+    <input type="file" name="filename" id="filename"><br>
+    <input type="submit" name="submit" value="Submit">
+</form>
+{% endblock %}
+
