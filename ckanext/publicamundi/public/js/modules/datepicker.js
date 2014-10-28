@@ -11,12 +11,12 @@ this.ckan.module('datepicker', function ($, _) {
                 format: module.options.format
             })
         } else {
-            window.console.error('The jQuery extension "bootstrap-datepicker" is not loaded')
+            window.console.warn('The jQuery extension "bootstrap-datepicker" is not loaded')
         }
-        window.console.log('Initialized module: datepicker')
+        window.console.debug('Initialized module: datepicker')
     },
     teardown: function() { 
-        window.console.log('Tearing down module: datepicker')
+        window.console.debug('Tearing down module: datepicker')
     },
   }
 })

@@ -127,6 +127,8 @@ def field_widget_multiadapter(field_ifaces, qualifiers=[], is_fallback=False):
     assert not tail_iface is IObjectField, (
         'The widget registry will never provide a multiadapter on a zope.schema.IObject '
         'item. Consider using the underlying schema instead.')
+    assert tail_iface.extends(IField) or tail_iface.isOrExtends(IObject), (
+        '%r is not a suitable interface' % (tail_iface))
     
     decorator = decorator_for_widget_multiadapter(
         field_ifaces, IFieldWidget, qualifiers, is_fallback)
@@ -145,10 +147,14 @@ def widget_for_object(qualified_action, obj, errors={}):
     '''
     
     # Build an array with all candidate names
-    q = QualAction.from_string(qualified_action)
+    
+    q = qualified_action
+    if isinstance(q, basestring):
+        q = QualAction.from_string(q)
     candidates = list(reversed(q.parents() + [q]))
 
     # Lookup registry
+    
     widget = None
     for candidate in candidates:
         name = candidate.to_string()
@@ -166,6 +172,7 @@ def widget_for_object(qualified_action, obj, errors={}):
         raise WidgetNotFound(qualified_action, obj)
     
     # Found a widget to adapt to obj
+    
     assert zope.interface.verify.verifyObject(IObjectWidget, widget)
     return widget
 
@@ -178,7 +185,9 @@ def widget_for_field(qualified_action, field, errors={}):
     
     # Build a list with candidate names
     
-    q = QualAction.from_string(qualified_action)
+    q = qualified_action
+    if isinstance(q, basestring):
+        q = QualAction.from_string(q)
     candidates = list(reversed(q.parents() + [q]))
 
     # Build adaptee vector

@@ -13,27 +13,35 @@ from ckanext.publicamundi.lib.metadata.types import *
 # Fixtures 
 
 # Schema validation errors, name, email not list
-#rp1 = ResponsibleParty(organization = "Non unicode name", email = "non unicode email",role = "Author")
+rp1 = ResponsibleParty(
+    organization = "Non unicode name", 
+    email = "non unicode email",
+    role = "Author")
 
 # Schema validation errors, empty fields
-rp2 = ResponsibleParty(organization = u"org",email = [u""])
+rp2 = ResponsibleParty(organization = u"org")
 
 # Schema validation errors, email not correct
-rp3 = ResponsibleParty(organization = u"unicode name",email = "unicodenon@email",role = u"author")
+rp3 = ResponsibleParty(
+    organization = u"unicode name",
+    email = "unicodenon@email",
+    role = u"author")
 
 # No schema errors
-#rp_correct = ResponsibleParty(organization = u"org",email = [u"correct@email.com",u"asd@asda.asd"],role = "author")
-rp_correct = ResponsibleParty(organization = u"org",email = u"correct@email.com", role = "author")
+rp_correct = ResponsibleParty(
+    organization = u"org", 
+    email = u"correct@email.com",
+    role = "author")
 
 # Tests 
 
-#def test_rp1():
-#    ''' Responsible Party validation errors, name, email not list'''
-#    assert_faulty_keys(rp1, expected_keys=set(['organization', 'email', 'role']))
+def test_rp1():
+    ''' Responsible Party validation errors, name, email not list'''
+    assert_faulty_keys(rp1, expected_keys=set(['organization', 'email', 'role']))
 
 def test_rp2():
     ''' Responsible Party validation errors, empty fields'''
-    assert_faulty_keys(rp2, expected_keys=set(['email', 'role']))
+    assert_faulty_keys(rp2, expected_keys=set(['email']))
 
 def test_rp3():
     ''' Responsible Party validation errors, email not correct'''
@@ -50,10 +58,18 @@ def test_rp4():
 # Fixtures
 
 # Find schema validation errors date, creation, degree
-cnf1 = Conformity(title = u"lala", date = 2015,date_type = "creationn", degree = "confofrmant")
+cnf1 = Conformity(
+    title = u"lala",
+    date = 2015,
+    date_type = "creationn",
+    degree = "confofrmant")
 
 # Validate correct schema
-cnf_correct = Conformity(title = u"lala",date = datetime.date.today(),date_type = "creation", degree = "conformant")
+cnf_correct = Conformity(
+    title = u"lala",
+    date = datetime.date.today(),
+    date_type = "creation",
+    degree = "conformant")
 
 # Tests
 
@@ -73,15 +89,22 @@ def test_cnf2():
 
 # Find schema validation errors: originating_vocabulary,date_type
 fkw1 = FreeKeyword(
-    value = u"val", reference_date = datetime.date(1000,1,1), date_type = "creationn")
+    value = u"val",
+    reference_date = datetime.date(1000,1,1),
+    date_type = "creationn")
 
 # Find schema validation invariant error - not all fields set
 fkw2 = FreeKeyword(
-    value = u"val", reference_date = datetime.date.today(), date_time = 'creation')
+    value = u"val",
+    reference_date = datetime.date.today(),
+    date_time = 'creation')
 
 # Validate correct schema
 fkw_correct = FreeKeyword(
-    value = u"val", originating_vocabulary = u"original", reference_date = datetime.date.today(), date_type = 'creation')
+    value = u"val",
+    originating_vocabulary = u"original",
+    reference_date = datetime.date.today(),
+    date_type = 'creation')
 
 # Tests
 
@@ -107,13 +130,20 @@ def test_fkw3():
 # Fixtures
 
 # Find schema validation errors: all not float
-gbb1 = GeographicBoundingBox(nblat = 50, sblat = 50, wblng = 40, eblng= 30)
+gbb1 = GeographicBoundingBox(
+    nblat = 50, sblat = 50, wblng = 40, eblng= 30)
 
 # Find schema validation errors - nblat, wblng greater than max allowed
-gbb2 = GeographicBoundingBox(nblat = -1235.0, sblat = 0.0 , eblng = 123.123 , wblng = 1235.0)
+gbb2 = GeographicBoundingBox(
+    nblat = -1235.0, sblat = 0.0 , eblng = 123.123 , wblng = 1235.0)
+
+# Find invariant errors (bad intervals)
+gbb3 = GeographicBoundingBox(
+    nblat = 30.0, sblat = 30.0 , eblng = -10.8 , wblng = 0.0)
 
 # Validate correct schema
-gbb_correct = GeographicBoundingBox(nblat = -50.0, sblat = -20.12, wblng = 15.0, eblng = 1.0)
+gbb4 = GeographicBoundingBox(
+    nblat = 5.0, sblat = -10.12, wblng = 15.0, eblng = 19.0)
 
 # Tests
 
@@ -126,8 +156,12 @@ def test_gbb2():
     assert_faulty_keys(gbb2, expected_keys=set(['nblat', 'wblng']))
 
 def test_gbb3():
+    '''GBBox invariant errors - bad intervals'''
+    assert_faulty_keys(gbb3, expected_keys=set(['__after']))
+
+def test_gbb4():
     '''GBBox correct schema'''
-    assert_faulty_keys(gbb_correct)
+    assert_faulty_keys(gbb4)
 
 #
 # Temporal Extent
@@ -139,13 +173,16 @@ def test_gbb3():
 te1 = TemporalExtent(end = datetime.date.today())
 
 # Find schema validation errors: start not date
-te2 = TemporalExtent(start = 2015, end = datetime.date.today())
+te2 = TemporalExtent(
+    start = 2015, end = datetime.date.today())
 
 # Find schema invariant error - start date greater than end date
-te3 = TemporalExtent(start = datetime.date(2015,01,01),end = datetime.date.today())
+te3 = TemporalExtent(
+    start = datetime.date(2015,01,01),end = datetime.date.today())
 
 # Validate correct schema
-te_correct = TemporalExtent(start = datetime.date.today(), end = datetime.date(2015,01,01))
+te_correct = TemporalExtent(
+    start = datetime.date.today(), end = datetime.date(2015,01,01))
 
 # Tests
 
@@ -176,17 +213,18 @@ def test_te4():
 # Find schema validation error - distance not int
 sr1 = SpatialResolution(distance = 5.0, uom = u"lala")
 
-# Find schema validation value 0
+# Find schema validation error for non-positive distance
 sr2 = SpatialResolution(distance = 0, uom=u"meters")
 
-# Find schema invariant error - not all values set
+# Find invariant error - distance cannot be unitless
 sr3 = SpatialResolution(distance = 5)
 
 # Empty
 sr4 = SpatialResolution()
 
 # Validate correct schema
-sr_correct = SpatialResolution(distance = 5, uom = u"lala")
+sr5 = SpatialResolution(distance = 5, uom = u"lala")
+sr6 = SpatialResolution(denominator = 4000)
 
 # Tests
 
@@ -197,21 +235,23 @@ def test_sr1():
 
 def test_sr2():
     '''Spatial Resolution validation value 0'''
-    assert_faulty_keys(sr2)
+    assert_faulty_keys(sr2, expected_keys=['distance'])
 
 def test_sr3():
     '''Spatial Resolution invariant error - not all values set'''
     assert_faulty_keys(sr3, 
-        expected_keys=set(['uom']))
+        expected_keys=set(['__after']))
 
 def test_sr4():
-    '''Spatial Resolution correct schema - no values set'''
+    '''Spatial Resolution invariant error - empty'''
     assert_faulty_keys(sr4, 
-        expected_keys=set(['distance', 'uom']))
+        expected_keys=set(['__after']))
 
 def test_sr5():
-    '''Spatial Resolution correct schema'''
-    assert_faulty_keys(sr_correct)
+    assert_faulty_keys(sr5)
+
+def test_sr6():
+    assert_faulty_keys(sr6)
 
 #
 # Main 

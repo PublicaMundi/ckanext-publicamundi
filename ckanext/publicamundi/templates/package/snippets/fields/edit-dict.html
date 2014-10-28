@@ -1,10 +1,10 @@
 
-<div class="{{ classes | join(' ') }}">
+<div class="{{ classes|join(' ') }}">
     {% if title %}<h3 class="title">{{ title }}</h3>{% endif -%}
-    {%- if description %}<div class="description">{{ description }}</div>{% endif -%}
-        
+    {%- if description %}<p class="description">{{ description }}</p>{% endif -%}
+
     <script type="x-template-mustache" id="{{ qname }}-item-template">
-        {{ item_template.markup|safe -}}
+        {{ item_template.markup|safe }}
     </script>
 
     <ul id="{{ qname }}-items">

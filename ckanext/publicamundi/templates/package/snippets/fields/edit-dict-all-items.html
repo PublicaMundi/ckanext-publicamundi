@@ -1,0 +1,24 @@
+{% if messages is not defined %}{% set messages = {} -%}{% endif -%}
+{% if list_classes is not defined %}{% set list_classes = ['unstyled'] -%}{% endif -%}
+
+<div class="{{ classes|join(' ') }}"
+    data-module="edit-all-dict-items" 
+    data-module-qname="{{ qname }}" 
+    data-module-terms="{{ h.dump_json(terms) }}"
+    data-module-messages="{{ h.dump_json(messages) }}"
+   >
+    {% if title %}<h3 class="title">{{ title }}</h3>{% endif -%}
+    {%- if description %}<p class="description">{{ description }}</p>{% endif -%}
+
+    <script type="x-template-mustache" id="{{ qname }}-item-template">
+        {{ item_template.markup|safe }}
+    </script>
+
+    <ul id="{{ qname }}-items" class="{{ list_classes|join(' ') }}" >
+        {% for k, y in items.items() -%}
+        <li data-key="{{ k }}">{{ y.markup }}</li>
+        {%- endfor %}
+    </ul>
+</div>
+
+{% resource 'ckanext-publicamundi/item-editor' %}

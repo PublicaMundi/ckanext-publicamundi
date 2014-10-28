@@ -1,0 +1,10 @@
+{%- if control_attrs is not defined %}{% set control_attrs = {} %}{% endif -%}
+{%- do
+    control_attrs.update({
+        'data-module-select': 'select2',
+        'placeholder': _('Enter a keyword...'),
+        'width': width or 'resolve',
+    })
+-%}
+
+{%- extends 'package/snippets/objects/edit-thesaurus_terms.html' %}

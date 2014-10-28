@@ -7,85 +7,69 @@ from owslib.iso import MD_Metadata
 
 from ckanext.publicamundi import reference_data
 from ckanext.publicamundi.lib.metadata.base import Object, object_null_adapter
-from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import (
-    IThesaurusTerms, IThesaurus, IInspireMetadata)
-from ckanext.publicamundi.lib.metadata.vocabularies import inspire_vocabularies
+from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import IInspireMetadata
+from ckanext.publicamundi.lib.metadata import vocabularies
 from ckanext.publicamundi.lib.metadata import xml_serializers
 from ckanext.publicamundi.lib.metadata.xml_serializers import object_xml_serialize_adapter
 
+from ckanext.publicamundi.lib.metadata.types import BaseMetadata
+from ckanext.publicamundi.lib.metadata.types.thesaurus import Thesaurus, ThesaurusTerms
 from ckanext.publicamundi.lib.metadata.types._common import *
 
-class Thesaurus(Object):
-
-    zope.interface.implements(IThesaurus)
-
-    # Interface IThesaurus
-
-    title = None
-    reference_date = None
-    date_type = None
-    name = None
-    version = None
-
-    @property
-    def vocabulary(self):
-        spec = inspire_vocabularies.get_by_name(self.name)
-        return spec.get('vocabulary') if spec else None
-
-    # Factory for Thesaurus
-
-    @classmethod
-    def make(cls, name):
-        '''Create a new Thesaurus instance from it's machine-name name.
-        '''
-        spec = inspire_vocabularies.get_by_name(name)
-        if spec:
-            kwargs = {
-               'title': spec.get('title'),
-               'name': spec.get('name'),
-               'reference_date': spec.get('reference_date'),
-               'version' : spec.get('version'),
-               'date_type': spec.get('date_type'),
-            }
-            return cls(**kwargs)
-        else:
-            raise ValueError(
-                'Cannot find an INSPIRE thesaurus named "%s"' %(name))
-
-@object_null_adapter()
-class ThesaurusTerms(Object):
+class KeywordsFactory(object):
     
-    zope.interface.implements(IThesaurusTerms)
+    __slots__ = ('_name',)
 
-    thesaurus = Thesaurus
-    terms = list
+    def __init__(self, thesaurus_name='keywords-gemet-inspire-themes'):
+        self._name = thesaurus_name
+    
+    def __call__(self):
+        keywords = {}
+        keywords[self._name] = ThesaurusTerms(
+            terms=[], thesaurus=Thesaurus.make(self._name))
+        return keywords
+
+class TemporalExtentFactory(object):
+    
+    def __call__(self):
+        return [TemporalExtent()]
 
 @object_null_adapter()
-class InspireMetadata(Object):
+class InspireMetadata(BaseMetadata):
     
     zope.interface.implements(IInspireMetadata)
 
     contact = list
     datestamp = None
     languagecode = None
+    
     title = None
-    identifier = list
+    identifier = None
     abstract = None
     locator = list
     resource_language = list
+    
     topic_category = list
-    keywords = list
+
+    keywords = KeywordsFactory()
+
     bounding_box = list
-    temporal_extent = list
+
+    temporal_extent = TemporalExtentFactory()
+
     creation_date = None
     publication_date = None
     revision_date = None
     lineage = None
+    
     denominator = list
     spatial_resolution = list
+    
     conformity = list
+    
     access_constraints = list
     limitations = list
+    
     responsible_party = list
 
 # XML serialization
@@ -154,9 +138,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         md = MD_Metadata(e)
 
         datestamp = to_date(md.datestamp)
-        id_list = []
-        for it in md.identification.uricode:
-            id_list.append(unicode(it))
+        id_list = md.identification.uricode
 
         url_list = []
         for it in md.distribution.online:
@@ -171,15 +153,13 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
                 # to enforce a specific thesaurus version.
                 thes_title = thes_split[0]
                 try:
-                    thes = Thesaurus.make(inspire_vocabularies.munge('Keywords-' + thes_title))
+                    thes = Thesaurus.make(vocabularies.munge('Keywords-' + thes_title))
                     if thes:
-                        #thes = Thesaurus.make(thes_dict)
-                        #thes = Thesaurus.make(inspire_vocabularies.munge('Keywords-' + thes_title))
                         kw = ThesaurusTerms(thesaurus=thes, terms=it['keywords'])
                         keywords_list.append(kw)
                 except:
                     pass
-                
+
         if md.identification.temporalextent_start or md.identification.temporalextent_end:
             temporal_extent = [TemporalExtent(
                 start = to_date(md.identification.temporalextent_start),
@@ -261,7 +241,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         obj.languagecode = md.languagecode
         obj.title = unicode(md.identification.title)
         obj.abstract = unicode(md.identification.abstract)
-        obj.identifier = id_list
+        obj.identifier = id_list[0]
         obj.locator = url_list
         obj.resource_language = md.identification.resourcelanguage
         obj.topic_category = md.identification.topiccategory

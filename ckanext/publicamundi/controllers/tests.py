@@ -13,6 +13,7 @@ import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
 
+from ckanext.publicamundi.lib.dictization import unflatten
 from ckanext.publicamundi.lib.util import Breakpoint
 from ckanext.publicamundi.lib.util import to_json
 from ckanext.publicamundi.lib.metadata import schemata
@@ -31,7 +32,7 @@ import shutil
 
 PERMANENT_STORE = '/var/local/ckan/default/ofs/storage'
 class TestsController(BaseController):
-
+ 
     def brk(self):
         raise Breakpoint()
 
@@ -82,13 +83,53 @@ class TestsController(BaseController):
         c.form_class = 'form-horizontal' # 'form-horizontal'
         return render('tests/accordion-form.html')
 
-    def get_field_markup_with_helper(self):
-        x = fixtures.foo1
-        k = 'title'
-        return render('tests/field.html', extra_vars = {
-            'field': x.get_field(k),
-            'title': u'Title',
-        })
+    def get_field_markup_with_helper(self, id):
+        x = getattr(fixtures, id)
+       
+        if request.method == 'POST':
+            response.headers['Content-Type'] = 'application/json' 
+            out = { tuple(k.split('.')): v for k, v in request.params.items() } 
+            out = unflatten(out)
+            return to_json(out)
+        else:
+            params = dict(request.params)
+            
+            k = params.pop('field', 'title')
+            field = x.get_field(k)
+            
+            action = params.pop('action', 'edit')
+            prefix = params.pop('prefix', id)
+            
+            extra_vars = copy.deepcopy(params) 
+            extra_vars.update({
+                'helper': True,
+                'field': field,
+                'action': str(action),
+                'name_prefix': str(prefix),
+            })
+            
+            return render('tests/field.html', extra_vars=extra_vars)
+    
+    def get_field_markup(self, id):
+        x = getattr(fixtures, id)
+       
+        if request.method == 'POST':
+            response.headers['Content-Type'] = 'application/json' 
+            out = { tuple(k.split('.')): v for k, v in request.params.items() } 
+            out = unflatten(out)
+            return to_json(out)
+        else:
+            params = dict(request.params)
+            k = params.pop('field', 'title')
+            action = params.pop('action', 'edit')
+            prefix = params.pop('prefix', id)
+            
+            field = x.get_field(k)
+            field_markup = markup_for_field(str(action),
+                field, name_prefix=str(prefix), errors=None, data=params)
+            
+            return render('tests/field.html', extra_vars={ 
+                'field_markup': field_markup })
 
     def get_objects_markup(self):
         markup = ''

@@ -19,6 +19,7 @@ import ckanext.publicamundi.lib.metadata as publicamundi_metadata
 import ckanext.publicamundi.lib.actions as publicamundi_actions
 
 from ckanext.publicamundi.lib.util import to_json, random_name
+from ckanext.publicamundi.lib.util import Breakpoint
 from ckanext.publicamundi.lib.metadata import (
     dataset_types, Object, ErrorDict,
     serializer_for_object, serializer_for_key_tuple)
@@ -121,15 +122,29 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     def before_map(self, mapper):
         ''' Called before routes map is setup. '''
 
-        mapper.connect ('/api/util/resource/mimetype_autocomplete',
-            controller='ckanext.publicamundi.controllers.api:Controller', action='mimetype_autocomplete')
-
+        api_controller = 'ckanext.publicamundi.controllers.api:Controller'
+        
+        mapper.connect(
+            '/api/util/resource/mimetype_autocomplete',
+            controller=api_controller, action='mimetype_autocomplete')
+         
+        mapper.connect('publicamundi-list-vocabularies',
+            '/api/publicamundi/vocabularies',
+            controller=api_controller, action='vocabularies_list')
+         
+        mapper.connect('publicamundi-get-vocabulary',
+            '/api/publicamundi/vocabularies/{name}',
+            controller=api_controller, action='vocabulary_get')
+      
         #mapper.connect('tags', '/tags',
         #    controller='ckanext.publicamundi.controllers.tags:Controller', action='index')
 
-        mapper.connect('publicamundi-tests', '/testing/publicamundi/{action}/{id}',
+        mapper.connect('publicamundi-tests', 
+            '/testing/publicamundi/{action}/{id}',
             controller='ckanext.publicamundi.controllers.tests:TestsController',)
-        mapper.connect('publicamundi-tests', '/testing/publicamundi/{action}',
+        
+        mapper.connect('publicamundi-tests', 
+            '/testing/publicamundi/{action}',
             controller='ckanext.publicamundi.controllers.tests:TestsController',)
 
         return mapper
@@ -202,7 +217,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         if not schema.has_key('__after'):
             schema['__after'] = []
         schema['__after'].append(postprocess_dataset_for_edit)
-        
+
         return schema
 
     def create_package_schema(self):

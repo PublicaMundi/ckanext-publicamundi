@@ -1,11 +1,11 @@
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
-<div class="{{ "error" if errors }}{{ " " ~ classes | join(' ') }}">
+<div class="{{ "error" if errors }}{{ " " ~ classes|join(' ') }}">
     <label class="checkbox">
         <input type="checkbox" name="{{ qname }}" id="input-{{ qname }}" value="{{ qname }}"
-            class="{{ input_classes | list | join(" ") }}"
+            class="{{ input_classes|join(" ") }}"
             {% if value %}checked="checked"{% endif -%}
-            {{ attrs | xmlattr }} />
+            {{ attrs|xmlattr }} />
          <span>{{ description }}</span>
      </label>
 </div>

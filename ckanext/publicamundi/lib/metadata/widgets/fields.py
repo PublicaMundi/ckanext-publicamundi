@@ -146,6 +146,45 @@ class TagsEditWidget(base_widgets.EditFieldWidget):
     def get_template(self):
         return 'package/snippets/fields/edit-list-tags.html'
 
+@field_widget_multiadapter([ITupleField, IChoiceField], 
+    qualifiers=['select'], is_fallback=True)
+@field_widget_multiadapter([IListField, IChoiceField], 
+    qualifiers=['select'], is_fallback=True)
+class ChoicesEditWidget(base_widgets.EditFieldWidget):
+
+    def __init__(self, field, *args):
+        assert isinstance(field, zope.schema.List)
+        base_widgets.EditFieldWidget.__init__(self, field)
+
+    def get_template(self):
+        return 'package/snippets/fields/edit-list-choices-select.html'
+
+@field_widget_multiadapter([ITupleField, IChoiceField], 
+    qualifiers=['select2'], is_fallback=False)
+@field_widget_multiadapter([IListField, IChoiceField], 
+    qualifiers=['select2'], is_fallback=False)
+class ChoicesEditWidget(base_widgets.EditFieldWidget):
+
+    def __init__(self, field, *args):
+        assert isinstance(field, zope.schema.List)
+        base_widgets.EditFieldWidget.__init__(self, field)
+
+    def get_template(self):
+        return 'package/snippets/fields/edit-list-choices-select2.html'
+
+@field_widget_multiadapter([ITupleField, IChoiceField], 
+    qualifiers=['checkbox'], is_fallback=False)
+@field_widget_multiadapter([IListField, IChoiceField], 
+    qualifiers=['checkbox'], is_fallback=False)
+class ChoicesEditWidget(base_widgets.EditFieldWidget):
+
+    def __init__(self, field, *args):
+        assert isinstance(field, zope.schema.List)
+        base_widgets.EditFieldWidget.__init__(self, field)
+
+    def get_template(self):
+        return 'package/snippets/fields/edit-list-choices-checkbox.html'
+
 @field_widget_adapter(IDictField)
 class DictEditWidget(base_widgets.EditFieldWidget, base_widgets.DictFieldWidgetTraits):
 

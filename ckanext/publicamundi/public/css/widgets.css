@@ -1,14 +1,85 @@
 
 .widget h3 { 
     font-size: 1.05em;
+    color: #555;
 }
 
 .widget li > .widget h3 { 
-    font-size: 1em; 
+    color: inherit;
 }
 
 .widget .accordion-heading a {
     font-weight: bold;
+    font-size: 1.05em;
+}
+
+li .widget.object-edit-widget {
+    padding: 0px 0px 4px 0px;
+    margin: 8px 0px;
+}
+
+.field-edit-widget > ul > li header > .btn.btn-small {
+}
+
+.field-edit-widget > ul > li header .btn.disable,
+.field-edit-widget > ol > li header .btn.disable,
+.field-edit-widget > ul > li header .btn.delete,
+.field-edit-widget > ol > li header .btn.delete,
+.field-edit-widget > ul > li header .btn-group.remove-opts > button,
+.field-edit-widget > ol > li header .btn-group.remove-opts > button {
+    color: brown;
+}
+.field-edit-widget > ol > li header .btn-group.remove-opts .dropdown-menu a,
+.field-edit-widget > ul > li header .btn-group.remove-opts .dropdown-menu a {
+    color: brown;
+}
+.field-edit-widget > ol > li header .btn-group.remove-opts .dropdown-menu a:hover,
+.field-edit-widget > ul > li header .btn-group.remove-opts .dropdown-menu a:hover {
+    background-image: none;
+    background-color: #f5f3f3;
+}
+.field-edit-widget.remove-hover {
+    background-color: #f7f7f5;
+}
+
+.field-edit-widget > .add-item {
+    margin: 5px 0px;
+}
+.field-edit-widget > .add-item select.select-key {
+    margin-right: 5px;
+    vertical-align: top;
+} 
+.field-edit-widget > .add-item .select2-container.select-key {
+    margin-right: 5px;
+    vertical-align: top;
+}
+
+.field-edit-widget > .add-item .description {
+    display: block;
+    font-size: 0.9em;
+    color: #777;
+    padding: 6px 0px 0px 0px;
+    vertical-align: bottom;
+}
+
+.field-edit-widget > .add-item .btn.add-item {
+    /*margin-right: 4px;*/
+}
+.field-edit-widget > .add-item .btn.clear-items {
+    color: brown;
 }
 
 .widget.object-read-widget .table.metadata-table {}
+
+/* 
+ * Custom styles for specific fields/objects.
+ * Fixme: Move to a separate stylesheet.
+ */
+
+.widget.field-widget.field-edit-widget.field-qname-booo\.keywords\.keywords-gemet-themes {
+    /*border: solid 1px wheat;*/
+}
+
+.widget.field-widget.field-edit-widget.ababoua-1  {
+    border: solid 1px wheat;
+}

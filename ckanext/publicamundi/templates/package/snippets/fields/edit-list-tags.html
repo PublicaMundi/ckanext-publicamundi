@@ -1,7 +1,6 @@
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
-{%- set placeholder = placeholder or field.default -%}
-{%- if input_classes is not defined %}{% set input_classes = [ 'input-xlarge' ] %}{% endif -%}
+{%- if input_classes is not defined %}{% set input_classes = ['input-xlarge'] %}{% endif -%}
 
 <div class="control-group{{ " error" if errors }}{{ " " ~ classes|join(' ') }}">
     <label class="control-label" for="{{ 'input-' ~ qname }}">
@@ -18,7 +17,7 @@
             {{- attrs|xmlattr -}}
         />
         {% if errors -%}
-        <span class="help-inline">{{ errors | join(', ') }}</span>
+        <span class="help-inline">{{ errors|join(', ') }}</span>
         {%- endif %}
     </div>
 </div>

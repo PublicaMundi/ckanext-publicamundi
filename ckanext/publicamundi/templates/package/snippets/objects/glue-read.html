@@ -1,6 +1,6 @@
 <div class="{{ " " ~ classes | join(' ') }}">
-    {%- if title %}<h3>{{ title }}</h3>{% endif -%}
+    <header>{% if title %}<h3 class="inline">{{ title }}</h3>{% endif -%}</header>
     {% for k, f in fields.items() -%}
     {{ f.markup }}
-    {% endfor -%}
+    {%- endfor %}
 </div>

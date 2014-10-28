@@ -4,4 +4,6 @@ from ckanext.publicamundi.lib.metadata.widgets import *
 
 from ckanext.publicamundi.lib.metadata.widgets.objects import _common
 from ckanext.publicamundi.lib.metadata.widgets.objects import foo
+from ckanext.publicamundi.lib.metadata.widgets.objects import baz
+from ckanext.publicamundi.lib.metadata.widgets.objects import inspire_metadata
 

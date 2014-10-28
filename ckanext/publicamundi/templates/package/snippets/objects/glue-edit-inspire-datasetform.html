@@ -1,0 +1,209 @@
+{% import 'macros/accordion.html' as accordion -%}
+{% import 'macros/markup_helpers.html' as markup_helpers -%}
+
+{# Start workaround for issue #13 
+   
+   The following fields should be initialized as read-only parts of information
+   that exists elsewhere (e.g. in core metadata or in resource metadata).
+#}
+
+{%- do 
+    fields.update({ 
+        'locator': { 
+            'markup': h.markup_for_field('edit:locator.inspire', 
+                obj.get_field('locator'),
+                name_prefix=name_prefix, 
+                data={ 
+                    'pkg_dict': pkg_dict, 
+                    'title': _('Locator'),
+                    'input_classes': ['span5'] }),
+        },
+        'resource_language': {
+            'markup': h.markup_for_field('edit:resource_language.inspire',
+                obj.get_field('resource_language'),
+                name_prefix=name_prefix,
+                data={ 
+                    'pkg_dict': pkg_dict, 
+                    'title': _('Language') })
+        },
+        'title': {
+            'markup': h.markup_for_field('edit',
+                obj.get_field('title'),
+                name_prefix=name_prefix,
+                data={ 
+                    'title': _('Title'),
+                    'input_classes': ['span4'],
+                    'attrs': { 
+                        'data-module': 'package-form-linked-fields',
+                        'data-module-target': h.dump_json({ 
+                            'name': 'title', 
+                            'value': pkg_dict.title, 
+                            'title': 'title', })}})
+        },
+        'identifier': {
+            'markup': h.markup_for_field('edit',
+                obj.get_field('identifier'),
+                name_prefix=name_prefix,
+                data={ 
+                    'title': _('Identifier'),
+                    'input_classes': ['span5'],
+                    'attrs': {
+                        'data-module': 'package-form-linked-fields',
+                        'data-module-target': h.dump_json({ 
+                            'name': 'name', 
+                            'value': pkg_dict.name, 
+                            'title': 'name', })}}),
+        },
+        'abstract': {
+            'markup': h.markup_for_field('edit',
+                obj.get_field('abstract'),
+                name_prefix=name_prefix,
+                data={ 
+                    'title': _('Abstract'),
+                    'description': none,
+                    'attrs': {
+                        'rows': 4,
+                        'data-module': 'package-form-linked-fields',
+                        'data-module-target': h.dump_json({
+                            'name': 'notes',
+                            'value': pkg_dict.notes,
+                            'title': 'description', })}}),
+        },
+    }) 
+-%}
+
+{# End workaround #}
+
+{%- set 
+    ungrouped_fields = []
+-%}
+
+{%- set 
+    grouped_fields = [
+        { 
+            'name': 'identification',
+            'heading': _('Identification'),
+            'subgroups': [
+                {
+                    'fields': [
+                        'identifier', 'title', 'abstract', 'locator', 'resource_language'],
+                },
+            ]
+        },
+        { 
+            'name': 'classification',
+            'heading': _('Classification'),
+            'subgroups': [
+                {
+                    'fields': ['topic_category'],
+                },
+             ],
+        },
+        { 
+            'name': 'keywords',
+            'heading': _('Keywords'),           
+            'subgroups': [
+                {
+                    'fields': ['keywords'],
+                },
+             ],
+        },
+        { 
+            'name': 'geographic',
+            'heading': _('Geographic'),
+            'subgroups': [
+                {
+                    'fields': ['bounding_box'],
+                },
+             ],
+        },
+        { 
+            'name': 'temporal',
+            'heading': _('Temporal'),
+            'subgroups': [
+                {
+                    'heading': none,
+                    'fields': ['temporal_extent'],
+                },
+                {
+                    'heading': _('Significant Dates'),
+                    'description': _(
+                        'Provide the significant dates in this dataset\'s lifecycle.'),
+                    'fields': [
+                        'creation_date', 'publication_date', 'revision_date'],
+                },
+            ]
+        },
+        { 
+            'name': 'quality',
+            'heading': _('Quality and Validity'),
+            'subgroups': [
+                {
+                    'fields': ['lineage'],
+                }
+            ]
+        },
+        { 
+            'name': 'conformity',
+            'heading': _('Conformity'),
+            'subgroups': []
+        },
+        { 
+            'name': 'constraints',
+            'heading': _('Constraints'),
+            'subgroups': []
+        },
+        { 
+            'name': 'responsible-party',
+            'heading': _('Responsible Party'),
+            'subgroups': [
+                {
+                    'fields': ['responsible_party'],
+                },
+            ],
+        },
+        {
+            'name': 'contact',
+            'heading': _('Contact Points'),
+            'subgroups': [
+                {
+                    'fields': ['contact'],
+                },
+            ],
+        },
+        { 
+            'name': 'metadata',
+            'heading': _('Metadata on Metadata'),
+            'subgroups': [
+                {
+                    'fields': ['languagecode', 'datestamp'],
+                },
+            ],
+        },
+   ]
+-%}
+
+<div class="{{ " " ~ classes|join(' ') }}">
+    {% if title %}<h3>{{ title }}</h3>{% endif %}
+    
+    {# ungrouped #}
+    {%- for fname in ungrouped_fields -%}
+    {{ fields[fname].markup }}
+    {% endfor -%}
+    
+    {# grouped in accordion sections #}
+    {%- call(group_desc) accordion.accordion('inspire-fields', grouped_fields) %}
+        {%- for subg in group_desc.subgroups %}
+            {% if not loop.first %}<hr/>{% endif -%}
+            {% if subg.heading %}<h3>{{ subg.heading }}</h3>{% endif %}
+            {% if subg.description -%}
+            <p class="description">{{ subg.description }}</p>
+            {% endif -%}
+            {%- for fname in subg.fields %}
+                {{ fields[fname].markup }}
+            {% endfor -%}
+        {% endfor -%}
+    {% endcall -%}
+</div>
+
+{% resource 'ckanext-publicamundi/package-form-linked-fields' %}

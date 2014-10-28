@@ -1,21 +1,8 @@
-
-<div class="{{ classes | join(' ') }}"
-    data-module="input-contacts-foo" 
-    data-module-qname="{{ qname }}" 
-    data-module-terms="{{ h.dump_json(terms) }}"
-  >
-    {% if title %}<h3 class="title">{{ title }}</h3>{% endif -%}
-    {%- if description %}<div class="description">{{ description }}</div>{% endif %}
-
-    <script type="x-template-mustache" id="{{ qname }}-item-template">
-        {{ item_template.markup| safe }}
-    </script>    
-    
-    <ul id="{{ qname }}-items">
-        {% for k, y in items.items() -%}
-        <li data-key="{{ k }}">{{ y.markup }}</li>
-        {%- endfor %}
-    </ul>
-</div>
-
-{% resource 'ckanext-publicamundi/foo' %}
+{% set 
+    messages = 
+    {
+        'select-label': 'Specify the type of contact ...',
+        'add-label': 'Add',
+    } 
+-%}
+{% extends 'package/snippets/fields/edit-dict-all-items.html' %}

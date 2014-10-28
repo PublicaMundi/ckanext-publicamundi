@@ -1,5 +1,5 @@
 
-this.ckan.module('form-autofiller', function ($, _) {
+this.ckan.module('package-form-autofiller', function ($, _) {
     
   return {
     
@@ -40,11 +40,22 @@ this.ckan.module('form-autofiller', function ($, _) {
                 'tags': ['hello-world', 'foo', 'test'],
                 'license': 'cc-by',
                 'version': '1.0.2',
-                'url': 'http://example.com/datasets/foo/1',
+                'url': 'http://example.com/datasets/foo/2',
                 'author': 'Φουφουτος',
                 'author_email': 'foofootos@example.com',
             },    
-
+            {
+                'title': 'Hello Inspire 1',
+                'name': 'hello-inspire-1',
+                'dataset_type': 'inspire',
+                'notes': 'I am another _INSPIRE_ package!',
+                'tags': ['hello-world', 'inspire', 'test'],
+                'license': 'cc-by',
+                'version': '1.0.1',
+                'url': 'http://example.com/datasets/inspire/1',
+                'author': 'Φουφουτος',
+                'author_email': 'inspired@example.com',
+            }, 
         ],
     },
     
@@ -82,6 +93,7 @@ this.ckan.module('form-autofiller', function ($, _) {
                         $form.find('#field-url').val(data['url'])
                         $form.find('#field-author').val(data['author'])
                         $form.find('#field-author-email').val(data['author_email'])
+                        return false
                     })
                     this.el.css('margin', '0px 5px')
                     this.el.insertBefore($form.find('button.btn-primary[name="save"]').first())
@@ -97,6 +109,7 @@ this.ckan.module('form-autofiller', function ($, _) {
                         $form.find('#field-name').val(data['name'])
                         $form.find('#field-description').val(data['description'])
                         $form.find('#field-format').select2('val', data['format'])
+                        return false
                     })
                     this.el.css('margin', '0px 5px')
                     this.el.insertBefore($form.find('button.btn-primary[name="save"]').first())
@@ -105,10 +118,10 @@ this.ckan.module('form-autofiller', function ($, _) {
                 break;
         }
 
-        window.console.log('Initialized module: form-autofiller')
+        window.console.debug('Initialized module: package-form-autofiller')
     },
     teardown: function() { 
-        window.console.log('Tearing down module: form-autofiller')
+        window.console.debug('Tearing down module: package-form-autofiller')
     },
   }
 })

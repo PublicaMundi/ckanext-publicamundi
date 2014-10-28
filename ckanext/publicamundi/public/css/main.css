@@ -1,18 +1,66 @@
+header > h1.inline,
+header > h2.inline,
+header > h3.inline,
+header > h4.inline,
+header > h5.inline,
+header > h6.inline { 
+    display: inline-block 
+} 
+
+.btn {
+    font-weight: normal;
+}
+
+.popover {
+    width: inherit;
+    max-width: 400px;
+    padding: 0px;
+    border-radius: 2px;
+}
+
+.popover .popover-title {
+    font-size: 1.05em;
+}
+
+.btn-small {
+    padding: 4px 9px 4px 9px;
+}
+
+.btn-mini {
+    padding: 3px 6px;
+}
+
 .datepicker {
     width: 250px
 }
 
 div.controls .help-block {
-    font-size: 0.85em;
+    font-size: 0.92em;
+    margin-top: 8px;
 }
 
 div.accordion-group {
     border-radius: 1px;
 }
 
+/* workaround for dropdown-menu buttons croped inside 
+ * accordion bodies */
+div.accordion-body .pull-right > .btn-group > ul.dropdown-menu {
+    left: -70%;
+}
+
+span.label.not-available {
+    padding: 3px 5px;
+    margin: 0px 7px;
+    font-size: 11px;
+    font-family: monospace;
+}
+
 select,
 textarea,
 input[type="text"],
+input[type="url"],
+input[type="email"],
 input[type="password"],
 input[type="number"],
 input[type="tel"] {
@@ -21,6 +69,19 @@ input[type="tel"] {
 
 .alert {
     border-radius: 1px;
+}
+
+label.checkbox {
+    font-weight: inherit;
+    margin-top: 4px;
+}
+
+.controls.checkboxes label.checkbox {
+    padding-left: 0px;
+}
+
+input[type='checkbox'], input[type='radio'] {
+    top: 5px;
 }
 
 .form-horizontal .control-label {
@@ -47,6 +108,10 @@ input[type="tel"] {
     font-size: 12px;
 }
 
+.select2-container {
+    margin-top: 0px;
+}
+
 .select2-container .select2-choice,
 .select2-container-multi .select2-choices {
     border-radius: 1px;
@@ -61,6 +126,11 @@ input[type="tel"] {
 
 .select2-container-multi .select2-choices .select2-search-choice {
     border-radius: 1px;
+}
+
+input:disabled,
+textarea:disabled {
+    cursor: text;
 }
 
 .input-append .add-on:last-child, 
@@ -80,12 +150,34 @@ input[type="tel"] {
     border-radius: 2px;
 }
 
+.form-horizontal .control-group {
+    margin-bottom: 14px;
+}
+
 .form-horizontal .info-inline {
     width: 235px;
 }
 
 .form-horizontal .control-group .controls > div.display {
     padding-top: 5px;
+}
+
+.form-horizontal .controls input + input {
+    display: block;
+    margin-top: 5px;
+}
+
+.form-horizontal .controls input + input.inline-control {
+    display: inline-block;
+    margin-top: inherit;
+}
+
+.space-x1 { padding: 0px 4px }
+.space-x2 { padding: 0px 8px }
+.space-x3 { padding: 0px 12px }
+
+.tag {
+    border-radius: 2px;
 }
 
 .table {
@@ -97,3 +189,16 @@ input[type="tel"] {
     font-size: 14px;
     font-family: menu;
 }
+
+.dropdown-menu {
+    border-radius: 4px;
+}
+
+/* Well, normally we would just use Bootstrap's .clearfix, but there are some 
+ * cases that we only want the :after part */
+.clear-after:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+

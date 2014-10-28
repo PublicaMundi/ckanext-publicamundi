@@ -1,21 +1,5 @@
-{% import 'macros/markup_helpers.html' as markup_helpers -%}
-
-{%- set placeholder = placeholder or field.default -%}
 {%- if input_classes is not defined %}{% set input_classes = ['input-medium'] %}{% endif -%}
-{%- do input_classes.extend(['url']) -%}
+{%- do input_classes.append('url') -%}
+{%- set input_type = 'url' -%}
 
-<div class="control-group{{ " error" if errors }}{{ " " ~ classes|join(' ') }}">
-    <label class="control-label" for="{{ 'input-' ~ qname }}">
-        {{- title }}{{ markup_helpers.mark_required(required) }}</label>
-    <div class="controls">
-        <input type="url" id="{{ 'input-' ~ qname }}"  name="{{ qname }}"
-            class="{{ input_classes|join(" ") }}"
-            value="{{ value|empty_and_escape }}" 
-            placeholder="{{ placeholder|empty_and_escape }}"
-            {{ attrs | xmlattr -}}
-        />
-        {% if errors -%}
-        <span class="help-inline">{{ errors | join(', ') }}</span>
-        {%- endif %}
-    </div>
-</div>
+{%- extends 'package/snippets/fields/edit-textline.html' %}

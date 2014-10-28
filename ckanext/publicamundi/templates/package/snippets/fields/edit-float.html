@@ -4,7 +4,7 @@
 {%- if input_classes is not defined %}{% set input_classes = ['input-small'] %}{% endif -%}
 {%- do input_classes.extend(['number', 'float']) -%}
 
-<div class="control-group{{ " error" if errors }}{{ " " ~ classes | join(' ') }}">
+<div class="control-group{{ " error" if errors }}{{ " " ~ classes|join(' ') }}">
     <label class="control-label" for="{{ 'input-' ~ qname }}">
         {{- title }}{{ markup_helpers.mark_required(required) }}</label>
     <div class="controls">
@@ -16,7 +16,7 @@
             {{ attrs|xmlattr -}}
         />
         {% if errors -%}
-        <span class="help-inline">{{ errors | join(', ') }}</span>
-        {%- endif %}
+        <span class="help-inline">{{ errors|join(', ') }}</span>
+        {%- endif -%}
     </div>
 </div>

@@ -8,10 +8,12 @@ this.ckan.module('datetimepicker', function ($, _) {
         pick12hourformat: false,
         format: 'yyyy-MM-dd hh:mm',
     },
-    initialize: function() {
+
+    initialize: function() 
+    {
         var module = this
+        var $el = $(this.el) 
         if ($.fn.datetimepicker) {
-            var $el = $(this.el) 
             var $input = $el.find('input')
             $input.data('format', module.options.format)
             $el.datetimepicker({
@@ -21,12 +23,14 @@ this.ckan.module('datetimepicker', function ($, _) {
                 pick12HourFormat: module.options.pick12hourformat,
             })
         } else {
-            window.console.error('The jQuery extension "bootstrap-datetimepicker" is not loaded')
+            window.console.warn('The jQuery extension "bootstrap-datetimepicker" is not loaded')
         }
-        window.console.log('Initialized module: datetimepicker')
+        window.console.debug('Initialized module: datetimepicker')
     },
-    teardown: function() { 
-        window.console.log('Tearing down module: datetimepicker')
+    
+    teardown: function() 
+    { 
+        window.console.debug('Tearing down module: datetimepicker')
     },
   }
 })
