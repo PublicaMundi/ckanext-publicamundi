@@ -102,6 +102,7 @@ class IInspireMetadata(IBaseMetadata):
         title = u'Keywords',
         description = u'The keyword value is a commonly used word, formalised word or phrase used to describe the subject. While the topic category is too coarse for detailed queries, keywords help narrowing a full text search and they allow for structured keyword search.',
         required = True,
+        min_length = 1,
         key_type = zope.schema.Choice(
             vocabulary = SimpleVocabulary(
                 tuple(SimpleTerm(k, k, vocabularies.get_by_name(k).get('title'))

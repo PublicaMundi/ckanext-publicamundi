@@ -2,39 +2,37 @@
 <!-- ISO 19115:2003 file created from OWSLib object model -->
 <gmd:MD_Metadata xsi:schemaLocation="http://www.isotc211.org/2005/gmd http://schemas.opengis.net/iso/19139/20060504/gmd/gmd.xsd" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gml="http://www.opengis.net/gml" xmlns:xlink="http://www.w3.org/1999/xlink">
   <gmd:fileIdentifier>
-    <gco:CharacterString>{{ data.identifier }}</gco:CharacterString>
+    <gco:CharacterString>12314213123</gco:CharacterString>
   </gmd:fileIdentifier>
   <gmd:language>
-    <gmd:LanguageCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#LanguageCode" codeListValue="eng">{{ data.languagecode }}</gmd:LanguageCode>
+    <gmd:LanguageCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#LanguageCode" codeListValue="eng">el</gmd:LanguageCode>
   </gmd:language>
   <gmd:hierarchyLevel>
-    <gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset" codeSpace="ISOTC211/19115">{{ 'dataset' }}</gmd:MD_ScopeCode>
+    <gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset" codeSpace="ISOTC211/19115">dataset</gmd:MD_ScopeCode>
   </gmd:hierarchyLevel>
-  {% for co in data.contact -%}
   <gmd:contact>
     <gmd:CI_ResponsibleParty>
       <gmd:organisationName>
-        <gco:CharacterString>{{ co.organization }}</gco:CharacterString>
+        <gco:CharacterString>Org</gco:CharacterString>
       </gmd:organisationName>
       <gmd:contactInfo>
         <gmd:CI_Contact>
           <gmd:address>
             <gmd:CI_Address>
               <gmd:electronicMailAddress>
-                <gco:CharacterString>{{ co.email }}</gco:CharacterString>
+                <gco:CharacterString>email@asd.gr</gco:CharacterString>
               </gmd:electronicMailAddress>
             </gmd:CI_Address>
           </gmd:address>
         </gmd:CI_Contact>
       </gmd:contactInfo>
       <gmd:role>
-        <gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue={{ "\"%s\""|safe % co.role }} codeSpace="ISOTC211/19115">{{ co.role }}</gmd:CI_RoleCode>
+        <gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="pointofcontact" codeSpace="ISOTC211/19115">pointofcontact</gmd:CI_RoleCode>
       </gmd:role>
     </gmd:CI_ResponsibleParty>
   </gmd:contact>
-  {% endfor -%}
   <gmd:dateStamp>
-    <gco:Date>{{ data.datestamp }}</gco:Date>
+    <gco:Date>2014-07-30</gco:Date>
   </gmd:dateStamp>
   <gmd:metadataStandardName>
     <gco:CharacterString>ISO 19115</gco:CharacterString>
@@ -47,99 +45,109 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>{{ data.title }}</gco:CharacterString>
+            <gco:CharacterString>Title</gco:CharacterString>
           </gmd:title>
-          {% if data.creation_date -%}
           <gmd:date>
             <gmd:CI_Date>
               <gmd:date>
-                <gco:DateTime>{{ data.creation_date }}</gco:DateTime>
+                <gco:DateTime>2013-01-01</gco:DateTime>
               </gmd:date>
               <gmd:dateType>
-                <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue={{ "\"%s\""|safe % 'creation' }} codeSpace="ISOTC211/19115">{{ 'creation' }}</gmd:CI_DateTypeCode>
+                <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication" codeSpace="ISOTC211/19115">publication</gmd:CI_DateTypeCode>
               </gmd:dateType>
             </gmd:CI_Date>
           </gmd:date>
-          {% endif -%}
-          {% if data.publication_date -%}
           <gmd:date>
             <gmd:CI_Date>
               <gmd:date>
-                <gco:DateTime>{{ data.publication_date }}</gco:DateTime>
+                <gco:DateTime>2012-01-01</gco:DateTime>
               </gmd:date>
               <gmd:dateType>
-                <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue={{ "\"%s\""|safe % 'publication' }} codeSpace="ISOTC211/19115">{{ 'publication' }}</gmd:CI_DateTypeCode>
+                <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation" codeSpace="ISOTC211/19115">creation</gmd:CI_DateTypeCode>
               </gmd:dateType>
             </gmd:CI_Date>
           </gmd:date>
-          {% endif -%}
-          {% if data.revision_date -%}
           <gmd:date>
             <gmd:CI_Date>
               <gmd:date>
-                <gco:DateTime>{{ data.revision_date }}</gco:DateTime>
+                <gco:DateTime>2014-01-01</gco:DateTime>
               </gmd:date>
               <gmd:dateType>
-                <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue={{ "\"%s\""|safe % 'revision' }} codeSpace="ISOTC211/19115">{{ data.revision_date }}</gmd:CI_DateTypeCode>
+                <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="revision" codeSpace="ISOTC211/19115">revision</gmd:CI_DateTypeCode>
               </gmd:dateType>
             </gmd:CI_Date>
           </gmd:date>
-          {% endif -%}
           <gmd:identifier>
             <gmd:RS_Identifier>
               <gmd:code>
-                <gco:CharacterString>{{ data.identifier }}</gco:CharacterString>
+                <gco:CharacterString>http://acme.example.com/datasets/12314213123</gco:CharacterString>
               </gmd:code>
             </gmd:RS_Identifier>
           </gmd:identifier>
         </gmd:CI_Citation>
       </gmd:citation>
       <gmd:abstract>
-        <gco:CharacterString>{{ data.abstract }}</gco:CharacterString>
+        <gco:CharacterString>abstracttttttt</gco:CharacterString>
       </gmd:abstract>
-      {% for co in data.responsible_party -%}
       <gmd:pointOfContact>
         <gmd:CI_ResponsibleParty>
           <gmd:organisationName>
-            <gco:CharacterString>{{ co.organization }}</gco:CharacterString>
+            <gco:CharacterString>Org</gco:CharacterString>
           </gmd:organisationName>
           <gmd:contactInfo>
             <gmd:CI_Contact>
               <gmd:address>
                 <gmd:CI_Address>
                   <gmd:electronicMailAddress>
-                    <gco:CharacterString>{{ co.email }}</gco:CharacterString>
+                    <gco:CharacterString>email@asd.gr</gco:CharacterString>
                   </gmd:electronicMailAddress>
                 </gmd:CI_Address>
               </gmd:address>
             </gmd:CI_Contact>
           </gmd:contactInfo>
           <gmd:role>
-            <gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue={{ "\"%s\""|safe % co.role }} codeSpace="ISOTC211/19115">{{ co.role }}</gmd:CI_RoleCode>
+            <gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="pointofcontact" codeSpace="ISOTC211/19115">pointofcontact</gmd:CI_RoleCode>
           </gmd:role>
         </gmd:CI_ResponsibleParty>
       </gmd:pointOfContact>
-      {% endfor -%}
-      {% for k,v in data.keywords.iteritems() -%}
+      <gmd:pointOfContact>
+        <gmd:CI_ResponsibleParty>
+          <gmd:organisationName>
+            <gco:CharacterString>Org2</gco:CharacterString>
+          </gmd:organisationName>
+          <gmd:contactInfo>
+            <gmd:CI_Contact>
+              <gmd:address>
+                <gmd:CI_Address>
+                  <gmd:electronicMailAddress>
+                    <gco:CharacterString>email2@asd.gr</gco:CharacterString>
+                  </gmd:electronicMailAddress>
+                </gmd:CI_Address>
+              </gmd:address>
+            </gmd:CI_Contact>
+          </gmd:contactInfo>
+          <gmd:role>
+            <gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="pointofcontact" codeSpace="ISOTC211/19115">pointofcontact</gmd:CI_RoleCode>
+          </gmd:role>
+        </gmd:CI_ResponsibleParty>
+      </gmd:pointOfContact>
       <gmd:descriptiveKeywords>
         <gmd:MD_Keywords>
-          {% for kw in v['terms'] -%}
           <gmd:keyword>
-            <gco:CharacterString>{{ kw }}</gco:CharacterString>
+            <gco:CharacterString>Administrative units</gco:CharacterString>
           </gmd:keyword>
-          {% endfor -%}
           <gmd:thesaurusName>
             <gmd:CI_Citation>
               <gmd:title>
-                <gco:CharacterString>{{ v['thesaurus']['title'] }}</gco:CharacterString>
+                  <gco:CharacterString>GEMET - INSPIRE themes, version 1.0</gco:CharacterString>
               </gmd:title>
               <gmd:date>
                 <gmd:CI_Date>
                   <gmd:date>
-                    <gco:Date>{{ v['thesaurus']['reference_date'] }}</gco:Date>
+                    <gco:Date>2000-01-01</gco:Date>
                   </gmd:date>
                   <gmd:dateType>
-                    <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue={{ "\"%s\""|safe % k['datetype'] }}>{{ v['thesaurus']['date_type'] }}</gmd:CI_DateTypeCode>
+                    <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation">creation</gmd:CI_DateTypeCode>
                   </gmd:dateType>
                 </gmd:CI_Date>
               </gmd:date>
@@ -147,95 +155,125 @@
           </gmd:thesaurusName>
         </gmd:MD_Keywords>
       </gmd:descriptiveKeywords>
-      {% endfor -%}
-      {% for rc in data.access_constraints -%}
       <gmd:resourceConstraints>
         <gmd:MD_Constraints>
           <gmd:useLimitation>
-            <gco:CharacterString>{{ rc }}</gco:CharacterString>
+            <gco:CharacterString>lalala1</gco:CharacterString>
           </gmd:useLimitation>
         </gmd:MD_Constraints>
       </gmd:resourceConstraints>
-      {% endfor -%}
-      {% for oc in data.limitations -%}
+      <gmd:resourceConstraints>
+        <gmd:MD_Constraints>
+          <gmd:useLimitation>
+            <gco:CharacterString>lalala2</gco:CharacterString>
+          </gmd:useLimitation>
+        </gmd:MD_Constraints>
+      </gmd:resourceConstraints>
       <gmd:resourceConstraints>
         <gmd:MD_LegalConstraints>
           <gmd:accessConstraints>
             <gmd:MD_RestrictionCode codeList="http://www.isotc211.org/2005/resources/Codelist/ML_gmxCodelists.xml#MD_RestrictionCode" codeListValue="otherRestrictions">otherRestrictions</gmd:MD_RestrictionCode>
           </gmd:accessConstraints>
           <gmd:otherConstraints>
-            <gco:CharacterString>{{ oc }}</gco:CharacterString>
+            <gco:CharacterString>limit1</gco:CharacterString>
           </gmd:otherConstraints>
         </gmd:MD_LegalConstraints>
       </gmd:resourceConstraints>
-      {% endfor -%}
-      {% if data.spatial_resolution|length > 0 -%}
-      {% for s in data.spatial_resolution -%}
+      <gmd:resourceConstraints>
+        <gmd:MD_LegalConstraints>
+          <gmd:accessConstraints>
+            <gmd:MD_RestrictionCode codeList="http://www.isotc211.org/2005/resources/Codelist/ML_gmxCodelists.xml#MD_RestrictionCode" codeListValue="otherRestrictions">otherRestrictions</gmd:MD_RestrictionCode>
+          </gmd:accessConstraints>
+          <gmd:otherConstraints>
+            <gco:CharacterString>limit2</gco:CharacterString>
+          </gmd:otherConstraints>
+        </gmd:MD_LegalConstraints>
+      </gmd:resourceConstraints>
       <gmd:spatialResolution>
         <gmd:MD_Resolution>
-        <gmd:distance>
-            <gco:Distance uom={{ "\"%s\""|safe % s.uom }}>{{ s.distance }}</gco:Distance>
-          </gmd:distance>
-        <gmd:equivalentScale>
+          <gmd:equivalentScale>
             <gmd:MD_RepresentativeFraction>
               <gmd:denominator>
-                <gco:Integer>{{ s.denominator }}</gco:Integer>
+                <gco:Integer>0</gco:Integer>
               </gmd:denominator>
             </gmd:MD_RepresentativeFraction>
           </gmd:equivalentScale>
         </gmd:MD_Resolution>
       </gmd:spatialResolution>
-      {% endfor -%}
-      {% endif -%}
-      {% for lan in data.resource_language -%}
-      <gmd:language>
-        <gmd:LanguageCode codeList="http://www.isotc211.org/2005/resources/Codelist/ML_gmxCodelists.xml#LanguageCode" codeListValue={{ "\"%s\""|safe % lan }}>{{ lan }}</gmd:LanguageCode>
+      <gmd:spatialResolution>
+        <gmd:MD_Resolution>
+          <gmd:equivalentScale>
+            <gmd:MD_RepresentativeFraction>
+              <gmd:denominator>
+                <gco:Integer>1</gco:Integer>
+              </gmd:denominator>
+            </gmd:MD_RepresentativeFraction>
+          </gmd:equivalentScale>
+        </gmd:MD_Resolution>
+      </gmd:spatialResolution>
+      <gmd:spatialResolution>
+        <gmd:MD_Resolution>
+          <gmd:equivalentScale>
+            <gmd:MD_RepresentativeFraction>
+              <gmd:denominator>
+                <gco:Integer>2</gco:Integer>
+              </gmd:denominator>
+            </gmd:MD_RepresentativeFraction>
+          </gmd:equivalentScale>
+        </gmd:MD_Resolution>
+      </gmd:spatialResolution>
+      <gmd:spatialResolution>
+        <gmd:MD_Resolution>
+          <gmd:equivalentScale>
+            <gmd:MD_RepresentativeFraction>
+              <gmd:denominator>
+                <gco:Integer>3</gco:Integer>
+              </gmd:denominator>
+            </gmd:MD_RepresentativeFraction>
+          </gmd:equivalentScale>
+        </gmd:MD_Resolution>
+      </gmd:spatialResolution>
+        <gmd:language>
+        <gmd:LanguageCode codeList="http://www.isotc211.org/2005/resources/Codelist/ML_gmxCodelists.xml#LanguageCode" codeListValue="el">el</gmd:LanguageCode>
       </gmd:language>
-      {% endfor -%}
-      {% for tc in data.topic_category -%}
       <gmd:topicCategory>
-        <gmd:MD_TopicCategoryCode>{{ tc }}</gmd:MD_TopicCategoryCode>
+        <gmd:MD_TopicCategoryCode>biota</gmd:MD_TopicCategoryCode>
       </gmd:topicCategory>
-      {% endfor -%}
       <gmd:extent>
         <gmd:EX_Extent>
-          {% for gbb in data.bounding_box -%}
           <gmd:geographicElement>
             <gmd:EX_GeographicBoundingBox>
               <gmd:westBoundLongitude>
-                <gco:Decimal>{{ gbb.wblng }}</gco:Decimal>
+                <gco:Decimal>0.0</gco:Decimal>
               </gmd:westBoundLongitude>
               <gmd:eastBoundLongitude>
-                <gco:Decimal>{{ gbb.eblng }}</gco:Decimal>
+                <gco:Decimal>0.0</gco:Decimal>
               </gmd:eastBoundLongitude>
               <gmd:southBoundLatitude>
-                <gco:Decimal>{{ gbb.sblat }}</gco:Decimal>
+                <gco:Decimal>0.0</gco:Decimal>
               </gmd:southBoundLatitude>
               <gmd:northBoundLatitude>
-                <gco:Decimal>{{ gbb.nblat }}</gco:Decimal>
+                <gco:Decimal>0.0</gco:Decimal>
               </gmd:northBoundLatitude>
             </gmd:EX_GeographicBoundingBox>
-        </gmd:geographicElement>
-        {% endfor -%}
+          </gmd:geographicElement>
         </gmd:EX_Extent>
       </gmd:extent>
-      {% for te in data.temporal_extent -%}
       <gmd:extent>
         <gmd:EX_Extent>
           <gmd:temporalElement>
             <gmd:EX_TemporalExtent>
               <gmd:extent>
                 <gml:TimePeriod xsi:type="gml:TimePeriodType">
-                  <gml:beginPosition>{{ te.start }}</gml:beginPosition>
-                  <gml:endPosition>{{ te.end }}</gml:endPosition>
+                  <gml:beginPosition>2014-01-01</gml:beginPosition>
+                  <gml:endPosition>2012-01-01</gml:endPosition>
                 </gml:TimePeriod>
               </gmd:extent>
             </gmd:EX_TemporalExtent>
           </gmd:temporalElement>
         </gmd:EX_Extent>
       </gmd:extent>
-      {% endfor -%}
-    </gmd:MD_DataIdentification>
+      </gmd:MD_DataIdentification>
   </gmd:identificationInfo>
   <gmd:distributionInfo>
     <gmd:MD_Distribution>
@@ -247,16 +285,21 @@
       </gmd:distributionFormat>
       <gmd:transferOptions>
         <gmd:MD_DigitalTransferOptions>
-          {% for ln in data.locator -%}
           <gmd:onLine>
             <gmd:CI_OnlineResource>
               <gmd:linkage>
-                <gmd:URL>{{ ln }}</gmd:URL>
+                <gmd:URL>http://www.google.com</gmd:URL>
               </gmd:linkage>
             </gmd:CI_OnlineResource>
           </gmd:onLine>
-          {% endfor -%}
-        </gmd:MD_DigitalTransferOptions>
+          <gmd:onLine>
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL>http://publicamundi.eu</gmd:URL>
+              </gmd:linkage>
+            </gmd:CI_OnlineResource>
+          </gmd:onLine>
+          </gmd:MD_DigitalTransferOptions>
       </gmd:transferOptions>
     </gmd:MD_Distribution>
   </gmd:distributionInfo>
@@ -265,11 +308,10 @@
       <gmd:scope>
         <gmd:DQ_Scope>
           <gmd:level>
-            <gmd:MD_ScopeCode codeListValue={{ "\"%s\""|safe % 'dataset' }} codeList="http://www.isotc211.org/2005/resources/Codelist/ML_gmxCodelists.xml#MD_ScopeCode">{{ 'dataset' }}</gmd:MD_ScopeCode>
+            <gmd:MD_ScopeCode codeListValue="dataset" codeList="http://www.isotc211.org/2005/resources/Codelist/ML_gmxCodelists.xml#MD_ScopeCode">dataset</gmd:MD_ScopeCode>
           </gmd:level>
         </gmd:DQ_Scope>
       </gmd:scope>
-      {% for con in data.conformity -%}
       <gmd:report>
         <gmd:DQ_DomainConsistency xsi:type="gmd:DQ_DomainConsistency_Type">
           <gmd:measureIdentification>
@@ -287,15 +329,15 @@
               <gmd:specification>
                 <gmd:CI_Citation>
                   <gmd:title>
-                    <gco:CharacterString>{{ con.title }}</gco:CharacterString>
+                    <gco:CharacterString>specifications blabla</gco:CharacterString>
                   </gmd:title>
                   <gmd:date>
                     <gmd:CI_Date>
                       <gmd:date>
-                        <gco:Date>{{ con.date }}</gco:Date>
+                        <gco:Date>2014-07-30</gco:Date>
                       </gmd:date>
                       <gmd:dateType>
-                        <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue={{ "\"%s\""|safe % dt }}>{{ con.date_type }}</gmd:CI_DateTypeCode>
+                        <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation">creation</gmd:CI_DateTypeCode>
                       </gmd:dateType>
                     </gmd:CI_Date>
                   </gmd:date>
@@ -305,17 +347,16 @@
                 <gco:CharacterString>See the referenced specification</gco:CharacterString>
               </gmd:explanation>
               <gmd:pass>
-                <gco:Boolean>{{ con.degree }}</gco:Boolean>
+                <gco:Boolean>conformant</gco:Boolean>
               </gmd:pass>
             </gmd:DQ_ConformanceResult>
           </gmd:result>
         </gmd:DQ_DomainConsistency>
       </gmd:report>
-      {% endfor -%}
       <gmd:lineage>
         <gmd:LI_Lineage>
           <gmd:statement>
-            <gco:CharacterString>{{ data.lineage }}</gco:CharacterString>
+            <gco:CharacterString>lineaage</gco:CharacterString>
           </gmd:statement>
         </gmd:LI_Lineage>
       </gmd:lineage>

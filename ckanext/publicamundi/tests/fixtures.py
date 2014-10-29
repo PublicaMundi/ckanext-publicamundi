@@ -52,7 +52,7 @@ party1 = ResponsibleParty(
     email = u"someone@acme.org", 
     role = "pointofcontact")
 
-bbox1 = GeographicBoundingBox(nblat=-50.0, sblat=-20.12, wblng=15.0, eblng=1.0)
+bbox1 = GeographicBoundingBox(nblat=50.0, sblat=-20.12, wblng=15.0, eblng=20.0)
 
 textent1 = TemporalExtent(start=datetime.date.today(), end=datetime.date(2015,01,01))
 
@@ -140,12 +140,13 @@ thesaurus_gemet_concepts = Thesaurus(
     title = u'GEMET Concepts',
     name = 'keywords-gemet-concepts',
     reference_date = datetime.date(2014, 1, 1),
-    version = '1.0',
+    #version = '1.0',
     date_type = 'creation'
 )
 
 thesaurus_gemet_themes = Thesaurus.make('keywords-gemet-themes')
-
+print 'thes'
+print thesaurus_gemet_themes
 thesaurus_gemet_inspire_data_themes = Thesaurus.make('keywords-gemet-inspire-themes')
 
 # Baz 
@@ -217,4 +218,5 @@ inspire1 = InspireMetadata(
 
 inspire2 = copy.deepcopy(inspire1)
 inspire2.keywords = None
+
 
