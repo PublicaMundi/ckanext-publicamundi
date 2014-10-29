@@ -305,7 +305,11 @@
                 <gco:CharacterString>See the referenced specification</gco:CharacterString>
               </gmd:explanation>
               <gmd:pass>
+                {% if con.degree -%}
                 <gco:Boolean>{{ con.degree }}</gco:Boolean>
+                {% else -%}
+                <gmd:pass gco:nilReason="template"/>
+                {% endif -%}
               </gmd:pass>
             </gmd:DQ_ConformanceResult>
           </gmd:result>

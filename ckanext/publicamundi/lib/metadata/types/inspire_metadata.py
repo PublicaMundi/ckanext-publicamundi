@@ -209,8 +209,8 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
 
         conf_list = []
 
-        if len(md.dataquality.conformancedate) != len(md.dataquality.conformancedatetype) or len(md.dataquality.conformancedate) != len(md.dataquality.conformancedegree) or len(md.dataquality.conformancedatetype) != len(md.dataquality.conformancedegree):
-            raise Exception('unequal list lengths conformance date,conformancedatetype, conformancedegree','!')
+        if len(md.dataquality.conformancedate) != len(md.dataquality.conformancedatetype):
+            raise Exception('unequal list lengths conformance date,conformancedatetype','!')
         else:
             if md.dataquality.conformancedate:
                 for i in range(0,len(md.dataquality.conformancedate)):
@@ -220,8 +220,10 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
                     #date_type = md.dataquality.conformancedatetype[i],
                     # TODO md.dataquality.conformancedatetype returns empty
                     date_type = 'creation'
-                    degree = md.dataquality.conformancedegree[i]
-
+                    try:
+                        degree = md.dataquality.conformancedegree[i]
+                    except:
+                        degree = "not-evaluated"
 
                     if md.dataquality.conformancetitle[i]:
                         title = unicode(md.dataquality.conformancetitle[i])

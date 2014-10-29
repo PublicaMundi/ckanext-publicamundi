@@ -35,10 +35,10 @@ class TestController(BaseTestController):
         yield self._from_xml, 'tests/samples/3b.xml', set(['temporal_extent'])
         # aktogrammh.xml fails on several fields during validation
         yield self._from_xml, 'tests/samples/aktogrammh.xml', set([
-            'languagecode', 'locator', 'contact', 'responsible_party', 'identifier', 'resource_language'])
+            'languagecode', 'locator', 'contact', 'responsible_party', 'identifier', 'resource_language','temporal_extent'])
         # dhmosia_kthria.xml fails on several fields during validation
         yield self._from_xml, 'tests/samples/dhmosia_kthria.xml', set([
-            'languagecode', 'locator', 'contact', 'responsible_party', 'identifier', 'resource_language'])
+            'languagecode', 'locator', 'contact', 'responsible_party', 'identifier', 'resource_language','temporal_extent'])
         # full.xml fails during etree parse, why?
         #yield self._from_xml, 'tests/samples/full.xml', set([])
 
