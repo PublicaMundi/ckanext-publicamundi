@@ -25,7 +25,7 @@
         {% for key, placeholder in groups[grp] %}
         {% with field = obj.get_field(key) -%}
         <input type="number" name="{{ qname ~ '.' ~ key }}" id="input-{{ qname ~ '.' ~ key }}"
-            value="{{ field.context.value|float(default=0) }}" step="any" min="{{ field.min }}" max="{{ field.max }}"
+            value="{{ field.context.value|empty_and_escape }}" step="any" min="{{ field.min }}" max="{{ field.max }}"
             class="span2 inline-control"
             title="{{ field.context.title or field.title }}" 
             placeholder="{{ placeholder }}" 

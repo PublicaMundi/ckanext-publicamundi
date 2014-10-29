@@ -8,3 +8,13 @@
 
 {% endblock %}
 
+{% block secondary_content %}
+
+  {{ super() }}
+
+  {% set geographic_extent = c.pkg_dict.spatial %}
+  {% if geographic_extent %}
+  {% snippet "spatial/snippets/dataset_map_sidebar.html", extent=geographic_extent %}
+  {% endif %}
+
+{% endblock %}
