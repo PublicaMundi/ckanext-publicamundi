@@ -210,7 +210,7 @@
 
                 var module = $dialog.data('current-module')
 
-                // Assign inputs (W-E latitude, S-N longitude)
+                // Assign inputs (West-East latitude, South-North longitude)
 
                 module.assignInput()
                 
@@ -349,7 +349,10 @@
 
                 $el.closest('form').on('submit', function (ev) {
                     // Find all related inputs and form a geoJSON object
-                    var $inp = $(this).find('input[name^="' + qname + '.' + '"]') 
+                    
+                    // Fetch only the 1st BBox (maybe be many of them)!
+                    var name_prefix = [qname, '0', ''].join('.')
+                    var $inp = $(this).find('input[name^="' + name_prefix + '"]') 
                     
                     var wblng = parseFloat($inp.filter('[name$=wblng]').val()),
                         eblng = parseFloat($inp.filter('[name$=eblng]').val()),

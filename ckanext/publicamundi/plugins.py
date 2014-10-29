@@ -29,7 +29,8 @@ _t = toolkit._
 log1 = logging.getLogger(__name__)
 
 class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
-    ''' A plugin that overrides the default dataset form '''
+    '''Override the default dataset form
+    '''
     p.implements(p.ITemplateHelpers)
     p.implements(p.IConfigurable, inherit=True)
     p.implements(p.IConfigurer, inherit=True)
@@ -172,9 +173,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         '''
         return []
 
-    def _modify_package_schema(self, schema):
-        log1.debug(' ** _modify_package_schema(): Building schema ...')
-         
+    def __modify_package_schema(self, schema):
+
         from ckanext.publicamundi.lib.metadata.validators import (
             is_dataset_type, get_field_edit_processor,
             preprocess_dataset_for_edit, postprocess_dataset_for_edit)
@@ -221,21 +221,17 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         return schema
 
     def create_package_schema(self):
-        log1.debug(' ** create_package_schema(): Building schema ...')
         schema = super(DatasetForm, self).create_package_schema()
-        schema = self._modify_package_schema(schema)
+        schema = self.__modify_package_schema(schema)
         return schema
 
     def update_package_schema(self):
-        log1.debug(' ** update_package_schema(): Building schema ...')
         schema = super(DatasetForm, self).update_package_schema()
-        schema = self._modify_package_schema(schema)
+        schema = self.__modify_package_schema(schema)
         return schema
 
     def show_package_schema(self):
         schema = super(DatasetForm, self).show_package_schema()
-        
-        log1.debug(' ** show_package_schema(): Building schema ...')
         
         from ckanext.publicamundi.lib.metadata.validators import (
             get_field_read_processor,
@@ -249,7 +245,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         ignore_missing = toolkit.get_validator('ignore_missing')
         convert_from_extras = toolkit.get_converter('convert_from_extras')
         
-        schema['dataset_type'] = [ convert_from_extras, check_not_empty ]
+        schema['dataset_type'] = [convert_from_extras, check_not_empty]
        
         # Add field-level converters
 
@@ -408,7 +404,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         return pkg_dict
 
 class PackageController(p.SingletonPlugin):
-    ''' Hook into the package controller '''
+    '''Hook into the package controller
+    '''
     p.implements(p.IConfigurable, inherit=True)
     p.implements(p.IPackageController, inherit=True)
 
@@ -540,7 +537,7 @@ class PackageController(p.SingletonPlugin):
         return
 
 class ErrorHandler(p.SingletonPlugin):
-    ''' Fixes CKAN's buggy errorware configuration '''
+    '''Fix CKAN's buggy errorware configuration'''
     p.implements(p.IConfigurer, inherit=True)
 
     @staticmethod
@@ -571,4 +568,43 @@ class ErrorHandler(p.SingletonPlugin):
         # monkey-patch email error reporter 
         error_reporter.assemble_email = lambda t,exc_data: self._exception_as_mime_message (\
             exc_data, to_addresses=t.to_addresses, from_address=t.from_address, prefix=t.subject_prefix)
+
+class SpatialDatasetForm(DatasetForm):
+    '''Extend the dataset-form to recognize and read/write the `spatial` extra field.
+    This extension only serves as a bridge to ckanext-spatial `spatial_metadata` 
+    plugin.
+    
+    Note: 
+    This should be part of a the ordinary `publicamundi_dataset` plugin (when it
+    gets decoupled from schema-handling logic!).
+    '''
+    
+    ## IDatasetForm interface ##
+
+    def create_package_schema(self):
+        schema = super(SpatialDatasetForm, self).create_package_schema()
+        return self.__modify_package_schema(schema)
+
+    def update_package_schema(self):
+        schema = super(SpatialDatasetForm, self).update_package_schema()
+        return self.__modify_package_schema(schema)
+    
+    def show_package_schema(self):
+        schema = super(SpatialDatasetForm, self).show_package_schema()
+        
+        ignore_missing = toolkit.get_validator('ignore_missing')
+        convert_from_extras = toolkit.get_converter('convert_from_extras')
+       
+        schema['spatial'] = [convert_from_extras, ignore_missing]
+
+        return schema
+    
+    def __modify_package_schema(self, schema):
+        
+        ignore_empty = toolkit.get_validator('ignore_empty')
+        convert_to_extras = toolkit.get_converter('convert_to_extras')
+        
+        schema['spatial'] = [ignore_empty, convert_to_extras]
+        
+        return schema
 

@@ -107,28 +107,24 @@ class IGeographicBoundingBox(IObject):
         title = u'South Bound Latitude',
         min = -90.0,
         max = 90.0,
-        default = .0,
         required = True)
 
     nblat = zope.schema.Float(
         title = u'North Bound Latitude',
         min = -90.0,
         max = 90.0,
-        default = .0,
         required = True)
     
     wblng = zope.schema.Float(
         title = u'West Bound Longitude',
         min = -180.0,
         max = 180.0,
-        default = .0,
         required = True)
 
     eblng = zope.schema.Float(
         title = u'East Bound Longitude',
         min = -180.0,
         max = 180.0,
-        default = .0,
         required = True)
 
     @zope.interface.invariant

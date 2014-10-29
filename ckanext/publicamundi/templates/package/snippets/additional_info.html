@@ -71,7 +71,7 @@
   {%- set obj = pkg_dict.get(dt) -%}
   
   {%- if obj -%}
-  <h3>{{ '%s Metadata' | format(h.dataset_types().get(dt).get('title')) }}</h3> 
+  <h3>{{ '%s Metadata'|format(h.dataset_types().get(dt).get('title'))|title }}</h3> 
   {{ 
      h.markup_for('read:table', obj, 
         errors={}, 
