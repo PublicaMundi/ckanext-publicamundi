@@ -22,6 +22,10 @@ header > h6.inline {
     font-size: 1.05em;
 }
 
+.modal {
+    border-radius: 2px;
+}
+
 .btn-small {
     padding: 4px 9px 4px 9px;
 }
@@ -172,9 +176,9 @@ textarea:disabled {
     margin-top: inherit;
 }
 
-.space-x1 { padding: 0px 4px }
-.space-x2 { padding: 0px 8px }
-.space-x3 { padding: 0px 12px }
+span.space-x1 { padding: 0px 4px }
+span.space-x2 { padding: 0px 8px }
+span.space-x3 { padding: 0px 12px }
 
 .tag {
     border-radius: 2px;
@@ -200,5 +204,28 @@ textarea:disabled {
     content: "";
     display: block;
     clear: both;
+}
+
+/* 
+ * Map widgets (dialogs, containers etc.)
+ */
+
+#draw-bbox-dialog .map-container {
+    height: 220px;
+}
+
+#draw-bbox-dialog {
+    /*
+    position: absolute;
+    width: 100%;
+    top: 10%;
+    left: 0%;
+    margin: 0px;
+    */
+    position: fixed;
+    width: 50%;
+    top: 50px;
+    left: 25%;
+    margin: 0px;
 }
 

@@ -1,0 +1,20 @@
+{# Modal dialog to assist in drawing a bounding box -#} 
+
+{% if not id is defined %}{% set id = 'draw-bbox-dialog' %}{% endif %}
+
+<div id="{{ id }}" class="modal hide no-fade" tabindex="-1" role="dialog" 
+    aria-labelledby="{{ id }}-label" aria-hidden="true"
+  >
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="{{ id }}-label">Draw a Bounding Box</h3>
+    </div>
+    <div class="modal-body">
+        <div id="{{ id }}-map-container" class="map-container">A placeholder for the map widget</div>
+        <p></p>
+    </div>
+    <div class="modal-footer">
+        <a class="btn cancel" aria-hidden="true">{{ _('Dismiss') }}</a>
+        <a class="btn btn-primary apply">{{ _('Apply') }}</a>
+    </div>
+</div>

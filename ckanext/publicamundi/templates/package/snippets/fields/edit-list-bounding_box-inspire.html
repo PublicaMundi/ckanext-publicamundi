@@ -1,13 +1,25 @@
+
+{#- 
+   Note: It is possible to generate content *before* extending the template.
+   See http://jinja.pocoo.org/docs/dev/tricks/#null-master-fallback
+-#}
+<div class="hide"
+    data-module="compute-spatial-from-bbox"
+    data-module-qname="{{ qname }}"
+ >
+    <input type="hidden" id="input-spatial" name="spatial" />
+</div>
+
 {%- set 
     messages = 
     {
-        'add-label': 'Add extent',
-        'add-title': 'Add extent', 
-        'clear-label': 'Clear all',
-        'clear-title': 'Clear all extents!',
-        'add-description': none,
-        'maxlength-alert': 'You cannot add more than {{maxlength}} extents',
-        'clear-alert': 'Are you sure you want to clear all ({{num}}) extents ?',
+        'add-label': _('Add extent'),
+        'add-title': _('Add extent'), 
+        'clear-label': _('Clear all'),
+        'clear-title': _('Clear all extents!'),
+        'add-description': false,
+        'maxlength-alert': _('You cannot add more than {{maxlength}} extents'),
+        'clear-alert': _('Are you sure you want to clear all ({{num}}) extents ?'),
     } 
 -%}
 

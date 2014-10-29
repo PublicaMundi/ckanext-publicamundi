@@ -1,71 +1,43 @@
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
-{%- set 
-    field_info = {
-        'nblat': { 
-            'placeholder': _('North Lat'), 'title':  _('North Bound Latitude') },
-        'sblat': { 
-            'placeholder': _('South Lat'), 'title':  _('South Bound Latitude') }, 
-        'eblng': { 
-            'placeholder': _('East Lng'), 'title':  _('East Bound Longitude') }, 
-        'wblng': { 
-            'placeholder': _('West Lng'), 'title':  _('West Bound Longitude') },
+{% set 
+    groups = {
+        'longitude': [
+            ('wblng', _('West Longitude')),
+            ('eblng', _('East Longitude')),
+        ],
+        'latitude': [
+            ('sblat', _('South Latitude')),
+            ('nblat', _('North Latitude')),
+        ]
     } 
 -%}
 
-<div class="control-group control-small {{ classes|join(' ') }}">
+<div class="control-group control-small {{ classes|join(' ') }}"
+    data-module="input-geographic-bbox"
+    data-module-qname="{{ qname }}"
+ >
     {% if heading %}<header><h3 class="inline">{{ heading }}</h3></header>{% endif -%}
-    <label class="control-label">{{ title }}{{ markup_helpers.mark_required(required) }}</label>
+    <label class="control-label">
+        {{- title }}{{ markup_helpers.mark_required(required) }}</label>
     <div class="controls ">
-       {%- for k in ['sblat', 'nblat'] %}
-       <input type="number" name="{{ qname ~ '.' ~ k }}" id="input-{{ qname ~ '.' ~ k }}"
-          step="any" min="-90.0" max="90.0"
-          class="input-small inline-control"
-          title="{{ field_info[k]['title'] }}"
-          value="{{ obj|attr(k)|float(default=0) }}" 
-          placeholder="{{ field_info[k]['placeholder'] }}" 
-        />
-       {% endfor -%}
-       <span class="space-x3"></span>
-       {%- for k in ['wblng', 'eblng'] %}
-       <input type="number" name="{{ qname ~ '.' ~ k }}" id="input-{{ qname ~ '.' ~ k }}"
-          step="any" min="-180.0" max="180.0"
-          class="input-small inline-control"
-          title="{{ field_info[k]['title'] }}"
-          value="{{ obj|attr(k)|float(default=0) }}" 
-          placeholder="{{ field_info[k]['placeholder'] }}" 
-        />
-       {% endfor -%}
+        {% for grp in ['longitude', 'latitude'] %}
+        {% for key, placeholder in groups[grp] %}
+        {% with field = obj.get_field(key) -%}
+        <input type="number" name="{{ qname ~ '.' ~ key }}" id="input-{{ qname ~ '.' ~ key }}"
+            value="{{ field.context.value|float(default=0) }}" step="any" min="{{ field.min }}" max="{{ field.max }}"
+            class="span2 inline-control"
+            title="{{ field.context.title or field.title }}" 
+            placeholder="{{ placeholder }}" 
+         />
+        <span class="space-x1"></span>
+        {% endwith %} {# with field #}
+        {% endfor %} {# for key, placeholder #}
+        <p class="space"></p>
+        {% endfor -%} {# for grp #}
+        <a class="btn btn-small draw-bbox"><i class="icon-pencil"></i> {{ _('Draw') }}</a>
     </div>
-    
-    {#
-    <p /> <!-- add some vertical space -->
-    
-    <div class="controls"> 
-        <button type="button" 
-            class="btn" 
-            href="#bounding_box-helper" 
-            data-toggle="collapse" 
-            title="{{ _('Select from a map widget') }}"
-         ><i class="icon-pencil"></i>&nbsp;{{ _('Draw a Bounding Box') }}
-        </button>
-    </div>
-
-    {% set field_name = "field-" ~ prefix %}
-    
-    {% set extent = data.get('spatial') %}
-    {% if not extent %}
-      {% set extents=[] %}
-      {% for x in data.get('extras', []) %}
-        {% if x.key == 'spatial' %}{% if extents.append(x.value) %}{% endif %}{% endif %}
-      {% endfor %}
-      {% set extent = extents.0 %}
-    {% endif %}
-    
-    <input type="hidden" name="{{ field_name }}" id="{{ field_name }}" />
-
-    {% snippet 'package/snippets/bounding_box-helper.html', extent=extent, target='#' ~ field_name %}
-    
-    #}
-
 </div>
+
+{% resource 'ckanext-spatial/spatial_query' %} 
+{% resource 'ckanext-publicamundi/geographic-bbox' %}
