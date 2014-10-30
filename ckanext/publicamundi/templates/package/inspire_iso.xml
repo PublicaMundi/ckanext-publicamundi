@@ -88,7 +88,7 @@
           <gmd:identifier>
             <gmd:RS_Identifier>
               <gmd:code>
-                <gco:CharacterString>{{ data.identifier[0] }}</gco:CharacterString>
+                <gco:CharacterString>{{ data.identifier }}</gco:CharacterString>
               </gmd:code>
             </gmd:RS_Identifier>
           </gmd:identifier>
@@ -120,10 +120,10 @@
         </gmd:CI_ResponsibleParty>
       </gmd:pointOfContact>
       {% endfor -%}
-      {% for k in data.keywords -%}
+      {% for k,v in data.keywords.iteritems() -%}
       <gmd:descriptiveKeywords>
         <gmd:MD_Keywords>
-          {% for kw in k['terms'] -%}
+          {% for kw in v['terms'] -%}
           <gmd:keyword>
             <gco:CharacterString>{{ kw }}</gco:CharacterString>
           </gmd:keyword>
@@ -131,15 +131,15 @@
           <gmd:thesaurusName>
             <gmd:CI_Citation>
               <gmd:title>
-                <gco:CharacterString>{{ k['thesaurus']['title'] }}</gco:CharacterString>
+                <gco:CharacterString>{{ v['thesaurus']['title'] }}</gco:CharacterString>
               </gmd:title>
               <gmd:date>
                 <gmd:CI_Date>
                   <gmd:date>
-                    <gco:Date>{{ k['thesaurus']['reference_date'] }}</gco:Date>
+                    <gco:Date>{{ v['thesaurus']['reference_date'] }}</gco:Date>
                   </gmd:date>
                   <gmd:dateType>
-                    <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue={{ "\"%s\""|safe % k['datetype'] }}>{{ k['thesaurus']['date_type'] }}</gmd:CI_DateTypeCode>
+                    <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue={{ "\"%s\""|safe % k['datetype'] }}>{{ v['thesaurus']['date_type'] }}</gmd:CI_DateTypeCode>
                   </gmd:dateType>
                 </gmd:CI_Date>
               </gmd:date>
@@ -169,28 +169,20 @@
         </gmd:MD_LegalConstraints>
       </gmd:resourceConstraints>
       {% endfor -%}
-      {% if data.denominator|length > 0 -%}
-      {% for den in data.denominator -%}
-      <gmd:spatialResolution>
-        <gmd:MD_Resolution>
-          <gmd:equivalentScale>
-            <gmd:MD_RepresentativeFraction>
-              <gmd:denominator>
-                <gco:Integer>{{ den }}</gco:Integer>
-              </gmd:denominator>
-            </gmd:MD_RepresentativeFraction>
-          </gmd:equivalentScale>
-        </gmd:MD_Resolution>
-      </gmd:spatialResolution>
-      {% endfor -%}
-      {% endif -%}
       {% if data.spatial_resolution|length > 0 -%}
       {% for s in data.spatial_resolution -%}
       <gmd:spatialResolution>
         <gmd:MD_Resolution>
-          <gmd:distance>
+        <gmd:distance>
             <gco:Distance uom={{ "\"%s\""|safe % s.uom }}>{{ s.distance }}</gco:Distance>
           </gmd:distance>
+        <gmd:equivalentScale>
+            <gmd:MD_RepresentativeFraction>
+              <gmd:denominator>
+                <gco:Integer>{{ s.denominator }}</gco:Integer>
+              </gmd:denominator>
+            </gmd:MD_RepresentativeFraction>
+          </gmd:equivalentScale>
         </gmd:MD_Resolution>
       </gmd:spatialResolution>
       {% endfor -%}
@@ -313,7 +305,11 @@
                 <gco:CharacterString>See the referenced specification</gco:CharacterString>
               </gmd:explanation>
               <gmd:pass>
+                {% if con.degree -%}
                 <gco:Boolean>{{ con.degree }}</gco:Boolean>
+                {% else -%}
+                <gmd:pass gco:nilReason="template"/>
+                {% endif -%}
               </gmd:pass>
             </gmd:DQ_ConformanceResult>
           </gmd:result>

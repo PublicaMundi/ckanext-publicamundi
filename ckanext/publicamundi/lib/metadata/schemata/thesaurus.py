@@ -22,6 +22,7 @@ class IThesaurus(IObject):
         required = True)
 
     version = zope.schema.NativeString(
+#    version = zope.schema.TextLine(
         title = u'Version',
         constraint = re.compile('^\d+\.\d+(\.[a-z0-9]+)*$').match,
         required = False)
