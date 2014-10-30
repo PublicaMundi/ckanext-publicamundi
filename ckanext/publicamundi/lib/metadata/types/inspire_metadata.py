@@ -99,6 +99,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
 
         if o is None:
             o = self.obj
+
         return p.toolkit.render('package/inspire_iso.xml', extra_vars={ 'data': o })
 
     def to_xml(self, o=None, nsmap=None):
@@ -163,6 +164,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
                         keywords_dict.update({thes_name:kw})
                 except:
                     pass
+
         if md.identification.temporalextent_start or md.identification.temporalextent_end:
             temporal_extent = [TemporalExtent(
                 start = to_date(md.identification.temporalextent_start),
@@ -186,15 +188,6 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         #elif not revision_date:
         #    raise Exception('revision date not present','')
 
-        #denom_list = []
-        #for it in md.identification.denominators:
-        #    try:
-        #        parsed_int = int(it)
-        #        denom_list.append(parsed_int)
-        #    except:
-        #        print 'Cannot parse denominator'
-
-        #denom_list = md.identification.denominators
 
         spatial_list = []
 
@@ -203,14 +196,14 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         else:
             for i in range(0,len(md.identification.distance)):
                 spatial_list.append(SpatialResolution(
-                    denominator =int(md.identification.denominators[i]),
+                    denominator = int(md.identification.denominators[i]),
                     distance = int(md.identification.distance[i]),
                     uom = unicode(md.identification.uom[i])))
 
         conf_list = []
 
         if len(md.dataquality.conformancedate) != len(md.dataquality.conformancedatetype):
-            raise Exception('unequal list lengths conformance date,conformancedatetype','!')
+            raise Exception('Found unequal list lengths conformance date, conformancedatetype','!')
         else:
             if md.dataquality.conformancedate:
                 for i in range(0,len(md.dataquality.conformancedate)):
@@ -264,7 +257,6 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         obj.publication_date = publication_date
         obj.revision_date = revision_date
         obj.lineage = unicode(md.dataquality.lineage)
-        #obj.denominator = denom_list
         obj.spatial_resolution = spatial_list
         obj.conformity = conf_list
         obj.access_constraints = limit_list
