@@ -29,14 +29,16 @@ class TestController(BaseTestController):
 
     @nose.tools.istest
     def test_from_xml(self):
-        # 3.xml contains wrong thesaurus name
+        # 3.xml contains wrong thesaurus name, fails as invariant
         yield self._from_xml, 'tests/samples/3.xml', set(['keywords'])
+        # 3b.xml fails on temporal extent
+        yield self._from_xml, 'tests/samples/3b.xml', set(['temporal_extent'])
         # aktogrammh.xml fails on several fields during validation
         yield self._from_xml, 'tests/samples/aktogrammh.xml', set([
-            'languagecode', 'locator', 'contact', 'responsible_party', 'identifier', 'resource_language'])
+            'languagecode', 'locator', 'contact', 'responsible_party', 'identifier', 'resource_language','temporal_extent'])
         # dhmosia_kthria.xml fails on several fields during validation
         yield self._from_xml, 'tests/samples/dhmosia_kthria.xml', set([
-            'languagecode', 'locator', 'contact', 'responsible_party', 'identifier', 'resource_language'])
+            'languagecode', 'locator', 'contact', 'responsible_party', 'identifier', 'resource_language','temporal_extent'])
         # full.xml fails during etree parse, why?
         #yield self._from_xml, 'tests/samples/full.xml', set([])
 
@@ -61,6 +63,8 @@ class TestController(BaseTestController):
         e = etree.parse(infile)
         assert isinstance(e, etree._ElementTree)
         out = ser.from_xml(e)
+        print 'out'
+        print out
         assert isinstance(out, InspireMetadata)
         assert_faulty_keys(out, expected_errs)
 

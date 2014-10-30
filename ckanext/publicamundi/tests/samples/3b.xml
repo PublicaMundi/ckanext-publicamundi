@@ -134,18 +134,12 @@
       <gmd:descriptiveKeywords>
         <gmd:MD_Keywords>
           <gmd:keyword>
-            <gco:CharacterString>lala1</gco:CharacterString>
-          </gmd:keyword>
-          <gmd:keyword>
-            <gco:CharacterString>lala2</gco:CharacterString>
-          </gmd:keyword>
-          <gmd:keyword>
-            <gco:CharacterString>lala3</gco:CharacterString>
+            <gco:CharacterString>Administrative units</gco:CharacterString>
           </gmd:keyword>
           <gmd:thesaurusName>
             <gmd:CI_Citation>
               <gmd:title>
-                <gco:CharacterString>Inspire Data Themes</gco:CharacterString>
+                  <gco:CharacterString>GEMET - INSPIRE themes, version 1.0</gco:CharacterString>
               </gmd:title>
               <gmd:date>
                 <gmd:CI_Date>
@@ -271,8 +265,8 @@
             <gmd:EX_TemporalExtent>
               <gmd:extent>
                 <gml:TimePeriod xsi:type="gml:TimePeriodType">
-                  <gml:beginPosition>2012-01-01</gml:beginPosition>
-                  <gml:endPosition>2014-01-01</gml:endPosition>
+                  <gml:beginPosition>2014-01-01</gml:beginPosition>
+                  <gml:endPosition>2012-01-01</gml:endPosition>
                 </gml:TimePeriod>
               </gmd:extent>
             </gmd:EX_TemporalExtent>

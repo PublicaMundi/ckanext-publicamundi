@@ -387,10 +387,12 @@ updates['inspire'] = {
             },]
     },
     'upd-3': {
-        'keywords': [{
-            'terms': ["agriculture", "climate"],
-            'thesaurus': { 'name': 'keywords-gemet-concepts', }
-        }],
+        'keywords': {
+            'keywords-gemet-concepts': {
+                'terms': ["agriculture", "climate"],
+                'thesaurus': { 'name': 'keywords-gemet-concepts', }
+            },
+        },
     },
 }
 

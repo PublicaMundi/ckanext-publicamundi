@@ -133,7 +133,7 @@
         "INSPIRE - Glossary": {
             "reference_date": "2010-01-12",
             "date_type": "publication",
-            "version":3.0,
+            "version":"3.0",
             "terms":[
                 "Addressable object", 
                 "Aqueduct", 
@@ -325,7 +325,7 @@
         "GEMET - Supergroups": {
             "reference_date": "2010-01-13",
             "date_type": "publication",
-            "version":2.4,
+            "version": "2.4",
             "terms":[
                 "ACCESSORY LISTS", 
                 "HUMAN ACTIVITIES AND PRODUCTS, EFFECTS ON THE ENVIRONMENT", 
@@ -336,7 +336,7 @@
         "INSPIRE - Feature Concept Dictionary": {
             "reference_date": "2010-01-19",
             "date_type": "publication",
-            "version":3.0,
+            "version":"3.0",
             "terms":[
                 "Access Restriction", 
                 "Address", 
@@ -523,7 +523,7 @@
         "GEMET - INSPIRE themes": {
             "reference_date": "2008-06-01",
             "date_type": "publication",
-            "version":1.0,
+            "version":"1.0",
             "terms":[
                 "Addresses", 
                 "Administrative units", 
@@ -564,7 +564,7 @@
         "GEMET - Groups": {
             "reference_date": "2010-01-13",
             "date_type": "publication",
-            "version":2.4,
+            "version":"2.4",
             "terms":[
                 "ADMINISTRATION, MANAGEMENT, POLICY, POLITICS, INSTITUTIONS, PLANNING", 
                 "AGRICULTURE, FORESTRY; ANIMAL HUSBANDRY; FISHERY", 
@@ -603,7 +603,7 @@
         "GEOSS - Earth Observation Vocabulary": {
             "reference_date": "2011-05-01",
             "date_type": "publication",
-            "version":1.0,
+            "version":"1.0",
             "terms":[
                 "AEROSOLS", 
                 "AGRICULTURAL AQUATIC SCIENCES", 
@@ -834,7 +834,7 @@
         "GEMET - Themes": {
             "reference_date": "2010-01-13",
             "date_type": "publication",
-            "version":2.4,
+            "version": "2.4",
             "terms":[
                 "administration", 
                 "agriculture", 
@@ -881,7 +881,7 @@
         "GEOSS Societal benefit areas": {
             "reference_date": "2010-08-25",
             "date_type": "publication",
-            "version":1.0,
+            "version":"1.0",
             "terms":[
                 "Accidental death and injury", 
                 "Adapting to", 
@@ -955,7 +955,7 @@
         "GEMET - Concepts": {
             "reference_date": "2010-01-13",
             "date_type": "publication",
-            "version":2.4,
+            "version":"2.4",
             "terms":[
                 "accident", 
                 "administration", 
@@ -1083,5 +1083,45 @@
             "user": "User", 
             "processor": "Processor"
         }
+    },
+    "Conformity Specifications" : {
+        "terms" : [
+            "COMMISSION REGULATION (EC) No 1205/2008 of 3 December 2008 implementing Directive 2007/2/EC of the European Parliament and of the Council as regards metadata;2008-12-04",
+            "Corrigendum to INSPIRE Metadata Regulation published in the Official Journal of the European Union, L 328, page 83;2009-12-15",
+            "Commission Regulation (EU) No 1089/2010 of 23 November 2010 implementing Directive 2007/2/EC of the European Parliament and of the Council as regards interoperability of spatial data sets and services;2010-12-08",
+            "COMMISSION REGULATION (EU) No 1088/2010 of 23 November 2010 amending Regulation (EC) No 976/2009 as regards download services and transformation services;2010-12-08",
+            "COMMISSION REGULATION (EC) No 976/2009 of 19 October 2009 implementing Directive 2007/2/EC of the European Parliament and of the Council as regards the Network Services;2009-10-20",
+            "COMMISSION REGULATION (EU) No 268/2010 of 29 March 2010 implementing Directive 2007/2/EC of the European Parliament and of the Council as regards the access to spatial data sets and services of the Member States by Community institutions and bodies under harmonised conditions;2010-03-30",
+            "Commission Decision of 5 June 2009 implementing Directive 2007/2/EC of the European Parliament and of the Council as regards monitoring and reporting (notified under document number C(2009) 4199) (2009/442/EC);2009-06-11"
+                ]
+    },
+    "Constraints Conditions" : {
+        "terms" : [
+            "geossUserRegistration",
+            "geossAttribution",
+            "geossMonetaryCharge",
+            "geossNoMonetaryCharge",
+            "geossMarginalCost",
+            "geossDataCore",
+            "geossNonCommercial",
+            "geossOther",
+            "No conditions apply",
+            "Conditions unknown"
+    ]
+    },
+    "Constraints Limitations" : {
+        "terms" : [
+            "no limitation",
+            "(a) the confidentiality of the proceedings of public authorities, where such confidentiality is provided for by law",
+            "(b) international relations, public security or national defence",
+            "(c) the course of justice, the ability of any person to receive a fair trial or the ability of a public authority to conduct an enquiry of a criminal or disciplinary nature",
+            "(d) the confidentiality of commercial or industrial information, where such confidentiality is provided for by national or Community law to protect a legitimate economic interest, including the public interest in maintaining statistical confidentiality and tax secrecy",
+            "(e) intellectual property rights",
+            "(f) the confidentiality of personal data and/or files relating to a natural person where that person has not consented to the disclosure of the information to the public, where such confidentiality is provided for by national or Community law",
+            "(g) the interests or protection of any person who supplied the information requested on a voluntary basis without being under, or capable of being put under, a legal obligation to do so, unless that person has consented to the release of the information concerned",
+            "(h) the protection of the environment to which such information relates, such as the location of rare species."
+            ]
     }
+
+
 }
