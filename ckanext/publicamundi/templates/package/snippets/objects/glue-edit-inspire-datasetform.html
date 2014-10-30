@@ -35,6 +35,7 @@
                     'input_classes': ['span4'],
                     'attrs': { 
                         'data-module': 'package-form-linked-fields',
+                        'data-module-submit': true,
                         'data-module-target': h.dump_json({ 
                             'name': 'title', 
                             'value': pkg_dict.title, 
@@ -49,6 +50,9 @@
                     'input_classes': ['span5'],
                     'attrs': {
                         'data-module': 'package-form-linked-fields',
+                        'data-module-submit': true,
+                        'data-module-transform': h.url_for('', qualified=1) ~ '/dataset/' ~ '{{target}}',
+                        'data-module-subscribe-event': 'slug-preview-modified',
                         'data-module-target': h.dump_json({ 
                             'name': 'name', 
                             'value': pkg_dict.name, 
@@ -64,6 +68,7 @@
                     'attrs': {
                         'rows': 4,
                         'data-module': 'package-form-linked-fields',
+                        'data-module-submit': true,
                         'data-module-target': h.dump_json({
                             'name': 'notes',
                             'value': pkg_dict.notes,

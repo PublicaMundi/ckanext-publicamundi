@@ -22,16 +22,16 @@ insp11 = InspireMetadata(
         locator = ["http://www.google.com"],
         resource_language = ["el"],
         topic_category = ["biota"],
-        keywords = [
-            ThesaurusTerms(
+        keywords = {
+            'keywords-gemet-concepts': ThesaurusTerms(
                 terms=["atmosphere"],
                 thesaurus=fixtures.thesaurus_gemet_concepts
             ),
-            ThesaurusTerms(
+            'keywords-gemet-inspire-themes': ThesaurusTerms(
                 terms=["land-cover", "land-use"],
                 thesaurus=fixtures.thesaurus_gemet_inspire_data_themes,
             ),
-        ],
+            },
         bounding_box = [
             GeographicBoundingBox(nblat=0.0, sblat=0.0, eblng=0.0, wblng=0.0)],
         temporal_extent = [
@@ -40,8 +40,7 @@ insp11 = InspireMetadata(
         publication_date = datetime.date(2013,1,1),
         revision_date = datetime.date(2014,1,1),
         lineage = u"lineaage",
-        denominator = [0,1,2],
-        spatial_resolution = [SpatialResolution(distance=0, uom=u"meters")],
+        spatial_resolution = [SpatialResolution(distance=1, uom=u"meters")],
         conformity = [
             Conformity(title=u"specifications blabla", date=datetime.date.today(), date_type="creation", degree="conformant")],
         access_constraints = [u"lalala1", u"lalala2"],
@@ -61,16 +60,16 @@ insp12 = InspireMetadata(
     abstract = u"abstracttttttt",
     locator = ["http://www.google.com", "http://publicamundi.eu"],
     resource_language = ["el"],
-    keywords = [
-        ThesaurusTerms(
-            terms=["atmosphere"],
-            thesaurus=fixtures.thesaurus_gemet_concepts
-        ),
-        ThesaurusTerms(
-            terms=["land-cover", "land-use"],
-            thesaurus=fixtures.thesaurus_gemet_inspire_data_themes,
-        ),
-    ],
+    keywords = {
+            'keywords-gemet-concepts': ThesaurusTerms(
+                terms=["atmosphere"],
+                thesaurus=fixtures.thesaurus_gemet_concepts
+            ),
+            'keywords-gemet-inspire-themes': ThesaurusTerms(
+                terms=["land-cover", "land-use"],
+                thesaurus=fixtures.thesaurus_gemet_inspire_data_themes,
+            ),
+        },
     bounding_box = [
         GeographicBoundingBox(nblat=0.0, sblat=0.0, wblng=0.0, eblng=0.0)],
     temporal_extent = [
@@ -79,7 +78,6 @@ insp12 = InspireMetadata(
     publication_date = datetime.date(2013,1,1),
     revision_date = datetime.date(2014,1,1),
     lineage = u"lineaage",
-    denominator = [0,1,2,3],
     spatial_resolution = [SpatialResolution(distance=5, uom = u"meters")],
     conformity = [
         Conformity(title=u"specifications blabla", date=datetime.date.today(), date_type="creation", degree="conformant")],
@@ -97,15 +95,16 @@ insp2 = InspireMetadata(
     locator = ["http://www.google.com"],
     resource_language = ["el"],
     topic_category = ["biota"],
-    keywords = [
-        ThesaurusTerms(
-            terms=["buildings"],
-            thesaurus=fixtures.thesaurus_gemet_inspire_data_themes,
-        ),
-        ThesaurusTerms(
-            terms=["atmosphere"],
-            thesaurus=fixtures.thesaurus_gemet_concepts)
-    ],
+    keywords = {
+            'keywords-gemet-concepts': ThesaurusTerms(
+                terms=["atmosphere"],
+                thesaurus=fixtures.thesaurus_gemet_concepts
+            ),
+            'keywords-gemet-inspire-themes': ThesaurusTerms(
+                terms=["land-cover", "land-use"],
+                thesaurus=fixtures.thesaurus_gemet_inspire_data_themes,
+            ),
+        },
     bounding_box = [
         GeographicBoundingBox(nblat=0.0, sblat=0.0, eblng=0.0, wblng=0.0)],
     temporal_extent = [
@@ -114,9 +113,8 @@ insp2 = InspireMetadata(
     publication_date = datetime.date(2013,1,1),
     revision_date = datetime.date(2012,1,1),
     lineage = u"lineaage",
-    denominator = [0,1,2],
     spatial_resolution = [
-        SpatialResolution(distance=0, uom=u"meters")],
+        SpatialResolution(distance=5, uom=u"meters")],
     conformity = [
         Conformity(title=u"specifications blabla", date=datetime.date.today(), date_type="creation", degree="conformant")],
     access_constraints = [u"lalala1", u"lalala2"],
@@ -135,15 +133,16 @@ insp3 = InspireMetadata(
     locator = [],
     resource_language = ["el"],
     topic_category = ["biota"],
-    keywords = [
-        ThesaurusTerms(
-            terms=["buildings"],
-            thesaurus=fixtures.thesaurus_gemet_inspire_data_themes,
-        ),
-        ThesaurusTerms(
-            terms=["atmosphere"],
-            thesaurus=fixtures.thesaurus_gemet_concepts)
-    ],
+    keywords = {
+            'keywords-gemet-concepts': ThesaurusTerms(
+                terms=["atmosphere"],
+                thesaurus=fixtures.thesaurus_gemet_concepts
+            ),
+            'keywords-gemet-inspire-themes': ThesaurusTerms(
+                terms=["land-cover", "land-use"],
+                thesaurus=fixtures.thesaurus_gemet_inspire_data_themes,
+            ),
+        },
     bounding_box = [
         GeographicBoundingBox(nblat=0.0, sblat=0.0, wblng=0.0, eblng=0.0)],
     temporal_extent = [
@@ -152,7 +151,6 @@ insp3 = InspireMetadata(
     publication_date = datetime.date(2013,1,1),
     revision_date = datetime.date(2014,1,1),
     lineage = u"lineaage",
-    denominator = [0,1,2,3],
     spatial_resolution = [
         SpatialResolution(distance=5, uom=u"meters")],
     conformity = [
@@ -175,16 +173,16 @@ insp4 = InspireMetadata(
     locator = ["http://www.google.com", "http://publicamundi.eu"],
     resource_language = ["el"],
     topic_category = ["biota"],
-    keywords = [
-        ThesaurusTerms(
-            terms=["buildings"],
-            thesaurus=fixtures.thesaurus_gemet_inspire_data_themes,
-        ),
-        ThesaurusTerms(
-            terms=["atmosphere"],
-            thesaurus=fixtures.thesaurus_gemet_concepts
-        ),
-    ],
+    keywords = {
+            'keywords-gemet-concepts': ThesaurusTerms(
+                terms=["atmosphere"],
+                thesaurus=fixtures.thesaurus_gemet_concepts
+            ),
+            'keywords-gemet-inspire-themes': ThesaurusTerms(
+                terms=["land-cover", "land-use"],
+                thesaurus=fixtures.thesaurus_gemet_inspire_data_themes,
+            ),
+        },
     bounding_box = [
         GeographicBoundingBox(nblat=0.0, sblat=0.0, wblng=0.0, eblng=0.0)],
     temporal_extent = [
@@ -193,7 +191,6 @@ insp4 = InspireMetadata(
     publication_date = datetime.date(2013,1,1),
     revision_date = datetime.date(2014,1,1),
     lineage = u"lineaage",
-    denominator = [0,1,2,3],
     spatial_resolution = [
         SpatialResolution(distance=5, uom=u"meters")],
     conformity = [
@@ -216,31 +213,45 @@ insp6.temporal_extent = [
 # Keywords include unexpected terms
 insp7 = copy.deepcopy(insp4)
 insp7.temporal_extent = None
-insp7.keywords = [
-    ThesaurusTerms(
-        terms=["buildings", "addresses"],
-        thesaurus=fixtures.thesaurus_gemet_inspire_data_themes,
-    ),
-    ThesaurusTerms(
-        terms=["analysis", "foo"], # Term "foo" does not exist
-        thesaurus=fixtures.thesaurus_gemet_concepts
-    ),
-]
+insp7.keywords = {
+            'keywords-gemet-concepts': ThesaurusTerms(
+                terms=["analysis", "foo"], # Term "foo" does not exist
+                thesaurus=fixtures.thesaurus_gemet_concepts
+            ),
+            'keywords-gemet-inspire-themes': ThesaurusTerms(
+                terms=["buildings", "addresses"],
+                thesaurus=fixtures.thesaurus_gemet_inspire_data_themes,
+            ),
+        },
+
 
 # Wrong Thesaurus Name Provided
 insp8 = copy.deepcopy(fixtures.inspire1)
-insp8.keywords = [
-    ThesaurusTerms(
-        terms=["buildings", "addresses"],
-        thesaurus= Thesaurus(
-            title = u'GEMET INSPIRE Themes',
-            name = 'keywords-gemet-wrong-inspire-themes',
-            reference_date = datetime.date(2014, 1, 1),
-            version = 1.0,
-            date_type = 'creation'
-            )
+insp8.keywords = {
+            'keywords-gemet-inspire-themes': ThesaurusTerms(
+                terms=["buildings", "addresses"],
+                thesaurus= Thesaurus(
+                    title = u'GEMET INSPIRE Themes',
+                    name = 'keywords-gemet-wrong-inspire-themes',
+                    reference_date = datetime.date(2014, 1, 1),
+                    version = 1.0,
+                    date_type = 'creation'
+                    )
+                ),
+            }
+
+# Missing keyword terms from INSPIRE Data themes 
+insp9 = copy.deepcopy(fixtures.inspire1)
+insp9.keywords = {
+        'keywords-gemet-themes': ThesaurusTerms(
+            terms=["air", "agriculture", "climate"],
+            thesaurus=fixtures.thesaurus_gemet_themes
         ),
-]
+        }
+
+# Keywords completely empty
+insp10 = copy.deepcopy(fixtures.inspire1)
+insp10.keywords = {}
 
 #
 # Tests
@@ -292,9 +303,20 @@ def test_insp8():
     assert_faulty_keys(insp8,
         expected_keys=set(['keywords']))
 
+def test_insp9():
+    '''Missing Keywords from INSPIRE Data themes'''
+    assert_faulty_keys(insp9,
+        expected_keys=set(['__after']))
+
+def test_insp10():
+    '''Completely empty keywords'''
+    assert_faulty_keys(insp10,
+        expected_keys=set(['keywords']))
+
 def test_fixtures_inspire1():
     '''Everything should be ok'''
     assert_faulty_keys(fixtures.inspire1)
+
 
 if __name__ == '__main__':
     #test_insp11()

@@ -74,7 +74,7 @@ def make_vocabularies(data_file):
             'title': title,
             'reference_date': datetime.strptime(keywords.get('reference_date'), '%Y-%m-%d').date(),
             'date_type': keywords.get('date_type'),
-            'version': keywords.get('version'),
+            'version': keywords.get('version').encode('utf-8'),
             'vocabulary': make_vocabulary(keywords.get('terms'))
         }
         yield (name, desc)

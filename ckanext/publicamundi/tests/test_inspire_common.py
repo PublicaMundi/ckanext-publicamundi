@@ -214,7 +214,7 @@ def test_te4():
 sr1 = SpatialResolution(distance = 5.0, uom = u"lala")
 
 # Find schema validation error for non-positive distance
-sr2 = SpatialResolution(distance = 0, uom=u"meters")
+sr2 = SpatialResolution(denominator = 2, distance = 0, uom=u"meters")
 
 # Find invariant error - distance cannot be unitless
 sr3 = SpatialResolution(distance = 5)
@@ -223,7 +223,7 @@ sr3 = SpatialResolution(distance = 5)
 sr4 = SpatialResolution()
 
 # Validate correct schema
-sr5 = SpatialResolution(distance = 5, uom = u"lala")
+sr5 = SpatialResolution(denominator=200, distance = 5, uom = u"lala")
 sr6 = SpatialResolution(denominator = 4000)
 
 # Tests

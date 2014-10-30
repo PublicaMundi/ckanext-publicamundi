@@ -132,8 +132,7 @@ input[type='checkbox'], input[type='radio'] {
     border-radius: 1px;
 }
 
-input:disabled,
-textarea:disabled {
+input:disabled, textarea:disabled {
     cursor: text;
 }
 

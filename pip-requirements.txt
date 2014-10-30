@@ -14,3 +14,4 @@ inflection
 pytz
 isodate
 dictdiffer
+pytidylib
