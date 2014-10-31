@@ -124,4 +124,5 @@ this.ckan.module('package-form-autofiller', function ($, _) {
         window.console.debug('Tearing down module: package-form-autofiller')
     },
   }
-})
+});
+

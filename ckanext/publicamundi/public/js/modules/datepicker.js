@@ -19,4 +19,5 @@ this.ckan.module('datepicker', function ($, _) {
         window.console.debug('Tearing down module: datepicker')
     },
   }
-})
+});
+

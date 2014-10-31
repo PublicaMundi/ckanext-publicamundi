@@ -68,7 +68,7 @@ this.ckan.module('input-select-choices', function ($, _) {
           debug('Tearing down module: input-select-choices')
       },
     }
-})
+});
 
 /*
  * Provide support for select2-based inputs.
@@ -142,7 +142,7 @@ this.ckan.module('input-select2', function ($, _) {
           debug('Tearing down module: input-select2')
       },
     }
-})
+});
 
 /*
  * A module for select2-based input for tags
@@ -248,7 +248,7 @@ this.ckan.module('input-select2-tags', function ($, _) {
           return prefix + Math.random().toString(36).substring(2)
       },
     }
-})
+});
 
 /*
  * A module for checkboxes-based input for choices
@@ -303,4 +303,5 @@ this.ckan.module('input-checkbox-choices', function ($, _) {
             debug('Tearing down module: input-checkbox-choices')
         },
     };
-})
+});
+

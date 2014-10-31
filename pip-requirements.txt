@@ -3,7 +3,6 @@ geojson
 shapely
 GeoAlchemy>=0.6
 requests==1.1.0
--e git+https://github.com/ckan/ckanext-spatial.git#egg=ckanext_spatial
 zope.interface==4.0.1
 zope.schema==4.4
 zope.component==4.1
@@ -15,3 +14,4 @@ pytz
 isodate
 dictdiffer
 pytidylib
+-e git+https://drmalex07@github.com/PublicaMundi/ckanext-spatial#egg=ckanext-spatial

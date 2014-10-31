@@ -111,4 +111,5 @@
         };
     })
  
-}).apply(this)  
+}).apply(this);
+
