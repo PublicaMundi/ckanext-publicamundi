@@ -476,4 +476,5 @@
         };
     })
 
-}).apply(this)  
+}).apply(this);
+
