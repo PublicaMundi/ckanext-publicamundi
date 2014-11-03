@@ -34,6 +34,11 @@ class TemporalExtentFactory(object):
     def __call__(self):
         return [TemporalExtent()]
 
+class SpatialResolutionFactory(object):
+    
+    def __call__(self):
+        return [SpatialResolution()]
+
 @object_null_adapter()
 class InspireMetadata(BaseMetadata):
     
@@ -62,7 +67,7 @@ class InspireMetadata(BaseMetadata):
     revision_date = None
     lineage = None
     
-    spatial_resolution = list
+    spatial_resolution = SpatialResolutionFactory()
     
     conformity = list
     

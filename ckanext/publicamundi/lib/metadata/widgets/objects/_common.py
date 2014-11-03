@@ -344,6 +344,13 @@ class SpatialResolutionEditWidget(EditObjectWidget):
     def get_template(self):
         return 'package/snippets/objects/edit-spatial_resolution.html' 
 
+@object_widget_adapter(schemata.ISpatialResolution, 
+    qualifiers=['item'], is_fallback=False)
+class SpatialResolutionAsItemEditWidget(EditObjectWidget):
+        
+    def get_template(self):
+        return 'package/snippets/objects/edit-spatial_resolution-item.html' 
+
 @object_widget_adapter(schemata.ISpatialResolution)
 class SpatialResolutionReadWidget(ReadObjectWidget):
         

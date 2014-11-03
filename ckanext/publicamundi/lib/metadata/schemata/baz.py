@@ -33,3 +33,6 @@ class IBaz(IBaseMetadata):
         title = u'Baz BBox',
         required = True)
 
+    resolution = zope.schema.Object(ISpatialResolution,
+        title = u'Spatial Resolution',
+        required = False)
