@@ -1,1 +1,60 @@
-<p>Todo <code>edit-spatial_resolution.html</code></p>
+
+{%- with by_scale = obj.distance is none -%}
+
+<div class="control-group {{ classes|join(' ') }}"
+    data-module="input-spatial-resolution"
+    data-module-qname="{{ qname }}"
+ >
+    {% if title %}<header><h3 class="inline">{{ title }}</h3></header>{% endif -%}
+    
+    <label class="control-label">{{ _('Specify') }}</label>
+    <div class="controls clearfix">
+        <label class="radio inline">
+            <input type="radio" name="{{ qname }}-type" value="scale" 
+                {%- if by_scale %} checked="checked"{% endif %}/>{{ _('By equivalent scale') -}}
+        </label>
+        <label class="radio inline">
+            <input type="radio" name="{{ qname }}-type" value="distance"
+                {%- if not by_scale %} checked="checked"{% endif %}/>{{ _('By ground distance') -}}
+        </label>
+    </div>
+        
+    <div class="control-subgroup" id="{{ qname }}-denominator">
+        <label class="control-label">{{ _('Equivalent Scale') }}</label>
+        <div class="controls">
+            {% with field = obj.get_field('denominator') %}
+            <input type="number" name="{{ qname ~ '.' ~ 'denominator' }}" id="input-{{ qname ~ '.' ~ 'denominator' }}"
+                class="input-small" placeholder="{{ _('50000') }}" {% if not by_scale %}disabled="disabled"{% endif %}
+                title="{{ field.description }}"
+                value="{{ field.context.value|empty_and_escape }}" min="{{ field.min }}" max="{{ field.max }}"
+             />
+            {% endwith %} {# denominator #}
+        </div>
+    </div>
+
+    <div class="control-subgroup" id="{{ qname }}-distance">
+        <label class="control-label">{{ _('Distance') }}</label>
+        <div class="controls">
+            {% with field = obj.get_field('distance') %}
+            <input type="number" name="{{ qname ~ '.' ~ 'distance' }}" id="input-{{ qname ~ '.' ~ 'distance' }}"
+                class="input-small inline-control" {% if by_scale %}disabled="disabled"{% endif %}
+                title="{{ field.description }}"
+                value="{{ field.context.value|empty_and_escape }}"
+             />
+            {% endwith %} {# distance #}
+            <span class="space-x1"></span><span>{{ _('Unit') }}:</span>
+            {% with field = obj.get_field('uom') %}
+            <input type="text" name="{{ qname ~ '.' ~ 'uom' }}" id="input-{{ qname ~ '.' ~ 'uom' }}"
+                class="span1 inline-control" placeholder="Km" {% if by_scale %}disabled="disabled"{% endif %}
+                title="{{ field.description }}"
+                value="{{ field.context.value|empty_and_escape }}"
+             />
+            {% endwith %} {# uom #}
+        </div>
+    </div>
+    
+</div>
+
+{%- endwith -%}
+
+{%- resource 'ckanext-publicamundi/spatial-resolution' -%}

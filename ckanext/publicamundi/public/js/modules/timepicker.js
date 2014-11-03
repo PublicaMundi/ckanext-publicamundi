@@ -23,5 +23,5 @@ this.ckan.module('timepicker', function ($, _) {
         window.console.debug('Tearing down module: timepicker')
     },
   }
-})
+});
 

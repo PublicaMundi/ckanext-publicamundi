@@ -93,4 +93,5 @@
         };
     })
 
-}).apply(this)  
+}).apply(this);
+

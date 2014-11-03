@@ -80,6 +80,11 @@ label.checkbox {
     margin-top: 4px;
 }
 
+label.radio {
+    font-weight: inherit;
+    margin: 0px 0px 0px 0px;
+}
+
 .controls.checkboxes label.checkbox {
     padding-left: 0px;
 }
@@ -173,6 +178,10 @@ input:disabled, textarea:disabled {
 .form-horizontal .controls input + input.inline-control {
     display: inline-block;
     margin-top: inherit;
+}
+
+.form-horizontal .control-group > .control-subgroup {
+    margin: 5px 0px;
 }
 
 span.space-x1 { padding: 0px 4px }

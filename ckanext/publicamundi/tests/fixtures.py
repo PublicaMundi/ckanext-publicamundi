@@ -157,11 +157,12 @@ baz1 = Baz(
         terms = ["energy", "agriculture", "climate", "human-health"],
         thesaurus = thesaurus_gemet_themes),
     bbox = bbox1,
+    resolution = SpatialResolution(distance=5, uom='km'),
 )
 
 baz2 = copy.deepcopy(baz1)
 baz2.keywords = None #ThesaurusTerms(thesaurus=Thesaurus(name='keywords-gemet-inspire-themes'))
-baz2.bbox = None
+baz2.resolution = SpatialResolution(denominator=5000) 
 
 # INSPIRE metadata
 
@@ -217,5 +218,4 @@ inspire1 = InspireMetadata(
 
 inspire2 = copy.deepcopy(inspire1)
 inspire2.keywords = None
-
 

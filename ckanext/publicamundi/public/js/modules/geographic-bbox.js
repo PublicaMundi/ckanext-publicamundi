@@ -384,4 +384,5 @@
         };
     })
 
-}).apply(this)  
+}).apply(this);
+

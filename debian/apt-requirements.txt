@@ -1,2 +1,2 @@
 tidy
-libtidy-lib
+libtidy-dev

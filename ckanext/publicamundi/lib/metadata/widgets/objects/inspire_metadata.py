@@ -42,6 +42,16 @@ class BoundingBoxEditWidget(EditFieldWidget, ListFieldWidgetTraits):
     def get_template(self):
         return 'package/snippets/fields/edit-list-bounding_box-inspire.html'
 
+@field_widget_multiadapter([IListField, schemata.ISpatialResolution],
+    qualifiers=['spatial_resolution.inspire'], is_fallback=False)
+class SpatialResolutionEditWidget(EditFieldWidget, ListFieldWidgetTraits):
+ 
+    def get_item_qualifier(self):
+        return 'item'
+    
+    def get_template(self):
+        return 'package/snippets/fields/edit-list-spatial_resolution-inspire.html'
+
 @field_widget_multiadapter([IListField, IURIField],
     qualifiers=['locator.inspire'], is_fallback=False)
 class ResourceLocatorsEditWidget(EditFieldWidget):
@@ -55,6 +65,13 @@ class ResourceLanguagesEditWidget(EditFieldWidget):
  
     def get_template(self):
         return 'package/snippets/fields/edit-list-resource_language-inspire.html'
+
+@field_widget_adapter(ITextField, 
+    qualifiers=['lineage.inspire'], is_fallback=False)
+class LineageEditWidget(EditFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/edit-text-lineage-inspire.html'
 
 @object_widget_adapter(schemata.IInspireMetadata, 
     qualifiers=['datasetform'], is_fallback=True)
@@ -91,8 +108,9 @@ class InspireEditWidget(EditObjectWidget):
             'publication_date': {},
             'revision_date': {},
             'lineage': {
+                'heading': _('Lineage Statement'),
                 'attrs': {
-                    'rows': 4,
+                    'rows': 5,
                 }
             },
             'languagecode': {
@@ -118,7 +136,8 @@ class InspireEditWidget(EditObjectWidget):
             ('creation_date', None),
             ('publication_date', None),
             ('revision_date', None),
-            ('lineage', None),
+            ('lineage', 'lineage.inspire'),
+            ('spatial_resolution', 'spatial_resolution.inspire'),
             ('responsible_party', 'contacts.inspire'),
             ('contact', 'contacts.inspire'),
             ('languagecode', 'select2'),
