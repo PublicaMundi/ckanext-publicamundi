@@ -99,8 +99,8 @@ def postprocess_dataset_for_read(key, data, errors, context):
     pass
 
 def postprocess_dataset_for_edit(key, data, errors, context):
-    assert key[0] == '__after', \
-        'This validator can only be invoked in the __after stage'
+    assert key[0] == '__after', (
+        'This validator can only be invoked in the __after stage')
      
     def debug(msg):
         logger.debug('Post-processing dataset for editing: %s' %(msg))
@@ -135,10 +135,11 @@ def postprocess_dataset_for_edit(key, data, errors, context):
     
     # 2. Validate as an object
 
-    validation_errors = obj.validate(dictize_errors=True)
-    # Todo Try to map `validation_errors` to `errors`
-    #assert not validation_errors
-   
+    if not 'skip_validation' in context:
+        validation_errors = obj.validate(dictize_errors=True)
+        # Todo Map `validation_errors` to `errors`
+        #assert not validation_errors
+    
     # 3. Convert fields to extras
     
     extras_list = data[('extras',)]
@@ -233,13 +234,14 @@ def get_field_edit_processor(field):
             raise StopOnError
 
         # Validate
-        
-        try: 
-            # Invoke the zope.schema validator
-            field.validate(value)
-        except zope.schema.ValidationError as ex:
-            # Map this exception to the one expected by CKAN
-            raise Invalid(u'Invalid (%s)' % (type(ex).__name__))
+       
+        if not 'skip_validation' in context:
+            try: 
+                # Invoke the zope.schema validator
+                field.validate(value)
+            except zope.schema.ValidationError as ex:
+                # Map this exception to the one expected by CKAN
+                raise Invalid(u'Invalid (%s)' % (type(ex).__name__))
 
         # Convert to a properly formatted string (for db storage)
 
