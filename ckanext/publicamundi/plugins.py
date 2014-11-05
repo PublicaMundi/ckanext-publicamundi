@@ -126,9 +126,15 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         api_controller = 'ckanext.publicamundi.controllers.api:Controller'
         
         mapper.connect(
-            '/api/util/resource/mimetype_autocomplete',
-            controller=api_controller, action='mimetype_autocomplete')
-         
+            '/api/publicamundi/util/resource/mimetype_autocomplete',
+            controller=api_controller, 
+            action='resource_mimetype_autocomplete')
+        
+        mapper.connect(
+            '/api/publicamundi/util/resource/format_autocomplete',
+            controller=api_controller, 
+            action='resource_format_autocomplete')
+       
         mapper.connect('publicamundi-list-vocabularies',
             '/api/publicamundi/vocabularies',
             controller=api_controller, action='vocabularies_list')
