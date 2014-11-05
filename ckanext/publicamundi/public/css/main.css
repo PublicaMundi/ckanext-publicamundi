@@ -223,17 +223,19 @@ span.space-x3 { padding: 0px 12px }
 }
 
 #draw-bbox-dialog {
-    /*
+    
     position: absolute;
-    width: 100%;
-    top: 10%;
-    left: 0%;
+    width: 80%;
+    top: 30px;
+    left: 10%;
     margin: 0px;
-    */
+    
+    /*
     position: fixed;
     width: 50%;
     top: 50px;
     left: 25%;
     margin: 0px;
+    */
 }
 

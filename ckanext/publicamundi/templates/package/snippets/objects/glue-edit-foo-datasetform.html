@@ -22,7 +22,7 @@
    ]
 %}
 
-<div class="{{ " " ~ classes | join(' ') }}">
+<div class="{{ classes|join(' ') }}">
     {% if title %}<h3>{{ title }}</h3>{% endif %}
     {% call(group_desc) accordion.accordion('foo-fields', groups) %}
         {% for fname in group_desc.fields -%}
