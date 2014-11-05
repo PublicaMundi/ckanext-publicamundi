@@ -317,10 +317,6 @@ class TestsController(BaseController):
             'ignore_auth':True, 
             'api_version': 3,
         }
-    
-    def test_download(self, errors={}):
-        return self.test_toxml(file_output='xml',name_or_id='title')
-
 
     def test_upload(self, errors={}):
         return render('package/upload_template.html', extra_vars={'errors':errors})
