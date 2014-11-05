@@ -26,21 +26,19 @@ Example usage:
 {% macro accordion(id, groups) -%}
 <div class="accordion" id="{{ id }}">
     {% for group in groups -%}
-    {% with group_id = id ~ '-group-' ~ loop.index -%}
-    {% with heading = group.heading -%}
+    {% with group_id = id ~ '-group-' ~ group.name, heading = group.heading -%}
     <div class="accordion-group">
         <div class="accordion-heading">
             <a class="accordion-toggle" data-toggle="collapse" data-parent="#{{ id }}" href="#{{ group_id }}"
                 >{{ heading }}</a>
         </div>
-        <div id="{{ group_id }}" class="accordion-body collapse {% if loop.first %}in{% endif %}">
+        <div id="{{ group_id }}" class="accordion-body collapse {% if group.selected %}in{% endif %}">
             <div class="accordion-inner">
                 {{ caller(group) }}
             </div>
         </div>
     </div>
-    {% endwith -%} {# heading #}
-    {% endwith -%} {# group_id #}
+    {% endwith -%} {# group_id, heading #}
     {% endfor -%}
 </div>
 {% endmacro -%}
