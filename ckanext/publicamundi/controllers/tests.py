@@ -346,8 +346,14 @@ class TestsController(BaseController):
         else:
             return self.test_upload(errors = {'No file or link provided':['Please provide a url or upload an XML file']})
 
-    def test_toxml(self, file_output='json', name_or_id=None):
-        dataset = self._show(name_or_id)
+    def export_to_type(self, id):
+        rtype = request.params.get('type')
+        if rtype:
+            file_output = request.params.get('type')
+        else:
+            file_output = 'json'
+        #file_output='json', name_or_id=None):
+        dataset = self._show(id)
         dataset_type = dataset.get('dataset_type')
         obj = dataset.get(dataset_type)
 
