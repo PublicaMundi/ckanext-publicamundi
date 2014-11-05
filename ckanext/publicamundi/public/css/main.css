@@ -80,6 +80,11 @@ label.checkbox {
     margin-top: 4px;
 }
 
+label.radio {
+    font-weight: inherit;
+    margin: 0px 0px 0px 0px;
+}
+
 .controls.checkboxes label.checkbox {
     padding-left: 0px;
 }
@@ -175,6 +180,10 @@ input:disabled, textarea:disabled {
     margin-top: inherit;
 }
 
+.form-horizontal .control-group > .control-subgroup {
+    margin: 5px 0px;
+}
+
 span.space-x1 { padding: 0px 4px }
 span.space-x2 { padding: 0px 8px }
 span.space-x3 { padding: 0px 12px }
@@ -210,21 +219,23 @@ span.space-x3 { padding: 0px 12px }
  */
 
 #draw-bbox-dialog .map-container {
-    height: 220px;
+    height: 250px;
 }
 
 #draw-bbox-dialog {
-    /*
+    
     position: absolute;
-    width: 100%;
-    top: 10%;
-    left: 0%;
+    width: 70%;
+    top: 30px;
+    left: 15%;
     margin: 0px;
-    */
+    
+    /*
     position: fixed;
     width: 50%;
     top: 50px;
     left: 25%;
     margin: 0px;
+    */
 }
 

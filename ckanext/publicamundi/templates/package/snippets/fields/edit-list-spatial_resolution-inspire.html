@@ -1,0 +1,15 @@
+
+{%- set 
+    messages = 
+    {
+        'add-label': _('Add resolution'),
+        'add-title': _('Add resolution'), 
+        'clear-label': _('Clear all'),
+        'clear-title': _('Clear all!'),
+        'add-description': false,
+        'maxlength-alert': _('You cannot add more than {{maxlength}} resolution descriptors'),
+        'clear-alert': _('Are you sure you want to clear all ({{num}}) resolution descriptors?'),
+    } 
+-%}
+
+{% extends 'package/snippets/fields/edit-list-items.html' %}

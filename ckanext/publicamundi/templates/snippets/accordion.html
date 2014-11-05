@@ -1,6 +1,6 @@
 <div class="accordion" id="{{ id }}">
     {% for section in sections -%}
-    {% with section_id=id ~ '-section-' ~ loop.index, heading=section.heading, body=section.body %}
+    {% with section_id = id ~ '-section-' ~ section.name, heading = section.heading, body = section.body %}
     <div class="accordion-group">
         <div class="accordion-heading">
             <a class="accordion-toggle" data-toggle="collapse" data-parent="#{{ id }}" href="#{{ section_id }}"

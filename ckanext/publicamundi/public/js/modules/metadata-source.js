@@ -268,5 +268,5 @@ this.ckan.module('metadata-source-upload-subscriber', function ($) {
         })
     },
   }
-})
+});
 

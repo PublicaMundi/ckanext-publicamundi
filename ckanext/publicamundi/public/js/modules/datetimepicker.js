@@ -33,5 +33,5 @@ this.ckan.module('datetimepicker', function ($, _) {
         window.console.debug('Tearing down module: datetimepicker')
     },
   }
-})
+});
 
