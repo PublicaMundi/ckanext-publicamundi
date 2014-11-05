@@ -32,6 +32,7 @@ from ckanext.publicamundi.lib.metadata.xml_serializers import *
 from ckanext.publicamundi.lib.metadata.types.inspire_metadata import *
 log1 = logging.getLogger(__name__)
 import shutil
+import requests
 
 PERMANENT_STORE = '/var/local/ckan/default/ofs/storage'
 class TestsController(BaseController):
@@ -303,7 +304,7 @@ class TestsController(BaseController):
         #raise Exception('Break')
         c.form_class = 'form-horizontal' # 'form-horizontal'
         return render('tests/accordion-form.html')
-  
+
     @classmethod
     def _get_action_context(cls):
         return {
@@ -329,31 +330,38 @@ class TestsController(BaseController):
             shutil.copyfileobj(myfile.file, permanent_file)
             myfile.file.close()
             permanent_file.close()
-            return self.test_fromxml(myfile.filename)
+            return self.test_fromxml(filename = myfile.filename)
         elif link:
             # Case: Link provided
             # TODO: Need to handle this
+            print 'link'
+            print link
+            r = requests.get(link)
+            return self.test_fromxml(link=link)
             #return self.test_fromxml(link)
-            return self.test_upload(errors = {'My bad': ['Url upload not yet supported']})
+            #return self.test_upload(errors = {'My bad': ['Url upload not yet supported']})
         else:
-            return self.test_upload(errors = {'Metadata upload failure':['No file or link provided']})
+            return self.test_upload(errors = {'No file or link provided':['Please upload an XML file or provide an online file url']})
         
         #return 'Successfully uploaded: %s' % (myfile.filename)
 
-    def test_fromxml(self, filename):
+    def test_fromxml(self, filename=None, link=None):
         name = None
-        try:
-            infile = open(os.path.join(PERMANENT_STORE, filename), 'r')
-        except:
-            log1.info('Exception %s' % ex)
-            return self.test_upload(errors = {'Metadata upload failure':['Cannot open file']})
+        if filename:
+            try:
+                infile = open(os.path.join(PERMANENT_STORE, filename), 'r')
+            except:
+                log1.info('Exception %s' % ex)
+                return self.test_upload(errors = {'Failure to read file':[ex]})
+        elif link:
+            infile = link
 
         ser = xml_serializer_for_object(InspireMetadata())
         try:
             e = etree.parse(infile)
         except Exception as ex:
             log1.info('Exception %s' % ex)
-            return self.test_upload(errors = {'Metadata upload failure':['Invalid XML file']})
+            return self.test_upload(errors = {'Invalid XML file provided':[ex]})
 
         try:
             insp = ser.from_xml(e)
@@ -366,14 +374,13 @@ class TestsController(BaseController):
             errors = insp.validate(dictize_errors=True)
         except Exception as ex:
             log1.info('Exception %s' % ex)
-            return self.test_upload(errors = {'Metadata upload failure':['INSPIRE XML validation failure']})
+            return self.test_upload(errors = {'INSPIRE XML validation failure':[ex]})
         if self._package_exists(name):
             #return render('package/page_error.html', extra_vars={ 'errors': u"Package with the same name already exists"})
-            return self.test_upload(errors = {'Metadata upload failure':['Package with the same name already exists']})
+            return self.test_upload(errors = {'Package with the same name already exists':['Please change dataset title and try again']})
 
         if errors:
             # If there are validation redirect to edit page for corrections 
-            # TODO Need to map data to edit form
             #pkg = self._prepare_inspire_draft(insp, name, errors)
             pkg = self._prepare_inspire(insp, name)
             print 'ERRORS'
@@ -399,25 +406,6 @@ class TestsController(BaseController):
 
         pkg = self._create_or_update(pkg_data)
         return pkg
-
-    def _prepare_inspire_draft(self, insp, name, errors):
-        data = insp.to_dict(flat=1, opts={'serialize-keys': True, 'serialize-values':'default'})
-        print 'DATA'
-        print data
-        for err in errors:
-            print err
-            for it in err:
-                print it
-        pkg_data = {}
-        pkg_data['title'] = insp.title
-        #pkg_data['name'] = json_loader.munge(insp.title)
-        pkg_data['name'] = name
-        pkg_data['dataset_type'] = 'inspire'
-        pkg_data['inspire'] = data
-        pkg = self._create_or_update(pkg_data)
-
-        return pkg
-
 
     def _create_or_update(self, data):
         print self._get_action_context()
