@@ -25,9 +25,18 @@
             },
         },
         dialog: { 
-            container: '#content .wrapper',
+            container: 'body', //'#content .wrapper', //'#inspire-fields-group-geographic',
             id: 'draw-bbox-dialog',
             template: 'draw-bbox-dialog.html',
+            position: 'simulate-fixed', // absolute | simulate-fixed  
+            // This allows us to simulate position:fixed behaviour while actually positioned as
+            // absolute. The simulation is needed by leaflet to function properly under a dialog.
+            // See issue #60.
+            createOptions: {
+                show: false, 
+                keyboard: true, 
+                backdrop: 'static',
+            },
         },
         extent: {
             type: 'Polygon',
@@ -41,8 +50,19 @@
         },
     };
     
+    // The dialog's state
+    var state = null // i.e not-initialized
+
+    // The dialog's container 
     var $container = $(config.dialog.container)
+
+    // The dialog
+    var $dialog = null
     
+    // The offset from top of the view window (needed only if simulate-fixed) 
+    var offsetTop = null
+    
+    // The leaflet map (one instance for multiple module instances)
     var map1 = null
 
     this.ckan.module('input-geographic-bbox', function ($, _) {
@@ -60,19 +80,30 @@
                     $el = this.el,
                     sandbox = this.sandbox
                 
-                var $dialog = $container.find('#' + config.dialog.id)
-                
-                if (!$dialog.length) {
+                if (state == null) {
+                    state = 'initializing'
                     var tpl_vars = { id: config.dialog.id }
                     sandbox.client.getTemplate(config.dialog.template, tpl_vars, function (markup) {
+                        // Create dialog
                         $dialog = $(markup)
-                            .modal({ show: false, keyboard: true })
+                            .modal(config.dialog.createOptions)
                             .appendTo($container)
                             .on('shown', $.proxy(module._prepareMap, null))
-                        $dialog.find('a.btn.apply')
+                        // Bind dialog button handlers
+                        $dialog.find('a.apply')
                             .on('click', $.proxy(module._handleApply, null))
-                        $dialog.find('a.btn.cancel')
+                        $dialog.find('a.cancel')
                             .on('click', $.proxy(module._handleCancel, null))
+                        // Check positioning configuration
+                        if ($dialog.css('position') != 'absolute') {
+                            warn('The leaflet map container is not positioned as absolute!')
+                        }
+                        if (config.dialog.position == 'simulate-fixed') {
+                            offsetTop = parseInt($dialog.css('top'))
+                            debug('Calculated offsetTop as ' + offsetTop)
+                        }
+                        // Update state
+                        state = 'initialized'
                     })
                 }
                 
@@ -134,19 +165,26 @@
 
             _openDialog: function () 
             {
-                var module = this 
-                 
-                var $dialog = $container.find('#' + config.dialog.id)
+                var module = this;
+                
+                var $dialog = $container.find('#' + config.dialog.id);
+                
+                // Position
+
+                if (config.dialog.position == 'simulate-fixed') {
+                    var top = $(window).scrollTop() + offsetTop;
+                    $dialog.css('top', top.toString() + 'px');
+                }
                 
                 // Show and store reference to current module instance
                 
-                assert($dialog.data('current-module') == null)
+                assert($dialog.data('current-module') == null);
 
                 $dialog
                     .data('current-module', module)
-                    .modal('show')
-
-                return false
+                    .modal('show');
+                
+                return false;
             },
 
             _closeDialog: function ()
