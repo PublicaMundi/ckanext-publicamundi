@@ -34,7 +34,10 @@ log1 = logging.getLogger(__name__)
 import shutil
 import requests
 from unidecode import unidecode
-
+content_types = {
+            'json': 'application/json; charset=utf8',
+            'xml': 'text/xml'
+            }
 PERMANENT_STORE = '/var/local/ckan/default/ofs/storage'
 class TestsController(BaseController):
 
@@ -315,6 +318,10 @@ class TestsController(BaseController):
             'api_version': 3,
         }
     
+    def test_download(self, errors={}):
+        return self.test_toxml(file_output='xml',name_or_id='title')
+
+
     def test_upload(self, errors={}):
         return render('package/upload_template.html', extra_vars={'errors':errors})
 
@@ -338,6 +345,23 @@ class TestsController(BaseController):
                 return self.test_upload(errors = {'Wrong url provided':['Please provide a correct url or upload an XML file']})
         else:
             return self.test_upload(errors = {'No file or link provided':['Please provide a url or upload an XML file']})
+
+    def test_toxml(self, file_output='json', name_or_id=None):
+        dataset = self._show(name_or_id)
+        dataset_type = dataset.get('dataset_type')
+        obj = dataset.get(dataset_type)
+
+        if file_output == 'xml':
+            response.headers['Content-Type'] = content_types['xml']
+            ser = xml_serializer_for_object(obj)
+            return [ser.dumps()]
+        else:
+            response.headers['Content-Type'] = content_types['json']
+            data = obj.to_json()
+            return [data]
+
+
+
 
     def test_fromxml(self, filename=None, link=None):
         if filename:
