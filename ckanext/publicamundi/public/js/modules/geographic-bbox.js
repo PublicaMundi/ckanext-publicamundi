@@ -32,6 +32,11 @@
             // This allows us to simulate position:fixed behaviour while actually positioned as
             // absolute. The simulation is needed by leaflet to function properly under a dialog.
             // See issue #60.
+            createOptions: {
+                show: false, 
+                keyboard: true, 
+                backdrop: 'static',
+            },
         },
         extent: {
             type: 'Polygon',
@@ -81,13 +86,13 @@
                     sandbox.client.getTemplate(config.dialog.template, tpl_vars, function (markup) {
                         // Create dialog
                         $dialog = $(markup)
-                            .modal({ show: false, keyboard: true })
+                            .modal(config.dialog.createOptions)
                             .appendTo($container)
                             .on('shown', $.proxy(module._prepareMap, null))
                         // Bind dialog button handlers
-                        $dialog.find('a.btn.apply')
+                        $dialog.find('a.apply')
                             .on('click', $.proxy(module._handleApply, null))
-                        $dialog.find('a.btn.cancel')
+                        $dialog.find('a.cancel')
                             .on('click', $.proxy(module._handleCancel, null))
                         // Check positioning configuration
                         if ($dialog.css('position') != 'absolute') {
