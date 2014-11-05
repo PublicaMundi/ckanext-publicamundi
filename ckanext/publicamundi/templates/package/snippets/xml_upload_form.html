@@ -9,7 +9,7 @@
 {{ markup_helpers.error_messages(errors) }}
 {% endblock %}
 
-<form class="dataset-form" data-module="basic-form" action="submit_upload" method="post" enctype="multipart/form-data" accept="xml">
+<form class="dataset-form" data-module="basic-form" action="submit_upload" method="post" enctype="multipart/form-data">
     {% block basic_fields_url %}
       {% set is_upload = (data.url_type == 'upload') %}
       {{ form.image_upload(data, errors, field_url='url', field_upload='upload', field_clear='clear_upload',
