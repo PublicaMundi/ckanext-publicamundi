@@ -31,7 +31,9 @@ from ckanext.publicamundi.lib.metadata.xml_serializers import *
 from ckanext.publicamundi.lib.metadata.types.inspire_metadata import *
 log1 = logging.getLogger(__name__)
 
+from cgi import FieldStorage
 import shutil
+
 import requests
 from unidecode import unidecode
 content_types = {
@@ -324,9 +326,13 @@ class TestsController(BaseController):
     def submit_upload(self):
         myfile = request.params.get('upload')
         link = request.params.get('url')
-
+        print 'req'
+        print request.params
+        print 'upload is '
+        print myfile
+        print link
         # Case: File provided
-        if isinstance(myfile, object):
+        if isinstance(myfile, FieldStorage):
             permanent_file = open(os.path.join(PERMANENT_STORE, myfile.filename.lstrip(os.sep)), 'w')
             shutil.copyfileobj(myfile.file, permanent_file)
             myfile.file.close()
@@ -437,9 +443,20 @@ class TestsController(BaseController):
         context = self._get_action_context()
         # Purposefully skip validation at this stage
         context.update({ 'skip_validation': True })
-        if self._package_exists(data.get('name')):
-            # Not supporting package upload from xml
-            pass
+        # If package exists as draft allow update
+        print 'package show'
+        print data.get('name')
+        dataset = self._show(data.get('name'))
+        if dataset:
+            state = dataset.get('state')
+            if state == 'draft':
+                pkg = toolkit.get_action ('package_update')(context, data_dict=data)
+            #if self._show(data.get('name')).get('state')=='draft':
+
+            elif state == 'active':
+                #self._package_exists(data.get('name')):
+                # Not supporting package upload from xml
+                pass
         else:
             pkg = toolkit.get_action ('package_create')(context, data_dict=data)
             log1.info('Created package %s' % pkg['name'])
@@ -447,7 +464,11 @@ class TestsController(BaseController):
 
 
     def _show(self, name_or_id):
-        return toolkit.get_action ('package_show') (self._get_action_context(), data_dict = {'id': name_or_id})
+        try:
+            return toolkit.get_action('package_show') (self._get_action_context(), data_dict = {'id': name_or_id})
+        except:
+            return {}
+
 
     def _package_exists(self, name_or_id):
         return  name_or_id in toolkit.get_action ('package_list')(self._get_action_context(), data_dict={})
