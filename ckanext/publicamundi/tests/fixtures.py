@@ -199,7 +199,7 @@ inspire1 = InspireMetadata(
     revision_date = datetime.date(2014,1,1),
     lineage = u"lineaage",
     spatial_resolution = [
-        SpatialResolution(distance=5, uom=u"meters", denominator=5000)],
+        SpatialResolution(distance=5, uom=u"meters")],
     conformity = [
         Conformity(
             title = u"specifications blabla", 
@@ -218,4 +218,10 @@ inspire1 = InspireMetadata(
 
 inspire2 = copy.deepcopy(inspire1)
 inspire2.keywords = None
+
+inspire3 = copy.deepcopy(inspire1)
+inspire3.spatial_resolution.append(SpatialResolution(denominator=51000))
+
+inspire4 = copy.deepcopy(inspire1)
+inspire4.spatial_resolution = None
 

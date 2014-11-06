@@ -1098,12 +1098,23 @@ class Object(object):
                     # The supplied value is not a dict, cannot invoke Loader
                     setf(f)
             elif isinstance(field, (zope.schema.List, zope.schema.Tuple)):
-                nv, nf = len(v), len(f)
+                nv, iv = None, None
+                if isinstance(v, (list, tuple)):
+                    nv = len(v)
+                    iv = enumerate(v)
+                elif isinstance(v, dict):
+                    od = dictization.numbered(v, key_order=int)
+                    nv = next(reversed(od)) + 1 # <maximum-of-indices> + 1
+                    iv = od.iteritems()
+                else:
+                    nv = 0
+                    iv = ()
+                nf = len(f)
                 if nv > nf:
                     f.extend([None] * (nv - nf))
-                for i in xrange(0, nv):
+                for i, yv in iv:
                     self._update_field_r(
-                        f[i], v[i], field.value_type, item_setter(f, i))
+                        f[i], yv, field.value_type, item_setter(f, i))
             elif isinstance(field, zope.schema.Dict):
                 for k, yv in v.iteritems():
                     self._update_field_r(
@@ -1152,8 +1163,15 @@ class Object(object):
                     f = v 
                 return f
             elif isinstance(field, (zope.schema.List, zope.schema.Tuple)):
+                iv = None
+                if isinstance(v, (list, tuple)):
+                    iv = enumerate(v)
+                elif isinstance(v, dict):
+                    iv = dictization.enumerated(v, key_order=int, missing_value=None)
+                else:
+                    iv = ()
                 return [ self._create_field(y, field.value_type)
-                    for y in v ]
+                    for i, y in iv ]
             elif isinstance(field, zope.schema.Dict):
                 return { k: self._create_field(y, field.value_type)
                     for k, y in v.iteritems() }

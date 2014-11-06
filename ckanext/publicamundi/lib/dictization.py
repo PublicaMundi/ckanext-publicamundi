@@ -1,5 +1,8 @@
 import itertools
-import logging
+import collections
+
+from collections import OrderedDict
+from operator import itemgetter, attrgetter
 
 def flatten(d, key_converter=None):
     '''Flatten a dictionary'''
@@ -160,3 +163,40 @@ def update_deep(a, b):
             a[k] = bk
 
     return a
+
+def numbered(d, key_order=int):
+    '''Try to convert a dict to an OrderedDict with numbered values.
+    
+    Each key is converted to an index according to `key_order`. If a key 
+    fails to convert, the corresponding value is omitted.
+    
+    E.g.:
+    {'0': 'aaa', '5': 'ccc', '4': 'bbb', 'a': 'AAA'} -> 
+    OrderedDict((0, 'aaa'), (4, 'bbb'), (5, 'ccc'))
+    '''
+    
+    a = []
+    for k in d:
+        i = None
+        try:
+            i = key_order(k)
+        except:
+            pass
+        if isinstance(i, int):
+            a.append((i, d[k]))  
+    od = OrderedDict(sorted(a, key=itemgetter(0)))
+    return od
+
+def enumerated(d, key_order=int, missing_value=None):
+    '''Try to convert a dict to an enumeration.
+    
+    Works like numbered, but returns an iterator on a continuous range
+    of integers (mimics builtin enumerate iterator).
+    '''
+    
+    od = numbered(d, key_order)
+    
+    m = next(reversed(od)) + 1
+    for i in xrange(0, m):
+        yield (i, od.get(i, missing_value))
+    
