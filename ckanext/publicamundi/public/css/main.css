@@ -219,21 +219,23 @@ span.space-x3 { padding: 0px 12px }
  */
 
 #draw-bbox-dialog .map-container {
-    height: 220px;
+    height: 250px;
 }
 
 #draw-bbox-dialog {
-    /*
+    
     position: absolute;
-    width: 100%;
-    top: 10%;
-    left: 0%;
+    width: 70%;
+    top: 30px;
+    left: 15%;
     margin: 0px;
-    */
+    
+    /*
     position: fixed;
     width: 50%;
     top: 50px;
     left: 25%;
     margin: 0px;
+    */
 }
 
