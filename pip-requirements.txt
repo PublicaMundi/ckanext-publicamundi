@@ -10,6 +10,7 @@ zope.dottedname
 z3c.schema
 owslib==0.8.8
 inflection
+unidecode==0.4.16
 pytz
 isodate
 dictdiffer

@@ -125,6 +125,10 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         api_controller = 'ckanext.publicamundi.controllers.api:Controller'
         
+        mapper.connect('publicamundi-dataset-export',
+            '/api/publicamundi/dataset/export/{id}',
+            controller=api_controller, action='export_to_type')
+
         mapper.connect(
             '/api/util/resource/mimetype_autocomplete',
             controller=api_controller, action='mimetype_autocomplete')

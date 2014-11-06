@@ -147,7 +147,10 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         url_list = []
         for it in md.distribution.online:
             url_list.append(it.url)
-
+        topic_list = []
+        for topic in md.identification.topiccategory:
+            topic_list.append(vocabularies.munge(topic))
+        
         keywords_dict = {}
         for it in md.identification.keywords:
             thes_title = it['thesaurus']['title']
@@ -247,8 +250,8 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         obj.abstract = unicode(md.identification.abstract)
         obj.identifier = id_list[0]
         obj.locator = url_list
-        obj.resource_language = md.identification.resourcelanguage
-        obj.topic_category = md.identification.topiccategory
+        #obj.resource_language = md.identification.resourcelanguage
+        obj.topic_category = topic_list
         obj.keywords = keywords_dict
         obj.bounding_box = [GeographicBoundingBox(
             nblat = float(md.identification.extent.boundingBox.maxy),

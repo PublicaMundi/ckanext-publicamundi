@@ -5,6 +5,7 @@ from datetime import datetime
 import zope.interface
 import zope.schema
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+from unidecode import unidecode
 
 def munge(name):
     '''Convert human-friendly to machine-friendly terms.
@@ -22,6 +23,10 @@ def munge(name):
     name = name.replace('&', '-and-')
 
     return name
+
+def transliterate_greek(name):
+    '''Transliterate greek characters to ascii'''
+    return unidecode(name)
 
 def make_vocabulary(data):
     '''Convert raw data to a SimpleVocabulary instance.
