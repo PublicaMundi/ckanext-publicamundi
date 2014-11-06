@@ -157,6 +157,8 @@ class ITemporalExtent(IObject):
 
 class ISpatialResolution(IObject):
     
+    zope.interface.taggedValue('allow-partial-update', False)
+
     denominator = zope.schema.Int(
         title = u'Equivalent Scale',
         min = 1, # positive integer
@@ -170,7 +172,7 @@ class ISpatialResolution(IObject):
     uom = zope.schema.TextLine(
         title = u'Unit of Measure',
         required = False,
-        min_length = 2)
+        min_length = 1)
 
     @zope.interface.invariant
     def check(obj):

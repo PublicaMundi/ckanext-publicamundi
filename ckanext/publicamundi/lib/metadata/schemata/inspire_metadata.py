@@ -7,8 +7,7 @@ from ckanext.publicamundi.lib.metadata import vocabularies
 from ckanext.publicamundi.lib.metadata.schemata import IBaseMetadata
 from ckanext.publicamundi.lib.metadata.schemata._common import *
 from ckanext.publicamundi.lib.metadata.schemata.thesaurus import (
-    IThesaurus, IThesaurusTerms
-)
+    IThesaurus, IThesaurusTerms)
 
 keyword_thesaurus_names = filter(
     lambda t: t.startswith('keywords-'), vocabularies.get_names())
@@ -190,6 +189,8 @@ class IInspireMetadata(IBaseMetadata):
         max_length = 6,
         value_type = zope.schema.Object(ISpatialResolution,
             title = u'Spatial Resolution'))
+   
+    spatial_resolution.value_type.setTaggedValue('allow-partial-update', False)
 
     # Conformity
 
