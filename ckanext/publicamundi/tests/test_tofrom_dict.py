@@ -27,19 +27,25 @@ leaf_types = (basestring, bool, int, long, float,)
 def test_dictize_update_foo_discard_junk():
 
     for name in ['foo1', 'foo2', 'foo3', 'foo4', 'foo5', 'foo6', 'foo7']:
-        for changeset in updates['foo'].keys():
+        for changeset in ['upd-1', 'upd-2', 'upd-3', 'upd-4', 'upd-5', 'upd-6']:
             yield _test_dictize_update_discard_junk, name, 'foo', changeset 
 
 @nose.tools.istest
 def test_dictize_update():
     
     for name in ['foo1', 'foo2', 'foo3', 'foo4', 'foo5', 'foo6', 'foo7']:
-        for changeset in updates['foo'].keys():
-            yield _test_dictize_update, name, 'foo', changeset 
-    
-    for name in ['inspire1']:
-        for changeset in updates['inspire'].keys():
-            yield _test_dictize_update, name, 'inspire', changeset 
+        for changeset in ['upd-1', 'upd-2', 'upd-3', 'upd-4', 'upd-5', 'upd-6']:
+            yield _test_dictize_update_shallow, name, 'foo', changeset 
+            yield _test_dictize_update_deep, name, 'foo', changeset 
+  
+    for name in ['inspire1', 'inspire2', 'inspire3', 'inspire4']:
+        for changeset in ['upd-1', 'upd-2', 'upd-3', 'upd-4']:
+            yield _test_dictize_update_shallow, name, 'inspire', changeset 
+            yield _test_dictize_update_deep, name, 'inspire', changeset
+
+    for name in ['inspire1', 'inspire2', 'inspire3', 'inspire4']:
+        for changeset in ['upd-5-deep']:
+            yield _test_dictize_update_deep, name, 'inspire', changeset
 
 def _test_dictize_update_discard_junk(fixture_name, dtype, changeset):
     
@@ -91,16 +97,15 @@ def _test_dictize_update_discard_junk(fixture_name, dtype, changeset):
  
     assert x1 == x2
 
-def _test_dictize_update(fixture_name, dtype, changeset):
-
+def _test_dictize_update_shallow(fixture_name, dtype, changeset):
+    '''Test from_dict in shallow-update mode
+    ''' 
+    
     x0 = getattr(fixtures, fixture_name)
-    assert x0
     df0 = x0.to_dict(flat=1, opts={'serialize-keys': 1})
     
     d = updates[dtype][changeset]
     df = flatten(d, lambda k: '.' . join(map(str, k)))
-   
-    # Test shallow updates
     
     x1 = copy.deepcopy(x0)
     x1.from_dict(d, is_flat=0, opts={ 'update': True })
@@ -126,8 +131,18 @@ def _test_dictize_update(fixture_name, dtype, changeset):
                 assert not key0 in df1
                 assert not (key0 in df) or (df[key0] is None) 
 
-    # Test deep updates
+    pass
 
+def _test_dictize_update_deep(fixture_name, dtype, changeset):
+    '''Test from_dict in deep-update mode
+    ''' 
+    
+    x0 = getattr(fixtures, fixture_name)
+    df0 = x0.to_dict(flat=1, opts={'serialize-keys': 1})
+    
+    d = updates[dtype][changeset]
+    df = flatten(d, lambda k: '.' . join(map(str, k)))
+     
     x2 = copy.deepcopy(x0)
     x2.from_dict(d, is_flat=0, opts={ 'update': 'deep' })
     
@@ -152,7 +167,7 @@ def _test_dictize_update(fixture_name, dtype, changeset):
     for change, key, desc in dictdiffer.diff(df0, df2):
         if change == 'change':
             val0, val2 = desc
-            assert val2 == df[key]
+            assert (val2 is None and not (key in df)) or (val2 == df[key])
             assert val0 == df0[key]
             assert val2 == df2[key]
         elif change == 'add':
@@ -166,7 +181,6 @@ def _test_dictize_update(fixture_name, dtype, changeset):
                 #  - an ancestor or self was fully reloaded
                 assert ((key0 in df) and (df[key0] is None)) or is_reloaded(key0)
                 assert df0[key0] == val0
-
     pass
 
 @nose.tools.istest
@@ -377,10 +391,10 @@ updates['inspire'] = {
     }, 
     'upd-2': {
         'bounding_box' : [{
-                'nblat': 1.0,
-                'sblat': 1.0,
-                'wblng': 1.0,
-                'eblng': 1.0,
+                'nblat': 21.0,
+                'sblat': 10.0,
+                'wblng': 0.0,
+                'eblng': 20.0,
             },],
         'temporal_extent' : [{ 
             'start': date(1999,1,1), 
@@ -394,6 +408,23 @@ updates['inspire'] = {
             },
         },
     },
+    'upd-4': {
+        'lineage': u'A very intresting dataset',
+        'spatial_resolution': [
+            {'denominator': u'55999'},
+            {'distance': u'9', 'uom': u'km'},
+        ]
+    },
+    'upd-5-deep': { 
+        # Note To be tested only with deep-update 
+        # See enhancement #62 (deep update to enumerable field from a dict)
+        'spatial_resolution': {
+            '0': {'denominator': u'55800'},
+            '0-type': u'scale',
+            '2': {'distance': u'45', 'uom': u'm'},
+            '2-type': u'distance',
+        },
+    },
 }
 
 #
@@ -402,11 +433,11 @@ updates['inspire'] = {
 
 if __name__ == '__main__':
     
-    for t, x, y in test_dictize():
-        t(x, y)
+    for t, x, y in test_dictize(): t(x, y)
 
-    _test_dictize_update('foo2', 'foo', 'upd-4')
-    _test_dictize_update('inspire1', 'inspire', 'upd-3')
+    _test_dictize_update_deep('inspire4', 'inspire', 'upd-5-deep')
+    _test_dictize_update_deep('foo2', 'foo', 'upd-4')
+    _test_dictize_update_shallow('foo2', 'foo', 'upd-4')
+    _test_dictize_update_deep('inspire1', 'inspire', 'upd-3')
     _test_dictize_update_discard_junk('foo1', 'foo', 'upd-1')
-
 
