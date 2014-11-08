@@ -202,37 +202,51 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         if len(md.identification.distance) != len(md.identification.uom):
             raise Exception('unequal list lengths distance,uom','%s %s' % (md.identification.distance,md.identification.uom))
         else:
-            for i in range(0,len(md.identification.distance)):
-                spatial_list.append(SpatialResolution(
-                    denominator = int(md.identification.denominators[i]),
-                    distance = int(md.identification.distance[i]),
-                    uom = unicode(md.identification.uom[i])))
+                for i in range(0,len(md.identification.distance)):
+                    spatial_list.append(SpatialResolution(
+                        distance = int(md.identification.distance[i]),
+                        uom = unicode(md.identification.uom[i])))
 
+                for i in range(0, len(md.identification.denominators)):
+                    spatial_list.append(SpatialResolution(
+                        denominator = int(md.identification.denominators[i])))
         conf_list = []
+        invalid_degree = False
 
         if len(md.dataquality.conformancedate) != len(md.dataquality.conformancedatetype):
+            # Date list is unequal to datetype list, this means wrong XML so exception is thrown
             raise Exception('Found unequal list lengths conformance date, conformancedatetype','!')
-        else:
-            if md.dataquality.conformancedate:
-                for i in range(0,len(md.dataquality.conformancedate)):
+        if len(md.dataquality.conformancedegree) != len(md.dataquality.conformancedate):
+            # Degree list is unequal to date/datetype lists, so we are unable to conclude to which conformity item each degree value corresponds, so all are set to not-evaluated
+            # TODO: MD_Metadata bug
+            # Issue #63
+            invalid_degree = True
 
-                    date = to_date(md.dataquality.conformancedate[i])
+        if md.dataquality.conformancedate:
+        #and len(md.dataquality.conformancedate) == len(md.dataquality.degree):
+            for i in range(0,len(md.dataquality.conformancedate)):
 
-                    #date_type = md.dataquality.conformancedatetype[i],
-                    # TODO md.dataquality.conformancedatetype returns empty
-                    date_type = 'creation'
+                date = to_date(md.dataquality.conformancedate[i])
+
+                date_type = md.dataquality.conformancedatetype[i]
+                # TODO md.dataquality.conformancedatetype returns empty
+                if invalid_degree:
+                    degree = 'not-evaluated'
+                else:
                     try:
-                        degree = md.dataquality.conformancedegree[i]
+                        if md.dataquality.conformancedegree[i] == 'true':
+                            degree = 'conformant'
+                        elif md.dataquality.conformancedegree[i] == 'false':
+                            degree = 'not-conformant'
                     except:
                         degree = "not-evaluated"
+                title = unicode(md.dataquality.conformancetitle[i])
+                if title != 'None': 
+                    conf_list.append(Conformity(title=title, date=date, date_type=date_type, degree=degree))
 
-                    if md.dataquality.conformancetitle[i]:
-                        title = unicode(md.dataquality.conformancetitle[i])
-                        conf_list.append(Conformity(title=title, date=date, date_type=date_type, degree=degree))
-
-                    else:
-
-                        conf_list.append(Conformity(date=date, date_type=date_type, degree=degree))
+                # TODO: is title required fields? If so the following is unnecessary
+                else:
+                    conf_list.append(Conformity(date=date, date_type=date_type, degree=degree))
 
         limit_list = []
         for it in md.identification.uselimitation:

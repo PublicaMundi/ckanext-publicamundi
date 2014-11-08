@@ -5,7 +5,7 @@
     <gco:CharacterString>{{ data.identifier }}</gco:CharacterString>
   </gmd:fileIdentifier>
   <gmd:language>
-    <gmd:LanguageCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#LanguageCode" codeListValue="eng">{{ data.languagecode }}</gmd:LanguageCode>
+    <gmd:LanguageCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#LanguageCode" codeListValue={{ "\"%s\""|safe % data.languagecode }}>{{ data.languagecode }}</gmd:LanguageCode>
   </gmd:language>
   <gmd:hierarchyLevel>
     <gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset" codeSpace="ISOTC211/19115">{{ 'dataset' }}</gmd:MD_ScopeCode>
@@ -56,7 +56,7 @@
                 <gco:DateTime>{{ data.creation_date }}</gco:DateTime>
               </gmd:date>
               <gmd:dateType>
-                <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue={{ "\"%s\""|safe % 'creation' }} codeSpace="ISOTC211/19115">{{ 'creation' }}</gmd:CI_DateTypeCode>
+                  <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue={{ "\"%s\""|safe % 'creation' }} codeSpace="ISOTC211/19115">{{ 'creation' }}</gmd:CI_DateTypeCode>
               </gmd:dateType>
             </gmd:CI_Date>
           </gmd:date>
@@ -171,20 +171,27 @@
       {% endfor -%}
       {% if data.spatial_resolution|length > 0 -%}
       {% for s in data.spatial_resolution -%}
+      {% if s.distance -%}
       <gmd:spatialResolution>
-        <gmd:MD_Resolution>
+          <gmd:MD_Resolution>
         <gmd:distance>
             <gco:Distance uom={{ "\"%s\""|safe % s.uom }}>{{ s.distance }}</gco:Distance>
-          </gmd:distance>
+        </gmd:distance>
+        </gmd:MD_Resolution>
+      </gmd:spatialResolution>
+    {% elif s.denominator -%}    
+      <gmd:spatialResolution>
+          <gmd:MD_Resolution>
         <gmd:equivalentScale>
             <gmd:MD_RepresentativeFraction>
-              <gmd:denominator>
+            <gmd:denominator>
                 <gco:Integer>{{ s.denominator }}</gco:Integer>
-              </gmd:denominator>
+            </gmd:denominator>
             </gmd:MD_RepresentativeFraction>
           </gmd:equivalentScale>
         </gmd:MD_Resolution>
       </gmd:spatialResolution>
+    {% endif -%}
       {% endfor -%}
       {% endif -%}
       {% for lan in data.resource_language -%}
@@ -217,25 +224,21 @@
             </gmd:EX_GeographicBoundingBox>
         </gmd:geographicElement>
         {% endfor -%}
-        </gmd:EX_Extent>
-      </gmd:extent>
-      {% for te in data.temporal_extent -%}
-      <gmd:extent>
-        <gmd:EX_Extent>
-          <gmd:temporalElement>
-            <gmd:EX_TemporalExtent>
-              <gmd:extent>
-                <gml:TimePeriod xsi:type="gml:TimePeriodType">
-                  <gml:beginPosition>{{ te.start }}</gml:beginPosition>
-                  <gml:endPosition>{{ te.end }}</gml:endPosition>
-                </gml:TimePeriod>
-              </gmd:extent>
-            </gmd:EX_TemporalExtent>
-          </gmd:temporalElement>
-        </gmd:EX_Extent>
-      </gmd:extent>
+        {% for te in data.temporal_extent -%}
+      <gmd:temporalElement>
+        <gmd:EX_TemporalExtent>
+            <gmd:extent>
+            <gml:TimePeriod gml:id="IDcd3b1c4f-b5f7-439a-afc4-3317a4cd89be" xsi:type="gml:TimePeriodType">
+                <gml:beginPosition>{{ te.start }}</gml:beginPosition>
+                <gml:endPosition>{{ te.end }}</gml:endPosition>
+            </gml:TimePeriod>
+            </gmd:extent>
+        </gmd:EX_TemporalExtent>
+       </gmd:temporalElement>
       {% endfor -%}
-    </gmd:MD_DataIdentification>
+        </gmd:EX_Extent>
+      </gmd:extent>
+      </gmd:MD_DataIdentification>
   </gmd:identificationInfo>
   <gmd:distributionInfo>
     <gmd:MD_Distribution>
@@ -269,6 +272,7 @@
           </gmd:level>
         </gmd:DQ_Scope>
       </gmd:scope>
+      {% if data.conformity|length > 0 -%}
       {% for con in data.conformity -%}
       <gmd:report>
         <gmd:DQ_DomainConsistency xsi:type="gmd:DQ_DomainConsistency_Type">
@@ -295,7 +299,7 @@
                         <gco:Date>{{ con.date }}</gco:Date>
                       </gmd:date>
                       <gmd:dateType>
-                        <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue={{ "\"%s\""|safe % dt }}>{{ con.date_type }}</gmd:CI_DateTypeCode>
+                        <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue={{ "\"%s\""|safe % con.date_type }}>{{ con.date_type }}</gmd:CI_DateTypeCode>
                       </gmd:dateType>
                     </gmd:CI_Date>
                   </gmd:date>
@@ -305,8 +309,10 @@
                 <gco:CharacterString>See the referenced specification</gco:CharacterString>
               </gmd:explanation>
               <gmd:pass>
-                {% if con.degree -%}
-                <gco:Boolean>{{ con.degree }}</gco:Boolean>
+                {% if con.degree == 'conformant' -%}
+                <gco:Boolean>true</gco:Boolean>
+                {% elif con.degree == 'not-conformant' -%}
+                <gco:Boolean>false</gco:Boolean>
                 {% else -%}
                 <gmd:pass gco:nilReason="template"/>
                 {% endif -%}
@@ -316,6 +322,7 @@
         </gmd:DQ_DomainConsistency>
       </gmd:report>
       {% endfor -%}
+      {% endif -%}
       <gmd:lineage>
         <gmd:LI_Lineage>
           <gmd:statement>

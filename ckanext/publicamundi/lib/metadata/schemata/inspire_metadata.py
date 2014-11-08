@@ -39,7 +39,7 @@ class IInspireMetadata(IBaseMetadata):
         vocabulary = vocabularies.get_by_name('languages').get('vocabulary'),
         description = u"This is the language in which the metadata elements are expressed. The value domain of this metadata element is limited to the official languages of the Community expressed in conformity with ISO 639-2.",
         required = True,
-        default = 'en')
+        default = 'eng')
 
     # Identification 
     
