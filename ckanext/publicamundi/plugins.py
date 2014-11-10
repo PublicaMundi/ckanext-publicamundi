@@ -142,6 +142,11 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         mapper.connect('publicamundi-get-vocabulary',
             '/api/publicamundi/vocabularies/{name}',
             controller=api_controller, action='vocabulary_get')
+	
+	mapper.connect('user_dashboard_resources', 
+            '/dashboard/resources',
+            controller='ckanext.publicamundi.controllers.user:UserController',
+            action='dashboard_resources')
       
         #mapper.connect('tags', '/tags',
         #    controller='ckanext.publicamundi.controllers.tags:Controller', action='index')
