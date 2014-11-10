@@ -238,4 +238,15 @@ span.space-x3 { padding: 0px 12px }
     margin: 0px;
     */
 }
+.label[resource-status="Not Found"], 
+.label[resource-status*="Not Found"] {
+    background-color: #E0051E;
+}
+.label[resource-status="Not Ready"], 
+.label[resource-status*="Not Ready"] {
+    background-color: #DFB100;
+}
 
+.dashboard-label{
+    float: right;
+}

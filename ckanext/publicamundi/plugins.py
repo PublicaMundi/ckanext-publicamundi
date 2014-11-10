@@ -17,6 +17,7 @@ import ckan.logic as logic
 import ckanext.publicamundi.model as publicamundi_model
 import ckanext.publicamundi.lib.metadata as publicamundi_metadata
 import ckanext.publicamundi.lib.actions as publicamundi_actions
+from ckanext.publicamundi.lib import identification_helper
 
 from ckanext.publicamundi.lib.util import to_json, random_name
 from ckanext.publicamundi.lib.util import Breakpoint
@@ -102,6 +103,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'markup_for_field': publicamundi_metadata.markup_for_field,
             'markup_for_object': publicamundi_metadata.markup_for_object,
             'markup_for': publicamundi_metadata.markup_for,
+            'identify_resource': identification_helper.identify
         }
 
     ## IConfigurer interface ##

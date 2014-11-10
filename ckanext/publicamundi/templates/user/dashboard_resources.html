@@ -4,7 +4,7 @@
 
   <h2 class="hide-heading">{{ _('My Datasets') }}</h2>
   {% if c.user_dict.datasets %}
-    {% snippet 'snippets/package_list.html', packages=c.user_dict.datasets %}
+    {% snippet 'user/snippets/package_list.html', packages=c.user_dict.datasets %}
   {% endif %}
   
 {% endblock %}
