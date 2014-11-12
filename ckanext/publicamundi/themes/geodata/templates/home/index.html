@@ -1,0 +1,72 @@
+{% ckan_extends %}
+{% block page %}
+{% block styles %}
+{{ super() }}
+    <link rel="stylesheet" href="/css/main.css" /> 
+{% endblock %}
+
+{%- block header %}
+  <header class="account-masthead">
+    <div class="container">
+        {% block header_site_navigation %}
+        <div id="homemenu">
+        <div id="mainlogo">
+        {# The .header-image class hides the main text and uses image replacement for the title #}
+        <hgroup class="{{ g.header_class }}">
+
+      {% block header_logo %}
+        {% if g.site_logo %}
+          <a class="logo" href="{{ h.url('home') }}"><img src="{{ h.url_for_static('/images/geodata-biglogo.png') }}" alt="{{ g.site_title }} Logo" title="{{ g.site_title }} Logo" /></a>
+        {% else %}
+          <h1>
+            <a href="{{ h.url('home') }}">{{ g.site_title }}</a>
+          </h1>
+          {% if g.site_description %}<h2>{{ g.site_description }}</h2>{% endif %}
+        {% endif %}
+      {% endblock %}
+
+    </hgroup>
+        </div>
+        <nav class="section navigation">
+          <ul class="nav nav-pills">
+            {% block header_site_navigation_tabs %}
+              {{ h.build_nav_main(
+                ('search', _('Datasets')),
+                ('organizations_index', _('Organizations')),
+                ('group_index', _('Groups')),
+                ('about', _('About'))
+                ) }}
+            </div>
+            {% endblock %}
+          </ul>
+          </nav>
+          </header>
+      {% endblock %}
+
+      {% endblock %}
+
+{% set homepage_style = ( g.homepage_style or '1' ) %}
+
+
+{% block content %}
+{% block maintag %}{% endblock %}
+{% block toolbar %}{% endblock %}
+
+<div class="homepage layout-{{ homepage_style }}">
+    <div class="container">
+      {{ self.flash() }}
+    </div>
+    {% block primary_content %}
+      {% snippet "home/layout{0}.html".format(homepage_style) %}
+    {% endblock %}
+</div>
+
+
+  {% endblock %}
+
+{% block footer %}
+{{ super() }}
+{% endblock %}
+{% endblock %}
+
+    
