@@ -308,15 +308,17 @@
               <gmd:explanation>
                 <gco:CharacterString>See the referenced specification</gco:CharacterString>
               </gmd:explanation>
-              <gmd:pass>
                 {% if con.degree == 'conformant' -%}
+                <gmd:pass>
                 <gco:Boolean>true</gco:Boolean>
+                </gmd:pass>
                 {% elif con.degree == 'not-conformant' -%}
+                <gmd:pass>
                 <gco:Boolean>false</gco:Boolean>
+                </gmd:pass>
                 {% else -%}
                 <gmd:pass gco:nilReason="template"/>
                 {% endif -%}
-              </gmd:pass>
             </gmd:DQ_ConformanceResult>
           </gmd:result>
         </gmd:DQ_DomainConsistency>
