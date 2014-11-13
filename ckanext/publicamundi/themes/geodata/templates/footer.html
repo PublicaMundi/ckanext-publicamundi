@@ -14,7 +14,8 @@
             <input id="field-sitewide-search" type="text" name="q" placeholder="{{ _('Search datasets...') }}" />
             <button class="btn-search" type="submit"><i class="icon-search"></i></button>
           </div>
-        </form>
+      </form>
+
         {% endblock %}
         </li>
             
@@ -36,24 +37,30 @@
                 ) }}
 
             {% endblock %}
-          </ul>
+        </ul>
+        
         {% endblock %}
       </nav>
       <div class="attribution">
-          {% block footer_lang %}
+        <ul class="unstyled">
+      {% block footer_lang %}
           {% snippet "snippets/language_selector.html" %}
-          {% endblock %} 
-
-
-          {% block footer_attribution %}
-        {#<p>{% trans %}{{ _('Powered by')}} <a class="hide-text ckan-footer-logo" href="http://ckan.org">CKAN</a>{% endtrans %}</p> #}
-        {% endblock %}
+          {% endblock %}
         <ul class="unstyled">
            <li><a href="http://www.ipsyp.gr/"> {{ _('IMIS') }} </a></li>
           <li><a href="https://www.athena-innovation.gr/"> {{ _('Athena RC') }} </a></li>
           <li><a href="http://ckan.org"> {{ _('CKAN') }} </a></li>
       </ul>
+
+      </ul>
+      
+
+          {% block footer_attribution %}
+        {#<p>{% trans %}{{ _('Powered by')}} <a class="hide-text ckan-footer-logo" href="http://ckan.org">CKAN</a>{% endtrans %}</p> #}
+        {% endblock %}
+              
   </div>
+    
   {# <div class="social">
       <ul class="unstyled">
           <li><a href="http://www.publicamundi.eu">PublicaMundi</a></li>

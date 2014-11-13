@@ -1,0 +1,74 @@
+@font-face {
+  font-family: 'geodata';
+  src: url('../font/geodata.eot?94468302');
+  src: url('../font/geodata.eot?94468302#iefix') format('embedded-opentype'),
+       url('../font/geodata.woff?94468302') format('woff'),
+       url('../font/geodata.ttf?94468302') format('truetype'),
+       url('../font/geodata.svg?94468302#geodata') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+/*
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: 'geodata';
+    src: url('../font/geodata.svg?94468302#geodata') format('svg');
+  }
+}
+*/
+ 
+ [class^="icon-"]:before, [class*=" icon-"]:before {
+  font-family: "geodata";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+ 
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+ 
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+     
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+ 
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+ 
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+ 
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+ 
+.icon-altitudes:before { content: '\e800'; } /* '' */
+.icon-licence:before { content: '\e801'; } /* '' */
+.icon-structure:before { content: '\e802'; } /* '' */
+.icon-signup:before { content: '\e803'; } /* '' */
+.icon-signin:before { content: '\e804'; } /* '' */
+.icon-transportation:before { content: '\e805'; } /* '' */
+.icon-structure-1:before { content: '\e806'; } /* '' */
+.icon-biota:before { content: '\e807'; } /* '' */
+.icon-boundaries:before { content: '\e808'; } /* '' */
+.icon-cadastre:before { content: '\e809'; } /* '' */
+.icon-climate:before { content: '\e80a'; } /* '' */
+.icon-economy:before { content: '\e80b'; } /* '' */
+.icon-environment:before { content: '\e80c'; } /* '' */
+.icon-farming:before { content: '\e80d'; } /* '' */
+.icon-geosciences:before { content: '\e80e'; } /* '' */
+.icon-health:before { content: '\e80f'; } /* '' */
+.icon-imagery-maps:before { content: '\e810'; } /* '' */
+.icon-inland-waters:before { content: '\e811'; } /* '' */
+.icon-location:before { content: '\e812'; } /* '' */
+.icon-military-intelligence:before { content: '\e813'; } /* '' */
+.icon-oceans:before { content: '\e814'; } /* '' */
+.icon-society:before { content: '\e815'; } /* '' */

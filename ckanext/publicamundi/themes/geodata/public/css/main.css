@@ -1,7 +1,9 @@
 /* Body */
 
-.body { 
+body { 
     color: #000;
+    background: #fff;
+    font-family: Aka-AcidGR-Muli, Helvetica, Arial;
 }
 a {
     color: #4E59A4;
@@ -10,6 +12,11 @@ a {
 
 .account-masthead {
     background: #fff;
+    font-color: #4E59A4;
+}
+.account-masthead-home {
+    height: 30px;
+    background: #F3F4F4;
     font-color: #4E59A4;
 }
 
@@ -102,23 +109,24 @@ a {
 }
 #mainlogo .logo {
     float : left;
-    margin-top: 5px;
+    padding-top: 8px;
 }
-.nav-pills > .active > a, .nav-pills > .active > a:hover, .nav-pills > .active > a:focus{
-    color: #fff;
-    background: #4E59A4;
+.nav-pills > .active > a, .nav-pills > .active > a:focus{
+    background: #fff;
+    color: #4E59A4;
 }
 .nav-pills > li > a {
     margin-top: 0;
     margin-bottom: 0;
-    padding-bottom: 12px;
+    padding-bottom: 10px;
+    padding-top: 10px;
     border-radius: 0;
     border-right: 1px #4E59A4 solid;
 }
 .nav-pills > li:first-child a{
     border-left: 1px #4E59A4 solid;
 }
-.nav-pills > li:hover a {
+.nav-pills > li:hover a, .nav-pills > .active >a:hover {
     background-color: #4E59A4;
     color: #fff;
 }
@@ -142,11 +150,19 @@ a {
 }
 /* Home background */
 .hero {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: rgba(123,123,321,0.8);
     width: 100vw;
-    height:99vh;
+    height:70vh;
 }
 .promotebox{
+    position: relative;
+    top: 50px;
+    margin-left:15%;
     border: 6px #4E59A4 solid;
+    max-width: 350px;
+
 }
 /* Main */
 [role=main] {
@@ -203,11 +219,29 @@ a {
 }
 .search-form .search-input.search-giant button{
     position:relative;
-    float:right;
+    float:left;
     margin-top:-40px;
+}
+.search-form .search-input.search-giant button i{
+    color: #4E59A4;
+}
+.search-form .search-input.search-giant input{
+    box-shadow: none;
+    margin-left: 20px;
+}
+
+.homepage .search-form .search-giant button{
+    margin-top:-48px;
+}
+.homepage .module-search .search-giant input{
+    height: 60px;
+}
+.search{
 }
 .homepage .module-search{ 
     padding: 0;
+    border: 0;
+    box-shadow: none;
 }
 .homepage .module-search .module-content{
     margin:0;
@@ -216,6 +250,37 @@ a {
 .homepage .searchfw{ 
     margin-bottom: 0 !important;
 }
+#package-list-home{
+    background: #ECECEC;
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+#package-list-home .dataset-preheading{
+    font-size:14px;
+}
+#package-list-home .dataset-preheading a{
+    color: #666666;
+}
+#package-list-home .dataset-preheading span a {
+    color: #4E59A4;
+}
+#package-list-home .dataset-postheading {
+    font-weight: 800;
+    font-size: 14px;
+    color: #4E59A4;
+}
+#package-list-home .dataset-heading{
+    font-size:24px;
+    margin-top:10px;
+}
+
+#package-list-home .dataset-heading a{
+    color: #4E59A4;
+}
+#package-list-home .dataset-heading img{
+    max-width: 40px;
+}
+
 .media-grid {
     background: #fff;
 }
@@ -244,9 +309,9 @@ a {
 .nav-simple > li:last-of-type, .nav-aside > li:last-of-type{
     border-bottom: 1px #4E59A4 solid;
 }
-.dataset-item{
+.dataset-item, .dataset-item:last-of-type{
     margin-bottom:0;
-    padding: 20px 20px 20px 20px;
+    padding: 10px;
 }
 .dataset-item:hover{
     background: #F6F6F6;
@@ -276,6 +341,16 @@ a {
 .site-footer a, .site-footer label{
     color: #6B75B3;
 }
+.footer-links > ul > li{
+    margin-bottom: 10px;
+}
+.site-footer .site-search{
+    margin-bottom: 20px;
+}
+.lang-select {
+}
+
+
 /* Buttons */
 .btn {
     border-radius: 0;
@@ -301,22 +376,22 @@ a {
     border: 4px #4E59A4 solid;
 
 }
-.btn-danger{
-    background: #C43210 ;
-    color: #fff;
-}
-.btn-danger:hover{
-    color: #ff0000 ;
-}
 
 .btn-warning{
-    background: #EDDB58;
+    color: #EDDB58; 
 }
-.clear-items{
+.btn-warning:hover{
+    background: #DBC12A;
+    border: 2px #DBC12A solid;
 }
-.remove:hover, .clear-items:hover{
+ .btn-danger, .clear-items{
+    color: #C43210;
+    background: #fff;
+}
+ .btn-danger:hover, .remove:hover, .clear-items:hover{
     background: #C43210;
     color: #fff !important;
+    border: 2px #C43210 solid;
 }
 /* Accordion */
 .accordion{
