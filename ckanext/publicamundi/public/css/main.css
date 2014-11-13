@@ -246,7 +246,36 @@ span.space-x3 { padding: 0px 12px }
 .label[resource-status*="Not Ready"] {
     background-color: #DFB100;
 }
-
+.label[resource-status="Rejected"], 
+.label[resource-status*="Rejected"] {
+    background-color: #D22727;
+}
+.label[resource-status="Published"], 
+.label[resource-status*="Published"] {
+    background-color: #62C462;
+}
+/*.label[resource-status="Not Published"], 
+.label[resource-status*="Not Published"] {
+    background-color: #36ABD2;
+}*/
+.label[resource-status="Identified"], 
+.label[resource-status*="Identified"] {
+    background-color: #36ABD2;
+}
 .dashboard-label{
-    float: right;
+    margin: 5px 10px 5px 0px;
+    float: left;
+}
+.dashboard-resource-info{
+    float:right;
+}
+.dashboard-dropdown{
+    float:left;
+}
+
+.icon-inject:before {
+   content:  "\21A0 ";
+}
+.icon-reject:before {
+   content:  "\219B ";
 }

@@ -1,0 +1,15 @@
+{% if task_result.resource_type=="vector" %}
+
+    {% set inject_template_url = h.url_for(controller='ckanext.vectorstorer.controllers.vector:VectorController', action='inject') %}
+    {% set reidentify_url = h.url_for('identify_vector_resource',resource_id=res.id) %}
+ 
+{% elif task_result.resource_type=="raster" %}
+    
+    {% set inject_template_url = h.url_for(controller='ckanext.vectorstorer.controllers.vector:VectorController', action='inject') %}
+    {% set reidentify_url = h.url_for('identify_raster_resource',resource_id=res.id) %}
+
+{% endif %}
+
+{% snippet 'user/snippets/status_label.html', status=task_result.status %}
+
+<a href="{{reidentify_url}}" class="btn" resource-status="{{task_result.status}}">Identify Again</a>

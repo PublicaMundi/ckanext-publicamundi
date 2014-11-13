@@ -1,0 +1,39 @@
+{% if task_result.resource_type=="vector" %}
+
+    {% set inject_template_url = h.url_for(controller='ckanext.vectorstorer.controllers.vector:VectorController', action='inject',resource_type=task_result.resource_type) %}
+    {% set reject_url = h.url_for('reject_resource',resource_id=res.id) %}
+ 
+{% elif task_result.resource_type=="raster" %}
+{% endif %}
+{% snippet 'user/snippets/status_label.html', status=task_result.status %}
+<div class="dropdown  dashboard-dropdown">
+    <a href="#" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+      
+      {{ _('Actions') }}
+      <span class="caret"></span>
+    </a>
+    
+    <ul class="dropdown-menu">
+      {% block resource_item_explore_links %}
+
+      <li>
+	<a href="{{ inject_template_url }}" class="">
+	  
+	    <i class="icon-inject"></i>
+	    {{ _('Inject') }}
+
+	</a>
+      </li>
+      
+      <li>
+	<a href="{{ reject_url }}" class="" >
+	  
+	    <i class="icon-reject"></i>
+	    {{ _('Reject') }}
+	  
+	</a>
+      </li>
+	
+      {% endblock %}
+    </ul>
+</div>

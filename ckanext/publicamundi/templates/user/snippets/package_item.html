@@ -42,9 +42,14 @@ Example:
     {% if package.resources and not hide_resources %}
       <section class="resources">
         {% for resource in package.resources %}
-           
-          {% snippet 'user/snippets/resource_item.html', pkg=package, res=resource %}
-           
+	  
+	  {% set task_result=h.identify_resource(resource.id) %}
+	  
+          {% if task_result.found %} 
+	      {% snippet 'user/snippets/publicamundi_resource_item.html', pkg=package, res=resource ,task_result=task_result%}
+          {% else %}
+	      {% snippet 'user/snippets/resource_item.html', pkg=package, res=resource ,task_result=task_result%}
+	  {% endif %}
           </br>
         {% endfor %}
       </section>

@@ -9,6 +9,8 @@ import geoalchemy
 import itertools
 from itertools import chain, ifilter
 
+from routes.mapper import SubMapper
+
 import ckan.model as model
 import ckan.plugins as p
 import ckan.plugins.toolkit as toolkit
@@ -145,10 +147,13 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             '/api/publicamundi/vocabularies/{name}',
             controller=api_controller, action='vocabulary_get')
 	
-	mapper.connect('user_dashboard_resources', 
-            '/dashboard/resources',
-            controller='ckanext.publicamundi.controllers.user:UserController',
-            action='dashboard_resources')
+	'''User controller mappings '''
+	with SubMapper(mapper, controller='ckanext.publicamundi.controllers.user:UserController') as m:
+	    
+	    m.connect('user_dashboard_resources', '/dashboard/resources', action='dashboard_resources')
+	    m.connect('reject_resource', '/dashboard/resources/reject/{resource_id}', action='reject')
+	    m.connect('identify_vector_resource', '/dashboard/resources/identify_vector/{resource_id}', 
+		      action='identify',resource_id ='{resource_id}', resource_type ='vector')
       
         #mapper.connect('tags', '/tags',
         #    controller='ckanext.publicamundi.controllers.tags:Controller', action='index')

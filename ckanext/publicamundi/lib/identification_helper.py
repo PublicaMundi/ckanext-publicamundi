@@ -1,4 +1,4 @@
-from ckanext.publicamundi.model.resource_identify import ResourceIdentify,TaskNotReady,TaskFailed
+from ckanext.publicamundi.model.resource_identify import ResourceIdentify,TaskNotReady,TaskFailed,IdentifyStatus
 
 import ckan
 
@@ -14,25 +14,40 @@ def _get_identification_result(resource_id):
     
     if res_identify:
 	
-	try:
-	    json_result['success'] = True
-	    result=res_identify.get_task_result()
-	    
+	json_result['found'] = True
+	ident_status = res_identify.get_identify_status()
+	if ident_status == IdentifyStatus.NOT_PUBLISHED:
+	    status,result,resource_type = get_celery_result(res_identify)
+	    json_result['status'] = status
 	    json_result['result'] = result
-	    return json_result
-	
-	except TaskNotReady:
-	    json_result['success'] = False
-	    json_result['result'] = "Not Ready"
-	    return json_result
-	    pass
-	except TaskFailed ,e:
- 
-	    json_result['success'] = False
-	    json_result['result'] = "Failed"
-	    return json_result
-	    
-    else:
-	json_result['success'] = False
-	json_result['result'] = "Not Found"
+	    json_result['resource_type'] = resource_type
+	elif ident_status == IdentifyStatus.PUBLISHED:
+	    json_result['status'] = "Published"
+	elif ident_status == IdentifyStatus.REJECTED:
+	    json_result['status'] = "Rejected"
+	    json_result['resource_type'] = res_identify.get_resource_type()
 	return json_result
+      
+	
+    else:
+	json_result['found'] = False
+	json_result['status'] = "No Action"
+	return json_result
+
+def get_celery_result(res_identify_obj):
+    status = None
+    result = None
+    resource_type = None
+    try:
+	status = "Identified"
+	result=res_identify_obj.get_celery_task_result()
+	resource_type=res_identify_obj.get_resource_type()
+    except TaskNotReady:
+	status = "Not Ready"
+	pass
+    except TaskFailed ,e:	
+	status = "Failed"
+	pass
+    
+    return status,result,resource_type
+	    
