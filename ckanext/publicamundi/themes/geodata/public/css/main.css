@@ -8,18 +8,15 @@ body {
 a {
     color: #4E59A4;
 }
+.wrapper:before, .wrapper:after{
+    display: none;
+}
 /* Menu */
 
 .account-masthead {
     background: #fff;
     font-color: #4E59A4;
 }
-.account-masthead-home {
-    height: 30px;
-    background: #F3F4F4;
-    font-color: #4E59A4;
-}
-
 .account-masthead .account .notifications a span{
     background-color: #fff;
 }
@@ -32,15 +29,11 @@ a {
     }
 
 .menu li {
-        font: bold 12px/18px sans-serif;
         display: inline-block;
-        margin-right: -4px;
         position: relative;
         cursor: pointer;
-        margin-top: 0;
-        margin-bottom: 0;
+        margin: 0; 
         border-radius: 0;
-        border: 1px #4E59A4 solid;
 
         -webkit-transition: all 0.2s;
         -moz-transition: all 0.2s;
@@ -52,15 +45,20 @@ a {
 .menu li:hover {
         z-index: 1000;
     }
+.menu li a{
+    border-bottom:none !important;
+    padding-bottom:3px !important ;
+}
+
 .menu li a span{
         color: #4E59A4;
         background: none;
     }
 .menu li ul {
+        width: 100%;
         padding: 0;
+        margin: 0;
         position: absolute;
-        top: 30px;
-        left: -10px;
         box-shadow: none;
         display: none;
         opacity: 0;
@@ -73,9 +71,9 @@ a {
 }
 
 .menu li ul li { 
+        width: 100%;
         background: #fff; 
         display: block; 
-        width: 100px;
         color: blue;
         }
 
@@ -101,15 +99,19 @@ a {
 }
 #homemenu .nav li a{
     font-size: 16px;
-    padding: 20px;    
+    padding: 20px 10px 20px 10px;
 }
-#mainmenu .section .nav { 
+.mainmenu .section .nav { 
     float: left;
     margin: 0 0 0 20px;
 }
 #mainlogo .logo {
     float : left;
     padding-top: 8px;
+}
+#homemenu #mainlogo .logo {
+    padding-top: 15px;
+    margin-right: 10%;
 }
 .nav-pills > .active > a, .nav-pills > .active > a:focus{
     background: #fff;
@@ -121,10 +123,10 @@ a {
     padding-bottom: 10px;
     padding-top: 10px;
     border-radius: 0;
-    border-right: 1px #4E59A4 solid;
+    border-right: 1px #7C7C7F solid;
 }
 .nav-pills > li:first-child a{
-    border-left: 1px #4E59A4 solid;
+    border-left: 1px #7C7C7F solid;
 }
 .nav-pills > li:hover a, .nav-pills > .active >a:hover {
     background-color: #4E59A4;
@@ -133,6 +135,22 @@ a {
 .nav-tabs > li > a, .nav-pills > li > a {
     margin-right: 0;
 }
+.account-masthead .account ul li:first-child{
+    //border-left: 1px #7C7C7F solid;
+    //border-right: 1px #7C7C7F solid;
+}
+.account-masthead .account ul li{
+    //border-right: 1px #7C7C7F solid;
+    border-left: none;
+    //width: 100%;
+}
+.account-masthead .account ul li a{
+    color: #4E59A4;
+    border-right: 1px #7C7C7F solid;
+    border-left: 1px #7C7C7F solid;
+    border-bottom: 1px #7C7C7F solid;
+}
+
 .account-masthead .account ul li a:hover{
     background-color: #4E59A4;
 }
@@ -167,7 +185,11 @@ a {
 /* Main */
 [role=main] {
     padding: 0;
+    padding-bottom: 20px;
     background: #fff;
+}
+[role=main] .primary{
+    width: 697px;
 }
 .wrapper {
     border: none;
@@ -220,7 +242,7 @@ a {
 .search-form .search-input.search-giant button{
     position:relative;
     float:left;
-    margin-top:-40px;
+    margin-top:-45px;
 }
 .search-form .search-input.search-giant button i{
     color: #4E59A4;
@@ -228,6 +250,7 @@ a {
 .search-form .search-input.search-giant input{
     box-shadow: none;
     margin-left: 20px;
+    font-size: 22px;
 }
 
 .homepage .search-form .search-giant button{
@@ -280,22 +303,43 @@ a {
 #package-list-home .dataset-heading img{
     max-width: 40px;
 }
-
+.media-view{
+    border:0;
+}
 .media-grid {
     background: #fff;
 }
-.media-grid li{
+.media-item {
+    width: 160px;
+    text-align: center;
+    border-radius: 0;
     border: 4px #4E59A4 solid;
+}
+.media-item img{
+    -webkit-transition: .2s ease-in-out;
+    -moz-transition: .2s ease-in-out;
+    -o-transition: .2s ease-in-out;
+    transition: .2s ease-in-out;
+}
+.media-item:hover img{
+    transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+}
+.media-item img{
+    border-radius: 0;
 }
 /* Sidebar */
 [role=main] .secondary {
-    width: 217px;
-    border: 3px #4E59A4 solid;
+    width: 237px;
     font-color: #666666;
+    border: 3px #4E59A4 solid;
+}
+.paintme{
+    border: 5px #4E59A4 solid;
 }
 .secondary .module-heading {
     border-top: 2px #4E59A4 solid;
-    border-bottom: 1px #4E59A4 solid;
+    border-bottom: 1px #545356 solid;
 }
 .secondary .module:first-child {
     border-top: none;
@@ -304,11 +348,24 @@ a {
     background-color: #ECECEC;
 }
 .nav-simple > li, .nav-aside > li {
-    border-bottom: 1px #4E59A4 solid;
+    border-bottom: 1px #545356 solid;
 }
 .nav-simple > li:last-of-type, .nav-aside > li:last-of-type{
     border-bottom: 1px #4E59A4 solid;
 }
+.nav-item.active > a, .nav-aside li.active a, .nav-item.active > a:hover{
+    background: #4E59A4;
+}
+.nav-item.active > a:before, .nav-aside li.active a:before{
+    background-image: none;
+    right:-12px;
+    height:0;
+    width:0;
+    border-top:17px solid transparent;
+    border-bottom:17px solid transparent;
+    border-left: 10px #4E59A4 solid;
+}
+
 .dataset-item, .dataset-item:last-of-type{
     margin-bottom:0;
     padding: 10px;
@@ -341,16 +398,29 @@ a {
 .site-footer a, .site-footer label{
     color: #6B75B3;
 }
-.footer-links > ul > li{
+.footer-links > ul > li, .footer-links > ul > ul > li{
     margin-bottom: 10px;
 }
 .site-footer .site-search{
     margin-bottom: 20px;
 }
+.site-footer input[type="text"]  {
+    border: 3px #4E59A4 solid;
+}
 .lang-select {
 }
+/* Dataset Page */
 
+.resource-actions {
+    display: inline-block;
+    position:relative;
+    float: right;
+}
 
+.resource-actions li {
+    float: left;
+    margin-left: 10px;
+}
 /* Buttons */
 .btn {
     border-radius: 0;
@@ -402,6 +472,16 @@ a {
 }
 .accordion-group:hover{
     background: #F6F6F6;
+}
+/* Search page specific */
+ .form-title{
+    display: inline-block;
+    position: relative;
+    float: left;
+    padding: 0 20px 0 20px;
+}
+.middle{
+    margin-left: 15%;
 }
 /* Bootstrap overrides */
 .select2-container .select2-choice, .select2-dropdown-open.select2-drop-above .select2-choice, .select2-dropdown-open.select2-drop-above .select2-choices{

@@ -24,7 +24,7 @@
 
 
         </div>
-        <div id="mainmenu">
+        <div class="mainmenu">
         <nav class="section navigation">
           <ul class="nav nav-pills">
             {% block header_site_navigation_tabs %}
@@ -64,8 +64,7 @@
               <li class="notifications {% if new_activities > 0 %}notifications-important{% endif %}">
                 {% set notifications_tooltip = ngettext('Dashboard (%(num)d new item)', 'Dashboard (%(num)d new items)', new_activities) %}
                 <a href="{{ h.url_for(controller='user', action='dashboard') }}" title="{{ notifications_tooltip }}">
-                  <span>{{ new_activities }}</span>
-                      <span>{{ _('Activities')}}</span>
+                  <span>{{ new_activities }}{{ _(' Activities')}}</span>
                 </a>
               </li>
               {% block header_account_settings_link %}

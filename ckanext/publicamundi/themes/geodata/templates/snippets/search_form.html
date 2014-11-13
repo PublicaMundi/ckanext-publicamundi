@@ -43,7 +43,9 @@
   {% endblock %}
 
   {% block search_title %}
-    {% if not no_title %}
+  <div class="form-title"> <h3> {{ _('Search Filters') }}</h3> </div>
+  {% if not no_title %}
+  <div class="form-title middle"> <h3>{% snippet 'snippets/search_result_text.html', query=query, count=count, type=type %}</h3></div>
     {% endif %}
   {% endblock %}
 
