@@ -8,7 +8,12 @@
           %}
 {% block searchbar %}
     {% snippet 'snippets/search_form_top.html', type='dataset', query=c.q, sorting=sorting, sorting_selected=c.sort_by_selected, count=c.page.item_count, facets=facets, show_empty=request.params, error=c.query_error %}
-{% endblock %}
+    {% endblock %}
+
+
+    {% block primary %}
+    {{ super() }}
+    {% endblock %}
 {% block form %}
         {% set facets = {
           'fields': c.fields_grouped,
