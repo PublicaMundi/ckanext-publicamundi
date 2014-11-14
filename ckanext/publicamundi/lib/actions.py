@@ -17,6 +17,7 @@ import ckanext.publicamundi
 log1 = logging.getLogger(__name__)
 
 # Some common MIME types
+# Todo Move this list to development.ini
 mime_types = [
     'text/plain', 
     'text/html', 
@@ -62,13 +63,13 @@ def mimetype_autocomplete(context, data_dict):
 
     :param q: the string to search for
     :type q: string
-    :param limit: the maximum number of resource formats to return (optional,default: 5)
+    :param limit: the maximum number of results to return
     :type limit: int
 
     :rtype: list of strings
     '''
 
-    model   = context['model']
+    model = context['model']
     session = context['session']
 
     toolkit.check_access('site_read', context, data_dict)
