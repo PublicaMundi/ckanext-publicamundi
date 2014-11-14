@@ -1,0 +1,30 @@
+{% extends 'tests/base.html' %}
+
+{% block primary_content_inner %}
+
+<form action="/testing/publicamundi/mock_handle_upload" id="form-1" 
+    method="post" enctype="multipart/form-data"
+    data-module="ababoua" 
+  >
+    {% snippet 'snippets/upload-ajax.html',
+        name='metadata_source', 
+        title=_('Metadata Source'),
+        allowed_mime_types=['text/xml', 'application/xml'],
+        labels={ 'proceed': 'Import', },
+        icons={ 'proceed': 'icon-circle-arrow-right', }
+    %}
+    <div class="controls">
+        <button type="reset" class="btn btn-small">Reset</button>
+        <button type="submit" class="btn btn-small btn-primary">Submit</button>
+    </div>
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+
+{{ super() }}
+
+{% resource 'ckanext-publicamundi/upload' %}
+
+{% endblock %}

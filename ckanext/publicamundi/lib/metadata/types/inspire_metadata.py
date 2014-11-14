@@ -76,6 +76,13 @@ class InspireMetadata(BaseMetadata):
     
     responsible_party = list
 
+    def deduce_basic_fields(self):
+        data = super(InspireMetadata, self).deduce_basic_fields()
+        data.update({
+            'notes': self.abstract,
+        })
+        return data
+
 # XML serialization
 
 @object_xml_serialize_adapter(IInspireMetadata)
@@ -147,6 +154,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         url_list = []
         for it in md.distribution.online:
             url_list.append(it.url)
+
         topic_list = []
         for topic in md.identification.topiccategory:
             topic_list.append(vocabularies.munge(topic))

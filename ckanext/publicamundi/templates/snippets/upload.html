@@ -1,0 +1,42 @@
+
+{%- if attrs is not defined %}{% set attrs = {} %}{% endif %}
+{%- if icons is not defined %}{% set icons = {} %}{% endif %}
+{%- if labels is not defined %}{% set labels = {} %}{% endif %}
+{%- if button_classes is not defined %}{% set button_classes = ['btn-small'] %}{% endif %}
+
+<div class="control-group control-upload {{ classes|join(' ') }}"
+    data-module="upload-link" data-module-name="{{ name }}"
+    {{ attrs|xmlattr }}
+ >
+    <label>{{ title }}</label>
+
+    <div class="controls choose-method" style="display:block">
+        <input type="file" name="{{ name }}-upload" id="input-{{ name }}-upload" 
+            {% if allowed_mime_types %}accept="{{ allowed_mime_types|join(',') }}"{% endif %} />
+        <button class="btn {{ button_classes|join(' ') }} upload-file">
+            <i class="{{ icons.upload|default('icon-cloud-upload') }}"></i> {{ labels.upload|default(_('Upload')) -}}
+        </button>
+        <button class="btn {{ button_classes|join(' ') }} link-file" >
+            <i class="{{ icons.link|default('icon-globe') }}"></i> {{ labels.link|default(_('Link')) -}}
+        </button>
+    </div>
+
+    <div class="controls link-file" style="display:none">
+        {% block controls_link_file  %}
+        <input type="url" class="span5" name="{{ name }}" id="input-{{ name }}"/>
+        <button class="btn {{ button_classes|join(' ') }} remove-link" title="">
+            <i class="icon-remove"></i> {{ _('Discard') -}}
+        </button>
+        {% endblock %}
+    </div>
+
+    <div class="controls upload-file" style="display:none">
+        {% block controls_upload_file  %}
+        <span class="selected-file muted">A placeholder for the selected file</span>
+        <button class="btn {{ button_classes|join(' ') }} remove-file" title="">
+            <i class="icon-remove"></i> {{ _('Discard') -}}
+        </button>
+        {% endblock %}
+    </div>
+
+</div>

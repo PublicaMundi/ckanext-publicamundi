@@ -125,32 +125,51 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         api_controller = 'ckanext.publicamundi.controllers.api:Controller'
         
-        mapper.connect('publicamundi-dataset-export',
-            '/api/publicamundi/dataset/export/{id}',
-            controller=api_controller, action='export_to_type')
-
         mapper.connect(
             '/api/util/resource/mimetype_autocomplete',
             controller=api_controller, action='mimetype_autocomplete')
          
-        mapper.connect('publicamundi-list-vocabularies',
+        mapper.connect('publicamundi-vocabularies-list',
             '/api/publicamundi/vocabularies',
             controller=api_controller, action='vocabularies_list')
          
-        mapper.connect('publicamundi-get-vocabulary',
+        mapper.connect('publicamundi-vocabularies-get',
             '/api/publicamundi/vocabularies/{name}',
             controller=api_controller, action='vocabulary_get')
+        
+        mapper.connect('publicamundi-dataset-import-metadata',
+            '/api/publicamundi/dataset/import_metadata',
+            controller=api_controller, action='import_metadata')
+        
+        mapper.connect('publicamundi-dataset-export-metadata',
+            '/api/publicamundi/dataset/{name_or_id}/export_metadata',
+            controller=api_controller, action='export_metadata')
+
+        files_controller = 'ckanext.publicamundi.controllers.files:Controller'
+        
+        mapper.connect('publicamundi-files-download-file',
+            '/publicamundi/files/{object_type}/{name_or_id}/download/{filename:.*?}',
+            controller=files_controller, action='download_file', 
+            conditions=dict(method=['GET']))
+        
+        mapper.connect('publicamundi-files-upload-file',
+            '/publicamundi/files/{object_type}',
+            controller=files_controller, action='upload_file',
+            conditions=dict(method=['POST']))
       
         #mapper.connect('tags', '/tags',
         #    controller='ckanext.publicamundi.controllers.tags:Controller', action='index')
+        
+        tests_controller = 'ckanext.publicamundi.controllers.tests:Controller'
 
-        mapper.connect('publicamundi-tests', 
-            '/testing/publicamundi/{action}/{id}',
-            controller='ckanext.publicamundi.controllers.tests:TestsController',)
+        mapper.connect(
+            '/dataset/import', controller=tests_controller, action='index')
         
         mapper.connect('publicamundi-tests', 
-            '/testing/publicamundi/{action}',
-            controller='ckanext.publicamundi.controllers.tests:TestsController',)
+            '/testing/publicamundi/{action}/{id}', controller=tests_controller)
+        
+        mapper.connect('publicamundi-tests', 
+            '/testing/publicamundi/{action}', controller=tests_controller)
 
         return mapper
 
@@ -159,6 +178,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     def get_actions(self):
         return {
             'mimetype_autocomplete': publicamundi_actions.mimetype_autocomplete,
+            'package_import': publicamundi_actions.package_import,
         }
 
     ## IDatasetForm interface ##
@@ -344,10 +364,14 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         # Determine dataset_type-related parameters for this package
         
-        dt = pkg_dict['dataset_type']
+        dt = pkg_dict.get('dataset_type')
+        if not dt:
+            # Noop: cannot recognize dataset-type (pkg_dict has raw extras?)
+            return
+
         dt_spec = dataset_types[dt]
         key_prefix = dt_spec.get('key_prefix', dt)
-        
+
         # Fix types, create flat object dict
         
         # Note If we attempt to pop() flat keys here (e.g. to replace them by a 

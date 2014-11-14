@@ -5,7 +5,7 @@
    {%- endif -%}
 {%- endmacro -%}
 
-{%- macro markup_for_messages(messages, key=None, titles={}) -%}
+{%- macro message_list(messages, key=None, titles={}) -%}
     {% if messages -%}
     {% if key -%}
     <label data-key="{{ key }}" class="title">{{ titles.get(key, key|title) }}</label>
@@ -13,7 +13,7 @@
     {% if messages is mapping -%}
     <ul>
         {% for k in messages -%}
-        <li>{{ markup_for_messages(messages[k], k, titles) }}</li>
+        <li>{{ message_list(messages[k], k, titles) }}</li>
         {% endfor -%}
     </ul>
     {% elif messages is sequence -%}
@@ -35,7 +35,7 @@
 {% macro error_messages(errors, titles={}) -%}
     {% if errors -%}
     <div class="alert alert-error errors error-messages">
-        {{ markup_for_messages(errors, key=None, titles=titles) }}
+        {{ message_list(errors, key=None, titles=titles) }}
     </div>
     {% endif -%}
 {% endmacro -%}

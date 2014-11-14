@@ -1,5 +1,5 @@
 import re
-#import tidylib
+import tidylib
 from lxml import etree
 
 

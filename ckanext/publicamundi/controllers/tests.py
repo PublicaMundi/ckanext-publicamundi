@@ -2,8 +2,14 @@ import datetime
 import logging
 import copy
 import json
+import os
+import random
 import pprint
 from collections import namedtuple
+from cgi import FieldStorage
+import shutil
+import requests
+from unidecode import unidecode
 
 from pylons import url
 
@@ -23,29 +29,73 @@ from ckanext.publicamundi.lib.metadata.widgets import (
     markup_for_field, markup_for_object, widget_for_object, widget_for_field)
 
 from ckanext.publicamundi.lib.metadata.vocabularies import json_loader
-
 from ckanext.publicamundi.tests import fixtures
 
-import os.path
 from ckanext.publicamundi.lib.metadata.xml_serializers import *
 from ckanext.publicamundi.lib.metadata.types.inspire_metadata import *
+
 log1 = logging.getLogger(__name__)
 
-from cgi import FieldStorage
-import shutil
-
-import requests
-from unidecode import unidecode
 content_types = {
-            'json': 'application/json; charset=utf8',
-            'xml': 'text/xml'
-            }
-PERMANENT_STORE = '/var/local/ckan/default/ofs/storage'
-class TestsController(BaseController):
+    'json': 'application/json; charset=utf8',
+    'xml': 'text/xml'
+}
+
+PERMANENT_STORE = '/tmp/' #'/var/local/ckan/default/ofs/storage'
+
+class Controller(BaseController):
 
     def brk(self):
         raise Breakpoint()
 
+    def mock_handle_upload(self):
+        '''Mocks a upload handler.
+        Returns a JSON dict that describes a successfully uploaded file.
+        '''
+        
+        field_name = request.params.get('name')
+        upload = request.params.get(field_name + '-upload')
+        if not isinstance(upload, FieldStorage):
+            abort(400, 'Expected a file upload')
+        
+        name = datetime.datetime.now().strftime('%s') + '-' + upload.filename
+        l = toolkit.url_for('publicamundi-files-download-file', 
+            object_type = 'baz', 
+            name_or_id = name,
+            filename = upload.filename)
+        
+        n = random.randint(1000, 9999) 
+
+        result = dict(name=name, url=l, size=n)
+        response.headers['Content-Type'] = content_types['json']
+        
+        return [to_json(result)]
+        
+    def report_params(self):
+        result = {}
+        for k, f in request.params.items():
+            if isinstance(f, FieldStorage) and hasattr(f, 'file'):
+                fp, mimetype, filename, name = f.file, f.type, f.filename, f.name
+                # Compute size
+                fp.seek(0, 2) # move fp to the end
+                size = fp.tell()
+                fp.seek(0, 0) # reset fp
+                # Report
+                result[k] = {
+                    'name': name,
+                    'filename': filename,
+                    'mimetype': mimetype,
+                    'size': size,
+                    'sample': fp.read(128).decode('utf-8') \
+                        if mimetype.startswith('text/') else '<binary-data>'
+                }
+            else:
+                result[k] = f
+        
+        response.headers['Content-Type'] = content_types['json']
+        return [to_json(result)]
+        
+    
     def index(self, id=None):
         return u'Another test!'
 
@@ -265,6 +315,7 @@ class TestsController(BaseController):
         return render('tests/page.html')
     
     def show_dataset(self, id):
+        '''Show dataset's metadata formatted as a table'''
         
         context = { 'model': model, 'session': model.Session }
         try:
@@ -310,6 +361,13 @@ class TestsController(BaseController):
         #raise Exception('Break')
         c.form_class = 'form-horizontal' # 'form-horizontal'
         return render('tests/accordion-form.html')
+
+    #
+    # Upload XML metadata
+    #
+    
+    def test_upload_form(self):
+        return render('tests/upload-form.html')
 
     @classmethod
     def _get_action_context(cls):
@@ -368,9 +426,6 @@ class TestsController(BaseController):
             data = obj.to_json()
             return [data]
 
-
-
-
     def test_fromxml(self, filename=None, link=None):
         if filename:
             try:
@@ -421,11 +476,10 @@ class TestsController(BaseController):
         pkg_data['name'] = json_loader.munge(unidecode(data.get('title')))
         pkg_data['dataset_type'] = 'inspire'
         pkg_data['inspire'] = data
-        pkg_data['state'] = 'draft'
+        pkg_data['state'] = 'faulty'
 
         pkg = self._create_or_update(pkg_data)
         return pkg
-
 
     def _prepare_inspire(self, insp):
         data = insp.to_dict(flat=1, opts={'serialize-keys': True})
@@ -462,13 +516,11 @@ class TestsController(BaseController):
             log1.info('Created package %s' % pkg['name'])
         return pkg
 
-
     def _show(self, name_or_id):
         try:
             return toolkit.get_action('package_show') (self._get_action_context(), data_dict = {'id': name_or_id})
         except:
             return {}
-
 
     def _package_exists(self, name_or_id):
         return  name_or_id in toolkit.get_action ('package_list')(self._get_action_context(), data_dict={})

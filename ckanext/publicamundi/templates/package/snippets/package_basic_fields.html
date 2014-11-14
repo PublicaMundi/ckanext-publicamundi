@@ -3,6 +3,12 @@
 {% set is_new = data.get('id') is none %}
 {% set is_draft = data.get('state', 'draft') == 'draft' %}
 
+{% block package_basic_fields_dataset_type %}
+
+{% snippet 'package/snippets/edit-dataset_type.html', data=data, is_new=is_new, is_draft=is_draft %}
+
+{% endblock %} {# package_basic_fields_dataset_type #}
+
 {% block package_basic_fields_title %}
   
 {{ 
@@ -25,13 +31,12 @@
 {% set domain = h.url_for(controller='package', action='read', id='', qualified=true) %}
 {% set domain = domain|replace("http://", "")|replace("https://", "") %}
 {% set attrs = {'data-module': 'slug-preview-slug', 'data-module-prefix': domain, 'data-module-placeholder': '<dataset>'} %}
-
 {{ 
     form.prepend('name', 
         id = 'field-name', 
-        label = _('URL'), 
+        label = _('Locator (URL)'), 
         prepend = prefix, 
-        placeholder = _('eg. my-dataset'), 
+        placeholder = _('eg. visitor-stats-2014b'), 
         value = data.name, 
         error = errors.name, 
         attrs = attrs, 
@@ -39,32 +44,9 @@
     ) 
 }}
 
+{#{% resource 'ckanext-publicamundi/show-dataset-name' %}#} {# Force `name` input to be always visible #}
+
 {% endblock %} {# package_basic_fields_url #}
-
-{% block package_basic_fields_dataset_type %}
-
-{% if is_new %}
-{{ 
-    form.select('dataset_type', 
-        id = 'field-dataset_type',
-        label = _('Dataset Type'),
-        options = h.dataset_type_options(), 
-        selected = 'ckan', 
-        attrs = { 
-            'data-module': 'input-select2',
-        }
-    ) 
-}}
-{% else %}
-{% set dataset_type = data.get('dataset_type') %}
-{{ form.hidden('dataset_type', dataset_type) }}
-<div class="control-group hide">
-    <label class="control-label">{{ _('Dataset Type') }}</label>
-    <div class="controls "><div class="display">{{ h.dataset_types().get(dataset_type).get('title') }}</div></div>
-</div>
-{% endif %} {# if is_new #}
-
-{% endblock %} {# package_basic_fields_dataset_type #}
 
 {% block package_basic_fields_description %}
 

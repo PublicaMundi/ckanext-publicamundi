@@ -59,6 +59,14 @@ def dictize_for_extras(obj, key_prefix):
     res = { k: v for k, v in res.iteritems() if v is not None }
     return res
 
+def must_validate(context, data):
+    '''Indicate whether an object (or a particular field of it) should be validated
+    under the given context.
+    '''
+    return not (
+        ('skip_validation' in context) or 
+        (data.get(('state',), '') == 'invalid'))
+
 ## Validators/Converters 
 
 def is_dataset_type(value, context):
@@ -79,8 +87,8 @@ def preprocess_dataset_for_read(key, data, errors, context):
     pass
 
 def postprocess_dataset_for_read(key, data, errors, context):
-    assert key[0] == '__after', \
-        'This validator can only be invoked in the __after stage'
+    assert key[0] == '__after', (
+        'This validator can only be invoked in the __after stage')
     
     def debug(msg):
         logger.debug('Post-processing dataset for reading: %s' %(msg))
@@ -107,11 +115,15 @@ def postprocess_dataset_for_edit(key, data, errors, context):
  
     debug('context=%r' %(context.keys()))
     
-    requested_with_api = context.has_key('api_version')
-    is_new = not context.has_key('package')
-    is_draft = data.get(('state',), 'unknown').startswith('draft')
+    # The state we are moving to
+    state = data.get(('state',), '') 
+    
+    # The previous state (if exists)
+    pkg = context.get('package')
+    prev_state = pkg.state if pkg else ''
 
-    #raise Breakpoint('postprocess_dataset_for_edit')
+    requested_with_api = 'api_version' in context
+    is_new = not pkg
 
     if is_new and not requested_with_api:
         return # noop: only core metadata expected
@@ -139,7 +151,7 @@ def postprocess_dataset_for_edit(key, data, errors, context):
         validation_errors = obj.validate(dictize_errors=True)
         # Todo Map `validation_errors` to `errors`
         #assert not validation_errors
-    
+   
     # 3. Convert fields to extras
     
     extras_list = data[('extras',)]
@@ -148,7 +160,18 @@ def postprocess_dataset_for_edit(key, data, errors, context):
         extras_list.append({ 'key': key, 'value': val })
     assert not find_all_duplicates(map(lambda t: t['key'], extras_list))
     
-    debug('Saved %d %s-related fields into extras' % (len(extras_dict), dt))
+    debug('About to save %d %s-related fields in extras' % (len(extras_dict), dt))
+    
+    # 4. Compute next state
+    
+    if 'skip_validation' in context:
+        data[('private',)] = True
+        state = data[('state',)] = 'invalid' 
+    
+    if not state:
+        if prev_state == 'invalid':
+            state = data[('state',)] = 'active'
+    
     return
 
 def preprocess_dataset_for_edit(key, data, errors, context):
@@ -180,9 +203,9 @@ def preprocess_dataset_for_edit(key, data, errors, context):
         key_prefix = dataset_types[dt]['key_prefix']
         debug('Trying to flatten input at %s' %(key_prefix))
         if any([ k[0].startswith(key_prefix) for k in received_data ]):
-            raise Invalid('Not supported: Detected both nested/flat inputs')
+            raise Invalid('Not supported: Found both nested/flat dicts')
         # Convert to expected flat fields
-        key_converter = lambda k: '.'.join((key_prefix,) +k)
+        key_converter = lambda k: '.'.join([key_prefix] + map(str, k))
         r = dictization.flatten(r, key_converter)
         data.update({ (k,): v for k, v in r.iteritems() })
 
@@ -234,7 +257,7 @@ def get_field_edit_processor(field):
             raise StopOnError
 
         # Validate
-       
+                
         if not 'skip_validation' in context:
             try: 
                 # Invoke the zope.schema validator

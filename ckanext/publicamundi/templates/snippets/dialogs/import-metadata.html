@@ -1,0 +1,61 @@
+
+{# A dialog to assist the user to provide (link or upload) existing metadata -#} 
+
+{% if not id is defined %}{% set id = 'import-metadata-dialog' %}{% endif %}
+
+<div id="{{ id }}" class="modal hide no-fade" tabindex="-1" role="dialog" 
+    aria-labelledby="{{ id }}-label" aria-hidden="true"
+  >
+    <div class="modal-header">
+        <a class="close cancel" aria-hidden="true">×</a>
+        {% block dialog_header %}
+        <h3 id="{{ id }}-label">{{ _('Import Metadata') }} - <span class="name"></span></h3>
+        {% endblock %}
+    </div>
+    
+    <div class="modal-body">
+
+        <div class="import-step">
+            <p>Create a new dataset by importing an existing <strong>XML</strong> metadata file.</p>
+            <p>You can either upload a local file from your computer, or use a link (in case metadata is allready published somewhere).</p>
+            {% with action = h.url_for('publicamundi-files-upload-file', object_type='source-metadata') %} 
+            <form id="{{ id }}-form" action="{{ action }}" method="post" enctype="multipart/form-data">
+                {%- block form %}
+                
+                {% snippet 'snippets/upload-ajax.html',
+                    name = 'metadata_source', 
+                    title = _('Metadata Source'),
+                    allowed_mime_types = ['text/xml', 'application/xml'],
+                    labels = { 'proceed': _('Import'), },
+                    icons = { 'proceed': 'icon-circle-arrow-right', },
+                    button_classes = []
+                %}
+                
+                {% endblock -%}
+            </form>
+            {% endwith %} {# action #}
+        </div>
+        
+        <div class="results-step">
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        {% block dialog_footer %}
+
+        <button class="btn cancel" aria-hidden="true">{{ _('Cancel') }}</button>
+        
+        {#<a class="btn btn-primary finish">{{ _('Finish') }}</a>#}
+        <div class="btn-group finish">
+            <button class="btn btn-primary finish">{{ _('Finish') }}</button>
+            <button class="btn btn-primary finish dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+            <ul class="dropdown-menu">
+               <li><a href="#1">Fix errors</a></li>
+               <li><a href="#2">View dataset</a></li>
+            </ul>
+        </div>
+        
+        {% endblock %}
+    </div>
+</div>
