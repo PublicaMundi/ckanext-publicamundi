@@ -11,7 +11,8 @@
 {% block searchbar %}
 <div class="searchbar">
     {% block groups_search_form %}
-    {% snippet 'snippets/search_form.html', type='group', query=c.q, sorting_selected=c.sort_by_selected, count=c.page.item_count, placeholder=_('Search groups...'), show_empty=request.params, no_bottom_border=true if c.page.items %}
+    
+    {% snippet 'snippets/search_form_top.html', type='group', query=c.q, sorting_selected=c.sort_by_selected, count=c.page.item_count, placeholder=_('Search groups...'), show_empty=request.params, no_bottom_border=true if c.page.items %}
   {% endblock %}
 </div>
   {% endblock %}

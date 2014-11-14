@@ -17,43 +17,18 @@ Example:
 {% set truncate_title = truncate_title or 80 %}
 {% set title = package.title or package.name %}
 {% set notes = h.markdown_extract(package.notes, extract_length=truncate) %}
-{% if package.organization %}
-{% set organization = package.organization.title %}
-{% else %}
-{% set organization = "" %}
-{% endif %}
-{% if package.groups %}
-{% set groups = package.groups %}
-{% else %}
-{% set groups = "" %}
-{% endif %}
-{% set modified = package.metadata_modified %}
+
 <li class="{{ item_class or "dataset-item" }}">
   {% block package_item_content %}
-  <div class="dataset-content">
-      <div class="dataset-preheading">
-          {% if groups %}
-          {% set group = groups[0] %}
-          <div>{{ h.friendly_date(modified|urlize)}} @ <span> <a href=/group/{{group.name}}> {{group.title|urlize }}</span></div> </a>
-          {% else %}
-          <div>{{ h.friendly_date(modified|urlize)}} </div>
-          {% endif %}
-      </div>
-
+    <div class="dataset-content">
       <h3 class="dataset-heading">
         {% if package.private %}
           <span class="dataset-private label label-inverse">
             <i class="icon-lock"></i>
             {{ _('Private') }}
-        </span>
+          </span>
         {% endif %}
-        
-        {% if groups %}
-        {% set group = groups[0] %}
-        <a href={{ h.url_for(controller='package', action='read', id=package.name)}}><img src= {{ group.image_display_url }}/></a>
-          {% endif %}
-
-          {{ h.link_to(h.truncate(title, truncate_title), h.url_for(controller='package', action='read', id=package.name)) }}
+        {{ h.link_to(h.truncate(title, truncate_title), h.url_for(controller='package', action='read', id=package.name)) }}
         {% if package.get('state', '').startswith('draft') %}
           <span class="label label-info">{{ _('Draft') }}</span>
         {% elif package.get('state', '').startswith('deleted') %}
@@ -64,10 +39,8 @@ Example:
       {% if banner %}
         <span class="banner">{{ _('Popular') }}</span>
       {% endif %}
-      {% if organization %}
-      <div class="dataset-postheading">
-          <a href=/organization/{{ package.organization.name}}> {{ organization|urlize }}</a>
-      </div>
+      {% if notes %}
+        <div>{{ notes|urlize }}</div>
       {% endif %}
     </div>
     {% if package.resources and not hide_resources %}

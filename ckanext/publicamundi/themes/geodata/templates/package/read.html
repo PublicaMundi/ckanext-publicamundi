@@ -33,13 +33,24 @@
   {% block package_resources %}
     {% snippet "package/snippets/resources_list.html", pkg=pkg, resources=pkg.resources %}
   {% endblock %}
-
   {# {% block package_tags %}
     {% snippet "package/snippets/tags.html", tags=pkg.tags %}
     {% endblock %} #}
+  
+    {% block dataset_type %}
+  {% set api_controller = 'ckanext.publicamundi.controllers.api:Controller' %}
+  <div class = "btn-group metadata-download"><a href="#" class="btn dropdown-toggle" data-toggle="dropdown">{{_('Download as')}}
+      <span class="caret"></span></a>
+  <ul class="dropdown-menu">
+      <li><a href="/api/publicamundi/dataset/export/{{pkg.name }}?type=xml">{{ pkg.dataset_type}} XML</a></li>
+      
+  </ul></div>
+  {% endblock %}
 
   {% block package_additional_info %}
-    {% snippet "package/snippets/additional_info.html", pkg_dict=pkg %}
+  
+  {% snippet "package/snippets/additional_info.html", pkg_dict=pkg %}
+
   {% endblock %}
 
 {% endblock %}

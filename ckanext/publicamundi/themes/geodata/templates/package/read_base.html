@@ -52,21 +52,19 @@
 {#  {% block package_info %}
     {% snippet 'package/snippets/info.html', pkg=pkg %}
     {% endblock %} #}
-
+<div class="paintme">
   {% block package_organization %}
-  {# {% if pkg.organization %} #}
       {% snippet "snippets/organization.html", organization=pkg.organization, has_context_title=true %}
-      {#   {% endif %} #}
   {% endblock %}
-  
   {% block package_tags %}
     {% snippet "package/snippets/tags.html", tags=pkg.tags %}
-  {% endblock %}
+    {% endblock %}
   {# {% block package_social %}
     {% snippet "snippets/social.html" %}
     {% endblock %} #}
 
   {% block package_license %}
     {% snippet "snippets/license.html", pkg_dict=pkg %}
-  {% endblock %}
-{% endblock %}
+    {% endblock %}
+    {% endblock %}
+</div>
