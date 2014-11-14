@@ -1,7 +1,9 @@
 {% extends "package/read_base.html" %}
 
 {% set pkg = c.pkg_dict %}
-
+{% block toolbar %}
+{{ super() }}
+{% endblock %}
 {% block primary_content_inner %}
   {{ super() }}
   {% block package_description %}

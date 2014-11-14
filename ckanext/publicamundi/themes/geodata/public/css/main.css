@@ -16,6 +16,7 @@ a {
 .account-masthead {
     background: #fff;
     font-color: #4E59A4;
+    height: 32px;
 }
 .account-masthead .account .notifications a span{
     background-color: #fff;
@@ -175,6 +176,12 @@ a {
     max-width: 350px;
 
 }
+.promotebox .module-content:first-child{
+    border-radius: 0;
+    box-shadow: none;
+    border: 0;
+    padding: 30px;
+}
 /* Main */
 [role=main] {
     padding: 0;
@@ -195,9 +202,26 @@ a {
 .breadcrumb > li {
     text-shadow: none;
     color: #fff;
+    float: left;
+    margin-left: 5px;
+}
+.breadcrumb li:first-child:after{
+    content: "";
+}
+//.threemonkeys ul{
+//    display: none;
+//}
+//.threemonkeys:hover ul{
+//    display: block;
+//    float: right;
+//    margin-left:10px;
+//    margin-top:5px;
+//}
+.gap{
+    margin-bottom: 40px;
 }
 .toolbar .breadcrumb {
-    padding-top: 5px;
+    padding-top: 8px;
 }
 .toolbar .breadcrumb .active a, .toolbar .breadcrumb a.active{
     font-weight: normal;
@@ -210,6 +234,9 @@ a {
     background: #4E59A4;
     margin: 0;
     height: 35px;
+}
+.toolbar .btn-primary{
+    float:right;
 }
 .searchfw {
     background: #F6F6F6;
@@ -251,7 +278,7 @@ a {
 }
 .search-form .search-input.search-giant input{
     box-shadow: none;
-    margin-left: 20px;
+    //margin-left: 20px;
     font-size: 22px;
 }
 
@@ -271,6 +298,9 @@ a {
 .homepage .module-search .module-content{
     margin:0;
     padding: 0;
+}
+.module-content:first-child{
+    padding-top:0;
 }
 .homepage .searchfw{ 
     margin-bottom: 0 !important;
@@ -334,11 +364,12 @@ a {
 [role=main] .secondary {
     width: 237px;
     font-color: #666666;
-    border: 3px #4E59A4 solid;
+    //border: 3px #4E59A4 solid;
+    border: 1px #666666 solid;
 }
 .paintme{
     //margin-top:55px;
-    //border: 3px #4E59A4 solid;
+    border: 3px #4E59A4 solid;
 }
 .secondary .module-heading {
     border-top: 2px #4E59A4 solid;
@@ -454,6 +485,11 @@ a {
     color: #fff;
     border: 2px #4E59A4 solid;
 }
+.resource-item .btn-group {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
 .btn-group > .btn:first-child {
     border-radius: 0;
 }
@@ -499,6 +535,7 @@ a {
     padding: 0 20px 0 20px;
 }
 .middle{
+    margin-left:15%;
 }
 /* Bootstrap overrides */
 .select2-container .select2-choice, .select2-dropdown-open.select2-drop-above .select2-choice, .select2-dropdown-open.select2-drop-above .select2-choices{
@@ -515,4 +552,9 @@ a {
 }
 .dropdown-menu > li:hover > a{
     background: #4E59A4;
+}
+
+/* Preview */
+.ckanext-datapreview iframe{
+    border: 6px #4E59A4 solid;
 }

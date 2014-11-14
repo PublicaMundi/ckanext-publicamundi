@@ -6,15 +6,37 @@
           (_('Last Modified'), 'metadata_modified desc'),
           (_('Popular'), 'views_recent desc') if g.tracking_enabled else (false, false) ]
           %}
+
+{% block breadcrumb %}
+
+{% if h.check_access('group_create') %}
+    {% link_for _('Add Dataset'), controller='package', action='new', class_='btn btn-primary', icon='plus-sign-alt' %}
+    {% endif %} 
+
+
+    <ol class="breadcrumb">
+    {% block breadcrumb_content %}
+    <li class="active">{% link_for _('Datasets'), controller='package', action='search' %}</li>
+  {% endblock %}
+  </ol>
+
+{% endblock %}
+
+
 {% block searchbar %}
-    {% snippet 'snippets/search_form_top.html', type='dataset', query=c.q, sorting=sorting, sorting_selected=c.sort_by_selected, count=c.page.item_count, facets=facets, show_empty=request.params, error=c.query_error %}
+
+{% snippet 'snippets/search_form_top.html', type='dataset', query=c.q, sorting=sorting, sorting_selected=c.sort_by_selected, count=c.page.item_count, facets=facets, show_empty=request.params, error=c.query_error %}
     {% endblock %}
 
 
     {% block primary %}
     {{ super() }}
     {% endblock %}
-{% block form %}
+
+{% block page_primary_action %}
+      {% endblock %}
+
+    {% block form %}
         {% set facets = {
           'fields': c.fields_grouped,
           'search': c.search_facets,
