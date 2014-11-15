@@ -1,12 +1,10 @@
 # Plugins for ckanext-publicamundi
 
-import time
+import re
 import datetime
 import json
 import weberror
 import logging
-import geoalchemy
-import itertools
 from itertools import chain, ifilter
 
 import ckan.model as model
@@ -14,12 +12,11 @@ import ckan.plugins as p
 import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
 
-import ckanext.publicamundi.model as publicamundi_model
-import ckanext.publicamundi.lib.metadata as publicamundi_metadata
-import ckanext.publicamundi.lib.actions as publicamundi_actions
+import ckanext.publicamundi.model as ext_model
+import ckanext.publicamundi.lib.metadata as ext_metadata
+import ckanext.publicamundi.lib.actions as ext_actions
 
-from ckanext.publicamundi.lib.util import to_json, random_name
-from ckanext.publicamundi.lib.util import Breakpoint
+from ckanext.publicamundi.lib.util import (to_json, random_name, Breakpoint)
 from ckanext.publicamundi.lib.metadata import (
     dataset_types, Object, ErrorDict,
     serializer_for_object, serializer_for_key_tuple)
@@ -27,6 +24,7 @@ from ckanext.publicamundi.lib.metadata import (
 _t = toolkit._
 
 log1 = logging.getLogger(__name__)
+
 
 class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     '''Override the default dataset form
@@ -98,25 +96,38 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'dataset_type_options': self.dataset_type_options,
             'organization_list_objects': self.organization_list_objects,
             'organization_dict_objects': self.organization_dict_objects,
-            'make_object': publicamundi_metadata.make_object,
-            'markup_for_field': publicamundi_metadata.markup_for_field,
-            'markup_for_object': publicamundi_metadata.markup_for_object,
-            'markup_for': publicamundi_metadata.markup_for,
+            'make_object': ext_metadata.make_object,
+            'markup_for_field': ext_metadata.markup_for_field,
+            'markup_for_object': ext_metadata.markup_for_object,
+            'markup_for': ext_metadata.markup_for,
         }
 
     ## IConfigurer interface ##
 
     def update_config(self, config):
-        ''' Setup the (fanstatic) resource library, public and template directory '''
+        ''' Configure CKAN (Pylons) environment'''
+
+        # Setup the (fanstatic) resource library, public and template directory
         p.toolkit.add_public_directory(config, 'public')
         p.toolkit.add_template_directory(config, 'templates')
         p.toolkit.add_resource('public', 'ckanext-publicamundi')
 
+        return
+
     ## IConfigurable interface ##
 
     def configure(self, config):
-        ''' Apply configuration options to this plugin '''
-        pass
+        '''Pass configuration to plugins and extensions'''
+        
+        asbool = toolkit.asbool
+
+        # Modify the pattern for valid names for {package, groups, organizations}
+        if asbool(config.get('ckanext.publicamundi.validation.relax_name_pattern')):
+            logic.validators.name_match = re.compile('[a-z][a-z0-9~_\-]*$')
+            log1.info('Using pattern for valid names: %r', 
+                logic.validators.name_match.pattern)
+
+        return
 
     ## IRoutes interface ##
 
@@ -177,8 +188,9 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
     def get_actions(self):
         return {
-            'mimetype_autocomplete': publicamundi_actions.mimetype_autocomplete,
-            'package_import': publicamundi_actions.package_import,
+            'mimetype_autocomplete': ext_actions.mimetype_autocomplete,
+            'package_export': ext_actions.package_export,
+            'package_import': ext_actions.package_import,
         }
 
     ## IDatasetForm interface ##
@@ -209,7 +221,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         default_initializer = toolkit.get_validator('default')
 
         # Add dataset-type, the field that distinguishes metadata formats
-        
+
         schema['dataset_type'] = [
             default_initializer('ckan'),
             convert_to_extras,
@@ -542,10 +554,10 @@ class PackageController(p.SingletonPlugin):
         from geoalchemy import WKTSpatialElement
         from ckanext.publicamundi.lib.util import geojson_to_wkt
         # Populate record fields
-        record = session.query(publicamundi_model.CswRecord).get(pkg_dict['id'])
+        record = session.query(ext_model.CswRecord).get(pkg_dict['id'])
         if not record:
             log1.info('Creating CswRecord %s', pkg_dict.get('id'))
-            record = publicamundi_model.CswRecord(pkg_dict.get('id'), name=pkg_dict.get('name'))
+            record = ext_model.CswRecord(pkg_dict.get('id'), name=pkg_dict.get('name'))
             session.add(record)
         else:
             log1.info('Updating CswRecord %s', pkg_dict.get('id'))
@@ -559,7 +571,7 @@ class PackageController(p.SingletonPlugin):
         return
 
     def _delete_csw_record(self, session, pkg_dict):
-        record = session.query(publicamundi_model.CswRecord).get(pkg_dict['id'])
+        record = session.query(ext_model.CswRecord).get(pkg_dict['id'])
         if record:
             session.delete(record)
             session.commit()

@@ -113,7 +113,7 @@ def postprocess_dataset_for_edit(key, data, errors, context):
     def debug(msg):
         logger.debug('Post-processing dataset for editing: %s' %(msg))
  
-    debug('context=%r' %(context.keys()))
+    #debug('context=%r' %(context.keys()))
     
     # The state we are moving to
     state = data.get(('state',), '') 
@@ -160,13 +160,13 @@ def postprocess_dataset_for_edit(key, data, errors, context):
         extras_list.append({ 'key': key, 'value': val })
     assert not find_all_duplicates(map(lambda t: t['key'], extras_list))
     
-    debug('About to save %d %s-related fields in extras' % (len(extras_dict), dt))
+    #debug('About to save %d %s-related fields in extras' % (len(extras_dict), dt))
     
     # 4. Compute next state
     
     if 'skip_validation' in context:
-        data[('private',)] = True
         state = data[('state',)] = 'invalid' 
+        #data[('private',)] = True
     
     if not state:
         if prev_state == 'invalid':
@@ -181,13 +181,13 @@ def preprocess_dataset_for_edit(key, data, errors, context):
     def debug(msg):
         logger.debug('Pre-processing dataset for editing: %s' %(msg))
     
-    debug('context=%r' %(context.keys()))
+    #debug('context=%r' %(context.keys()))
     
     received_data = { k:v for k,v in data.iteritems() if not (v is missing) }
     unexpected_data = received_data.get(('__extras',), {})
     
-    debug('Received data: %r' %(received_data))
-    debug('Received (but unexpected) data: %r' %(unexpected_data))
+    #debug('Received data: %r' %(received_data))
+    #debug('Received (but unexpected) data: %r' %(unexpected_data))
     
     # Figure-out if a nested dict is supplied (instead of a flat one).
     
@@ -224,7 +224,7 @@ def get_field_edit_processor(field):
 
     def convert(key, data, errors, context):
         value = data.get(key)
-        logger.debug('Processing field %s for editing (%r)', key[0], value)
+        #logger.debug('Processing field %s for editing (%r)', key[0], value)
          
         ser = serializer_for_field(field)
 
@@ -283,7 +283,7 @@ def get_field_read_processor(field):
 
     def convert(key, data, errors, context):
         value = data.get(key)
-        logger.debug('Processing field %s for reading (%r)', key[0], value)
+        #logger.debug('Processing field %s for reading (%r)', key[0], value)
         
         assert not value is missing
         assert isinstance(value, basestring)

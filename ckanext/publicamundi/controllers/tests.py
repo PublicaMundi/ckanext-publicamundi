@@ -4,7 +4,6 @@ import copy
 import json
 import os
 import random
-import pprint
 from collections import namedtuple
 from cgi import FieldStorage
 import shutil
@@ -94,7 +93,6 @@ class Controller(BaseController):
         
         response.headers['Content-Type'] = content_types['json']
         return [to_json(result)]
-        
     
     def index(self, id=None):
         return u'Another test!'
@@ -369,12 +367,26 @@ class Controller(BaseController):
     def test_upload_form(self):
         return render('tests/upload-form.html')
 
+    def test_1(self):
+        from ckanext.publicamundi.lib.actions import _find_a_package_name as probe
+        ctx = self._get_action_context()
+        
+        name_1_0 = probe(ctx, 'hello-2', 0)
+        name_1_1 = probe(ctx, 'hello-2', 1)
+        name_1_2 = probe(ctx, 'hello-2', 2)
+        
+        name_2_0 = probe(ctx, 'hello-inspire-3', 0)
+        name_2_1 = probe(ctx, 'hello-inspire-3', 1)
+        name_2_5 = probe(ctx, 'hello-inspire-3', 5)
+        
+        assert False
+    
     @classmethod
     def _get_action_context(cls):
         return {
             'model': model, 
             'session': model.Session, 
-            'ignore_auth':True, 
+            #'ignore_auth': False, 
             'api_version': 3,
         }
 

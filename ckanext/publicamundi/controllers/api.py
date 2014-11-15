@@ -260,6 +260,9 @@ class Controller(BaseController):
             'name': name,
             'notes': notes,
             'dataset_type': dataset_type,
+            #'groups': [{'name': 'environment'}],
+            #'owner_org': 'pico-org',
+
         }
         
         pkg[dataset_type] = obj.to_dict(flat=True, opts={'serialize-keys': True})

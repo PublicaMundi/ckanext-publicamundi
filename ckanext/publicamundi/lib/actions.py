@@ -23,6 +23,7 @@ _ = toolkit._
 
 url_for = toolkit.url_for
 get_action = toolkit.get_action
+check_access = toolkit.check_access
 
 @logic.side_effect_free
 def mimetype_autocomplete(context, data_dict):
@@ -59,40 +60,54 @@ def mimetype_autocomplete(context, data_dict):
 
     return results
 
+@logic.side_effect_free
+def package_export(context, data_dict):
+    '''Export a dataset to XML.
+    '''
+    raise NotImplementedError('Todo')
+
 def package_import(context, data_dict):
-    '''Import a dataset from a given source.
+    '''Import a dataset from a given XML source.
 
     :param source: a (local or external) URL where metadata is located
     :type q: string
     
     :param dtype: the dataset-type i.e. the schema of imported metadata
     :type dtype: string
-    
+
+    :param owner_org: the machine-name for the owner organization 
+    :type owner_org: string
+
     :param on_errors: hint on what to do when validation errors are encountered
     :type on_errors: enum {'continue', 'abort'}
     
     :param on_name_conflict: hint on what to do when a name conflict is encountered
     :type on_name_conflict: enum {'rename', 'abort'}
 
-    :rtype: A status message 
+    :rtype: basic info for the newly created package 
     '''
+      
+    # Read parameters
 
-    result = { 'message': None }
-   
-    model, session = context['model'], context['session']
-     
-    toolkit.check_access('package_create', context, data_dict)
-    
-    # Read params
-
-    source = data_dict.get('source')
+    try:
+        source = data_dict['source']
+    except KeyError:
+        raise ValueError('The `source` parameter is required')
     if not source.startswith('http://'):
         source = config['ckan.site_url'] + source.strip('/')
     source = urlparse.urlparse(source)
 
-    dtype = data_dict.get('dtype', 'ckan')
-    on_errors = data_dict.get('on_errors', 'abort')
-    on_name_conflict = data_dict.get('on_name_conflict', 'abort')
+    dtype = data_dict.get('dtype', 'inspire')
+
+    try:
+        owner_org = data_dict['owner_org']
+    except KeyError:
+        raise ValueError(
+            'The `owner_org` parameter is required.\n'
+            'Hint: Use organization_list_for_user action to retrieve a valid list')
+        
+    allow_rename = data_dict.get('on_name_conflict', 'abort') == 'rename'
+    allow_validation_errors = data_dict.get('on_errors', 'continue') == 'continue'
 
     # Fetch raw XML data
 
@@ -112,7 +127,7 @@ def package_import(context, data_dict):
         obj = xml_serializer_for(obj).loads(xmldata)
     except:
         # Map all parse exceptions to Invalid (even assertions)
-        raise toolkit.Invalid('The given XML file is malformed')
+        raise toolkit.Invalid(_('The given XML file is malformed'))
 
     # Prepare package dict
     
@@ -122,48 +137,104 @@ def package_import(context, data_dict):
         dtype: obj.to_dict(flat=False),
     })
     
-    # Check name is available
-    # Note: We just find the 1st available name, of course this doesnt guarantee that 
-    # it will remain available at the actual time `package_create` is called.
+    # Find and assign a machine-name for this package
+    # Note We just find the first available name, of course this does not guarantee
+    # that it will remain available the actual time `package_create` is called.
     
-    name, name_found = pkg_dict['name'], False
-    while False and not name_found:
-        try:
-            get_action('package_show')(context, data_dict=dict(id=name))
-        except toolkit.ObjectNotFound:
-            name_found = True
-        else:
-            if on_name_conflict == 'abort':
-                raise ValueError('The package name %r is not available' % (name))
-            else:
-                # Todo Rename and retry
-                name = name + '~1' 
-   
-    # Workaround for https://github.com/ckan/ckanext-harvest/issues/84
-    # context.pop('__auth_audit', None)
+    basename = pkg_dict['name']
+    max_num_probes = 10 if allow_rename else 0
+    name = _find_a_package_name(context, basename, max_num_probes)
+    if not name:
+        raise ValueError(
+            'The package name %r is not available ' % (basename))
+    else:
+        pkg_dict['name'] = name
+        pkg_dict['title'] += ' ' + name[len(basename):]
     
     # Create/Update package
-     
-    #pkg_dict['state'] = 'invalid'
+    
+    validation_errors, error_message = None, None
+
+    ctx = _make_context(context)
+    check_access('package_create', ctx, dict(name=name))
     try:
-        x = get_action('package_create')(context, data_dict=pkg_dict)
+        pkg_dict = get_action('package_create')(ctx, data_dict=pkg_dict)
     except toolkit.ValidationError as ex:
         if 'name' in ex.error_dict:
-            # The name is taken
-            assert False, 'name taken'
+            # The name is taken, re-raise exception
+            raise ex
+        elif allow_validation_errors:
+            validation_errors = ex.error_dict
+            error_message = ex.message or _('The dataset contains invalid metadata')
+            # Retry `package_create` with a different context
+            ctx = _make_context(context, skip_validation=True)
+            check_access('package_create', ctx, dict(name=name))
+            pkg_dict = get_action('package_create')(ctx, data_dict=pkg_dict)
+            log1.warn('Created invalid package (skip-validation) as %r ' % (name))
         else:
-            # The dataset is invalid
-            #assert False, 'validation failed'
-            log1.warn(' ** Validation failed for %r ' % (name))
-            context['skip_validation'] = True
-            pkg_dict['state'] = 'invalid'
-            x = get_action('package_create')(context, data_dict=pkg_dict)
+            raise ex
 
+    assert name == pkg_dict['name']
     
-    result['name'] = x['name'] 
-    result['state'] = x.get('state')
-    
-    #assert False
-    return result
+    return {
+        # Provide basic package fields
+        'id': pkg_dict['id'], 
+        'name': name, 
+        'state': pkg_dict.get('state'),
+        # Provide details on validation (only if allow_validation_errors)
+        'validation': {
+            'message': error_message,
+            'errors': validation_errors,
+        },
+    }
 
+def _make_context(context, **opts):
+    '''Make a new context for an action, based on an initial context.
+    
+    This is needed in case we want to retry the action, because re-using the
+    previous context leads to strange errors (updates instead of creates etc?) 
+    '''
+    
+    ctx = { 
+        'model': context['model'], 
+        'session': context['session'], 
+        'user': toolkit.c.user,
+    }
+    
+    if 'api_version' in context:
+        ctx['api_version'] = context['api_version']
+
+    ctx.update(opts)
+    
+    return ctx
+
+def _find_a_package_name(context, basename, max_num_probes=12):
+    '''Probe until you find an available (non-occupied) package name.
+    
+    The result name will be based on `name` and will try to append a suffix
+    until it succeeds or until it reaches `max_num_probes`.
+
+    If you pass a zero value for `max_num_probes`, it will essentially test if the given
+    name (unmodified) is available (and will also return it).
+    '''
+    
+    suffix_fmt = '~{num_probes:d}'
+   
+    ctx = _make_context(context, return_id_only=True)
+    name, num_probes, found, exhausted = basename, 0, False, False
+    while not (found or exhausted):
+        try:
+            check_access('package_show', ctx, dict(id=name))
+            get_action('package_show')(ctx, data_dict=dict(id=name))
+        except toolkit.ObjectNotFound:
+            found = True
+        else:
+            if num_probes < max_num_probes:
+                # Rename and retry
+                num_probes += 1
+                name = basename + suffix_fmt.format(num_probes=num_probes) 
+            else:
+                exhausted = True
+   
+    return name if found else None
 
