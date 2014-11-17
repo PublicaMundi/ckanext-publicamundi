@@ -152,11 +152,11 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 	    
 	    m.connect('user_dashboard_resources', '/dashboard/resources', action='dashboard_resources')
 	    m.connect('admin_page_resources', '/user/resources', action='admin_page_resources')
-	    m.connect('reject_resource', '/dashboard/resources/reject/{resource_id}', action='reject')
-	    m.connect('identify_vector_resource', '/dashboard/resources/identify_vector/{resource_id}', 
-		      action='identify',resource_id ='{resource_id}', resource_type ='vector')
-	    m.connect('render_injection', '/dashboard/resources/inject/{resource_id}', 
-		      action='render_injection_template',resource_id ='{resource_id}')
+	    m.connect('reject_resource', '/{parent}/resources/reject/{resource_id}', action='reject', parent='{parent}')
+	    m.connect('identify_vector_resource', '/{parent}/resources/identify_vector/{resource_id}', 
+		      action='identify',resource_id ='{resource_id}', resource_type ='vector', parent='{parent}')
+	    m.connect('render_injection', '/{parent}/resources/inject/{resource_id}', 
+		      action='render_injection_template',resource_id ='{resource_id}', parent='{parent}')
         
         #mapper.connect('tags', '/tags',
         #    controller='ckanext.publicamundi.controllers.tags:Controller', action='index')
