@@ -140,6 +140,9 @@ a {
 }
 .account-masthead .account ul li a{
     color: #4E59A4;
+    width: 100%;
+    max-width: 250px;
+    background: #fff;
     border-right: 1px #7C7C7F solid;
     border-left: 1px #7C7C7F solid;
     border-bottom: 1px #7C7C7F solid;
@@ -194,7 +197,7 @@ a {
 #menu-block-home {
     z-index: 1000;
     max-width:50%;
-    left: 40%;
+    left: 25%;
     top: 86px;
     //display: block;
     display: none;
@@ -414,12 +417,12 @@ a {
 [role=main] .secondary {
     width: 237px;
     font-color: #666666;
-    //border: 3px #4E59A4 solid;
-    border: 1px #666666 solid;
+    border: 2px #4E59A4 solid;
+    //border: 1px #666666 solid;
 }
 .paintme{
     //margin-top:55px;
-    border: 3px #4E59A4 solid;
+    //border: 2px #4E59A4 solid;
 }
 .secondary .module {
     margin: 0;
@@ -591,6 +594,9 @@ a {
  }
  .dropdown-menu .btn, .dropdown-menu .btn-mini{
      border: none !important;
+ }
+ .btn [class^="icon-"]{
+     margin-right:0;
  }
 
 

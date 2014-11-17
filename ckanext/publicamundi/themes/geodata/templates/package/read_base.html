@@ -54,7 +54,7 @@
     {% endblock %} #}
 <div class="paintme">
   {% block package_organization %}
-      {% snippet "snippets/organization.html", organization=pkg.organization, has_context_title=true %}
+      {% snippet "snippets/organization.html", organization=pkg.organization , has_context_title=true  %}
       {% endblock %}
     {% block package_group %}
     {% snippet "snippets/group.html", group=pkg.groups %}
