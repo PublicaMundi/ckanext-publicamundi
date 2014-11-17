@@ -54,17 +54,21 @@
     {% endblock %} #}
 <div class="paintme">
   {% block package_organization %}
-      {% snippet "snippets/organization.html", organization=pkg.organization, has_context_title=true %}
-  {% endblock %}
+      {% snippet "snippets/organization.html", organization=pkg.organization , has_context_title=true  %}
+      {% endblock %}
+    {% block package_group %}
+    {% snippet "snippets/group.html", group=pkg.groups %}
+    {% endblock %}
+
   {% block package_tags %}
     {% snippet "package/snippets/tags.html", tags=pkg.tags %}
     {% endblock %}
-  {# {% block package_social %}
-    {% snippet "snippets/social.html" %}
-    {% endblock %} #}
 
   {% block package_license %}
     {% snippet "snippets/license.html", pkg_dict=pkg %}
     {% endblock %}
-    {% endblock %}
+{# {% block package_social %}
+    {% snippet "snippets/social.html" %}
+    {% endblock %} #}
 </div>
+    {% endblock %}

@@ -19,23 +19,24 @@
     {% block maintag %}<div role="main">{% endblock %}
          {% block toolbar %}
             <div class="toolbar">
+              <div class="container">
               {% block breadcrumb %}
               {% if self.breadcrumb_content() | trim %}
-              <div class="container">
                   <ol class="breadcrumb">
                     {% snippet 'snippets/home_breadcrumb_item.html' %}
                     {% block breadcrumb_content %}{% endblock %}
                 </ol>
-            </div>
                 {% endif %}
               {% endblock %}
+            </div>
             </div>
           {% endblock %}
         {% endblock %}
 
    {% block searchbar %}{% endblock %}
         <div id="content" class="container">
-        {% block main_content %}
+          <div class="gap">
+            {% block main_content %}
           {% block flash %}
             {% set flash_messages = h.flash.pop_messages() | list %}
             <div class="flash-messages">
@@ -46,7 +47,7 @@
               {% endfor %}
             </div>
           {% endblock %}
-
+        </div>
                     <div class="wrapper{% block wrapper_class %}{% endblock %}{% if self.secondary()|trim == '' %} no-nav{% endif %}">
 
             {#

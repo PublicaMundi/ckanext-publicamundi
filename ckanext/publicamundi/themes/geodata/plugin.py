@@ -8,6 +8,13 @@ def most_recent_datasets(limit=10):
 
     return datasets
 
+def list_menu_items (limit=16):
+    groups = toolkit.get_action('group_list')(
+            data_dict={'sort': 'name desc', 'all_fields':True})
+    groups = groups[:limit]
+
+    return groups
+
 def friendly_date(date_str):
     date = datetime.datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S.%f").date()
     return date.strftime('%d, %b, %Y')
@@ -21,6 +28,7 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     
     def get_helpers(self):
         return {'newest_datasets': most_recent_datasets,
+                'list_menu_items': list_menu_items,
                 'friendly_date': friendly_date
             }
 

@@ -1,10 +1,9 @@
 {% ckan_extends %}
 {% block page %}
 
-<div class="account-masthead" style="background-color:#F3F4F4">
+<div class="account-masthead" style="background-color:#F3F4F4; ">
     <div class="container">
     
-        <div class="mainmenu">
 
 {% block header_account_container_content %}
       {% if c.userobj %}
@@ -64,11 +63,11 @@
 
 </div>
 </div>
-</div>
-<header class="account-masthead">
+<header class="account-masthead" style="height:54px" >
     <div class="container">
         {% block header_site_navigation %}
         <div id="homemenu">
+        <div class="mainmenu"> 
         <div id="mainlogo">
         {# The .header-image class hides the main text and uses image replacement for the title #}
         <hgroup class="{{ g.header_class }}">
@@ -83,24 +82,30 @@
         {% endif %}
 
     </hgroup>
-        </div>
+</div>
+
+    <div id="menu-block-home" >
+        {% block groups_list %}
+             {% snippet "snippets/menu_list.html", items=h.list_menu_items() %} 
+        {% endblock %}
+    </div>
         <nav class="section navigation">
           <ul class="nav nav-pills">
             {% block header_site_navigation_tabs %}
               {{ h.build_nav_main(
                 ('search', _('Datasets')),
-                ('group_index', _('Groups')),
+                ('group_index', _('Topics')),
                 ('organizations_index', _('Organizations')),
                 ('maps', _('Maps')),
                 ('about', _('About'))
                 ) }}
+            </div>
             </div>
             {% endblock %}
           </ul>
           </nav>
           </header>
       {% endblock %}
-
 
 {% set homepage_style = ( g.homepage_style or '1' ) %}
 
@@ -111,10 +116,13 @@
 
 <div class="homepage layout-{{ homepage_style }}">
     <div class="container">
-      {{ self.flash() }}
+        
+
+        {{ self.flash() }}
     </div>
     {% block primary_content %}
-      {% snippet "home/layout{0}.html".format(homepage_style) %}
+    
+    {% snippet "home/layout{0}.html".format(homepage_style) %}
     {% endblock %}
 </div>
 

@@ -25,12 +25,19 @@
 
         </div>
         <div class="mainmenu">
+
+        <div id="menu-block" >
+        {% block groups_list %}
+             {% snippet "snippets/menu_list.html", items=h.list_menu_items() %} 
+        {% endblock %}
+    </div>
+
         <nav class="section navigation">
           <ul class="nav nav-pills">
             {% block header_site_navigation_tabs %}
               {{ h.build_nav_main(
                 ('search', _('Datasets')),
-                ('group_index', _('Groups')),
+                ('group_index', _('Topics')),
                 ('organizations_index', _('Organizations')),
                 ('maps', _('Maps')),
                 ('about', _('About'))
