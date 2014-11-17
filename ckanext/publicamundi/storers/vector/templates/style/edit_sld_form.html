@@ -1,0 +1,33 @@
+{% extends "style/main.html" %}
+
+{% block sld_actions %}
+    <h3>Edit current Style</h3>
+
+    {% if c.error %}
+	 dsadasd
+	<div class="error-explanation alert alert-error ">
+	    <p>There was an error while uploading this SLD :</p>
+	    <ul>
+        
+		<li data-field-label="Name">{{c.error}}</li>
+        
+	    </ul>
+	</div>
+	
+    {% endif %}
+    
+    {% if c.success %}
+	<div class="alert in alert-success">
+	    <strong>SLD file was successfully uploaded.</strong>
+	</div>
+    {% endif %}
+    
+    {% if c.sld_body %}
+    {% snippet 'style/snippets/sld_editor.html', action='edit_current_sld',id=c.pkg.id,resource_id=c.resource.id,sld_body=c.sld_body %}
+    {% endif %}
+ 
+  
+
+    {% resource 'ckanext-vectorstorer/sld_editor' %}
+
+{% endblock %}

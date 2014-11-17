@@ -10,7 +10,7 @@
     
       <div class="dashboard-resource-info">
 	  {% if task_result.status == "Identified" %}
-	      {% snippet 'user/snippets/not_published.html', pkg=pkg, res=res ,task_result=task_result%}
+	      {% snippet 'user/snippets/identified.html', pkg=pkg, res=res ,task_result=task_result%}
 	    
 	  
 	  {% elif task_result.status == "Published" %}

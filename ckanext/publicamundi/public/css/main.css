@@ -254,10 +254,10 @@ span.space-x3 { padding: 0px 12px }
 .label[resource-status*="Published"] {
     background-color: #62C462;
 }
-/*.label[resource-status="Not Published"], 
-.label[resource-status*="Not Published"] {
-    background-color: #36ABD2;
-}*/
+.label[resource-status="Failed"], 
+.label[resource-status*="Failed"] {
+    background-color: #FF6600;
+}
 .label[resource-status="Identified"], 
 .label[resource-status*="Identified"] {
     background-color: #36ABD2;
@@ -279,3 +279,9 @@ span.space-x3 { padding: 0px 12px }
 .icon-reject:before {
    content:  "\219B ";
 }
+.dashboard-table-tr,
+.dashboard-table-td,
+.dashboard-table{
+	border:1px solid grey;
+}
+ 

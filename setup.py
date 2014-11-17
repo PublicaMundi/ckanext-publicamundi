@@ -36,6 +36,8 @@ setup(
 
         publicamundi_errorware = ckanext.publicamundi.plugins:ErrorHandler
         
+        publicamundi_vector = ckanext.publicamundi.storers.vector.plugin:VectorStorer
+        
         [paste.paster_command]
         
         publicamundi-setup = ckanext.publicamundi.commands:Setup
@@ -49,6 +51,9 @@ setup(
         publicamundi_extract_json = ckanext.publicamundi.lib.metadata.vocabularies.babel_extractors:extract_json
         
         [fanstatic.libraries]
+        
+        [ckan.celery_task]
+	tasks = ckanext.publicamundi.storers.vector.celery_import:task_imports
 
         """,
     # The following only stands as an example. The actual message_extractors should be defined into 

@@ -1,0 +1,29 @@
+{% set layer = task_result.layers[0] %}
+<div class="info ">
+    <label>{{ _('Resource Information')}}</label> 
+    GDAL Driver : {{task_result.gdal_driver}}</br>
+    Layer Name : {{layer.layer_name}}</br>
+    Layer Geometry : {{layer.layer_geometry}}</br>
+    Layer Srs : {{layer.layer_srs}}</br>
+</div>
+</br>
+<div>
+    <label>{{ _('Insert Encoding')}}</label> 
+    <input  id="shp_encoding" type="text">
+    
+  
+    <div id="divproj" class="form-select ">
+		
+		<label>{{ _('Select projection')}}</label> <input  id="projection" type="text">
+	      
+	</div>
+
+	
+	<div id="proj-error" class="projection-error"></div>
+
+
+</div>
+
+ 
+ 
+ 

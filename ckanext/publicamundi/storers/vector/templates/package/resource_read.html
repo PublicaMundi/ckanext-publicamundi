@@ -1,0 +1,29 @@
+{% ckan_extends %}
+ 
+{% block resource_actions_inner %}
+    {{super()}}
+    
+     {% if res.vectorstorer_resource and res.format=='data_table' %}
+	{% set export_dialog_url = h.url_for('vector_export',  action='export',operation='index', id=pkg.name, resource_id=res.id) %} 
+ 
+	<a class="btn btn-info" href="{{ export_dialog_url }}" data-module="api-info" data-module-template="{{ export_dialog_url }}" data-loading-text="{{ loading_text }}">
+	    <i class="icon-cloud-download icon-large"></i> 
+	    {{ _('Export') }}
+	</a>
+
+	{% resource 'ckanext-vectorstorer/dialog' %}
+	
+    {% endif %}
+    {% if res.format=="wms" and res.vectorstorer_resource %}
+	{% set edit_style_url = h.url_for('edit_current_sld', action='edit_current_sld', id=pkg.name, resource_id=res.id,operation='show') %} 
+	  
+	<a class="btn btn-info" href="{{ edit_style_url }}">
+	    <i class="icon-magic icon-large"></i> 
+	    {{ _('Edit Style') }}
+	</a>
+	 
+      
+    {% endif %}
+
+{% endblock %}
+

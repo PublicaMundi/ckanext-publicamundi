@@ -7,9 +7,11 @@ import ckan.logic as logic
 import ckan.lib.helpers as h
 from ckan.common import _
 import ckan
-
+import json
 from ckanext.publicamundi.model.resource_identify import ResourceIdentify,TaskNotReady,TaskFailed,IdentifyStatus,ResourceTypes
-from ckanext.vectorstorer import resource_actions
+from ckanext.publicamundi.lib import identification_helper
+from ckan.lib.base import c
+from ckanext.publicamundi.storers.vector import resource_actions
 NotFound = logic.NotFound
 NotAuthorized = logic.NotAuthorized
 
@@ -21,6 +23,12 @@ class UserController(BaseController):
         context,data_dict = self._get_context()
         self._setup_template_variables(context, data_dict)
         return render('user/dashboard_resources.html')
+    
+    def admin_page_resources(self):
+	 
+        context,data_dict = self._get_context()
+        self._setup_template_variables(context, data_dict)
+        return render('user/admin_page_resources.html')
     
     def _get_context(self):
 	context = {'for_view': True, 'user': c.user or c.author,
@@ -55,3 +63,8 @@ class UserController(BaseController):
 	if resource_type == ResourceTypes.VECTOR:
 	    resource_actions.identify_resource(resource)
 	redirect(url(controller='ckanext.publicamundi.controllers.user:UserController', action='dashboard_resources'))
+    
+    def render_injection_template(self,resource_id):
+	c.resource_id =resource_id
+	c.task_result = json.loads(identification_helper.identify(resource_id)['result'])
+	return render('user/snippets/inject_templates/vector/vector.html')

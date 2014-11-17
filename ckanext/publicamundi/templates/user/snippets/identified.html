@@ -1,10 +1,6 @@
-{% if task_result.resource_type=="vector" %}
-
-    {% set inject_template_url = h.url_for(controller='ckanext.vectorstorer.controllers.vector:VectorController', action='inject',resource_type=task_result.resource_type) %}
-    {% set reject_url = h.url_for('reject_resource',resource_id=res.id) %}
+{% set inject_render_url = h.url_for('render_injection',resource_id=res.id) %}
+{% set reject_url = h.url_for('reject_resource',resource_id=res.id) %}
  
-{% elif task_result.resource_type=="raster" %}
-{% endif %}
 {% snippet 'user/snippets/status_label.html', status=task_result.status %}
 <div class="dropdown  dashboard-dropdown">
     <a href="#" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
@@ -17,23 +13,23 @@
       {% block resource_item_explore_links %}
 
       <li>
-	<a href="{{ inject_template_url }}" class="">
-	  
-	    <i class="icon-inject"></i>
-	    {{ _('Inject') }}
-
-	</a>
+	{% set loading_text = _('Loading...') %}
+	
+      <a  href="{{ inject_render_url }}" data-module="inject-dialog" data-module-template="{{ inject_render_url }}" data-loading-text="{{ loading_text }}">
+	  <i class="icon-inject"></i> 
+	    {{ _('Data API') }}
+	  </a>
       </li>
       
       <li>
 	<a href="{{ reject_url }}" class="" >
-	  
 	    <i class="icon-reject"></i>
 	    {{ _('Reject') }}
-	  
 	</a>
       </li>
 	
       {% endblock %}
     </ul>
 </div>
+
+{% resource 'ckanext-publicamundi/inject-dialog' %}

@@ -15,3 +15,10 @@ isodate
 dictdiffer
 pytidylib
 -e git+https://drmalex07@github.com/PublicaMundi/ckanext-spatial#egg=ckanext-spatial
+#Vectorplugin
+gsconfig
+pyunpack
+http://downloads.sourceforge.net/project/patool/0.17/patool-0.17.tar.gz
+entrypoint2
+psycopg2
+

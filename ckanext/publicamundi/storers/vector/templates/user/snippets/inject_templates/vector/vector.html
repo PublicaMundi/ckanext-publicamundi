@@ -1,0 +1,34 @@
+{% extends 'user/snippets/inject_templates/inject_base.html'%}
+
+{% set resource_id = c.resource_id %}
+{% set task_result = c.task_result %}
+{% set gdal_driver = task_result.gdal_driver %}
+{% set layers = task_result.layers %} 
+{% set inject_base_url= h.url_for('vector_inject',resource_id =resource_id)%}
+
+ 
+{% block inject_content %}
+<div data-module="vector-inject" data-module-inject_base_url="{{inject_base_url}}">
+	    
+    {% if gdal_driver=="ESRI Shapefile" %}
+	{% snippet 'user/snippets/inject_templates/vector/shapefile.html', task_result=task_result%}
+    
+    {% elif gdal_driver=="SQLite" or gdal_driver=="GeoPackage"%}
+	{% snippet 'user/snippets/inject_templates/vector/sqlite_gpkg.html', task_result=task_result%}
+    
+    {% elif gdal_driver=="" %}
+    
+    {% elif gdal_driver=="" %}
+    
+    {% elif gdal_driver=="" %}
+    
+    {% endif %}
+    </br>
+    <button class="btn btn-success" id="inject_button"> {{ _('Inject') }}</button>
+</div>
+  
+{% resource 'ckanext-vectorstorer/vector_inject'%}
+{% endblock %}
+
+  
+ 
