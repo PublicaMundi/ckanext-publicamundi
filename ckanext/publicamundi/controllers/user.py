@@ -19,51 +19,65 @@ class UserController(BaseController):
  
     
     def dashboard_resources(self):
-	 
-        context,data_dict = self._get_context()
-        self._setup_template_variables(context, data_dict)
+	user_dict = self._check_access() 
+        self._setup_template_variables(user_dict)
         return render('user/dashboard_resources.html')
     
     def admin_page_resources(self):
-	 
-        context,data_dict = self._get_context()
-        self._setup_template_variables(context, data_dict)
+        user_dict = self._check_access() 
+        self._setup_template_variables(user_dict)
         return render('user/admin_page_resources.html')
     
+    def _check_access(self):
+	context,data_dict = self._get_context()
+	try:
+            user_dict = toolkit.get_action('user_show')(context, data_dict)
+            return user_dict
+        except NotFound:
+            abort(404, _('User not found'))
+        except NotAuthorized:
+            abort(401, _('Not authorized to see this page'))
     def _get_context(self):
 	context = {'for_view': True, 'user': c.user or c.author,
                    'auth_user_obj': c.userobj}
         data_dict = {'user_obj': c.userobj}
         return context,data_dict
         
-    def _setup_template_variables(self, context, data_dict):
+    def _setup_template_variables(self,user_dict ):
         c.is_sysadmin = False
-        try:
-            user_dict = toolkit.get_action('user_show')(context, data_dict)
-        except NotFound:
-            abort(404, _('User not found'))
-        except NotAuthorized:
-            abort(401, _('Not authorized to see this page'))
+        
         c.user_dict = user_dict
         c.is_myself = user_dict['name'] == c.user
         c.about_formatted = h.render_markdown(user_dict['about'])
 
-    def reject(self,resource_id):
-	context,data_dict = self._get_context()
-	self._setup_template_variables(context, data_dict)
+    def reject(self, resource_id, parent):
+
+	user_dict = self._check_access() 
+        self._setup_template_variables(user_dict)
+        
 	res_identify_query=ckan.model.Session.query(ResourceIdentify).filter(ResourceIdentify.resource_id==resource_id).first()
 	res_identify_query.set_identify_status(IdentifyStatus.REJECTED)
 	ckan.model.Session.commit()
-        redirect(url(controller='ckanext.publicamundi.controllers.user:UserController', action='dashboard_resources'))
+	if parent=='dashboard':
+	    _action='dashboard_resources'
+	else:
+	    _action='admin_page_resources'
+	redirect(url(controller='ckanext.publicamundi.controllers.user:UserController', action=_action))
     
-    def identify(self,resource_id,resource_type):
-	context,data_dict = self._get_context()
-	#self._setup_template_variables(context, data_dict)
+    def identify(self,resource_id,resource_type, parent):
+	user_dict = self._check_access() 
+        self._setup_template_variables(user_dict)
+        context,data_dict = self._get_context()
 	resource = logic.get_action('resource_show')(context,{'id': resource_id})
 	if resource_type == ResourceTypes.VECTOR:
 	    resource_actions.identify_resource(resource)
-	redirect(url(controller='ckanext.publicamundi.controllers.user:UserController', action='dashboard_resources'))
-    
+	
+	if parent=='dashboard':
+	    _action='dashboard_resources'
+	else:
+	    _action='admin_page_resources'
+	redirect(url(controller='ckanext.publicamundi.controllers.user:UserController', action=_action))
+	
     def render_injection_template(self,resource_id):
 	c.resource_id =resource_id
 	c.task_result = json.loads(identification_helper.identify(resource_id)['result'])
