@@ -5,7 +5,6 @@ from datetime import datetime
 import zope.interface
 import zope.schema
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
-from unidecode import unidecode
 
 def munge(name):
     '''Convert human-friendly to machine-friendly terms.

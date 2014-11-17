@@ -16,6 +16,7 @@ from ckanext.publicamundi.lib.metadata import types
 from ckanext.publicamundi.lib.metadata import dataset_types, Object
 from ckanext.publicamundi.tests.functional import with_request_context
 from ckanext.publicamundi.tests import fixtures
+
 class TestController(ckan.tests.TestController):
     
     core_keys = set([
@@ -315,7 +316,7 @@ foo_fixtures = {
         '0': {
             'name': 'hello-foo-i-4',
             'title': u'Hello Foo (i-4)',
-            'notes': u'Under normal circumstances, i should not be created!',
+            'notes': u'Under normal circumstances, i would not be created!',
             'author': u'Nowhere Man',
             'maintainer': u'Nowhere Man',
             'author_email': 'nowhere-man@example.com',

@@ -13,24 +13,42 @@ import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
 
 from ckanext.publicamundi.lib.util import to_json
+from ckanext.publicamundi.lib import uploader
 from ckanext.publicamundi.lib.metadata import vocabularies
+from ckanext.publicamundi.lib.metadata import (
+    dataset_types, make_object, serializer_for, xml_serializer_for)
 
-from ckanext.publicamundi.lib.metadata.xml_serializers import *
-from ckanext.publicamundi.lib.metadata.types.inspire_metadata import *
+log = logging.getLogger(__name__)
 
-log1 = logging.getLogger(__name__)
+_url = toolkit.url_for
+_get_action = toolkit.get_action
+_check_access = toolkit.check_access
 
 content_types = {
     'json': 'application/json; charset=utf8',
-    'xml': 'text/xml; charset=utf8',
+    'xml': 'application/xml; charset=utf8',
 }
 
 resource_formats = toolkit.aslist(config.get('ckanext.publicamundi.resource_formats'))
 
 class Controller(BaseController):
+    '''Publicamundi-specific api actions'''
 
-    # Autocomplete helpers
+    @staticmethod
+    def _make_context(**opts):
+        ctx = { 
+            'model': model, 
+            'session': model.Session, 
+            'api_version': 3 
+        }
+        if opts:
+            ctx.update(opts)
+        return ctx
     
+    #
+    # Autocomplete helpers
+    #
+
     def resource_mimetype_autocomplete(self):
         '''Return list of mime types whose names contain a string
         '''
@@ -39,7 +57,7 @@ class Controller(BaseController):
         q = str(q).lower()
         limit  = request.params.get('limit', 12)
 
-        context = { 'model': model, 'session': model.Session }
+        context = self._make_context()
         data_dict = { 'q': q, 'limit': limit }
 
         # Invoke the action we have registered via IActions 
@@ -47,7 +65,7 @@ class Controller(BaseController):
 
         result_set = {
             'ResultSet': {
-                'Result': [{ 'name': t } for t in r]
+                'Result': [{'name': t } for t in r]
             }
         }
 
@@ -87,7 +105,9 @@ class Controller(BaseController):
         response.headers['Content-Type'] = content_types['json']
         return [to_json(result_set)]
     
+    #
     # Vocabularies
+    #
 
     # Note: The 1st thought was to rely on CKAN's vocabulary/tag functionality.
     # But because (e.g. for INSPIRE-related thesauri) we need to distinguish 
@@ -116,83 +136,32 @@ class Controller(BaseController):
                 
         response.headers['Content-Type'] = content_types['json']
         return [to_json(r)]
+    
+    #
+    # Datasets
+    #
 
-    # Export to XML/Json
-    def export_to_type(self, id):
-        rtype = request.params.get('type')
-        if rtype:
-            output = request.params.get('type')
-        else:
-            output = 'json'
-        #file_output='json', name_or_id=None):
-        dataset = self._show(id)
-        dataset_type = dataset.get('dataset_type')
-        obj = dataset.get(dataset_type)
+    def dataset_export(self, name_or_id):
+        
+        context = self._make_context() 
+        result = _get_action('dataset_export')(context, { 'id': name_or_id })
+        
+        exported_url = result.get('url')
+        redirect(exported_url)
+        return
+    
+    def dataset_import(self):
 
-        if output == 'xml':
-            response.headers['Content-Type'] = content_types['xml']
-            ser = xml_serializer_for_object(obj)
-            return [ser.dumps()]
-        else:
-            response.headers['Content-Type'] = content_types['json']
-            data = obj.to_json()
-            return [data]
+        post = request.params
 
-    # Helpers
+        # Forward to the dataset_import action
 
-    @classmethod
-    def _get_action_context(cls):
-        return {
-            'model': model, 
-            'session': model.Session, 
-            'ignore_auth':True, 
-            'api_version': 3,
+        context = self._make_context()
+        data_dict = {
+            'source': post.get('source'),
+            'dtype': post.get('dtype'),
+            'owner_org': post.get('owner_org'),
         }
+        result = _get_action('dataset_import')(context, data_dict)
+        return result
 
-    def _prepare_inspire_draft(self, insp):
-        data = insp.to_dict(flat=1, opts={'serialize-keys': True})
-
-        pkg_data = {}
-        pkg_data['title'] = data.get('title')
-        pkg_data['name'] = json_loader.munge(unidecode(data.get('title')))
-        pkg_data['dataset_type'] = 'inspire'
-        pkg_data['inspire'] = data
-        pkg_data['state'] = 'draft'
-
-        pkg = self._create_or_update(pkg_data)
-        return pkg
-
-
-    def _prepare_inspire(self, insp):
-        data = insp.to_dict(flat=1, opts={'serialize-keys': True})
-
-        pkg_data = {}
-        pkg_data['title'] = data.get('title')
-        pkg_data['name'] = json_loader.munge(unidecode(data.get('title')))
-        pkg_data['dataset_type'] = 'inspire'
-        pkg_data['inspire'] = data
-
-        pkg = self._create_or_update(pkg_data)
-        return pkg
-
-    def _create_or_update(self, data):
-        context = self._get_action_context()
-        # Purposefully skip validation at this stage
-        context.update({ 'skip_validation': True })
-        if self._package_exists(data.get('name')):
-            # Not supporting package upload from xml
-            pass
-        else:
-            pkg = toolkit.get_action ('package_create')(context, data_dict=data)
-            log1.info('Created package %s' % pkg['name'])
-        return pkg
-
-
-    def _show(self, name_or_id):
-        return toolkit.get_action ('package_show') (self._get_action_context(), data_dict = {'id': name_or_id})
-
-    def _package_exists(self, name_or_id):
-        return  name_or_id in toolkit.get_action ('package_list')(self._get_action_context(), data_dict={})
-
-    def _check_result_for_read(self, data, result):
-        pass
