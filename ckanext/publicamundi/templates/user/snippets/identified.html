@@ -1,5 +1,5 @@
-{% set inject_render_url = h.url_for('render_injection',resource_id=res.id) %}
-{% set reject_url = h.url_for('reject_resource',resource_id=res.id) %}
+{% set inject_render_url = h.url_for('render_injection',resource_id=res.id, parent = parent) %}
+{% set reject_url = h.url_for('reject_resource',resource_id=res.id, parent = parent) %}
  
 {% snippet 'user/snippets/status_label.html', status=task_result.status %}
 <div class="dropdown  dashboard-dropdown">
