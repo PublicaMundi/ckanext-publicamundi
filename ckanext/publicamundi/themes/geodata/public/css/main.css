@@ -622,7 +622,7 @@ a {
 .middle-text{
     margin-left:15%;
 }
-/* Bootstrap overrides */
+/* CKAN control overrides */
 .select2-container .select2-choice, .select2-dropdown-open.select2-drop-above .select2-choice, .select2-dropdown-open.select2-drop-above .select2-choices{
     background-image: none;
     background: #fff;
@@ -643,6 +643,9 @@ a {
 }
 .select2-drop.select2-drop-above.select2-drop-active{
     //border: 3px #4E59A4 solid;
+}
+.js .image-upload #field-image-upload{
+    z-index: -1;
 }
 /* Preview */
 .ckanext-datapreview iframe{
