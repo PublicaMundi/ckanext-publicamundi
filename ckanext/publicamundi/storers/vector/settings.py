@@ -19,25 +19,22 @@ VECTOR_FORMATS= [
     'kml',
     'gml',
     #'gpx',
-    #'csv',
+    'csv',
     'geojson',
     'sqlite',
     'geopackage',
     'gpkg']
 
-ARCHIVE_FORMATS=[
-    '.zip',
-     
-    '.tar',
-     
-     
-]
+ 
 
-import mimetypes
-ARCHIVE_MIMETYPES = []
-
-for archive_format in ARCHIVE_FORMATS:
-    ARCHIVE_MIMETYPES.append(mimetypes.types_map[archive_format])
+ARCHIVE_MIMETYPES = [
+    'application/zip',
+    'application/gzip',
+    'application/x-7z-compressed',
+    'application/x-tar',
+    'application/x-rar',
+     ]
+ 
 
 
 WMS_VECTORSTORER_RESOURCE=u'vectorstorer_wms'
