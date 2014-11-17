@@ -1,0 +1,57 @@
+{% from 'macros/markup_helpers.html' import error_messages %}
+
+{% block errors %}
+{% if (not errors) and error_summary %}
+<div class="alert alert-error">{{ error_summary|safe }}</div>
+{% elif errors %}
+{{ error_messages(errors or {}, summary=error_summary, titles={}) }}
+{% endif %}
+{% endblock %} 
+
+{% block form %}
+
+<form class="form-horizontal import-metadata-form" method="post" enctype="multipart/form-data">
+
+    {% snippet 'package/snippets/edit-dataset_type.html', 
+        is_new=true, default_value='inspire', required=true, 
+        description=_('Specify the metadata schema the dataset aligns to.')
+    %}
+    
+    {% snippet 'package/snippets/edit-organization.html', 
+        name='owner_org', title=_('Organization'),
+        description=_('Specify the organization the dataset belongs to.'),
+        required=true, orgs_available=h.organizations_available('create_dataset')
+    %}
+        
+    {% snippet 'snippets/checkbox.html', 
+        label=_('Rename'), name='rename', checked=true, 
+        description= _('Rename dataset, if needed.')
+    %}
+
+    {% snippet 'snippets/checkbox.html', 
+        label=_('Force create'), name='force_create', checked=true, 
+        description= _('Create dataset, even if validation fails.')
+    %}
+    
+    {% with allowed_mime_types = ['text/xml', 'application/xml'] %}
+    {% snippet 'snippets/upload.html',
+        name='source', title=_('Source'), 
+        required=true, allowed_mime_types=allowed_mime_types,
+        classes={ 
+            'buttons': [], 
+            'remove_buttons': ['btn-warning', 'btn-small'] 
+        }
+    %}
+    {% endwith %}
+
+    <div class="form-actions">
+        <a class="btn cancel" href="{{ h.url_for('/dataset') }}">{{ _('Cancel') }}</a>
+        <button class="btn btn-primary submit" 
+            title="{{ _('Go ahead and import this dataset') }}"
+          ><i class="icon-circle-arrow-right"></i> {{ _('Import') }}</button>
+    </div>
+</form>
+
+{% endblock %} {# form #}
+
+{% resource 'ckanext-publicamundi/metadata-source' %}

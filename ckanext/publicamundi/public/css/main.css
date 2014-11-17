@@ -1,3 +1,7 @@
+body {
+    font-family: sans-serif;
+}
+
 header > h1.inline,
 header > h2.inline,
 header > h3.inline,
@@ -24,6 +28,10 @@ header > h6.inline {
 
 .modal {
     border-radius: 2px;
+}
+
+.modal .modal-header h3 {
+    font-size: 1.5em;
 }
 
 .btn-small {
@@ -71,8 +79,18 @@ input[type="tel"] {
     border-radius: 1px;
 }
 
+.input-prepend .add-on:first-child, 
+.input-prepend .btn:first-child {
+    border-radius: 1px 0 0 1px;
+}
+
 .alert {
     border-radius: 1px;
+}
+
+.alert.error-messages > h3 {
+    font-size: 1.06em;
+    margin: 4px 0px;
 }
 
 label.checkbox {
@@ -83,6 +101,10 @@ label.checkbox {
 label.radio {
     font-weight: inherit;
     margin: 0px 0px 0px 0px;
+}
+
+.control-group .btn {
+    top: 0px;
 }
 
 .controls.checkboxes label.checkbox {
@@ -206,6 +228,10 @@ span.space-x3 { padding: 0px 12px }
     border-radius: 4px;
 }
 
+.js .image-upload .btn-remove-url {
+    border-radius: 1px;
+}
+
 /* Well, normally we would just use Bootstrap's .clearfix, but there are some 
  * cases that we only want the :after part */
 .clear-after:after {
@@ -223,13 +249,11 @@ span.space-x3 { padding: 0px 12px }
 }
 
 #draw-bbox-dialog {
-    
     position: absolute;
     width: 70%;
     top: 30px;
     left: 15%;
     margin: 0px;
-    
     /*
     position: fixed;
     width: 50%;
@@ -239,3 +263,91 @@ span.space-x3 { padding: 0px 12px }
     */
 }
 
+/*
+ * Uploads 
+ */ 
+
+.control-upload .controls {
+  position:relative;
+  width: 100%;
+}
+
+.form-horizontal .control-upload .controls {
+  /*margin: inherit;*/
+}
+
+.control-upload .controls.choose-method input[type='file'] {
+  display:none;
+  position:absolute;
+  top: 0px;
+  left: 0px;
+  opacity: 0;
+  font-size: 0px;
+  cursor: pointer;
+  z-index: 0;
+}
+
+.control-upload .controls.choose-method button.upload-file {
+  display:inline-block;
+  position: static;
+  z-index: -1;
+  cursor: pointer;
+}
+
+.control-upload .controls.choose-method button.link-file {
+  display:inline-block;
+  position: static;
+}
+
+.control-upload .controls.link-file {
+}
+
+.control-upload .controls.link-file input[type='url'] {
+  display: inline-block;
+  margin-bottom: 0px;  
+}
+
+.control-upload .controls.link-file .btn.remove-link.stacked { 
+    border-radius: 1px;
+    padding: 0px 4px;
+    position: relative;
+    left: -29px; /* on top the right edge of .link-file input */
+}
+
+.control-upload .controls.link-file .btn.remove-link.stacked > .icon-remove {
+    margin-right: 0px;
+}
+
+.control-upload .controls.upload-file {
+}   
+
+.control-upload .controls.upload-file span.selected-file {
+   padding: 0px 5px;
+   font-size: 0.92em;
+   vertical-align: text-top;
+   /*font-family: monospace;*/
+}
+
+/*
+ * Import Metadata widgets
+ */
+
+#import-metadata-dialog {
+    position: absolute;
+    width: 75%;
+    top: 0px;
+}
+
+#import-metadata-dialog .modal-body {
+    padding: 10px 15px;
+    height: 220px;
+    overflow: auto;
+}
+
+/*
+ * Dataset views
+ */
+
+section.additional-info header > .btn-group {
+    margin-top: 8px;
+}

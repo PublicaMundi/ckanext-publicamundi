@@ -16,6 +16,7 @@ from ckanext.publicamundi.lib.metadata import types
 from ckanext.publicamundi.lib.metadata import dataset_types, Object
 from ckanext.publicamundi.tests.functional import with_request_context
 from ckanext.publicamundi.tests import fixtures
+
 class TestController(ckan.tests.TestController):
     
     core_keys = set([
@@ -45,6 +46,7 @@ class TestController(ckan.tests.TestController):
         #yield self._create, 'inspire', 'inspire-1'
         yield self._create_invalid, 'foo', 'hello-boo', set(['dataset_type'])
         yield self._create_invalid, 'foo', 'hello-foo-i-4', set(['foo.baz', 'foo.rating'])
+        yield self._create_invalid_skip_validation, 'foo', 'hello-foo-i-4', set(['foo.baz', 'foo.rating'])
         pass
 
     @nose.tools.istest
@@ -117,6 +119,18 @@ class TestController(ckan.tests.TestController):
         else:
             assert False, 'This should have failed!'
 
+        pass
+     
+    @with_request_context('publicamundi-tests', 'index')
+    def _create_invalid_skip_validation(self, dt, name, bad_keys):
+        
+        context = self.get_action_context()
+        context.update({ 'skip_validation': True })
+        pkg_dict = pkg_fixtures[dt][name]['0']
+        
+        pkg = toolkit.get_action('package_create')(context, data_dict=pkg_dict)
+
+        assert pkg and pkg.get('id') and pkg.get('name')
         pass
 
     def _check_result_for_read(self, data, result):
@@ -302,7 +316,7 @@ foo_fixtures = {
         '0': {
             'name': 'hello-foo-i-4',
             'title': u'Hello Foo (i-4)',
-            'notes': u'I will never get created because i am bad!',
+            'notes': u'Under normal circumstances, i would not be created!',
             'author': u'Nowhere Man',
             'maintainer': u'Nowhere Man',
             'author_email': 'nowhere-man@example.com',
@@ -332,6 +346,7 @@ foo_fixtures = {
 #                }
 #            }
 #        }
+
 pkg_fixtures = {
     'foo': foo_fixtures,
     'ckan': ckan_fixtures,

@@ -1,0 +1,25 @@
+{% from 'macros/markup_helpers.html' import mark_required %}
+
+{%- if orgs_available %}
+<div class="control-group">
+    <label for="input-{{ name }}" class="control-label">
+        {{- title or _('Organization') }}{{ mark_required(required) }}</label>
+    <div class="controls">
+        <select id="input-{{ name }}" name="{{ name }}" class="input-xlarge"
+            data-module="autocomplete"
+         >
+            {% if not required -%}
+            <option value="" {% if not value %} selected="selected" {% endif %}>
+                {{- _('Select an organization...') }}</option>
+            {%- endif %}
+            {%- for org_name, org in h.organization_objects(orgs_available).iteritems() %}
+                <option value="{{ org.id }}" {% if value == org.id %} selected="selected" {% endif %}>
+                    {{- org.display_name }}</option>
+            {% endfor -%}
+        </select>
+        {% if verbose|default(true) and description %}
+        <p class="help-block">{{ description }}</p>
+        {% endif %}
+    </div>
+</div>
+{% endif -%}
