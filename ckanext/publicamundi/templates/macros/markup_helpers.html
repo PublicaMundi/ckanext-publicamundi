@@ -5,16 +5,12 @@
    {%- endif -%}
 {%- endmacro -%}
 
-{%- macro markup_for_messages(messages, key=None, titles={}) -%}
+{%- macro message_list(messages, key=None, titles={}) -%}
     {% if messages -%}
-    {% if key -%}
-    <label data-key="{{ key }}" class="title">{{ titles.get(key, key|title) }}</label>
-    {% endif -%}
+    {% if key %}<h4 data-key="{{ key }}" class="title">{{ titles.get(key, key|title) }}</h4>{% endif %}
     {% if messages is mapping -%}
     <ul>
-        {% for k in messages -%}
-        <li>{{ markup_for_messages(messages[k], k, titles) }}</li>
-        {% endfor -%}
+        {% for k in messages -%}<li>{{ message_list(messages[k], k, titles) }}</li>{% endfor -%}
     </ul>
     {% elif messages is sequence -%}
     {% with n = messages|count %}
@@ -22,9 +18,7 @@
     <span>{{ messages|first }}</span>
     {% else %}
     <ul>
-        {% for msg in messages -%}
-        <li>{{ msg }}</li>
-        {% endfor -%}
+        {% for msg in messages -%}<li>{{ msg }}</li>{% endfor -%}
     </ul>
     {% endif -%} {# if n #} 
     {% endwith %} {# with n #}
@@ -32,10 +26,11 @@
     {% endif -%} {# if messages #}
 {%- endmacro -%}
 
-{% macro error_messages(errors, titles={}) -%}
-    {% if errors -%}
+{% macro error_messages(errors, summary=None, titles={}) -%}
+    {% if errors or summary -%}
     <div class="alert alert-error errors error-messages">
-        {{ markup_for_messages(errors, key=None, titles=titles) }}
+        {% if summary %}<h3>{{ summary|safe }}</h3>{% endif %}
+        {% if errors %}{{ message_list(errors, key=None, titles=titles) }}{% endif %}
     </div>
     {% endif -%}
 {% endmacro -%}

@@ -1,0 +1,38 @@
+{% from 'macros/markup_helpers.html' import mark_required %}
+
+{% if not default_value %}{% set default_value = 'ckan' %}{% endif -%}
+
+{% if is_new %}
+
+<div class="control-group control-select">
+    <label class="control-label" for="field-dataset_type">
+        {{- title or _('Schema') }}{{ mark_required(required) }}</label>
+    <div class="controls ">      
+        <select class="input-xlarge" id="field-dataset_type" name="dataset_type" 
+            data-module="input-select2"
+         >
+            {%- for option in h.dataset_type_options() %} 
+            <option value="{{ option.value }}"
+                {%- if option.value == default_value %} selected{% endif %}>{{ option.text }}</option>
+            {% endfor -%}
+        </select>
+        {% if verbose|default(true) and description %}
+        <p class="help-block">{{ description }}</p>
+        {% endif %}
+    </div>
+</div>
+
+{% else %}
+
+{% with dataset_type = data.get('dataset_type') %}
+<input type="hidden" name="dataset_type" value="{{ dataset_type }}">
+<div class="control-group hide">
+    <label class="control-label">{{ _('Schema') }}</label>
+    <div class="controls ">
+        <div class="display">{{ h.dataset_types().get(dataset_type).get('title') }}</div>
+    </div>
+</div>
+{% endwith %} {# dataset_type #}
+
+{% endif %} {# if is_new #}
+

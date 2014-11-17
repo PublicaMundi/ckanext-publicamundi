@@ -878,6 +878,8 @@ class ObjectSerializer(BaseObjectSerializer):
         schema = self.obj.get_schema()
         factory = type(self.obj)
         obj = factory()
+        
+        # Fixme: Why dont we directly update self.obj?
 
         for p in e:
             k = QName(p.tag).localname

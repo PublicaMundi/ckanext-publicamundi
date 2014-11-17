@@ -2,8 +2,13 @@ import datetime
 import logging
 import copy
 import json
-import pprint
+import os
+import random
 from collections import namedtuple
+from cgi import FieldStorage
+import shutil
+import requests
+from unidecode import unidecode
 
 from pylons import url
 
@@ -14,28 +19,92 @@ import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
 
 from ckanext.publicamundi.lib.dictization import unflatten
-from ckanext.publicamundi.lib.util import Breakpoint
-from ckanext.publicamundi.lib.util import to_json
+from ckanext.publicamundi.lib.util import to_json, Breakpoint
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata import types
 from ckanext.publicamundi.lib.metadata.types import Object
 from ckanext.publicamundi.lib.metadata.widgets import (
     markup_for_field, markup_for_object, widget_for_object, widget_for_field)
-
 from ckanext.publicamundi.tests import fixtures
 
-import os.path
-from ckanext.publicamundi.lib.metadata.xml_serializers import *
-from ckanext.publicamundi.lib.metadata.types.inspire_metadata import *
 log1 = logging.getLogger(__name__)
-import shutil
 
-PERMANENT_STORE = '/var/local/ckan/default/ofs/storage'
-class TestsController(BaseController):
- 
+content_types = {
+    'json': 'application/json; charset=utf8',
+    'xml': 'text/xml'
+}
+
+class Controller(BaseController):
+
     def brk(self):
         raise Breakpoint()
+    
+    def test_1(self):
+        from ckanext.publicamundi.cache_manager import get_cache
 
+        cache1 = get_cache('foobara')
+
+        def compute():
+            log1.info(' ** i compute something **')
+            return 42
+        
+        assert False
+
+    def test_dataapp(self):
+        from paste.fileapp import DataApp
+        app = DataApp('Ababoua')
+        status, headers, app_it = request.call_application(app)
+        assert False
+
+    def mock_handle_upload(self):
+        '''Mocks a upload handler.
+        Returns a JSON dict that describes a successfully uploaded file.
+        '''
+        
+        field_name = request.params.get('name')
+        upload = request.params.get(field_name + '-upload')
+        if not isinstance(upload, FieldStorage):
+            abort(400, 'Expected a file upload')
+        
+        name = datetime.datetime.now().strftime('%s') + '-' + upload.filename
+        l = toolkit.url_for(
+            controller = 'ckanext.publicamundi.controllers.files:Controller',
+            action = 'download_file',
+            object_type = 'baz', 
+            name_or_id = name,
+            filename = upload.filename)
+        
+        n = random.randint(1000, 9999) 
+
+        result = dict(name=name, url=l, size=n)
+        response.headers['Content-Type'] = content_types['json']
+        
+        return [to_json(result)]
+        
+    def report_params(self):
+        result = {}
+        for k, f in request.params.items():
+            if isinstance(f, FieldStorage) and hasattr(f, 'file'):
+                fp, mimetype, filename, name = f.file, f.type, f.filename, f.name
+                # Compute size
+                fp.seek(0, 2) # move fp to the end
+                size = fp.tell()
+                fp.seek(0, 0) # reset fp
+                # Report
+                result[k] = {
+                    'name': name,
+                    'filename': filename,
+                    'mimetype': mimetype,
+                    'size': size,
+                    'sample': fp.read(128).decode('utf-8') \
+                        if mimetype.startswith('text/') else '<binary-data>'
+                }
+            else:
+                result[k] = f
+        
+        response.headers['Content-Type'] = content_types['json']
+        return [to_json(result)]
+    
     def index(self, id=None):
         return u'Another test!'
 
@@ -255,6 +324,7 @@ class TestsController(BaseController):
         return render('tests/page.html')
     
     def show_dataset(self, id):
+        '''Show dataset's metadata formatted as a table'''
         
         context = { 'model': model, 'session': model.Session }
         try:
@@ -300,106 +370,7 @@ class TestsController(BaseController):
         #raise Exception('Break')
         c.form_class = 'form-horizontal' # 'form-horizontal'
         return render('tests/accordion-form.html')
-  
-    @classmethod
-    def _get_action_context(cls):
-        return {
-            'model': model, 
-            'session': model.Session, 
-            'ignore_auth':True, 
-            'api_version': 3,
-        }
     
-  
-    def test_upload(self):
-        return render('package/upload_template.html')
-
-    def submit_upload(self):
-        myfile = request.POST['filename']
-        permanent_file = open(os.path.join(PERMANENT_STORE, myfile.filename.lstrip(os.sep)), 'w')
-
-        shutil.copyfileobj(myfile.file, permanent_file)
-        myfile.file.close()
-        permanent_file.close()
-
-        return self.test_fromxml(myfile.filename)
-        #return 'Successfully uploaded: %s' % (myfile.filename)
-
-    def test_fromxml(self, filename):
-
-        try:
-            infile = open(os.path.join(PERMANENT_STORE, filename), 'r')
-        except:
-            log1.info('Exception %s' % ex)
-            return render('package/page_error.html', extra_vars={ 'errors': u"Cannot open file"})
-
-        ser = xml_serializer_for_object(InspireMetadata())
-        try:
-            e = etree.parse(infile)
-        except Exception as ex:
-            log1.info('Exception %s' % ex)
-            return render('package/page_error.html', extra_vars={ 'errors': u"No XML file selected. Try again"})
-
-        try:
-            insp = ser.from_xml(e)
-            errors = insp.validate(dictize_errors=True)
-        except Exception as ex:
-            log1.info('Exception %s' % ex)
-            return render('package/page_error.html', extra_vars={ 'errors': u"XML file validation failure: %s" % ex})
-
-        if errors:
-            # If there are validation redirect to edit page for corrections 
-            # TODO Need to map data to edit form
-            pkg = self._prepare_inspire_draft(insp, errors)
-            return toolkit.redirect_to('dataset_edit', id=pkg.get('name'))
-        else:
-            # Else package should be created correctly and user redirected to view page
-            pkg = self._prepare_inspire(insp)
-            return toolkit.redirect_to('dataset_read', id=pkg.get('name'))
-
-    # Helpers
-
-    def _prepare_inspire(self, insp):
-        data = insp.to_dict(flat=1, opts={'serialize-keys': True, 'serialize-values':'default'})
-
-        pkg_data = {}
-        pkg_data['title'] = data.get('title')
-        pkg_data['name'] = inspire_vocabularies.munge(data.get('title'))
-        pkg_data['dataset_type'] = 'inspire'
-        pkg_data['inspire'] = data
-
-        pkg = self._create_or_update(pkg_data)
-        return pkg
-
-    def _prepare_inspire_draft(self, insp, errors):
-
-        pkg_data = {}
-        pkg_data['title'] = insp.title
-        pkg_data['name'] = inspire_vocabularies.munge(insp.title)
-        pkg_data['dataset_type'] = 'inspire'
-        #pkg_data['inspire'] = data
-
-        pkg = self._create_or_update(pkg_data)
-
-        return pkg
-
-
-    def _create_or_update(self, data):
-
-        if self._package_exists(data.get('name')):
-            pkg = toolkit.get_action ('package_update')(self._get_action_context(), data_dict=data)
-            log1.info('Created package %s' % pkg['name'])
-        else:
-            pkg = toolkit.get_action ('package_create')(self._get_action_context(), data_dict=data)
-            log1.info('Updated package %s' % pkg['name'])
-        return pkg
-
-
-    def _show(self, name_or_id):
-        return toolkit.get_action ('package_show') (self._get_action_context(), data_dict = {'id': name_or_id})
-
-    def _package_exists(self, name_or_id):
-        return  name_or_id in toolkit.get_action ('package_list')(self._get_action_context(), data_dict={})
-
-    def _check_result_for_read(self, data, result):
-        pass
+    def test_upload_form(self):
+        return render('tests/upload-form.html')
+   
