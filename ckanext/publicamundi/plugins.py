@@ -125,10 +125,20 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         api_controller = 'ckanext.publicamundi.controllers.api:Controller'
         
+        mapper.connect('publicamundi-dataset-export',
+            '/api/publicamundi/dataset/export/{id}',
+            controller=api_controller, action='export_to_type')
+
         mapper.connect(
-            '/api/util/resource/mimetype_autocomplete',
-            controller=api_controller, action='mimetype_autocomplete')
-         
+            '/api/publicamundi/util/resource/mimetype_autocomplete',
+            controller=api_controller, 
+            action='resource_mimetype_autocomplete')
+        
+        mapper.connect(
+            '/api/publicamundi/util/resource/format_autocomplete',
+            controller=api_controller, 
+            action='resource_format_autocomplete')
+       
         mapper.connect('publicamundi-list-vocabularies',
             '/api/publicamundi/vocabularies',
             controller=api_controller, action='vocabularies_list')
@@ -147,6 +157,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         mapper.connect('publicamundi-tests', 
             '/testing/publicamundi/{action}',
             controller='ckanext.publicamundi.controllers.tests:TestsController',)
+        mapper.connect('maps',
+        '')
 
         return mapper
 

@@ -77,57 +77,57 @@
             "farming": "Farming", 
             "biota": "Biota", 
             "boundaries": "Boundaries", 
-            "climatology-meteorology-atmosphere": "Climatology - Meteorology - Atmosphere", 
+            "climatologyMeteorologyAtmosphere": "Climatology - Meteorology - Atmosphere", 
             "economy": "Economy", 
             "elevation": "Elevation", 
             "environment": "Environment", 
-            "geoscientific-information": "Geoscientific Information", 
+            "geoscientificInformation": "Geoscientific Information", 
             "health": "Health", 
-            "imagery-base-maps-earth-cover": "Imagery Base - Maps Earth Cover", 
-            "intelligence-military": "Intelligence - Military", 
-            "inland-waters": "Inland Waters", 
+            "imageryBaseMapsEarthCover": "Imagery Base - Maps Earth Cover", 
+            "intelligenceMilitary": "Intelligence - Military", 
+            "inlandWaters": "Inland Waters", 
             "location": "Location", 
             "oceans": "Oceans", 
-            "planning-cadastre": "Planning Cadastre", 
+            "planningCadastre": "Planning Cadastre", 
             "society": "Society", 
             "structure": "Structure", 
             "transportation": "Transportation", 
-            "utilities-communication": "Utilities - Communication"
+            "utilitiesCommunication": "Utilities - Communication"
         }
     },
     "Languages": {
         "terms":{
-            "el": "Greek", 
-            "en": "English", 
-            "it": "Italian", 
-            "ga": "Irish", 
-            "cs": "Czech", 
-            "et": "Estonian", 
-            "es": "Spanish", 
-            "nl": "Dutch", 
-            "pt": "Portuguese", 
-            "lv": "Latvian", 
-            "lt": "Lithuanian", 
-            "ro": "Romanian", 
-            "pl": "Polish", 
-            "fr": "French", 
-            "bg": "Bulgarian", 
-            "de": "German", 
-            "da": "Danish", 
-            "fi": "Finnish", 
-            "hu": "Hungarian", 
-            "sv": "Swedish", 
-            "sk": "Slovak", 
-            "mt": "Maltese", 
-            "sl": "Slovenian"
+            "gre": "Greek", 
+            "eng": "English", 
+            "ita": "Italian", 
+            "gle": "Irish", 
+            "ces": "Czech", 
+            "est": "Estonian", 
+            "spa": "Spanish", 
+            "nld": "Dutch", 
+            "por": "Portuguese", 
+            "lav": "Latvian", 
+            "lit": "Lithuanian", 
+            "ron": "Romanian", 
+            "pol": "Polish", 
+            "fra": "French", 
+            "bul": "Bulgarian", 
+            "deu": "German", 
+            "dan": "Danish", 
+            "fin": "Finnish", 
+            "hun": "Hungarian", 
+            "swe": "Swedish", 
+            "slo": "Slovak", 
+            "mlt": "Maltese", 
+            "slv": "Slovenian"
         } 
     },
     "Degrees": {
-        "terms": [
-            "Not evaluated", 
-            "Conformant", 
-            "Not conformant"
-        ]
+        "terms": {
+            "not-evaluated":"Not evaluated", 
+            "conformant":"Conformant", 
+            "not-conformant":"Not conformant"
+        }
     },
     "Keywords": {
         "INSPIRE - Glossary": {
@@ -1072,9 +1072,9 @@
     "Party Roles": {
         "terms": {
             "publisher": "Publisher", 
-            "pointofcontact": "Point of Contact", 
+            "pointOfContact": "Point of Contact", 
             "author": "Author", 
-            "resourceprovider": "Resource Provider", 
+            "resourceProvider": "Resource Provider", 
             "owner": "Owner", 
             "originator": "Originator", 
             "investigator": "Principal Investigator", 

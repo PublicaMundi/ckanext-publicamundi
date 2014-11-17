@@ -1,0 +1,17 @@
+{% set sorting = [(_('Latest Updated'), 'name desc')] %}
+<div role="main" class="hero"  style = "background: url({{ h.url_for_static('/images/geodata-greecepx.jpg')}}); background-size:cover; background-repeat: no-repeat; background-position:center" />
+
+  <div class="container">
+          <div class = "promotebox">
+              {% snippet 'home/snippets/promoted.html' %}
+          </div>
+  </div>
+</div>
+{% snippet 'home/snippets/search.html' %}
+<div id="package-list-home">
+<div class="container">
+    <h4>{{ _('Latest Updates') }}</h4>
+    {% snippet 'snippets/package_list_home.html', packages = h.newest_datasets().get('results'), hide_resources=true %}
+</div>
+</div>
+</div>

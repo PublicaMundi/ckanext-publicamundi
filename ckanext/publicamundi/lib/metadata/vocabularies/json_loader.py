@@ -5,6 +5,7 @@ from datetime import datetime
 import zope.interface
 import zope.schema
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+from unidecode import unidecode
 
 def munge(name):
     '''Convert human-friendly to machine-friendly terms.
@@ -39,9 +40,8 @@ def make_vocabulary(data):
             terms.append(SimpleTerm(k, k, t))
     elif isinstance(data, dict):     
         for k, t in data.items():
-            k = munge(k)
+            #k = munge(k)
             terms.append(SimpleTerm(k, k, t))
-
     return SimpleVocabulary(terms, swallow_duplicates=True)
 
 def make_vocabularies(data_file):

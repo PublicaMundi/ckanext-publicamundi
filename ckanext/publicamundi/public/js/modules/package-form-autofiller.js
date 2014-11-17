@@ -13,10 +13,17 @@ this.ckan.module('package-form-autofiller', function ($, _) {
             },
             {
                 'url': window.location.origin + '/samples/1.csv',
-                'description': 'A quite interesting example',
+                'description': 'A quite interesting CSV example',
                 'name': 'A CSV example',
                 'format': 'csv',
             },
+            {
+                'url': window.location.origin + '/samples/1.rdf',
+                'description': 'A remarkable RDF example',
+                'name': 'An RDF example',
+                'format': 'rdf',
+            },
+
         ],
         "package-form": [
             {

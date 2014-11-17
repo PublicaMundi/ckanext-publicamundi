@@ -22,17 +22,27 @@ from ckanext.publicamundi.lib.metadata.types import Object
 from ckanext.publicamundi.lib.metadata.widgets import (
     markup_for_field, markup_for_object, widget_for_object, widget_for_field)
 
+from ckanext.publicamundi.lib.metadata.vocabularies import json_loader
+
 from ckanext.publicamundi.tests import fixtures
 
 import os.path
 from ckanext.publicamundi.lib.metadata.xml_serializers import *
 from ckanext.publicamundi.lib.metadata.types.inspire_metadata import *
 log1 = logging.getLogger(__name__)
+
+from cgi import FieldStorage
 import shutil
 
+import requests
+from unidecode import unidecode
+content_types = {
+            'json': 'application/json; charset=utf8',
+            'xml': 'text/xml'
+            }
 PERMANENT_STORE = '/var/local/ckan/default/ofs/storage'
 class TestsController(BaseController):
- 
+
     def brk(self):
         raise Breakpoint()
 
@@ -300,7 +310,7 @@ class TestsController(BaseController):
         #raise Exception('Break')
         c.form_class = 'form-horizontal' # 'form-horizontal'
         return render('tests/accordion-form.html')
-  
+
     @classmethod
     def _get_action_context(cls):
         return {
@@ -309,49 +319,93 @@ class TestsController(BaseController):
             'ignore_auth':True, 
             'api_version': 3,
         }
-    
-  
-    def test_upload(self):
-        return render('package/upload_template.html')
+
+    def test_upload(self, errors={}):
+        return render('package/upload_template.html', extra_vars={'errors':errors})
 
     def submit_upload(self):
-        myfile = request.POST['filename']
-        permanent_file = open(os.path.join(PERMANENT_STORE, myfile.filename.lstrip(os.sep)), 'w')
+        myfile = request.params.get('upload')
+        link = request.params.get('url')
+        print 'req'
+        print request.params
+        print 'upload is '
+        print myfile
+        print link
+        # Case: File provided
+        if isinstance(myfile, FieldStorage):
+            permanent_file = open(os.path.join(PERMANENT_STORE, myfile.filename.lstrip(os.sep)), 'w')
+            shutil.copyfileobj(myfile.file, permanent_file)
+            myfile.file.close()
+            permanent_file.close()
+            return self.test_fromxml(filename = myfile.filename)
+        # Case: Link provided
+        elif link:
+            try:
+                r = requests.get(link)
+                return self.test_fromxml(link=link)
+            except Exception as ex:
+                return self.test_upload(errors = {'Wrong url provided':['Please provide a correct url or upload an XML file']})
+        else:
+            return self.test_upload(errors = {'No file or link provided':['Please provide a url or upload an XML file']})
 
-        shutil.copyfileobj(myfile.file, permanent_file)
-        myfile.file.close()
-        permanent_file.close()
+    def export_to_type(self, id):
+        rtype = request.params.get('type')
+        if rtype:
+            file_output = request.params.get('type')
+        else:
+            file_output = 'json'
+        #file_output='json', name_or_id=None):
+        dataset = self._show(id)
+        dataset_type = dataset.get('dataset_type')
+        obj = dataset.get(dataset_type)
 
-        return self.test_fromxml(myfile.filename)
-        #return 'Successfully uploaded: %s' % (myfile.filename)
+        if file_output == 'xml':
+            response.headers['Content-Type'] = content_types['xml']
+            ser = xml_serializer_for_object(obj)
+            return [ser.dumps()]
+        else:
+            response.headers['Content-Type'] = content_types['json']
+            data = obj.to_json()
+            return [data]
 
-    def test_fromxml(self, filename):
 
-        try:
-            infile = open(os.path.join(PERMANENT_STORE, filename), 'r')
-        except:
-            log1.info('Exception %s' % ex)
-            return render('package/page_error.html', extra_vars={ 'errors': u"Cannot open file"})
+
+
+    def test_fromxml(self, filename=None, link=None):
+        if filename:
+            try:
+                infile = open(os.path.join(PERMANENT_STORE, filename), 'r')
+            except:
+                log1.info('Exception %s' % ex)
+                os.remove(os.path.join(PERMANENT_STORE, filename))
+                return self.test_upload(errors = {'Failure to read file':[ex]})
+        elif link:
+            infile = link
 
         ser = xml_serializer_for_object(InspireMetadata())
         try:
             e = etree.parse(infile)
         except Exception as ex:
             log1.info('Exception %s' % ex)
-            return render('package/page_error.html', extra_vars={ 'errors': u"No XML file selected. Try again"})
+            if filename:
+                os.remove(os.path.join(PERMANENT_STORE, filename))
+            return self.test_upload(errors = {'Invalid XML file provided':[ex]})
 
         try:
             insp = ser.from_xml(e)
             errors = insp.validate(dictize_errors=True)
         except Exception as ex:
             log1.info('Exception %s' % ex)
-            return render('package/page_error.html', extra_vars={ 'errors': u"XML file validation failure: %s" % ex})
+            if filename:
+                os.remove(os.path.join(PERMANENT_STORE, filename))
+            return self.test_upload(errors = {'INSPIRE XML validation failure':[ex]})
+        if self._package_exists(json_loader.munge(unidecode(insp.title))):
+            return self.test_upload(errors = {'Package with the same name already exists':['Please change dataset title and try again']})
 
         if errors:
-            # If there are validation redirect to edit page for corrections 
-            # TODO Need to map data to edit form
-            pkg = self._prepare_inspire_draft(insp, errors)
-            return toolkit.redirect_to('dataset_edit', id=pkg.get('name'))
+            # If there are validation errors redirect to stage 3 of editing for corrections 
+            pkg = self._prepare_inspire_draft(insp)
+            return toolkit.redirect_to(controller='package', action='new_metadata', id=pkg.get('name'))
         else:
             # Else package should be created correctly and user redirected to view page
             pkg = self._prepare_inspire(insp)
@@ -359,44 +413,62 @@ class TestsController(BaseController):
 
     # Helpers
 
-    def _prepare_inspire(self, insp):
-        data = insp.to_dict(flat=1, opts={'serialize-keys': True, 'serialize-values':'default'})
+    def _prepare_inspire_draft(self, insp):
+        data = insp.to_dict(flat=1, opts={'serialize-keys': True})
 
         pkg_data = {}
         pkg_data['title'] = data.get('title')
-        pkg_data['name'] = inspire_vocabularies.munge(data.get('title'))
+        pkg_data['name'] = json_loader.munge(unidecode(data.get('title')))
+        pkg_data['dataset_type'] = 'inspire'
+        pkg_data['inspire'] = data
+        pkg_data['state'] = 'draft'
+
+        pkg = self._create_or_update(pkg_data)
+        return pkg
+
+
+    def _prepare_inspire(self, insp):
+        data = insp.to_dict(flat=1, opts={'serialize-keys': True})
+
+        pkg_data = {}
+        pkg_data['title'] = data.get('title')
+        pkg_data['name'] = json_loader.munge(unidecode(data.get('title')))
         pkg_data['dataset_type'] = 'inspire'
         pkg_data['inspire'] = data
 
         pkg = self._create_or_update(pkg_data)
         return pkg
 
-    def _prepare_inspire_draft(self, insp, errors):
-
-        pkg_data = {}
-        pkg_data['title'] = insp.title
-        pkg_data['name'] = inspire_vocabularies.munge(insp.title)
-        pkg_data['dataset_type'] = 'inspire'
-        #pkg_data['inspire'] = data
-
-        pkg = self._create_or_update(pkg_data)
-
-        return pkg
-
-
     def _create_or_update(self, data):
+        context = self._get_action_context()
+        # Purposefully skip validation at this stage
+        context.update({ 'skip_validation': True })
+        # If package exists as draft allow update
+        print 'package show'
+        print data.get('name')
+        dataset = self._show(data.get('name'))
+        if dataset:
+            state = dataset.get('state')
+            if state == 'draft':
+                pkg = toolkit.get_action ('package_update')(context, data_dict=data)
+            #if self._show(data.get('name')).get('state')=='draft':
 
-        if self._package_exists(data.get('name')):
-            pkg = toolkit.get_action ('package_update')(self._get_action_context(), data_dict=data)
-            log1.info('Created package %s' % pkg['name'])
+            elif state == 'active':
+                #self._package_exists(data.get('name')):
+                # Not supporting package upload from xml
+                pass
         else:
-            pkg = toolkit.get_action ('package_create')(self._get_action_context(), data_dict=data)
-            log1.info('Updated package %s' % pkg['name'])
+            pkg = toolkit.get_action ('package_create')(context, data_dict=data)
+            log1.info('Created package %s' % pkg['name'])
         return pkg
 
 
     def _show(self, name_or_id):
-        return toolkit.get_action ('package_show') (self._get_action_context(), data_dict = {'id': name_or_id})
+        try:
+            return toolkit.get_action('package_show') (self._get_action_context(), data_dict = {'id': name_or_id})
+        except:
+            return {}
+
 
     def _package_exists(self, name_or_id):
         return  name_or_id in toolkit.get_action ('package_list')(self._get_action_context(), data_dict={})

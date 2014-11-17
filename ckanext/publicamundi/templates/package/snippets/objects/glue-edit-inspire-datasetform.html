@@ -38,7 +38,7 @@
                         'data-module-submit': true,
                         'data-module-target': h.dump_json({ 
                             'name': 'title', 
-                            'value': pkg_dict.title, 
+                            'value': pkg_dict.title|default(''), 
                             'title': 'title', })}})
         },
         'identifier': {
@@ -55,7 +55,7 @@
                         'data-module-subscribe-event': 'slug-preview-modified',
                         'data-module-target': h.dump_json({ 
                             'name': 'name', 
-                            'value': pkg_dict.name, 
+                            'value': pkg_dict.name|default(''), 
                             'title': 'name', })}}),
         },
         'abstract': {
@@ -71,7 +71,7 @@
                         'data-module-submit': true,
                         'data-module-target': h.dump_json({
                             'name': 'notes',
-                            'value': pkg_dict.notes,
+                            'value': pkg_dict.notes|default(''),
                             'title': 'description', })}}),
         },
     }) 

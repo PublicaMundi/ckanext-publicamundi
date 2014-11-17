@@ -36,6 +36,9 @@ setup(
 
         publicamundi_errorware = ckanext.publicamundi.plugins:ErrorHandler
         
+        publicamundi_geodata_theme = ckanext.publicamundi.themes.geodata.plugin:GeodataThemePlugin
+
+        
         [paste.paster_command]
         
         publicamundi-setup = ckanext.publicamundi.commands:Setup
