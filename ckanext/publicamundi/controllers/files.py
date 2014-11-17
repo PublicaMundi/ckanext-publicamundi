@@ -11,6 +11,7 @@ from ckan.lib.base import (
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 
+from ckanext.publicamundi.cache_manager import get_cache
 from ckanext.publicamundi.lib.util import to_json
 import ckanext.publicamundi.lib.uploader as uploader
 
@@ -25,17 +26,21 @@ class Controller(BaseController):
         
         filepath = None
         if object_type == 'resources':
-            u = uploader.ResourceUpload(resource={})
-            filepath = u.get_path(name_or_id)
+            up = uploader.ResourceUpload(resource={})
+            filepath = up.get_path(name_or_id)
+            app = fileapp.FileApp(filepath)
         elif object_type == 'source-metadata':
-            u = uploader.MetadataUpload()
-            filepath = u.get_path(name_or_id)
+            up = uploader.MetadataUpload()
+            filepath = up.get_path(name_or_id)
+            app = fileapp.FileApp(filepath)
+        elif object_type == 'metadata':
+            val = get_cache('metadata').get(name_or_id)
+            app = fileapp.DataApp(val) 
         else:
             abort(404, 'Unknown object-type')
         
         # Retreive file
 
-        app = fileapp.FileApp(filepath)
         try:
             status, headers, app_it = request.call_application(app)
         except:
@@ -43,11 +48,11 @@ class Controller(BaseController):
         response.headers.update(dict(headers))
         response.status = status
         
-        # Dump file
-
+        # Dump
         return app_it
 
     def describe_file(self, object_type, name_or_id):
+        # Todo
         pass
         
     def upload_file(self, object_type):
@@ -61,18 +66,22 @@ class Controller(BaseController):
         
         result = None
         if object_type == 'resources':
-            abort(400, 'Uploading of resources is not handled here!')
+            abort(400, 'Cannot handle uploading of resources here')
         elif object_type == 'source-metadata':
-            u = uploader.MetadataUpload(upload.filename)
-            u.update_data_dict(dict(request.params), upload_name)
-            u.upload(max_size=1)
+            up = uploader.MetadataUpload(upload.filename)
+            up.update_data_dict(dict(request.params), upload_name)
+            up.upload(max_size=1)
         
-            l = toolkit.url_for('publicamundi-files-download-file', 
-                object_type='source-metadata', name_or_id=u.filename,
+            link = toolkit.url_for(
+                controller='ckanext.publicamundi.controllers.files:Controller',
+                action='download_file', 
+                object_type=up.object_type,
+                name_or_id=up.filename,
                 filename=upload.filename)
-            n = os.stat(u.filepath).st_size
 
-            result = dict(name=u.filename, url=l, size=n)
+            size = os.stat(u.filepath).st_size
+
+            result = dict(name=u.filename, url=link, size=size)
         else:
             abort(404, 'Unknown object-type')
 

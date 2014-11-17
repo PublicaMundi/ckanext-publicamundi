@@ -1,28 +1,26 @@
+{% from 'macros/markup_helpers.html' import mark_required %}
+
+{% if not default_value %}{% set default_value = 'ckan' %}{% endif -%}
 
 {% if is_new %}
 
 <div class="control-group control-select">
-    <label class="control-label" for="field-dataset_type">{{ _('Schema') }}</label>
+    <label class="control-label" for="field-dataset_type">
+        {{- title or _('Schema') }}{{ mark_required(required) }}</label>
     <div class="controls ">      
-        <select id="field-dataset_type" name="dataset_type" data-module="input-select2">
+        <select class="input-xlarge" id="field-dataset_type" name="dataset_type" 
+            data-module="input-select2"
+         >
             {%- for option in h.dataset_type_options() %} 
-            <option value="{{ option.value }}" {% if option.value == 'ckan'%}selected{% endif %}>{{ option.text }}</option>
+            <option value="{{ option.value }}"
+                {%- if option.value == default_value %} selected{% endif %}>{{ option.text }}</option>
             {% endfor -%}
         </select>
-        {# Provide an alternative way: Import existing XML metadata #}
-        <span id="import-metadata-btn-wrapper" 
-            data-module="import-metadata-dialog" 
-            data-module-target-url="{{ h.url_for('publicamundi-dataset-import-metadata') }}"
-         >
-            <a class="btn btn-link open-dialog"
-                title="I have allready prepared metadata in an XML file, and i want to use them."
-                >{{ _('Import metadata') }}</a>
-        </span>
+        {% if verbose|default(true) and description %}
+        <p class="help-block">{{ description }}</p>
+        {% endif %}
     </div>
 </div>
-
-{% resource 'ckanext-publicamundi/upload' %}
-{% resource 'ckanext-publicamundi/metadata-source' %}
 
 {% else %}
 

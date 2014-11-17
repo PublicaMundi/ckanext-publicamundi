@@ -14,7 +14,7 @@ import ckan.lib.munge as munge
 from ckan.lib.uploader import get_storage_path, Upload, ResourceUpload
 
 class MetadataUpload(Upload):
-    '''Represents an uploaded file containing metadata (usually as XML).
+    '''Represents an uploaded file containing XML metadata.
     '''
 
     def __init__(self, old_filename=None):

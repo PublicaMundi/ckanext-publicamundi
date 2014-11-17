@@ -1,0 +1,11 @@
+{% if not id %}{% set id = 'input' ~ name %}{% endif %}
+<div class="control-group {{ classes|join(' ') }}">
+    <label for="{{ id }}" class="control-label">{{ label }}</label>
+    <div class="controls">
+         <div class="checkbox">
+            <input type="checkbox" name="{{ name }}" id="{{ id }}" 
+                value="{{ value|default('y') }}" {% if checked %}checked{% endif %} >
+             <span>{{ description }}</span>
+         </div>
+    </div>
+</div>
