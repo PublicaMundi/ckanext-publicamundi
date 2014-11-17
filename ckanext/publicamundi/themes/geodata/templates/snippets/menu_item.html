@@ -1,0 +1,30 @@
+{#
+Renders a media item for a group. This should be used in a list.
+
+group - A group dict.
+
+Example:
+
+    <ul class="menu-grid">
+      {% for group in groups %}
+        {% snippet "group/snippets/group_item.html", group=group %}
+      {% endfor %}
+    </ul>
+#}
+{% set type = item.type %}
+{% set url = h.url_for(type ~ '_read', action='read', id=item.name) %}
+<li class="menu-item">
+<a href="{{ url }}">
+  {% block image %}
+    <img src="{{ item.image_display_url or h.url_for_static('/base/images/placeholder-group.png') }}" alt="{{ item.name }}" class="menu-image">
+  {% endblock %}
+  {% block title %}
+    <span class="menu-heading">{{ item.display_name }}</span>
+  {% endblock %}
+  {% block description %}
+  {% endblock %}
+  </a>
+  </li>
+{% if position is divisibleby 3 %}
+  <li class="clearfix js-hide"></li>
+{% endif %}

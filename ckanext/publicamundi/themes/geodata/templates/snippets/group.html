@@ -1,0 +1,26 @@
+{#
+Embeds a group within the sidebar of a page.
+
+group    - The group dict.
+truncate - A max length for the group description. If not provided the description
+           will be full length.
+
+Example:
+
+    {% snippet 'snippets/group, group=c.group_dict %}
+
+    #}
+  <section class="module module-narrow module-shallow group">
+    <h2 class="module-heading"><i class="icon-medium icon-lock"></i> {{ _('Groups') }}</h2>
+    {% if not group %}
+    <section class="module-content"></section>
+    {% endif %}
+      <ul class="unstyled nav nav-simple">
+        {% for group in  group %}   
+        {% with truncate=truncate or 0, url=h.url_for(controller='group', action='read', id=group.name) %}
+            <li class="nav-item"><a href={{ url }}>{{ group.title or group.name }}</a></li>
+        {% endwith %}
+        {% endfor %}
+    </ul>
+
+  </section>
