@@ -125,13 +125,24 @@ def _get_gdalDRV_filepath(resource, resource_tmp_folder,file_name):
         extraction_folder =  os.path.join(resource_tmp_folder,file_name_wo_ext)
         os.makedirs(extraction_folder)
         Archive(downloaded_res_file).extractall(extraction_folder)
-        actual_resource_parent_folder = extraction_folder
+        file_extracted_folder = _get_file_folder(extraction_folder)
+        actual_resource_parent_folder = file_extracted_folder
         
     gdal_driver, vector_file_name, prj_exists = _get_file_path(actual_resource_parent_folder, resource)
     vector_file_path = os.path.join(actual_resource_parent_folder, vector_file_name)
 
     return gdal_driver, vector_file_path, prj_exists
 
+def _get_file_folder(extraction_folder):
+    files_folder=None
+    for dirName, subdirList, fileList in os.walk(extraction_folder):
+	if len(fileList)>0:
+	    files_folder = dirName
+	    break
+    return files_folder
+	  
+	
+    
 def _download_resource(resource,user_api_key):
     '''Downloads the file declared in the resource url and saves it in a temp folder'''
     random_folder_name = str(uuid.uuid4())
@@ -237,16 +248,27 @@ def _get_tmp_file_name(resource):
 
 def _handle_vector(_vector, layer_idx, resource, context, geoserver_context):
     layer = _vector.get_layer(layer_idx)
+    
+    if context.has_key('projection'):
+	cont_proj = context['projection']
+	if isinstance(cont_proj,int):
+	    srs=cont_proj
+	else:
+	    srs = int(_vector.get_SRS(layer))
+    else:
+	srs = int(_vector.get_SRS(layer))
+	
+    
     if layer and layer.GetFeatureCount() > 0:
         layer_name = layer.GetName()
         geom_name = _vector.get_geometry_name(layer)
-        srs_epsg = int(_vector.get_SRS(layer))
+
         spatial_ref = settings.osr.SpatialReference()
-        spatial_ref.ImportFromEPSG(srs_epsg)
+        spatial_ref.ImportFromEPSG(srs)
         srs_wkt = spatial_ref.ExportToWkt()
         created_db_table_resource = _add_db_table_resource(context, resource, geom_name, layer_name)
         layer = _vector.get_layer(layer_idx)
-        _vector.handle_layer(layer, geom_name, created_db_table_resource['id'].lower())
+        _vector.handle_layer(layer, geom_name, created_db_table_resource['id'].lower(), srs)
         wms_server, wms_layer = _publish_layer(geoserver_context, created_db_table_resource, srs_wkt)
         _add_wms_resource(context, layer_name, created_db_table_resource, wms_server, wms_layer)
 

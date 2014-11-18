@@ -18,7 +18,7 @@ class DatasourceException(Exception):
   
 class Vector:
     _check_for_conversion = False
-    default_epsg = 4326
+    default_epsg = -1
     gdal_driver = None
 
     def __init__(self, gdal_driver, file_path, encoding = None, db_conn_params = None):
@@ -36,8 +36,8 @@ class Vector:
     def get_layer(self, layer_idx):
         return self.dataSource.GetLayer(layer_idx)
 
-    def handle_layer(self, layer, geom_name, table_name):
-        srs = self.get_SRS(layer)
+    def handle_layer(self, layer, geom_name, table_name,srs):
+        #srs = self.get_SRS(layer)
         featureCount = layer.GetFeatureCount()
         layerDefinition = layer.GetLayerDefn()
         self._db = DB(self.db_conn_params)
