@@ -71,7 +71,7 @@ class IResponsibleParty(IObject):
         title = u'Responsible Party Role',
         vocabulary = vocabularies.get_by_name('party-roles').get('vocabulary'), 
         description = u'This is the role of the responsible organisation.',
-        default = 'pointofcontact',
+        default = 'pointOfContact',
         required = True)
 
 class IFreeKeyword(IObject):

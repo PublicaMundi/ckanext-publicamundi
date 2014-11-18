@@ -3,9 +3,8 @@ import datetime
 import json
 import weberror
 import logging
+import geoalchemy
 from itertools import chain, ifilter
-
-from pylons import g
 
 import ckan.model as model
 import ckan.plugins as p

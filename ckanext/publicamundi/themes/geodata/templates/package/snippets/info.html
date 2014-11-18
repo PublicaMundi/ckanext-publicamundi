@@ -1,0 +1,19 @@
+{#
+Displays a sidebard module with information for given package
+
+pkg    - The package dict that owns the resources.
+
+Example:
+
+  {% snippet "package/snippets/info.html", pkg=pkg %}
+
+#}
+{% if pkg %}
+  <section class="module module-narrow">
+    <div class="module context-info">
+      <div class="module-content">
+        <h1 class="heading">{{ pkg.title or pkg.name }}</h1>
+        </div>
+    </div>
+  </section>
+{% endif %}

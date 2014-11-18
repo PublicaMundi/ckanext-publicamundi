@@ -201,7 +201,7 @@ def test_field_accessors_with_ifoo():
     })
 
 if __name__  == '__main__':
- 
+     
     x = fixtures.foo1
     
     field1 = x.get_schema().get('contact_info')

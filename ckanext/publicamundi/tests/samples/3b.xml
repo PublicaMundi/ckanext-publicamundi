@@ -194,7 +194,7 @@
           <gmd:equivalentScale>
             <gmd:MD_RepresentativeFraction>
               <gmd:denominator>
-                <gco:Integer>0</gco:Integer>
+                <gco:Integer>10</gco:Integer>
               </gmd:denominator>
             </gmd:MD_RepresentativeFraction>
           </gmd:equivalentScale>
@@ -347,7 +347,7 @@
                 <gco:CharacterString>See the referenced specification</gco:CharacterString>
               </gmd:explanation>
               <gmd:pass>
-                <gco:Boolean>conformant</gco:Boolean>
+                <gco:Boolean>true</gco:Boolean>
               </gmd:pass>
             </gmd:DQ_ConformanceResult>
           </gmd:result>
