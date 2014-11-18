@@ -41,12 +41,6 @@
   
     {% block dataset_type %}
   {% set api_controller = 'ckanext.publicamundi.controllers.api:Controller' %}
-  <div class = "btn-group metadata-download"><a href="#" class="btn dropdown-toggle" data-toggle="dropdown">{{_('Download as')}}
-      <span class="caret"></span></a>
-  <ul class="dropdown-menu">
-      <li><a href="/api/publicamundi/dataset/export/{{pkg.name }}?type=xml">{{ pkg.dataset_type}} XML</a></li>
-      
-  </ul></div>
   {% endblock %}
 
   {% block package_additional_info %}
