@@ -209,7 +209,7 @@ a {
     display: block !important;
 }
 #menu-block {
-    z-index: 1000;
+    z-index: 2000;
     max-width:50%;
     left: 24%;
     top: 32px;
@@ -227,15 +227,19 @@ a {
 .menu-item{
     display: block;
     float: left;
-    margin: 10px;
+    margin: 20px;
     text-align: center;
+}
+.menu-item span{
+    max-width: 75px;
+    line-height: 10px;
 }
 .menu-heading{
     font-size: 12px;
     display: block;
 }
 #menu-block img, #menu-block-home img{
-    max-width:50px;
+    max-width:70px;
 }
 .wrapper {
     border: none;
@@ -599,7 +603,10 @@ a {
      margin-right:0;
  }
 
-
+.btn-primary .caret, .btn-warning .caret, .btn-danger .caret, .btn-info .caret, .btn-success .caret, .btn-inverse .caret{
+    border-top-color: #4E59A4;
+    border-bottom-color: #4E59A4;
+}
 
 
 /* Accordion */
