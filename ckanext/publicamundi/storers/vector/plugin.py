@@ -36,9 +36,9 @@ class VectorStorer(SingletonPlugin):
 	map.connect('search_epsg', '/api/search_epsg',
             controller='ckanext.publicamundi.storers.vector.controllers.export:ExportController',
             action='search_epsg')
-	map.connect('vector_inject', '/api/vector/inject/{resource_id}',
+	map.connect('vector_ingest', '/api/vector/ingest/{resource_id}',
             controller='ckanext.publicamundi.storers.vector.controllers.vector:VectorController',
-            action='inject',resource_id='{resource_id}')
+            action='ingest',resource_id='{resource_id}')
 	
 	return map
     

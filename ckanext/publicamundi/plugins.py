@@ -155,8 +155,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 	    m.connect('reject_resource', '/{parent}/resources/reject/{resource_id}', action='reject', parent='{parent}')
 	    m.connect('identify_vector_resource', '/{parent}/resources/identify_vector/{resource_id}', 
 		      action='identify',resource_id ='{resource_id}', resource_type ='vector', parent='{parent}')
-	    m.connect('render_injection', '/{parent}/resources/inject/{resource_id}', 
-		      action='render_injection_template',resource_id ='{resource_id}', parent='{parent}')
+	    m.connect('render_ingestion', '/{parent}/resources/ingest/{resource_id}', 
+		      action='render_ingestion_template',resource_id ='{resource_id}', parent='{parent}')
         
         #mapper.connect('tags', '/tags',
         #    controller='ckanext.publicamundi.controllers.tags:Controller', action='index')

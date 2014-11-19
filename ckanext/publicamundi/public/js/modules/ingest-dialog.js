@@ -1,5 +1,5 @@
 var module;
-this.ckan.module('inject-dialog', function (jQuery, _) {
+this.ckan.module('ingest-dialog', function (jQuery, _) {
   return {
 
     /* holds the loaded lightbox */

@@ -78,9 +78,9 @@ class UserController(BaseController):
 	    _action='admin_page_resources'
 	redirect(url(controller='ckanext.publicamundi.controllers.user:UserController', action=_action))
 	
-    def render_injection_template(self,resource_id):
+    def render_ingestion_template(self,resource_id):
 	c.resource_id = resource_id
 	c.task_result = json.loads(identification_helper.identify(resource_id)['result'])
 	res_identify_obj = ckan.model.Session.query(ResourceIdentify).filter(ResourceIdentify.resource_id==resource_id).first()
 	if res_identify_obj.get_resource_type()==ResourceTypes.VECTOR:
-	    return render('user/snippets/inject_templates/vector/vector.html')
+	    return render('user/snippets/ingest_templates/vector/vector.html')

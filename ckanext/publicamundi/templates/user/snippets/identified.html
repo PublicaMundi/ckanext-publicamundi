@@ -1,4 +1,4 @@
-{% set inject_render_url = h.url_for('render_injection',resource_id=res.id, parent = parent) %}
+{% set ingest_render_url = h.url_for('render_ingestion',resource_id=res.id, parent = parent) %}
 {% set reject_url = h.url_for('reject_resource',resource_id=res.id, parent = parent) %}
  
 {% snippet 'user/snippets/status_label.html', status=task_result.status %}
@@ -15,9 +15,9 @@
       <li>
 	{% set loading_text = _('Loading...') %}
 	
-      <a  href="{{ inject_render_url }}" data-module="inject-dialog" data-module-template="{{ inject_render_url }}" data-loading-text="{{ loading_text }}">
-	  <i class="icon-inject"></i> 
-	    {{ _('Inject') }}
+      <a  href="{{ ingest_render_url }}" data-module="ingest-dialog" data-module-template="{{ ingest_render_url }}" data-loading-text="{{ loading_text }}">
+	  <i class="icon-ingest"></i> 
+	    {{ _('Ingest') }}
 	  </a>
       </li>
       
@@ -32,4 +32,4 @@
     </ul>
 </div>
 
-{% resource 'ckanext-publicamundi/inject-dialog' %}
+{% resource 'ckanext-publicamundi/ingest-dialog' %}

@@ -19,7 +19,7 @@ _check_access = check_access
 class VectorController(BaseController):
     """VectorController will be used to publish vector data at postgis and geoserver"""
 	
-    def inject(self,resource_id):
+    def ingest(self,resource_id):
 	
 	self._get_context(resource_id)
 	json_data = request.POST['data']

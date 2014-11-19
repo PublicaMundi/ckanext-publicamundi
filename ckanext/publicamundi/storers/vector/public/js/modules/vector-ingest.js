@@ -10,30 +10,30 @@ function tabular_layer(idx){
       this.is_selected= $("#checkbox_"+idx).is(":checked");
 };
 
-ckan.module('vector-inject', function (jQuery, _) {
+ckan.module('vector-ingest', function (jQuery, _) {
   return {
 
     options: {
-      inject_base_url:null,
+      ingest_base_url:null,
       gdal_driver:null,
       layers:null,
     },
     initialize: function () {
     var module = this;    
     
-    $("#inject_button").click(function () {
-	    module._inject2();
+    $("#ingest_button").click(function () {
+	    module._ingest2();
 	});
 
 
     },
-    _inject: function(){
+    _ingest: function(){
       
-      var base_url=(this.options.inject_base_url);
-      var inject_url =base_url;
+      var base_url=(this.options.ingest_base_url);
+      var ingest_url =base_url;
       var gdal_driver= this.options.gdal_driver;
       if (gdal_driver=='ESRI Shapefile'){
-	  inject_url=inject_url+ "?projection=" + $('#projection').val() + "&encoding=" +  $('#shp_encoding').val();
+	  ingest_url=ingest_url+ "?projection=" + $('#projection').val() + "&encoding=" +  $('#shp_encoding').val();
 	
       }
       else{
@@ -42,16 +42,16 @@ ckan.module('vector-inject', function (jQuery, _) {
 	      {
 		selected_layers.push(this.value);
 	      });
-	  inject_url=inject_url+ "?selected_layers=" +selected_layers ;
-	  console.log(inject_url);
+	  ingest_url=ingest_url+ "?selected_layers=" +selected_layers ;
+	  console.log(ingest_url);
       }
       
       
         module.hide();
-        window.location = inject_url;
+        window.location = ingest_url;
       
     },
-    _inject2: function(){
+    _ingest2: function(){
 	
 	layers_array=[];
 	var gdal_driver = this.options.gdal_driver;
@@ -68,7 +68,7 @@ ckan.module('vector-inject', function (jQuery, _) {
 	      
 	    }
 	
-	var base_url=(this.options.inject_base_url);
+	var base_url=(this.options.ingest_base_url);
 	 
 	var json_data={"layers":layers_array
 		      };
