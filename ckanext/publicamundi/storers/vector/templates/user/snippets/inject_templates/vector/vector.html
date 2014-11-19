@@ -8,19 +8,19 @@
 
  
 {% block inject_content %}
-<div data-module="vector-inject" data-module-inject_base_url="{{inject_base_url}}">
+<div data-module="vector-inject" data-module-inject_base_url="{{inject_base_url}}" data-module-gdal_driver="{{gdal_driver}}" data-module-layers="{{h.dump_json(layers)}}">
 	    
     {% if gdal_driver=="ESRI Shapefile" %}
 	{% snippet 'user/snippets/inject_templates/vector/shapefile.html', task_result=task_result%}
     
-    {% elif gdal_driver=="SQLite" or gdal_driver=="GeoPackage"%}
+    {% else %}
 	{% snippet 'user/snippets/inject_templates/vector/sqlite_gpkg.html', task_result=task_result%}
     
-    {% elif gdal_driver=="" %}
+    {#{% elif gdal_driver=="" %}
     
     {% elif gdal_driver=="" %}
     
-    {% elif gdal_driver=="" %}
+    {% elif gdal_driver=="" %} #}
     
     {% endif %}
     </br>

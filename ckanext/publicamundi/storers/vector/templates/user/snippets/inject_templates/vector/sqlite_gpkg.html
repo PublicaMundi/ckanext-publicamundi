@@ -19,11 +19,13 @@
 		<tr >
 		 
 		  <td headers="layer_idx_header">
-		      <input type="checkbox" id="checkbox_layer"  name="checkbox_layer" value="{{layer.idx}}">
+		      <input type="checkbox" id="checkbox_{{layer.idx}}"  name="checkbox_layer" checked>
 		  </td>
 		  <td headers="layer_name_header">{{layer.layer_name}}</td>
 		  <td headers="layer_geometry_header">{{layer.layer_geometry}}</td>
-		  <td headers="layer_srs_header">{{layer.layer_srs}}</td>
+		  <td  headers="layer_srs_header">
+		      <input type="input" id="layer_srs_{{layer.idx}}"  name="layer_srs" value="{{layer.layer_srs}}">
+		  </td>
 		  
 		 
 		</tr>

@@ -10,7 +10,7 @@ import json
 import ckan
 from pylons import config
 from ckanext.publicamundi.storers.vector import settings
-from ckanext.publicamundi.model.resource_identify import ResourceIdentify,ResourceTypes
+from ckanext.publicamundi.model.resource_identify import ResourceIdentify,ResourceTypes,IdentifyStatus
 
 def _get_site_url():
     try:
@@ -60,7 +60,7 @@ def _get_geoserver_context():
     return geoserver_context
 
 
-def create_vector_storer_task(resource, extra_params = None):
+def create_vector_storer_task(resource, layer_params):
     user = _get_site_user()
     resource_package_id = resource.as_dict()['package_id']
     cont = {'package_id': resource_package_id,
@@ -68,16 +68,20 @@ def create_vector_storer_task(resource, extra_params = None):
      'apikey': user.get('apikey'),
      'site_user_apikey': user.get('apikey'),
      'user': user.get('name'),
-     'db_params': config['ckan.datastore.write_url']}
-    if extra_params:
-        for key, value in extra_params.iteritems():
-            cont[key] = value
+     'db_params': config['ckan.datastore.write_url'],
+     'layer_params':layer_params}
+    
 
     context = json.dumps(cont)
     geoserver_context = _get_geoserver_context()
     data = json.dumps(resource_dictize(resource, {'model': model}))
     task_id = make_uuid()
     celery.send_task('vectorstorer.upload', args=[geoserver_context, context, data], task_id=task_id)
+    
+    res_identify_query=ckan.model.Session.query(ResourceIdentify).filter(ResourceIdentify.resource_id==resource.id).first()
+    res_identify_query.set_identify_status(IdentifyStatus.PUBLISHED)
+    res_identify_query.set_celery_task_id(task_id)
+    ckan.model.Session.commit()
 
 
 def update_vector_storer_task(resource):

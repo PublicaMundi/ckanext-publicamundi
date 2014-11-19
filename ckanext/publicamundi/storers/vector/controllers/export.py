@@ -125,13 +125,14 @@ class ExportController(BaseController):
 		feature.SetField(fieldName, feat[fieldName])
 	    
 	    geom = feat.GetGeometryRef()
-	    
-	   
-            
+	  
             if coordTrans:
                 geom.Transform(coordTrans)
-            
-	    feature.SetGeometry(geom)
+            try:
+		feature.SetGeometry(geom)
+	    except RuntimeError:
+		pass
+	      
 	    export_layer.CreateFeature(feature)
 	    
             feature.Destroy()
@@ -245,6 +246,9 @@ class ExportController(BaseController):
 	      
 	    else:
 		return [] 
+	elif gdal_driver=='GPX':
+	    datasource_options="GPX_USE_EXTENSIONS=YES"
+	    return [datasource_options]
 	else:
 	    return []
     def _get_layer_options(self, gdal_driver):

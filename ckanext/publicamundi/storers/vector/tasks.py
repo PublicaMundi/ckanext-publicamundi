@@ -22,13 +22,15 @@ RESOURCE_DELETE_ACTION = 'resource_delete'
 @celery.task(name='vectorstorer.identify')
 def identify_resource(data,user_api_key):
     resource = json.loads(data)
-    resource_tmp_folder, _file_path = _download_resource(resource,user_api_key)
+
     try:
+	resource_tmp_folder, _file_path = _download_resource(resource,user_api_key)
 	json_result = _identify(resource,user_api_key,resource_tmp_folder, _file_path)
+	_delete_temp(resource_tmp_folder)
 	return json.dumps(json_result)
     except vector.DatasourceException:
 	_delete_temp(resource_tmp_folder)
-	raise DatasourceException
+	raise vector.DatasourceException
 
 def _identify(resource,user_api_key,resource_tmp_folder, file_path):
     json_result = {}
@@ -53,7 +55,6 @@ def _identify(resource,user_api_key,resource_tmp_folder, file_path):
 
         json_result['layers'] = layers
     
-    _delete_temp(resource_tmp_folder)
     return json_result
     
 
@@ -68,40 +69,32 @@ def vectorstorer_upload(geoserver_cont, cont, data):
     user_api_key = context['apikey'].encode('utf8')
     
     '''Download the resource and , the temp_folder created and the file_name''' 
-    resource_tmp_folder,filename = _download_resource(resource,user_api_key)
+    
     try:
+	resource_tmp_folder,filename = _download_resource(resource,user_api_key)
 	_handle_resource(resource, db_conn_params, context, geoserver_context,resource_tmp_folder,filename)
-    except Exception as e:
-	#print e.error
 	_delete_temp(resource_tmp_folder)
-
+    except Exception as e:
+	_delete_temp(resource_tmp_folder)
 
 def _handle_resource(resource, db_conn_params, context, geoserver_context,resource_tmp_folder,filename):
     
     
     gdal_driver, vector_file_path ,prj_exists = _get_gdalDRV_filepath(resource, resource_tmp_folder,filename)
     
-    if context.has_key('encoding'):
-        _encoding = context['encoding']
-    else:
-        _encoding = 'utf-8'
+    layer_params=context['layer_params']['layers']
     
-    _selected_layers = None
-    if context.has_key('selected_layers'):
-        if len(context['selected_layers']) > 0:
-            _selected_layers = context['selected_layers']
+    _encoding = 'utf-8'
+    
     if gdal_driver:
         _vector = vector.Vector(gdal_driver, vector_file_path, _encoding, db_conn_params)
         layer_count = _vector.get_layer_count()
         for layer_idx in range(0, layer_count):
-            if _selected_layers:
-                if str(layer_idx) in _selected_layers:
-                    _handle_vector(_vector, layer_idx, resource, context, geoserver_context)
-            else:
-                _handle_vector(_vector, layer_idx, resource, context, geoserver_context)
+           
+	    if layer_params[layer_idx]['is_selected']:
+		srs=layer_params[layer_idx]['srs']
 
-    _delete_temp(resource_tmp_folder)
-
+		_handle_vector(_vector, layer_idx, resource, context, geoserver_context,srs)
 
 def _get_gdalDRV_filepath(resource, resource_tmp_folder,file_name):
     '''Tries to find the vector file which is going to be readed by GDAL.
@@ -226,7 +219,8 @@ def _get_file_path(resource_tmp_folder,resource):
     elif resource_format == 'xlsx':
 	vector_file = get_file_by_extention(file_list,'.xlsx')
         gdal_driver = vector.XLS
-
+    if vector_file is None:
+	raise vector.DatasourceException
     return  gdal_driver, vector_file, prj_exists
   
 def get_file_by_extention(file_list,extention):
@@ -246,19 +240,10 @@ def _get_tmp_file_name(resource):
     return resource_file_name
 
 
-def _handle_vector(_vector, layer_idx, resource, context, geoserver_context):
+def _handle_vector(_vector, layer_idx, resource, context, geoserver_context,srs):
     layer = _vector.get_layer(layer_idx)
-    
-    if context.has_key('projection'):
-	cont_proj = context['projection']
-	if isinstance(cont_proj,int):
-	    srs=cont_proj
-	else:
-	    srs = int(_vector.get_SRS(layer))
-    else:
-	srs = int(_vector.get_SRS(layer))
-	
-    
+
+    srs =int(srs)
     if layer and layer.GetFeatureCount() > 0:
         layer_name = layer.GetName()
         geom_name = _vector.get_geometry_name(layer)

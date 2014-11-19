@@ -12,61 +12,22 @@ from ckan.lib.celery_app import celery
 from ckan.model.types import make_uuid
 from ckan.lib.dictization.model_dictize import resource_dictize
 
-from ckanext.publicamundi.model.resource_identify import ResourceIdentify,TaskNotReady,TaskFailed,IdentifyStatus,ResourceTypes
-
+from ckanext.publicamundi.model.resource_identify import ResourceIdentify,TaskNotReady,TaskFailed,IdentifyStatus
+import json
 _check_access = check_access
 
 class VectorController(BaseController):
     """VectorController will be used to publish vector data at postgis and geoserver"""
 	
     def inject(self,resource_id):
-
 	
 	self._get_context(resource_id)
-	
-        encoding = self._get_encoding()
-        projection = self._get_projection()    
-        
-        #Extra parm for csv,xls
-        geometry_column, geometry_type = self._get_geometry_params() 
+	json_data = request.POST['data']
+	layer_options=json.loads(json_data)
         
         resource=ckan.model.Session.query(model.Resource).get(resource_id)
-       
-	extra_params={
-		      "encoding":encoding,
-		      "projection":projection,
-		      "geometry_type":geometry_type,
-		      "geometry_column":geometry_column
-		      }
 	
-        resource_actions.create_vector_storer_task(resource,extra_params)
-        
-        res_identify_query=ckan.model.Session.query(ResourceIdentify).filter(ResourceIdentify.resource_id==resource_id).first()
-	res_identify_query.set_identify_status(IdentifyStatus.PUBLISHED)
-	ckan.model.Session.commit()
-        redirect(url(controller='ckanext.publicamundi.controllers.user:UserController', action='dashboard_resources'))
-    
-    def reject(self,resource_id):
-
-	resource_id = request.params.get('resource_id',u'')
-	self._get_context(resource_id)
-	
-        encoding = self._get_encoding()
-        projection = self._get_projection()    
-        
-        #Extra parm for csv,xls
-        geometry_column, geometry_type = self._get_geometry_params() 
-        
-        resource=ckan.model.Session.query(model.Resource).get(resource_id)
-       
-	extra_params={
-		      "encoding":encoding,
-		      "projection":projection,
-		      "geometry_type":geometry_type,
-		      "geometry_column":geometry_column
-		      }
-	
-        resource_actions.create_vector_storer_task(resource,extra_params)
+        resource_actions.create_vector_storer_task(resource,layer_options)
         
     def _get_context(self,resource_id):
 	context = {'model': model, 'session': model.Session,
@@ -105,13 +66,16 @@ class VectorController(BaseController):
 	return True
       
     def _get_projection(self):
+	proj_param=request.params.get('projection')
+	if not proj_param:
+	    return None
 	try:
 
-	    proj_param=request.params.get('projection',u'')
+	   
 	    _projection=int(proj_param)
 	    _spatial_ref = osr.SpatialReference()
 	    _spatial_ref.ImportFromEPSG(_projection)
-	   
+	    return _projection
 	except ValueError:
 	    abort(400, _('Bad EPSG code : %s') % proj_param)
 	except RuntimeError:
