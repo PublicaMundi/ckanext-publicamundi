@@ -16,7 +16,15 @@
 	  {% elif task_result.status == "Published" %}
 	      
 	      {% snippet 'user/snippets/status_label.html', status=task_result.status %}
-
+	  
+	  {% elif task_result.status == "Publishing" %}
+	      
+	      {% snippet 'user/snippets/status_label.html', status=task_result.status %}
+	  
+	  {% elif task_result.status == "Publishing Failed" %}
+	      
+	      {% snippet 'user/snippets/status_label.html', status=task_result.status %}    
+	  
 	  {% elif task_result.status == "Rejected" %}
 	      
 	      {% snippet 'user/snippets/rejected.html', pkg=pkg, res=res ,task_result=task_result,parent= parent %}

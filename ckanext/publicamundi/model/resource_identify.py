@@ -8,9 +8,9 @@ from ckan.lib.celery_app import celery
 from ckanext.publicamundi.model import Base
 class IdentifyStatus:
     NOT_PUBLISHED="not_published"
-    PUBLISHED="published"
     REJECTED="rejected"
-
+    PUBLISHED="published"
+    
 class ResourceTypes:
     VECTOR="vector"
     RASTER="raster"
