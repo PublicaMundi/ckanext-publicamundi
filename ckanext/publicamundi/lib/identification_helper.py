@@ -41,14 +41,14 @@ def get_celery_identification_result(res_identify_obj):
     result = None
     resource_type = None
     try:
-	status = "Published"
+	status = "Identified"
 	result=res_identify_obj.get_celery_task_result()
 	resource_type=res_identify_obj.get_resource_type()
     except TaskNotReady:
-	status = "Publishing"
+	status = "Not Ready"
 	pass
     except TaskFailed ,e:	
-	status = "Publishing Failed"
+	status = "Identification Failed"
 	pass
     
     return status,result,resource_type
@@ -57,14 +57,14 @@ def get_celery_publishing_result(res_identify_obj):
     status = None
     resource_type = None
     try:
-	status = "Identified"
+	status = "Published"
 	res_identify_obj.get_celery_task_result()
 	resource_type=res_identify_obj.get_resource_type()
     except TaskNotReady:
-	status = "Not Ready"
+	status = "Publishing"
 	pass
     except TaskFailed ,e:	
-	status = "Failed"
+	status = "Publishing Failed"
 	pass
     
     return status,resource_type

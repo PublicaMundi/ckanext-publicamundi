@@ -23,8 +23,8 @@ class TaskFailed(Exception):
 
 class ResourceIdentify(Base):
     __tablename__ = 'resource_identification'
-    celery_task_id =  Column('resource_id', String(64), primary_key=True)
-    resource_id = Column('celery_task_id', String(64))
+    resource_id =  Column('resource_id', String(64), primary_key=True)
+    celery_task_id = Column('celery_task_id', String(64))
     status = Column('status', String(64))
     resource_type = Column('resource_type', String(64))
     
@@ -54,7 +54,9 @@ class ResourceIdentify(Base):
     
     def set_identify_status(self,new_status):
 	self.status = new_status
-
+    
+    def set_celery_task_id(self,new_task_id):
+	self.celery_task_id = new_task_id
 
 
 
