@@ -1,8 +1,9 @@
-from settings import ogr, osr, db_encoding
-from db_helpers import DB
-import re
 from psycopg2.extensions import adapt
-import unicodedata as ud
+
+from ckanext.publicamundi.storers.vector.settings import ogr, osr, db_encoding
+from ckanext.publicamundi.storers.vector.db_helpers import DB
+
+
 SHAPEFILE = 'ESRI Shapefile'
 KML = 'KML'
 GEOJSON = 'GeoJSON'
@@ -13,15 +14,22 @@ XLS = 'XLS'
 SQLITE = 'SQLite'
 GEOPACKAGE = 'GPKG'
 
+
 class DatasourceException(Exception):
     pass
-  
+
+
 class Vector:
     _check_for_conversion = False
     default_epsg = -1
     gdal_driver = None
 
-    def __init__(self, gdal_driver, file_path, encoding = None, db_conn_params = None):
+    def __init__(
+            self,
+            gdal_driver,
+            file_path,
+            encoding=None,
+            db_conn_params=None):
         self.gdal_driver = gdal_driver
         self.encoding = encoding
         self.db_conn_params = db_conn_params
@@ -36,8 +44,7 @@ class Vector:
     def get_layer(self, layer_idx):
         return self.dataSource.GetLayer(layer_idx)
 
-    def handle_layer(self, layer, geom_name, table_name,srs):
-        #srs = self.get_SRS(layer)
+    def handle_layer(self, layer, geom_name, table_name, srs):
         featureCount = layer.GetFeatureCount()
         layerDefinition = layer.GetLayerDefn()
         self._db = DB(self.db_conn_params)
@@ -47,11 +54,16 @@ class Vector:
         feat_geom = feat.GetGeometryRef()
         coordinate_dimension = feat_geom.GetCoordinateDimension()
         layer.ResetReading()
-        self._db.create_table(table_name, fields, geom_name, srs, coordinate_dimension)
+        self._db.create_table(
+            table_name,
+            fields,
+            geom_name,
+            srs,
+            coordinate_dimension)
         self.write_to_db(table_name, layer, srs, geom_name)
 
     def get_SRS(self, layer):
-        if not layer.GetSpatialRef() == None:
+        if not layer.GetSpatialRef() is None:
             prj = layer.GetSpatialRef().ExportToWkt()
             srs_osr = osr.SpatialReference()
             srs_osr.ImportFromESRI([prj])
@@ -130,16 +142,16 @@ class Vector:
         feat_data = {}
         layer.ResetReading()
         for feat in layer:
-	    if not feat:
-		continue
+            if not feat:
+                continue
 
-	    for y in range(feat.GetFieldCount()):
-		layerDefinition = layer.GetLayerDefn()
-		field_name = layerDefinition.GetFieldDefn(y).GetName()
-		feat_data[field_name] = feat.GetField(y)
-
-	    break
-	return feat_data
+            for y in range(feat.GetFieldCount()):
+                layerDefinition = layer.GetLayerDefn()
+                field_name = layerDefinition.GetFieldDefn(y).GetName()
+                feat_data[field_name] = feat.GetField(y)
+            feat_data['geom'] = str(feat.GetGeometryRef())
+            break
+        return feat_data
 
     def write_to_db(self, table_name, layer, srs, layer_geom_name):
         i = 0
@@ -149,11 +161,20 @@ class Vector:
             if not feat:
                 continue
             for y in range(feat.GetFieldCount()):
-                if not feat.GetField(y) == None:
-                    if layer.GetLayerDefn().GetFieldDefn(y).GetType() in (4, 9, 10, 11):
-                        #field_value = feat.GetField(y).decode(self.encoding, 'ignore').encode(db_encoding)
-                        field_value= str(feat.GetField(y).decode('utf8', 'replace').encode('utf8'))
-                        feature_fields += adapt(field_value).getquoted().decode(db_encoding) + ','
+                if not feat.GetField(y) is None:
+                    if layer.GetLayerDefn().GetFieldDefn(y).GetType() in (
+                            4,
+                            9,
+                            10,
+                            11):
+                        # field_value = feat.GetField(y).decode(self.encoding,
+                        # 'ignore').encode(db_encoding)
+                        field_value = str(
+                            feat.GetField(y).decode(
+                                'utf8',
+                                'replace').encode('utf8'))
+                        feature_fields += adapt(
+                            field_value).getquoted().decode(db_encoding) + ','
                     else:
                         feature_fields += str(feat.GetField(y)) + ','
                 else:
@@ -161,8 +182,15 @@ class Vector:
 
             convert_to_multi = False
             if self._check_for_conversion:
-                convert_to_multi = self.needs_conversion_to_multi(feat, layer_geom_name)
-            self._db.insert_to_table(table_name, feature_fields, feat.GetGeometryRef(), convert_to_multi, srs)
+                convert_to_multi = self.needs_conversion_to_multi(
+                    feat,
+                    layer_geom_name)
+            self._db.insert_to_table(
+                table_name,
+                feature_fields,
+                feat.GetGeometryRef(),
+                convert_to_multi,
+                srs)
 
         self._db.create_spatial_index(table_name)
         self._db.commit_and_close()

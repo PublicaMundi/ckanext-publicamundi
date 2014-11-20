@@ -146,17 +146,25 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         mapper.connect('publicamundi-get-vocabulary',
             '/api/publicamundi/vocabularies/{name}',
             controller=api_controller, action='vocabulary_get')
-	
-	'''User controller mappings '''
-	with SubMapper(mapper, controller='ckanext.publicamundi.controllers.user:UserController') as m:
-	    
-	    m.connect('user_dashboard_resources', '/dashboard/resources', action='dashboard_resources')
-	    m.connect('admin_page_resources', '/user/resources', action='admin_page_resources')
-	    m.connect('reject_resource', '/{parent}/resources/reject/{resource_id}', action='reject', parent='{parent}')
-	    m.connect('identify_vector_resource', '/{parent}/resources/identify_vector/{resource_id}', 
-		      action='identify',resource_id ='{resource_id}', resource_type ='vector', parent='{parent}')
-	    m.connect('render_ingestion', '/{parent}/resources/ingest/{resource_id}', 
-		      action='render_ingestion_template',resource_id ='{resource_id}', parent='{parent}')
+
+        '''User controller mappings '''
+        with SubMapper(mapper, controller='ckanext.publicamundi.controllers.user:UserController') as m:
+
+            m.connect('user_dashboard_resources', '/dashboard/resources',
+                      action='dashboard_resources')
+            m.connect('admin_page_resources', '/user/resources',
+                      action='admin_page_resources')
+            m.connect('reject_resource',
+                      '/{parent}/resources/reject/{resource_id}',
+                      action='reject', parent='{parent}')
+            m.connect('identify_vector_resource',
+                      '/{parent}/resources/identify_vector/{resource_id}',
+                      action='identify', resource_id='{resource_id}',
+                      resource_type='vector', parent='{parent}')
+            m.connect('render_ingestion',
+                      '/{parent}/resources/ingest/{resource_id}',
+                      action='render_ingestion_template',
+                      resource_id='{resource_id}', parent='{parent}')
         
         #mapper.connect('tags', '/tags',
         #    controller='ckanext.publicamundi.controllers.tags:Controller', action='index')
