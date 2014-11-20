@@ -53,7 +53,7 @@ setup(
         [fanstatic.libraries]
         
         [ckan.celery_task]
-	tasks = ckanext.publicamundi.storers.vector.celery_import:task_imports
+        vector_tasks = ckanext.publicamundi.storers.vector.celery_import:task_imports
 
         """,
     # The following only stands as an example. The actual message_extractors should be defined into 
