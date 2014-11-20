@@ -345,8 +345,12 @@ span.space-x3 { padding: 0px 12px }
 }
 
 /*
- * Dataset views
+ * Dataset searrh/view
  */
+
+.search-form {
+    margin-top: 10px;
+}
 
 section.additional-info header > .btn-group {
     margin-top: 8px;
