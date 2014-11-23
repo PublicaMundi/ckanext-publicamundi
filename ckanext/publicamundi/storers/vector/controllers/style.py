@@ -59,7 +59,7 @@ class StyleController(BaseController):
             abort(404, _('Resource not found'))
 
     def _get_layer_style(self, resource_id):
-        geoserver_url = config['ckanext-vectorstorer.geoserver_url']
+        geoserver_url = config['ckanext.publicamundi.vectorstorer.geoserver_url']
 
         cat = Catalog(geoserver_url + "/rest")
         layer = cat.get_layer(c.layer_id)
@@ -92,7 +92,7 @@ class StyleController(BaseController):
 
     def _submit_sld(self, sld_body):
         try:
-            geoserver_url = config['ckanext-vectorstorer.geoserver_url']
+            geoserver_url = config['ckanext.publicamundi.vectorstorer.geoserver_url']
             cat = Catalog(geoserver_url + "/rest")
             layer = cat.get_layer(c.layer_id)
             default_style = layer._get_default_style()

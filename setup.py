@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '1.1dev'
+version = '1.2dev'
 
 setup(
 	name='ckanext-publicamundi',
@@ -22,7 +22,7 @@ setup(
 	zip_safe=False,
     install_requires=[
 		# -*- Extra requirements: -*-
-        # Note: Moved under pip-requirements.txt
+        # Note: Moved under requirements.txt
 	],
 	entry_points=\
 	"""
@@ -53,6 +53,7 @@ setup(
         [fanstatic.libraries]
         
         [ckan.celery_task]
+        
         vector_tasks = ckanext.publicamundi.storers.vector.celery_import:task_imports
 
         """,

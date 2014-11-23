@@ -1,7 +1,7 @@
-from psycopg2.extensions import adapt
+import psycopg2
 
-from ckanext.publicamundi.storers.vector.settings import ogr, osr, db_encoding
-from ckanext.publicamundi.storers.vector.db_helpers import DB
+import ckanext.publicamundi.storers.vector as vectorstorer
+from ckanext.publicamundi.storers.vector import db_helpers
 
 
 SHAPEFILE = 'ESRI Shapefile'
@@ -33,7 +33,7 @@ class Vector:
         self.gdal_driver = gdal_driver
         self.encoding = encoding
         self.db_conn_params = db_conn_params
-        driver = ogr.GetDriverByName(gdal_driver)
+        driver = vectorstorer.ogr.GetDriverByName(gdal_driver)
         self.dataSource = driver.Open(file_path, 0)
         if self.dataSource is None:
             raise DatasourceException('Could not open %s' % file_path)
@@ -47,7 +47,7 @@ class Vector:
     def handle_layer(self, layer, geom_name, table_name, srs):
         featureCount = layer.GetFeatureCount()
         layerDefinition = layer.GetLayerDefn()
-        self._db = DB(self.db_conn_params)
+        self._db = db_helpers.DB(self.db_conn_params)
         fields = self._get_layer_fields(layerDefinition)
         layer.ResetReading()
         feat = layer.GetNextFeature()
@@ -65,7 +65,7 @@ class Vector:
     def get_SRS(self, layer):
         if not layer.GetSpatialRef() is None:
             prj = layer.GetSpatialRef().ExportToWkt()
-            srs_osr = osr.SpatialReference()
+            srs_osr = vectorstorer.osr.SpatialReference()
             srs_osr.ImportFromESRI([prj])
             epsg = srs_osr.GetAuthorityCode(None)
             if epsg is None or epsg == 0:
@@ -162,19 +162,13 @@ class Vector:
                 continue
             for y in range(feat.GetFieldCount()):
                 if not feat.GetField(y) is None:
-                    if layer.GetLayerDefn().GetFieldDefn(y).GetType() in (
-                            4,
-                            9,
-                            10,
-                            11):
-                        # field_value = feat.GetField(y).decode(self.encoding,
-                        # 'ignore').encode(db_encoding)
+                    if layer.GetLayerDefn().GetFieldDefn(y).GetType() in (4, 9, 10, 11):
                         field_value = str(
                             feat.GetField(y).decode(
                                 'utf8',
                                 'replace').encode('utf8'))
-                        feature_fields += adapt(
-                            field_value).getquoted().decode(db_encoding) + ','
+                        feature_fields += psycopg2.extensions.adapt(
+                            field_value).getquoted().decode('utf-8') + ','
                     else:
                         feature_fields += str(feat.GetField(y)) + ','
                 else:

@@ -7,16 +7,17 @@ import shutil
 import urllib2
 from pylons import config, Response
 
-from ckan.lib.base import BaseController, c, g, request, \
-    response, session, render, config, abort
-from ckan.logic import get_action, check_access, model
-from ckan.common import _
+from ckan.lib.base import (
+    BaseController, c, g, request, response, session, render, config, abort)
+import ckan.model as model
+import ckan.plugins.toolkit as toolkit
 
-from ckanext.publicamundi.storers.vector.settings import(
-    ogr, osr, DB_TABLE_FORMAT)
+from ckanext.publicamundi.storers.vector import ogr, osr
 from ckanext.publicamundi.storers.vector.resources import DBTableResource
 
-_check_access = check_access
+_ = toolkit._
+_check_access = toolkit.check_access
+_get_action = toolkit.get_action
 
 
 class NotVectorStorerDB(Exception):
@@ -324,7 +325,7 @@ class ExportController(BaseController):
 
         try:
 
-            resource = get_action('resource_show')(context,
+            resource = _get_action('resource_show')(context,
                                                    {'id': resource_id})
             # return resource['name']
             return resource['name']
@@ -337,13 +338,13 @@ class ExportController(BaseController):
 
         try:
 
-            c.resource = get_action('resource_show')(context,
+            c.resource = _get_action('resource_show')(context,
                                                      {'id': resource_id})
-            c.package = get_action('package_show')(context, {'id': id})
+            c.package = _get_action('package_show')(context, {'id': id})
             c.pkg = context['package']
             c.pkg_dict = c.package
-            if not ('vectorstorer_resource' in c.resource and c.resource[
-                    'format'].lower() == DB_TABLE_FORMAT):
+            if not ('vectorstorer_resource' in c.resource and 
+                    c.resource['format'].lower() == DBTableResource.FORMAT):
                 raise NotVectorStorerDB
 
         except NotVectorStorerDB:

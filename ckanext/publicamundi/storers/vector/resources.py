@@ -1,15 +1,16 @@
 from urlparse import urlparse, urljoin
-from ckanext.publicamundi.storers.vector import settings
 
 
 class WMSResource:
+    
+    FORMAT = 'wms'
+    
     name_extention = " WMS Layer"
     _get_capabilities_url = "?service=WMS&request=GetCapabilities"
     _name = None
     _description = None
     _package_id = None
     _url = None
-    _format = settings.WMS_FORMAT
     _parent_resource_id = None
     _wms_server = None
     _wms_layer = None
@@ -37,7 +38,7 @@ class WMSResource:
         resource = {
             "package_id": unicode(self._package_id),
             "url": self._wms_server + self._get_capabilities_url,
-            "format": self._format,
+            "format": self.FORMAT,
             "parent_resource_id": self._parent_resource_id,
             'vectorstorer_resource': self._vectorstorer_resource,
             "wms_server": self._wms_server,
@@ -49,12 +50,14 @@ class WMSResource:
 
 
 class DBTableResource:
+
+    FORMAT = 'data_table'
+
     name_extention = " Data Preview"
     _name = None
     _description = None
     _package_id = None
     _url = None
-    _format = settings.DB_TABLE_FORMAT
     _parent_resource_id = None
     _geometry = None
     _vectorstorer_resource = True
@@ -78,7 +81,7 @@ class DBTableResource:
         resource = {
             "package_id": unicode(self._package_id),
             "url": self._url,
-            "format": self._format,
+            "format": self.FORMAT,
             "parent_resource_id": self._parent_resource_id,
             "geometry": self._geometry,
             'vectorstorer_resource': self._vectorstorer_resource,

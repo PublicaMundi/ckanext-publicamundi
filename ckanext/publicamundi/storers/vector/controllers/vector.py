@@ -3,44 +3,45 @@ import json
 
 import ckan.model as model
 from ckan.lib.base import BaseController, c, request, abort
-from ckan.logic import get_action, check_access, NotFound, NotAuthorized
-from ckan.common import _
+import ckan.plugins.toolkit as toolkit
 
-from ckanext.publicamundi.storers.vector.settings import osr
+from ckanext.publicamundi.storers.vector import osr
 from ckanext.publicamundi.storers.vector import resource_actions
 
-_check_access = check_access
+_ = toolkit._
+_check_access = toolkit.check_access
+_get_action = toolkit.get_action
 
 
 class VectorController(BaseController):
+    '''Store vector data under postgis, publish at geoserver
+    '''
 
-    """VectorController will be used to publish vector data
-    at postgis and geoserver"""
-
+    def _make_default_context(self):
+        return {
+            'model': model,
+            'session': model.Session,
+            'user': c.user,
+        }
+    
     def ingest(self, resource_id):
+        
+        # Check if authorized to update
 
-        self._get_context(resource_id)
-        json_data = request.POST['data']
-        layer_options = json.loads(json_data)
+        context = self._make_default_context()
+        try:
+            _check_access('resource_update', context, dict(id=resource_id))
+        except toolkit.ObjectNotFound as ex:
+            abort(404)
+        except toolkit.NotAuthorized as ex:
+            abort(403, _('Not authorized to update resource'))
+            
+        # Read layer opts, procceed to ingestion
+
+        layer_options = json.loads(request.params.get('data'))
 
         resource = model.Session.query(model.Resource).get(resource_id)
-
-        resource_actions.create_vector_storer_task(resource, layer_options)
-
-    def _get_context(self, resource_id):
-        context = {'model': model, 'session': model.Session,
-                   'user': c.user}
-
-        try:
-            _check_access('resource_update', context, {'id': resource_id})
-            resource = get_action('resource_show')(context,
-                                                   {'id': resource_id})
-            return (resource)
-
-        except NotFound:
-            abort(404, _('Resource not found'))
-        except NotAuthorized:
-            abort(401, _('Unauthorized to read resource %s') % resource_id)
+        resource_actions.create_ingest_resource(resource, layer_options)
 
     def _get_encoding(self):
         _encoding = request.params.get('encoding', u'utf-8')

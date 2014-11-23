@@ -3,6 +3,6 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
-from csw_record import CswRecord
+from .csw_record import CswRecord
 
-from resource_identify import ResourceIdentify
+from .resource_ingest import ResourceIngest

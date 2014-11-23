@@ -1,12 +1,10 @@
-{% if task_result.resource_type=="vector" %}
-
+{% if task_result.storer_type=="vector" %}
     
-    {% set reidentify_url = h.url_for('identify_vector_resource',resource_id=res.id, parent = parent) %}
+{% set reidentify_url = h.url_for('identify_vector_resource', resource_id=res.id, parent = parent) %}
  
-{% elif task_result.resource_type=="raster" %}
-    
+{% elif task_result.storer_type=="raster" %}
      
-    {% set reidentify_url = h.url_for('identify_raster_resource',resource_id=res.id) %}
+{% set reidentify_url = h.url_for('identify_raster_resource', resource_id=res.id) %}
 
 {% endif %}
 

@@ -8,7 +8,6 @@ import logging
 import geoalchemy
 import itertools
 from itertools import chain, ifilter
-
 from routes.mapper import SubMapper
 
 import ckan.model as model
@@ -19,15 +18,14 @@ import ckan.logic as logic
 import ckanext.publicamundi.model as publicamundi_model
 import ckanext.publicamundi.lib.metadata as publicamundi_metadata
 import ckanext.publicamundi.lib.actions as publicamundi_actions
-from ckanext.publicamundi.lib import identification_helper
+import ckanext.publicamundi.lib.template_helpers as ext_template_helpers
 
-from ckanext.publicamundi.lib.util import to_json, random_name
-from ckanext.publicamundi.lib.util import Breakpoint
+from ckanext.publicamundi.lib.util import to_json, random_name, Breakpoint
 from ckanext.publicamundi.lib.metadata import (
     dataset_types, Object, ErrorDict,
     serializer_for_object, serializer_for_key_tuple)
 
-_t = toolkit._
+_ = toolkit._
 
 log1 = logging.getLogger(__name__)
 
@@ -43,12 +41,6 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     p.implements(p.IPackageController, inherit=True)
 
     ## Define helper methods ## 
-
-    @classmethod
-    def publicamundi_helloworld(cls):
-        ''' This is our simple helper function. '''
-        markup = p.toolkit.render_snippet('snippets/hello.html', data={ 'name': 'PublicaMundi' })
-        return p.toolkit.literal(markup)
 
     @classmethod
     def organization_list_objects(cls, org_names = []):
@@ -95,7 +87,6 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         These helpers will be available under the 'h' thread-local global object.
         '''
         return {
-            'publicamundi_helloworld': self.publicamundi_helloworld,
             'random_name': random_name,
             'dataset_types': self.dataset_types,
             'dataset_type_options': self.dataset_type_options,
@@ -105,7 +96,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'markup_for_field': publicamundi_metadata.markup_for_field,
             'markup_for_object': publicamundi_metadata.markup_for_object,
             'markup_for': publicamundi_metadata.markup_for,
-            'identify_resource': identification_helper.identify
+            'resource_ingestion_result': ext_template_helpers.resource_ingestion_result,
         }
 
     ## IConfigurer interface ##
@@ -147,27 +138,27 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             '/api/publicamundi/vocabularies/{name}',
             controller=api_controller, action='vocabulary_get')
 
-        '''User controller mappings '''
-        with SubMapper(mapper, controller='ckanext.publicamundi.controllers.user:UserController') as m:
+        user_controller = 'ckanext.publicamundi.controllers.user:UserController'
+
+        with SubMapper(mapper, controller=user_controller) as m:
+            
+            # Fixme: unneeded parameters to mapper.connect ?
 
             m.connect('user_dashboard_resources', '/dashboard/resources',
-                      action='dashboard_resources')
+                      action='show_dashboard_resources')
             m.connect('admin_page_resources', '/user/resources',
-                      action='admin_page_resources')
+                      action='show_admin_page_resources')
             m.connect('reject_resource',
                       '/{parent}/resources/reject/{resource_id}',
-                      action='reject', parent='{parent}')
-            m.connect('identify_vector_resource',
+                      action='reject_resource', parent='{parent}')
+            m.connect('identify_vector_resource', # Fixme: adapt
                       '/{parent}/resources/identify_vector/{resource_id}',
-                      action='identify', resource_id='{resource_id}',
-                      resource_type='vector', parent='{parent}')
+                      action='identify_resource', resource_id='{resource_id}',
+                      storer_type='vector', parent='{parent}')
             m.connect('render_ingestion',
                       '/{parent}/resources/ingest/{resource_id}',
                       action='render_ingestion_template',
                       resource_id='{resource_id}', parent='{parent}')
-        
-        #mapper.connect('tags', '/tags',
-        #    controller='ckanext.publicamundi.controllers.tags:Controller', action='index')
 
         mapper.connect('publicamundi-tests', 
             '/testing/publicamundi/{action}/{id}',
@@ -529,8 +520,8 @@ class PackageController(p.SingletonPlugin):
         extras = pkg_dict.get('extras', [])
         # or we can translate keys ...
         field_key_map = {
-            u'updated_at': _t(u'Updated'),
-            u'created_at': _t(u'Created'),
+            u'updated_at': _(u'Updated'),
+            u'created_at': _(u'Created'),
         }
         for item in extras:
             k = item.get('key')
