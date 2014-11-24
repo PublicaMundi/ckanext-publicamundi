@@ -1,52 +1,45 @@
-{% extends "package/read_base.html" %}
-
+{% ckan_extends %}
 {% set pkg = c.pkg_dict %}
 {% block toolbar %}
 {{ super() }}
 {% endblock %}
-{% block primary_content_inner %}
-  {{ super() }}
-  {% block package_description %}
-    {% if pkg.private %}
-      <span class="dataset-private label label-inverse pull-right">
-        <i class="icon-lock"></i>
-        {{ _('Private') }}
-      </span>
-    {% endif %}
-    <h1>
-      {% block page_heading %}
-        {{ pkg.title or pkg.name }}
-        {% if pkg.state.startswith('draft') %}
-          [{{ _('Draft') }}]
-        {% endif %}
-      {% endblock %}
-    </h1>
-    {% block package_notes %}
-      {% if c.pkg_notes_formatted %}
-        <div class="notes embedded-content">
-          {{ c.pkg_notes_formatted }}
-        </div>
-      {% endif %}
-    {% endblock %}
-    {# FIXME why is this here? seems wrong #}
-    <span class="insert-comment-thread"></span>
-  {% endblock %}
 
-  {% block package_resources %}
-    {% snippet "package/snippets/resources_list.html", pkg=pkg, resources=pkg.resources %}
-  {% endblock %}
-  {# {% block package_tags %}
-    {% snippet "package/snippets/tags.html", tags=pkg.tags %}
-    {% endblock %} #}
+{% block package_tags %}{% endblock %}
   
     {% block dataset_type %}
   {% set api_controller = 'ckanext.publicamundi.controllers.api:Controller' %}
   {% endblock %}
 
-  {% block package_additional_info %}
-  
-  {% snippet "package/snippets/additional_info.html", pkg_dict=pkg %}
+ {% block secondary_content %}
+{# {% block secondary_help_content %}{% endblock %} #}
 
-  {% endblock %}
+{#  {% block package_info %}
+    {% snippet 'package/snippets/info.html', pkg=pkg %}
+    {% endblock %} #}
+    <div class="paintme">
+        {% if pkg.organization %}
+  {% block package_organization %}
+      {% snippet "snippets/organization.html", organization=pkg.organization , has_context_title=true  %}
+      {% endblock %}
+      {% endif %}
 
-{% endblock %}
+      {% if pkg.groups %}
+    {% block package_group %}
+    {% snippet "snippets/group.html", group=pkg.groups %}
+    {% endblock %}
+    {% endif %}
+
+    {% if pkg.tags %}
+  {% block package_side_tags %}
+    {% snippet "package/snippets/tags.html", tags=pkg.tags %}
+    {% endblock %}
+    {% endif %}
+
+  {% block package_license %}
+    {% snippet "snippets/license.html", pkg_dict=pkg %}
+    {% endblock %}
+    {# {% block package_social %}
+    {% snippet "snippets/social.html" %}
+    {% endblock %} #}
+</div>
+    {% endblock %}
