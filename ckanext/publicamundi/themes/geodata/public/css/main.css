@@ -447,6 +447,7 @@ a {
 .search-form{
     margin-bottom:0;
     padding-bottom:0;
+    margin-top:0;
 }
 .searchfw {
     background: #F6F6F6;
@@ -586,7 +587,7 @@ a {
 [role=main] .secondary {
     width: 237px;
     font-color: #666666;
-    //border: 1px #4E59A4 solid;
+    border: 1px #4E59A4 solid;
     //border: 1px #666666 solid;
 }
 .secondary .module-heading {
@@ -596,7 +597,7 @@ a {
 
 .paintme{
     //margin-top:55px;
-    border: 2px #4E59A4 solid;
+    border: 1px #4E59A4 solid;
 }
 .alt-side-style .module-heading{
     font-size:20px;
