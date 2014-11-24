@@ -1,0 +1,34 @@
+{% extends 'tests/base.html' %}
+
+{% block primary_content_inner %}
+
+{% with name = 'metadata_source', title = _('Metadata Source') %}
+<form id="form-1"
+    action=""
+    {#action="/testing/publicamundi/mock_handle_upload?name={{ name }}"#}
+    method="post" enctype="multipart/form-data"
+    data-module="ababoua" 
+  >
+    {% snippet 'snippets/upload-ajax.html',
+        name=name, 
+        title=title,
+        allowed_mime_types=['text/xml', 'application/xml'],
+        labels={ 'proceed': 'Upload Now', },
+        icons={ 'proceed': 'icon-circle-arrow-right', }
+    %}
+    <div class="controls">
+        <button type="reset" class="btn btn-small">Reset</button>
+        <button type="submit" class="btn btn-small btn-primary">Submit</button>
+    </div>
+</form>
+{% endwith %}
+
+{% endblock %}
+
+{% block scripts %}
+
+{{ super() }}
+
+{% resource 'ckanext-publicamundi/upload' %}
+
+{% endblock %}

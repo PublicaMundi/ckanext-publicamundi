@@ -50,7 +50,7 @@ freekeyword1 = FreeKeyword(
 party1 = ResponsibleParty(
     organization = u"Acme Org", 
     email = u"someone@acme.org", 
-    role = "pointofcontact")
+    role = "resourceProvider")
 
 bbox1 = GeographicBoundingBox(nblat=50.0, sblat=-20.12, wblng=15.0, eblng=20.0)
 
@@ -169,7 +169,7 @@ baz2.resolution = SpatialResolution(denominator=5000)
 inspire1 = InspireMetadata(
     contact = [party1],
     datestamp = datetime.date.today(),
-    languagecode = "el",
+    languagecode = "gre",
     title = u"Title",
     identifier = "http://acme.example.com/datasets/91b54070-5adb-11e4-8ed6-0800200c9a66",
     abstract = u"This is an abstract description",
@@ -178,7 +178,7 @@ inspire1 = InspireMetadata(
         "http://www.ipsyp.gr",
         "http://www.example.com"
     ],
-    resource_language = ["el"],
+    resource_language = ["gre"],
     topic_category = ["biota", "farming", "economy"],
     keywords = {
         'keywords-gemet-themes': ThesaurusTerms(
@@ -193,10 +193,10 @@ inspire1 = InspireMetadata(
     bounding_box = [
         GeographicBoundingBox(nblat=0.0, sblat=0.0, wblng=0.0, eblng=0.0)],
     temporal_extent = [
-        TemporalExtent(start=datetime.date(2012,1,1), end=datetime.date(2014,1,1))],
-    creation_date = datetime.date(2012,1,1),
+        TemporalExtent(start=datetime.date(2009,1,1), end=datetime.date(2010,1,1))],
+    creation_date = datetime.date(2011,1,1),
     publication_date = datetime.date(2012,1,1),
-    revision_date = datetime.date(2014,1,1),
+    revision_date = datetime.date(2013,1,1),
     lineage = u"lineaage",
     spatial_resolution = [
         SpatialResolution(distance=5, uom=u"meters")],
@@ -204,8 +204,8 @@ inspire1 = InspireMetadata(
         Conformity(
             title = u"specifications blabla", 
             date = datetime.date.today(), 
-            date_type = "creation", 
-            degree = "conformant")
+            date_type = 'creation', 
+            degree = "not-conformant")
     ],
     access_constraints = [u"lalala1", u"lalala2"],
     limitations = [u"limit1", u"limit2"],
@@ -213,7 +213,7 @@ inspire1 = InspireMetadata(
         ResponsibleParty(
             organization=u"Acme Org", email=u"a@acme.example.com", role="originator"), 
         ResponsibleParty(
-            organization=u"Coyote Org", email=u"b@coyote.example.com", role="pointofcontact")]
+            organization=u"Coyote Org", email=u"b@coyote.example.com", role="pointOfContact")]
 )
 
 inspire2 = copy.deepcopy(inspire1)
@@ -223,5 +223,22 @@ inspire3 = copy.deepcopy(inspire1)
 inspire3.spatial_resolution.append(SpatialResolution(denominator=51000))
 
 inspire4 = copy.deepcopy(inspire1)
-inspire4.spatial_resolution = None
+inspire4.spatial_resolution = [SpatialResolution(denominator=3),
+        SpatialResolution(distance=5, uom=u"meters"), SpatialResolution(denominator=50, distance=2, uom=u"meters")]
+#inspire4.spatial_resolution = None
+inspire4.conformity = [
+        Conformity(
+            title = u"specifications blabla", 
+            date = datetime.date.today(), 
+            date_type = 'creation', 
+            degree = "not-evaluated"
+            ),
+        Conformity(
+            title = u"specifications blabla2", 
+            date = datetime.date.today(), 
+            date_type = 'creation', 
+            degree = "conformant"
+            )
+
+    ]
 

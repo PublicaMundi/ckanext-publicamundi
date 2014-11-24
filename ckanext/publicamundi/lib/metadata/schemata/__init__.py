@@ -13,6 +13,11 @@ class IBaseMetadata(IObject):
         title = u'Title',
         required = True, 
         min_length = 5)
+    
+    def deduce_basic_fields():
+        '''Return a dict populated with basic (i.e. core) package fields.
+        These fields are deduced (if possible) from this object's own fields.
+        '''
 
 # Import actual interfaces into schemata
 

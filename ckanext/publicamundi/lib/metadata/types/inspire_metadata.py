@@ -76,6 +76,13 @@ class InspireMetadata(BaseMetadata):
     
     responsible_party = list
 
+    def deduce_basic_fields(self):
+        data = super(InspireMetadata, self).deduce_basic_fields()
+        data.update({
+            'notes': self.abstract,
+        })
+        return data
+
 # XML serialization
 
 @object_xml_serialize_adapter(IInspireMetadata)
@@ -105,7 +112,9 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         if o is None:
             o = self.obj
 
-        return p.toolkit.render('package/inspire_iso.xml', extra_vars={ 'data': o })
+        s = p.toolkit.render('package/inspire_iso.xml', extra_vars={ 'data': o })
+        # Convert: render() always returns unicode
+        return s.encode('utf-8') 
 
     def to_xml(self, o=None, nsmap=None):
         '''Build and return an etree Element to serialize an object (instance of
@@ -148,6 +157,10 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         for it in md.distribution.online:
             url_list.append(it.url)
 
+        topic_list = []
+        for topic in md.identification.topiccategory:
+            topic_list.append(vocabularies.munge(topic))
+        
         keywords_dict = {}
         for it in md.identification.keywords:
             thes_title = it['thesaurus']['title']
@@ -199,37 +212,51 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         if len(md.identification.distance) != len(md.identification.uom):
             raise Exception('unequal list lengths distance,uom','%s %s' % (md.identification.distance,md.identification.uom))
         else:
-            for i in range(0,len(md.identification.distance)):
-                spatial_list.append(SpatialResolution(
-                    denominator = int(md.identification.denominators[i]),
-                    distance = int(md.identification.distance[i]),
-                    uom = unicode(md.identification.uom[i])))
+                for i in range(0,len(md.identification.distance)):
+                    spatial_list.append(SpatialResolution(
+                        distance = int(md.identification.distance[i]),
+                        uom = unicode(md.identification.uom[i])))
 
+                for i in range(0, len(md.identification.denominators)):
+                    spatial_list.append(SpatialResolution(
+                        denominator = int(md.identification.denominators[i])))
         conf_list = []
+        invalid_degree = False
 
         if len(md.dataquality.conformancedate) != len(md.dataquality.conformancedatetype):
+            # Date list is unequal to datetype list, this means wrong XML so exception is thrown
             raise Exception('Found unequal list lengths conformance date, conformancedatetype','!')
-        else:
-            if md.dataquality.conformancedate:
-                for i in range(0,len(md.dataquality.conformancedate)):
+        if len(md.dataquality.conformancedegree) != len(md.dataquality.conformancedate):
+            # Degree list is unequal to date/datetype lists, so we are unable to conclude to which conformity item each degree value corresponds, so all are set to not-evaluated
+            # TODO: MD_Metadata bug
+            # Issue #63
+            invalid_degree = True
 
-                    date = to_date(md.dataquality.conformancedate[i])
+        if md.dataquality.conformancedate:
+        #and len(md.dataquality.conformancedate) == len(md.dataquality.degree):
+            for i in range(0,len(md.dataquality.conformancedate)):
 
-                    #date_type = md.dataquality.conformancedatetype[i],
-                    # TODO md.dataquality.conformancedatetype returns empty
-                    date_type = 'creation'
+                date = to_date(md.dataquality.conformancedate[i])
+
+                date_type = md.dataquality.conformancedatetype[i]
+                # TODO md.dataquality.conformancedatetype returns empty
+                if invalid_degree:
+                    degree = 'not-evaluated'
+                else:
                     try:
-                        degree = md.dataquality.conformancedegree[i]
+                        if md.dataquality.conformancedegree[i] == 'true':
+                            degree = 'conformant'
+                        elif md.dataquality.conformancedegree[i] == 'false':
+                            degree = 'not-conformant'
                     except:
                         degree = "not-evaluated"
+                title = unicode(md.dataquality.conformancetitle[i])
+                if title != 'None': 
+                    conf_list.append(Conformity(title=title, date=date, date_type=date_type, degree=degree))
 
-                    if md.dataquality.conformancetitle[i]:
-                        title = unicode(md.dataquality.conformancetitle[i])
-                        conf_list.append(Conformity(title=title, date=date, date_type=date_type, degree=degree))
-
-                    else:
-
-                        conf_list.append(Conformity(date=date, date_type=date_type, degree=degree))
+                # TODO: is title required fields? If so the following is unnecessary
+                else:
+                    conf_list.append(Conformity(date=date, date_type=date_type, degree=degree))
 
         limit_list = []
         for it in md.identification.uselimitation:
@@ -247,8 +274,8 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         obj.abstract = unicode(md.identification.abstract)
         obj.identifier = id_list[0]
         obj.locator = url_list
-        obj.resource_language = md.identification.resourcelanguage
-        obj.topic_category = md.identification.topiccategory
+        #obj.resource_language = md.identification.resourcelanguage
+        obj.topic_category = topic_list
         obj.keywords = keywords_dict
         obj.bounding_box = [GeographicBoundingBox(
             nblat = float(md.identification.extent.boundingBox.maxy),

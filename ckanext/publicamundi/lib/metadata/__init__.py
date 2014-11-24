@@ -32,6 +32,14 @@ from ckanext.publicamundi.lib.metadata.widgets import (
     markup_for_field, markup_for_object, markup_for,
     widget_for_field, widget_for_object)
 
+# Aliases for common functions
+
+formatter_for = formatter_for_object
+
+serializer_for = serializer_for_object
+
+xml_serializer_for = xml_serializer_for_object
+
 # Declare dataset types (i.e. metadata formats).
 # Note If, for a certain dataset-type, a "class" value is not given,
 # then a suitable class will be lookup-up in the adapter registry.

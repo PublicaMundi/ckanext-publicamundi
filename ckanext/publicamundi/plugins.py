@@ -1,12 +1,9 @@
-# Plugins for ckanext-publicamundi
-
-import time
+import re
 import datetime
 import json
 import weberror
 import logging
 import geoalchemy
-import itertools
 from itertools import chain, ifilter
 from routes.mapper import SubMapper
 
@@ -15,12 +12,12 @@ import ckan.plugins as p
 import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
 
-import ckanext.publicamundi.model as publicamundi_model
-import ckanext.publicamundi.lib.metadata as publicamundi_metadata
-import ckanext.publicamundi.lib.actions as publicamundi_actions
+import ckanext.publicamundi.model as ext_model
+import ckanext.publicamundi.lib.metadata as ext_metadata
+import ckanext.publicamundi.lib.actions as ext_actions
 import ckanext.publicamundi.lib.template_helpers as ext_template_helpers
 
-from ckanext.publicamundi.lib.util import to_json, random_name, Breakpoint
+from ckanext.publicamundi.lib.util import (to_json, random_name, Breakpoint)
 from ckanext.publicamundi.lib.metadata import (
     dataset_types, Object, ErrorDict,
     serializer_for_object, serializer_for_key_tuple)
@@ -43,33 +40,6 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     ## Define helper methods ## 
 
     @classmethod
-    def organization_list_objects(cls, org_names = []):
-        ''' Make a action-api call to fetch the a list of full dict objects (for each organization) '''
-        context = {
-            'model': model,
-            'session': model.Session,
-            'user': toolkit.c.user,
-        }
-
-        options = { 'all_fields': True }
-        if org_names and len(org_names):
-            t = type(org_names[0])
-            if   t is str:
-                options['organizations'] = org_names
-            elif t is dict:
-                options['organizations'] = map(lambda org: org.get('name'), org_names)
-
-        return logic.get_action('organization_list')(context, options)
-
-    @classmethod
-    def organization_dict_objects(cls, org_names = []):
-        ''' Similar to organization_list_objects but returns a dict keyed to the organization name. '''
-        results = {}
-        for org in cls.organization_list_objects(org_names):
-            results[org['name']] = org
-        return results
-
-    @classmethod
     def dataset_types(cls):
         '''Provide a dict of dataset types'''
         return dataset_types
@@ -83,58 +53,74 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     ## ITemplateHelpers interface ##
 
     def get_helpers(self):
-        ''' Return a dict of named helper functions (as defined in the ITemplateHelpers interface).
+        '''Return a dict of named helper functions (ITemplateHelpers interface).
         These helpers will be available under the 'h' thread-local global object.
         '''
         return {
             'random_name': random_name,
             'dataset_types': self.dataset_types,
             'dataset_type_options': self.dataset_type_options,
-            'organization_list_objects': self.organization_list_objects,
-            'organization_dict_objects': self.organization_dict_objects,
-            'make_object': publicamundi_metadata.make_object,
-            'markup_for_field': publicamundi_metadata.markup_for_field,
-            'markup_for_object': publicamundi_metadata.markup_for_object,
-            'markup_for': publicamundi_metadata.markup_for,
+            'organization_objects': ext_template_helpers.get_organization_objects,
+            'make_object': ext_metadata.make_object,
+            'markup_for_field': ext_metadata.markup_for_field,
+            'markup_for_object': ext_metadata.markup_for_object,
+            'markup_for': ext_metadata.markup_for,
             'resource_ingestion_result': ext_template_helpers.resource_ingestion_result,
         }
 
     ## IConfigurer interface ##
 
     def update_config(self, config):
-        ''' Setup the (fanstatic) resource library, public and template directory '''
+        '''Configure CKAN (Pylons) environment'''
+
+        # Setup the (fanstatic) resource library, public and template directory
         p.toolkit.add_public_directory(config, 'public')
         p.toolkit.add_template_directory(config, 'templates')
         p.toolkit.add_resource('public', 'ckanext-publicamundi')
+        
+        return
 
     ## IConfigurable interface ##
 
     def configure(self, config):
-        ''' Apply configuration options to this plugin '''
-        pass
+        '''Pass configuration to plugins and extensions'''
+        
+        asbool = toolkit.asbool
+
+        # Modify the pattern for valid names for {package, groups, organizations}
+        
+        if asbool(config.get('ckanext.publicamundi.validation.relax_name_pattern')):
+            logic.validators.name_match = re.compile('[a-z][a-z0-9~_\-]*$')
+            log1.info('Using pattern for valid names: %r', 
+                logic.validators.name_match.pattern)
+        
+        # Setup extension-wide cache manager
+
+        from ckanext.publicamundi import cache_manager
+        cache_manager.setup(config)
+
+        return
 
     ## IRoutes interface ##
 
     def before_map(self, mapper):
-        ''' Called before routes map is setup. '''
+        '''Setup routes before CKAN defines core routes.'''
 
         api_controller = 'ckanext.publicamundi.controllers.api:Controller'
         
         mapper.connect(
             '/api/publicamundi/util/resource/mimetype_autocomplete',
-            controller=api_controller, 
-            action='resource_mimetype_autocomplete')
+            controller=api_controller, action='resource_mimetype_autocomplete')
         
         mapper.connect(
             '/api/publicamundi/util/resource/format_autocomplete',
-            controller=api_controller, 
-            action='resource_format_autocomplete')
-       
-        mapper.connect('publicamundi-list-vocabularies',
+            controller=api_controller, action='resource_format_autocomplete')
+
+        mapper.connect(
             '/api/publicamundi/vocabularies',
             controller=api_controller, action='vocabularies_list')
          
-        mapper.connect('publicamundi-get-vocabulary',
+        mapper.connect(
             '/api/publicamundi/vocabularies/{name}',
             controller=api_controller, action='vocabulary_get')
 
@@ -160,13 +146,39 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
                       action='render_ingestion_template',
                       resource_id='{resource_id}', parent='{parent}')
 
+        mapper.connect(
+            '/api/publicamundi/dataset/export/{name_or_id}', 
+            controller=api_controller, action='dataset_export')
+        
+        mapper.connect(
+            '/api/publicamundi/dataset/import', 
+            controller=api_controller, action='dataset_import',
+            conditions=dict(method=['POST']))
+      
+        files_controller = 'ckanext.publicamundi.controllers.files:Controller'
+        
+        mapper.connect(
+            '/publicamundi/files/{object_type}/{name_or_id}/download/{filename:.*?}',
+            controller=files_controller, action='download_file')
+        
+        mapper.connect(
+            '/publicamundi/files/{object_type}', 
+            controller=files_controller, action='upload_file',
+            conditions=dict(method=['POST']))
+        
+        package_controller = 'ckanext.publicamundi.controllers.package:Controller'
+
+        mapper.connect(
+            '/dataset/import_metadata',
+            controller=package_controller, action='import_metadata')
+       
+        tests_controller = 'ckanext.publicamundi.controllers.tests:Controller'
+
         mapper.connect('publicamundi-tests', 
-            '/testing/publicamundi/{action}/{id}',
-            controller='ckanext.publicamundi.controllers.tests:TestsController',)
+            '/testing/publicamundi/{action}/{id}', controller=tests_controller)
         
         mapper.connect('publicamundi-tests', 
-            '/testing/publicamundi/{action}',
-            controller='ckanext.publicamundi.controllers.tests:TestsController',)
+            '/testing/publicamundi/{action}', controller=tests_controller)
 
         return mapper
 
@@ -174,7 +186,9 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
     def get_actions(self):
         return {
-            'mimetype_autocomplete': publicamundi_actions.mimetype_autocomplete,
+            'mimetype_autocomplete': ext_actions.autocomplete.mimetype_autocomplete,
+            'dataset_export': ext_actions.package.dataset_export,
+            'dataset_import': ext_actions.package.dataset_import,
         }
 
     ## IDatasetForm interface ##
@@ -205,7 +219,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         default_initializer = toolkit.get_validator('default')
 
         # Add dataset-type, the field that distinguishes metadata formats
-        
+
         schema['dataset_type'] = [
             default_initializer('ckan'),
             convert_to_extras,
@@ -360,10 +374,14 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         # Determine dataset_type-related parameters for this package
         
-        dt = pkg_dict['dataset_type']
+        dt = pkg_dict.get('dataset_type')
+        if not dt:
+            # Noop: cannot recognize dataset-type (pkg_dict has raw extras?)
+            return
+
         dt_spec = dataset_types[dt]
         key_prefix = dt_spec.get('key_prefix', dt)
-        
+
         # Fix types, create flat object dict
         
         # Note If we attempt to pop() flat keys here (e.g. to replace them by a 
@@ -387,12 +405,14 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         pkg_dict[key_prefix] = obj
         
         # Note We use this bit of hack when package is shown directly from the
-        # HTTP API (normally at /api/action/package_show).
+        # action api, normally at /api/action/(package|dataset)_show.
             
         r = toolkit.c.environ['pylons.routes_dict']
-        if r['controller'] == 'api' and r.get('action') == 'action' and \
-            r.get('logic_function') in ('package_show', 'package_create', 'package_update'):
-            # Remove flat field values (will not be needed anymore)
+        if (r['controller'] == 'api' and r.get('action') == 'action' and 
+                r.get('logic_function') in (
+                    'package_show', 'package_create', 'package_update',
+                    'dataset_show', 'dataset_create', 'dataset_update')):
+            # Remove flat field values (won't be needed anymore)
             for k in keys:
                 pkg_dict.pop(k)
             # Dictize obj so that json.dumps can handle it
@@ -534,10 +554,10 @@ class PackageController(p.SingletonPlugin):
         from geoalchemy import WKTSpatialElement
         from ckanext.publicamundi.lib.util import geojson_to_wkt
         # Populate record fields
-        record = session.query(publicamundi_model.CswRecord).get(pkg_dict['id'])
+        record = session.query(ext_model.CswRecord).get(pkg_dict['id'])
         if not record:
             log1.info('Creating CswRecord %s', pkg_dict.get('id'))
-            record = publicamundi_model.CswRecord(pkg_dict.get('id'), name=pkg_dict.get('name'))
+            record = ext_model.CswRecord(pkg_dict.get('id'), name=pkg_dict.get('name'))
             session.add(record)
         else:
             log1.info('Updating CswRecord %s', pkg_dict.get('id'))
@@ -551,7 +571,7 @@ class PackageController(p.SingletonPlugin):
         return
 
     def _delete_csw_record(self, session, pkg_dict):
-        record = session.query(publicamundi_model.CswRecord).get(pkg_dict['id'])
+        record = session.query(ext_model.CswRecord).get(pkg_dict['id'])
         if record:
             session.delete(record)
             session.commit()

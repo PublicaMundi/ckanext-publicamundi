@@ -1,0 +1,15 @@
+{% extends 'snippets/upload.html' %}
+
+{% block controls_link_file %}
+{{ super() }}
+<button class="btn {{ classes.buttons|join(' ') }} btn-primary proceed" title="">
+    <i class="{{ icons.proceed|default('icon-arrow-right') }}"></i> {{ labels.proceed|default(_('Proceed')) -}}
+</button>
+{% endblock %}
+
+{% block controls_upload_file %}
+{{ super() }}
+<button class="btn {{ classes.buttons|join(' ') }} btn-primary proceed" title="">
+    <i class="{{ icons.proceed|default('icon-arrow-right') }}"></i> {{ labels.proceed|default(_('Proceed')) -}}
+</button>
+{% endblock %}

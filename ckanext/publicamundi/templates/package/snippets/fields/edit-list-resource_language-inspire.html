@@ -1,6 +1,6 @@
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
-{%- set resource_languages = ['en'] %}
+{%- set resource_languages = ['eng'] %}
 
 {%- for r in pkg_dict.resources -%}
 {%- if r.language is defined and r.language not in resource_languages %}
