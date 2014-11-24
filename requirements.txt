@@ -15,4 +15,3 @@ pytz
 isodate
 dictdiffer
 pytidylib
--e git+https://drmalex07@github.com/PublicaMundi/ckanext-spatial#egg=ckanext-spatial

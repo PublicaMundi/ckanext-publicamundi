@@ -23,22 +23,26 @@ from ckanext.publicamundi.lib.metadata.xml_serializers import xml_serializer_for
 class TestController(BaseTestController):
 
     @nose.tools.istest
-    def test_to_xml(self):
+    def test_to_then_from_xml(self):
         yield self._to_xml, 'inspire1', '/tmp/inspire1.xml'
         yield self._from_xml, '/tmp/inspire1.xml'
+
+        yield self._to_xml, 'inspire4', '/tmp/inspire4.xml'
+        yield self._from_xml, '/tmp/inspire4.xml'
+        yield self._validate_with_xsd, 'inspire4', '/tmp/inspire4.xml', True
 
     @nose.tools.istest
     def test_from_xml(self):
         # 3.xml contains wrong thesaurus name, fails as invariant
-        yield self._from_xml, 'tests/samples/3.xml', set(['keywords'])
+        yield self._from_xml, 'tests/samples/3.xml', set(['keywords', 'responsible_party', 'contact'])
         # 3b.xml fails on temporal extent
-        yield self._from_xml, 'tests/samples/3b.xml', set(['temporal_extent'])
+        yield self._from_xml, 'tests/samples/3b.xml', set(['languagecode', 'responsible_party', 'contact'])
         # aktogrammh.xml fails on several fields during validation
         yield self._from_xml, 'tests/samples/aktogrammh.xml', set([
-            'languagecode', 'locator', 'contact', 'responsible_party', 'identifier', 'resource_language','temporal_extent'])
+            'responsible_party', 'locator', 'identifier',  'temporal_extent'])
         # dhmosia_kthria.xml fails on several fields during validation
         yield self._from_xml, 'tests/samples/dhmosia_kthria.xml', set([
-            'languagecode', 'locator', 'contact', 'responsible_party', 'identifier', 'resource_language','temporal_extent'])
+            'locator', 'identifier', 'temporal_extent'])
         # full.xml fails during etree parse, why?
         #yield self._from_xml, 'tests/samples/full.xml', set([])
 
@@ -70,7 +74,7 @@ class TestController(BaseTestController):
 
     def _validate_with_xsd(self, fixture_name, xml_file, expected_valid):
         obj = getattr(fixtures, fixture_name)
-        
+
         ser = xml_serializer_for_object(obj)
         xsd = ser.to_xsd(wrap_into_schema=True)
 

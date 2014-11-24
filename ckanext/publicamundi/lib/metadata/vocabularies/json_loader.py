@@ -39,9 +39,8 @@ def make_vocabulary(data):
             terms.append(SimpleTerm(k, k, t))
     elif isinstance(data, dict):     
         for k, t in data.items():
-            k = munge(k)
+            #k = munge(k)
             terms.append(SimpleTerm(k, k, t))
-
     return SimpleVocabulary(terms, swallow_duplicates=True)
 
 def make_vocabularies(data_file):

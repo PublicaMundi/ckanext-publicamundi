@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '1.1dev'
+version = '1.2dev'
 
 setup(
 	name='ckanext-publicamundi',
@@ -22,7 +22,7 @@ setup(
 	zip_safe=False,
     install_requires=[
 		# -*- Extra requirements: -*-
-        # Note: Moved under pip-requirements.txt
+        # Note: Moved under requirements.txt
 	],
 	entry_points=\
 	"""
@@ -36,6 +36,10 @@ setup(
 
         publicamundi_errorware = ckanext.publicamundi.plugins:ErrorHandler
         
+        publicamundi_geodata_theme = ckanext.publicamundi.themes.geodata.plugin:GeodataThemePlugin
+
+        publicamundi_vector = ckanext.publicamundi.storers.vector.plugin:VectorStorer
+
         [paste.paster_command]
         
         publicamundi-setup = ckanext.publicamundi.commands:Setup
@@ -49,6 +53,10 @@ setup(
         publicamundi_extract_json = ckanext.publicamundi.lib.metadata.vocabularies.babel_extractors:extract_json
         
         [fanstatic.libraries]
+        
+        [ckan.celery_task]
+        
+        vector_tasks = ckanext.publicamundi.storers.vector.celery_import:task_imports
 
         """,
     # The following only stands as an example. The actual message_extractors should be defined into 

@@ -1,0 +1,85 @@
+<footer class="site-footer">
+  <div class="container">
+    {% block footer_content %}
+    {% block footer_links %}
+            {% endblock %}
+
+    <div class="quarter">
+        <ul class="unstyled"> 
+            <li>
+                <form class="section site-search simple-input" action="{% url_for controller='package', action='search' %}" method="get">
+                    <div class="field">
+                    <label for="field-sitewide-search">{{ _('Search Datasets') }}</label>
+                    <input id="field-sitewide-search" type="text" name="q" placeholder="{{ _('Search datasets...') }}" />
+                    <button class="btn-search" type="submit"><i class="icon-search"></i></button>
+                    </div>
+                </form>
+            </li>
+            <li>
+                <a class="logo" href="{{ h.url('home') }}"><img src="{{ h.url_for_static('/images/geodata-logo.png') }}" alt="{{ g.site_title }} Logo" title="{{ g.site_title }} Logo" /></a>
+            </li>
+        </ul>
+
+    </div>
+
+        {# <nav class="footer-links"> #}
+        {% block footer_nav %}
+       
+        <div class="quarter-middle footer-links">
+            <ul class="unstyled">
+            {% block footer_links_ckan %}
+              {% set api_url = 'http://docs.ckan.org/en/{0}/api.html'.format(g.ckan_doc_version) %}
+              {#<li><a href="{{ api_url }}">{{ _('CKAN API') }}</a></li>
+              <li><a href="http://www.okfn.org/">{{ _('Open Knowledge Foundation') }}</a></li>
+              <li><a href="http://www.opendefinition.org/okd/"><img src="http://assets.okfn.org/images/ok_buttons/od_80x15_blue.png"></a></li> #}
+            {{ h.build_nav_main(
+                ('search', _('Datasets')),
+                ('group_index', _('Topics')),
+                ('organizations_index', _('Organizations')),
+                ('maps', _('Maps')),
+                ('about', _('About'))
+                ) }}
+            {% endblock %}
+            </ul>
+        </div>
+        
+        {% endblock %}
+        {# </nav> #}
+
+        <div class="quarter-middle footer-links">
+            <ul class="unstyled">
+                <li><a href="http://www.ipsyp.gr/"> {{ _('IMIS') }} </a></li>
+                <li><a href="https://www.athena-innovation.gr/"> {{ _('Athena RC') }} </a></li>
+                <li><a href="http://ckan.org"> {{ _('CKAN') }} </a></li>
+            </ul>
+        </div>
+
+        <div class="quarter footer-links">
+            <ul class="unstyled">
+            <li>
+                {% block footer_lang %}
+                    {% snippet "snippets/language_selector.html" %}
+                {% endblock %}
+            </li>
+            <li><a href="http://www.publicamundi.eu">PublicaMundi</a></li>
+            <li><a href="https://github.com/PublicaMundi">Github</a></li>
+            <li><a href="https://twitter.com/PublicaMundi">Twitter</a></li>
+            </ul>
+        </div>   
+      
+
+          {% block footer_attribution %}
+        {#<p>{% trans %}{{ _('Powered by')}} <a class="hide-text ckan-footer-logo" href="http://ckan.org">CKAN</a>{% endtrans %}</p> #}
+        {% endblock %}
+              
+  </div>
+    
+       {% endblock %}
+  </div>
+
+  {% block footer_debug %}
+    {% if g.debug %}
+      {% include 'snippets/debug.html' %}
+    {% endif %}
+  {% endblock %}
+</footer>

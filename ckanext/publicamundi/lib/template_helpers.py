@@ -4,6 +4,8 @@ from beaker.cache import (cache_regions, cache_region)
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 
+from ckanext.publicamundi.lib import resource_ingestion
+
 def get_organization_objects(org_names=[]):
     '''Fetch organizations as a dict (keyed to name) of fully-loaded objects
     '''
@@ -24,4 +26,8 @@ def get_organization_objects(org_names=[]):
 
     orgs = toolkit.get_action('organization_list')(context, options)
     return { org['name']: org for org in orgs }
+
+
+def resource_ingestion_result(resource_id):
+    return resource_ingestion.get_result(resource_id)
 

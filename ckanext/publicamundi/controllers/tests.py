@@ -6,7 +6,6 @@ import os
 import random
 from collections import namedtuple
 from cgi import FieldStorage
-import shutil
 import requests
 from unidecode import unidecode
 
@@ -17,6 +16,7 @@ from ckan.lib.base import (BaseController, render, abort, redirect)
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
+import ckan.lib.helpers as h
 
 from ckanext.publicamundi.lib.dictization import unflatten
 from ckanext.publicamundi.lib.util import to_json, Breakpoint
@@ -39,15 +39,16 @@ class Controller(BaseController):
     def brk(self):
         raise Breakpoint()
     
-    def test_1(self):
+    def test_cache(self):
         from ckanext.publicamundi.cache_manager import get_cache
 
-        cache1 = get_cache('foobara')
+        cache1 = get_cache('test')
 
         def compute():
             log1.info(' ** i compute something **')
             return 42
         
+        val = cache1.get('foo', createfunc=compute)
         assert False
 
     def test_dataapp(self):
@@ -62,8 +63,9 @@ class Controller(BaseController):
         '''
         
         field_name = request.params.get('name')
-        upload = request.params.get(field_name + '-upload')
+        upload = request.params.get(field_name + '-upload') if field_name else 'upload'
         if not isinstance(upload, FieldStorage):
+            assert 0
             abort(400, 'Expected a file upload')
         
         name = datetime.datetime.now().strftime('%s') + '-' + upload.filename
@@ -372,5 +374,8 @@ class Controller(BaseController):
         return render('tests/accordion-form.html')
     
     def test_upload_form(self):
+        if request.method == 'POST':
+            h.flash('Thanks for uploading data', 'alert-info')
+            redirect(toolkit.url_for('/dataset'))
         return render('tests/upload-form.html')
    
