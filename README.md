@@ -6,6 +6,7 @@ This is a CKAN extension that hosts various plugins needed for PublicaMundi proj
 Install
 -------
 
+    pip install -r requirements.txt
     python setup.py develop
     paster publicamundi-setup --config /path/to/development.ini
 

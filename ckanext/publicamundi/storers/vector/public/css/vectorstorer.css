@@ -1,0 +1,28 @@
+#proj {
+    position: relative;
+    z-index: 10000;
+}
+.ui-autocomplete {
+     z-index: 9999 !important;
+}
+.projection-error{
+     color:red;
+}
+.div_tabular{
+    display:none;
+}
+.div_tabular_point{
+    display:none;
+}
+.div_tabular_wkt{
+    display:none;
+}
+.vs_radio{
+    top: -2px !important;
+}
+.gml-version-select{
+    display:none;
+}
+.csv_formats{ 
+    margin-left: 15px;
+}

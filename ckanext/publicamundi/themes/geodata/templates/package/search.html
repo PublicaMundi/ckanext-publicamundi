@@ -7,26 +7,43 @@
           (_('Popular'), 'views_recent desc') if g.tracking_enabled else (false, false) ]
           %}
 
-{% block breadcrumb %}
 
-{% if h.check_access('group_create') %}
-    {% link_for _('Add Dataset'), controller='package', action='new', class_='btn btn-primary', icon='plus-sign-alt' %}
-    {% endif %} 
-
-
-    <ol class="breadcrumb">
-    {% block breadcrumb_content %}
+{% block breadcrumb_content %}
     <li class="active">{% link_for _('Datasets'), controller='package', action='search' %}</li>
-  {% endblock %}
-  </ol>
-
 {% endblock %}
+
 
 {% block secondary_content %}
 <div class="paintme">
   {{ super() }}
 </div>
 {% endblock %}
+{% block altbar %}
+<div class="altbar">
+        <div class="container">
+            {% block altbar_content %}
+            
+            <nav class="section alt-navigation">
+          <ul class="alt-nav nav nav-pills">
+              <li>
+              <a href="#">{{_('Mapping API')}}</a>
+              </li>
+              <li>
+              <a href="#">{{_('Data API')}}</a>
+              </li>
+              <li>
+              <a href="#">{{_('INSPIRE')}}</a>
+              </li>
+              {% block header_site_navigation_tabs %}
+            
+            {% endblock %}
+          </ul>
+          </nav>
+     
+            {% endblock %}
+        </div>
+    </div>
+    {% endblock %}
 
 {% block searchbar %}
 
@@ -38,8 +55,6 @@
     {{ super() }}
     {% endblock %}
 
-{% block page_primary_action %}
-      {% endblock %}
 
     {% block form %}
         {% set facets = {

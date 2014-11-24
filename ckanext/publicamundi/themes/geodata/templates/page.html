@@ -10,7 +10,7 @@
   {%- block header %}
     {% include "header.html" %}
   {% endblock -%}
-  
+
  {%- block main %}
 
 
@@ -20,20 +20,29 @@
          {% block toolbar %}
             <div class="toolbar">
               <div class="container">
-              {% block breadcrumb %}
-              {% if self.breadcrumb_content() | trim %}
+                  {% block breadcrumb %}
+                      {% if self.breadcrumb_content() | trim %}
                   <ol class="breadcrumb">
                     {% snippet 'snippets/home_breadcrumb_item.html' %}
                     {% block breadcrumb_content %}{% endblock %}
                 </ol>
                 {% endif %}
+
+                {% if self.page_primary_action() | trim %}
+                        <div class="page_primary_action">
+                          {% block page_primary_action %}{% endblock %}
+                        </div>
+                      {% endif %}
+
+
               {% endblock %}
             </div>
             </div>
           {% endblock %}
         {% endblock %}
-
-   {% block searchbar %}{% endblock %}
+    {% block altbar %} 
+    {% endblock %}
+    {% block searchbar %}{% endblock %}
         <div id="content" class="container">
           <div class="gap">
             {% block main_content %}
@@ -85,11 +94,6 @@
                       </header>
                     {% endblock %}
                     <div class="module-content">
-                      {% if self.page_primary_action() | trim %}
-                        <div class="page_primary_action">
-                          {% block page_primary_action %}{% endblock %}
-                        </div>
-                      {% endif %}
                       {% block primary_content_inner %}
                       {% endblock %}
                     </div>

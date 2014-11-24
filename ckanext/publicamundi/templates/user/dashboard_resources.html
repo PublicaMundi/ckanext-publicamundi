@@ -1,0 +1,10 @@
+{% extends "user/dashboard.html" %}
+
+{% block primary_content_inner %}
+
+  <h2 class="hide-heading">{{ _('My Datasets') }}</h2>
+  {% if c.user_dict.datasets %}
+    {% snippet 'user/snippets/package_list.html', packages=c.user_dict.datasets, parent='dashboard' %}
+  {% endif %}
+  
+{% endblock %}

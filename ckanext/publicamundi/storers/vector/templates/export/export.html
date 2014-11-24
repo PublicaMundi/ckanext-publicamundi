@@ -1,0 +1,113 @@
+{%extends 'export/base.html'%}
+{% set res = c.resource %}
+
+{% set base_url=h.url_for('vector_export', action='export',operation='export_file', id=c.pkg.name, resource_id=c.resource.id) %}
+
+{% set gdal_drivers = c.gdal_drv_list %}
+
+    {% set gdal_export_formats =[
+		{'display_name': 'ESRI Shapefile', 'get_param': 'shp'}, 
+		{'display_name': 'KML', 'get_param': 'kml'},
+		{'display_name': 'GML', 'get_param': 'gml'},
+		{'display_name': 'GeoJSON', 'get_param': 'geojson'},
+		{'display_name': 'CSV', 'get_param': 'csv'},
+		{'display_name': 'AutoCAD DXF', 'get_param': 'dxf'},		
+		{'display_name': 'Geospatial PDF', 'get_param': 'pdf'},
+		{'display_name': 'SpatiaLite', 'get_param': 'sqlite'},
+		{'display_name': 'MS Excel format', 'get_param': 'xlsx'},
+		{'display_name': 'GeoPackage', 'get_param': 'gpkg'}
+		] %}
+    {% set gml_formats=[
+		{'display_name': 'GML2', 'get_param': 'GML'},
+		{'display_name': 'GML3', 'get_param': 'GML3'},
+		{'display_name': 'GML3Deegree', 'get_param': 'GML3Deegree'},
+		{'display_name': 'GML3.2', 'get_param': 'GML3.2'}
+		] %}
+    {% if res['geometry']=='POINT' %}
+	{% do gdal_export_formats.append({'display_name': 'GPX', 'get_param': 'gpx'})%}	
+    {% endif %}
+    
+    {% block export_content %}
+    
+    <div id="s" class="module-content" data-module='export-module' data-module-base_url='{{base_url}}' >
+			    
+	<h3>
+	    {{ _('Export') }}
+	</h3>
+	
+	<div class="form-select ">
+	    <label>{{ _('Select format')}}</label> 
+	    
+	    <select id="field-export_format" type="text">
+		{% for format in gdal_export_formats %}
+		    {% if (format['get_param'].upper() in gdal_drivers) or (format['display_name'].upper() in gdal_drivers)%}
+	
+    
+		    <option value="{{ format['get_param'] }}">
+		    
+			{{format['display_name'] }}
+		    
+		    </option>
+		    {% endif %}
+		{% endfor %}
+
+	    </select>
+
+	</div>
+	
+	<div id= "gml_format_select" class="gml-version-select ">
+	    <label>{{ _('Select GML version')}}</label> 
+	    
+	    <select id="field-gml-export_format" type="text">
+		{% for format in gml_formats %}
+
+		    <option value="{{ format['get_param'] }}">
+		    
+			{{format['display_name'] }}
+		    
+		    </option>
+					    
+		{% endfor %}
+
+	    </select>
+
+	</div>
+	
+	<div id="div_tabular" class="div_tabular">
+	      <label>{{ _('CVS Export Options')}}</label>
+	      <input type="checkbox" id="check_geom_export" class="vs_radio" checked> {{ _('Export Geometry')}}<br>
+	      <div id="csv_formats" class="csv_formats">
+	      <input type="radio" id="radio_wkt" class="vs_radio" name="csv_export_geom" value="WKT" checked> {{ _('WKT')}}<br>
+	      {% if res['geometry']=='POINT' %}
+		  <input type="radio" id="radio_latlon" class="vs_radio" name="csv_export_geom" value="XY"> {{ _('Latitude, Longitude')}}<br>
+		  <input type="radio" id="radio_latlon" class="vs_radio" name="csv_export_geom" value="YX"> {{ _('Longitude, Latitude')}}<br>
+	      {% endif %}
+	      </div>
+	      
+	</div>
+
+	<div id="divproj" class="form-select ">
+		
+		<label>{{ _('Select projection')}}</label> <input  id="projection" type="text">
+	      
+	</div>
+
+	
+	<div id="proj-error" class="projection-error"></div>
+	
+	<br>
+	
+	<button class="btn" id="export_button"> {{ _('Download') }}</button>
+    
+    </div>
+
+    
+   {% resource 'ckanext-publicamundi-vector/export' %} 
+   {% resource 'ckanext-publicamundi-vector/styles' %}
+{% endblock%}
+
+  
+ 
+  
+ 
+ 

@@ -1,0 +1,20 @@
+
+<div{% if not embedded %} class="modal"{% endif %}>
+
+  <div class="modal-header">
+    <h3>
+      {{ _('Export Resource') }}
+    </h3>
+  </div>
+  <div{% if not embedded %} class="modal-body"{% endif %}>
+   <body>
+    
+    {% block export_content %}{% endblock %}
+  </body>
+
+  </div>
+</div>
+ 
+
+       
+

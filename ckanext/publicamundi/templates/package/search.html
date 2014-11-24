@@ -4,7 +4,6 @@
 
 {% if h.check_access('package_create') %}
 {% with edit_url = h.url_for('/dataset/new'), import_url = h.url_for('/dataset/import_metadata') %}
-<div class="page_primary_action">
     <div class="btn-group">
         <a class="btn btn-primary" href="{{ edit_url }}"
             >{#<i class="icon-asterisk"></i>#} {{ _('Add Dataset') }}</a>
@@ -22,7 +21,6 @@
             </li>
         </ul>
     </div>
-</div>
 {% endwith %}
 {% endif %} {# if check_access #}
 
