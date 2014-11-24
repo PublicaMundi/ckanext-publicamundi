@@ -1,0 +1,10 @@
+{% set style_controller = 'ckanext.vectorstorer.controllers.style:StyleController' %}
+{% block sld_editor %}
+
+    <form data-module="sld_editor" action="{{ h.url_for(action, action=action,id=id,resource_id=resource_id,operation='submit') }}" method="post" id="sld_form">
+	<textarea  name="sld_body" id="sld_body">{{sld_body}}</textarea>
+	<p>
+	<input type="submit" value="Change Style">
+    </form>
+    
+{% endblock %}
