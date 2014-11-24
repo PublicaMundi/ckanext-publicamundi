@@ -1,0 +1,19 @@
+{% set current_url = request.environ.CKAN_CURRENT_URL %}
+{% set current_lang = request.environ.CKAN_LANG %}
+
+{% for locale in h.get_available_locales() %}
+{% if locale == current_lang %}
+<a href="{{ h.url_for(current_url, locale=locale) }}"><span >
+            {{ locale.display_name or locale.english_name }}</span></a>
+{% endif %}
+{% endfor %}
+
+    <ul>
+    {% for locale in h.get_available_locales() %}
+    {% if locale != current_lang %}
+    <li value="{% url_for current_url, locale=locale %}"><a href="{{ h.url_for(current_url, locale=locale) }}"><span>
+        {{ locale.display_name or locale.english_name }}</span></a></li>
+    {% endif %}
+    {% endfor %}
+    </ul>
+

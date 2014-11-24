@@ -1,67 +1,95 @@
 {% ckan_extends %}
+{% block subtitle %}{% endblock %}
 {% block page %}
 
 <div class="account-masthead" style="background-color:#F3F4F4; ">
     <div class="container">
-    
 
-{% block header_account_container_content %}
-      {% if c.userobj %}
-          <div class="account avatar authed" data-module="me" data-me="{{ c.userobj.id }}">
-              <ul class="user-menu">
+
+
+
+    <div class="account avatar">
+
+    <ul class="user-menu">
+                
+        {% block header_account_container_content %}
+        {# {% snippet "snippets/user_selector_simple.html", c=c %} #}
+        {% if c.userobj %}
+          <li class="authed down-arrow" data-module="me" data-me="{{ c.userobj.id }}">
               {% block header_account_logged %}
-              <li>
+              {# <ul class="unstyled"> #}
+                  {# <li> #}
                 <a href="{{ h.url_for(controller='user', action='read', id=c.userobj.name) }}" class="viewprofile" title="{{ _('View profile') }}">
-                  <span class="username">{{ c.userobj.display_name }}</span>
-                </a>
+                    <span>{{c.userobj.display_name }}</span>
+                    </a>
                 <ul>
-            {% if c.userobj.sysadmin %}
-                <li>
-                  <a href="{{ h.url_for(controller='admin', action='index') }}" title="{{ _('Sysadmin settings') }}">
-                  </a>
-                </li>
-              {% endif %}
-        
-            {% set new_activities = h.new_activities() %}
-            {% set notifications_tooltip = ngettext('Dashboard (%(num)d new item)', 'Dashboard (%(num)d new items)', new_activities) %}
-              <li class="notifications {% if new_activities > 0 %}notifications-important{% endif %}">
-                <a href="{{ h.url_for(controller='user', action='dashboard') }}" title="{{ notifications_tooltip }}">
-                    {#  <span>{{ new_activities }}{{ _(' Activities')}}</span> #}
-                    <span>{{ _('Dashboard') }}</span>
-                </a>
-              </li>
-              {% block header_account_settings_link %}
-                <li>
-                  <a href="{{ h.url_for(controller='user', action='edit', id=c.userobj.name) }}" title="{{ _('Edit settings') }}">
-                      <span>{{ _('Settings')}}</span>
-                  </a>
-                </li>
-              {% endblock %}
-              {% block header_account_log_out_link %}
-                <li>
-                  <a href="{{ h.url_for('/user/_logout') }}" title="{{ _('Log out') }}">
-                      <span>{{ _('Logout')}}</span>
-                  </a>
-                </li>
-                {% endblock %}
+                    {% if c.userobj.sysadmin %}
+                    <li>
+                        <a href="{{ h.url_for(controller='admin', action='index') }}" title="{{ _('Sysadmin settings') }}">
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% set new_activities = h.new_activities() %}
+                    <li class="notifications {% if new_activities > 0 %}notifications-important{% endif %}">
+                        {% set notifications_tooltip = ngettext('Dashboard (%(num)d new item)', 'Dashboard (%(num)d new items)', new_activities) %}
+                        <a href="{{ h.url_for(controller='user', action='dashboard_datasets') }}" title="{{ notifications_tooltip }}">
+                        <span>{{ _('Dashboard') }}</span>
+                        </a>
+                    </li>
+                    
+                    {% block header_account_settings_link %}
+                    <li>
+                        <a href="{{ h.url_for(controller='user', action='edit', id=c.userobj.name) }}" title="{{ _('Edit settings') }}">
+                        <span>{{ _('Settings')}}</span>
+                        </a>
+                    </li>
+                    {% endblock %}
+                    
+                    {% block header_account_log_out_link %}
+                    <li>
+                        <a href="{{ h.url_for('/user/_logout') }}" title="{{ _('Log out') }}">
+                        <span>{{ _('Logout')}}</span>
+                        </a>
+                    </li>
+                    {% endblock %}
+                    {#  </ul>
+                </li> #}
             </ul>
-            </li>
             {% endblock %}
-            </ul>
-          </div>
-        {% else %}
-          <nav class="account not-authed">
-            <ul class="unstyled">
-              {% block header_account_notlogged %}
-              <li>{% link_for _('Log in'), controller='user', action='login' %}</li>
-              {% if h.check_access('user_create') %}
+            </li>
+              {#  </ul> #}
+          {% else %}
+          {# <li class="not-authed">
+          <ul class="unstyled"> #}
+                {% block header_account_notlogged %}
+                <li>{% link_for _('Log in'), controller='user', action='login' %}</li>
+                {% if h.check_access('user_create') %}
                 <li>{% link_for _('Register'), controller='user', action='register', class_='sub' %}</li>
-              {% endif %}
-              {% endblock %}
-            </ul>
-          </nav>
+                {% endif %}
+                {% endblock %}
+                {#  </ul>
+            </li> #}
         {% endif %}
-      {% endblock %}
+        {% endblock %}
+        
+        {% block header_lang %}
+        <li class="down-arrow language">
+            {% snippet "snippets/language_selector_simple.html" %}
+            </li>
+        {% endblock %}
+    
+    </ul>
+        
+
+    </div>
+
+    
+  </div>
+    </div>
+
+        
+
 
 </div>
 </div>
@@ -104,7 +132,7 @@
           </header>
        
             {% block menucontainer %}
-          <div id="menu-block-home" >
+          <div id="menu-block-home" class="container" >
         {% block groups_list %}
              {% snippet "snippets/menu_list.html", items=h.list_menu_items() %} 
         {% endblock %}
@@ -128,7 +156,17 @@
         {{ self.flash() }}
     </div>
     {% block primary_content %}
-    
+     {%- block main %}
+
+    {% block feedback %}
+
+                <div class="feedback-form">
+                    <a href="{{ h.feedback_form() }}"><button class="btn">{{_('Leave your feedback')}}</button></a>
+                                    </div>
+            {% endblock %}
+            {% endblock %}
+
+
     {% snippet "home/layout{0}.html".format(homepage_style) %}
     {% endblock %}
 </div>
