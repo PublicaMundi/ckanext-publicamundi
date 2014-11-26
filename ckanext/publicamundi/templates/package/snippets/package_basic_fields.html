@@ -119,7 +119,7 @@
 {% if h.check_access('sysadmin') or is_new or is_draft %}
 {% snippet 'package/snippets/edit-organization.html', 
     name = 'owner_org', 
-    value = data.owner_org,
+    value = data.owner_org or data.group_id,
     required = false,
     orgs_available = h.organizations_available('create_dataset')
 %}

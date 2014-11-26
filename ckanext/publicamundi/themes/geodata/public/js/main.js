@@ -46,7 +46,7 @@ function myFunction() {
 
         //Breadcrumbs auto hide all but last element
     
-           brd_items = $('.breadcrumb li:first').nextAll();
+           brd_items = $('.breadcrumb li:first').next().nextAll();
            brd_items = brd_items.not(':last');
 
             brd_items.each(function(idx) {

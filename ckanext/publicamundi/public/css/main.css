@@ -225,7 +225,7 @@ span.space-x3 { padding: 0px 12px }
 }
 
 .dropdown-menu {
-    border-radius: 4px;
+    border-radius: 1px;
 }
 
 .js .image-upload .btn-remove-url {
@@ -264,48 +264,50 @@ span.space-x3 { padding: 0px 12px }
 }
 
 /*
+ * Package states
+ */
+
+.label.state-active { }
+.label.state-draft { }
+.label.state-deleted { }
+.label.state-invalid { }
+
+/*
  * Resource Dashboard
  */
- 
-.label[resource-status="Not Found"], 
-.label[resource-status*="Not Found"] {
-    background-color: #E0051E;
-}
-.label[resource-status="Not Ready"], 
-.label[resource-status*="Not Ready"] {
-    background-color: #DFB100;
-}
-.label[resource-status="Rejected"], 
-.label[resource-status*="Rejected"] {
-    background-color: #D22727;
-}
-.label[resource-status="Published"], 
-.label[resource-status*="Published"] {
-    background-color: #62C462;
-}
-.label[resource-status="Failed"], 
-.label[resource-status*="Failed"] {
-    background-color: #FF6600;
-}
-.label[resource-status="Identified"], 
-.label[resource-status*="Identified"] {
-    background-color: #36ABD2;
-}
-.dashboard-label{
-    margin: 5px 10px 5px 0px;
-    float: left;
-}
-.dashboard-resource-info{
-    float:right;
-}
-.dashboard-dropdown{
-    float:left;
+
+.dashboard-resources li.resource-item {
 }
 
-.dashboard-table-tr,
-.dashboard-table-td,
-.dashboard-table{
-	border:1px solid grey;
+.dashboard-resources li.resource-item p {
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.dashboard-resources li.resource-item .resource-ingest-actions {
+}
+
+.dashboard-resources li.resource-item .btn-group.resource-ingest-opts {
+    position: relative;
+    top: 0px;
+    right: 0px;
+}
+
+.label[data-resource-status="identifying"] {
+    background-color: #DFB100;
+}
+.label[data-resource-status="rejected"] {
+    background-color: #D22727;
+}
+.label[data-resource-status="published"] {
+    background-color: #62C462;
+}
+.label[data-resource-status="publish-failed"],
+.label[data-resource-status="identify-failed"] {
+    background-color: #FF6600;
+}
+.label[data-resource-status="identified"] {
+    background-color: #36ABD2;
 }
 
 /*

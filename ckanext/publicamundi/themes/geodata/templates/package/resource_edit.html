@@ -1,9 +1,9 @@
 {% ckan_extends %}
 
 {% block secondary_content %}
-
 {% block paint %}{% endblock %}
 <div class="alt-side-style">
-    {% snippet 'package/snippets/info.html', pkg=pkg, hide_follow_button=true %}
+    {{ super() }}
 </div>
 {% endblock %}
+
