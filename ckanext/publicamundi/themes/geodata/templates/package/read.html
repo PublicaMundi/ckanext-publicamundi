@@ -1,4 +1,5 @@
-{% ckan_extends %}
+{%ckan_extends %}
+
 {% set pkg = c.pkg_dict %}
 {% block toolbar %}
 {{ super() }}
@@ -16,7 +17,6 @@
 {#  {% block package_info %}
     {% snippet 'package/snippets/info.html', pkg=pkg %}
     {% endblock %} #}
-    <div class="paintme">
         {% if pkg.organization %}
   {% block package_organization %}
       {% snippet "snippets/organization.html", organization=pkg.organization , has_context_title=true  %}
@@ -41,5 +41,4 @@
     {# {% block package_social %}
     {% snippet "snippets/social.html" %}
     {% endblock %} #}
-</div>
     {% endblock %}
