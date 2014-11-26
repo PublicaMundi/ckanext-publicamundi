@@ -52,6 +52,16 @@ class SpatialResolutionEditWidget(EditFieldWidget, ListFieldWidgetTraits):
     def get_template(self):
         return 'package/snippets/fields/edit-list-spatial_resolution-inspire.html'
 
+@field_widget_multiadapter([IListField, schemata.IConformity],
+    qualifiers=['conformity.inspire'], is_fallback=False)
+class ConformityEditWidget(EditFieldWidget, ListFieldWidgetTraits):
+ 
+    def get_item_qualifier(self):
+        return 'item'
+    
+    def get_template(self):
+        return 'package/snippets/fields/edit-list-conformity-inspire.html'
+
 @field_widget_multiadapter([IListField, IURIField],
     qualifiers=['locator.inspire'], is_fallback=False)
 class ResourceLocatorsEditWidget(EditFieldWidget):

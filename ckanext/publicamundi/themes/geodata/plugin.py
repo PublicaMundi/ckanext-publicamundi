@@ -60,15 +60,9 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     def configure(self, config):
         '''Pass configuration to plugins and extensions'''
         
-        # Modify the pattern for valid names for {package, groups, organizations}
         global _feedback_form 
         _feedback_form = config.get('ckanext.publicamundi.themes.geodata.feedback_form')
-        print 'form='
-        print _feedback_form
-        # Setup extension-wide cache manager
-
         return
-
 
     # IRoutes
 
