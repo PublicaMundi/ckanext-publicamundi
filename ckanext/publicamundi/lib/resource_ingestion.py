@@ -21,22 +21,19 @@ def get_result(resource_id):
 
     if res_identify:
         result['found'] = True
+        result['storer_type'] = res_identify.storer_type
         ingest_status = res_identify.status
         if ingest_status == IngestStatus.NOT_PUBLISHED:
             status, task_result, storer_type = get_celery_identification_result(res_identify)
             result['status'] = status
             result['result'] = task_result
-            result['storer_type'] = storer_type
         elif ingest_status == IngestStatus.PUBLISHED:
             status, storer_type = get_celery_ingestion_result(res_identify)
             result['status'] = status
-            result['storer_type'] = storer_type
         elif ingest_status == IngestStatus.REJECTED:
-            result['status'] = "Rejected"
-            result['storer_type'] = res_identify.storer_type
+            result['status'] = ingest_status
     else:
         result['found'] = False
-        result['status'] = "No Action"
     
     return result
 
@@ -45,14 +42,14 @@ def get_celery_identification_result(res_identify_obj):
     result = None
     storer_type = None
     try:
-        status = "Identified"
+        status = "identified"
         result = res_identify_obj.get_celery_task_result()
         storer_type = res_identify_obj.storer_type
     except TaskNotReady as ex:
-        status = "Not Ready"
+        status = "identifying"
         pass
     except TaskFailed as ex:
-        status = "Identification Failed"
+        status = "identify-failed"
         pass
 
     return status, result, storer_type
@@ -61,14 +58,14 @@ def get_celery_ingestion_result(res_identify_obj):
     status = None
     storer_type = None
     try:
-        status = "Published"
+        status = "published"
         res_identify_obj.get_celery_task_result()
         storer_type = res_identify_obj.storer_type
     except TaskNotReady as ex:
-        status = "Publishing"
+        status = "publishing"
         pass
     except TaskFailed as ex:
-        status = "Publishing Failed"
+        status = "publish-failed"
         pass
 
     return status, storer_type

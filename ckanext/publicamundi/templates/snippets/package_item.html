@@ -7,53 +7,57 @@ hide_resources - If true hides the resources (default: false).
 banner         - If true displays a popular banner (default: false).
 truncate       - The length to trucate the description to (default: 180)
 truncate_title - The length to truncate the title to (default: 80).
-
-Example:
-
-  {% snippet 'snippets/package_item.html', package=c.datasets[0] %}
-
 #}
+
 {% set truncate = truncate or 180 %}
 {% set truncate_title = truncate_title or 80 %}
 {% set title = package.title or package.name %}
 {% set notes = h.markdown_extract(package.notes, extract_length=truncate) %}
 
 <li class="{{ item_class or "dataset-item" }}">
-  {% block package_item_content %}
+    {% block package_item_content %}
     <div class="dataset-content">
+      {% block package_item_heading %}
       <h3 class="dataset-heading">
         {{ h.link_to(h.truncate(title, truncate_title), h.url_for(controller='package', action='read', id=package.name)) }}
         {% if package.private %}
-          <span class="dataset-private label label-inverse">
-            <i class="icon-lock"></i>
-            {{ _('Private') }}
-          </span>
+          <span class="dataset-private label label-inverse"><i class="icon-lock"></i>{{ _('Private') }}</span>
         {% endif %}
-
         {% if package.get('state', '').startswith('draft') %}
           <span class="label label-info state-draft">{{ _('Draft') }}</span>
         {% elif package.get('state', '').startswith('deleted') %}
           <span class="label label-important state-deleted">{{ _('Deleted') }}</span>
         {% elif package.get('state', '').startswith('invalid') %}
-          <span class="label label-important state-invalid">{{ _('Invalid') }}</span>
+          <span class="label label-warning state-invalid">{{ _('Invalid') }}</span>
         {% endif %}
         {{ h.popular('recent views', package.tracking_summary.recent, min=10) if package.tracking_summary }}
       </h3>
+      {% endblock %} {# package_item_heading #}
+      
+      {% block package_item_banner %}
       {% if banner %}
         <span class="banner">{{ _('Popular') }}</span>
       {% endif %}
+      {% endblock %} {# package_item_banner #}
+
+      {% block package_item_notes %}  
       {% if notes %}
         <div>{{ notes|urlize }}</div>
       {% endif %}
+      {% endblock %} {# package_item_notes #}
     </div>
+    {% endblock %} {# package_item_content #}
+    
     {% if package.resources and not hide_resources %}
+    {% block package_item_resources %}
       <ul class="dataset-resources unstyled">
         {% for resource in h.dict_list_reduce(package.resources, 'format') %}
           <li>
-            <a href="{{ h.url_for(controller='package', action='read', id=package.name) }}" class="label" data-format="{{ resource.lower() }}">{{ resource }}</a>
+            <a href="{{ h.url_for(controller='package', action='read', id=package.name) }}" class="label" 
+                data-format="{{ resource.lower() }}">{{ resource }}</a>
           </li>
         {% endfor %}
       </ul>
+    {% endblock %} {# package_item_resources #}
     {% endif %}
-  {% endblock %}
 </li>
