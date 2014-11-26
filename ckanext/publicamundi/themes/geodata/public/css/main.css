@@ -262,6 +262,9 @@ a {
 .nav-tabs > li > a, .nav-pills > li > a {
     margin-right: 0;
 }
+.nav-tabs {
+    border-bottom: 0px;
+}
 /* Home background */
 .feedback-form{
     //display: block;
