@@ -16,7 +16,7 @@
     {% block feedback %}
 
                 <div class="feedback-form">
-                    <a href="{{ h.feedback_form() }}"><button class="btn">{{_('Leave your feedback')}}</button></a>
+                    <a href="{{ h.feedback_form() }}"><button class="btn btn-primary">{{_('Leave your feedback')}}</button></a>
                                     </div>
             {% endblock %}
 
@@ -140,7 +140,7 @@
   file.
   #}
   {%- block footer %}
-    {% include "footer.html" %}
+  {% include "footer.html" %} 
   {% endblock -%}
 {%- endblock -%}
 

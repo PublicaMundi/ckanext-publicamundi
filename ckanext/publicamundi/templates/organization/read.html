@@ -1,0 +1,27 @@
+{% ckan_extends %}
+
+{% block page_primary_action %}
+{% if h.check_access('package_create') %}
+{% with edit_url = h.url_for('/dataset/new'), import_url = h.url_for('/dataset/import_metadata') %}
+    <div class="btn-group">
+        <a class="btn btn-primary" href="{{ edit_url }}"
+            >{#<i class="icon-asterisk"></i>#} {{ _('Add Dataset') }}</a>
+        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li>
+                <a class="btn-link" href="{{ edit_url }}"
+                    ><i class="icon-pencil"></i> &nbsp; {{ _('Create from scratch') }}</a>
+            </li>
+            <li>
+                <a class="btn-link" href="{{ import_url }}"
+                    ><i class="icon-file-text"></i> &nbsp; {{ _('Import existing metadata') }}</a>
+            </li>
+        </ul>
+    </div>
+{% endwith %}
+{% endif %} {# if check_access #}
+
+{% endblock %} {# page_primary_action #}
+

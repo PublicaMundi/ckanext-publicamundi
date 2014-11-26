@@ -42,12 +42,25 @@ a {
     text-align: left;
     color: #4E59A4;
     line-height: 30px;
+    //padding: 0;
 }
 
+.account-masthead .account ul li a.sub{
+    font-weight: bold;
+}
+.account-masthead .authed > a{
+    //display: block;
+    min-width:100px;
+    width: 100%;
+    max-width:160px;
+    //white-space: nowrap;
+    //overflow: hidden;
+}
 .account-masthead .account ul li a:hover{
     background-color: #4E59A4;
     color: #fff;
 }
+
 #user-top{
     display: block;
     position: relative;
@@ -125,7 +138,10 @@ a {
         border-bottom: 2px #4E59A4 solid;
     }
 .user-menu li a span{
-    }
+    white-space:nowrap;
+    overflow: hidden;
+    display: block;
+}
 .user-menu li ul{
         padding: 0;
         margin: 0;
@@ -156,7 +172,6 @@ a {
     border-top: 5px solid #4E59A4;
 }
 .down-arrow:hover:before{
-
     border-top-color: #fff;
 }
 
@@ -225,6 +240,7 @@ a {
 }
 .alt-nav > li:first-child a{
     border: none;
+    padding-left: 0;
 }
 
 .alt-nav li:hover a{
@@ -282,6 +298,8 @@ a {
     background-color: rgba(123,123,321,0.8);
     width: 100vw;
     height:70vh;
+}
+.stayinview{
 }
 .promotebox{
     position: relative;
@@ -407,6 +425,10 @@ a {
 .breadcrumb-hide-text a{
     display: none;
 }
+
+.breadcrumb-hide-text:before{
+    content:" ... " !important; 
+}
 .breadcrumb-hide-text:after{
     content:"";
 }
@@ -418,7 +440,7 @@ a {
     margin-bottom: 100px;
 }
 .toolbar .breadcrumb {
-    padding-top: 8px;
+    padding-top: 12px;
     overflow: hidden;
 }
 .toolbar .breadcrumb .active a, .toolbar .breadcrumb a.active{
@@ -431,16 +453,19 @@ a {
 .toolbar { 
     background: #4E59A4;
     margin: 0;
-    //height: 35px;
+    height: 40px;
 }
-.toolbar .btn-primary, .toolbar .btn-group, .toolbar .btn{
+.toolbar .btn-primary,.toolbar .btn{
     float:right;
+    margin-top: 4px;
 }
-
+.toolbar .btn-group{
+    float: right;
+}
 .altbar{
     background: #A9B6D8;
     margin: 0;
-    height: 35px;
+    height: 40px;
     padding: 5px 0;
 
 }
@@ -487,7 +512,7 @@ a {
 .search-form .search-input.search-giant button{
     position:relative;
     float:right;
-    margin-top:-45px;
+    margin-top:-42px;
 }
 .search-form .search-input button i{
     color: #4E59A4;
@@ -508,7 +533,6 @@ a {
     padding-left:0;
 }
 .homepage .module-search .search-giant input{
-    height: 60px;
     font-size: 22px;
 }
 .search{
@@ -517,6 +541,10 @@ a {
     padding: 0;
     border: 0;
     box-shadow: none;
+    height:50px;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
 }
 .homepage .module-search .module-content{
     margin:0;
@@ -587,17 +615,52 @@ a {
 [role=main] .secondary {
     width: 237px;
     font-color: #666666;
-    border: 1px #4E59A4 solid;
+    //border: 1px #4E59A4 solid;
     //border: 1px #666666 solid;
-}
-.secondary .module-heading {
-    border-top: 2px #4E59A4 solid;
-    border-bottom: 1px #545356 solid;
 }
 
 .paintme{
     //margin-top:55px;
-    border: 1px #4E59A4 solid;
+    border: 2px #4E59A4 solid;
+}
+.secondary .module {
+    margin: 0;
+}
+.secondary .module:first-child {
+    border-top: none;
+}
+.secondary .module-heading{
+    border-top: 2px #4E59A4 solid;
+    border-bottom: 1px #545356 solid;
+    text-align: left;
+    background-color: #F6F6F6;
+    font-size: 18px;
+    color: #666666;
+    font-weight: normal;
+}
+.secondary .module-heading .action{
+    font-size: 14px;
+    float: right;
+    display: block;
+    margin-top:3px;
+}
+.secondary .module-content{
+    text-align: center;
+}
+.secondary .module-footer, .module-narrow #dataset-map-attribution{
+    background: #F6F6F6;
+    margin:0;
+    padding: 5px 8px;
+}
+.secondary .module-footer a{
+    font-size: 12px;
+    color: #4E59A4;
+    padding-left:10px;
+    font-weight: normal;
+}
+.secondary .nav-item a span{
+    color: #666666;
+    font-size: 14px;
 }
 .alt-side-style .module-heading{
     font-size:20px;
@@ -608,14 +671,8 @@ a {
     padding-left:18px;
     padding-right:18px;
 }
-.secondary .module {
-    margin: 0;
-}
-.secondary .module:first-child {
-    border-top: none;
-}
-.secondary ..module-heading{
-    background-color: #ECECEC;
+.social{
+    background: #fff;
 }
 .social ul li{
     float: left;
@@ -848,15 +905,21 @@ a {
     border-top-color: #fff !important;
     border-bottom-color: #fff !important;
 }
-.btn-primary .caret, .btn-warning .caret, .btn-danger .caret, .btn-info .caret, .btn-success .caret, .btn-inverse .caret{
+.btn .caret, .btn-primary .caret, .btn-warning .caret, .btn-danger .caret, .btn-info .caret, .btn-success .caret, .btn-inverse .caret{
     border-top-color: #4E59A4;
     border-bottom-color: #4E59A4;
     //border-bottom-color: #4E59A4;
 }
 
-.btn-primary:hover .caret, .btn-warning:hover .caret, .btn-danger:hover .caret, .btn-info:hover .caret, .btn-success:hover .caret, .btn-inverse:hover .caret{
+.btn:hover .caret, .btn-primary:hover .caret,  .btn-info:hover .caret, .btn-success:hover .caret, .btn-inverse:hover .caret{
     border-top-color: #fff;
     border-bottom-color: #fff;
+}
+.btn-warning:hover .caret{
+    background: #C6B489;
+}
+.remove-opts .btn:hover, .remove-opts .btn-mini:hover{
+    background: #C43210;
 }
 .btn-primary:focus{
     color: #fff;
@@ -888,7 +951,7 @@ a {
 
 .dataset-resources  li a{
     border: 1px #4E59A4 solid;
-    font-size: 10px;
+    font-size: 12px;
     border-radius: 0;
     background-color: #fff !important;
     color: #4E59A4 !important;
@@ -909,9 +972,12 @@ a {
     background-image:none;
     background: #fff;
 }
-.btn-group.open .btn-primary.dropdown-toggle{
+.btn-group.open .btn-primary.dropdown-toggle, .btn-group.open .btn.dropdown-toggle{
     background: #4E59A4;
     box-shadow: none;
+}
+.remove-opts.open .btn.dropdown-toggle{
+    background: #C43210 !important;
 }
 .dropdown-menu > li:hover > a{
     background: #4E59A4;
@@ -963,4 +1029,20 @@ a {
 /* Recline */
 .recline-data-explorer .btn{
     border-radius: 0;
+}
+/* About page */
+.about{
+    width: 70%;
+}
+/* Pagination */
+.module .pagination{
+    border-top: 1px #545356 solid;
+    border-bottom: 1px #545356 solid;
+}
+.module .pagination li a{
+    border-left: 1px #545356 solid;
+    color: #4E59A4;
+}
+.module .pagination li.active a{
+    background: #F3F4F4;
 }
