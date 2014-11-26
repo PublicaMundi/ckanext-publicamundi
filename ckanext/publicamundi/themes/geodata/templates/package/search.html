@@ -5,11 +5,6 @@
 {% endblock %}
 {% block gap %}{% endblock %}
 
-{% block secondary_content %}
-<div class="paintme">
-  {{ super() }}
-</div>
-{% endblock %}
 {% block altbar %}
 <div class="altbar">
         <div class="container">
@@ -62,7 +57,7 @@
     <div class="module-content">
   
       {% block package_search_results_list %}
-        {{ h.snippet('snippets/package_list.html', packages=c.page.items) }}
+        {{ h.snippet('snippets/package_list_search.html', packages=c.page.items) }}
       {% endblock %}
     </div>
 

@@ -4,6 +4,7 @@
 
 <li class="resource-item" data-id="{{ res.id }}">
   {% block resource_item_title %}
+  <div class="resource-info">
   <a class="heading" href="{{ url }}" title="{{ res.name or res.description }}">
     {{ h.resource_display_name(res) | truncate(50) }}<span class="format-label" property="dc:format" data-format="{{ res.format.lower() or 'data' }}">{{ res.format }}</span>
     {{ h.popular('views', res.tracking_summary.total, min=10) }}
@@ -13,7 +14,8 @@
     {% if res.description %}
       {{ h.markdown_extract(res.description, extract_length=80) }}
     {% endif %}
-  </p>
+    </p>
+</div>
   {% block resource_item_explore %}
   {% if not url_is_edit %}
     <div class="btn-group">
