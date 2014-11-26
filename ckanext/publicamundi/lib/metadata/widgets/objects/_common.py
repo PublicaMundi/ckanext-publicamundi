@@ -380,3 +380,44 @@ class GeographicBoundingBoxReadWidget(ReadObjectWidget):
     def get_template(self):
         return None 
 
+#
+# IConformity
+#
+
+@object_widget_adapter(schemata.IConformity)
+class ConformityEditWidget(EditObjectWidget):
+        
+    def get_field_template_vars(self):
+        return {
+            'title': {
+                'title': _('Specification'),
+                'input_classes': ['span5'],
+            },
+            'date': {
+                'title': _('Date'),
+            },
+            'date_type': {
+                'title': _('Date Type'),
+            },
+            'degree': {
+                'title': _('Degree'),
+            },
+        }
+    
+    def get_field_qualifiers(self):
+        return OrderedDict([
+            ('title', None),
+            ('date', None),
+            ('date_type', 'select2'),
+            ('degree', 'select2')
+        ])
+   
+    def get_template(self):
+        return None 
+
+@object_widget_adapter(schemata.IConformity)
+class ConformityReadWidget(ReadObjectWidget):
+        
+    def get_template(self):
+        return None 
+

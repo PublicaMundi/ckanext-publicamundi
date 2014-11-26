@@ -25,7 +25,7 @@
         {# <nav class="footer-links"> #}
         {% block footer_nav %}
        
-        <div class="quarter-middle footer-links">
+        <div class="quarter footer-links">
             <ul class="unstyled">
             {% block footer_links_ckan %}
               {% set api_url = 'http://docs.ckan.org/en/{0}/api.html'.format(g.ckan_doc_version) %}
@@ -46,21 +46,17 @@
         {% endblock %}
         {# </nav> #}
 
-        <div class="quarter-middle footer-links">
+        <div class="quarter footer-links">
             <ul class="unstyled">
-                <li><a href="http://www.ipsyp.gr/"> {{ _('IMIS') }} </a></li>
-                <li><a href="https://www.athena-innovation.gr/"> {{ _('Athena RC') }} </a></li>
-                <li><a href="http://ckan.org"> {{ _('CKAN') }} </a></li>
+                <li><a href="http://www.imis.athena-innovation.gr"> {{ _('IMIS') }} </a></li>
+                <li><a href="http://www.rasdaman.com"> {{ _('Rasdaman') }} </a></li>
+                <li><a href="http://www.geolabs.fr"> {{ _('Geolabs') }} </a></li>
+                <li><a href="http://www.getmap.gr"> {{ _('GET') }} </a></li>
             </ul>
         </div>
 
         <div class="quarter footer-links">
             <ul class="unstyled">
-            <li>
-                {% block footer_lang %}
-                    {% snippet "snippets/language_selector.html" %}
-                {% endblock %}
-            </li>
             <li><a href="http://www.publicamundi.eu">PublicaMundi</a></li>
             <li><a href="https://github.com/PublicaMundi">Github</a></li>
             <li><a href="https://twitter.com/PublicaMundi">Twitter</a></li>

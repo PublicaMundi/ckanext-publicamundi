@@ -13,6 +13,12 @@
 
  {%- block main %}
 
+    {% block feedback %}
+
+                <div class="feedback-form">
+                    <a href="{{ h.feedback_form() }}"><button class="btn btn-primary">{{_('Leave your feedback')}}</button></a>
+                                    </div>
+            {% endblock %}
 
   {# The content block allows you to replace the content of the page if needed #}
   {%- block content %}
@@ -44,7 +50,9 @@
     {% endblock %}
     {% block searchbar %}{% endblock %}
         <div id="content" class="container">
-          <div class="gap">
+            {% block gap %}
+            <div class="gap"></div>
+            {% endblock %}
             {% block main_content %}
           {% block flash %}
             {% set flash_messages = h.flash.pop_messages() | list %}
@@ -56,7 +64,6 @@
               {% endfor %}
             </div>
           {% endblock %}
-        </div>
                     <div class="wrapper{% block wrapper_class %}{% endblock %}{% if self.secondary()|trim == '' %} no-nav{% endif %}">
 
             {#
@@ -64,9 +71,11 @@
             rendering of the main content columns of the page.
             #}
             {% block pre_primary %}
+                
             {% endblock %}
 
             {% block primary %}
+
               <div class="primary">
                 {#
                 The primary_content block can be used to add content to the page.
@@ -80,7 +89,7 @@
                   {% endblock %}
                 #}
                 {% block primary_content %}
-                  <article class="module">
+                <article class="module">
                     {% block page_header %}
                       <header class="module-content page-header">
                         {% if self.content_action() | trim %}
@@ -103,7 +112,7 @@
             {% endblock %}
 
             {% block secondary %}
-              <aside class="secondary">
+            <aside class="secondary {% block paint %} paintme {% endblock %}">
                 {#
                 The secondary_content block can be used to add content to the
                 sidebar of the page. This is the main block that is likely to be
@@ -131,7 +140,7 @@
   file.
   #}
   {%- block footer %}
-    {% include "footer.html" %}
+  {% include "footer.html" %} 
   {% endblock -%}
 {%- endblock -%}
 

@@ -1,0 +1,7 @@
+{% if task.storer_type=="vector" %}
+  {% set reidentify_url = h.url_for('identify_vector_resource', resource_id=res.id, parent = parent) %}
+{% elif task.storer_type=="raster" %}
+  {% set reidentify_url = h.url_for('identify_raster_resource', resource_id=res.id) %}
+{% endif %}
+
+<a href="{{reidentify_url}}" class="btn btn-small">{{ _('Re-Identify') }}</a>

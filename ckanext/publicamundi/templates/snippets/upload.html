@@ -8,7 +8,7 @@
 {% set classes = { 'buttons': [], 'remove_buttons': [] } %}
 {% endif -%}
 
-<div class="control-group control-upload {{ classes|join(' ') }}"
+<div class="control-group control-upload image-upload {{ classes|join(' ') }}"
     data-module="upload-link" data-module-name="{{ name }}"
     {{ attrs|xmlattr -}}
  >

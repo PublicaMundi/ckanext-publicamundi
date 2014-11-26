@@ -1,5 +1,5 @@
 function myFunction() {
-        var obj = $('.nav-pills > li > a[href="/group"]');
+        var obj = $('.nav-pills > li > a[href$="/group"]');
         
         // Mouse enter and leave listeners on groups button
         obj.on('mouseenter', function(){
@@ -32,15 +32,34 @@ function myFunction() {
 
         });
 
-        //Upload button hover bypass
-        $('.controls input').on('mouseenter', function(){
+        //Upload button hover
+        $('.image-upload input[type="file"]').on('mouseenter', function(){
             $(this).parent().find('.btn:first').addClass('btn-hover');
+            //$(this).parent().find('.btn:first').addClass('btn-hover');
         });
 
-        $('.controls input').on('mouseleave', function(){
+        $('.image-upload input[type="file"]').on('mouseleave', function(){
+            
             $(this).parent().find('.btn:first').removeClass('btn-hover');
+            //$(this).parent().find('.btn:first').removeClass('btn-hover');
         });
 
+        //Breadcrumbs auto hide all but last element
+    
+           brd_items = $('.breadcrumb li:first').next().nextAll();
+           brd_items = brd_items.not(':last');
+
+            brd_items.each(function(idx) {
+                //console.log($(this).context.innerText);
+                //$(this).context.innerText = "...";
+                $(this).addClass('breadcrumb-hide-text');
+            });
+            brd_items.on('mouseenter', function(){
+                $(this).removeClass('breadcrumb-hide-text');
+            });
+            brd_items.on('mouseleave', function(){
+                $(this).addClass('breadcrumb-hide-text');
+            });
 
 }
 onload = myFunction;

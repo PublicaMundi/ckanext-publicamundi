@@ -32,17 +32,19 @@ class Controller(BaseController):
         Return a redirection URL.
         '''
         
-        redirect_url = _url('') # current url
+        redirect_url = None
         
         #
         # Read and validate post parameters
         #
 
-        # Note The authorization is enforced by the underlying action.
+        # Note Authorization is enforced by the underlying action.
         owner_org = post.get('owner_org')
         if not owner_org:
             abort(400, 'The owner organization is not given')
 
+        redirect_url = _url('', group=owner_org)
+        
         dtype = post.get('dataset_type')
         if not dtype in dataset_types:
             abort(400, 'Unknown metadata schema')
@@ -131,6 +133,7 @@ class Controller(BaseController):
             redirect_url = self._import_metadata(request.params)
             redirect(redirect_url)
         else:
+            c.group_id = request.params.get('group')
             c.error_summary = session.pop('error_summary', None)
             c.errors = session.pop('errors', None)
             c.result = session.pop('result', None)
