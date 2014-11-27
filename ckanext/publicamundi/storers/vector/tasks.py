@@ -13,7 +13,7 @@ from ckan.lib.celery_app import celery
 import ckanext.publicamundi.storers.vector as vectorstorer
 from ckanext.publicamundi.storers.vector import vector
 from ckanext.publicamundi.storers.vector.resources import(
-    WMSResource, DBTableResource)
+    WMSResource, DBTableResource, WFSResource)
 from ckanext.publicamundi.storers.vector.db_helpers import DB
 
 # List MIME types recognized as archives from pyunpack
@@ -359,14 +359,20 @@ def _ingest_vector(
             geom_name,
             created_db_table_resource['id'].lower(),
             srs)
-        wms_server, wms_layer = _publish_layer(
+        publishing_server, publishing_layer = _publish_layer(
             context, geoserver_context, created_db_table_resource, srs_wkt)
         _add_wms_resource(
             context,
             layer_name,
             created_db_table_resource,
-            wms_server,
-            wms_layer)
+            publishing_server,
+            publishing_layer)
+        _add_wfs_resource(
+            context,
+            layer_name,
+            created_db_table_resource,
+            publishing_server,
+            publishing_layer)
 
 def _add_db_table_resource(context, resource, geom_name, layer_name):
     db_table_resource = DBTableResource(
@@ -402,6 +408,26 @@ def _add_wms_resource(
         wms_res_as_dict,
         'resource_create')
     return created_wms_resource
+
+def _add_wfs_resource(
+        context,
+        layer_name,
+        parent_resource,
+        wfs_server,
+        wfs_layer):
+    wfs_resource = WFSResource(
+        context['package_id'],
+        layer_name,
+        parent_resource['description'],
+        parent_resource['id'],
+        wfs_server,
+        wfs_layer)
+    wfs_res_as_dict = wfs_resource.get_as_dict()
+    created_wfs_resource = _invoke_api_resource_action(
+        context,
+        wfs_res_as_dict,
+        'resource_create')
+    return created_wfs_resource
 
 def _delete_temp(res_tmp_folder):
     shutil.rmtree(res_tmp_folder)
@@ -471,11 +497,11 @@ def _publish_layer(context, geoserver_context, resource, srs_wkt):
                 ex.reason, detail))
         raise RuntimeError('Cannot publish layer') # hides HTTP error
 
-    wms_server = geoserver_url + '/wms'
-    wms_layer = geoserver_workspace + ':' + resource_id
+    publishing_server = geoserver_url
+    layer_name = geoserver_workspace + ':' + resource_id
     
-    logger.info('Published layer at %s' % (wms_layer))
-    return (wms_server, wms_layer)
+    logger.info('Published layer at %s' % (layer_name))
+    return (publishing_server, layer_name)
 
 def _invoke_api_resource_action(context, resource, action):
     api_key = context['user_api_key']
