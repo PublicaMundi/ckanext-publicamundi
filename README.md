@@ -1,5 +1,6 @@
 ckanext-publicamundi
 ====================
+-- stratiot rep
 
 This is a CKAN extension that hosts various plugins needed for PublicaMundi project!
 
