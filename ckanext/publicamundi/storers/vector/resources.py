@@ -5,7 +5,7 @@ class WMSResource:
     
     FORMAT = 'wms'
     
-    name_extention = " WMS Layer"
+    name_extention = " (WMS)"
     _get_capabilities_url = "?service=WMS&request=GetCapabilities"
     _name = None
     _description = None
@@ -53,7 +53,7 @@ class DBTableResource:
 
     FORMAT = 'data_table'
 
-    name_extention = " Data Preview"
+    name_extention = " (Data)"
     _name = None
     _description = None
     _package_id = None
@@ -94,7 +94,7 @@ class WFSResource:
     
     FORMAT = 'wfs'
     
-    name_extention = " WFS Layer"
+    name_extention = " (WFS)"
     _get_capabilities_url = "?service=WFS&request=GetCapabilities"
     _name = None
     _description = None
