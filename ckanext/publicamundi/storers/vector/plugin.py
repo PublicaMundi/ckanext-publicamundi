@@ -57,7 +57,7 @@ class VectorStorer(p.SingletonPlugin):
         map.connect(
             'search_epsg',
             '/api/publicamundi/search_epsg',
-            controller=exportController,
+            controller=vectorController,
             action='search_epsg')
 
         map.connect(

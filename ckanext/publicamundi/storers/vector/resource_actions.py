@@ -133,10 +133,11 @@ def update_ingest_resource(resource):
         task_id=task_id)
 
 def delete_ingest_resource(resource, pkg_delete=False):
+    resource_dict = resource_dictize(resource, {'model': model})
     resource_list_to_delete = None
-    if ((resource['format'] == WMSResource.FORMAT or
-            resource['format'] == DBTableResource.FORMAT) and
-            'vectorstorer_resource' in resource):
+    if ((resource_dict['format'] == WMSResource.FORMAT or
+            resource_dict['format'] == DBTableResource.FORMAT) and
+            'vectorstorer_resource' in resource_dict):
         if pkg_delete:
             resource_list_to_delete = _get_child_resources(resource)
     else:
@@ -146,7 +147,6 @@ def delete_ingest_resource(resource, pkg_delete=False):
         'resource_list_to_delete': resource_list_to_delete,
         'db_params': config['ckan.datastore.write_url']
     })
-    resource_dict = resource_dictize(resource, {'model': model})
     geoserver_context = _make_geoserver_context()
     task_id = make_uuid()
     celery.send_task(
