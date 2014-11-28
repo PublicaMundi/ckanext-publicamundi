@@ -24,7 +24,7 @@ class StyleController(BaseController):
         username = config['ckanext.publicamundi.vectorstorer.geoserver_admin']
         password = config['ckanext.publicamundi.vectorstorer.geoserver_password']
         catalog1 = Catalog(
-            geoserver_url + "/rest", username=username, password=password)
+            geoserver_url.rstrip('/') + "/rest", username=username, password=password)
         return catalog1
     
     def upload_sld(self, id, resource_id, operation):

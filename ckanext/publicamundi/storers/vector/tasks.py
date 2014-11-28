@@ -1,4 +1,5 @@
 import os
+import copy
 import urllib2
 import urllib
 import json
@@ -8,7 +9,7 @@ from urlparse import urlparse
 from geoserver.catalog import Catalog
 from pyunpack import Archive
 
-from ckan.lib.celery_app import celery
+from ckan.lib.celery_app import celery as celery_app
 
 import ckanext.publicamundi.storers.vector as vectorstorer
 from ckanext.publicamundi.storers.vector import vector
@@ -25,6 +26,12 @@ archive_mime_types = [
     'application/x-rar',
 ]
 
+class CannotDownload(RuntimeError):
+    pass
+
+class CannotPublishLayer(RuntimeError):
+    pass
+
 def setup_vectorstorer_in_task_context(context):
     '''The vectorstorer module needs to be setup before any task actually
     does anything. 
@@ -38,29 +45,33 @@ def setup_vectorstorer_in_task_context(context):
     vectorstorer.setup(gdal_folder, temp_folder)    
     return
 
-@celery.task(name='vectorstorer.identify')
+@celery_app.task(name='vectorstorer.identify', max_retries=2)
 def identify_resource(resource_dict, context):
     setup_vectorstorer_in_task_context(context)
     
     logger = identify_resource.get_logger()
-    context['logger'] = logger
     
     api_key = context['user_api_key']
-    
+    resource_id = resource_dict['id']
+
     # Download
 
-    tmp_folder, filename = _download_resource(context, resource_dict, api_key)
-    logger.info('Downloaded resource %s at %s' % (
-        resource_dict['id'], tmp_folder))
+    try:
+        tmp_folder, filename = _download_resource(resource_dict, api_key)
+    except CannotDownload as ex:
+        # Retry later, maybe the resource is still uploading
+        logger.error('Failed to identify: %s' % (ex.message))
+        identify_resource.retry(exc=ex, countdown=60)
+    logger.info('Downloaded resource %s at %s' % (resource_id, tmp_folder))
 
     # Identify downloaded resource
 
     result = None
     try:
         result = _identify_resource(resource_dict, api_key, tmp_folder, filename)
-        logger.info('Identified resource %s' % (resource_dict['id']))
+        logger.info('Identified resource %s' % (resource_id))
     except vector.DatasourceException as ex:
-        logger.error('Failed to identify resource: %s' % (ex))
+        logger.error('Failed to identify resource %s: %s' % (resource_id, ex))
         raise 
     finally:
         _delete_temp(tmp_folder)
@@ -96,7 +107,7 @@ def _identify_resource(resource, user_api_key, resource_tmp_folder, filename):
 
     return result
 
-@celery.task(name='vectorstorer.upload')
+@celery_app.task(name='vectorstorer.upload')
 def vectorstorer_upload(resource_dict, context, geoserver_context):
     setup_vectorstorer_in_task_context(context)
     
@@ -105,35 +116,38 @@ def vectorstorer_upload(resource_dict, context, geoserver_context):
     resource_id = resource_dict['id']
     
     logger = vectorstorer_upload.get_logger()
-    context['logger'] = logger
 
     # Download
 
-    tmp_folder, filename = _download_resource(context, resource_dict, api_key)
+    tmp_folder, filename = _download_resource(resource_dict, api_key)
     logger.info(
         'Downloaded resource %s at %s' % (resource_id, tmp_folder))
     
+    # Prepare a context object for ingestion
+    # Note: Dont clutter task's context with non-seriazable objects
+
+    context1 = copy.deepcopy(context)
+    context1['logger'] = logger
+
     # Ingest
     
     try:
         _ingest_resource(
             resource_dict,
-            db_conn_params,
-            context,
+            context1,
             geoserver_context,
             tmp_folder,
             filename)
         logger.info('Ingested resource %s' % (resource_id))
-        _delete_temp(tmp_folder)
     except Exception as ex:
         logger.error(
             'Failed to ingest resource %s: %s' % (resource_id, ex))
-        _delete_temp(tmp_folder)
         raise
+    finally:
+        _delete_temp(tmp_folder)
 
 def _ingest_resource(
         resource,
-        db_conn_params,
         context,
         geoserver_context,
         resource_tmp_folder,
@@ -146,6 +160,7 @@ def _ingest_resource(
     gdal_driver, vector_file_path, prj_exists = _get_gdalDRV_filepath(
         resource, resource_tmp_folder, filename)
 
+    db_conn_params = context['db_params']
     layer_params = context['layer_params']['layers']
 
     _encoding = 'utf-8'
@@ -213,39 +228,40 @@ def _get_file_folder(extraction_folder):
             break
     return files_folder
 
-def _download_resource(context, resource_dict, user_api_key):
+def _download_resource(resource_dict, api_key):
     '''Downloads the HTTP resource specified in resource-url and saves it inder a 
     temporary folder.
     '''
-    
-    logger = context['logger']
 
     temp_folder = os.path.join(vectorstorer.temp_dir, resource_dict['id'])
     os.makedirs(temp_folder)
     
     resource_url = urllib2.unquote(resource_dict['url'])
     is_upload = resource_dict.get('url_type', '') == 'upload'
-    
+
     # Prepare download request
 
     download_request = urllib2.Request(resource_url)
     if is_upload:
-        download_request.add_header('Authorization', user_api_key)
+        download_request.add_header('Authorization', api_key)
     
     # Perform request, handle errors
     
     try:
         download_response = urllib2.urlopen(download_request)
     except urllib2.HTTPError as ex:
+        _delete_temp(temp_folder)
         try:
-            detail = ex.read()
+            detail = ex.read(128)
         except:
             detail = 'n/a'
-        logger.error('Failed to download %s: HTTP Error %r: %s' % (
-            resource_url, ex, detail))
+        raise CannotDownload(
+            'Failed to download %s: %s: %s' % (resource_url, ex, detail))
+    except urllib2.URLError as ex:
         _delete_temp(temp_folder)
-        raise RuntimeError('Cannot download resource')
-    
+        raise CannotDownload(
+            'Failed to download %s: %s' % (resource_url, ex))
+
     # Save downloaded resource in a local file
     
     filename = urlparse(resource_url).path.split('/')[-1]
@@ -337,36 +353,43 @@ def _ingest_vector(
     # Todo: 
     #  a. Document this function
     #  b. Emit errors/warnings for the several parts that can fail
-    
+   
+    logger = context['logger']
+
     layer = _vector.get_layer(layer_idx)
 
     srs = int(srs)
     if layer and layer.GetFeatureCount() > 0:
         layer_name = layer.GetName()
         geom_name = _vector.get_geometry_name(layer)
-
         spatial_ref = vectorstorer.osr.SpatialReference()
         spatial_ref.ImportFromEPSG(srs)
         srs_wkt = spatial_ref.ExportToWkt()
+        
         created_db_table_resource = _add_db_table_resource(
             context,
             resource,
             geom_name,
             layer_name)
         layer = _vector.get_layer(layer_idx)
+        
         _vector.handle_layer(
             layer,
             geom_name,
             created_db_table_resource['id'].lower(),
             srs)
+        
         wms_server, wms_layer = _publish_layer(
             context, geoserver_context, created_db_table_resource, srs_wkt)
+        logger.info('Published layer as %s' % (wms_layer))
+        
         _add_wms_resource(
             context,
             layer_name,
             created_db_table_resource,
             wms_server,
             wms_layer)
+        logger.info('Created derived WMS resource for layer %s' % (wms_layer))
 
 def _add_db_table_resource(context, resource, geom_name, layer_name):
     db_table_resource = DBTableResource(
@@ -426,7 +449,6 @@ def _is_shapefile(res_folder_path):
         return (False, None, False)
 
 def _publish_layer(context, geoserver_context, resource, srs_wkt):
-    logger = context['logger']
     
     geoserver_url = geoserver_context['geoserver_url']
     geoserver_workspace = geoserver_context['geoserver_workspace']
@@ -457,24 +479,19 @@ def _publish_layer(context, geoserver_context, resource, srs_wkt):
                     ':' +
                     geoserver_password).encode('base64').rstrip())
     
-    logger.info('Trying to publish layer at %s' % (req.get_full_url()))
     try:
         res = urllib2.urlopen(req)
     except urllib2.HTTPError as ex:
-        detail = 'n/a'
         try:
             detail = ex.read()
         except:
-            pass # no body in response
-        logger.error(
-            'Failed to publish layer, received an HTTP error %r: %s' % (
-                ex.reason, detail))
-        raise RuntimeError('Cannot publish layer') # hides HTTP error
+            detail = 'n/a'
+        raise CannotPublishLayer(
+            'Failed to publish layer: %s: %s' % (ex, detail))
 
     wms_server = geoserver_url + '/wms'
     wms_layer = geoserver_workspace + ':' + resource_id
     
-    logger.info('Published layer at %s' % (wms_layer))
     return (wms_server, wms_layer)
 
 def _invoke_api_resource_action(context, resource, action):
@@ -496,7 +513,7 @@ def _update_resource_metadata(context, resource):
     request.add_header('Authorization', api_key)
     urllib2.urlopen(request, data_string)
 
-@celery.task(name='vectorstorer.update')
+@celery_app.task(name='vectorstorer.update')
 def vectorstorer_update(resource_dict, context, geoserver_context): 
     setup_vectorstorer_in_task_context(context)
     
@@ -515,9 +532,9 @@ def vectorstorer_update(resource_dict, context, geoserver_context):
                 print e.reason
 
     # Fixme: Wrap in an try block as inside vectorstorer.upload
-    _ingest_resource(resource_dict, db_conn_params, context, geoserver_context)
+    _ingest_resource(resource_dict, context, geoserver_context)
 
-@celery.task(name='vectorstorer.delete')
+@celery_app.task(name='vectorstorer.delete')
 def vectorstorer_delete(resource_dict, context, geoserver_context): 
     setup_vectorstorer_in_task_context(context)
     
@@ -547,13 +564,10 @@ def _delete_from_datastore(resource_id, db_conn_params, context):
 
 def _unpublish_from_geoserver(resource_id, geoserver_context):
     geoserver_url = geoserver_context['geoserver_url']
-    geoserver_admin = geoserver_context['geoserver_admin']
-    geoserver_password = geoserver_context['geoserver_password']
     cat = Catalog(
-        geoserver_url +
-        '/rest',
-        username=geoserver_admin,
-        password=geoserver_password)
+        geoserver_url.rstrip('/') + '/rest',
+        username=geoserver_context['geoserver_admin'],
+        password=geoserver_context['geoserver_password'])
     layer = cat.get_layer(resource_id.lower())
     cat.delete(layer)
     cat.reload()

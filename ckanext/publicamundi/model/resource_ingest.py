@@ -47,10 +47,11 @@ class ResourceIngest(Base):
         result = celery.AsyncResult(self.celery_task_id)
         if result.state == _celery.states.SUCCESS:
             return result.get()
-        elif (result.state == _celery.states.PENDING or
-              result.state == _celery.states.RECEIVED):
+        elif result.state in (
+                _celery.states.PENDING, _celery.states.RETRY, _celery.states.RECEIVED):
             raise TaskNotReady()
-        elif result.state == _celery.states.FAILURE:
+        elif result.state in (
+                _celery.states.FAILURE, _celery.states.REVOKED):
             raise TaskFailed()
         return None
 

@@ -56,13 +56,14 @@ def identify_resource(resource):
     celery.send_task(
         'vectorstorer.identify',
         args=[resource_dict, context],
+        countdown=15,
         task_id=task_id)
 
-    # This is used when a user had rejected the injection workflow and wants
-    # to identify again the resource
     res_identify = model.Session.query(ResourceIngest).filter(
         ResourceIngest.resource_id == resource.id).first()
     if res_identify:
+        # This is when a user had previously rejected the ingestion workflow, 
+        # but now wants to re-identify the resource
         model.Session.delete(res_identify)
         new_res_identify = ResourceIngest(
             task_id,
@@ -71,6 +72,7 @@ def identify_resource(resource):
         model.Session.add(new_res_identify)
         model.Session.commit()
     else:
+        # A newly created/updated resource needs to be identified
         new_res_identify = ResourceIngest(
             task_id,
             resource.id,
