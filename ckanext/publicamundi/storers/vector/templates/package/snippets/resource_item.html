@@ -1,11 +1,8 @@
 {% ckan_extends %}
 
 {% block resource_item_explore %}
-    {{super()}}
-    {% if res.format=="wfs" and res.vectorstorer_resource%}
-        
-        {% snippet 'package/snippets/geoserver_export.html' , res=res %}
-
+    {{ super() }}
+    {% if res.format=="wfs" and res.vectorstorer_resource %}
+        {% snippet 'package/snippets/wfs_export_button.html', res=res %}
     {% endif %}
 {% endblock %}
- 
