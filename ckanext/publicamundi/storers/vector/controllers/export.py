@@ -51,25 +51,6 @@ class ExportController(BaseController):
         else:
             abort(400, _('No Export Format was defined !'))
 
-    def search_epsg(self):
-        query = request.params.get('term')
-        prj2epsg_api = "http://www.prj2epsg.org/search.json?terms=%s" % query
-
-        response = urllib2.urlopen(prj2epsg_api).read()
-
-        autocomplete_json = []
-
-        results = json.loads(response)['codes']
-
-        for idx, val in enumerate(results):
-            autocomplete_dict = {}
-            autocomplete_dict['label'] = val['name'] + " - " + val['code']
-            autocomplete_dict['value'] = val['code']
-
-            autocomplete_json.append(autocomplete_dict)
-
-        return json.dumps(autocomplete_json)
-
     def _init_export(self, resource_id, export_format, export_projection):
 
         postgis_layer, connection = self._get_layer(resource_id)
@@ -157,7 +138,7 @@ class ExportController(BaseController):
         shutil.rmtree(tmp_folder)
 
         resp = self._send_file_response(file_path, resource_name)
-        os.remove(file_path)
+        #os.remove(file_path) Needs Fix to delete files
 
         return resp
 
@@ -343,7 +324,7 @@ class ExportController(BaseController):
             c.package = _get_action('package_show')(context, {'id': id})
             c.pkg = context['package']
             c.pkg_dict = c.package
-            if not ('vectorstorer_resource' in c.resource and 
+            if not ('vectorstorer_resource' in c.resource and
                     c.resource['format'].lower() == DBTableResource.FORMAT):
                 raise NotVectorStorerDB
 

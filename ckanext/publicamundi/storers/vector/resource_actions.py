@@ -56,13 +56,14 @@ def identify_resource(resource):
     celery.send_task(
         'vectorstorer.identify',
         args=[resource_dict, context],
+        countdown=15,
         task_id=task_id)
 
-    # This is used when a user had rejected the injection workflow and wants
-    # to identify again the resource
     res_identify = model.Session.query(ResourceIngest).filter(
         ResourceIngest.resource_id == resource.id).first()
     if res_identify:
+        # This is when a user had previously rejected the ingestion workflow, 
+        # but now wants to re-identify the resource
         model.Session.delete(res_identify)
         new_res_identify = ResourceIngest(
             task_id,
@@ -71,6 +72,7 @@ def identify_resource(resource):
         model.Session.add(new_res_identify)
         model.Session.commit()
     else:
+        # A newly created/updated resource needs to be identified
         new_res_identify = ResourceIngest(
             task_id,
             resource.id,
@@ -79,16 +81,18 @@ def identify_resource(resource):
 
 def _make_geoserver_context():
     return {
-        'geoserver_url':
-            config['ckanext.publicamundi.vectorstorer.geoserver_url'].rstrip('/'),
-        'geoserver_workspace':
-            config['ckanext.publicamundi.vectorstorer.geoserver_workspace'],
-        'geoserver_admin':
-            config['ckanext.publicamundi.vectorstorer.geoserver_admin'],
-        'geoserver_password':
-            config['ckanext.publicamundi.vectorstorer.geoserver_password'],
-        'geoserver_ckan_datastore':
-            config['ckanext.publicamundi.vectorstorer.geoserver_ckan_datastore']
+        'url':
+            config['ckanext.publicamundi.vectorstorer.geoserver.url'].rstrip('/'),
+        'workspace':
+            config['ckanext.publicamundi.vectorstorer.geoserver.workspace'],
+        'username':
+            config['ckanext.publicamundi.vectorstorer.geoserver.username'],
+        'password':
+            config['ckanext.publicamundi.vectorstorer.geoserver.password'],
+        'datastore':
+            config['ckanext.publicamundi.vectorstorer.geoserver.datastore'],
+        'reload_url':
+            config.get('ckanext.publicamundi.vectorstorer.geoserver.reload_url'),
     }
 
 def create_ingest_resource(resource, layer_params):
@@ -131,10 +135,11 @@ def update_ingest_resource(resource):
         task_id=task_id)
 
 def delete_ingest_resource(resource, pkg_delete=False):
+    resource_dict = resource_dictize(resource, {'model': model})
     resource_list_to_delete = None
-    if ((resource['format'] == WMSResource.FORMAT or
-            resource['format'] == DBTableResource.FORMAT) and
-            'vectorstorer_resource' in resource):
+    if ((resource_dict['format'] == WMSResource.FORMAT or
+            resource_dict['format'] == DBTableResource.FORMAT) and
+            'vectorstorer_resource' in resource_dict):
         if pkg_delete:
             resource_list_to_delete = _get_child_resources(resource)
     else:
@@ -144,7 +149,6 @@ def delete_ingest_resource(resource, pkg_delete=False):
         'resource_list_to_delete': resource_list_to_delete,
         'db_params': config['ckan.datastore.write_url']
     })
-    resource_dict = resource_dictize(resource, {'model': model})
     geoserver_context = _make_geoserver_context()
     task_id = make_uuid()
     celery.send_task(

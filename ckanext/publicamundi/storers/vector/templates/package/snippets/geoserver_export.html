@@ -1,0 +1,26 @@
+{% set geoserver_export_formats=[
+    {'display_name': 'CSV', 'get_param': 'csv'},
+    {'display_name': 'GML2', 'get_param': 'GML2'},
+    {'display_name': 'GML3.1', 'get_param': 'text/xml; subtype=gml/3.1.1'},
+    {'display_name': 'GML3.2', 'get_param': 'application/gml+xml; version=3.2'},
+    {'display_name': 'GeoJSON', 'get_param': 'application/json'},
+    {'display_name': 'KML', 'get_param': 'application/vnd.google-earth.kml+xml'},
+    {'display_name': 'Shapefile', 'get_param': 'SHAPE-ZIP'}
+    ]
+%}
+{% set base_wfs_url =res.wfs_server+"?service=WFS&version=1.0.0&request=GetFeature&typeName="+res.wfs_layer+"&outputFormat="%}
+ 
+<a href="#" class="btn dropdown-toggle" data-toggle="dropdown">
+    <i class="icon-share-alt"></i>
+    {{ _('Export') }}
+    <span class="caret"></span>
+</a>
+<ul class="dropdown-menu">
+    {% for export_format in geoserver_export_formats%}
+        <li>
+            <a  href="{{base_wfs_url}}{{export_format['get_param']| safe }}">
+                {{export_format['display_name']}}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
