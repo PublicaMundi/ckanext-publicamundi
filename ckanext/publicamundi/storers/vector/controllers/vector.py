@@ -1,12 +1,13 @@
 import codecs
 import json
+from sqlalchemy import func
 
 import ckan.model as model
 from ckan.lib.base import BaseController, c, request, abort
 import ckan.plugins.toolkit as toolkit
 
-from ckanext.publicamundi.storers.vector import osr
 from ckanext.publicamundi.storers.vector import resource_actions
+from ckanext.publicamundi.storers.vector.model.spatial_ref_sys import SpatialRefSys
 
 _ = toolkit._
 _check_access = toolkit.check_access
@@ -42,7 +43,25 @@ class VectorController(BaseController):
 
         resource = model.Session.query(model.Resource).get(resource_id)
         resource_actions.create_ingest_resource(resource, layer_options)
+    
+    def search_epsg(self):
+        '''Searching on the spatial_ref_sys table to find
+        results matched the query. Returns a json for autocomplte'''
+        
+        search_term = request.params.get('term')
+       
+        like_condition="%%%s%%"%(search_term.lower())
+        
+        results = model.Session.query(SpatialRefSys).filter(
+                  func.lower(SpatialRefSys.srtext).like(
+                  like_condition)).all()
+        
+        autocomplete_json = []
+        for res in results:
+            autocomplete_json.append(res.get_autocomplete_dict())
+        return json.dumps(autocomplete_json)
 
+        
     def _get_encoding(self):
         _encoding = request.params.get('encoding', u'utf-8')
 

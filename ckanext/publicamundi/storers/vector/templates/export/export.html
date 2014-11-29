@@ -1,8 +1,8 @@
 {%extends 'export/base.html'%}
 {% set res = c.resource %}
 
-{% set base_url=h.url_for('vector_export', action='export',operation='export_file', id=c.pkg.name, resource_id=c.resource.id) %}
-
+{% set base_url = h.url_for('vector_export', action='export',operation='export_file', id=c.pkg.name, resource_id=c.resource.id) %}
+{% set search_epsg_url = h.url_for('search_epsg') %}
 {% set gdal_drivers = c.gdal_drv_list %}
 
     {% set gdal_export_formats =[
@@ -86,7 +86,7 @@
 	      
 	</div>
 
-	<div id="divproj" class="form-select ">
+	<div id="divproj" class="form-select " data-module="projection-autocomplete" data-module-search_epsg_url="{{search_epsg_url}}">
 		
 		<label>{{ _('Select projection')}}</label> <input  id="projection" type="text">
 	      
@@ -102,7 +102,8 @@
     </div>
 
     
-   {% resource 'ckanext-publicamundi-vector/export' %} 
+   {% resource 'ckanext-publicamundi-vector/export' %}
+   {% resource 'ckanext-publicamundi-vector/projection_autocomplete' %} 
    {% resource 'ckanext-publicamundi-vector/styles' %}
 {% endblock%}
 

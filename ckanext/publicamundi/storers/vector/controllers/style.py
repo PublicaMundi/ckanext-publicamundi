@@ -5,23 +5,28 @@ from geoserver.catalog import Catalog
 from geoserver.catalog import UploadError
 
 from ckan.lib.base import(
-    BaseController, c, request,
-    session, render, config, abort)
+    BaseController, c, request, session, render, config, abort)
 import ckan.model as model
-from ckan.logic import get_action, check_access, NotFound, NotAuthorized
-from ckan.common import _
+import ckan.plugins.toolkit as toolkit
 
-_check_access = check_access
-
-NoFileSelected = 'No XML file was selected.'
-
-
-class NotVectorStorerWMS(Exception):
-    pass
+_ = toolkit._
+_check_access = toolkit.check_access
+_get_action = toolkit.get_action
 
 
 class StyleController(BaseController):
 
+    def _get_catalog(self):
+        '''Get a configured geoserver.catalog.Catalog client instance.
+        '''
+
+        geoserver_url = config['ckanext.publicamundi.vectorstorer.geoserver.url']
+        username = config['ckanext.publicamundi.vectorstorer.geoserver.username']
+        password = config['ckanext.publicamundi.vectorstorer.geoserver.password']
+        catalog1 = Catalog(
+            geoserver_url.rstrip('/') + "/rest", username=username, password=password)
+        return catalog1
+    
     def upload_sld(self, id, resource_id, operation):
         if operation:
             self._get_context(id, resource_id)
@@ -30,15 +35,15 @@ class StyleController(BaseController):
             elif operation.lower() == 'upload':
                 sld_file_param = request.POST['sld_file']
                 try:
-                    fileExtension = os.path.splitext(
+                    file_extension = os.path.splitext(
                         sld_file_param.filename)[1]
-                    if fileExtension.lower() == ".xml":
+                    if file_extension.lower() == ".xml":
                         sld_file = sld_file_param.file
                         c.sld_body = sld_file.read()
                     else:
                         raise AttributeError
                 except AttributeError:
-                    c.error = NoFileSelected
+                    c.error = 'No XML file was selected.'
             elif operation.lower() == 'submit':
                 sld_body = request.POST['sld_body']
                 self._submit_sld(sld_body)
@@ -59,41 +64,37 @@ class StyleController(BaseController):
             abort(404, _('Resource not found'))
 
     def _get_layer_style(self, resource_id):
-        geoserver_url = config['ckanext.publicamundi.vectorstorer.geoserver_url']
-
-        cat = Catalog(geoserver_url + "/rest")
+        cat = self._get_catalog()
         layer = cat.get_layer(c.layer_id)
         default_style = layer._get_default_style()
         xml = minidom.parseString(default_style.sld_body)
         return xml.toprettyxml()
 
+    # Fixme: The following method is not doing what its name says.
+    # Separate authorization checks from context retrieval.
     def _get_context(self, id, resource_id):
-        context = {'model': model, 'session': model.Session,
-                   'user': c.user}
-
+        
+        context = {
+            'model': model, 'session': model.Session, 'user': c.user}
         try:
             _check_access('package_update', context, {'id': id})
-            c.resource = get_action('resource_show')(context,
-                                                     {'id': resource_id})
-            c.package = get_action('package_show')(context, {'id': id})
+            c.resource = _get_action('resource_show')(context, {'id': resource_id})
+            c.package = _get_action('package_show')(context, {'id': id})
             c.pkg = context['package']
             c.pkg_dict = c.package
             if 'vectorstorer_resource' in c.resource and c.resource[
                     'format'].lower() == 'wms':
                 c.layer_id = c.resource['parent_resource_id']
             else:
-                raise NotVectorStorerWMS
-        except NotVectorStorerWMS:
-            abort(400, _('Resource is not WMS VectorStorer resource'))
-        except NotFound:
+                abort(400, _('Resource is not a vectorstorer WMS resource'))
+        except toolkit.ObjectNotFound:
             abort(404, _('Resource not found'))
-        except NotAuthorized:
+        except toolkit.NotAuthorized:
             abort(401, _('Unauthorized to read resource %s') % id)
 
     def _submit_sld(self, sld_body):
+        cat = self._get_catalog()
         try:
-            geoserver_url = config['ckanext.publicamundi.vectorstorer.geoserver_url']
-            cat = Catalog(geoserver_url + "/rest")
             layer = cat.get_layer(c.layer_id)
             default_style = layer._get_default_style()
             if default_style.name == c.layer_id:
@@ -102,9 +103,8 @@ class StyleController(BaseController):
                 cat.create_style(c.layer_id, sld_body, overwrite=True)
                 layer._set_default_style(c.layer_id)
                 cat.save(layer)
-
             c.success = True
-
         except UploadError as e:
             c.sld_body = sld_body
             c.error = e
+        return
