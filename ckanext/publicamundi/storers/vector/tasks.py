@@ -9,6 +9,9 @@ from urlparse import urlparse
 from geoserver.catalog import Catalog
 from pyunpack import Archive
 
+import celery
+from celery.task.http import HttpDispatchTask
+
 from ckan.lib.celery_app import celery as celery_app
 
 import ckanext.publicamundi.storers.vector as vectorstorer
@@ -53,7 +56,7 @@ def identify_resource(resource_dict, context):
     
     api_key = context['user_api_key']
     resource_id = resource_dict['id']
-
+    
     # Download
 
     try:
@@ -116,7 +119,7 @@ def vectorstorer_upload(resource_dict, context, geoserver_context):
     resource_id = resource_dict['id']
     
     logger = vectorstorer_upload.get_logger()
-
+    
     # Download
 
     tmp_folder, filename = _download_resource(resource_dict, api_key)
@@ -145,6 +148,15 @@ def vectorstorer_upload(resource_dict, context, geoserver_context):
         raise
     finally:
         _delete_temp(tmp_folder)
+
+    # Reload configuration at backend 
+    
+    try:
+        _reload_geoserver_config(context1, geoserver_context)
+    except Exception as ex:
+        logger.warning('Failed to reload backend configuration: %s' % (ex))
+
+    return
 
 def _ingest_resource(
         resource,
@@ -272,6 +284,16 @@ def _download_resource(resource_dict, api_key):
 
     return temp_folder, filename
 
+def _reload_geoserver_config(context, geoserver_context):
+    
+    reload_url = geoserver_context.get('reload_url', '')
+    if reload_url.startswith('http://'):
+        # Fire this task in a synchronous manner
+        r = HttpDispatchTask.delay(url=reload_url, method='GET')
+        r.get(timeout=15)
+    
+    return
+
 def _get_file_path(resource_tmp_folder, resource):
     '''Looking into the downladed or extracted folder for the resource
     based on the resource format.
@@ -329,7 +351,9 @@ def _get_file_path(resource_tmp_folder, resource):
 
 def get_file_by_extention(file_list, extention):
     '''Looking into the download or extracted folder for the file
-       based on the resource format which was was entered from the user'''
+    based on the resource format which was was entered from the user
+    '''
+    
     file_name = None
     for _file in file_list:
         if _file.lower().endswith(extention):
@@ -476,11 +500,11 @@ def _is_shapefile(res_folder_path):
 
 def _publish_layer(context, geoserver_context, resource, srs_wkt):
     
-    geoserver_url = geoserver_context['geoserver_url']
-    geoserver_workspace = geoserver_context['geoserver_workspace']
-    geoserver_admin = geoserver_context['geoserver_admin']
-    geoserver_password = geoserver_context['geoserver_password']
-    geoserver_ckan_datastore = geoserver_context['geoserver_ckan_datastore']
+    geoserver_url = geoserver_context['url']
+    geoserver_workspace = geoserver_context['workspace']
+    geoserver_username = geoserver_context['username']
+    geoserver_password = geoserver_context['password']
+    geoserver_datastore = geoserver_context['datastore']
     
     resource_id = resource['id'].lower()
     resource_name = resource['name']
@@ -488,7 +512,7 @@ def _publish_layer(context, geoserver_context, resource, srs_wkt):
         resource_name = resource_name.replace(DBTableResource.name_extention, '')
     resource_description = resource['description']
     url = geoserver_url + '/rest/workspaces/' + geoserver_workspace + \
-        '/datastores/' + geoserver_ckan_datastore + '/featuretypes'
+        '/datastores/' + geoserver_datastore + '/featuretypes'
     
     req = urllib2.Request(url)
     req.add_header('Content-type', 'text/xml')
@@ -501,7 +525,7 @@ def _publish_layer(context, geoserver_context, resource, srs_wkt):
            </featureType>'''
         % (resource_id, resource_name, resource_description, srs_wkt))
     req.add_header('Authorization', 'Basic ' +
-                   (geoserver_admin +
+                   (geoserver_username +
                     ':' +
                     geoserver_password).encode('base64').rstrip())
     
@@ -555,6 +579,7 @@ def vectorstorer_update(resource_dict, context, geoserver_context):
             try:
                 _invoke_api_resource_action(context, res, 'resource_delete')
             except urllib2.HTTPError as e:
+                # Fixme proper logging
                 print e.reason
 
     # Fixme: Wrap in an try block as inside vectorstorer.upload
@@ -589,11 +614,11 @@ def _delete_from_datastore(resource_id, db_conn_params, context):
     _db.commit_and_close()
 
 def _unpublish_from_geoserver(resource_id, geoserver_context):
-    geoserver_url = geoserver_context['geoserver_url']
+    geoserver_url = geoserver_context['url']
     cat = Catalog(
         geoserver_url.rstrip('/') + '/rest',
-        username=geoserver_context['geoserver_admin'],
-        password=geoserver_context['geoserver_password'])
+        username=geoserver_context['username'],
+        password=geoserver_context['password'])
     layer = cat.get_layer(resource_id.lower())
     cat.delete(layer)
     cat.reload()

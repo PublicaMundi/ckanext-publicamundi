@@ -81,16 +81,18 @@ def identify_resource(resource):
 
 def _make_geoserver_context():
     return {
-        'geoserver_url':
-            config['ckanext.publicamundi.vectorstorer.geoserver_url'].rstrip('/'),
-        'geoserver_workspace':
-            config['ckanext.publicamundi.vectorstorer.geoserver_workspace'],
-        'geoserver_admin':
-            config['ckanext.publicamundi.vectorstorer.geoserver_admin'],
-        'geoserver_password':
-            config['ckanext.publicamundi.vectorstorer.geoserver_password'],
-        'geoserver_ckan_datastore':
-            config['ckanext.publicamundi.vectorstorer.geoserver_ckan_datastore']
+        'url':
+            config['ckanext.publicamundi.vectorstorer.geoserver.url'].rstrip('/'),
+        'workspace':
+            config['ckanext.publicamundi.vectorstorer.geoserver.workspace'],
+        'username':
+            config['ckanext.publicamundi.vectorstorer.geoserver.username'],
+        'password':
+            config['ckanext.publicamundi.vectorstorer.geoserver.password'],
+        'datastore':
+            config['ckanext.publicamundi.vectorstorer.geoserver.datastore'],
+        'reload_url':
+            config.get('ckanext.publicamundi.vectorstorer.geoserver.reload_url'),
     }
 
 def create_ingest_resource(resource, layer_params):

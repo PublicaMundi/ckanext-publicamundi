@@ -20,9 +20,9 @@ class StyleController(BaseController):
         '''Get a configured geoserver.catalog.Catalog client instance.
         '''
 
-        geoserver_url = config['ckanext.publicamundi.vectorstorer.geoserver_url']
-        username = config['ckanext.publicamundi.vectorstorer.geoserver_admin']
-        password = config['ckanext.publicamundi.vectorstorer.geoserver_password']
+        geoserver_url = config['ckanext.publicamundi.vectorstorer.geoserver.url']
+        username = config['ckanext.publicamundi.vectorstorer.geoserver.username']
+        password = config['ckanext.publicamundi.vectorstorer.geoserver.password']
         catalog1 = Catalog(
             geoserver_url.rstrip('/') + "/rest", username=username, password=password)
         return catalog1
