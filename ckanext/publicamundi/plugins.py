@@ -550,6 +550,9 @@ class PackageController(p.SingletonPlugin):
 
     def _create_or_update_csw_record(self, session, pkg_dict):
         ''' Sync dataset fields to CswRecord fields '''
+        # Get new XML record
+        query = '/api/publicamundi/dataset/export/%s' % pkg_dict.get('id')
+
         #raise Exception('Break')
         #from geoalchemy import WKTSpatialElement
         #from ckanext.publicamundi.lib.util import geojson_to_wkt
