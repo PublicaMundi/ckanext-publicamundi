@@ -1,31 +1,9 @@
-{% set can_edit = h.check_access('package_update', {'id':pkg.id }) %}
-{% set url_action = 'resource_edit' if url_is_edit and can_edit else 'resource_read' %}
-{% set url = h.url_for(controller='package', action=url_action, id=pkg.name, resource_id=res.id) %}
+{% ckan_extends %}
 
-<li class="resource-item" data-id="{{ res.id }}">
-  {% block resource_item_title %}
-  <div class="resource-info">
-  <a class="heading" href="{{ url }}" title="{{ res.name or res.description }}">
-    {{ h.resource_display_name(res) | truncate(50) }}<span class="format-label" property="dc:format" data-format="{{ res.format.lower() or 'data' }}">{{ res.format }}</span>
-    {{ h.popular('views', res.tracking_summary.total, min=10) }}
-  </a>
-  {% endblock %}
-  <p class="description">
-    {% if res.description %}
-      {{ h.markdown_extract(res.description, extract_length=80) }}
-    {% endif %}
-    </p>
-</div>
   {% block resource_item_explore %}
   {% if not url_is_edit %}
     <div class="btn-group">
-        {# <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> 
-      <i class="icon-share-alt"></i>
-      {{ _('Explore') }}
-      <span class="caret"></span> #}
-  </a> 
-  {#<ul class="dropdown-menu"> #}
-    <ul class="resource-actions unstyled">
+        <ul class="resource-actions unstyled">
       {% block resource_item_explore_links %}
       <li>
         <a href="{{ url }}">
@@ -63,4 +41,3 @@
           {#  </div> #}
   {% endif %}
   {% endblock %}
-</li>

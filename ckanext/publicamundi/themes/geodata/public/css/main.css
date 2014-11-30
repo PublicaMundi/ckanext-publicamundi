@@ -317,7 +317,7 @@ a {
     background-repeat: no-repeat;
     background-size: cover;
     background-color: rgba(123,123,321,0.8);
-    width: 100vw;
+    //width: 100vw;
     height:70vh;
 }
 .stayinview{
@@ -820,7 +820,7 @@ a {
     float: right;
 }
 .resource-info{
-    max-width: 320px;
+    max-width: 300px;
 }
 .metadata-download{
     position:relative;
@@ -876,10 +876,11 @@ a {
     color: #fff;
     border: 2px #5cdbd4 solid;
 }
-.resource-item .btn-group {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+.resources li.resource-item{
+    padding: 10px 5px 5px 60px;
+}
+.resources li.resource-item .btn-group{
+    float: right;
 }
 .btn-group > .btn:first-child {
     border-radius: 0;
@@ -889,6 +890,8 @@ a {
 }
 .btn-group > .dropdown-toggle{
     float: right;
+    box-shadow: none;
+    border-radius: 0;
 }
 .btn-primary{
     //border: 4px #4E59A4 solid;
@@ -1019,7 +1022,7 @@ a {
 }
 /* Preview */
 .ckanext-datapreview iframe{
-    border: 4px #4E59A4 solid;
+    //border: 4px #4E59A4 solid;
 }
 /* New package */
 .stages li.active .highlight{
@@ -1077,4 +1080,96 @@ a {
 }
 .module .pagination li.active a{
     background: #F3F4F4;
+}
+/* Resources */
+.resource-item .format-label{
+    background-image: url("../../images/icons/resources/data-generic.svg");
+    background-repeat: no-repeat;
+     background-position: 0px 0px;
+   background-size: 100%;
+    width: 50px;
+    height: 48px; 
+
+    top: 5px;
+    left: 5px;
+}
+.format-label[data-format=csv], .format-label[data-format*=csv]
+{
+    background-image: url("../../images/icons/resources/csv.svg");
+}
+.format-label[data-format=zip], .format-label[data-format*=zip]
+{
+    background-image: url("../../images/icons/resources/zip.svg");
+}
+.format-label[data-format=xml], .format-label[data-format*=xml]
+{
+    background-image: url("../../images/icons/resources/xml.svg");
+}
+.format-label[data-format=json], .format-label[data-format*=json]
+{
+    background-image: url("../../images/icons/resources/json.svg");
+}
+.format-label[data-format=geojson], .format-label[data-format*=geojson]
+{
+    background-image: url("../../images/icons/resources/geojson.svg");
+}
+.format-label[data-format=gml], .format-label[data-format*=gml]
+{
+    background-image: url("../../images/icons/resources/gml.svg");
+}
+.format-label[data-format=html], .format-label[data-format*=html]
+{
+    background-image: url("../../images/icons/resources/html.svg");
+}
+.format-label[data-format=kml], .format-label[data-format*=kml]
+{
+    background-image: url("../../images/icons/resources/kml.svg");
+}
+.format-label[data-format=jpg], .format-label[data-format*=jpg]
+{
+    background-image: url("../../images/icons/resources/jpg.svg");
+}
+.format-label[data-format=png], .format-label[data-format*=png]
+{
+    background-image: url("../../images/icons/resources/png.svg");
+}
+.format-label[data-format=ods], .format-label[data-format*=ods]
+{
+    background-image: url("../../images/icons/resources/ods.svg");
+}
+.format-label[data-format=odt], .format-label[data-format*=odt]
+{
+    background-image: url("../../images/icons/resources/odt.svg");
+}
+.format-label[data-format=pdf], .format-label[data-format*=pdf]
+{
+    background-image: url("../../images/icons/resources/pdf.svg");
+}
+.format-label[data-format=wms], .format-label[data-format*=wms]
+{
+    background-image: url("../../images/icons/resources/wms.svg");
+}
+.format-label[data-format=wfs], .format-label[data-format*=wfs]
+{
+    background-image: url("../../images/icons/resources/wfs.svg");
+}
+.format-label[data-format=rdf], .format-label[data-format*=rdf]
+{
+    background-image: url("../../images/icons/resources/rdf.svg");
+}
+.format-label[data-format=tiff], .format-label[data-format*=tiff]
+{
+    background-image: url("../../images/icons/resources/tiff.svg");
+}
+.format-label[data-format=txt], .format-label[data-format*=txt]
+{
+    background-image: url("../../images/icons/resources/txt.svg");
+}
+.format-label[data-format=shp], .format-label[data-format*=shp]
+{
+    background-image: url("../../images/icons/resources/shapefile.svg");
+}
+.format-label[data-format=xls], .format-label[data-format*=xls]
+{
+    background-image: url("../../images/icons/resources/xls.svg");
 }
