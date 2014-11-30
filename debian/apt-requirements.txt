@@ -1,2 +1,6 @@
 tidy
 libtidy-dev
+python-gdal
+unzip
+unrar
+p7zip-full
