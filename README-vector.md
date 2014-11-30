@@ -38,15 +38,16 @@ Configuration
     
 **2.  Configure Plugin**
 
-  The following should be set in the CKAN config :
+  The following should be set in the CKAN config:
 
         ckanext.publicamundi.vectorstorer.temp_dir = %(cache_dir)s/vectorstorer
-        ckanext.publicamundi.vectorstorer.geoserver_url = (e.g. http://ckan_services_server/geoserver)
-        ckanext.publicamundi.vectorstorer.geoserver_workspace = (e.g. CKAN)
-        ckanext.publicamundi.vectorstorer.geoserver_admin = (e.g. admin)
-        ckanext.publicamundi.vectorstorer.geoserver_password = (e.g. geoserver)
-        ckanext.publicamundi.vectorstorer.geoserver_ckan_datastore = (e.g. ckan_datastore_default)
         ckanext.publicamundi.vectorstorer.gdal_folder = (e.g. /usr/lib/python2.7/dist-packages)
+        ckanext.publicamundi.vectorstorer.geoserver.url = (e.g. http://ckan_services_server/geoserver)
+        ckanext.publicamundi.vectorstorer.geoserver.workspace = (e.g. CKAN)
+        ckanext.publicamundi.vectorstorer.geoserver.username = (e.g. admin)
+        ckanext.publicamundi.vectorstorer.geoserver.password = (e.g. geoserver)
+        ckanext.publicamundi.vectorstorer.geoserver.datastore = (e.g. ckan_datastore_default)
+        ckanext.publicamundi.vectorstorer.geoserver.reload_url = (optional e.g. http://localhost:5005/reload)
 
   Geoserver workspace and datastore have to be created in advance. The datastore must be the same as the CKAN datastore database.
 

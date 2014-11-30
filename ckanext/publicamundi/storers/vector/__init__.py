@@ -17,6 +17,18 @@ supported_formats = [
     'geopackage',
     'gpkg']
 
+wfs_output_formats = {
+    'geoserver': [
+        { 'display_name': 'CSV', 'name': 'csv' },
+        { 'display_name': 'GML2', 'name': 'GML2' },
+        { 'display_name': 'GML3.1', 'name': 'text/xml; subtype=gml/3.1.1' },
+        { 'display_name': 'GML3.2', 'name': 'application/gml+xml; version=3.2' },
+        { 'display_name': 'GeoJSON', 'name': 'application/json' },
+        { 'display_name': 'KML', 'name': 'application/vnd.google-earth.kml+xml' },
+        { 'display_name': 'Shapefile', 'name': 'SHAPE-ZIP' }
+    ],
+}
+
 temp_dir = None
 
 gdal = None

@@ -273,7 +273,29 @@ span.space-x3 { padding: 0px 12px }
 .label.state-invalid { }
 
 /*
- * Resource Dashboard
+ * Resources List (Dataset)
+ */
+
+.resources li.resource-item {
+    padding: 5px 5px 5px 60px;
+}
+
+.resources li.resource-item .btn-group {
+    position: relative;
+    top: 0px;
+    right: 0px;
+}
+
+.resources li.resource-item .btn-group + .btn-group {
+    margin-right: 5px;
+}
+
+.resources li.resource-item p.description {
+    width: 60%;
+}
+
+/*
+ * Resources List (Dashboard)
  */
 
 .dashboard-resources li.resource-item {
@@ -392,7 +414,7 @@ span.space-x3 { padding: 0px 12px }
 }
 
 /*
- * Dataset searrh/view
+ * Dataset search/view
  */
 
 .search-form {

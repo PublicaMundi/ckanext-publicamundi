@@ -404,7 +404,7 @@ def _ingest_vector(
             srs)
         
         publishing_server, publishing_layer = _publish_layer(
-            context, geoserver_context, created_db_table_resource, srs_wkt)
+            context, geoserver_context, layer_name, created_db_table_resource, srs_wkt)
         logger.info('Published layer as %s' % (publishing_layer))
         
         _add_wms_resource(
@@ -429,11 +429,8 @@ def _add_db_table_resource(context, resource, geom_name, layer_name):
         resource['id'],
         resource['url'],
         geom_name)
-    db_res_as_dict = db_table_resource.get_as_dict()
     created_db_table_resource = _invoke_api_resource_action(
-        context,
-        db_res_as_dict,
-        'resource_create')
+        context, db_table_resource.as_dict(), 'resource_create')
     return created_db_table_resource
 
 def _add_wms_resource(
@@ -449,11 +446,8 @@ def _add_wms_resource(
         parent_resource['id'],
         wms_server,
         wms_layer)
-    wms_res_as_dict = wms_resource.get_as_dict()
     created_wms_resource = _invoke_api_resource_action(
-        context,
-        wms_res_as_dict,
-        'resource_create')
+        context, wms_resource.as_dict(), 'resource_create')
     return created_wms_resource
 
 def _add_wfs_resource(
@@ -469,11 +463,8 @@ def _add_wfs_resource(
         parent_resource['id'],
         wfs_server,
         wfs_layer)
-    wfs_res_as_dict = wfs_resource.get_as_dict()
     created_wfs_resource = _invoke_api_resource_action(
-        context,
-        wfs_res_as_dict,
-        'resource_create')
+        context, wfs_resource.as_dict(), 'resource_create')
     return created_wfs_resource
 
 def _delete_temp(res_tmp_folder):
@@ -498,7 +489,7 @@ def _is_shapefile(res_folder_path):
     else:
         return (False, None, False)
 
-def _publish_layer(context, geoserver_context, resource, srs_wkt):
+def _publish_layer(context, geoserver_context, layer_name, resource, srs_wkt):
     
     geoserver_url = geoserver_context['url']
     geoserver_workspace = geoserver_context['workspace']
@@ -506,11 +497,6 @@ def _publish_layer(context, geoserver_context, resource, srs_wkt):
     geoserver_password = geoserver_context['password']
     geoserver_datastore = geoserver_context['datastore']
     
-    resource_id = resource['id'].lower()
-    resource_name = resource['name']
-    if DBTableResource.name_extention in resource_name:
-        resource_name = resource_name.replace(DBTableResource.name_extention, '')
-    resource_description = resource['description']
     url = geoserver_url + '/rest/workspaces/' + geoserver_workspace + \
         '/datastores/' + geoserver_datastore + '/featuretypes'
     
@@ -523,11 +509,9 @@ def _publish_layer(context, geoserver_context, resource, srs_wkt):
             <abstract>%s</abstract>
             <nativeCRS>%s</nativeCRS>
            </featureType>'''
-        % (resource_id, resource_name, resource_description, srs_wkt))
-    req.add_header('Authorization', 'Basic ' +
-                   (geoserver_username +
-                    ':' +
-                    geoserver_password).encode('base64').rstrip())
+        % (resource['id'], layer_name, resource['description'], srs_wkt))
+    req.add_header('Authorization', 'Basic ' + (
+        (geoserver_username + ':' + geoserver_password).encode('base64').rstrip()))
     
     try:
         res = urllib2.urlopen(req)
@@ -537,10 +521,10 @@ def _publish_layer(context, geoserver_context, resource, srs_wkt):
         except:
             detail = 'n/a'
         raise CannotPublishLayer(
-            'Failed to publish layer: %s: %s' % (ex, detail))
+            'Failed to publish layer %r: %s: %s' % (layer_name, ex, detail))
 
     publishing_server = geoserver_url
-    layer_name = geoserver_workspace + ':' + resource_id
+    layer_name = geoserver_workspace + ':' + resource['id']
     
     return (publishing_server, layer_name)
 
