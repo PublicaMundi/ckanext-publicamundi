@@ -9,8 +9,8 @@ from .csw_record import pre_cleanup as csw_pre_cleanup
 
 from .resource_ingest import ResourceIngest
 
-def post_setup(self):
-	csw_post_setup()
+def post_setup(self, engine):
+	csw_post_setup(engine)
 
-def pre_cleanup(self):
-	csw_pre_cleanup()
+def pre_cleanup(self, engine):
+	csw_pre_cleanup(engine)
