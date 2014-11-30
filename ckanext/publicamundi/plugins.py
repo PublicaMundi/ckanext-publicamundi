@@ -29,6 +29,7 @@ log1 = logging.getLogger(__name__)
 class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     '''Override the default dataset form
     '''
+    
     p.implements(p.ITemplateHelpers)
     p.implements(p.IConfigurable, inherit=True)
     p.implements(p.IConfigurer, inherit=True)

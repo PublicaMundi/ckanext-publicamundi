@@ -63,10 +63,8 @@ class ExportController(BaseController):
         tmp_folder = self._create_temp_export_folder()
 
         resource_name = self._get_resource_name(resource_id)
-        if DBTableResource.name_extention in resource_name:
-            resource_name = resource_name.replace(
-                DBTableResource.name_extention,
-                '')
+        if DBTableResource.name_suffix in resource_name:
+            resource_name = resource_name.replace(DBTableResource.name_suffix, '')
 
         export_datasource, export_layer = self._create_export_datasource(
             tmp_folder, resource_name, export_format, export_projection,
