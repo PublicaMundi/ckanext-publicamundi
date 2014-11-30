@@ -551,23 +551,23 @@ class PackageController(p.SingletonPlugin):
     def _create_or_update_csw_record(self, session, pkg_dict):
         ''' Sync dataset fields to CswRecord fields '''
         #raise Exception('Break')
-        from geoalchemy import WKTSpatialElement
-        from ckanext.publicamundi.lib.util import geojson_to_wkt
+        #from geoalchemy import WKTSpatialElement
+        #from ckanext.publicamundi.lib.util import geojson_to_wkt
         # Populate record fields
         record = session.query(ext_model.CswRecord).get(pkg_dict['id'])
         if not record:
             log1.info('Creating CswRecord %s', pkg_dict.get('id'))
-            record = ext_model.CswRecord(pkg_dict.get('id'), name=pkg_dict.get('name'))
-            session.add(record)
+            #record = ext_model.CswRecord(pkg_dict.get('id'), name=pkg_dict.get('name'))
+            #session.add(record)
         else:
             log1.info('Updating CswRecord %s', pkg_dict.get('id'))
-        extras = { item['key']: item['value'] for item in pkg_dict.get('extras', []) }
-        record.title = pkg_dict.get('title')
-        if 'spatial' in extras:
-            record.geom = WKTSpatialElement(geojson_to_wkt(extras.get('spatial')))
+        #extras = { item['key']: item['value'] for item in pkg_dict.get('extras', []) }
+        #record.title = pkg_dict.get('title')
+        #if 'spatial' in extras:
+        #    record.geom = WKTSpatialElement(geojson_to_wkt(extras.get('spatial')))
         # Persist object
-        session.commit()
-        log1.info('Saved CswRecord %s (%s)', record.id, record.name)
+        #session.commit()
+        #log1.info('Saved CswRecord %s (%s)', record.id, record.name)
         return
 
     def _delete_csw_record(self, session, pkg_dict):
