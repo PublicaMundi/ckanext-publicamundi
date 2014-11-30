@@ -97,22 +97,22 @@ class CswRecord(Base):
     #     self.name = name
     #     self.created_at = created_at or datetime.now();
 
-    def post_setup(self, engine):
-        #table_name = 'csw_record'
-        table_language = 'english'
-        postgis_geometry_column='wkb_geometry'
-        conn = engine.connect()
+def post_setup(engine):
+    table_name = CswRecord.__tablename__
+    table_language = 'english'
+    postgis_geometry_column='wkb_geometry'
+    conn = engine.connect()
 
-        # Creating PostgreSQL Free Text Search (FTS) GIN index
-        tsvector_fts = "alter table %s add column anytext_tsvector tsvector" % __tablename__
-        conn.execute(tsvector_fts)
-        index_fts = "create index fts_gin_idx on %s using gin(anytext_tsvector)" % __tablename__
-        conn.execute(index_fts)
-        trigger_fts = "create trigger ftsupdate before insert or update on %s for each row execute procedure tsvector_update_trigger('anytext_tsvector', 'pg_catalog.%s', 'anytext')" % (__tablename__, table_language)
-        conn.execute(trigger_fts)
+    # Creating PostgreSQL Free Text Search (FTS) GIN index
+    tsvector_fts = "alter table %s add column anytext_tsvector tsvector" % table_name
+    conn.execute(tsvector_fts)
+    index_fts = "create index fts_gin_idx on %s using gin(anytext_tsvector)" % table_name
+    conn.execute(index_fts)
+    trigger_fts = "create trigger ftsupdate before insert or update on %s for each row execute procedure tsvector_update_trigger('anytext_tsvector', 'pg_catalog.%s', 'anytext')" % (__tablename__, table_language)
+    conn.execute(trigger_fts)
 
-        create_column_sql = "ALTER TABLE %s ADD COLUMN %s geometry(Geometry,4326);" % (__tablename__, postgis_geometry_column)
-        create_insert_update_trigger_sql = '''
+    create_column_sql = "ALTER TABLE %s ADD COLUMN %s geometry(Geometry,4326);" % (table_name, postgis_geometry_column)
+    create_insert_update_trigger_sql = '''
 DROP TRIGGER IF EXISTS %(table)s_update_geometry ON %(table)s;
 DROP FUNCTION IF EXISTS %(table)s_update_geometry();
 CREATE FUNCTION %(table)s_update_geometry() RETURNS trigger AS $%(table)s_update_geometry$
@@ -127,18 +127,18 @@ $%(table)s_update_geometry$ LANGUAGE plpgsql;
 
 CREATE TRIGGER %(table)s_update_geometry BEFORE INSERT OR UPDATE ON %(table)s
 FOR EACH ROW EXECUTE PROCEDURE %(table)s_update_geometry();
-    ''' % {'table': table, 'geometry': postgis_geometry_column}
+''' % {'table': table_name, 'geometry': postgis_geometry_column}
 
-        create_spatial_index_sql = 'CREATE INDEX %(geometry)s_idx ON %(table)s USING GIST (%(geometry)s);' \
-        % {'table': __tablename__, 'geometry': postgis_geometry_column}
+    create_spatial_index_sql = 'CREATE INDEX %(geometry)s_idx ON %(table)s USING GIST (%(geometry)s);' \
+    % {'table': table_name, 'geometry': postgis_geometry_column}
 
-        conn.execute(create_column_sql)
-        conn.execute(create_insert_update_trigger_sql)
-        conn.execute(create_spatial_index_sql)
-        conn.close()
+    conn.execute(create_column_sql)
+    conn.execute(create_insert_update_trigger_sql)
+    conn.execute(create_spatial_index_sql)
+    conn.close()
 
-    def pre_cleanup(self, engine):
-        pass
+def pre_cleanup(engine):
+    pass
 
 # Note: needed to generate proper AddGeometryColumn statements
 #GeometryDDL(CswRecord.__table__)
