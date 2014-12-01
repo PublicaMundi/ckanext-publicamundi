@@ -16,6 +16,7 @@ import ckanext.publicamundi.model as ext_model
 import ckanext.publicamundi.lib.metadata as ext_metadata
 import ckanext.publicamundi.lib.actions as ext_actions
 import ckanext.publicamundi.lib.template_helpers as ext_template_helpers
+import ckanext.publicamundi.lib.pycsw_sync as ext_pycsw_sync
 
 from ckanext.publicamundi.lib.util import (to_json, random_name, Breakpoint)
 from ckanext.publicamundi.lib.metadata import (
@@ -550,9 +551,6 @@ class PackageController(p.SingletonPlugin):
 
     def _create_or_update_csw_record(self, session, pkg_dict):
         ''' Sync dataset fields to CswRecord fields '''
-        # Get new XML record
-        query = '/api/publicamundi/dataset/export/%s' % pkg_dict.get('id')
-
         #raise Exception('Break')
         #from geoalchemy import WKTSpatialElement
         #from ckanext.publicamundi.lib.util import geojson_to_wkt
@@ -560,10 +558,12 @@ class PackageController(p.SingletonPlugin):
         record = session.query(ext_model.CswRecord).get(pkg_dict['id'])
         if not record:
             log1.info('Creating CswRecord %s', pkg_dict.get('id'))
+            ext_pycsw_sync.create(ckan_id=pkg_dict.get('id'))
             #record = ext_model.CswRecord(pkg_dict.get('id'), name=pkg_dict.get('name'))
             #session.add(record)
         else:
             log1.info('Updating CswRecord %s', pkg_dict.get('id'))
+            ext_pycsw_sync.update(ckan_id=pkg_dict.get('id'))
         #extras = { item['key']: item['value'] for item in pkg_dict.get('extras', []) }
         #record.title = pkg_dict.get('title')
         #if 'spatial' in extras:
