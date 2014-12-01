@@ -15,7 +15,7 @@ class CswRecord(Base):
     __tablename__ = 'csw_record'
 
     # core; nothing happens without these
-    id = Column('identifier', Text, ForeignKey(Package.id, ondelete='cascade'), primary_key=True)
+    identifier = Column('identifier', Text, ForeignKey(Package.id, ondelete='cascade'), primary_key=True)
     typename = Column('typename', Text, default='csw:Record', nullable=False, index=True)
     schema = Column('schema', Text, default='http://www.opengis.net/cat/csw/2.0.2', nullable=False, index=True)
     mdsource = Column('mdsource', Text, default='local', nullable=False, index=True)
