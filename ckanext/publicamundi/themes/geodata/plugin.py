@@ -19,7 +19,6 @@ def friendly_date(date_str):
     date = datetime.datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S.%f").date()
     return date.strftime('%d, %b, %Y')
 
-global _feedback_form
 _feedback_form = None
 
 def feedback_form():

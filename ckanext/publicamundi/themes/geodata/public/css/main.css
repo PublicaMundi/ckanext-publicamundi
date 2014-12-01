@@ -602,6 +602,7 @@ a {
 }
 .dataset-preheading{
     margin-bottom: 5px;
+    font-size: 12px;
 }
 .dataset-heading a{
     color: #4E59A4;
@@ -829,6 +830,9 @@ a {
 .resources {
     margin-bottom: 20px;
 }
+.resource-item:hover{
+    background: #F6f6f6;
+}
 .label{
     border-radius:0;
     text-shadow: none;
@@ -848,9 +852,33 @@ a {
     float: left;
     margin-top:20px
 }
-.filter-list .filtered .icon-remove{
+
+.pill .remove{
+    box-shadow: none;
+    text-shadow: none;
+    border: 2px #6f8890 solid;
+    //border: none;
+    //width: 12px;
+    //height: 16px;
+}
+.pill .icon-remove{
+    color :#6f8890;
+    //border: none;
+}
+.pill .icon-remove:before{
+}
+.pill .remove:hover{
+    border: 2px #6f8890 solid;
+    background: #fff !important;
+    //border: none;
+}
+.pill .remove:hover .icon-remove{
+    //background: transparent;
     color: #C43210;
 }
+.pill .remove:hover .icon-remove:before{
+}
+
 /* Buttons */
 .btn {
     border-radius: 0;
