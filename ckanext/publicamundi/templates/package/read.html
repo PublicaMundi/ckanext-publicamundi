@@ -3,33 +3,26 @@
 {# Note: The parent template has aliased c.pkg_dict as pkg #}
 
 {% block package_description %}
-    
   {{ super() }}
-
 {% endblock %}
 
 {% block page_heading %}
+  {{ pkg.title or pkg.name }}
 
-
-    {{ pkg.title or pkg.name }}
-
-{% if pkg.get('state', '').startswith('draft') %}
-          <span class="label label-big label-info state-draft">{{ _('Draft') }}</span>
-        {% elif pkg.get('state', '').startswith('deleted') %}
-          <span class="label label-big label-important state-deleted">{{ _('Deleted') }}</span>
-        {% elif pkg.get('state', '').startswith('invalid') %}
-          <span class="label label-big label-important state-invalid">{{ _('Invalid') }}</span>
-        {% endif %}
-
-      {% endblock %}
+  {% if pkg.get('state', '').startswith('draft') %}
+  <span class="label label-big label-info state-draft">{{ _('Draft') }}</span>
+  {% elif pkg.get('state', '').startswith('deleted') %}
+  <span class="label label-big label-important state-deleted">{{ _('Deleted') }}</span>
+  {% elif pkg.get('state', '').startswith('invalid') %}
+  <span class="label label-big label-important state-invalid">{{ _('Invalid') }}</span>
+  {% endif %} {# state #}
+{% endblock %}
 
 {% block secondary_content %}
-
   {{ super() }}
 
   {% set geographic_extent = c.pkg_dict.spatial %}
   {% if geographic_extent %}
   {% snippet "spatial/snippets/dataset_map_sidebar.html", extent=geographic_extent %}
   {% endif %}
-
 {% endblock %}

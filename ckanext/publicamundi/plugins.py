@@ -59,6 +59,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         '''
         return {
             'random_name': random_name,
+            'filtered_list': ext_template_helpers.filtered_list,
             'dataset_types': self.dataset_types,
             'dataset_type_options': self.dataset_type_options,
             'organization_objects': ext_template_helpers.get_organization_objects,

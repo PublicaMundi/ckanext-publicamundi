@@ -1,0 +1,66 @@
+{# 
+Renders a list of resources with icons and view links.
+This is a variation of resources_list.html that groups its items based on
+resource-type attribute. 
+
+Note that this variation (in contrast to its non-grouped counterpart) does not
+provide the "resource_list" and "resource_list_inner" blocks as they are
+meaningless. So, an extending template that overrides these 2 blocks will break.
+
+resources - A list of resources to render
+pkg - A package object that the resources belong to.
+
+#}
+
+{% if not filtered_formats is defined %}{% set filtered_formats = [] %}{% endif %}
+
+{% set file_resources = h.filtered_list(resources, 'resource_type', 'api', 'ne') %}
+{% set api_resources = h.filtered_list(resources, 'resource_type', 'api', 'eq') %}
+
+<section id="dataset-resources-files" class="resources">
+    <header><h3 class="inline">{{ _('Data and Resources') }}</h3></header>
+    
+    {% block resource_file_list %}
+    {% if file_resources %}
+    <ul class="resource-list">
+        {% block resource_file_list_inner %}
+        {% for resource in file_resources if not resource.format in filtered_formats %}
+            {% snippet 'package/snippets/resource_item.html', pkg=pkg, res=resource %}
+        {% endfor %}
+        {% endblock %}
+    </ul>
+    {% endif %} {# file_resources #}
+    {% endblock %} {# resource_file_list #}
+    
+    {% block resources_empty %}
+    {% if not resources %}
+    {% if h.check_access('resource_create', pkg) %}
+    {% trans url = h.url_for(controller='package', action='new_resource', id=pkg.name) %}
+    <p class="empty">
+        This dataset has no data, <a href="{{ url }}">why not add some?</a>
+    </p>
+    {% endtrans %}
+    {% else %}
+    <p class="empty">
+        {{ _('This dataset has no data') }}
+    </p>
+    {% endif %} {# check_access #}
+    {% endif %} {# not resources #}
+    {% endblock %} {# resources_empty #}
+</section>
+
+<section id="dataset-resources-apis" class="resources {% if not api_resources %}hide{% endif %}">
+    <header><h3 class="inline">{{ _('Services') }}</h3></header>
+    {% block resource_api_list %}
+    {% if api_resources %}
+    <ul class="resource-list">
+        {% block resource_api_list_inner %}
+        {% for resource in api_resources if not resource.format in filtered_formats %}
+            {% snippet 'package/snippets/resource_item.html', pkg=pkg, res=resource %}
+        {% endfor %}
+        {% endblock %}
+    </ul>
+    {% endif %} {# api_resources #}
+    {% endblock %} {# resource_api_list #}
+</section>
+
