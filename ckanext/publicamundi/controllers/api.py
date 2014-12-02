@@ -95,11 +95,12 @@ class Controller(BaseController):
         results = []
         
         r1 = logic.get_action('format_autocomplete')(context, data_dict)
-        results.extend(({ 'name': t } for t in r1))
+        results.extend(({ 'name': t, 'text': t.upper() } for t in r1))
 
         limit -= len(results)
-        r2 = ifilter(lambda t: t.find(q) >= 0, resource_formats)
-        results.extend(({ 'name': t } for t in islice(r2, 0, limit)))
+        r2 = ifilter(lambda t: (not t in r1) and (t.find(q) >= 0), resource_formats)
+        r2 = islice(r2, 0, limit)
+        results.extend(({ 'name': t, 'text': t.upper() } for t in r2))
    
         result_set = { 'ResultSet': { 'Result': results } } 
         response.headers['Content-Type'] = content_types['json']

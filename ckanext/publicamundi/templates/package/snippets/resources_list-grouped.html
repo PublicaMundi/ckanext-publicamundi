@@ -17,7 +17,9 @@ pkg - A package object that the resources belong to.
 {% set file_resources = h.filtered_list(resources, 'resource_type', 'api', 'ne') %}
 {% set api_resources = h.filtered_list(resources, 'resource_type', 'api', 'eq') %}
 
-<section id="dataset-resources-files" class="resources">
+<section id="dataset-resources-files" 
+    class="resources {% if resources and not file_resources %}hide{% endif %}"
+ >
     <header><h3 class="inline">{{ _('Data and Resources') }}</h3></header>
     
     {% block resource_file_list %}
@@ -49,7 +51,9 @@ pkg - A package object that the resources belong to.
     {% endblock %} {# resources_empty #}
 </section>
 
-<section id="dataset-resources-apis" class="resources {% if not api_resources %}hide{% endif %}">
+<section id="dataset-resources-apis" 
+    class="resources {% if not api_resources %}hide{% endif %}"
+ >
     <header><h3 class="inline">{{ _('Services') }}</h3></header>
     {% block resource_api_list %}
     {% if api_resources %}

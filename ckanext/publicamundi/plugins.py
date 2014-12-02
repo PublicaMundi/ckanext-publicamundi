@@ -3,6 +3,7 @@ import datetime
 import json
 import weberror
 import logging
+import string
 import geoalchemy
 from itertools import chain, ifilter
 from routes.mapper import SubMapper
@@ -14,6 +15,7 @@ import ckan.logic as logic
 
 import ckanext.publicamundi.model as ext_model
 import ckanext.publicamundi.lib.metadata as ext_metadata
+import ckanext.publicamundi.lib.metadata.validators as ext_validators
 import ckanext.publicamundi.lib.actions as ext_actions
 import ckanext.publicamundi.lib.template_helpers as ext_template_helpers
 
@@ -27,7 +29,7 @@ _ = toolkit._
 log1 = logging.getLogger(__name__)
 
 class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
-    '''Override the default dataset form
+    '''Override the default dataset form.
     '''
     
     p.implements(p.ITemplateHelpers)
@@ -37,6 +39,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     p.implements(p.IRoutes, inherit=True)
     p.implements(p.IActions, inherit=True)
     p.implements(p.IPackageController, inherit=True)
+    p.implements(p.IResourceController, inherit=True)
+    p.implements(p.IFacets, inherit=True)
 
     ## Define helper methods ## 
 
@@ -210,30 +214,30 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         return []
 
     def __modify_package_schema(self, schema):
+        '''Define modify schema for both create/update operations.
+        '''
 
-        from ckanext.publicamundi.lib.metadata.validators import (
-            is_dataset_type, get_field_edit_processor,
-            preprocess_dataset_for_edit, postprocess_dataset_for_edit)
-
+        check_not_empty = toolkit.get_validator('not_empty')
         ignore_missing = toolkit.get_validator('ignore_missing')
         ignore_empty = toolkit.get_validator('ignore_empty')
         convert_to_extras = toolkit.get_converter('convert_to_extras')
         default_initializer = toolkit.get_validator('default')
-
+        
         # Add dataset-type, the field that distinguishes metadata formats
 
+        is_dataset_type = ext_validators.is_dataset_type
         schema['dataset_type'] = [
-            default_initializer('ckan'),
-            convert_to_extras,
-            is_dataset_type,
+            default_initializer('ckan'), convert_to_extras, is_dataset_type,
         ]
        
-        # Add field-level validators/converters
+        # Add package field-level validators/converters
         
         # Note We provide a union of fields for all supported schemata.
         # Of course, not all of them will be present in a specific dataset,
         # so any "required" constraint cannot be applied here.
 
+        get_field_processor = ext_validators.get_field_edit_processor
+        
         for dt, dt_spec in dataset_types.items():
             flattened_fields = dt_spec.get('class').get_flattened_fields(opts={
                 'serialize-keys': True,
@@ -242,17 +246,35 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             for field_name, field in flattened_fields.items():
                 # Build chain of processors for field
                 schema[field_name] = [ 
-                    ignore_missing,
-                    get_field_edit_processor(field),
+                    ignore_missing, get_field_processor(field),
                 ]
         
         # Add before/after package-level processors
 
-        schema['__before'].insert(-1, preprocess_dataset_for_edit)
+        preprocess_dataset = ext_validators.preprocess_dataset_for_edit
+        postprocess_dataset = ext_validators.postprocess_dataset_for_edit
+        
+        schema['__before'].insert(-1, preprocess_dataset)
 
-        if not schema.has_key('__after'):
+        if not '__after' in schema:
             schema['__after'] = []
-        schema['__after'].append(postprocess_dataset_for_edit)
+        schema['__after'].append(postprocess_dataset)
+        
+        # Add or replace resource field-level validators/converters
+
+        guess_resource_type = ext_validators.guess_resource_type_if_empty
+        
+        def convert_format_1(key, data, errors, context):
+            assert False
+
+        schema['resources'].update({
+            'resource_type': [
+                guess_resource_type, string.lower, unicode],
+            'format': [
+                check_not_empty, string.lower, unicode],
+        })
+
+        # Done, return updated schema
 
         return schema
 
@@ -268,10 +290,6 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
     def show_package_schema(self):
         schema = super(DatasetForm, self).show_package_schema()
-        
-        from ckanext.publicamundi.lib.metadata.validators import (
-            get_field_read_processor,
-            preprocess_dataset_for_read, postprocess_dataset_for_read)
 
         # Don't show vocab tags mixed in with normal 'free' tags
         # (e.g. on dataset pages, or on the search page)
@@ -283,7 +301,9 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         
         schema['dataset_type'] = [convert_from_extras, check_not_empty]
        
-        # Add field-level converters
+        # Add package field-level converters
+        
+        get_field_processor = ext_validators.get_field_read_processor
 
         for dt, dt_spec in dataset_types.items():
             flattened_fields = dt_spec.get('class').get_flattened_fields(opts={
@@ -292,18 +312,19 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             })
             for field_name, field in flattened_fields.items():
                 schema[field_name] = [ 
-                    convert_from_extras, 
-                    ignore_missing, 
-                    get_field_read_processor(field),
+                    convert_from_extras, ignore_missing, get_field_processor(field)
                 ]
           
         # Add before/after package-level processors
         
-        schema['__before'].insert(-1, preprocess_dataset_for_read)
+        preprocess_dataset = ext_validators.preprocess_dataset_for_read
+        postprocess_dataset = ext_validators.postprocess_dataset_for_read
+
+        schema['__before'].insert(-1, preprocess_dataset)
         
-        if not schema.has_key('__after'):
+        if not '__after' in schema:
             schema['__after'] = []
-        schema['__after'].append(postprocess_dataset_for_read)
+        schema['__after'].append(postprocess_dataset)
         
         return schema
 
@@ -316,6 +337,13 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         c = toolkit.c
         c.publicamundi_magic_number = 99
+        
+        if c.search_facets:
+            # Provide label functions for certain facets
+            if not c.facet_labels:
+                c.facet_labels = {
+                    'res_format': lambda t: t['display_name'].upper()
+                }
 
     # Note for all *_template hooks: 
     # We choose not to modify the path for each template (so we simply call super()). 
@@ -421,31 +449,63 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             pkg_dict[key_prefix] = obj.to_dict(flat=False, opts={
                 'serialize-values': 'json-s' 
             })
-            
-        return
-        #return pkg_dict
+         
+        return pkg_dict
      
     def before_search(self, search_params):
+        '''Return a modified (or not) version of the query parameters.
+        '''
         #search_params['q'] = 'extras_boo:*';
         #search_params['extras'] = { 'ext_boo': 'far' }
         return search_params
    
     def after_search(self, search_results, search_params):
+        '''Receive the search results, as well as the search parameters, and
+        return a modified (or not) result with the same structure.
+        '''
         #raise Exception('Breakpoint')
         return search_results
 
     def before_index(self, pkg_dict):
+        '''Receive what will be given to SOLR for indexing.
+        
+        This is essentially a flattened dict (except for multi-valued fields 
+        such as tags) of all the terms sent to the indexer.
+        '''
         log1.debug('before_index: Package %s is indexed', pkg_dict.get('name'))
         return pkg_dict
 
     def before_view(self, pkg_dict):
-        log1.debug('before_view: Package %s is prepared for view', pkg_dict.get('name'))
+        '''Receive the validated package dict before it is sent to the template. 
+        '''
 
-        # This hook can add/hide/transform package fields before being sent to the template.
+        log1.debug('before_view: Package %s is prepared for view', pkg_dict.get('name'))
         
         dt = pkg_dict.get('dataset_type') 
-
         return pkg_dict
+
+    ## IResourceController interface ##
+
+    def before_show(self, resource_dict):
+        '''Receive the validated data dict before the resource is ready for display.
+        '''
+        
+        # Normalize resource format (#66)
+        # Note ckan.lib.dictization.model_dictize:resource_dictize converts only
+        # some of the formats to uppercase (?), which leads to mixed cases.
+        resource_dict['format'] = resource_dict['format'].lower()
+        
+        return resource_dict
+
+    ## IFacets interface ##
+
+    def dataset_facets(self, facets_dict, package_type):
+        '''Update the facets_dict and return it.
+        '''
+        if package_type == 'dataset':
+            # Todo Maybe reorder facets
+            pass
+        return facets_dict
 
 class PackageController(p.SingletonPlugin):
     '''Hook into the package controller
