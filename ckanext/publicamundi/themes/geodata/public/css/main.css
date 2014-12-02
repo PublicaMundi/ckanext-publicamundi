@@ -1,10 +1,14 @@
 /* Body */
+@font-face { 
+    font-family: 'ACMuli';
+    src: url('../fonts/ACMuli/AC-Muli.ttf')
+}
 
 body { 
     color: #000;
     background: #fff;
     border: 4px #4E59A4 solid;
-    font-family: Aka-AcidGR-Muli, Helvetica, Arial;
+    font-family: 'ACMuli', Helvetica, Arial, sans-serif;
 }
 a {
     color: #4E59A4;
