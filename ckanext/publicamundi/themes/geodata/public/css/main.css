@@ -44,6 +44,7 @@ a {
 .account-masthead .account .notifications a:hover span{
     background-color: transparent;
 }
+
 .account-masthead .account ul li a{
     text-align: left;
     color: #4E59A4;
@@ -66,7 +67,10 @@ a {
     background-color: #4E59A4;
     color: #fff;
 }
-
+.notifications-profile{
+    display: block;
+    float: left;
+}
 #user-top{
     display: block;
     position: relative;

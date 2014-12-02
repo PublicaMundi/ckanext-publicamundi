@@ -8,7 +8,7 @@ def most_recent_datasets(limit=10):
         data_dict={'sort': 'metadata_modified desc', 'rows':8})
     return datasets
 
-def list_menu_items (limit=16):
+def list_menu_items (limit=21):
     groups = toolkit.get_action('group_list')(
         data_dict={'sort': 'name desc', 'all_fields':True})
     groups = groups[:limit]
