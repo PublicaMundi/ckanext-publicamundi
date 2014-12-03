@@ -7,12 +7,10 @@ import zope.interface
 import zope.schema
 import zope.schema.interfaces
 from lxml import etree
-from lxml.etree import \
-    Element, SubElement, ElementTree, QName
+from lxml.etree import (Element, SubElement, ElementTree, QName)
 
 from ckanext.publicamundi.lib.util import raise_for_stub_method
 from ckanext.publicamundi.lib.metadata import adapter_registry
-from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata.ibase import IXmlSerializer, IObject
 from ckanext.publicamundi.lib.metadata.base import Object, FieldContext
@@ -892,8 +890,4 @@ class ObjectSerializer(BaseObjectSerializer):
             yf.set(obj, ys.from_xml(p))
         
         return obj
-
-@object_xml_serialize_adapter(schemata.IFoo)
-class FooObjectSerializer(ObjectSerializer):
-    pass
 

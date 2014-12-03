@@ -20,7 +20,35 @@ plugins as usual. For now, the supported plugins are:
  * `publicamundi_dataset`: Provides validation logic, storage logic and ui controls for metadata described in alternative schemata (e.g. INSPIRE).
  * `publicamundi_dataset_with_spatial`: Extends `publicamundi_dataset` by providing a bridge to `spatial_metadata` plugin: recognizes the `spatial` extra field. 
  * `publicamundi_package`: Provides synchronization of package metadata to other databases (e.g. to the intergrated CSW service).
+ * `publicamundi_vector`: Provide processing and services for vector-based spatial resources. See more at README-vector.md
+ * `publicamundi_raster`: Provide processing and services for raster-based spatial resources. See more at README-raster.md 
 
+
+Configure
+---------
+
+Here we cover some of the configuration settings for only basic plugins of `ckanext-publicamundi`. Settings which are specific to a _storer_ plugin (either 
+`publicamundi_vector` or `publicamundi_raster`) are documented in their dedicated README file.
+
+The most common settings are:
+
+    # Specify which dataset types are enabled
+    ckanext.publicamundi.dataset_types = ckan inspire foo
+    
+    # Indicate whether a more relaxed name pattern can be used for dataset names
+    ckanext.publicamundi.validation.relax_name_pattern = true 
+    
+    # Specify a list of formats which should be considered as services (APIs)
+    ckanext.publicamundi.api_resource_formats = wms wcs wfs csw
+    
+    # Specify a list of pre-existing resource formats to be used as autocomplete suggestions
+    ckanext.publicamundi.resource_formats = 
+    # raster file formats 
+        geotiff bitmap png jpeg
+    # vector file formats
+        shapefile sqlite gml kml
+    # services, apis
+       %(ckanext.publicamundi.api_resource_formats)s
 
 Manage
 ------

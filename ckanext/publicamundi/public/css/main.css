@@ -232,6 +232,10 @@ span.space-x3 { padding: 0px 12px }
     border-radius: 1px;
 }
 
+.context-info .nums dl dd {
+    font-size: 26px;
+}
+
 /* Well, normally we would just use Bootstrap's .clearfix, but there are some 
  * cases that we only want the :after part */
 .clear-after:after {
@@ -419,6 +423,15 @@ span.space-x3 { padding: 0px 12px }
 
 .search-form {
     margin-top: 10px;
+}
+
+.search-form .filter-list .pill {
+    background-color: #91939D;
+    border-radius: 2px;
+    padding: 2px 8px;
+}
+.pill a.remove {
+    vertical-align: -5%;
 }
 
 section.additional-info header > .btn-group {

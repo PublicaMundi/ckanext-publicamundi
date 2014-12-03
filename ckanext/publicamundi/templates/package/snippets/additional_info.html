@@ -96,9 +96,9 @@
     {% endwith %} {# api_controller #}
 
   </header>
-  {{ 
-    h.markup_for('read:table', obj, errors={}, name_prefix='', data={ 'max_depth': 2 }) 
-  }}
+
+  {{ h.markup_for('read:table', obj, errors={}, name_prefix='', data={ 'max_depth': 2 }) }}
+  
   {%- endif -%} {# if obj #}
 
 </section>
