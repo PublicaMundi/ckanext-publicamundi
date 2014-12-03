@@ -1,0 +1,11 @@
+
+{# If not an editor, append more to filtered_formats #}
+{% if not h.check_access('package_update', pkg) %}
+  {% if not filtered_formats is defined %}
+    {% set filtered_formats = ['data_table'] %}
+  {% else %}
+    {% if not 'data_table' in filtered_formats %}{% do filtered_formats.append('data_table') %}{% endif %}
+  {% endif %}
+{% endif %}
+
+{% ckan_extends %}

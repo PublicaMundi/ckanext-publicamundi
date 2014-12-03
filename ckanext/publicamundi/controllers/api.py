@@ -3,9 +3,7 @@ import json
 import time
 import datetime
 from itertools import ifilter, islice
-
 from pylons import g, config
-from pylons.i18n import _
 
 from ckan.lib.base import (BaseController, c, request, response, abort, redirect)
 import ckan.model as model
@@ -15,11 +13,10 @@ import ckan.logic as logic
 from ckanext.publicamundi.lib.util import to_json
 from ckanext.publicamundi.lib import uploader
 from ckanext.publicamundi.lib.metadata import vocabularies
-from ckanext.publicamundi.lib.metadata import (
-    dataset_types, make_object, serializer_for, xml_serializer_for)
 
 log = logging.getLogger(__name__)
 
+_ = toolkit._
 _url = toolkit.url_for
 _get_action = toolkit.get_action
 _check_access = toolkit.check_access
@@ -95,11 +92,12 @@ class Controller(BaseController):
         results = []
         
         r1 = logic.get_action('format_autocomplete')(context, data_dict)
-        results.extend(({ 'name': t } for t in r1))
+        results.extend(({ 'name': t, 'text': t.upper() } for t in r1))
 
         limit -= len(results)
-        r2 = ifilter(lambda t: t.find(q) >= 0, resource_formats)
-        results.extend(({ 'name': t } for t in islice(r2, 0, limit)))
+        r2 = ifilter(lambda t: (not t in r1) and (t.find(q) >= 0), resource_formats)
+        r2 = islice(r2, 0, limit)
+        results.extend(({ 'name': t, 'text': t.upper() } for t in r2))
    
         result_set = { 'ResultSet': { 'Result': results } } 
         response.headers['Content-Type'] = content_types['json']
