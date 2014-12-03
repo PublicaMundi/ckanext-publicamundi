@@ -1,4 +1,4 @@
-<div class="{{ " " ~ classes | join(' ') }}">     
+<div class="{{ classes|join(' ') }}">     
 {%- if title %}<h3>{{ title }}</h3>{% endif -%}
     <table class="table table-bordered metadata-table">
         {% set col_width = 100.0 / (num_cols + 1.5) %}
@@ -12,17 +12,19 @@
             {% for row in rows -%}
             <tr>
                 {%- for r in row -%}
-                {%- set 
+                {%- with 
                     attrs = { 
                         'class': 'value' if loop.last else 'name',
                         'rowspan': r.rowspan if r.rowspan|int > 1 else None, 
-                        'colspan': r.colspan if r.colspan|int > 1 else None, }
+                        'colspan': r.colspan if r.colspan|int > 1 else None, 
+                    }
                 -%}
                 {%- if r.tag == 'th' -%}
                 <th {{ attrs|xmlattr }}>{{ r.title or r.data }}</th>
                 {% else %}
                 <td {{ attrs|xmlattr }}>{{ r.data }}</td>
                 {%- endif -%}
+                {%- endwith -%} {# attrs #}
                 {%- endfor -%} {# for r in row #}
             </tr>           
             {% endfor -%}

@@ -67,38 +67,35 @@
     </tbody>
   </table>
 
-  {%- set dt = pkg_dict.dataset_type -%}
-  {%- set obj = pkg_dict.get(dt) -%}
-  
+  {%- with 
+      obj = pkg_dict.get(pkg_dict.dataset_type),
+      dtspec = h.dataset_types().get(pkg_dict.dataset_type)
+  -%}
   {%- if obj -%}
   <header>
-    <h3 class="inline">{{ '%s Metadata'|format(h.dataset_types().get(dt).get('title'))|title }}</h3>
+    <h3 class="inline">{{ '%s Metadata'|format(dtspec.title)|title }}</h3>
     
     {% with api_controller = 'ckanext.publicamundi.controllers.api:Controller' %}
     <div class="btn-group pull-right">
-      <a class="btn" 
-        href="{{ h.url_for(controller=api_controller, action='dataset_export', name_or_id=pkg_dict.name) }}"
+      <a class="btn" href="{{ h.url_for(controller=api_controller, action='dataset_export', name_or_id=pkg_dict.name) }}"
         >{{ _('Download as') }}</a>
-      <button class="btn dropdown-toggle" data-toggle="dropdown">
-      <span class="caret"></span>
-      </button>
-        <ul class="dropdown-menu">
-          <li>
-            <a class="" 
-              href="{{ h.url_for(controller=api_controller, action='dataset_export', name_or_id=pkg_dict.name) }}"
-              >{{ _('XML Metadata') }}</a></li>
-          <li>
-            <a class="" 
-              href="{{ h.url_for('/api/action/dataset_show', id=pkg_dict.name) }}"
-              >{{ _('JSON Metadata') }}</a></li>
-        </ul>
+      <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+      <ul class="dropdown-menu">
+        <li>
+          <a href="{{ h.url_for(controller=api_controller, action='dataset_export', name_or_id=pkg_dict.name) }}"
+            >{{ _('XML Metadata') }}</a></li>
+        <li>
+          <a href="{{ h.url_for('/api/action/dataset_show', id=pkg_dict.name) }}"
+            >{{ _('JSON Metadata') }}</a></li>
+      </ul>
     </div>
     {% endwith %} {# api_controller #}
 
   </header>
 
-  {{ h.markup_for('read:table', obj, errors={}, name_prefix='', data={ 'max_depth': 2 }) }}
+  {{ h.markup_for('read:table', obj, errors=none, name_prefix='', data={ 'max_depth': 2 }) }}
   
   {%- endif -%} {# if obj #}
+  {%- endwith -%} {# obj, dtspec #}
 
 </section>

@@ -271,6 +271,10 @@ span.space-x3 { padding: 0px 12px }
  * Package states
  */
 
+h1 > .label.package-state {
+    vertical-align: super;
+}
+
 .label.state-active { }
 .label.state-draft { }
 .label.state-deleted { }

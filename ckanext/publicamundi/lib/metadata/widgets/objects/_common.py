@@ -15,7 +15,7 @@ from ckanext.publicamundi.lib.metadata.widgets.base import (
 _ = toolkit._
 
 #
-# IObject - Tabular views
+# IObject - Tabular view
 #
 
 @object_widget_adapter(schemata.IObject, qualifiers=['table'])
@@ -34,9 +34,8 @@ class TableObjectReadWidget(ReadObjectWidget):
         
         max_depth = data.get('max_depth', 0) or self.max_depth
 
-        obj_dict = self.obj.to_dict(flat=False, opts={ 
-            'max-depth': max_depth,
-            'format-values': 'default', })
+        dictz_opts = { 'max-depth': max_depth, 'format-values': 'default' } 
+        obj_dict = self.obj.to_dict(flat=False, opts=dictz_opts)
         
         num_rows, num_cols, rows = cls._tabulate(obj_dict)
        
