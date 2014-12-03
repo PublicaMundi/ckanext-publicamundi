@@ -45,6 +45,7 @@ def dataset_export(context, data_dict):
     if obj:
         # Get a proper serializer
         xser = xml_serializer_for(obj)
+        xser.target_namespace = config.get('ckan.site_url') 
         # Persist exported XML data and wrap into a URL
         name = '%(name)s@%(revision_id)s' % (pkg)
         cached = cached_metadata.get(name, createfunc=xser.dumps)

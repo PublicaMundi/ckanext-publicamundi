@@ -21,9 +21,8 @@ then itself be extended to add/remove blocks of functionality. #}
   {% endblock %}
 
   {% block package_fields_autofill %}
-  <button class="btn btn-warning hide" data-module="package-form-autofiller" data-module-formid="package-form">Auto</button>
-  {% resource 'ckanext-publicamundi/package-form-autofiller'  %}
-  {% endblock %} {# package_basic_autofill #}
+  {% if h.debug() %}{% snippet 'package/snippets/form-autofiller.html', form_id='package-form' %}{% endif %}
+  {% endblock %}
 
   {% block basic_fields %}
   {% snippet 'package/snippets/package_basic_fields.html', 
