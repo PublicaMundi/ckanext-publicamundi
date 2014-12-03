@@ -20,11 +20,11 @@ import ckanext.publicamundi.lib.actions as ext_actions
 import ckanext.publicamundi.lib.template_helpers as ext_template_helpers
 
 from ckanext.publicamundi.lib.util import (to_json, random_name, Breakpoint)
-from ckanext.publicamundi.lib.metadata import (
-    dataset_types, Object, ErrorDict,
-    serializer_for_object, serializer_for_key_tuple)
+from ckanext.publicamundi.lib.metadata import dataset_types
 
 _ = toolkit._
+asbool = toolkit.asbool
+aslist = toolkit.aslist
 
 log1 = logging.getLogger(__name__)
 
@@ -42,18 +42,22 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     p.implements(p.IResourceController, inherit=True)
     p.implements(p.IFacets, inherit=True)
 
+    _debug = False
+
+    _dataset_types = None
+
     ## Define helper methods ## 
 
     @classmethod
     def dataset_types(cls):
-        '''Provide a dict of dataset types'''
-        return dataset_types
+        '''Provide a dict of supported dataset types'''
+        return cls._dataset_types
 
     @classmethod
     def dataset_type_options(cls):
-        '''Provide options for dataset-type (needed for select inputs)'''
-        for name, spec in dataset_types.items():
-            yield { 'value': name, 'text': spec['title'] }
+        '''Provide options for dataset-type (needed for selects)'''
+        for k, spec in cls._dataset_types.items():
+            yield { 'value': k, 'text': spec['title'] }
 
     ## ITemplateHelpers interface ##
 
@@ -61,7 +65,9 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         '''Return a dict of named helper functions (ITemplateHelpers interface).
         These helpers will be available under the 'h' thread-local global object.
         '''
+
         return {
+            'debug': lambda: self._debug,
             'random_name': random_name,
             'filtered_list': ext_template_helpers.filtered_list,
             'dataset_types': self.dataset_types,
@@ -79,7 +85,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     def update_config(self, config):
         '''Configure CKAN (Pylons) environment'''
 
-        # Setup the (fanstatic) resource library, public and template directory
+        # Setup static resources
+
         p.toolkit.add_public_directory(config, 'public')
         p.toolkit.add_template_directory(config, 'templates')
         p.toolkit.add_resource('public', 'ckanext-publicamundi')
@@ -91,7 +98,17 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     def configure(self, config):
         '''Pass configuration to plugins and extensions'''
         
-        asbool = toolkit.asbool
+        cls = type(self)
+
+        # Are we in debug mode?
+
+        cls._debug = asbool(config['global_conf']['debug'])
+        
+        # Set supported dataset types
+
+        type_keys = aslist(config['ckanext.publicamundi.dataset_types'])
+        cls._dataset_types = { k: spec
+            for k, spec in dataset_types.items() if k in type_keys }
 
         # Modify the pattern for valid names for {package, groups, organizations}
         
@@ -99,12 +116,12 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             logic.validators.name_match = re.compile('[a-z][a-z0-9~_\-]*$')
             log1.info('Using pattern for valid names: %r', 
                 logic.validators.name_match.pattern)
-        
+              
         # Setup extension-wide cache manager
 
         from ckanext.publicamundi import cache_manager
         cache_manager.setup(config)
-
+    
         return
 
     ## IRoutes interface ##
@@ -238,7 +255,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         get_field_processor = ext_validators.get_field_edit_processor
         
-        for dt, dt_spec in dataset_types.items():
+        for dt, dt_spec in self._dataset_types.items():
             flattened_fields = dt_spec.get('class').get_flattened_fields(opts={
                 'serialize-keys': True,
                 'key-prefix': dt_spec.get('key_prefix', dt)
@@ -305,7 +322,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         
         get_field_processor = ext_validators.get_field_read_processor
 
-        for dt, dt_spec in dataset_types.items():
+        for dt, dt_spec in self._dataset_types.items():
             flattened_fields = dt_spec.get('class').get_flattened_fields(opts={
                 'serialize-keys': True,
                 'key-prefix': dt_spec.get('key_prefix', dt)
@@ -409,7 +426,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             # Noop: cannot recognize dataset-type (pkg_dict has raw extras?)
             return
 
-        dt_spec = dataset_types[dt]
+        dt_spec = self._dataset_types[dt]
         key_prefix = dt_spec.get('key_prefix', dt)
 
         # Fix types, create flat object dict

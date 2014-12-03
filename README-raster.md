@@ -1,0 +1,4 @@
+Publicamundi Raster Plugin
+==========================
+
+Todo

@@ -232,6 +232,10 @@ span.space-x3 { padding: 0px 12px }
     border-radius: 1px;
 }
 
+.context-info .nums dl dd {
+    font-size: 26px;
+}
+
 /* Well, normally we would just use Bootstrap's .clearfix, but there are some 
  * cases that we only want the :after part */
 .clear-after:after {
