@@ -4,15 +4,26 @@
     src: url('../fonts/ACMuli/AC-Muli.ttf')
 }
 
+@font-face {
+    font-family: 'ACMuliLight';
+    src: url('../fonts/ACMuliLight/AC-MuliLight.ttf')
+}
 body { 
     color: #000;
     background: #fff;
     border: 4px #4E59A4 solid;
-    font-family: 'ACMuli', Helvetica, Arial, sans-serif;
+    font-family: 'ACMuliLight', Helvetica, Arial, sans-serif;
+}
+input{
+    font-family: 'ACMuliLight', Helvetica, Arial, sans-serif !important;
 }
 a {
     color: #4E59A4;
 }
+.heading, h1, h2, h3, h4, h5, h6{
+    font-family: 'ACMuli', Helvetica, Arial, sans-serif;
+}
+
 #content{
     min-height: 70vh;
 }
@@ -290,6 +301,9 @@ a {
 }
 .nav-tabs {
  //   border-bottom: 0px;
+}
+.nav-tabs > li > a:focus{
+    background: #F6F6F6;
 }
 /* Home background */
 .feedback-form{
@@ -605,8 +619,8 @@ a {
     color: #4E59A4;
 }
 #package-list-home .dataset-heading{
-    font-size:24px;
-    margin-top:10px;
+    font-size:20px;
+    margin-top:7px;
 }
 .dataset-preheading{
     margin-bottom: 5px;
@@ -819,6 +833,16 @@ a {
     display: inline-block;
     position:relative;
     float: right;
+}
+.icon-edit{
+    font-size: 23px;
+    position: relative;
+    top: 4px;
+    
+}
+.icon-edit:hover{
+    text-decoration: none;
+    
 }
 
 .resource-actions li {
