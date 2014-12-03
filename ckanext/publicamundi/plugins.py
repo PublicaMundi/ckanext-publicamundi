@@ -78,6 +78,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'markup_for_object': ext_metadata.markup_for_object,
             'markup_for': ext_metadata.markup_for,
             'resource_ingestion_result': ext_template_helpers.resource_ingestion_result,
+            'remove_get_param': ext_template_helpers.remove_get_param,
+            'add_get_param': ext_template_helpers.add_get_param,
         }
 
     ## IConfigurer interface ##

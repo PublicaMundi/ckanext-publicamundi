@@ -1,7 +1,8 @@
 import json
 
 import ckan.model as model
-from ckan.lib.base import (c, BaseController, render, abort, redirect)
+from ckan.lib.base import (
+    c, BaseController, render, request, abort, redirect)
 import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
 import ckan.lib.helpers as h
@@ -14,11 +15,14 @@ from ckanext.publicamundi.storers.vector import resource_actions # Fixme: adapt
 _ = toolkit._
 NotFound = toolkit.ObjectNotFound
 NotAuthorized = toolkit.NotAuthorized
+accepted_sortings = ["status", "storer_type"]
+
 
 class UserController(BaseController):
 
     def show_dashboard_resources(self):
         user_dict = self._check_access()
+        user_dict = self._filter_user_dict(user_dict)
         self._setup_template_variables(user_dict)
         return render('user/dashboard_resources.html')
 
@@ -39,15 +43,48 @@ class UserController(BaseController):
 
     def _get_context(self):
         context = {
-            'for_view': True, 
+            'for_view': True,
             'user': c.user or c.author,
             'auth_user_obj': c.userobj
         }
         data_dict = {'user_obj': c.userobj}
         return context, data_dict
 
+    def _filter_user_dict(self, user_dict):
+        datasets_dict = user_dict['datasets']
+        filtered_datasets_dict = []
+        for dataset in datasets_dict:
+            resources = dataset['resources']
+            params = request.params
+            filtered_resources = resources
+            for param in params:
+
+                if param in accepted_sortings:
+                    filtered_resources = self._filter_resources_by_status(
+                        filtered_resources, param)
+
+            dataset['resources'] = filtered_resources
+            filtered_datasets_dict.append(dataset)
+        user_dict['datasets'] = filtered_datasets_dict
+        return user_dict
+
+    def _filter_resources_by_status(self, resources_dict, sorting):
+        filtered_resources = []
+        for resource in resources_dict:
+                res_ingestion = resource_ingestion.get_result(
+                    resource["id"])
+                if res_ingestion["found"]:
+                    if sorting == accepted_sortings[0]:
+                        if res_ingestion["status"] == request.params.get(
+                                sorting).lower():
+                            filtered_resources.append(resource)
+                    elif sorting == accepted_sortings[1]:
+                        if res_ingestion["storer_type"] == request.params.get(
+                                sorting).lower():
+                            filtered_resources.append(resource)
+        return filtered_resources
+
     def _setup_template_variables(self, user_dict):
-        c.is_sysadmin = False # Fixme: why? normally should be computed
         c.user_dict = user_dict
         c.is_myself = user_dict['name'] == c.user
         c.about_formatted = h.render_markdown(user_dict['about'])
