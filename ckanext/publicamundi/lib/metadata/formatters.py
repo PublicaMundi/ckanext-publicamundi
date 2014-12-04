@@ -125,8 +125,15 @@ def formatter_for_field(field, name=''):
     return formatter
 
 def config_for_field(field, name=''):
-    fo_tag = field.queryTaggedValue('format')
-    return fo_tag.get(name) if fo_tag else None
+    '''Get config options for field.
+    '''
+
+    tag = None
+    if name:
+        tag = field.queryTaggedValue('format:%s' % (name))
+    if not tag:
+        tag = field.queryTaggedValue('format')
+    return tag
     
 # Formatters
 

@@ -16,14 +16,14 @@
                 {%- with 
                     attrs = { 
                         'class': 'value' if loop.last else 'name',
-                        'rowspan': r.rowspan if r.rowspan|int > 1 else None, 
-                        'colspan': r.colspan if r.colspan|int > 1 else None, 
+                        'rowspan': r.rowspan if r.rowspan > 1 else None, 
+                        'colspan': r.colspan if r.colspan > 1 else None, 
                     }
                 -%}
                 {%- if r.tag == 'th' -%}
                 <th {{ attrs|xmlattr }}>{{ r.title or r.data }}</th>
                 {% else %}
-                <td {{ attrs|xmlattr }}>{{ r.data }}</td>
+                <td {{ attrs|xmlattr }}>{{ r.data|safe }}</td>
                 {%- endif -%}
                 {%- endwith -%} {# attrs #}
                 {%- endfor -%} {# for r in row #}

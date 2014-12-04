@@ -18,7 +18,7 @@ class MarkupFieldFormatter(FieldFormatter):
     def _format(self, value, opts):
         field = self.field
         if not field.context:
-            field = field.bind(FieldContext(key=None, value=value))
+            field = field.bind(FieldContext(key=field.__name__, value=value))
         qualifier = opts.get('q')
         qual_action = 'read:%s' % (qualifier) if qualifier else 'read'
         return markup_for_field(qual_action, field, name_prefix='')

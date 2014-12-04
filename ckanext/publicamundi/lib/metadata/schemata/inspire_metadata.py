@@ -94,6 +94,7 @@ class IInspireMetadata(IBaseMetadata):
         value_type = zope.schema.Choice(
             title = u'Topic Category',
             vocabulary = vocabularies.get_by_name('topic-category').get('vocabulary'),))
+    topic_category.setTaggedValue('format:markup', { 'descend-if-dictized': False })
 
     # Keywords
 
@@ -109,6 +110,7 @@ class IInspireMetadata(IBaseMetadata):
             title = u'Keyword Thesaurus'),
         value_type = zope.schema.Object(IThesaurusTerms, 
             title = u'Keywords'))
+    keywords.setTaggedValue('format:markup', { 'descend-if-dictized': False })
 
     @zope.interface.invariant
     def check_keywords(obj):

@@ -346,10 +346,8 @@ class Controller(BaseController):
         
         #raise Breakpoint('Break')
 
-        c.markup = markup_for_object('read:table', obj, errors={}, name_prefix=k, 
-            data = {
-                'title': u'%s: Metadata' %(pkg_dict['title'])
-            })
+        data = { 'title': u'%s: Metadata' % (pkg_dict['title']) }
+        c.markup = markup_for_object('read:table', obj, name_prefix=k, data=data)
 
         return render('tests/page.html')
         

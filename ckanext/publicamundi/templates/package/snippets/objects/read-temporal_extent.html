@@ -1,4 +1,4 @@
-<div class="{{ classes | join(' ') }}">
+<div class="{{ classes|join(' ') }}">
     <dt>{{ title or _('Temporal Extent') }}</dt>
-    <dd>From {{ obj.start }} to {{ obj.end }}</dd>
+    <dd>{{ _('From %(start)s to %(end)s')|format(start=obj.start, end=obj.end) }}</dd>
 </div>

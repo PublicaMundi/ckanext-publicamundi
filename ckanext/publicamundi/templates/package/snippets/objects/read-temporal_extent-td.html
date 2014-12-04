@@ -1,0 +1,4 @@
+<span class="{{ classes|join(' ') }}">
+    {#- Todo Format dates with respect to lacale -#}
+    {{- _('From %(start)s to %(end)s')|format(start=obj.start, end=obj.end) -}}
+</span>

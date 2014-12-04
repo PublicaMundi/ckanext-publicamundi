@@ -859,10 +859,10 @@ class Object(object):
                 if ser:
                     try:
                         v = ser.dumps(v)
-                    except:
+                    except Exception as ex:
                         logger.warn(
-                            'Failed to serialize value %r for field %r (%s)' % (
-                                v, field.__name__, field.__class__.__name__))
+                            'Failed to serialize value %r for field %r (%s): %s' % (
+                                v, field.__name__, field.__class__.__name__, ex))
                         v = None
                 # Return here, no need to do anything more
                 return v
@@ -883,10 +883,10 @@ class Object(object):
                     # Try to format
                     try:
                         v = fo.format(v, opts=fo_opts)
-                    except:
+                    except Exception as ex:
                         logger.warn(
-                            'Failed to format value %r for field %r (%s)' % (
-                                v, field.__name__, field.__class__.__name__))
+                            'Failed to format value %r for field %r (%s): %s' % (
+                                v, field.__name__, field.__class__.__name__, ex))
                         v = None
             
             return v
