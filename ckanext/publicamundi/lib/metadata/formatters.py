@@ -1,7 +1,8 @@
 '''Provide formatters for zope.schema fields
 
 We provide named adapters for IFormatter interface. These adapters are named 
-according to their names as "format:<name>".
+according to their names as "format:<name>". An unnamed adapter also exists
+as "format" and stands for the default formatter.
 
 '''
 
@@ -13,6 +14,8 @@ from collections import namedtuple
 from ckanext.publicamundi.lib import logger
 from ckanext.publicamundi.lib.util import quote, raise_for_stub_method
 from ckanext.publicamundi.lib.metadata.fields import *
+from ckanext.publicamundi.lib.metadata.fields import (
+    build_adaptee, check_multiadapter_ifaces)
 from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.ibase import IFormatSpec, IFormatter
 
@@ -23,8 +26,6 @@ __all__ = [
     'BaseFormatter', 
     'formatter_for_field',
 ]
-
-supported_formats = ['default', 'summary',]
 
 # Format specifiers
 
@@ -38,10 +39,11 @@ class FormatSpec(namedtuple('_FormatSpec', ('name', 'opts'))):
         '''Return as a format-spec string.
         '''
         
-        opts_str = ','.join(('%s' %(t[0]) if t[1] is True else '%s=%s' %(t) 
-            for t in  self.opts.iteritems()))
+        opts_str = ','.join(
+            ('%s' %(t[0]) if t[1] is True else '%s=%s' % (t) 
+                for t in  self.opts.iteritems()))
 
-        return '%s:%s' %(self.name, opts_str)
+        return '%s:%s' %(self.name, opts_str) if self.name else ''
 
     @classmethod
     def parse(cls, spec):
@@ -49,7 +51,7 @@ class FormatSpec(namedtuple('_FormatSpec', ('name', 'opts'))):
         
         Examples:
             >>> FormatSpec.parse('default:aa,bb,cc=3,quote')
-            FormatSpec(name='default', opts={'aa': True, 'cc': '1', 'bb': True, 'quote': True})
+            FormatSpec(name='default', opts={'aa': True, 'cc': '3', 'bb': True, 'quote': True})
 
             >>> FormatSpec.parse('default')
             FormatSpec(name='default', opts={})
@@ -69,64 +71,60 @@ class FormatSpec(namedtuple('_FormatSpec', ('name', 'opts'))):
 
 # Decorators for adaptation
 
-def field_format_adapter(required_iface, name):
-    assert required_iface.isOrExtends(IField)
-    assert name in supported_formats
-    
+def decorator_for_multiadapter(required_ifaces, qualifier, is_fallback):
     def decorate(cls):
-        adapter_registry.register(
-            [required_iface], IFormatter, 'format:%s' %(name), cls)
+        adapter_names = set()
+        if not qualifier or is_fallback:
+            adapter_names.add('format')
+        if qualifier:
+            adapter_names.add('format:%s' % (qualifier))
+        for name in adapter_names:
+            adapter_registry.register(required_ifaces, IFormatter, name, cls)
         return cls
-    
-    return decorate
+    return decorate   
 
-def field_format_multiadapter(required_ifaces, name):
-    for iface in required_ifaces:
-        assert iface.isOrExtends(IField)
-    assert name in supported_formats
-    
-    def decorate(cls):
-        adapter_registry.register(
-            required_ifaces, IFormatter, 'format:%s' %(name), cls)
-        return cls
-    
-    return decorate
+def field_format_adapter(required_iface, name='', is_fallback=False):
+    assert required_iface.isOrExtends(IField)
+    return decorator_for_multiadapter([required_iface], name, is_fallback)
+
+def field_format_multiadapter(required_ifaces, name='', is_fallback=False):
+    check_multiadapter_ifaces(required_ifaces)
+    return decorator_for_multiadapter(required_ifaces, name, is_fallback)   
 
 # Utilities
 
-def formatter_for_field(field, name='default'):
+def formatter_for_field(field, name=''):
     '''Get a proper formatter for a zope.schema.Field instance.
-    ''' 
-    
-    from ckanext.publicamundi.lib.metadata.fields import build_adaptee
-    
+    '''  
     assert isinstance(field, zope.schema.Field)
-    
-    # Note Maybe relax this and return None
-    assert name in supported_formats
     
     # Build adaptee vector
     
     adaptee = build_adaptee(field, expand_collection=True)
 
     # Lookup
-
-    requested_name, name = name, 'format:%s' % (name)
+    
+    candidates = ['format']
+    if name:
+        candidates.insert(0, 'format:%s' % (name))
     
     formatter = None
-    while len(adaptee):
-        formatter = adapter_registry.queryMultiAdapter(adaptee, IFormatter, name)
+    while adaptee:
+        for candidate in candidates: 
+            formatter = adapter_registry.queryMultiAdapter(
+                adaptee, IFormatter, candidate)
+            if formatter:
+                break
         if formatter:
             break
         # Fallback to a more general version of this adaptee    
         adaptee.pop()
 
     if formatter:
-        formatter.requested_name = requested_name
-
+        formatter.requested_name = name
     return formatter
 
-def config_for_field(field, name='default'):
+def config_for_field(field, name=''):
     fo_tag = field.queryTaggedValue('format')
     return fo_tag.get(name) if fo_tag else None
     
@@ -157,16 +155,15 @@ class BaseFieldFormatter(BaseFormatter):
     def _format(self, value, opts):
         raise_for_stub_method()
 
-@field_format_adapter(IField, 'default')
-@field_format_adapter(IField, 'summary')
+@field_format_adapter(IField)
 class FieldFormatter(BaseFieldFormatter):
     '''A fallback formatter for any field (IField)'''
 
     def _format(self, value, opts):
         return unicode(value)
 
-@field_format_adapter(IStringField, 'default')
-@field_format_adapter(IStringLineField, 'default')
+@field_format_adapter(IStringField)
+@field_format_adapter(IStringLineField)
 class StringFieldFormatter(BaseFieldFormatter):
     
     encoding = 'utf-8'
@@ -176,15 +173,15 @@ class StringFieldFormatter(BaseFieldFormatter):
         s = value.decode(self.encoding)
         return quote(s) if opts.get('quote') else s
 
-@field_format_adapter(ITextLineField, 'default')
-@field_format_adapter(ITextField, 'default')
+@field_format_adapter(ITextLineField)
+@field_format_adapter(ITextField)
 class TextFieldFormatter(BaseFieldFormatter):
 
     def _format(self, value, opts):
         assert isinstance(value, unicode)
         return quote(value) if opts.get('quote') else value
 
-@field_format_adapter(IFloatField, 'default')
+@field_format_adapter(IFloatField)
 class FloatFieldFormatter(BaseFieldFormatter):
 
     precision = 4
@@ -197,13 +194,13 @@ class FloatFieldFormatter(BaseFieldFormatter):
             precision = self.precision
         return u'{0:.{1}f}'.format(value, precision)
 
-@field_format_adapter(IPasswordField, 'default')
+@field_format_adapter(IPasswordField)
 class PasswordFieldFormatter(BaseFieldFormatter):
     
     def _format(self, value, opts):
         return '*'
 
-@field_format_adapter(IChoiceField, 'default')
+@field_format_adapter(IChoiceField)
 class ChoiceFieldFormatter(BaseFieldFormatter):
     
     def _format(self, value, opts):
@@ -216,9 +213,9 @@ class ChoiceFieldFormatter(BaseFieldFormatter):
         s = term.title
         return u'<%s>' % s if opts.get('quote') else s
         
-@field_format_adapter(IDatetimeField, 'default')
-@field_format_adapter(IDateField, 'default')
-@field_format_adapter(ITimeField, 'default')
+@field_format_adapter(IDatetimeField)
+@field_format_adapter(IDateField)
+@field_format_adapter(ITimeField)
 class DatetimeFieldFormatter(BaseFieldFormatter):
 
     def _format(self, value, opts):
@@ -227,8 +224,8 @@ class DatetimeFieldFormatter(BaseFieldFormatter):
         s = value.isoformat()
         return u'<%s>' % s if opts.get('quote') else s
 
-@field_format_adapter(ITupleField, 'default')
-@field_format_adapter(IListField, 'default')
+@field_format_adapter(ITupleField)
+@field_format_adapter(IListField)
 class ListFieldFormatter(BaseFieldFormatter):
     
     delimiter = ', '
@@ -244,7 +241,7 @@ class ListFieldFormatter(BaseFieldFormatter):
         s = delimiter.join(map(f, values))
         return u'[%s]' % s if opts.get('quote') else s
 
-@field_format_adapter(IDictField, 'default')
+@field_format_adapter(IDictField)
 class DictFieldFormatter(BaseFieldFormatter):
     
     delimiter = u', '
@@ -260,7 +257,7 @@ class DictFieldFormatter(BaseFieldFormatter):
         s = delimiter.join(map(f, data.iteritems()))
         return u'{%s}' % s if opts.get('quote') else s
 
-@field_format_multiadapter([IListField, IStringLineField], 'default')
+@field_format_multiadapter([IListField, IStringLineField])
 class ListOfStringFieldFormatter(ListFieldFormatter):
 
     encoding = 'utf-8'
@@ -274,7 +271,7 @@ class ListOfStringFieldFormatter(ListFieldFormatter):
         s = delimiter.join(map(quote, map(decode, values)))
         return u'[%s]' % s if opts.get('quote') else s
 
-@field_format_multiadapter([IListField, ITextLineField], 'default')
+@field_format_multiadapter([IListField, ITextLineField])
 class ListOfTextFieldFormatter(ListFieldFormatter):
     
     def _format(self, values, opts):
@@ -283,7 +280,7 @@ class ListOfTextFieldFormatter(ListFieldFormatter):
         s = delimiter.join(map(quote, values))
         return u'[%s]' % s if opts.get('quote') else s
 
-@field_format_multiadapter([IDictField, IStringField], 'default')
+@field_format_multiadapter([IDictField, IStringField])
 class DictOfStringFieldFormatter(DictFieldFormatter):
 
     encoding = 'utf-8'
@@ -298,7 +295,7 @@ class DictOfStringFieldFormatter(DictFieldFormatter):
         s = delimiter.join(map(f, data.iteritems()))
         return u'{%s}' % s if opts.get('quote') else s
 
-@field_format_multiadapter([IDictField, ITextLineField], 'default')
+@field_format_multiadapter([IDictField, ITextLineField])
 class DictOfTextFieldFormatter(DictFieldFormatter):
     
     def _format(self, data, opts):

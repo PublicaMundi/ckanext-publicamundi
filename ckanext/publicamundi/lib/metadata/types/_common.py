@@ -86,7 +86,7 @@ class TemporalExtent(Object):
     start = None
     end = None
 
-@object_format_adapter(ITemporalExtent, 'default')
+@object_format_adapter(ITemporalExtent)
 class TemporalExtentFormatter(ObjectFormatter):
 
     def _format(self, obj, opts):

@@ -36,7 +36,7 @@ class TableObjectReadWidget(ReadObjectWidget):
 
         dictz_opts = { 'max-depth': max_depth, 'format-values': 'default' } 
         obj_dict = self.obj.to_dict(flat=False, opts=dictz_opts)
-        
+
         num_rows, num_cols, rows = cls._tabulate(obj_dict)
        
         # Provide human-friendly names for TH elements 

@@ -39,6 +39,14 @@ class Controller(BaseController):
     def brk(self):
         raise Breakpoint()
     
+    def test_formatter(self):
+        from ckanext.publicamundi.lib.metadata import formatter_for_field
+        x = fixtures.inspire1
+        f = x.get_field('spatial_resolution')
+        fo = formatter_for_field(f, 'markup')
+        s = fo.format()
+        return [unicode(s)]
+    
     def test_cache(self):
         from ckanext.publicamundi.cache_manager import get_cache
 
@@ -65,7 +73,6 @@ class Controller(BaseController):
         field_name = request.params.get('name')
         upload = request.params.get(field_name + '-upload') if field_name else 'upload'
         if not isinstance(upload, FieldStorage):
-            assert 0
             abort(400, 'Expected a file upload')
         
         name = datetime.datetime.now().strftime('%s') + '-' + upload.filename
