@@ -26,8 +26,46 @@
 
   </header>
 
-  {{ h.markup_for('read:table', obj, errors=none, name_prefix='', data={ 'max_depth': 2 }) }}
-  
+  {% with 
+     data = { 
+        'max_depth': 2,
+        'extras': [ 
+            {
+                'title': _('Source'), 
+                'value': h.link_to(pkg_dict.url, pkg_dict.url, rel='foaf:homepage', target='_blank') if pkg_dict.url else none, 
+                'attrs': { 'property': 'foaf:homepage' },  
+            },
+            { 
+                'title': _('Author'), 
+                'value': pkg_dict.author, 
+                'attrs': { 'property': 'dc:creator' },  
+            },
+            {
+                'title': _('Author Email'), 
+                'value': h.mail_to(email_address=pkg_dict.author_email, name=pkg_dict.author_email) if pkg_dict.author_email else none, 
+                'attrs': { 'property': 'dc:creator' },  
+            },
+            {
+                'title': _('Maintainer'), 
+                'value': pkg_dict.maintainer, 
+                'attrs': { 'property': 'dc:contributor' },  
+            },
+            {
+                'title': _('Maintainer Email'), 
+                'value': h.mail_to(email_address=pkg_dict.maintainer_email, name=pkg_dict.maintainer_email) if pkg_dict.maintainer_email else none, 
+                'attrs': { 'property': 'dc:contributor' },  
+            },
+            {
+                'title': _('Version'),
+                'value': pkg_dict.version,
+                'attrs': {},  
+            },
+        ] 
+     } 
+  %}
+  {{ h.markup_for('read:table', obj, errors=none, name_prefix='', data=data) }}
+  {% endwith %}
+
   {%- endif -%} {# if obj #}
   {%- endwith -%} {# obj, dtspec #}
 

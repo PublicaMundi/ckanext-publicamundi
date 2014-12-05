@@ -27,7 +27,10 @@ class TableObjectReadWidget(ReadObjectWidget):
         return 'package/snippets/objects/read-object-table.html'
 
     def prepare_template_vars(self, name_prefix, data):
+        
         cls = type(self)
+        Td, Th = cls._Td, cls._Th
+        
         tpl_vars = super(cls, self).prepare_template_vars(name_prefix, data)
 
         # Preprocess self.obj to be displayed as table rows
@@ -49,7 +52,18 @@ class TableObjectReadWidget(ReadObjectWidget):
                 kp = th.key_path()
                 field = self.obj.get_field(kp)
                 th.title = field.context.title or field.title
-                
+        
+        # Prepend extra rows if needed
+
+        for extra in reversed(data.get('extras', [])):
+            if extra['value']:
+                td = Td(
+                    data=extra['value'], 
+                    colspan=(num_cols - 1), 
+                    attrs=extra.get('attrs'))
+                th = Th(data=extra['title'])
+                rows.insert(0, [th, td])
+
         # Provide vars to template
 
         tpl_vars.update({
@@ -65,14 +79,15 @@ class TableObjectReadWidget(ReadObjectWidget):
 
     class _Td(object):
 
-        __slots__ = ('parent', 'data', 'rowspan', 'colspan')
+        __slots__ = ('parent', 'data', 'rowspan', 'colspan', 'attrs')
 
         tag = 'td'
         
-        def  __init__(self, data, rowspan=1, colspan=1):
+        def  __init__(self, data, rowspan=1, colspan=1, attrs=None):
             self.data = data
             self.rowspan = rowspan
             self.colspan = colspan
+            self.attrs = attrs 
             self.parent = None
 
         def __repr__(self):
@@ -86,8 +101,8 @@ class TableObjectReadWidget(ReadObjectWidget):
 
         tag = 'th'
         
-        def  __init__(self, data, rowspan=1, colspan=1):
-            super(type(self), self).__init__(data, rowspan, colspan)
+        def  __init__(self, data, rowspan=1, colspan=1, attrs=None):
+            super(type(self), self).__init__(data, rowspan, colspan, attrs)
             self.title = self.data
 
         def key(self):

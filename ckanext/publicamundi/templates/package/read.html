@@ -20,6 +20,7 @@
 
 {% block package_additional_info %}
   {# This is a replacement for additional_info.html -#}
+  {#{% snippet "package/snippets/additional_info.html", pkg_dict=pkg %}#}
   {% snippet "package/snippets/package_metadata_table.html", pkg_dict=pkg %}
 {% endblock %}
 
