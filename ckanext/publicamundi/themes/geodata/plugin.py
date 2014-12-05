@@ -67,8 +67,7 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
 
     def before_map(self, mapper):
 
-        mapper.connect('maps', '') 
-        #mapper.redirect('/dashboard', '/dashboard/datasets')
+        mapper.connect('maps', '/maps') 
 
         return mapper
 

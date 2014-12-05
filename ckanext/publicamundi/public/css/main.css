@@ -103,6 +103,10 @@ label.radio {
     margin: 0px 0px 0px 0px;
 }
 
+.actions li {
+    margin-right: 0px;
+}
+
 .control-group .btn {
     top: 0px;
 }
