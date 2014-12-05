@@ -379,13 +379,6 @@ class ResponsiblePartyReadWidget(ReadObjectWidget):
     def get_template(self):
         return None 
 
-# Fixme
-#@object_widget_adapter(schemata.IResponsibleParty, qualifiers=['td'])
-#class TdResponsiblePartyReadWidget(ReadObjectWidget):
-#
-#    def get_template(self):
-#        return 'package/snippets/objects/read-responsible_party-td.html'
-
 #
 # IThesaurusTerms
 #
@@ -495,6 +488,16 @@ class GeographicBoundingBoxReadWidget(ReadObjectWidget):
         
     def get_template(self):
         return None 
+
+@field_widget_multiadapter([IListField, schemata.IGeographicBoundingBox],
+    qualifiers=['td'], is_fallback=False)
+class ListOfGeographicBoundingBoxEditWidget(ReadFieldWidget, ListFieldWidgetTraits):
+ 
+    def get_item_qualifier(self):
+        return 'td' 
+    
+    def get_template(self):
+        return 'package/snippets/fields/read-list.html' 
 
 #
 # IConformity
