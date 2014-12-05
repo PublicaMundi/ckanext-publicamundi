@@ -10,7 +10,7 @@ from ckanext.publicamundi.lib.metadata import vocabularies
 
 class IThesaurus(IObject):
 
-    name = zope.schema.NativeString(title=u'Name (machine-friendly)', required=True)
+    name = zope.schema.NativeString(title=u'Name', required=True)
     
     title = zope.schema.TextLine(title=u'Title', required=True)
 
@@ -39,7 +39,7 @@ class IThesaurus(IObject):
         try:
             verifyObject(IVocabularyTokenized, obj.vocabulary)
         except Exception as ex:
-            raise zope.interface.Invalid('Found an invalid vocabulary: %s' %(str(ex)))
+            raise zope.interface.Invalid('Not a vocabulary: %s' %(str(ex)))
 
 class IThesaurusTerms(IObject):
 

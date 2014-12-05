@@ -1,0 +1,14 @@
+{% ckan_extends %}
+
+{% block resource_actions_inner %}
+{% if res.format == 'wms' %}
+<li>
+<a class="btn" href={{ "/maps/" + res.id}} >
+        <i class="icon-medium icon-globe"></i>{{ _(' View in Maps')}}
+    </a>
+</li>
+{% endif %}
+{{ super() }}
+
+{% endblock %}
+

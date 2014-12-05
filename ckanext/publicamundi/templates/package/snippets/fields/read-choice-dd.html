@@ -1,0 +1,5 @@
+{% with term = field.vocabulary.getTerm(value) if value else none -%}
+<span class="{{ classes|join(' ') }} choice">
+    {% if term %}{{- term.title -}}{% else %}<i>{{ _('n/a') }}</i>{% endif %}
+</span>
+{% endwith %}

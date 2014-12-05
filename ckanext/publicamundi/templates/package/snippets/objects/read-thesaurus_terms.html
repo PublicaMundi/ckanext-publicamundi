@@ -1,0 +1,13 @@
+<div class="{{ classes|join(' ')}}">
+  {% if title %}<header><h3>{{ title }}</h3></header>{% endif -%}
+  <ul class="terms {{ list_classes|join(' ') }}" data-thesaurus-name="{{ obj.thesaurus.name|safe }}">
+    {% with vocabulary = obj.thesaurus.vocabulary.by_value %}
+    {% for value in obj.terms %}
+    <li data-value="{{ value|safe }}" 
+      {%- if item_classes %}class="{{ item_classes|join(' ') }}"{% endif -%}
+      >{{ vocabulary.get(value).title -}}
+    </li>
+    {% endfor %}
+    {% endwith %}
+  </ul>
+</div>

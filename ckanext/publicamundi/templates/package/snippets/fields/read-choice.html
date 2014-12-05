@@ -1,5 +1,6 @@
-{% set term = field.vocabulary.getTerm(value) if value -%}
-<div class="{{ classes | join(' ') }}">
+{% with term = field.vocabulary.getTerm(value) if value else none -%}
+<dl class="{{ classes|join(' ') }}">
     <dt>{{ title }}</dt>
     <dd>{{ term.title if term else 'n/a' }}</dd>  
-</div>
+</dl>
+{% endwith %}

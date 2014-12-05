@@ -1,0 +1,4 @@
+<span class="{{ classes|join(' ') }} datetime">
+    {# Todo Format datetime objects with respect to current locale #}
+    {% if value %}{{ value }}{% else %}<i>{{ _('n/a') }}</i>{% endif %}
+</span>

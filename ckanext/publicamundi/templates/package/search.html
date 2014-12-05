@@ -39,7 +39,9 @@
   {# Map widget #}
   {% snippet "spatial/snippets/spatial_query.html" %}
   {# Facets #}
+  {% with labels = c.facet_labels or {} %}
   {% for facet, title in c.facet_titles.items() %}
-    {% snippet 'snippets/facet_list.html', title=title, name=facet, label_function=c.facet_labels.get(facet) %}
+    {% snippet 'snippets/facet_list.html', title=title, name=facet, label_function=labels.get(facet) %}
   {% endfor %}
+  {% endwith %}
 {% endblock %} {# secondary_content #}

@@ -1,0 +1,9 @@
+<ul class="{{ classes|join(' ') }} unstyled" data-thesaurus-name="{{ obj.thesaurus.name|safe }}">
+  {% with vocabulary = obj.thesaurus.vocabulary.by_value %}
+  {% for term in obj.terms %}
+  <li data-value="{{ term|safe }}" class="tag {{ item_classes|join(' ') }}">
+    {{- vocabulary.get(term).title -}}
+  </li>
+  {% endfor %}
+  {% endwith %}
+</ul>
