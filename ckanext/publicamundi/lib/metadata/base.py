@@ -209,7 +209,7 @@ class Object(object):
             if isinstance(format_values, FormatSpec):
                 pass
             elif isinstance(format_values, (bool, int)):
-                format_values = FormatSpec(name='default', opts={})
+                format_values = FormatSpec(name='', opts={})
             else:
                 format_values = FormatSpec.parse(str(format_values))
             opts['format-values'] = format_values
@@ -859,10 +859,10 @@ class Object(object):
                 if ser:
                     try:
                         v = ser.dumps(v)
-                    except:
+                    except Exception as ex:
                         logger.warn(
-                            'Failed to serialize value %r for field %r (%s)' % (
-                                v, field.__name__, field.__class__.__name__))
+                            'Failed to serialize value %r for field %r (%s): %s' % (
+                                v, field.__name__, field.__class__.__name__, ex))
                         v = None
                 # Return here, no need to do anything more
                 return v
@@ -883,10 +883,10 @@ class Object(object):
                     # Try to format
                     try:
                         v = fo.format(v, opts=fo_opts)
-                    except:
+                    except Exception as ex:
                         logger.warn(
-                            'Failed to format value %r for field %r (%s)' % (
-                                v, field.__name__, field.__class__.__name__))
+                            'Failed to format value %r for field %r (%s): %s' % (
+                                v, field.__name__, field.__class__.__name__, ex))
                         v = None
             
             return v
@@ -1294,23 +1294,18 @@ def serializer_for_object(obj, name='default'):
 # Formatters
 # 
 
-@field_format_adapter(IObjectField, 'default')
+@field_format_adapter(IObjectField)
 class ObjectFieldFormatter(BaseFieldFormatter):
     
     def _format(self, obj, opts):
         fo = formatter_for_object(obj)
         return fo.format(obj, opts) if fo else format(obj)
         
-def object_format_adapter(required_iface, name='default'):
+def object_format_adapter(required_iface, name='', is_fallback=False):
     assert required_iface.isOrExtends(IObject)
-    assert name in formatters.supported_formats
-    def decorate(cls):
-        adapter_registry.register(
-            [required_iface], IFormatter, 'format:%s' %(name), cls)
-        return cls
-    return decorate
+    return formatters.decorator_for_multiadapter([required_iface], name, is_fallback)
 
-@object_format_adapter(IObject, 'default')
+@object_format_adapter(IObject)
 class ObjectFormatter(BaseFormatter):
     '''Provide a simple formatter for derivatives of Object.
     '''
@@ -1326,8 +1321,8 @@ class ObjectFormatter(BaseFormatter):
     def _format(self, obj, opts):
         '''Format the object according to our named format.
         
-        If possible, all contained fields will be formatted under the same format, 
-        and will be passed the same options.
+        If possible, all contained fields will be formatted under the same 
+        format, and will be passed the same options.
         '''
        
         # Note We want to pass a 'quote' option to all our fields (this will be
@@ -1360,19 +1355,23 @@ class ObjectFormatter(BaseFormatter):
         
         args = ' '.join(map(lambda t: '%s=%s' % t, argv))
         s = '<%s %s>' % (type(obj).__name__, args)
-        
         return s   
 
-def formatter_for_object(obj, name='default'):
+def formatter_for_object(obj, name=''):
     '''Get a proper formatter for an object instance.
     '''
+    
+    candidates = ['format']
+    if name:
+        candidates.insert(0, 'format:%s' % (name))
 
-    assert name in formatters.supported_formats
+    for candidate in candidates:
+        formatter = adapter_registry.queryMultiAdapter(
+            [obj], IFormatter, candidate)
+        if formatter:
+            break
 
-    formatter = adapter_registry.queryMultiAdapter(
-        [obj], IFormatter, 'format:%s' %(name))
     if formatter:
         formatter.requested_name = name
-    
     return formatter
 

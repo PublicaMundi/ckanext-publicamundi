@@ -1,0 +1,5 @@
+{%- do classes.append('unstyled') %}
+{%- if not item_classes %}{% set item_classes = [] %}{% endif %}
+{%- do item_classes.append('tag') %}
+
+{% extends 'package/snippets/fields/read-list-choice.html' %}

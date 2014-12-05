@@ -1,0 +1,6 @@
+<dl class="{{ classes|join(' ') }}">
+  {% for k, f in fields.items() -%}
+  <dt data-name="{{ k }}">{{ f.field.title }}</dt>
+  <dd>{{ f.markup }}</dd>
+  {%- endfor %}
+</dl>

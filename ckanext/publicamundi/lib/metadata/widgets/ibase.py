@@ -1,9 +1,12 @@
+import re
 import zope.interface
 import zope.schema
 import zope.schema.interfaces
 
 from ckanext.publicamundi.lib.metadata.ibase import IObject, IErrorDict
 from ckanext.publicamundi.lib.metadata.fields import IField
+
+re_action_qualifier = re.compile('^([a-z][-_~a-z0-9]+)(\.[a-z][-_~a-z0-9]*)*$')
 
 action_field = zope.schema.Choice(('read', 'edit'), required=True)
 
@@ -12,7 +15,9 @@ class IQualAction(zope.interface.Interface):
 
     action = action_field
 
-    qualifier = zope.schema.DottedName(required=False)
+    qualifier = zope.schema.NativeString(
+        required=False,
+        constraint=re_action_qualifier.match)
 
     def parents():
         '''Return ordered list of parents for this qualified action.
