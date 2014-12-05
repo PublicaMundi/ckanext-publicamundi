@@ -103,6 +103,10 @@ label.radio {
     margin: 0px 0px 0px 0px;
 }
 
+.actions li {
+    margin-right: 0px;
+}
+
 .control-group .btn {
     top: 0px;
 }
@@ -219,6 +223,15 @@ span.space-x3 { padding: 0px 12px }
     margin-top:10px;
 }
 
+.table td.value > dl, 
+.table td.value > .field-read-widget > dl {
+    margin: 0px 0px 0px 5px;
+}
+
+.table td.value span.number { 
+    font-family: monospace;
+}
+
 .control-required {
     font-size: 14px;
     font-family: menu;
@@ -270,6 +283,10 @@ span.space-x3 { padding: 0px 12px }
 /*
  * Package states
  */
+
+h1 > .label.package-state {
+    vertical-align: super;
+}
 
 .label.state-active { }
 .label.state-draft { }
@@ -421,6 +438,10 @@ span.space-x3 { padding: 0px 12px }
  * Dataset search/view
  */
 
+section.tags {
+    margin-bottom: 10px;
+}
+
 .search-form {
     margin-top: 10px;
 }
@@ -430,7 +451,7 @@ span.space-x3 { padding: 0px 12px }
     border-radius: 2px;
     padding: 2px 8px;
 }
-.pill a.remove {
+.search-form .filter-list .pill a.remove {
     vertical-align: -5%;
 }
 

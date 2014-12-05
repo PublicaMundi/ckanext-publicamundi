@@ -1,0 +1,9 @@
+<span class="{{ classes|join(' ') }} number int">
+    {% if value %}
+    {{- value|int -}}
+    {% elif field.default %}
+    {{- field.default -}}
+    {% else %}
+    <i>{{ _('n/a') }}</i>
+    {% endif %}
+</span>

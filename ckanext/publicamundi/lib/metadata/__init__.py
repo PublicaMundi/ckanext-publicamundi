@@ -13,7 +13,8 @@ from ckanext.publicamundi.lib.metadata.ibase import (
 from ckanext.publicamundi.lib.metadata.formatters import (
     field_format_adapter, 
     field_format_multiadapter, 
-    formatter_for_field)
+    formatter_for_field,
+    FieldFormatter)
 
 from ckanext.publicamundi.lib.metadata.serializers import (
     serializer_for_field, 

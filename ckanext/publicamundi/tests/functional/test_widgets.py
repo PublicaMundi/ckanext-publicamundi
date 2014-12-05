@@ -193,7 +193,6 @@ class TestController(BaseTestController):
         
         pq = pyquery.PyQuery(unicode(markup))
         assert pq
-        assert pq.is_('div')
         assert pq.is_('.field-qname-%s\\.%s' %(fixture_name, k))
         assert pq.is_('.field-%s-widget' %(qa.action))
         

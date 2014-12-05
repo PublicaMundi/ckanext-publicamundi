@@ -3,11 +3,12 @@ import zope.interface
 import zope.interface.verify
 import zope.schema
 import logging
-from itertools import islice
 
 from ckanext.publicamundi.lib import logger
 from ckanext.publicamundi.lib.memoizer import memoize
 from ckanext.publicamundi.lib.metadata.fields import *
+from ckanext.publicamundi.lib.metadata.fields import (
+    build_adaptee, check_multiadapter_ifaces)
 from ckanext.publicamundi.lib.metadata import (
     adapter_registry, get_object_factory, IObject, Object, FieldContext)
 
@@ -105,7 +106,8 @@ def decorator_for_widget_multiadapter(required_ifaces, provided_iface, qualifier
             q = QualAction(action=action, qualifier=qualifier)
             names.add(q.to_string())
         for name in names:
-            adapter_registry.register(required_ifaces, provided_iface, name, widget_cls)
+            adapter_registry.register(
+                required_ifaces, provided_iface, name, widget_cls)
         return widget_cls
     return decorate
    
@@ -115,23 +117,10 @@ def field_widget_adapter(field_iface, qualifiers=[], is_fallback=False):
         [field_iface], IFieldWidget, qualifiers, is_fallback)
     return decorator
 
-def field_widget_multiadapter(field_ifaces, qualifiers=[], is_fallback=False):
-    nf = len(field_ifaces)
-    assert nf > 1, 'A non-trivial interface vector (length > 1) is needed'
-    
-    for iface in islice(field_ifaces, 0, nf - 1):
-        assert iface.extends(IContainerField), (
-            'The multiadapter decorator is meant to be used for container-based fields')
-    
-    tail_iface = field_ifaces[-1]
-    assert not tail_iface is IObjectField, (
-        'The widget registry will never provide a multiadapter on a zope.schema.IObject '
-        'item. Consider using the underlying schema instead.')
-    assert tail_iface.extends(IField) or tail_iface.isOrExtends(IObject), (
-        '%r is not a suitable interface' % (tail_iface))
-    
+def field_widget_multiadapter(required_ifaces, qualifiers=[], is_fallback=False):
+    check_multiadapter_ifaces(required_ifaces) 
     decorator = decorator_for_widget_multiadapter(
-        field_ifaces, IFieldWidget, qualifiers, is_fallback)
+        required_ifaces, IFieldWidget, qualifiers, is_fallback)
     return decorator
       
 def object_widget_adapter(object_iface, qualifiers=[], is_fallback=False):
@@ -180,8 +169,6 @@ def widget_for_field(qualified_action, field, errors={}):
     '''Find and instantiate a widget to adapt a field to a widget interface.
     The given field should be a bound instance of zope.schema.Field.
     '''
-
-    from ckanext.publicamundi.lib.metadata.fields import build_adaptee
     
     # Build a list with candidate names
     
@@ -239,4 +226,8 @@ markup_for = markup_for_object
 from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 from ckanext.publicamundi.lib.metadata.widgets import fields as field_widgets
 from ckanext.publicamundi.lib.metadata.widgets import objects as object_widgets
+
+# Import markup formatters (bridge with IFormatter)
+
+from ckanext.publicamundi.lib.metadata.widgets import markup_formatters
 

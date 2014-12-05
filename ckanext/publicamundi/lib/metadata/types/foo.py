@@ -35,6 +35,6 @@ class Foo(BaseMetadata):
 class FooXmlSerializer(xml_serializers.ObjectSerializer):
     pass
 
-@object_format_adapter(IFoo, 'default')
+@object_format_adapter(IFoo)
 class FooFormatter(ObjectFormatter):
     pass

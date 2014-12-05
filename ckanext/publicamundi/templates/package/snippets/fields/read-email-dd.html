@@ -1,0 +1,3 @@
+<span class="{{ classes|join(' ') }} email">
+    {% if value %}<a href="mailto:{{ value }}">{{ value }}</a>{% else %}<i>{{ _('n/a') }}</i>{% endif %}
+</span>
