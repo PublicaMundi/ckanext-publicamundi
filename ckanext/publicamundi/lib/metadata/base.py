@@ -101,8 +101,8 @@ class Object(object):
         '''Return a bound field for a key k.
 
         Note that, depending on it's type, k will be interpeted as:  
-            * as an direct attribute of this object, if a string
-            * as a path of attributes/indices/keys inside this object, if a tuple
+          * as an direct attribute of this object, if a string
+          * as a path of attributes/indices/keys inside this object, if a tuple
         '''
         if isinstance(k, basestring):
             kt = (k,)
@@ -492,7 +492,7 @@ class Object(object):
                 yf, yv = self._get_field_field(field.value_type, yv, kt[1:])
             else:
                 yf = field.value_type.bind(FieldContext(key=iv, value=yv))
-                yf.context.title = u'%s #%d' % (yf.title, iv)
+                yf.context.title = u'%s #%d' % (yf.title, iv + 1)
         elif isinstance(field, zope.schema.Dict):
             if not isinstance(value, dict):
                 raise ValueError(

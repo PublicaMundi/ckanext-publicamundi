@@ -669,6 +669,7 @@ class ErrorHandler(p.SingletonPlugin):
         msg = weberror.reporter.MIMEText(format_text(exc_data)[0])
         msg['Subject'] = as_str(prefix + exc_data.exception_value)
         msg['From'] = as_str(from_address)
+        msg['Reply-To'] = as_str(from_address)
         msg['To'] = as_str(", ".join(to_addresses))
         msg.set_type('text/plain')
         msg.set_param('charset', 'UTF-8')
@@ -676,19 +677,24 @@ class ErrorHandler(p.SingletonPlugin):
 
     def update_config(self, config):
         from weberror.reporter import EmailReporter as error_reporter
-        # override default config options for pylons errorware
+        
+        # Override default config options for pylons errorware
         error_config = config['pylons.errorware']
         error_config.update({
             'error_subject_prefix' : config.get('ckan.site_title') + ': ',
-            'from_address' : config.get('error_from_address'),
+            'from_address' : config.get('error_email_from'),
             'smtp_server'  : config.get('smtp.server'),
-            'smtp_username': config.get('smtp.username'),
+            'smtp_username': config.get('smtp.user'),
             'smtp_password': config.get('smtp.password'),
-            'smtp_use_tls' : config.get('smtp.use_tls'),
+            'smtp_use_tls' : config.get('smtp.starttls'),
         })
-        # monkey-patch email error reporter 
-        error_reporter.assemble_email = lambda t,exc_data: self._exception_as_mime_message (\
-            exc_data, to_addresses=t.to_addresses, from_address=t.from_address, prefix=t.subject_prefix)
+        
+        # Monkey-patch email error reporter 
+        error_reporter.assemble_email = lambda t, exc: self._exception_as_mime_message(
+            exc, 
+            to_addresses=t.to_addresses, 
+            from_address=t.from_address,
+            prefix=t.subject_prefix)
 
 class SpatialDatasetForm(DatasetForm):
     '''Extend the dataset-form to recognize and read/write the `spatial` extra field.
