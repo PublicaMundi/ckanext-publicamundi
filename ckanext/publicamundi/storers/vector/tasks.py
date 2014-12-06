@@ -6,8 +6,9 @@ import json
 import shutil
 import magic
 from urlparse import urlparse
-from geoserver.catalog import Catalog
+from geoserver.catalog import Catalog, FailedRequestError
 from pyunpack import Archive
+from psycopg2 import ProgrammingError
 
 import celery
 from celery.task.http import HttpDispatchTask
@@ -186,14 +187,18 @@ def _ingest_resource(
         layer_count = _vector.get_layer_count()
         for layer_idx in range(0, layer_count):
             if layer_params[layer_idx]['is_selected']:
+                layer_name = layer_params[layer_idx]['name']
                 srs = layer_params[layer_idx]['srs']
+                encoding = layer_params[layer_idx]['encoding']
                 _ingest_vector(
                     _vector,
                     layer_idx,
+                    layer_name,
                     resource,
                     context,
                     geoserver_context,
-                    srs)
+                    srs,
+                    encoding)
 
 def _get_gdalDRV_filepath(resource, resource_tmp_folder, file_name):
     '''Tries to find the vector file which is going to be read by GDAL.
@@ -369,10 +374,12 @@ def _make_tmp_file_name(resource):
 def _ingest_vector(
         _vector,
         layer_idx,
+        layer_name,
         resource,
         context,
         geoserver_context,
-        srs):
+        srs,
+        encoding):
     
     # Todo: 
     #  a. Document this function
@@ -384,7 +391,7 @@ def _ingest_vector(
 
     srs = int(srs)
     if layer and layer.GetFeatureCount() > 0:
-        layer_name = layer.GetName()
+        #layer_name = layer.GetName()
         geom_name = _vector.get_geometry_name(layer)
         spatial_ref = vectorstorer.osr.SpatialReference()
         spatial_ref.ImportFromEPSG(srs)
@@ -401,7 +408,8 @@ def _ingest_vector(
             layer,
             geom_name,
             created_db_table_resource['id'].lower(),
-            srs)
+            srs,
+            encoding)
         
         publishing_server, publishing_layer = _publish_layer(
             context, geoserver_context, layer_name, created_db_table_resource, srs_wkt)
@@ -559,9 +567,14 @@ def vectorstorer_update(resource_dict, context, geoserver_context):
     
     if len(resource_ids) > 0:
         for res_id in resource_ids:
+            
+            
             res = {'id': res_id}
             try:
-                _invoke_api_resource_action(context, res, 'resource_delete')
+                _invoke_api_resource_action(
+                    context,
+                    res,
+                    'resource_delete')
             except urllib2.HTTPError as e:
                 # Fixme proper logging
                 print e.reason
@@ -578,42 +591,91 @@ def vectorstorer_delete(resource_dict, context, geoserver_context):
     logger = vectorstorer_delete.get_logger()
     context['logger'] = logger
     
-    if 'format' in resource_dict:
-        if resource_dict['format'] == DBTableResource.FORMAT:
-            _delete_from_datastore(resource_dict['id'], db_conn_params, context)
-        elif resource_dict['format'] == WMSResource.FORMAT:
-            _unpublish_from_geoserver(
-                resource_dict['parent_resource_id'],
-                geoserver_context)
-    resource_ids = context['resource_list_to_delete']
-    if resource_ids:
-        resource_ids = context['resource_list_to_delete']
-        for res_id in resource_ids:
-            res = {'id': res_id}
+    resources_to_delete = context['resource_list_to_delete']   
+
+    # If resource dict is None a parent vector resource
+    # has been deleted. So we skip the next checks
+    if resource_dict is not None:
+        # A vector child resource has been deleted
+        if 'format' in resource_dict:
+            if resource_dict['format'] == DBTableResource.FORMAT:
+                # A DBTable resource was deleted, so delete the table
+                # from the database
+                _delete_from_datastore(
+                    resource_dict['id'],
+                    db_conn_params,
+                    context,
+                    logger)
+            elif resource_dict['format'] in [
+                WMSResource.FORMAT, WFSResource.FORMAT]:
+                # A WMS or WFS resource was deleted, so unpublish it
+                # from Geoserver
+                _unpublish_from_geoserver(
+                    resource_dict,
+                    geoserver_context,
+                    logger)
+    
+    # Delete the resources that are in the list. For example
+    # if a DB_Table resouce was deleted, this list contains
+    # the WMS and WFS resource.
+    for resource in resources_to_delete:
+        if resource is not None:
+            if resource['format'] == DBTableResource.FORMAT:        
+                # A DBTable resource was deleted, so delete the table
+                # from the database
+                _delete_from_datastore(
+                    resource['id'],
+                    db_conn_params,
+                    context,
+                    logger)
+            elif resource['format'] in [
+                WMSResource.FORMAT, WFSResource.FORMAT]:            
+                # A WMS or WFS resource will be deleted, so unpublish it
+                # from Geoserver
+                _unpublish_from_geoserver(
+                    resource,
+                    geoserver_context,
+                    logger)
+    # After doing unpublish and delete operations for child resources
+    # delete the from ckan
+    for resource in resources_to_delete:
+        res = {'id': resource['id']}
+        try:
             _invoke_api_resource_action(context, res, 'resource_delete')
+        except urllib2.HTTPError as e:
+            print e.reason
 
-def _delete_from_datastore(resource_id, db_conn_params, context):
-    _db = DB(db_conn_params)
-    _db.drop_table(resource_id)
-    _db.commit_and_close()
+def _delete_from_datastore(resource_id, db_conn_params, context, logger):
+    try:
+        _db = DB(db_conn_params)
+        _db.drop_table(resource_id)
+        _db.commit_and_close()
+        logger.info('Deleted table %s from the Database'
+            % (resource_id))
+    except ProgrammingError as ex:
+        logger.error('Failed to delete table %s from the database: %s'
+            % (resource_id, ex))
 
-def _unpublish_from_geoserver(resource_id, geoserver_context):
-    geoserver_url = geoserver_context['url']
-    cat = Catalog(
-        geoserver_url.rstrip('/') + '/rest',
-        username=geoserver_context['username'],
-        password=geoserver_context['password'])
-    layer = cat.get_layer(resource_id.lower())
-    cat.delete(layer)
-    cat.reload()
-
-def _delete_vectorstorer_resources(resource, context):
-    resources_ids_to_delete = context['vector_storer_resources_ids']
-    api_key = context['user_api_key']
-    site_url = context['site_url']
-    for res_id in resources_ids_to_delete:
-        resource = {'id': res_id}
-        data_string = urllib.quote(json.dumps(resource))
-        request = urllib2.Request(site_url + 'api/action/resource_delete')
-        request.add_header('Authorization', api_key)
-        urllib2.urlopen(request, data_string)
+def _unpublish_from_geoserver(resource, geoserver_context, logger):
+    layer_name = None
+    if resource['format'] == WMSResource.FORMAT:
+        layer_name = resource['wms_layer']
+    else:
+        layer_name = resource['wfs_layer']
+    try:
+        geoserver_url = geoserver_context['url']
+        cat = Catalog(
+            geoserver_url.rstrip('/') + '/rest',
+            username=geoserver_context['username'],
+            password=geoserver_context['password'])
+        layer = cat.get_layer(resource['parent_resource_id'].lower())
+        cat.delete(layer)
+        cat.reload()
+        logger.info('Unpublished layer %s from Geoserver'
+            % (layer_name))
+    except AttributeError as ex:
+        logger.error('Failed to unpublish layer %s: %s'
+            % (layer_name, ex))
+    except FailedRequestError as ex:
+         logger.error('Failed to unpublish layer %s: %s'
+            % (layer_name, ex))
