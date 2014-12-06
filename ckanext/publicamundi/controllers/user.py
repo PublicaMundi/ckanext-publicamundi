@@ -28,6 +28,7 @@ class UserController(BaseController):
 
     def show_admin_page_resources(self):
         user_dict = self._check_access()
+        user_dict = self._filter_user_dict(user_dict)
         self._setup_template_variables(user_dict)
         return render('user/admin_page_resources.html')
 
