@@ -6,8 +6,6 @@ import os
 import random
 from collections import namedtuple
 from cgi import FieldStorage
-import requests
-from unidecode import unidecode
 
 from pylons import url
 
@@ -38,7 +36,7 @@ class Controller(BaseController):
 
     def brk(self):
         raise Breakpoint()
-    
+
     def test_formatter(self):
         from ckanext.publicamundi.lib.metadata import formatter_for_field
         x = fixtures.inspire1
