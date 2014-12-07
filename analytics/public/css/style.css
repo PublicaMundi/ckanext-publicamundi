@@ -1,0 +1,10 @@
+.rotate-90 {
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+}
+
+.amcharts-graph, .bboxes-map {
+  height: 500px;
+}
