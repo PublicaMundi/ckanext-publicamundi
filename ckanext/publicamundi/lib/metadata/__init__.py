@@ -5,32 +5,43 @@ import zope.schema
 adapter_registry = zope.interface.adapter.AdapterRegistry()
 
 from ckanext.publicamundi.lib.metadata.ibase import (
-    ISerializer, IXmlSerializer, IFormatter, IObject)
+    ISerializer, 
+    IXmlSerializer, 
+    IFormatter, 
+    IObject)
 
 from ckanext.publicamundi.lib.metadata.formatters import (
-    field_format_adapter, field_format_multiadapter, formatter_for_field)
+    field_format_adapter, 
+    field_format_multiadapter, 
+    formatter_for_field,
+    FieldFormatter)
 
 from ckanext.publicamundi.lib.metadata.serializers import (
-    serializer_for_field, serializer_for_key_tuple)
+    serializer_for_field, 
+    serializer_for_key_tuple)
 
 from ckanext.publicamundi.lib.metadata.base import (
-    Object, FieldContext, ErrorDict, 
-    object_null_adapter, get_object_factory,
-    object_serialize_adapter, serializer_for_object,
-    object_format_adapter, formatter_for_object, ObjectFormatter)
-
-from ckanext.publicamundi.lib.metadata.schemata import (
-    IFoo, IBaz, ICkanMetadata, IInspireMetadata)
-
-from ckanext.publicamundi.lib.metadata.types import (
-    Foo, Baz, CkanMetadata, InspireMetadata)
+    Object, 
+    FieldContext, 
+    ErrorDict, 
+    object_null_adapter,
+    get_object_factory,
+    object_serialize_adapter,
+    serializer_for_object,
+    object_format_adapter,
+    formatter_for_object,
+    ObjectFormatter)
 
 from ckanext.publicamundi.lib.metadata.xml_serializers import (
-    object_xml_serialize_adapter, xml_serializer_for_object)
+    object_xml_serialize_adapter,
+    xml_serializer_for_object)
 
 from ckanext.publicamundi.lib.metadata.widgets import (
-    markup_for_field, markup_for_object, markup_for,
-    widget_for_field, widget_for_object)
+    markup_for_field,
+    markup_for_object,
+    markup_for,
+    widget_for_field,
+    widget_for_object)
 
 # Aliases for common functions
 
@@ -40,7 +51,16 @@ serializer_for = serializer_for_object
 
 xml_serializer_for = xml_serializer_for_object
 
+# Import common schemata/types
+
+from ckanext.publicamundi.lib.metadata.schemata import (
+    IFoo, IBaz, ICkanMetadata, IInspireMetadata)
+
+from ckanext.publicamundi.lib.metadata.types import (
+    Foo, Baz, CkanMetadata, InspireMetadata)
+
 # Declare dataset types (i.e. metadata formats).
+
 # Note If, for a certain dataset-type, a "class" value is not given,
 # then a suitable class will be lookup-up in the adapter registry.
 

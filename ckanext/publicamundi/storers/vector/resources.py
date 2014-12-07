@@ -5,7 +5,7 @@ class WMSResource:
     
     FORMAT = 'wms'
     
-    name_extention = " (WMS)"
+    name_suffix = " (WMS)"
     _get_capabilities_url = "?service=WMS&request=GetCapabilities"
     _name = None
     _description = None
@@ -19,13 +19,14 @@ class WMSResource:
     def __init__(
             self,
             package_id,
-            name,
+            layer_name,
             description,
             parent_resource_id,
             wms_server,
             wms_layer):
         self._package_id = package_id
-        self._name = name + self.name_extention
+        self._layer_name = layer_name
+        self._name = layer_name + self.name_suffix
         self._description = description
         base_url = urlparse(wms_server)
 
@@ -34,7 +35,7 @@ class WMSResource:
         self._wms_server = wms_server+"/wms"
         self._wms_layer = wms_layer
 
-    def get_as_dict(self):
+    def as_dict(self):
         resource = {
             "package_id": unicode(self._package_id),
             "url": self._wms_server + self._get_capabilities_url,
@@ -44,16 +45,15 @@ class WMSResource:
             "wms_server": self._wms_server,
             "wms_layer": self._wms_layer,
             "name": self._name,
-            "description": self._description}
-
+            "description": self._description
+        }
         return resource
-
 
 class DBTableResource:
 
     FORMAT = 'data_table'
 
-    name_extention = " (Data)"
+    name_suffix = " (Table)"
     _name = None
     _description = None
     _package_id = None
@@ -65,19 +65,20 @@ class DBTableResource:
     def __init__(
             self,
             package_id,
-            name,
+            layer_name,
             description,
             parent_resource_id,
             url,
             geometry):
         self._package_id = package_id
-        self._name = name + self.name_extention
+        self._layer_name = layer_name
+        self._name = layer_name + self.name_suffix
         self._description = description
         self._url = url
         self._parent_resource_id = parent_resource_id
         self._geometry = geometry
 
-    def get_as_dict(self):
+    def as_dict(self):
         resource = {
             "package_id": unicode(self._package_id),
             "url": self._url,
@@ -86,15 +87,15 @@ class DBTableResource:
             "geometry": self._geometry,
             'vectorstorer_resource': self._vectorstorer_resource,
             "name": self._name,
-            "description": self._description}
-
+            "description": self._description
+        }
         return resource
 
 class WFSResource:
     
     FORMAT = 'wfs'
     
-    name_extention = " (WFS)"
+    name_suffix = " (WFS)"
     _get_capabilities_url = "?service=WFS&request=GetCapabilities"
     _name = None
     _description = None
@@ -108,13 +109,14 @@ class WFSResource:
     def __init__(
             self,
             package_id,
-            name,
+            layer_name,
             description,
             parent_resource_id,
             wfs_server,
             wfs_layer):
         self._package_id = package_id
-        self._name = name + self.name_extention
+        self._layer_name = layer_name
+        self._name = layer_name + self.name_suffix
         self._description = description
         base_url = urlparse(wfs_server)
 
@@ -123,7 +125,7 @@ class WFSResource:
         self._wfs_server = wfs_server+"/wfs"
         self._wfs_layer = wfs_layer
 
-    def get_as_dict(self):
+    def as_dict(self):
         resource = {
             "package_id": unicode(self._package_id),
             "url": self._wfs_server + self._get_capabilities_url,
@@ -133,6 +135,6 @@ class WFSResource:
             "wfs_server": self._wfs_server,
             "wfs_layer": self._wfs_layer,
             "name": self._name,
-            "description": self._description}
-
+            "description": self._description
+        }
         return resource

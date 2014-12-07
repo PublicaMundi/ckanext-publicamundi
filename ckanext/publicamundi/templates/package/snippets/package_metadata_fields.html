@@ -4,7 +4,8 @@
 
 {% block package_metadata_fields_url %}
 {{ 
-    form.input('url', 
+    form.input(
+        'url', 
         label=_('Source'), 
         id='field-url', 
         placeholder=_('http://example.com/dataset.json'), 
@@ -16,7 +17,8 @@
 
 {% block package_metadata_fields_version %}
 {{ 
-    form.input('version', 
+    form.input(
+        'version', 
         label=_('Version'), 
         id='field-version', 
         placeholder=_('1.0'), 
@@ -28,7 +30,8 @@
 
 {% block package_metadata_author %}
 {{ 
-    form.input('author', 
+    form.input(
+        'author', 
         label=_('Author'), 
         id='field-author', 
         placeholder=_('Joe Bloggs'), 
@@ -37,7 +40,8 @@
         classes=['control-medium'])         
 }}
 {{ 
-    form.input('author_email', 
+    form.input(
+        'author_email', 
         label=_('Author Email'), 
         id='field-author-email', 
         placeholder=_('joe@example.com'), 
@@ -49,7 +53,8 @@
 
 {% block package_metadata_fields_maintainer %}
 {{ 
-    form.input('maintainer', 
+    form.input(
+        'maintainer', 
         label=_('Maintainer'), 
         id='field-maintainer', 
         placeholder=_('Joe Bloggs'), 
@@ -58,7 +63,8 @@
         classes=['control-medium']) 
 }}
 {{ 
-    form.input('maintainer_email', 
+    form.input(
+        'maintainer_email', 
         label=_('Maintainer Email'), 
         id='field-maintainer-email', 
         placeholder=_('joe@example.com'), 
@@ -92,14 +98,14 @@
 {% endif -%}
 
 {% if errors -%}
-{% do 
-    obj.from_dict(data, is_flat=true, opts={ 
-        'update': 'deep', 
-        'unserialize-keys': true, 
-        'key-prefix': dt_prefix, 
-        'unserialize-values': 'default', 
-    }) 
+{% set loader_opts = {
+     'update': 'deep', 
+     'unserialize-keys': true, 
+     'key-prefix': dt_prefix, 
+     'unserialize-values': 'default', 
+   } 
 %}
+{% do obj.from_dict(data, is_flat=true, opts=loader_opts) %}
 {% endif -%} {# if errors #}
 
 {{ 

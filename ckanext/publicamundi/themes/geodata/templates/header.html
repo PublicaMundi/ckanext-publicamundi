@@ -78,8 +78,11 @@
               {% block header_account_logged %}
               {# <ul class="unstyled"> #}
                   {# <li> #}
+                {% set new_activities = h.new_activities() %}
                 <a href="{{ h.url_for(controller='user', action='read', id=c.userobj.name) }}" class="viewprofile" title="{{ _('View profile') }}">
-                    <span>{{c.userobj.display_name }}</span>
+                    <span>{{c.userobj.display_name}} </span>
+                    {# {% if new_activities > 0 %}({{new_activities}}) {% endif %} #}
+                    
                     </a>
                 <ul>
                     {% if c.userobj.sysadmin %}
@@ -89,7 +92,6 @@
                     </li>
                     {% endif %}
 
-                    {% set new_activities = h.new_activities() %}
                     <li class="notifications {% if new_activities > 0 %}notifications-important{% endif %}">
                         {% set notifications_tooltip = ngettext('Dashboard (%(num)d new item)', 'Dashboard (%(num)d new items)', new_activities) %}
                         <a href="{{ h.url_for(controller='user', action='dashboard_datasets') }}" title="{{ notifications_tooltip }}">

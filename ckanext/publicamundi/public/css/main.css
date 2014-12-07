@@ -103,6 +103,10 @@ label.radio {
     margin: 0px 0px 0px 0px;
 }
 
+.actions li {
+    margin-right: 0px;
+}
+
 .control-group .btn {
     top: 0px;
 }
@@ -219,6 +223,15 @@ span.space-x3 { padding: 0px 12px }
     margin-top:10px;
 }
 
+.table td.value > dl, 
+.table td.value > .field-read-widget > dl {
+    margin: 0px 0px 0px 5px;
+}
+
+.table td.value span.number { 
+    /*font-family: monospace;*/
+}
+
 .control-required {
     font-size: 14px;
     font-family: menu;
@@ -230,6 +243,10 @@ span.space-x3 { padding: 0px 12px }
 
 .js .image-upload .btn-remove-url {
     border-radius: 1px;
+}
+
+.context-info .nums dl dd {
+    font-size: 26px;
 }
 
 /* Well, normally we would just use Bootstrap's .clearfix, but there are some 
@@ -267,13 +284,39 @@ span.space-x3 { padding: 0px 12px }
  * Package states
  */
 
+h1 > .label.package-state {
+    vertical-align: super;
+}
+
 .label.state-active { }
 .label.state-draft { }
 .label.state-deleted { }
 .label.state-invalid { }
 
 /*
- * Resource Dashboard
+ * Resources List (Dataset)
+ */
+
+.resources li.resource-item {
+    padding: 5px 5px 5px 60px;
+}
+
+.resources li.resource-item .btn-group {
+    position: relative;
+    top: 0px;
+    right: 0px;
+}
+
+.resources li.resource-item .btn-group + .btn-group {
+    margin-right: 5px;
+}
+
+.resources li.resource-item p.description {
+    width: 60%;
+}
+
+/*
+ * Resources List (Dashboard)
  */
 
 .dashboard-resources li.resource-item {
@@ -392,11 +435,24 @@ span.space-x3 { padding: 0px 12px }
 }
 
 /*
- * Dataset searrh/view
+ * Dataset search/view
  */
+
+section.tags {
+    margin-bottom: 10px;
+}
 
 .search-form {
     margin-top: 10px;
+}
+
+.search-form .filter-list .pill {
+    background-color: #91939D;
+    border-radius: 2px;
+    padding: 2px 8px;
+}
+.search-form .filter-list .pill a.remove {
+    vertical-align: -5%;
 }
 
 section.additional-info header > .btn-group {

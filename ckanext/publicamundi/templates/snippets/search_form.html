@@ -1,0 +1,26 @@
+{% ckan_extends %}
+
+{% block search_facets %}
+  {% if facets %}
+  <p class="filter-list">
+    {% for field in facets.fields %}
+    {% with field_search_facets = facets.search.get(field), field_label = facets.labels.get(field) %}
+    <span class="facet">{{ facets.titles.get(field) }}:</span>
+    {% for value in facets.fields[field] %}
+    <span class="filtered pill">
+      {%- if facets.translated_fields and facets.translated_fields.has_key((field,value)) -%}
+      {{ facets.translated_fields[(field,value)] }}
+      {%- else -%}
+      {% with it = h.filtered_list(field_search_facets.get('items'), 'name', value, 'eq')|first %}
+      {{ field_label(it) if field_label is callable else it.display_name }}
+      {% endwith %}
+      {%- endif %} {# facets.translated_fields #}
+      <a href="{{ facets.remove_field(field, value) }}" class="remove" title="{{ _('Remove') }}"
+        ><i class="icon-remove"></i></a>
+    </span>
+    {% endfor %} {# for value #}
+    {% endwith %} {# field_search_facets, field_labels #}
+    {% endfor %} {# for field #}
+  </p>
+  {% endif %} {# if facets #}
+{% endblock %}

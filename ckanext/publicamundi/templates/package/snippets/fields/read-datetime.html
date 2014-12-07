@@ -1,4 +1,4 @@
-<div class="{{ classes | join(' ') }}">
+<dl class="{{ classes|join(' ') }}">
     <dt>{{ title }}</dt>
     <dd>{{ value.isoformat() if value else _('n/a') }}</dd>
-</div>
+</dl>
