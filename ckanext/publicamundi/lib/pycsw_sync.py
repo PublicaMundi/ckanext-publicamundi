@@ -17,18 +17,21 @@ log1 = logging.getLogger(__name__)
 
 site_url = None
 
-pycsw_config_path = None
 pycsw_config = None
 pycsw_context = None
 pycsw_database = None
 pycsw_table_name = None
-pycsw_repo = None
 
 def setup(config):
     '''Setup module when Pylons config is available
     '''
     
+    global site_url
+
     site_url = config['ckan.site_url']
+    
+    global pycsw_config, pycsw_context, pycsw_database, pycsw_table_name
+    
     pycsw_config_path = config['ckanext.publicamundi.pycsw.config']
     pycsw_config = _load_config(pycsw_config_path)
     pycsw_context = pycsw.config.StaticContext()
@@ -92,15 +95,15 @@ def update_record(ckan_id):
 
     return record
 
-def get_record(pycsw_context, repo, ckan_url, ckan_id):
+def get_record(pycsw_context, repo, site_url, ckan_id):
     '''Build and return a metadata record from a dataset's XML dump.
     
     Returns None on failure, or a loaded metadata record on success.
     '''
 
-    api_url = 'api/publicamundi/dataset/export/%s' % (ckan_id)
-    query = ckan_url + api_url
-    response = requests.get(url)
+    api_url = site_url.rstrip('/') + (
+        '/api/publicamundi/dataset/export/%s' % (ckan_id))
+    response = requests.get(api_url)
 
     try:
         xml = etree.parse(io.BytesIO(response.content))

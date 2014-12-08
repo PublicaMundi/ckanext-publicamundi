@@ -550,7 +550,7 @@ class PackageController(p.SingletonPlugin):
         At this point, the package is possibly in 'draft' state so most Action-API (targeting on the
         package itself) calls will fail.
         '''
-        log1.debug('A package was created: %s', to_json(pkg_dict, indent=4))
+        log1.debug('A package was created: %s', pkg_dict['id'])
         self._create_or_update_csw_record(context['session'], pkg_dict)
         pass
 
@@ -559,7 +559,7 @@ class PackageController(p.SingletonPlugin):
         Extensions will receive the validated data dict after the package has been updated
         (Note that the edit method will return a package domain object, which may not include all fields).
         '''
-        log1.debug('A package was updated: %s', to_json(pkg_dict, indent=4))
+        log1.debug('A package was updated: %s', pkg_dict['id'])
         self._create_or_update_csw_record(context['session'], pkg_dict)
         pass
 
@@ -567,7 +567,7 @@ class PackageController(p.SingletonPlugin):
         '''
         Extensions will receive the data dict (typically containing just the package id) after the package has been deleted.
         '''
-        log1.debug('A package was deleted: %s', json.dumps(pkg_dict, indent=3))
+        log1.debug('A package was deleted: %s', pkg_dict['id'])
         self._delete_csw_record(context['session'], pkg_dict)
         pass
 
