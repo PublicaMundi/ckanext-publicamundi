@@ -101,7 +101,15 @@ def post_setup(engine):
     table_name = CswRecord.__tablename__
     table_language = 'english'
     postgis_geometry_column='wkb_geometry'
+    postgis_lib_version = None
+    create_column_sql = ''
     conn = engine.connect()
+
+    try:
+        for row in conn.execute('select(postgis_lib_version())'):
+            postgis_lib_version = row[0]
+    except:
+        pass
 
     # Creating PostgreSQL Free Text Search (FTS) GIN index
     tsvector_fts = "ALTER TABLE %s add column anytext_tsvector tsvector" % table_name
@@ -113,8 +121,10 @@ def post_setup(engine):
        " ('anytext_tsvector', 'pg_catalog.%s', 'anytext')" % (table_name, table_language)
     conn.execute(trigger_fts)
 
-    #create_column_sql = "ALTER TABLE %s ADD COLUMN %s geometry(Geometry,4326);" % (table_name, postgis_geometry_column)
-    create_column_sql = "SELECT AddGeometryColumn('public', '%s', '%s', 4326, 'POLYGON', 2)" % (table_name, postgis_geometry_column)
+    if postgis_lib_version < '2':
+        create_column_sql = "SELECT AddGeometryColumn('public', '%s', '%s', 4326, 'POLYGON', 2)" % (table_name, postgis_geometry_column)
+    else:
+        create_column_sql = "ALTER TABLE %s ADD COLUMN %s geometry(Geometry,4326);" % (table_name, postgis_geometry_column)
     
     create_insert_update_trigger_sql = '''
 DROP TRIGGER IF EXISTS %(table)s_update_geometry ON %(table)s;
