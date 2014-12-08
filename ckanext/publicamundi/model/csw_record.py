@@ -104,14 +104,18 @@ def post_setup(engine):
     conn = engine.connect()
 
     # Creating PostgreSQL Free Text Search (FTS) GIN index
-    tsvector_fts = "alter table %s add column anytext_tsvector tsvector" % table_name
+    tsvector_fts = "ALTER TABLE %s add column anytext_tsvector tsvector" % table_name
     conn.execute(tsvector_fts)
-    index_fts = "create index fts_gin_idx on %s using gin(anytext_tsvector)" % table_name
+    index_fts = "CREATE INDEX fts_gin_idx on %s using gin(anytext_tsvector)" % table_name
     conn.execute(index_fts)
-    trigger_fts = "create trigger ftsupdate before insert or update on %s for each row execute procedure tsvector_update_trigger('anytext_tsvector', 'pg_catalog.%s', 'anytext')" % (__tablename__, table_language)
+    trigger_fts = "CREATE TRIGGER ftsupdate before insert or update on %s " \
+       "for each row execute procedure tsvector_update_trigger" \
+       " ('anytext_tsvector', 'pg_catalog.%s', 'anytext')" % (table_name, table_language)
     conn.execute(trigger_fts)
 
-    create_column_sql = "ALTER TABLE %s ADD COLUMN %s geometry(Geometry,4326);" % (table_name, postgis_geometry_column)
+    #create_column_sql = "ALTER TABLE %s ADD COLUMN %s geometry(Geometry,4326);" % (table_name, postgis_geometry_column)
+    create_column_sql = "SELECT AddGeometryColumn('public', '%s', '%s', 4326, 'POLYGON', 2)" % (table_name, postgis_geometry_column)
+    
     create_insert_update_trigger_sql = '''
 DROP TRIGGER IF EXISTS %(table)s_update_geometry ON %(table)s;
 DROP FUNCTION IF EXISTS %(table)s_update_geometry();

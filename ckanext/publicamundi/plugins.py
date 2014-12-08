@@ -534,8 +534,11 @@ class PackageController(p.SingletonPlugin):
     ## IConfigurable interface ##
 
     def configure(self, config):
-        ''' Apply configuration options to this plugin '''
-        pass
+        '''Apply configuration options to this plugin '''
+        
+        ext_pycsw_sync.setup(config)
+
+        return
 
     ## IPackageController interface ##
 
@@ -637,12 +640,12 @@ class PackageController(p.SingletonPlugin):
         record = session.query(ext_model.CswRecord).get(pkg_dict['id'])
         if not record:
             log1.info('Creating CswRecord %s', pkg_dict.get('id'))
-            ext_pycsw_sync.create(ckan_id=pkg_dict.get('id'))
+            ext_pycsw_sync.create_record(ckan_id=pkg_dict.get('id'))
             #record = ext_model.CswRecord(pkg_dict.get('id'), name=pkg_dict.get('name'))
             #session.add(record)
         else:
             log1.info('Updating CswRecord %s', pkg_dict.get('id'))
-            ext_pycsw_sync.update(ckan_id=pkg_dict.get('id'))
+            ext_pycsw_sync.update_record(ckan_id=pkg_dict.get('id'))
         #extras = { item['key']: item['value'] for item in pkg_dict.get('extras', []) }
         #record.title = pkg_dict.get('title')
         #if 'spatial' in extras:
