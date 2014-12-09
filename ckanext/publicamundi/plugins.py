@@ -642,11 +642,20 @@ class PackageController(p.SingletonPlugin):
 
     def _create_or_update_csw_record(self, session, pkg_dict):
         '''Sync dataset with CSW record'''
+        
+        pkg_id = pkg_dict['id']
+
+        if pkg_dict.get('state', 'active') != 'active':
+            log1.info(
+                'Skipped sync of non-active dataset %s to CSW record' % (pkg_id))
+            return
+
         record = ext_pycsw_sync.create_or_update_record(session, pkg_dict)
         if record: 
             log1.info('Saved CswRecord %s (%s)', record.identifier, record.title)
         else:
-            log1.warning('Failed to save CswRecord for dataset %s' %(pkg_dict['id']))
+            log1.warning('Failed to save CswRecord for dataset %s' %(pkg_id))
+        
         return
 
     def _delete_csw_record(self, session, pkg_dict):

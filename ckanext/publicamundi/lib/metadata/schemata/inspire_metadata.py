@@ -25,7 +25,7 @@ class IInspireMetadata(IBaseMetadata):
         min_length = 1,
         max_length = 4,
         value_type = zope.schema.Object(IResponsibleParty,
-            title = u'Point of Contact',
+            title = u'Contact',
             required = True))
 
     datestamp = zope.schema.Date(
@@ -129,6 +129,7 @@ class IInspireMetadata(IBaseMetadata):
         max_length = 4,
         value_type = zope.schema.Object(IGeographicBoundingBox,
             title = u'Bounding Box'))
+    bounding_box.setTaggedValue('format:markup', { 'descend-if-dictized': True })
 
     # Temporal 
 
@@ -191,7 +192,6 @@ class IInspireMetadata(IBaseMetadata):
         max_length = 6,
         value_type = zope.schema.Object(ISpatialResolution,
             title = u'Resolution'))
-   
     spatial_resolution.value_type.setTaggedValue('allow-partial-update', False)
 
     # Conformity

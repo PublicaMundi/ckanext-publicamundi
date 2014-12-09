@@ -3,7 +3,7 @@
 <div class="{{ classes|join(' ') }}" {{ attrs|xmlattr }} >
     {% if title %}<h3 class="title">{{ title }}</h3>{% endif -%}
     {%- if description %}<p class="description">{{ description }}</p>{% endif %}
-    <ul id="{{ qname }}-items">
+    <ul class="{{ list_classes|join(' ') }}">
         {% for k, y in items.items() -%}
         <li data-key="{{ k }}">{{ y.markup }}</li>
         {%- endfor %}

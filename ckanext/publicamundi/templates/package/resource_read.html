@@ -1,14 +1,59 @@
 {% ckan_extends %}
 
 {% block resource_actions_inner %}
-{% if res.format == 'wms' %}
-<li>
-<a class="btn" href={{ "/maps/" + res.id}} >
-        <i class="icon-medium icon-globe"></i>{{ _(' View in Maps')}}
+  {% if res.format == 'wms' %}
+  <li>
+    <a class="btn" href={{ "/maps/" + res.id}} >
+      <i class="icon-medium icon-globe"></i>{{ _(' View in Maps')}}
     </a>
-</li>
+  </li>
 {% endif %}
 {{ super() }}
+{% endblock %}
 
+{% block resource_additional_information %}
+  {% if res %}
+  <section class="module">
+    <div class="module-content">
+      <h2>{{ _('Additional Information') }}</h2>
+      <table class="table table-striped table-bordered" 
+        data-module="table-collapsible-rows"
+        data-module-numcols="2"
+        >
+        {#
+        <thead>
+          <tr>
+            <th scope="col">{{ _('Field') }}</th>
+            <th scope="col">{{ _('Value') }}</th>
+          </tr>
+        </thead>
+        #}
+        <tbody>
+          <tr>
+            <th scope="row">{{ _('Last updated') }}</th>
+            <td>{{ h.render_datetime(res.last_modified) or h.render_datetime(res.revision_timestamp) or h.render_datetime(res.created) or _('unknown') }}</td>
+          </tr>
+          <tr>
+            <th scope="row">{{ _('Created') }}</th>
+            <td>{{ h.render_datetime(res.created) or _('unknown') }}</td>
+          </tr>
+          <tr>
+            <th scope="row">{{ _('Format') }}</th>
+            <td>{{ res.mimetype_inner or res.mimetype or res.format or _('unknown') }}</td>
+          </tr>
+          <tr>
+            <th scope="row">{{ _('License') }}</th>
+            <td>{% snippet "snippets/license.html", pkg_dict=pkg, text_only=True %}</td>
+          </tr>
+          {% for key, value in h.format_resource_items(res.items()) %}
+            <tr class="toggle-more"><th scope="row">{{ key }}</th><td>{{ value }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+  {% endif %}
+
+  {% resource 'ckanext-publicamundi/table-collapsible-rows' %}
 {% endblock %}
 

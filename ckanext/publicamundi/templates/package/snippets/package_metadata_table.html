@@ -6,7 +6,7 @@
   -%}
   {%- if obj -%}
   <header>
-    <h3 class="inline">{{ '%s Metadata'|format(dtspec.title)|title }}</h3>
+    <h3 class="inline">{{ 'Metadata' }}</h3>
     
     {% with api_controller = 'ckanext.publicamundi.controllers.api:Controller' %}
     <div class="btn-group pull-right">
@@ -29,7 +29,12 @@
   {% with 
      data = { 
         'max_depth': 2,
-        'extras': [ 
+        'extras': [
+            {
+                'title': _('State'),
+                'value': pkg_dict.state,
+                'attrs': {},
+            },
             {
                 'title': _('Source'), 
                 'value': h.link_to(pkg_dict.url, pkg_dict.url, rel='foaf:homepage', target='_blank') if pkg_dict.url else none, 
