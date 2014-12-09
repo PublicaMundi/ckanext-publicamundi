@@ -37,6 +37,13 @@ class Controller(BaseController):
     def brk(self):
         raise Breakpoint()
 
+    def test_csw_hooks(self, id):
+        from ckanext.publicamundi.lib import pycsw_sync
+        context = {'model': model, 'session': model.Session, 'api_version': 3}
+        pkg_dict = toolkit.get_action('package_show')(context, {'id': id})
+        pycsw_sync.create_or_update_record(context['session'], pkg_dict)
+        return ['Done']
+    
     def test_formatter(self):
         from ckanext.publicamundi.lib.metadata import formatter_for_field
         x = fixtures.inspire1

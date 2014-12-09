@@ -1,14 +1,18 @@
 import os
 import logging
 import datetime
-import io
-import requests
 from lxml import etree
 from ConfigParser import SafeConfigParser
 
-from pycsw import metadata, repository, util
+import pycsw
 import pycsw.config
 import pycsw.admin
+
+import ckan.model as model
+import ckan.plugins.toolkit as toolkit
+
+from ckanext.publicamundi.lib.metadata import (
+    make_metadata_object, xml_serializer_for)
 
 log1 = logging.getLogger(__name__)
 
@@ -22,13 +26,15 @@ pycsw_context = None
 pycsw_database = None
 pycsw_table_name = None
 
+_repo = None
+
 def setup(config):
     '''Setup module when Pylons config is available
     '''
     
     global site_url
 
-    site_url = config['ckan.site_url']
+    site_url = config['ckan.site_url'].rstrip('/')
     
     global pycsw_config, pycsw_context, pycsw_database, pycsw_table_name
     
@@ -42,85 +48,94 @@ def setup(config):
     
     return
 
-def create_record(ckan_id):
-    '''Attempts to create a new CSW record for a newly created dataset.
-    
-    Returns None on failure, or a metadata record object on success.
+def get_repo():
+    '''Initialize (once) and return the pyCSW repository.
     '''
     
-    repo = repository.Repository(
-        pycsw_database, pycsw_context, table=pycsw_table_name)
-    
-    record = get_record(pycsw_context, repo, site_url, ckan_id)
-    if not record:
-        log1.error('Cannot parse %s as a record. Skipped.' % (ckan_id))
-        return None
-    
-    try:
-        repo.insert(record, 'local', util.get_today_and_now())
-        log1.info('Created record for %s' % (ckan_id))
-    except Exception, err:
-        log1.error('Failed to create %s: %s' % (ckan_id, err))
-        return None
-    
-    return record
+    global _repo
 
-def update_record(ckan_id):
-    '''Attempts to update a CSW record for a just updated dataset.
-    
-    Returns None on failure, or a metadata record object on success.
+    if not _repo:
+        _repo = pycsw.repository.Repository(
+            pycsw_database, pycsw_context, table=pycsw_table_name)
+
+    return _repo
+
+def delete_record(session, pkg_dict):
+    '''Delete the corresponding CSW record (if exists)
     '''
     
-    repo = repository.Repository(
-        pycsw_database, pycsw_context, table=pycsw_table_name)
+    repo = get_repo()
     
-    record = get_record(pycsw_context, repo, site_url, ckan_id)
-    if not record:
-        log1.error('Cannot parse %s as a record. Skipped.' % (ckan_id))
-        return None
+    existing_record = session.query(repo.dataset).get(pkg_dict['id'])
+    if existing_record:
+        session.delete(existing_record)
+        session.commit()
     
-    update_dict = dict([(getattr(repo.dataset, key), getattr(record, key)) \
-        for key in record.__dict__.keys() if key != '_sa_instance_state'])
-    
-    try:
-        repo.session.begin()
-        repo.session.query(repo.dataset).filter_by(
-            ckan_id=ckan_id).update(update_dict)
-        repo.session.commit()
-        log1.info('Updated record for %s.' % (ckan_id))
-    except Exception, err:
-        repo.session.rollback()
-        log1.error('Failed to update %s: %s' % (ckan_id, err))
-        return None
+    return existing_record
 
+def create_or_update_record(session, pkg_dict):
+    '''Create or update a CSW record to sync with a newly updated dataset
+    '''
+    
+    repo = get_repo()
+    
+    existing_record = session.query(repo.dataset).get(pkg_dict['id'])
+    
+    record = make_record(pkg_dict, repo)
+    if not record:
+        return None
+    
+    # Now, a record object is computed from dataset's metadata
+
+    if not existing_record:
+        # Persist the newly created record
+        session.add(record)
+    else:
+        # Copy new record to session-persistent object
+        for key in map(lambda col: col.key, repo.dataset.__table__.columns):
+            if key in ['identifier']:
+                continue
+            setattr(existing_record, key, getattr(record, key, None))
+    
+    session.commit()
     return record
 
-def get_record(pycsw_context, repo, site_url, ckan_id):
+def make_record(pkg_dict, repo=None):
     '''Build and return a metadata record from a dataset's XML dump.
     
     Returns None on failure, or a loaded metadata record on success.
     '''
+    
+    global pycsw_context
 
-    api_url = site_url.rstrip('/') + (
-        '/api/publicamundi/dataset/export/%s' % (ckan_id))
-    response = requests.get(api_url)
+    if not repo:
+        repo = get_repo()
 
+    # Load pkg-dict into a metadata object
+
+    pkg_id = pkg_dict['id']
+    pkg_dtype = pkg_dict.get('dataset_type')
+    obj = make_metadata_object(pkg_dtype, pkg_dict)
+    
+    # Generate an XML dump for current pkg-dict
+
+    xser = xml_serializer_for(obj)
+    xser.target_namespace = site_url 
+    xmldata = xser.to_xml()
+    
+    # Parse XML dump into a pyCSW metadata record
+
+    record = None
     try:
-        xml = etree.parse(io.BytesIO(response.content))
-    except Exception, err:
-        log1.error('Could not parse XML for dataset %s: %s' % (ckan_id, err))
-        return None
+        record = pycsw.metadata.parse_record(pycsw_context, xmldata, repo)[0]
+    except Exception as err:
+        log1.error('Cannot extract metadata for %s: %s' % (pkg_id, err))
+    else:
+        log1.debug('Extracted metadata for dataset %s' % (pkg_id))
 
-    try:
-        record = metadata.parse_record(pycsw_context, xml, repo)[0]
-    except Exception, err:
-        log1.error(
-            'Could not extract metadata for %s: %s' % (ckan_id, err))
-        return None
-
-    if not record.identifier:
-        record.identifier = ckan_id
-
+    if record and not record.identifier:
+        record.identifier = pkg_id
+    
     return record
 
 def _load_config(file_path):

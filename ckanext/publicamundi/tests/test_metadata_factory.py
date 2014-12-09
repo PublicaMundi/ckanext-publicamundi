@@ -21,7 +21,7 @@ class Baz(object):
 baz_factory = Baz()
 
 @object_null_adapter(name='another-foo')
-class AnotherFoo(Object):
+class AnotherFoo(types.BaseMetadata):
     
     zope.interface.implements(schemata.IFoo)
     

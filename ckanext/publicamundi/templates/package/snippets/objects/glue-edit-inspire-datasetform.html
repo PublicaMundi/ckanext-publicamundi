@@ -16,7 +16,7 @@
                 data={ 
                     'pkg_dict': pkg_dict, 
                     'title': _('Locator'),
-                    'input_classes': ['span5'] }),
+                    'input_classes': ['span6'] }),
         },
         'resource_language': {
             'markup': h.markup_for_field('edit:resource_language.inspire',
@@ -32,7 +32,7 @@
                 name_prefix=name_prefix,
                 data={ 
                     'title': _('Title'),
-                    'input_classes': ['span4'],
+                    'input_classes': ['span6'],
                     'attrs': { 
                         'data-module': 'package-form-linked-fields',
                         'data-module-submit': true,
@@ -47,16 +47,14 @@
                 name_prefix=name_prefix,
                 data={ 
                     'title': _('Identifier'),
-                    'input_classes': ['span5'],
+                    'input_classes': ['span6'],
                     'attrs': {
                         'data-module': 'package-form-linked-fields',
                         'data-module-submit': true,
-                        'data-module-transform': h.url_for('', qualified=1) ~ '/dataset/' ~ '{{target}}',
-                        'data-module-subscribe-event': 'slug-preview-modified',
-                        'data-module-target': h.dump_json({ 
-                            'name': 'name', 
-                            'value': pkg_dict.name|default(''), 
-                            'title': 'name', })}}),
+                        'data-module-target': h.dump_json({
+                            'name': none,
+                            'value': pkg_dict.id,
+                            'title': 'dataset identifier', })}}),
         },
         'abstract': {
             'markup': h.markup_for_field('edit',
