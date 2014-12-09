@@ -171,7 +171,7 @@ inspire1 = InspireMetadata(
     datestamp = datetime.date.today(),
     languagecode = "gre",
     title = u"Title",
-    identifier = "http://acme.example.com/datasets/91b54070-5adb-11e4-8ed6-0800200c9a66",
+    identifier = "91b54070-5adb-11e4-8ed6-0800200c9a66",
     abstract = u"This is an abstract description",
     locator = [
         "http://publicamundi.eu",

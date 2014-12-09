@@ -18,6 +18,7 @@ import ckanext.publicamundi.lib.metadata as ext_metadata
 import ckanext.publicamundi.lib.metadata.validators as ext_validators
 import ckanext.publicamundi.lib.actions as ext_actions
 import ckanext.publicamundi.lib.template_helpers as ext_template_helpers
+import ckanext.publicamundi.lib.pycsw_sync as ext_pycsw_sync
 
 from ckanext.publicamundi.lib.util import (to_json, random_name, Breakpoint)
 from ckanext.publicamundi.lib.metadata import dataset_types
@@ -73,7 +74,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'dataset_types': self.dataset_types,
             'dataset_type_options': self.dataset_type_options,
             'organization_objects': ext_template_helpers.get_organization_objects,
-            'make_object': ext_metadata.make_object,
+            'make_metadata_object': ext_metadata.make_metadata_object,
             'markup_for_field': ext_metadata.markup_for_field,
             'markup_for_object': ext_metadata.markup_for_object,
             'markup_for': ext_metadata.markup_for,
@@ -146,6 +147,15 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         mapper.connect(
             '/api/publicamundi/vocabularies/{name}',
             controller=api_controller, action='vocabulary_get')
+        
+        mapper.connect(
+            '/api/publicamundi/dataset/export/{name_or_id}', 
+            controller=api_controller, action='dataset_export')
+        
+        mapper.connect(
+            '/api/publicamundi/dataset/import', 
+            controller=api_controller, action='dataset_import',
+            conditions=dict(method=['POST']))
 
         user_controller = 'ckanext.publicamundi.controllers.user:UserController'
 
@@ -168,15 +178,6 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
                       '/{parent}/resources/ingest/{resource_id}',
                       action='render_ingestion_template',
                       resource_id='{resource_id}', parent='{parent}')
-
-        mapper.connect(
-            '/api/publicamundi/dataset/export/{name_or_id}', 
-            controller=api_controller, action='dataset_export')
-        
-        mapper.connect(
-            '/api/publicamundi/dataset/import', 
-            controller=api_controller, action='dataset_import',
-            conditions=dict(method=['POST']))
       
         files_controller = 'ckanext.publicamundi.controllers.files:Controller'
         
@@ -533,37 +534,44 @@ class PackageController(p.SingletonPlugin):
     ## IConfigurable interface ##
 
     def configure(self, config):
-        ''' Apply configuration options to this plugin '''
-        pass
+        '''Apply configuration options to this plugin '''
+        
+        ext_pycsw_sync.setup(config)
+
+        return
 
     ## IPackageController interface ##
 
     def after_create(self, context, pkg_dict):
+        '''Extensions will receive the validated data dict after the package has been created
+       
+        Note that the create method will return a package domain object, which may not 
+        include all fields. Also the newly created package id will be added to the dict.
+        At this point, the package is possibly in 'draft' state so most Action-API 
+        (targeting on the package itself) calls will fail.
         '''
-        Extensions will receive the validated data dict after the package has been created
-        Note that the create method will return a package domain object, which may not include all fields.
-        Also the newly created package id will be added to the dict.
-        At this point, the package is possibly in 'draft' state so most Action-API (targeting on the
-        package itself) calls will fail.
-        '''
-        log1.debug('A package was created: %s', to_json(pkg_dict, indent=4))
+        
+        log1.debug('A package was created: %s', pkg_dict['id'])
         self._create_or_update_csw_record(context['session'], pkg_dict)
         pass
 
     def after_update(self, context, pkg_dict):
+        '''Extensions will receive the validated data dict after the package has been updated
+        
+        Note that the edit method will return a package domain object, which may not include 
+        all fields.
         '''
-        Extensions will receive the validated data dict after the package has been updated
-        (Note that the edit method will return a package domain object, which may not include all fields).
-        '''
-        log1.debug('A package was updated: %s', to_json(pkg_dict, indent=4))
+        
+        log1.debug('A package was updated: %s', pkg_dict['id'])
         self._create_or_update_csw_record(context['session'], pkg_dict)
         pass
 
     def after_delete(self, context, pkg_dict):
+        '''Extensions will receive the data dict (typically containing just the package id)
+        after the package has been deleted.
         '''
-        Extensions will receive the data dict (typically containing just the package id) after the package has been deleted.
-        '''
-        log1.debug('A package was deleted: %s', json.dumps(pkg_dict, indent=3))
+
+        log1.debug('A package was deleted: %s', pkg_dict['id'])
         self._delete_csw_record(context['session'], pkg_dict)
         pass
 
@@ -573,48 +581,53 @@ class PackageController(p.SingletonPlugin):
         Note that the read method will return a package domain object (which may 
         not include all fields).
         '''
+        
         #log1.info('A package is shown: %s', pkg_dict)
         pass
 
     def before_search(self, search_params):
+        '''Extensions will receive a dictionary with the query parameters just before are
+        sent to SOLR backend, and should return a modified (or not) version of it.
+        
+        Parameter search_params will include an "extras" dictionary with all values from 
+        fields starting with "ext_", so extensions can receive user input from specific fields.
+        This "extras" dictionary will not affect SOLR results, but can be later be used by the
+        after_search callback.
         '''
-        Extensions will receive a dictionary with the query parameters just before are sent to SOLR backend,
-        and should return a modified (or not) version of it.
-        Parameter search_params will include an "extras" dictionary with all values from fields
-        starting with "ext_", so extensions can receive user input from specific fields. This "extras"
-        dictionary will not affect SOLR results, but can be later be used by the after_search callback.
-        '''
+
         #search_params['q'] = 'extras_boo:*';
         #search_params['extras'] = { 'ext_boo': 'far' }
         return search_params
 
     def after_search(self, search_results, search_params):
-        '''
-        Extensions will receive the search results, as well as the search parameters, and should return a modified
-        (or not) object with the same structure:
+        '''Extensions will receive the search results, as well as the search parameters,
+        and should return a modified (or not) object with the same structure:
             {"count": "", "results": "", "facets": ""}
-        Note that count and facets may need to be adjusted if the extension changed the results for some reason.
-        Parameter search_params will include an extras dictionary with all values from fields starting with "ext_", so
-        extensions can receive user input from specific fields. For example, the ckanext-spatial extension recognizes
-        the "ext_bbox" parameter (inside "extras" dict) and handles it appropriately by filtering the results on one
+        
+        Note that count and facets may need to be adjusted if the extension changed the results
+        for some reason. Parameter search_params will include an extras dictionary with all 
+        values from fields starting with "ext_", so extensions can receive user input from 
+        specific fields. For example, the ckanext-spatial extension recognizes the "ext_bbox"
+        parameter (inside "extras" dict) and handles it appropriately by filtering the results on one
         more condition (filters out those not contained in the specified bounding box)
         '''
+        
         #raise Exception('Breakpoint')
         return search_results
 
     def before_index(self, pkg_dict):
-        '''
-        Extensions will receive what will be given to SOLR for indexing. This is essentially a flattened dict
-        (except for multli-valued fields such as tags) of all the terms sent to the indexer. The extension can modify
-        this by returning an altered version.
+        '''Extensions will receive what will be given to SOLR for indexing. This is essentially
+        a flattened dict (except for multli-valued fields such as tags) of all the terms sent
+        to the indexer. The extension can modify this by returning an altered version.
         '''
         return pkg_dict
 
     def before_view(self, pkg_dict):
+        '''Extensions will recieve this before the dataset gets displayed.
+        
+        The dictionary returned will be the one sent to the template.
         '''
-        Extensions will recieve this before the dataset gets displayed. The dictionary returned will be the one
-        that gets sent to the template.
-        '''
+
         # An IPackageController can add/hide/transform package fields before sent to the template.
         extras = pkg_dict.get('extras', [])
         # or we can translate keys ...
@@ -628,33 +641,19 @@ class PackageController(p.SingletonPlugin):
         return pkg_dict
 
     def _create_or_update_csw_record(self, session, pkg_dict):
-        ''' Sync dataset fields to CswRecord fields '''
-        #raise Exception('Break')
-        from geoalchemy import WKTSpatialElement
-        from ckanext.publicamundi.lib.util import geojson_to_wkt
-        # Populate record fields
-        record = session.query(ext_model.CswRecord).get(pkg_dict['id'])
-        if not record:
-            log1.info('Creating CswRecord %s', pkg_dict.get('id'))
-            record = ext_model.CswRecord(pkg_dict.get('id'), name=pkg_dict.get('name'))
-            session.add(record)
+        '''Sync dataset with CSW record'''
+        record = ext_pycsw_sync.create_or_update_record(session, pkg_dict)
+        if record: 
+            log1.info('Saved CswRecord %s (%s)', record.identifier, record.title)
         else:
-            log1.info('Updating CswRecord %s', pkg_dict.get('id'))
-        extras = { item['key']: item['value'] for item in pkg_dict.get('extras', []) }
-        record.title = pkg_dict.get('title')
-        if 'spatial' in extras:
-            record.geom = WKTSpatialElement(geojson_to_wkt(extras.get('spatial')))
-        # Persist object
-        session.commit()
-        log1.info('Saved CswRecord %s (%s)', record.id, record.name)
+            log1.warning('Failed to save CswRecord for dataset %s' %(pkg_dict['id']))
         return
 
     def _delete_csw_record(self, session, pkg_dict):
-        record = session.query(ext_model.CswRecord).get(pkg_dict['id'])
+        '''Delete CSW record'''
+        record = ext_pycsw_sync.delete_record(session, pkg_dict)
         if record:
-            session.delete(record)
-            session.commit()
-            log1.info('Deleted CswRecord %s', pkg_dict['id'])
+            log1.info('Deleted CswRecord for dataset %s', pkg_dict['id'])  
         return
 
 class ErrorHandler(p.SingletonPlugin):
