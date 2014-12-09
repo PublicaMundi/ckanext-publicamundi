@@ -25,25 +25,35 @@ class TableObjectReadWidget(ReadObjectWidget):
     
     def get_template(self):
         return 'package/snippets/objects/read-object-table.html'
+    
+    def get_field_order(self):
+        '''Explicitly define the order at which fields are listed in rows
+        ''' 
+        cls = TableObjectReadWidget
+        return super(cls, self).get_field_qualifiers().keys()
 
     def prepare_template_vars(self, name_prefix, data):
         
-        cls = type(self)
-        Td, Th = cls._Td, cls._Th
+        cls = TableObjectReadWidget
+        Td, Th, Tr = cls._Td, cls._Th, cls._Tr
         
         tpl_vars = super(cls, self).prepare_template_vars(name_prefix, data)
 
-        # Preprocess self.obj to be displayed as table rows
+        # Dictize self.obj, format leafs as markup
         
         max_depth = data.get('max_depth', 0) or self.max_depth
 
-        dictz_opts = { 
-            'max-depth': max_depth, 
-            'format-values': 'markup:q=td' 
-        } 
+        dictz_opts = {'max-depth': max_depth, 'format-values': 'markup:q=td'}
         obj_dict = self.obj.to_dict(flat=False, opts=dictz_opts)
 
-        num_rows, num_cols, rows = cls._tabulate(obj_dict)
+        # Re-order according to this widget's field ordering
+        
+        ordered_fields = self.get_field_order()
+        od = OrderedDict(((k, obj_dict[k]) for k in self.get_field_order()))
+        
+        # Preprocess ordered obj_dict to be displayed as table rows
+                
+        num_rows, num_cols, rows = cls._tabulate(od)
        
         # Provide human-friendly names for TH elements 
         
@@ -62,12 +72,13 @@ class TableObjectReadWidget(ReadObjectWidget):
                     colspan=(num_cols - 1), 
                     attrs=extra.get('attrs'))
                 th = Th(data=extra['title'])
-                rows.insert(0, [th, td])
-
+                row = Tr([th, td])
+                row.display = True
+                rows.insert(0, row)
+        
         # Provide vars to template
 
         tpl_vars.update({
-            'obj_dict': obj_dict,
             'rows': rows,
             'num_rows': num_rows,
             'num_cols': num_cols,
@@ -77,6 +88,10 @@ class TableObjectReadWidget(ReadObjectWidget):
 
     # Helpers
 
+    class _Tr(list):
+
+        __slots__ = ('attrs', 'display')
+    
     class _Td(object):
 
         __slots__ = ('parent', 'data', 'rowspan', 'colspan', 'attrs')
@@ -131,7 +146,7 @@ class TableObjectReadWidget(ReadObjectWidget):
     @classmethod 
     def _tabulate_rows(cls, x):
         
-        Td, Th = cls._Td, cls._Th
+        Td, Th, Tr = cls._Td, cls._Th, cls._Tr
         
         itr = None
         if isinstance(x, dict):
@@ -158,11 +173,13 @@ class TableObjectReadWidget(ReadObjectWidget):
                     res.extend(rows)
         else:
             if x:
-                res.append([Td(data=unicode(x), colspan=1)])
+                row = Tr([Td(data=unicode(x), colspan=1)])
+                row.display = False
+                res.append(row)
         
         return res
 
-@object_widget_adapter(schemata.IObject, qualifiers=['dl', 'td'])
+@object_widget_adapter(schemata.IObject, qualifiers=['dl'])
 class DlObjectReadWidget(ReadObjectWidget):
     
     def get_field_qualifiers(self):
@@ -173,6 +190,18 @@ class DlObjectReadWidget(ReadObjectWidget):
 
     def get_glue_template(self):
         return 'package/snippets/objects/glue-read-object-dl.html'
+
+@object_widget_adapter(schemata.IObject, qualifiers=['td'])
+class TdObjectReadWidget(ReadObjectWidget):
+    
+    def get_field_qualifiers(self):
+        qualifiers = super(ReadObjectWidget, self).get_field_qualifiers()
+        for key in qualifiers:
+            qualifiers[key] = 'dd'
+        return qualifiers
+
+    def get_glue_template(self):
+        return 'package/snippets/objects/glue-read-object-td.html'
 
 @field_widget_adapter(IStringField, qualifiers=['dd', 'td'])
 @field_widget_adapter(IStringLineField, qualifiers=['dd', 'td'])
@@ -492,9 +521,18 @@ class GeographicBoundingBoxReadWidget(ReadObjectWidget):
 @field_widget_multiadapter([IListField, schemata.IGeographicBoundingBox],
     qualifiers=['td'], is_fallback=False)
 class ListOfGeographicBoundingBoxEditWidget(ReadFieldWidget, ListFieldWidgetTraits):
- 
+
+    def prepare_template_vars(self, name_prefix, data):
+        cls = type(self)
+        tpl_vars = super(cls, self).prepare_template_vars(name_prefix, data)
+        tpl_vars.update({
+            'title': None,
+            'description': None,
+        })
+        return tpl_vars
+
     def get_item_qualifier(self):
-        return 'td' 
+        return 'dl' 
     
     def get_template(self):
         return 'package/snippets/fields/read-list.html' 
