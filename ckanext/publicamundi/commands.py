@@ -215,6 +215,7 @@ class Setup(CkanCommand):
         import ckanext.publicamundi.model as publicamundi_model
 
         publicamundi_model.Base.metadata.create_all(bind=meta.engine)
+        publicamundi_model.post_setup(engine=meta.engine)
 
         self.log.info('Setup complete')
 
@@ -240,6 +241,7 @@ class Cleanup(CkanCommand):
         import ckan.model.meta as meta
         import ckanext.publicamundi.model as publicamundi_model
 
+        publicamundi_model.pre_cleanup(engine=meta.engine)
         publicamundi_model.Base.metadata.drop_all(bind=meta.engine)
 
         self.log.info('Cleanup complete')

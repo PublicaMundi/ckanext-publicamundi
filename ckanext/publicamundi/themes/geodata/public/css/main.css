@@ -45,6 +45,7 @@ a {
     //position: absolute;
 }
 .account-masthead .account .notifications a span{
+    font-size:13px;
     background-color: #fff;
     padding-left:0;
 }
@@ -423,7 +424,8 @@ a {
 }
 .menu-item span{
     max-width: 75px;
-    margin-top: 5px;
+    margin-top: 8px;
+    margin-right: 0;
     line-height: 15px;
 }
 .icons-grid li img{
@@ -934,6 +936,7 @@ a {
 
 /* Buttons */
 .btn {
+    font-family: 'ACMuli';
     border-radius: 0;
     border: 2px #4E59A4 solid;
     background: #fff;
@@ -1069,9 +1072,10 @@ a {
     padding: 0 20px 0 20px;
 }
 
-.dataset-resources  li a{
+.dataset-resources li a{
     border: 1px #4E59A4 solid;
     font-size: 12px;
+    margin-bottom: 5px;
     border-radius: 0;
     background-color: #fff !important;
     color: #4E59A4 !important;
@@ -1083,7 +1087,7 @@ a {
 /* CKAN control overrides */
 .select2-container-multi .select2-choices .select2-search-choice{
     font-size: 14px;
-    line-height: 17px;
+    line-height: 13px;
 }
 .select2-container .select2-choice, .select2-dropdown-open.select2-drop-above .select2-choice, .select2-dropdown-open.select2-drop-above .select2-choices{
     background-image: none;
@@ -1091,7 +1095,9 @@ a {
     border-radius: 0;
     //border: 3px #4E59A4 solid;
 }
-
+.select2-search-choice-close, .select2-container-multi .select2-search-choice-close{
+    top: 4px;
+}
 .select2-container .select2-choice .select2-arrow{
     background-image:none;
     background: #fff;
@@ -1254,7 +1260,9 @@ a {
 {
     background-image: url("../../images/icons/resources/txt.svg");
 }
-.format-label[data-format=shp], .format-label[data-format*=shp]
+.format-label[data-format=shp], .format-label[data-format*=shp], .format-label[data-format=shapefile], .format-label[data-format*=shapefile], .format-label[data-format=shape], .format-label[data-format*=shape]
+
+
 {
     background-image: url("../../images/icons/resources/shapefile.svg");
 }

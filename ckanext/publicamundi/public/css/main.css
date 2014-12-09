@@ -229,7 +229,7 @@ span.space-x3 { padding: 0px 12px }
 }
 
 .table td.value span.number { 
-    font-family: monospace;
+    /*font-family: monospace;*/
 }
 
 .control-required {
