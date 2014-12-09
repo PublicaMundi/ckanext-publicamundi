@@ -22,9 +22,9 @@
         label=_('Version'), 
         id='field-version', 
         placeholder=_('1.0'), 
-        value=data.version, 
+        value=(data.version or '0.1'), 
         error=errors.version, 
-        classes=['control-medium']) 
+        classes=['control-small']) 
 }}
 {% endblock %} {# package_metadata_fields_version #}
 
