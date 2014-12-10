@@ -51,6 +51,10 @@ div.controls .help-block {
     margin-top: 8px;
 }
 
+.slug-preview {
+    margin: 3px 0px 0px 0px;
+}
+
 div.accordion-group {
     border-radius: 1px;
 }
