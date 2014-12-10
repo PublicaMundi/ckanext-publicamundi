@@ -1,17 +1,34 @@
 <div class="{{ classes|join(' ') }}">     
     {%- if title %}<h3>{{ title }}</h3>{% endif -%}
-    <table class="table table-bordered metadata-table">
-        {% with col_width = 100.0 / (num_cols + 1.5) %}
+    <table class="table table-bordered metadata-table" 
+        data-module="table-collapsible-rows"
+        data-module-numcols="{{ num_cols|int }}"
+      >
+        {% if num_cols > 3 %}
+        {% with wl = 1.8, col_width = 100.0 / (num_cols + (wl - 1)) %}
         <colgroup>
             {%- for j in range(1, num_cols) -%}
-            <col style="width:{{ '%.1f'|format(col_width) }}%"></col>
+            <col style="width:{{ '%.1f'|format(col_width) }}%" />
             {%- endfor -%}
-            <col style="width:{{ '%.1f'|format(col_width * (1 + 1.5)) }}%"></col>
+            <col style="width:{{ '%.1f'|format(col_width * wl) }}%" />
         </colgroup>
         {% endwith %}
+        {% elif num_cols == 3 %}
+        <colgroup>
+            <col style="width: 30%" />
+            <col style="width: 24%" />
+            <col style="width: 46%" />
+        </colgroup>
+        {% elif num_cols == 2 %}
+        <colgroup>
+            <col style="width: 40%" />
+            <col style="width: 60%" />
+        </colgroup>
+        {% endif %} {# num_cols #}
+        
         <tbody>
             {% for row in rows -%}
-            <tr>
+            <tr class="{% if not row.display %}toggle-more{% endif %}">
                 {%- for r in row -%}
                 {%- with 
                     attrs = { 
@@ -22,13 +39,9 @@
                     }
                 -%}
                 {%- if r.tag == 'th' -%}
-                <th {{ attrs|xmlattr }}>
-                    {{- r.title or r.data -}}
-                </th>
+                <th {{ attrs|xmlattr }}>{{ r.title or r.data }}</th>
                 {% else %}
-                <td {{ attrs|xmlattr }}>
-                    {{- r.data|safe -}}
-                </td>
+                <td {{ attrs|xmlattr }}>{{ r.data|safe }}</td>
                 {%- endif -%}
                 {%- endwith -%} {# attrs #}
                 {%- endfor -%} {# for r in row #}
@@ -37,3 +50,5 @@
         </tbody>
     </table>
 </div>
+
+{% resource 'ckanext-publicamundi/table-collapsible-rows' %}

@@ -57,14 +57,15 @@
     {% snippet "package/snippets/tags.html", tags=pkg.tags %}
     {% endblock %}
     {% endif %}
+    
+    {% if pkg.spatial %}
+  {% snippet "spatial/snippets/dataset_map_sidebar.html", extent=pkg.spatial %}
+  {% endif %}
 
 
   {% block package_license %}
 {% snippet "snippets/license.html", pkg_dict=pkg %}
 {% endblock %}
-{% if pkg.spatial %}
-  {% snippet "spatial/snippets/dataset_map_sidebar.html", extent=pkg.spatial %}
-  {% endif %}
 
 {% block package_social %}
 {% snippet "snippets/social.html" %}

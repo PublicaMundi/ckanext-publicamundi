@@ -227,15 +227,32 @@ span.space-x3 { padding: 0px 12px }
 .table {
     margin-bottom: 10px;
     margin-top:10px;
+    border-radius: 2px;
 }
 
 .table td.value > dl, 
-.table td.value > .field-read-widget > dl {
+.table td.value > .field-read-widget > dl, 
+.table td.value > .field-read-widget > .object-read-widget > dl {
     margin: 0px 0px 0px 5px;
 }
 
+.table td.value li.tag {
+    margin-bottom: 0px;
+} 
+
 .table td.value span.number { 
-    font-family: monospace;
+    /*font-family: monospace;*/
+}
+
+.table tr.toggle-separator {
+    display: table-row;
+}
+
+.table tr.toggle-separator td {
+    padding: 0px;
+    height: 5px;
+    background-image: url('/base/images/table-seperator.png')
+    /*background: repeating-linear-gradient(-45deg, #ccc, #ccc 5px, #fff 5px, #fff 10px);*/
 }
 
 .control-required {
@@ -470,9 +487,5 @@ section.additional-info header > .btn-group {
     margin-right: 12px;
     width: 104px;
     text-align: center;
-}
-.metadata-label:after{
-    content: "\2713";
-    margin-left:5px;
 }
 

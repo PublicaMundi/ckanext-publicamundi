@@ -4,7 +4,6 @@ import zope.interface.verify
 import zope.schema
 import logging
 
-from ckanext.publicamundi.lib import logger
 from ckanext.publicamundi.lib.memoizer import memoize
 from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata.fields import (
@@ -15,6 +14,8 @@ from ckanext.publicamundi.lib.metadata import (
 from ckanext.publicamundi.lib.metadata.widgets.ibase import (
     IQualAction, ILookupContext, 
     IWidget, IFieldWidget, IObjectWidget)
+
+logger = logging.getLogger(__name__)
 
 class QualAction(object):
     '''A qualified action that we need to perform and search a widget for.

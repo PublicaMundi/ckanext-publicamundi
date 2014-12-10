@@ -6,12 +6,19 @@ from ckan.plugins import toolkit
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata.widgets import (
-    object_widget_adapter, field_widget_adapter, field_widget_multiadapter)
+    object_widget_adapter,
+    field_widget_adapter,
+    field_widget_multiadapter)
 from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 from ckanext.publicamundi.lib.metadata.widgets.base import (
-    EditFieldWidget, EditObjectWidget, 
-    ReadFieldWidget, ReadObjectWidget,
-    ListFieldWidgetTraits, DictFieldWidgetTraits)
+    EditFieldWidget,
+    EditObjectWidget, 
+    ReadFieldWidget,
+    ReadObjectWidget,
+    ListFieldWidgetTraits,
+    DictFieldWidgetTraits)
+
+from ._common import TableObjectReadWidget
 
 _ = toolkit._
 
@@ -176,4 +183,42 @@ class InspireReadWidget(ReadObjectWidget):
 
     def get_template(self):
         return None # use glue template
+
+@object_widget_adapter(schemata.IInspireMetadata, qualifiers=['table'])
+class TableInspireReadWidget(TableObjectReadWidget):
+
+    def get_field_order(self):
+        return [
+           # Identification
+           'identifier',
+           'title',
+           'abstract',
+           'locator',
+           'resource_language',
+           # Metadata on metadata
+           'contact',
+           'languagecode',
+           'datestamp',
+           # Classification
+           'topic_category',
+           # Keywords
+           'keywords',
+           # Geographic
+           'bounding_box',
+           # Temporal
+           'temporal_extent',
+           'creation_date',
+           'publication_date',
+           'revision_date',
+           # Quality 
+           'lineage',
+           'spatial_resolution',
+           # Conformity
+           'conformity',
+           # Contraints
+           'access_constraints',
+           'limitations',
+           # Responsible Party
+           'responsible_party',
+        ]
 
