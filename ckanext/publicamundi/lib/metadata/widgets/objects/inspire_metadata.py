@@ -90,6 +90,13 @@ class LineageEditWidget(EditFieldWidget):
     def get_template(self):
         return 'package/snippets/fields/edit-text-lineage-inspire.html'
 
+@field_widget_multiadapter([IListField, ITextLineField],
+    qualifiers=['access_constraints.inspire'], is_fallback=False)
+class AccessConstraintsEditWidget(EditFieldWidget):
+ 
+    def get_template(self):
+        return 'package/snippets/fields/edit-list-textline.html'
+
 @object_widget_adapter(schemata.IInspireMetadata, 
     qualifiers=['datasetform'], is_fallback=True)
 class InspireEditWidget(EditObjectWidget):
@@ -156,6 +163,9 @@ class InspireEditWidget(EditObjectWidget):
             ('lineage', 'lineage.inspire'),
             ('spatial_resolution', 'spatial_resolution.inspire'),
             ('responsible_party', 'contacts.inspire'),
+            ('conformity', 'conformity.inspire'),
+            ('access_constraints', 'access_constraints.inspire'),
+            ('limitations', 'access_constraints.inspire'),
             ('contact', 'contacts.inspire'),
             ('languagecode', 'select2'),
             ('datestamp', None),
