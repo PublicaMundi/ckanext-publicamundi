@@ -11,6 +11,12 @@ header > h6.inline {
     display: inline-block 
 } 
 
+.right{
+    float:right;
+}
+.left{
+    float:left;
+}
 .btn {
     font-weight: normal;
 }
@@ -458,3 +464,15 @@ section.tags {
 section.additional-info header > .btn-group {
     margin-top: 8px;
 }
+
+.metadata-label{
+    padding: 5px;
+    margin-right: 12px;
+    width: 104px;
+    text-align: center;
+}
+.metadata-label:after{
+    content: "\2713";
+    margin-left:5px;
+}
+

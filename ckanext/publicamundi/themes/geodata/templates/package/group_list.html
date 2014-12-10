@@ -1,38 +1,4 @@
-{%ckan_extends %}
-
-{% set pkg = c.pkg_dict %}
-{% block toolbar %}
-{{ super() }}
-{% endblock %}
-
-
-{% block page_heading %}
-{{ super() }}
-
-{% endblock %}
-
-{% block package_notes %}
-<div class="dataset-dates">
-    <div> {{_('Publication:')}} {{ pkg.metadata_created.split('T')[0] or pkg.metadata_created or _('Never')}}</div>
-    <div> {{_('Last revision:')}} {{ pkg.metadata_modified.split('T')[0] or pkg.metadata_modified or  _('Never') }}</div>
-</div>
-<hr class="border-divider"/>
-
-{{ super() }}
-<hr class="border-divider"/>
-{% endblock %}
-
-{% block package_tags %}{% endblock %}
-  
-    {% block dataset_type %}
-  {% set api_controller = 'ckanext.publicamundi.controllers.api:Controller' %}
-  {% endblock %}
-
-
-{% block package_additional_info %}
-<hr class="border-divider"/>
-{{ super() }}
-{% endblock %}
+{% ckan_extends %}
 
  {% block secondary_content %}
 {# {% block secondary_help_content %}{% endblock %} #}
@@ -71,3 +37,9 @@
 {% endblock %} 
 
 {% endblock %}
+
+{% block primary_content_inner %}
+<div class="gap"></div>
+{{super()}}
+{% endblock %}
+
