@@ -275,7 +275,7 @@ class ExportController(BaseController):
 
         headers = [
             ('Content-Disposition',
-             'attachment; filename=\"'+str(resource_name)+'\"'),
+             'attachment; filename=\"'+str(resource_name)+'.zip\"'),
             ('Content-Type',
              'text/html'),
             ('Content-Length',
