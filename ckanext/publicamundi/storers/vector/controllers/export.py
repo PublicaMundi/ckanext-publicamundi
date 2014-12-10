@@ -275,19 +275,19 @@ class ExportController(BaseController):
 
         headers = [
             ('Content-Disposition',
-             'attachment; filename=\"' +
-             resource_name +
-             '.zip\"'),
+             'attachment; filename=\"'+str(resource_name)+'\"'),
             ('Content-Type',
-             'text/plain'),
+             'text/html'),
             ('Content-Length',
              str(file_size))]
 
         from paste.fileapp import FileApp
 
         fapp = FileApp(filepath, headers=headers)
-
-        return fapp(request.environ, self.start_response)
+        status, headers, app_it = request.call_application(fapp)
+        response.headers = headers
+        response.status = status
+        return app_it
 
     def _get_gdal_driver_list(self):
         gdal_drvs = []
