@@ -1,29 +1,32 @@
 <footer class="site-footer">
   <div class="container">
     {% block footer_content %}
-       
-    <nav class="footer-links">
-        {% block footer_nav %}
-          <ul class="unstyled">
-            {% block footer_links %}
-            <li>
-            {% block header_site_search %}
-        <form class="section site-search simple-input" action="{% url_for controller='package', action='search' %}" method="get">
-          <div class="field">
-            <label for="field-sitewide-search">{{ _('Search Datasets') }}</label>
-            <input id="field-sitewide-search" type="text" name="q" placeholder="{{ _('Search datasets...') }}" />
-            <button class="btn-search" type="submit"><i class="icon-search"></i></button>
-          </div>
-      </form>
-
-        {% endblock %}
-        </li>
-            
-        <li> <a class="logo" href="{{ h.url('home') }}"><img src="{{ h.url_for_static('/images/geodata-logo.png') }}" alt="{{ g.site_title }} Logo" title="{{ g.site_title }} Logo" /></a> </li>
-
+    {% block footer_links %}
             {% endblock %}
-          </ul>
-          <ul class="unstyled">
+
+    <div class="quarter">
+        <ul class="unstyled"> 
+            <li>
+                <form class="section site-search simple-input" action="{% url_for controller='package', action='search' %}" method="get">
+                    <div class="field">
+                    <label for="field-sitewide-search">{{ _('Search Datasets') }}</label>
+                    <input id="field-sitewide-search" type="text" name="q" placeholder="{{ _('Search datasets...') }}" />
+                    <button class="btn-search" type="submit"><i class="icon-search"></i></button>
+                    </div>
+                </form>
+            </li>
+            <li>
+                <a class="logo" href="{{ h.url('home') }}"><img src="{{ h.url_for_static('/images/geodata-logo.png') }}" alt="{{ g.site_title }} Logo" title="{{ g.site_title }} Logo" /></a>
+            </li>
+        </ul>
+
+    </div>
+
+        {# <nav class="footer-links"> #}
+        {% block footer_nav %}
+       
+        <div class="quarter footer-links">
+            <ul class="unstyled">
             {% block footer_links_ckan %}
               {% set api_url = 'http://docs.ckan.org/en/{0}/api.html'.format(g.ckan_doc_version) %}
               {#<li><a href="{{ api_url }}">{{ _('CKAN API') }}</a></li>
@@ -31,28 +34,34 @@
               <li><a href="http://www.opendefinition.org/okd/"><img src="http://assets.okfn.org/images/ok_buttons/od_80x15_blue.png"></a></li> #}
             {{ h.build_nav_main(
                 ('search', _('Datasets')),
-                ('organizations_index', _('Organizations')),
                 ('group_index', _('Topics')),
+                ('organizations_index', _('Organizations')),
+                ('maps', _('Maps')),
                 ('about', _('About'))
                 ) }}
-
             {% endblock %}
-        </ul>
+            </ul>
+        </div>
         
         {% endblock %}
-      </nav>
-      <div class="attribution">
-        <ul class="unstyled">
-      {% block footer_lang %}
-          {% snippet "snippets/language_selector.html" %}
-          {% endblock %}
-        <ul class="unstyled">
-           <li><a href="http://www.ipsyp.gr/"> {{ _('IMIS') }} </a></li>
-          <li><a href="https://www.athena-innovation.gr/"> {{ _('Athena RC') }} </a></li>
-          <li><a href="http://ckan.org"> {{ _('CKAN') }} </a></li>
-      </ul>
+        {# </nav> #}
 
-      </ul>
+        <div class="quarter footer-links">
+            <ul class="unstyled">
+                <li><a href="http://www.imis.athena-innovation.gr"> {{ _('IMIS') }} </a></li>
+                <li><a href="http://www.rasdaman.com"> {{ _('Rasdaman') }} </a></li>
+                <li><a href="http://www.geolabs.fr"> {{ _('Geolabs') }} </a></li>
+                <li><a href="http://www.getmap.gr"> {{ _('GET') }} </a></li>
+            </ul>
+        </div>
+
+        <div class="quarter footer-links">
+            <ul class="unstyled">
+            <li><a href="http://www.publicamundi.eu">PublicaMundi</a></li>
+            <li><a href="https://github.com/PublicaMundi">Github</a></li>
+            <li><a href="https://twitter.com/PublicaMundi">Twitter</a></li>
+            </ul>
+        </div>   
       
 
           {% block footer_attribution %}
@@ -61,14 +70,7 @@
               
   </div>
     
-  {# <div class="social">
-      <ul class="unstyled">
-          <li><a href="http://www.publicamundi.eu">PublicaMundi</a></li>
-          <li><a href="https://github.com/PublicaMundi">Github</a></li>
-          <li><a href="https://twitter.com/PublicaMundi">Twitter</a></li>
-      </ul>
-  </div> #}
-     {% endblock %}
+       {% endblock %}
   </div>
 
   {% block footer_debug %}

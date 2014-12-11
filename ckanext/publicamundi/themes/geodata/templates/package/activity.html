@@ -1,0 +1,40 @@
+{% ckan_extends %}
+
+ {% block secondary_content %}
+        {% if pkg.organization %}
+  {% block package_organization %}
+      {% snippet "snippets/organization.html", organization=pkg.organization , has_context_title=true  %}
+      {% endblock %}
+      {% endif %}
+
+      {% if pkg.groups %}
+    {% block package_group %}
+    {% snippet "snippets/group.html", group=pkg.groups %}
+    {% endblock %}
+    {% endif %}
+
+    {% if pkg.tags %}
+  {% block package_side_tags %}
+    {% snippet "package/snippets/tags.html", tags=pkg.tags %}
+    {% endblock %}
+    {% endif %}
+
+
+  {% block package_license %}
+{% snippet "snippets/license.html", pkg_dict=pkg %}
+{% endblock %}
+{% if pkg.spatial %}
+  {% snippet "spatial/snippets/dataset_map_sidebar.html", extent=pkg.spatial %}
+  {% endif %}
+
+{% block package_social %}
+{% snippet "snippets/social.html" %}
+{% endblock %} 
+
+{% endblock %}
+
+{% block primary_content_inner %}
+<div class="gap"></div>
+{{super()}}
+{% endblock %}
+

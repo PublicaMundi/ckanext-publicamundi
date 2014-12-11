@@ -1,0 +1,15 @@
+{% extends 'snippets/package_item.html' %} 
+
+{# Do not display package description here -#}
+{% block package_item_notes %}{% endblock %}
+
+{# Display a list of ingestion-aware resources #}
+{% block package_item_resources %}
+  <ul class="resources unstyled">
+  {% for resource in package.resources %}
+  {% with task_result = h.resource_ingestion_result(resource.id) %}
+  {% snippet 'user/snippets/resource_item.html', pkg=package, res=resource, task=task_result, parent=parent %}
+  {% endwith %} {# task_result #}
+  {% endfor %} {# resource #}
+  </ul>
+{% endblock %}

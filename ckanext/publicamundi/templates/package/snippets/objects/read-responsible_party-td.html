@@ -1,0 +1,12 @@
+<dl style="color:magenta" class="{{ classes|join(' ') }}">
+    {% with field = obj.get_field('organization') %}
+    <dt>{{ field.title }}</dt>
+    <dl>{{ field.context.value }}</dl>
+    {% endwith %}
+    
+    {% with field = obj.get_field('email') %}
+    {% endwith %}
+    
+    {% with field = obj.get_field('role') %}
+    {% endwith %}
+</dl>

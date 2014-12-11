@@ -1,0 +1,88 @@
+{#
+Displays a single of dataset.
+
+package        - A package to display.
+item_class     - The class name to use on the list item.
+hide_resources - If true hides the resources (default: false).
+banner         - If true displays a popular banner (default: false).
+truncate       - The length to trucate the description to (default: 180)
+truncate_title - The length to truncate the title to (default: 80).
+
+Example:
+
+  {% snippet 'snippets/package_item_home.html', package=c.datasets[0] %}
+
+#}
+{% set truncate = truncate or 180 %}
+{% set truncate_title = truncate_title or 80 %}
+{% set title = package.title or package.name %}
+{% set notes = h.markdown_extract(package.notes, extract_length=truncate) %}
+{% if package.organization %}
+{% set organization = package.organization.title %}
+{% else %}
+{% set organization = "" %}
+{% endif %}
+{% if package.groups %}
+{% set groups = package.groups %}
+{% else %}
+{% set groups = "" %}
+{% endif %}
+{% set modified = package.metadata_modified %}
+<li class="{{ item_class or "dataset-item" }}">
+  {% block package_item_content %}
+  <div class="dataset-content">
+      <div class="dataset-preheading">
+          {% if groups %}
+          {% set group = groups[0] %}
+          <div>{{ h.friendly_date(modified|urlize)}} @ <span> <a href=/group/{{group.name}}> {{group.title|urlize }}</span></div> </a>
+          {% else %}
+          <div>{{ h.friendly_date(modified|urlize)}} </div>
+          {% endif %}
+      </div>
+
+      <h3 class="dataset-heading">
+        {% if package.private %}
+          <span class="dataset-private label label-inverse">
+            <i class="icon-lock"></i>
+            {{ _('Private') }}
+        </span>
+        {% endif %}
+        
+          {{ h.link_to(h.truncate(title, truncate_title), h.url_for(controller='package', action='read', id=package.name)) }}
+        {% if package.get('state', '').startswith('draft') %}
+          <span class="label label-info">{{ _('Draft') }}</span>
+        {% elif package.get('state', '').startswith('deleted') %}
+          <span class="label label-important">{{ _('Deleted') }}</span>
+        {% endif %}
+        {{ h.popular('recent views', package.tracking_summary.recent, min=10) if package.tracking_summary }}
+      </h3>
+      {% if banner %}
+        <span class="banner">{{ _('Popular') }}</span>
+      {% endif %}
+        {% if notes %}
+  <div> {{ notes |urlize }} </div>
+  {% endif %}
+
+      {% if organization %}
+      <div class="dataset-postheading">
+          <a href=/organization/{{ package.organization.name}}> {{ organization|urlize }}</a>
+      </div>
+      {% endif %}
+  </div>
+    {% block package_item_resources %}
+    {% if package.resources and not hide_resources %}
+      <ul class="dataset-resources unstyled">
+        {% for resource in package.resources %}
+        <li>
+          <a class="label"
+            href="{{ h.url_for(controller='package', action='resource_read', id=package.name, resource_id=resource.id) }}"
+            data-format="{{ resource.format }}"
+           >{{ resource.format|upper }}</a>
+        </li>
+        {% endfor %}
+      </ul>
+    {% endif %} {# package.resources #}
+    {% endblock %} {# package_item_resources #}
+
+      {% endblock %}
+</li>

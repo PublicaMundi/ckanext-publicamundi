@@ -43,6 +43,15 @@ def _test_object(fixture_name):
     s = format(x, format_spec)
     print s
 
+    format_spec = ''
+    print ' -- format <empty-string> -- '
+    s = format(x, format_spec)
+    print s
+
+    print ' -- format <missing> -- '
+    s = format(x)
+    print s
+
 def _test_object_dictize_with_format(fixture_name):
 
     print
@@ -57,13 +66,8 @@ def _test_object_dictize_with_format(fixture_name):
     else:
         assert False, 'Method to_dict() should fail: incompatible opts'
     
-    bad_opts = { 'format-values': 'baobab',}
-    try:
-        d = x.to_dict(flat=1, opts=bad_opts)
-    except AssertionError as ex:
-        pass
-    else:
-        assert False, 'Method to_dict() should fail: bad formatter name'
+    opts = { 'format-values': True, }
+    d = x.to_dict(flat=1, opts=opts)
 
     opts = { 'format-values': 'default', }
     d = x.to_dict(flat=1, opts=opts)
@@ -164,12 +168,13 @@ def test_field_dicts():
         'nonsence': u'ειμαι "βράχος"',
     }
     f.validate(v)
-    formatter = formatter_for_field(f, 'default')
-    verifyObject(IFormatter, formatter)
     
-    s = formatter.format(v)
-    print ' -- format:default %s -- ' %(type(f))
-    print s 
+    for name in ['default']:
+        formatter = formatter_for_field(f, name)
+        verifyObject(IFormatter, formatter)
+        s = formatter.format(v)
+        print ' -- format:%s %s -- ' %(name, type(f))
+        print s 
    
     # [Dict, *]
     
@@ -179,12 +184,13 @@ def test_field_dicts():
         'office': fixtures.contact2,
     }
     f.validate(v)
-    formatter = formatter_for_field(f, 'default')
-    verifyObject(IFormatter, formatter)
-    
-    s = formatter.format(v)
-    print ' -- format:default %s -- ' %(type(f))
-    print s 
+
+    for name in ['default']:
+        formatter = formatter_for_field(f, name)
+        verifyObject(IFormatter, formatter)
+        s = formatter.format(v)
+        print ' -- format:%s %s -- ' %(name, type(f))
+        print s 
 
 def test_field_lists():
     
@@ -192,47 +198,59 @@ def test_field_lists():
     
     # [List, TextLine]
 
-    f = zope.schema.List(
-        title = u'A list of keywords',
-        value_type = zope.schema.TextLine(title=u'Keyword')
-    ) 
-    v = [ u'alpha', u'αλφα', u'ειμαι "βράχος"' ]
-    f.validate(v)
-    formatter = formatter_for_field(f, 'default')
-    verifyObject(IFormatter, formatter)
-   
-    s = formatter.format(v)
-    print ' -- format:default %s -- ' %(type(f))
-    print s 
+    for name in ['default']:
+        f = zope.schema.List(
+            title = u'A list of keywords',
+            value_type = zope.schema.TextLine(title=u'Keyword')) 
+        v = [ u'alpha', u'αλφα', u'ειμαι "βράχος"' ]
+        f.validate(v)
+        formatter = formatter_for_field(f, name)
+        verifyObject(IFormatter, formatter)
+        s = formatter.format(v)
+        print ' -- format:%s %s -- ' %(name, type(f))
+        print s 
     
     # [List, NativeStringLine]
 
-    f = zope.schema.List(
-        title = u'A list of keywords',
-        value_type = zope.schema.NativeStringLine(title=u'Keyword')) 
-    v = [ 'alphA', 'beta', 'i am a "rock"' ]
-    f.validate(v)
-    formatter = formatter_for_field(f, 'default')
-    verifyObject(IFormatter, formatter)
-    
-    s = formatter.format(v)
-    print ' -- format:default %s -- ' %(type(f))
-    print s 
+    for name in ['default',]:
+        f = zope.schema.List(
+            title = u'A list of keywords',
+            value_type = zope.schema.NativeStringLine(title=u'Keyword')) 
+        v = [ 'alphA', 'beta', 'i am a "rock"' ]
+        f.validate(v)
+        formatter = formatter_for_field(f, name)
+        verifyObject(IFormatter, formatter)    
+        s = formatter.format(v)
+        print ' -- format:%s %s -- ' %(name, type(f))
+        print s 
 
     # [List, *]
     
-    f = schemata.IInspireMetadata.get('bounding_box') 
-    v = [ fixtures.bbox1 ]
-    f.validate(v)
-    formatter = formatter_for_field(f, 'default')
-    verifyObject(IFormatter, formatter)
-    
+    for name in ['default',]:
+        f = schemata.IInspireMetadata.get('bounding_box') 
+        v = [fixtures.bbox1]
+        f.validate(v)
+        formatter = formatter_for_field(f, name)
+        verifyObject(IFormatter, formatter)
+        s = formatter.format(v)
+        print ' -- format:%s %s -- ' %(name, type(f))
+        print s
+
+    f = zope.schema.List(
+        title=u'A list of spatial resolution objects',
+        value_type=zope.schema.Object(schema=schemata.ISpatialResolution))
+    v = [fixtures.spatialres2, fixtures.spatialres1]
+    f = f.bind(FieldContext(key='f', value=v))
+    formatter = formatter_for_field(f, 'booo')
     s = formatter.format(v)
-    print ' -- format:default %s -- ' %(type(f))
-    print s 
+    print ' -- format:booo %s -- ' %(type(f))
+    print s
    
 if __name__ == '__main__':
     
-    _test_object_dictize_with_format('thesaurus_gemet_concepts')
-
+    #_test_object_dictize_with_format('thesaurus_gemet_concepts')
+    _test_object_dictize_with_format('foo1')
+    _test_object('foo1')
+    test_field_lists()
+    test_field_dicts()
 

@@ -1,0 +1,80 @@
+<section class="additional-info">
+  
+  {%- with 
+      obj = pkg_dict.get(pkg_dict.dataset_type),
+      dtspec = h.dataset_types().get(pkg_dict.dataset_type)
+  -%}
+  {%- if obj -%}
+  <header>
+    <h3 class="inline">{{ 'Metadata' }}</h3>
+    <div class="download-links pull-right">
+      <div class="btn-group pull-right">
+        <a class="btn dropdown-toggle" data-toggle="dropdown"
+          >{{ _('Download as') }} <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+           {% for link in pkg_dict.download_links|sort(attribute='weight') %}
+           <li><a href="{{ link.url }}" target="_blank">{{ h.render_markdown(link.title)|safe }}</a></li>
+           {% endfor %}
+        </ul>
+      </div>
+      <div class="metadata-label pull-right">
+        <span>{{ dtspec.title|title|upper }}</span> <i class="icon-ok-sign"></i>
+      </div>
+    </div>
+  </header>
+
+  {% with 
+     data = { 
+        'max_depth': 2,
+        'extras': [
+            {
+                'title': _('State'),
+                'value': pkg_dict.state,
+                'attrs': {},
+            },
+            {
+                'title': _('License'),
+                'value': h.link_to(pkg_dict.license_title, pkg_dict.license_url, target='_blank') if pkg_dict.license_id else none,
+                'attrs': {},
+            },
+            {
+                'title': _('Source'), 
+                'value': h.link_to(pkg_dict.url, pkg_dict.url, rel='foaf:homepage', target='_blank') if pkg_dict.url else none, 
+                'attrs': { 'property': 'foaf:homepage' },  
+            },
+            { 
+                'title': _('Author'), 
+                'value': pkg_dict.author, 
+                'attrs': { 'property': 'dc:creator' },  
+            },
+            {
+                'title': _('Author Email'), 
+                'value': h.mail_to(email_address=pkg_dict.author_email, name=pkg_dict.author_email) if pkg_dict.author_email else none, 
+                'attrs': { 'property': 'dc:creator' },  
+            },
+            {
+                'title': _('Maintainer'), 
+                'value': pkg_dict.maintainer, 
+                'attrs': { 'property': 'dc:contributor' },  
+            },
+            {
+                'title': _('Maintainer Email'), 
+                'value': h.mail_to(email_address=pkg_dict.maintainer_email, name=pkg_dict.maintainer_email) if pkg_dict.maintainer_email else none, 
+                'attrs': { 'property': 'dc:contributor' },  
+            },
+            {
+                'title': _('Version'),
+                'value': pkg_dict.version,
+                'attrs': {},  
+            },
+        ] 
+     } 
+  %}
+  {{ h.markup_for('read:table', obj, errors=none, name_prefix='', data=data) }}
+  {% endwith %}
+
+  {%- endif -%} {# if obj #}
+  {%- endwith -%} {# obj, dtspec #}
+
+</section>
+

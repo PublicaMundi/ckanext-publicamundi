@@ -6,9 +6,6 @@ import os
 import random
 from collections import namedtuple
 from cgi import FieldStorage
-import shutil
-import requests
-from unidecode import unidecode
 
 from pylons import url
 
@@ -17,6 +14,7 @@ from ckan.lib.base import (BaseController, render, abort, redirect)
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 import ckan.logic as logic
+import ckan.lib.helpers as h
 
 from ckanext.publicamundi.lib.dictization import unflatten
 from ckanext.publicamundi.lib.util import to_json, Breakpoint
@@ -38,16 +36,32 @@ class Controller(BaseController):
 
     def brk(self):
         raise Breakpoint()
+
+    def test_csw_hooks(self, id):
+        from ckanext.publicamundi.lib import pycsw_sync
+        context = {'model': model, 'session': model.Session, 'api_version': 3}
+        pkg_dict = toolkit.get_action('package_show')(context, {'id': id})
+        pycsw_sync.create_or_update_record(context['session'], pkg_dict)
+        return ['Done']
     
-    def test_1(self):
+    def test_formatter(self):
+        from ckanext.publicamundi.lib.metadata import formatter_for_field
+        x = fixtures.inspire1
+        f = x.get_field('spatial_resolution')
+        fo = formatter_for_field(f, 'markup')
+        s = fo.format()
+        return [unicode(s)]
+    
+    def test_cache(self):
         from ckanext.publicamundi.cache_manager import get_cache
 
-        cache1 = get_cache('foobara')
+        cache1 = get_cache('test')
 
         def compute():
             log1.info(' ** i compute something **')
             return 42
         
+        val = cache1.get('foo', createfunc=compute)
         assert False
 
     def test_dataapp(self):
@@ -62,7 +76,7 @@ class Controller(BaseController):
         '''
         
         field_name = request.params.get('name')
-        upload = request.params.get(field_name + '-upload')
+        upload = request.params.get(field_name + '-upload') if field_name else 'upload'
         if not isinstance(upload, FieldStorage):
             abort(400, 'Expected a file upload')
         
@@ -337,10 +351,8 @@ class Controller(BaseController):
         
         #raise Breakpoint('Break')
 
-        c.markup = markup_for_object('read:table', obj, errors={}, name_prefix=k, 
-            data = {
-                'title': u'%s: Metadata' %(pkg_dict['title'])
-            })
+        data = { 'title': u'%s: Metadata' % (pkg_dict['title']) }
+        c.markup = markup_for_object('read:table', obj, name_prefix=k, data=data)
 
         return render('tests/page.html')
         
@@ -372,5 +384,8 @@ class Controller(BaseController):
         return render('tests/accordion-form.html')
     
     def test_upload_form(self):
+        if request.method == 'POST':
+            h.flash('Thanks for uploading data', 'alert-info')
+            redirect(toolkit.url_for('/dataset'))
         return render('tests/upload-form.html')
    

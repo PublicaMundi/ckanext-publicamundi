@@ -1,0 +1,18 @@
+{% ckan_extends %}
+
+{% block primary_content_inner %}
+  <h2 class="hide-heading">{{ _('My Organizations') }}</h2>
+  {% set organizations = h.organizations_available('create_dataset') %}
+  {% if organizations %}
+    <div class="wide">
+      {% snippet "organization/snippets/organization_list.html", organizations=organizations %}
+    </div>
+  {% else %}
+    <p class="empty">
+      {{ _('You are not a member of any organizations.') }}
+      {% if h.check_access('organization_create') %}
+        {% link_for _('Create one now?'), controller='organization', action='new' %}
+      {% endif %}
+    </p>
+  {% endif %}
+{% endblock %}

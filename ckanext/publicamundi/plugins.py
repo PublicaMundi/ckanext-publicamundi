@@ -3,8 +3,11 @@ import datetime
 import json
 import weberror
 import logging
+import string
+import urllib
 import geoalchemy
 from itertools import chain, ifilter
+from routes.mapper import SubMapper
 
 import ckan.model as model
 import ckan.plugins as p
@@ -13,21 +16,25 @@ import ckan.logic as logic
 
 import ckanext.publicamundi.model as ext_model
 import ckanext.publicamundi.lib.metadata as ext_metadata
+import ckanext.publicamundi.lib.metadata.validators as ext_validators
 import ckanext.publicamundi.lib.actions as ext_actions
 import ckanext.publicamundi.lib.template_helpers as ext_template_helpers
+import ckanext.publicamundi.lib.pycsw_sync as ext_pycsw_sync
 
 from ckanext.publicamundi.lib.util import (to_json, random_name, Breakpoint)
-from ckanext.publicamundi.lib.metadata import (
-    dataset_types, Object, ErrorDict,
-    serializer_for_object, serializer_for_key_tuple)
+from ckanext.publicamundi.lib.metadata import dataset_types
 
-_t = toolkit._
+_ = toolkit._
+asbool = toolkit.asbool
+aslist = toolkit.aslist
+url_for = toolkit.url_for
 
 log1 = logging.getLogger(__name__)
 
 class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
-    '''Override the default dataset form
+    '''Override the default dataset form.
     '''
+    
     p.implements(p.ITemplateHelpers)
     p.implements(p.IConfigurable, inherit=True)
     p.implements(p.IConfigurer, inherit=True)
@@ -35,19 +42,25 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     p.implements(p.IRoutes, inherit=True)
     p.implements(p.IActions, inherit=True)
     p.implements(p.IPackageController, inherit=True)
+    p.implements(p.IResourceController, inherit=True)
+    p.implements(p.IFacets, inherit=True)
+
+    _debug = False
+
+    _dataset_types = None
 
     ## Define helper methods ## 
 
     @classmethod
     def dataset_types(cls):
-        '''Provide a dict of dataset types'''
-        return dataset_types
+        '''Provide a dict of supported dataset types'''
+        return cls._dataset_types
 
     @classmethod
     def dataset_type_options(cls):
-        '''Provide options for dataset-type (needed for select inputs)'''
-        for name, spec in dataset_types.items():
-            yield { 'value': name, 'text': spec['title'] }
+        '''Provide options for dataset-type (needed for selects)'''
+        for k, spec in cls._dataset_types.items():
+            yield { 'value': k, 'text': spec['title'] }
 
     ## ITemplateHelpers interface ##
 
@@ -55,15 +68,19 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         '''Return a dict of named helper functions (ITemplateHelpers interface).
         These helpers will be available under the 'h' thread-local global object.
         '''
+
         return {
+            'debug': lambda: self._debug,
             'random_name': random_name,
+            'filtered_list': ext_template_helpers.filtered_list,
             'dataset_types': self.dataset_types,
             'dataset_type_options': self.dataset_type_options,
             'organization_objects': ext_template_helpers.get_organization_objects,
-            'make_object': ext_metadata.make_object,
+            'make_metadata_object': ext_metadata.make_metadata_object,
             'markup_for_field': ext_metadata.markup_for_field,
             'markup_for_object': ext_metadata.markup_for_object,
             'markup_for': ext_metadata.markup_for,
+            'resource_ingestion_result': ext_template_helpers.resource_ingestion_result,
         }
 
     ## IConfigurer interface ##
@@ -71,7 +88,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     def update_config(self, config):
         '''Configure CKAN (Pylons) environment'''
 
-        # Setup the (fanstatic) resource library, public and template directory
+        # Setup static resources
+
         p.toolkit.add_public_directory(config, 'public')
         p.toolkit.add_template_directory(config, 'templates')
         p.toolkit.add_resource('public', 'ckanext-publicamundi')
@@ -83,7 +101,17 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     def configure(self, config):
         '''Pass configuration to plugins and extensions'''
         
-        asbool = toolkit.asbool
+        cls = type(self)
+
+        # Are we in debug mode?
+
+        cls._debug = asbool(config['global_conf']['debug'])
+        
+        # Set supported dataset types
+
+        type_keys = aslist(config['ckanext.publicamundi.dataset_types'])
+        cls._dataset_types = { k: spec
+            for k, spec in dataset_types.items() if k in type_keys }
 
         # Modify the pattern for valid names for {package, groups, organizations}
         
@@ -91,31 +119,35 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             logic.validators.name_match = re.compile('[a-z][a-z0-9~_\-]*$')
             log1.info('Using pattern for valid names: %r', 
                 logic.validators.name_match.pattern)
-        
+              
         # Setup extension-wide cache manager
 
         from ckanext.publicamundi import cache_manager
         cache_manager.setup(config)
-
+    
         return
 
     ## IRoutes interface ##
 
     def before_map(self, mapper):
-        '''Setup routes before CKAN does.'''
+        '''Setup routes before CKAN defines core routes.'''
 
         api_controller = 'ckanext.publicamundi.controllers.api:Controller'
         
         mapper.connect(
-            '/api/util/resource/mimetype_autocomplete',
-            controller=api_controller, action='mimetype_autocomplete')
-         
+            '/api/publicamundi/util/resource/mimetype_autocomplete',
+            controller=api_controller, action='resource_mimetype_autocomplete')
+        
+        mapper.connect(
+            '/api/publicamundi/util/resource/format_autocomplete',
+            controller=api_controller, action='resource_format_autocomplete')
+
         mapper.connect(
             '/api/publicamundi/vocabularies',
             controller=api_controller, action='vocabularies_list')
          
         mapper.connect(
-            '/api/publicamundi/vocabularies/{name}', 
+            '/api/publicamundi/vocabularies/{name}',
             controller=api_controller, action='vocabulary_get')
         
         mapper.connect(
@@ -126,6 +158,28 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             '/api/publicamundi/dataset/import', 
             controller=api_controller, action='dataset_import',
             conditions=dict(method=['POST']))
+
+        user_controller = 'ckanext.publicamundi.controllers.user:UserController'
+
+        with SubMapper(mapper, controller=user_controller) as m:
+            
+            # Fixme: unneeded parameters to mapper.connect ?
+
+            m.connect('user_dashboard_resources', '/dashboard/resources',
+                      action='show_dashboard_resources')
+            m.connect('admin_page_resources', '/user/resources',
+                      action='show_admin_page_resources')
+            m.connect('reject_resource',
+                      '/{parent}/resources/reject/{resource_id}',
+                      action='reject_resource', parent='{parent}')
+            m.connect('identify_vector_resource', # Fixme: adapt
+                      '/{parent}/resources/identify_vector/{resource_id}',
+                      action='identify_resource', resource_id='{resource_id}',
+                      storer_type='vector', parent='{parent}')
+            m.connect('render_ingestion',
+                      '/{parent}/resources/ingest/{resource_id}',
+                      action='render_ingestion_template',
+                      resource_id='{resource_id}', parent='{parent}')
       
         files_controller = 'ckanext.publicamundi.controllers.files:Controller'
         
@@ -180,31 +234,31 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         return []
 
     def __modify_package_schema(self, schema):
+        '''Define modify schema for both create/update operations.
+        '''
 
-        from ckanext.publicamundi.lib.metadata.validators import (
-            is_dataset_type, get_field_edit_processor,
-            preprocess_dataset_for_edit, postprocess_dataset_for_edit)
-
+        check_not_empty = toolkit.get_validator('not_empty')
         ignore_missing = toolkit.get_validator('ignore_missing')
         ignore_empty = toolkit.get_validator('ignore_empty')
         convert_to_extras = toolkit.get_converter('convert_to_extras')
         default_initializer = toolkit.get_validator('default')
-
+        
         # Add dataset-type, the field that distinguishes metadata formats
 
+        is_dataset_type = ext_validators.is_dataset_type
         schema['dataset_type'] = [
-            default_initializer('ckan'),
-            convert_to_extras,
-            is_dataset_type,
+            default_initializer('ckan'), convert_to_extras, is_dataset_type,
         ]
        
-        # Add field-level validators/converters
+        # Add package field-level validators/converters
         
         # Note We provide a union of fields for all supported schemata.
         # Of course, not all of them will be present in a specific dataset,
         # so any "required" constraint cannot be applied here.
 
-        for dt, dt_spec in dataset_types.items():
+        get_field_processor = ext_validators.get_field_edit_processor
+        
+        for dt, dt_spec in self._dataset_types.items():
             flattened_fields = dt_spec.get('class').get_flattened_fields(opts={
                 'serialize-keys': True,
                 'key-prefix': dt_spec.get('key_prefix', dt)
@@ -212,17 +266,35 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             for field_name, field in flattened_fields.items():
                 # Build chain of processors for field
                 schema[field_name] = [ 
-                    ignore_missing,
-                    get_field_edit_processor(field),
+                    ignore_missing, get_field_processor(field),
                 ]
         
         # Add before/after package-level processors
 
-        schema['__before'].insert(-1, preprocess_dataset_for_edit)
+        preprocess_dataset = ext_validators.preprocess_dataset_for_edit
+        postprocess_dataset = ext_validators.postprocess_dataset_for_edit
+        
+        schema['__before'].insert(-1, preprocess_dataset)
 
-        if not schema.has_key('__after'):
+        if not '__after' in schema:
             schema['__after'] = []
-        schema['__after'].append(postprocess_dataset_for_edit)
+        schema['__after'].append(postprocess_dataset)
+        
+        # Add or replace resource field-level validators/converters
+
+        guess_resource_type = ext_validators.guess_resource_type_if_empty
+        
+        def convert_format_1(key, data, errors, context):
+            assert False
+
+        schema['resources'].update({
+            'resource_type': [
+                guess_resource_type, string.lower, unicode],
+            'format': [
+                check_not_empty, string.lower, unicode],
+        })
+
+        # Done, return updated schema
 
         return schema
 
@@ -238,10 +310,6 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
     def show_package_schema(self):
         schema = super(DatasetForm, self).show_package_schema()
-        
-        from ckanext.publicamundi.lib.metadata.validators import (
-            get_field_read_processor,
-            preprocess_dataset_for_read, postprocess_dataset_for_read)
 
         # Don't show vocab tags mixed in with normal 'free' tags
         # (e.g. on dataset pages, or on the search page)
@@ -253,27 +321,30 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         
         schema['dataset_type'] = [convert_from_extras, check_not_empty]
        
-        # Add field-level converters
+        # Add package field-level converters
+        
+        get_field_processor = ext_validators.get_field_read_processor
 
-        for dt, dt_spec in dataset_types.items():
+        for dt, dt_spec in self._dataset_types.items():
             flattened_fields = dt_spec.get('class').get_flattened_fields(opts={
                 'serialize-keys': True,
                 'key-prefix': dt_spec.get('key_prefix', dt)
             })
             for field_name, field in flattened_fields.items():
                 schema[field_name] = [ 
-                    convert_from_extras, 
-                    ignore_missing, 
-                    get_field_read_processor(field),
+                    convert_from_extras, ignore_missing, get_field_processor(field)
                 ]
           
         # Add before/after package-level processors
         
-        schema['__before'].insert(-1, preprocess_dataset_for_read)
+        preprocess_dataset = ext_validators.preprocess_dataset_for_read
+        postprocess_dataset = ext_validators.postprocess_dataset_for_read
+
+        schema['__before'].insert(-1, preprocess_dataset)
         
-        if not schema.has_key('__after'):
+        if not '__after' in schema:
             schema['__after'] = []
-        schema['__after'].append(postprocess_dataset_for_read)
+        schema['__after'].append(postprocess_dataset)
         
         return schema
 
@@ -286,6 +357,13 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         c = toolkit.c
         c.publicamundi_magic_number = 99
+        
+        if c.search_facets:
+            # Provide label functions for certain facets
+            if not c.facet_labels:
+                c.facet_labels = {
+                    'res_format': lambda t: t['display_name'].upper()
+                }
 
     # Note for all *_template hooks: 
     # We choose not to modify the path for each template (so we simply call super()). 
@@ -351,7 +429,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             # Noop: cannot recognize dataset-type (pkg_dict has raw extras?)
             return
 
-        dt_spec = dataset_types[dt]
+        dt_spec = self._dataset_types[dt]
         key_prefix = dt_spec.get('key_prefix', dt)
 
         # Fix types, create flat object dict
@@ -391,72 +469,161 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             pkg_dict[key_prefix] = obj.to_dict(flat=False, opts={
                 'serialize-values': 'json-s' 
             })
-            
-        return
-        #return pkg_dict
+         
+        return pkg_dict
      
     def before_search(self, search_params):
+        '''Return a modified (or not) version of the query parameters.
+        '''
         #search_params['q'] = 'extras_boo:*';
         #search_params['extras'] = { 'ext_boo': 'far' }
         return search_params
    
     def after_search(self, search_results, search_params):
+        '''Receive the search results, as well as the search parameters, and
+        return a modified (or not) result with the same structure.
+        '''
         #raise Exception('Breakpoint')
         return search_results
 
     def before_index(self, pkg_dict):
+        '''Receive what will be given to SOLR for indexing.
+        
+        This is essentially a flattened dict (except for multi-valued fields 
+        such as tags) of all the terms sent to the indexer.
+        '''
         log1.debug('before_index: Package %s is indexed', pkg_dict.get('name'))
         return pkg_dict
 
     def before_view(self, pkg_dict):
+        '''Receive the validated package dict before it is sent to the template. 
+        '''
+
         log1.debug('before_view: Package %s is prepared for view', pkg_dict.get('name'))
-
-        # This hook can add/hide/transform package fields before being sent to the template.
         
-        dt = pkg_dict.get('dataset_type') 
-
+        dt = pkg_dict.get('dataset_type')
+        dtspec = self._dataset_types.get(dt) if dt else None
+        pkg_name, pkg_id = pkg_dict['name'], pkg_dict['id']
+        
+        # Provide alternative download links for dataset's metadata 
+        
+        if dt:
+            download_links = pkg_dict.get('download_links', []) 
+            if not download_links:
+                pkg_dict['download_links'] = download_links
+            download_links.extend([
+                {
+                    'title': _('Native JSON Metadata'),
+                    'url': url_for('/api/action/dataset_show', id=pkg_name),
+                    'weight': 0,
+                    'format': 'json',
+                },
+                {
+                    'title': _('Native **%s** XML Metadata') % (dtspec['title']),
+                    'url': url_for(
+                        controller='ckanext.publicamundi.controllers.api:Controller',
+                        action='dataset_export',
+                        name_or_id=pkg_name),
+                    'weight': 5,
+                    'format': 'xml',
+                },
+            ])
+        
         return pkg_dict
+
+    ## IResourceController interface ##
+
+    def before_show(self, resource_dict):
+        '''Receive the validated data dict before the resource is ready for display.
+        '''
+        
+        # Normalize resource format (#66)
+        # Note ckan.lib.dictization.model_dictize:resource_dictize converts only
+        # some of the formats to uppercase (?), which leads to mixed cases.
+        resource_dict['format'] = resource_dict['format'].lower()
+        
+        return resource_dict
+
+    ## IFacets interface ##
+
+    def dataset_facets(self, facets_dict, package_type):
+        '''Update the facets_dict and return it.
+        '''
+        if package_type == 'dataset':
+            # Todo Maybe reorder facets
+            pass
+        return facets_dict
 
 class PackageController(p.SingletonPlugin):
     '''Hook into the package controller
     '''
+
     p.implements(p.IConfigurable, inherit=True)
     p.implements(p.IPackageController, inherit=True)
+    
+    csw_output_schemata = {
+        'dc': 'http://www.opengis.net/cat/csw/2.0.2',
+        'iso-19115': 'http://www.isotc211.org/2005/gmd',
+        'fgdc': 'http://www.opengis.net/cat/csw/csdgm',
+        'atom': 'http://www.w3.org/2005/Atom',
+        'nasa-dif': 'http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/',
+    }
+   
+    _pycsw_config_file = None
+    _pycsw_service_endpoint = None
 
     ## IConfigurable interface ##
 
     def configure(self, config):
-        ''' Apply configuration options to this plugin '''
-        pass
+        '''Apply configuration settings to this plugin
+        '''
+        
+        cls = type(self)
+
+        site_url = config['ckan.site_url']
+        cls._pycsw_config_file = config.get(
+            'ckanext.publicamundi.pycsw.config', 
+            'pycsw.ini')
+        cls._pycsw_service_endpoint = config.get(
+            'ckanext.publicamundi.pycsw.service_endpoint', 
+            '%s/csw' % (site_url.rstrip('/')))
+        
+        ext_pycsw_sync.setup(site_url, self._pycsw_config_file)
+
+        return
 
     ## IPackageController interface ##
 
     def after_create(self, context, pkg_dict):
+        '''Extensions will receive the validated data dict after the package has been created
+       
+        Note that the create method will return a package domain object, which may not 
+        include all fields. Also the newly created package id will be added to the dict.
+        At this point, the package is possibly in 'draft' state so most Action-API 
+        (targeting on the package itself) calls will fail.
         '''
-        Extensions will receive the validated data dict after the package has been created
-        Note that the create method will return a package domain object, which may not include all fields.
-        Also the newly created package id will be added to the dict.
-        At this point, the package is possibly in 'draft' state so most Action-API (targeting on the
-        package itself) calls will fail.
-        '''
-        log1.debug('A package was created: %s', to_json(pkg_dict, indent=4))
+        
+        log1.debug('A package was created: %s', pkg_dict['id'])
         self._create_or_update_csw_record(context['session'], pkg_dict)
         pass
 
     def after_update(self, context, pkg_dict):
+        '''Extensions will receive the validated data dict after the package has been updated
+        
+        Note that the edit method will return a package domain object, which may not include 
+        all fields.
         '''
-        Extensions will receive the validated data dict after the package has been updated
-        (Note that the edit method will return a package domain object, which may not include all fields).
-        '''
-        log1.debug('A package was updated: %s', to_json(pkg_dict, indent=4))
+        
+        log1.debug('A package was updated: %s', pkg_dict['id'])
         self._create_or_update_csw_record(context['session'], pkg_dict)
         pass
 
     def after_delete(self, context, pkg_dict):
+        '''Extensions will receive the data dict (typically containing just the package id)
+        after the package has been deleted.
         '''
-        Extensions will receive the data dict (typically containing just the package id) after the package has been deleted.
-        '''
-        log1.debug('A package was deleted: %s', json.dumps(pkg_dict, indent=3))
+
+        log1.debug('A package was deleted: %s', pkg_dict['id'])
         self._delete_csw_record(context['session'], pkg_dict)
         pass
 
@@ -466,88 +633,159 @@ class PackageController(p.SingletonPlugin):
         Note that the read method will return a package domain object (which may 
         not include all fields).
         '''
+        
         #log1.info('A package is shown: %s', pkg_dict)
         pass
 
     def before_search(self, search_params):
+        '''Extensions will receive a dictionary with the query parameters just before are
+        sent to SOLR backend, and should return a modified (or not) version of it.
+        
+        Parameter search_params will include an "extras" dictionary with all values from 
+        fields starting with "ext_", so extensions can receive user input from specific fields.
+        This "extras" dictionary will not affect SOLR results, but can be later be used by the
+        after_search callback.
         '''
-        Extensions will receive a dictionary with the query parameters just before are sent to SOLR backend,
-        and should return a modified (or not) version of it.
-        Parameter search_params will include an "extras" dictionary with all values from fields
-        starting with "ext_", so extensions can receive user input from specific fields. This "extras"
-        dictionary will not affect SOLR results, but can be later be used by the after_search callback.
-        '''
+
         #search_params['q'] = 'extras_boo:*';
         #search_params['extras'] = { 'ext_boo': 'far' }
         return search_params
 
     def after_search(self, search_results, search_params):
-        '''
-        Extensions will receive the search results, as well as the search parameters, and should return a modified
-        (or not) object with the same structure:
+        '''Extensions will receive the search results, as well as the search parameters,
+        and should return a modified (or not) object with the same structure:
             {"count": "", "results": "", "facets": ""}
-        Note that count and facets may need to be adjusted if the extension changed the results for some reason.
-        Parameter search_params will include an extras dictionary with all values from fields starting with "ext_", so
-        extensions can receive user input from specific fields. For example, the ckanext-spatial extension recognizes
-        the "ext_bbox" parameter (inside "extras" dict) and handles it appropriately by filtering the results on one
+        
+        Note that count and facets may need to be adjusted if the extension changed the results
+        for some reason. Parameter search_params will include an extras dictionary with all 
+        values from fields starting with "ext_", so extensions can receive user input from 
+        specific fields. For example, the ckanext-spatial extension recognizes the "ext_bbox"
+        parameter (inside "extras" dict) and handles it appropriately by filtering the results on one
         more condition (filters out those not contained in the specified bounding box)
         '''
+        
         #raise Exception('Breakpoint')
         return search_results
 
     def before_index(self, pkg_dict):
-        '''
-        Extensions will receive what will be given to SOLR for indexing. This is essentially a flattened dict
-        (except for multli-valued fields such as tags) of all the terms sent to the indexer. The extension can modify
-        this by returning an altered version.
+        '''Extensions will receive what will be given to SOLR for indexing. This is essentially
+        a flattened dict (except for multli-valued fields such as tags) of all the terms sent
+        to the indexer. The extension can modify this by returning an altered version.
         '''
         return pkg_dict
 
     def before_view(self, pkg_dict):
+        '''Extensions will recieve this before the dataset gets displayed.
+        
+        The dictionary returned will be the one sent to the template.
         '''
-        Extensions will recieve this before the dataset gets displayed. The dictionary returned will be the one
-        that gets sent to the template.
-        '''
-        # An IPackageController can add/hide/transform package fields before sent to the template.
-        extras = pkg_dict.get('extras', [])
-        # or we can translate keys ...
-        field_key_map = {
-            u'updated_at': _t(u'Updated'),
-            u'created_at': _t(u'Created'),
-        }
-        for item in extras:
-            k = item.get('key')
-            item['key'] = field_key_map.get(k, k)
+        
+        dt = pkg_dict.get('dataset_type')
+        pkg_name, pkg_id = pkg_dict['name'], pkg_dict['id']
+
+        # Provide CSW-backed download links for dataset's metadata 
+       
+        if dt:
+            download_links = pkg_dict.get('download_links', []) 
+            if not download_links:
+                pkg_dict['download_links'] = download_links
+            download_links.extend([
+                {
+                    'title': _('CSW-backed **DC** XML Metadata'),
+                    'url': self._build_csw_request_url(
+                        pkg_id, output_schema='dc', output_format='application/xml'),
+                    'weight': 10,
+                    'format': 'xml',
+                },
+                {
+                    'title': _('CSW-backed **DC** JSON Metadata'),
+                    'url': self._build_csw_request_url(
+                        pkg_id, output_schema='dc', output_format='application/json'),
+                    'weight': 15,
+                    'format': 'json',
+                },
+                {
+                    'title': _('CSW-backed **ISO-19115** XML Metadata'),
+                    'url': self._build_csw_request_url(
+                        pkg_id, output_schema='iso-19115', output_format='application/xml'),
+                    'weight': 15,
+                    'format': 'xml',
+                },
+                {
+                    'title': _('CSW-backed **ISO-19115** JSON Metadata'),
+                    'url': self._build_csw_request_url(
+                        pkg_id, output_schema='iso-19115', output_format='application/json'),
+                    'weight': 20,
+                    'format': 'json',
+                },
+                {
+                    'title': _('CSW-backed **FGDC** XML Metadata'),
+                    'url': self._build_csw_request_url(
+                        pkg_id, output_schema='fgdc', output_format='application/xml'),
+                    'weight': 25,
+                    'format': 'xml',
+                },
+                {
+                    'title': _('CSW-backed **Atom** XML Metadata'),
+                    'url': self._build_csw_request_url(
+                        pkg_id, output_schema='atom', output_format='application/xml'),
+                    'weight': 30,
+                    'format': 'xml',
+                },
+                {
+                    'title': _('CSW-backed **NASA-Dif** XML Metadata'),
+                    'url': self._build_csw_request_url(
+                        pkg_id, output_schema='nasa-dif', output_format='application/xml'),
+                    'weight': 35,
+                    'format': 'xml',
+                },
+            ])
+        
         return pkg_dict
 
+    ## Helpers ##
+    
+    def _build_csw_request_url(self, pkg_id, output_schema='dc', output_format=None):
+        '''Build a GetRecordById request to a CSW endpoint
+        '''
+        
+        qs_params = {
+            'service': 'CSW',
+            'version': '2.0.2',
+            'request': 'GetRecordById',
+            'ElementSetName': 'full',
+            'OutputSchema': self.csw_output_schemata.get(output_schema, ''),
+            'Id': pkg_id,
+        }
+        
+        if output_format:
+            qs_params['OutputFormat'] = output_format
+ 
+        return self._pycsw_service_endpoint + '?' + urllib.urlencode(qs_params)
+
     def _create_or_update_csw_record(self, session, pkg_dict):
-        ''' Sync dataset fields to CswRecord fields '''
-        #raise Exception('Break')
-        from geoalchemy import WKTSpatialElement
-        from ckanext.publicamundi.lib.util import geojson_to_wkt
-        # Populate record fields
-        record = session.query(ext_model.CswRecord).get(pkg_dict['id'])
-        if not record:
-            log1.info('Creating CswRecord %s', pkg_dict.get('id'))
-            record = ext_model.CswRecord(pkg_dict.get('id'), name=pkg_dict.get('name'))
-            session.add(record)
+        '''Sync dataset with CSW record'''
+        
+        pkg_id = pkg_dict['id']
+
+        if pkg_dict.get('state', 'active') != 'active':
+            log1.info(
+                'Skipped sync of non-active dataset %s to CSW record' % (pkg_id))
+            return
+
+        record = ext_pycsw_sync.create_or_update_record(session, pkg_dict)
+        if record: 
+            log1.info('Saved CswRecord %s (%s)', record.identifier, record.title)
         else:
-            log1.info('Updating CswRecord %s', pkg_dict.get('id'))
-        extras = { item['key']: item['value'] for item in pkg_dict.get('extras', []) }
-        record.title = pkg_dict.get('title')
-        if 'spatial' in extras:
-            record.geom = WKTSpatialElement(geojson_to_wkt(extras.get('spatial')))
-        # Persist object
-        session.commit()
-        log1.info('Saved CswRecord %s (%s)', record.id, record.name)
+            log1.warning('Failed to save CswRecord for dataset %s' %(pkg_id))
+        
         return
 
     def _delete_csw_record(self, session, pkg_dict):
-        record = session.query(ext_model.CswRecord).get(pkg_dict['id'])
+        '''Delete CSW record'''
+        record = ext_pycsw_sync.delete_record(session, pkg_dict)
         if record:
-            session.delete(record)
-            session.commit()
-            log1.info('Deleted CswRecord %s', pkg_dict['id'])
+            log1.info('Deleted CswRecord for dataset %s', pkg_dict['id'])  
         return
 
 class ErrorHandler(p.SingletonPlugin):
@@ -562,6 +800,7 @@ class ErrorHandler(p.SingletonPlugin):
         msg = weberror.reporter.MIMEText(format_text(exc_data)[0])
         msg['Subject'] = as_str(prefix + exc_data.exception_value)
         msg['From'] = as_str(from_address)
+        msg['Reply-To'] = as_str(from_address)
         msg['To'] = as_str(", ".join(to_addresses))
         msg.set_type('text/plain')
         msg.set_param('charset', 'UTF-8')
@@ -569,19 +808,24 @@ class ErrorHandler(p.SingletonPlugin):
 
     def update_config(self, config):
         from weberror.reporter import EmailReporter as error_reporter
-        # override default config options for pylons errorware
+        
+        # Override default config options for pylons errorware
         error_config = config['pylons.errorware']
         error_config.update({
             'error_subject_prefix' : config.get('ckan.site_title') + ': ',
-            'from_address' : config.get('error_from_address'),
+            'from_address' : config.get('error_email_from'),
             'smtp_server'  : config.get('smtp.server'),
-            'smtp_username': config.get('smtp.username'),
+            'smtp_username': config.get('smtp.user'),
             'smtp_password': config.get('smtp.password'),
-            'smtp_use_tls' : config.get('smtp.use_tls'),
+            'smtp_use_tls' : config.get('smtp.starttls'),
         })
-        # monkey-patch email error reporter 
-        error_reporter.assemble_email = lambda t,exc_data: self._exception_as_mime_message (\
-            exc_data, to_addresses=t.to_addresses, from_address=t.from_address, prefix=t.subject_prefix)
+        
+        # Monkey-patch email error reporter 
+        error_reporter.assemble_email = lambda t, exc: self._exception_as_mime_message(
+            exc, 
+            to_addresses=t.to_addresses, 
+            from_address=t.from_address,
+            prefix=t.subject_prefix)
 
 class SpatialDatasetForm(DatasetForm):
     '''Extend the dataset-form to recognize and read/write the `spatial` extra field.

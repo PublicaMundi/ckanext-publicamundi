@@ -1,4 +1,4 @@
-<div class="{{ classes | join(' ') }}">
+<dl class="{{ classes|join(' ') }}">
     <dt>{{ title }}</dt>
-    <dd class="number int">{{ value | int(default=field.default) }}</dd>
-</div>
+    <dd class="number int">{{ value|int(default=field.default) }}</dd>
+</dl>

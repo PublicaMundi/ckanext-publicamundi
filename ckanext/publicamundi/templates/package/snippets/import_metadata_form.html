@@ -9,7 +9,6 @@
 {% endblock %} 
 
 {% block form %}
-
 <form class="form-horizontal import-metadata-form" method="post" enctype="multipart/form-data">
 
     {% snippet 'package/snippets/edit-dataset_type.html', 
@@ -18,7 +17,9 @@
     %}
     
     {% snippet 'package/snippets/edit-organization.html', 
-        name='owner_org', title=_('Organization'),
+        name='owner_org', 
+        title=_('Organization'),
+        value=owner_org,
         description=_('Specify the organization the dataset belongs to.'),
         required=true, orgs_available=h.organizations_available('create_dataset')
     %}
@@ -51,7 +52,6 @@
           ><i class="icon-circle-arrow-right"></i> {{ _('Import') }}</button>
     </div>
 </form>
-
 {% endblock %} {# form #}
 
 {% resource 'ckanext-publicamundi/metadata-source' %}

@@ -1,0 +1,8 @@
+{% ckan_extends %}
+
+{% block page_primary_action %}
+{% if h.check_access('package_create') %}
+  {% snippet 'snippets/add_dataset_button.html', group=none %}
+{% endif %}
+{% endblock %}
+

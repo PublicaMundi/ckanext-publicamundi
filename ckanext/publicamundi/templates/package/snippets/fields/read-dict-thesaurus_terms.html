@@ -1,0 +1,16 @@
+{% set keywords_dict = value %}
+<dl class="{{ classes|join(' ') }}" >
+  {% for keywords in keywords_dict.values() %}
+  <dt data-thesaurus-name="{{ keywords.thesaurus.name|safe }}">
+    {{- keywords.thesaurus.title -}}
+  </dt>
+  {% with vocabulary = keywords.thesaurus.vocabulary.by_value %}
+  {% for term in keywords.terms %}
+  <dl data-value="{{ term|safe }}">
+    {{- vocabulary.get(term).title -}}
+  </dl>
+  {% endfor %} {# term #}
+  {% endwith %} {# vocabulary #}
+  {% endfor %} {# keywords #}
+</dl>
+

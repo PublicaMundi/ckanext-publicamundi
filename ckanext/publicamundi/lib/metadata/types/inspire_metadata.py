@@ -39,6 +39,11 @@ class SpatialResolutionFactory(object):
     def __call__(self):
         return [SpatialResolution()]
 
+class ConformityFactory(object):
+    
+    def __call__(self):
+        return [Conformity(title=None, degree=None)]
+
 @object_null_adapter()
 class InspireMetadata(BaseMetadata):
     
@@ -69,7 +74,7 @@ class InspireMetadata(BaseMetadata):
     
     spatial_resolution = SpatialResolutionFactory()
     
-    conformity = list
+    conformity = list 
     
     access_constraints = list
     limitations = list
@@ -206,11 +211,12 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         #elif not revision_date:
         #    raise Exception('revision date not present','')
 
-
         spatial_list = []
 
         if len(md.identification.distance) != len(md.identification.uom):
-            raise Exception('unequal list lengths distance,uom','%s %s' % (md.identification.distance,md.identification.uom))
+            raise Exception(
+                'Found unequal list lengths distance,uom (%s, %s)' % (
+                    md.identification.distance,md.identification.uom))
         else:
                 for i in range(0,len(md.identification.distance)):
                     spatial_list.append(SpatialResolution(
@@ -225,11 +231,11 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
 
         if len(md.dataquality.conformancedate) != len(md.dataquality.conformancedatetype):
             # Date list is unequal to datetype list, this means wrong XML so exception is thrown
-            raise Exception('Found unequal list lengths conformance date, conformancedatetype','!')
+            raise Exception('Found unequal list lengths: conformance date, conformancedatetype')
         if len(md.dataquality.conformancedegree) != len(md.dataquality.conformancedate):
-            # Degree list is unequal to date/datetype lists, so we are unable to conclude to which conformity item each degree value corresponds, so all are set to not-evaluated
-            # TODO: MD_Metadata bug
-            # Issue #63
+            # Degree list is unequal to date/datetype lists, so we are unable to conclude
+            # to which conformity item each degree value corresponds, so all are set to 
+            # not-evaluated (Todo: MD_Metadata bug #63)
             invalid_degree = True
 
         if md.dataquality.conformancedate:

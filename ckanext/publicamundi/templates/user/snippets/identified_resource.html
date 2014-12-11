@@ -1,0 +1,23 @@
+
+{% set ingest_render_url = h.url_for('render_ingestion',resource_id=res.id, parent = parent) %}
+{% set reject_url = h.url_for('reject_resource',resource_id=res.id, parent = parent) %}
+
+<div class="btn-group resource-ingest-opts">
+    <a href="#" class="btn btn-small dropdown-toggle" data-toggle="dropdown"
+        > {{ _('Actions') }} <span class="caret"></span></a>
+    <ul class="dropdown-menu">
+      {% block resource_item_ingest_links %}
+      <li>
+        <a class="btn-link btn-small" href="{{ ingest_render_url }}" 
+            data-module="ingest-dialog" data-module-template="{{ ingest_render_url }}" data-loading-text="{{ _('Loading...') }}"
+            ><i class="icon-cog icon-fixed-width"></i>&nbsp;&nbsp;{{ _('Ingest resource') }}</a>
+      </li>
+      <li>
+	    <a class="btn-link btn-small" href="{{ reject_url }}" 
+            ><i class="icon-check icon-fixed-width"></i>&nbsp;&nbsp;{{ _('Ignore') }}</a>
+      </li>
+      {% endblock %} {# resource_item_ingest_links #}
+    </ul>
+</div>
+
+{% resource 'ckanext-publicamundi/ingest-dialog' %}

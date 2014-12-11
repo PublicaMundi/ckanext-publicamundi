@@ -1,0 +1,33 @@
+{% ckan_extends %}
+ 
+{% block resource_actions_inner %}
+    {{ super() }}
+    
+    {#
+      Note:
+
+      The following additional links can co-exist with links from other publicamundi storer
+      plugins (extending also the same template with `ckan_extends`), since they will not be
+      present in the same resource.
+
+      But, especially for the "Export" button, it will be nice if it was part of the parent 
+      publicamundi plugin, and could delegate to the proper export function based on the 
+      storer/ingestor that generated this particular resource.
+    
+    #}
+
+    {% if res.vectorstorer_resource and res.format == 'data_table' %}
+	{% set export_dialog_url = h.url_for('vector_export',  action='export',operation='index', id=pkg.name, resource_id=res.id) %} 
+	<a class="btn btn-success" href="{{ export_dialog_url }}" 
+        data-module="api-info" data-module-template="{{ export_dialog_url }}" data-loading-text="{{ loading_text }}"
+        ><i class="icon-cloud-download"></i> {{ _('Export') }}</a>
+	{% resource 'ckanext-publicamundi-vector/dialog' %}
+    {% endif %}
+
+    {% if res.vectorstorer_resource  and res.format == 'wms' %}
+	{% set edit_style_url = h.url_for('edit_current_sld', action='edit_current_sld', id=pkg.name, resource_id=res.id,operation='show') %} 
+	<a class="btn btn-success" href="{{ edit_style_url }}"
+        ><i class="icon-magic"></i> {{ _('Edit Style') }}</a> 
+    {% endif %}
+
+{% endblock %}

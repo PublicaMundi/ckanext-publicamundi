@@ -171,7 +171,7 @@ inspire1 = InspireMetadata(
     datestamp = datetime.date.today(),
     languagecode = "gre",
     title = u"Title",
-    identifier = "http://acme.example.com/datasets/91b54070-5adb-11e4-8ed6-0800200c9a66",
+    identifier = "91b54070-5adb-11e4-8ed6-0800200c9a66",
     abstract = u"This is an abstract description",
     locator = [
         "http://publicamundi.eu",
@@ -191,7 +191,7 @@ inspire1 = InspireMetadata(
         ),
     },
     bounding_box = [
-        GeographicBoundingBox(nblat=0.0, sblat=0.0, wblng=0.0, eblng=0.0)],
+        GeographicBoundingBox(nblat=30.0, sblat=0.0, wblng=0.0, eblng=0.0)],
     temporal_extent = [
         TemporalExtent(start=datetime.date(2009,1,1), end=datetime.date(2010,1,1))],
     creation_date = datetime.date(2011,1,1),

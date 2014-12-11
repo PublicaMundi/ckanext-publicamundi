@@ -1,11 +1,11 @@
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
-<div class="{{ classes | join(' ') }}" {{ attrs | xmlattr }} >
-    <h3 class="title">{{ title }}</h3>
+<div class="{{ classes|join(' ') }}" {{ attrs|xmlattr }} >
+    {% if title %}<h3 class="title">{{ title }}</h3>{% endif %}
     {% if description %}<p class="description">{{ description }}</p>{% endif -%}
-    <ol>
+    <ol class="{{ list_classes|join(' ') }}">
         {% for y in items -%}
-        <li>{{ y.markup }}</li>
+        <li data-key="{{ loop.index0 }}">{{ y.markup }}</li>
         {% endfor -%}
     </ol>
 </div>

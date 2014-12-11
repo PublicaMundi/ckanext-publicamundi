@@ -1,0 +1,37 @@
+{% ckan_extends %}
+
+{% block resource_item_explore_links %}
+
+    {% if res.vectorstorer_resource and res.format == 'wfs' %}
+    {# In case of a WFS resource, we also provide a tabular preview #}
+    {% with tab_res = h.vectorstorer_table_resource(pkg, res) %}
+    {% if tab_res %}
+    <li>
+        <a href="{{ h.url_for(controller='package', action='resource_read', id=pkg.name, resource_id=tab_res.id) }}">
+            <i class="icon-table"></i> {{ _('Preview table') }}</a>
+    </li>
+    {% endif %}
+    {% endwith %}
+    {% endif %}
+    
+    {{ super() }}
+{% endblock %}
+
+{% block resource_item_download %}
+    {% if res.vectorstorer_resource and res.format in ['wfs'] %}
+    <div class="dropdown btn-group resource-download-opts pull-right">
+        <a href="#" class="btn dropdown-toggle" data-toggle="dropdown"
+            >{#<i class="icon-download"></i> #}{{ _('Download as') }} <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+            {% if res.format == 'wfs' %}
+            {% for fmt in h.vectorstorer_wfs_output_formats() %}
+            <li>
+               <a href="{{ h.vectorstorer_wfs_feature_url(res.wfs_server, res.wfs_layer, fmt.name) }}" target="_blank"
+                  >{{ fmt.display_name|safe }}</a>
+            </li>
+            {% endfor %}
+            {% endif %} {# res.format #}
+        </ul>
+    </div>
+    {% endif %}
+{% endblock %}

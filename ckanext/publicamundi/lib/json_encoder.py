@@ -6,8 +6,9 @@ class JsonEncoder(json.JSONEncoder):
     datetime objects
     '''
     def default(self, o):
-        if isinstance(o, datetime.datetime) or isinstance(o, datetime.date) or \
-           isinstance(o, datetime.time):
+        if (isinstance(o, datetime.datetime) or 
+                isinstance(o, datetime.date) or
+                isinstance(o, datetime.time)):
             return o.isoformat()
         else:
             return json.JSONEncoder.default(self, o)
