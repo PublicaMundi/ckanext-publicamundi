@@ -329,7 +329,15 @@ h1 > .label.package-state {
 .label.state-invalid { }
 
 /*
- * Resources List (Dataset)
+ * Resources (Search)
+ */
+
+.dataset-item .dataset-resources li a {
+   padding: 5px 5px 3px 4px;  
+}  
+
+/*
+ * Resources (Dataset)
  */
 
 .resources li.resource-item {
@@ -351,7 +359,7 @@ h1 > .label.package-state {
 }
 
 /*
- * Resources List (Dashboard)
+ * Resources (Dashboard)
  */
 
 .dashboard-resources li.resource-item {
