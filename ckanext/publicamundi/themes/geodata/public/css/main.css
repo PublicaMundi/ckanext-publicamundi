@@ -1388,7 +1388,6 @@ a {
 }
 .format-label[data-format=shp], .format-label[data-format*=shp], .format-label[data-format=shapefile], .format-label[data-format*=shapefile], .format-label[data-format=shape], .format-label[data-format*=shape]
 
-
 {
     background-image: url("../../images/icons/resources/shapefile.svg");
 }
@@ -1396,3 +1395,21 @@ a {
 {
     background-image: url("../../images/icons/resources/xls.svg");
 }
+.format-label[data-format=gpx], .format-label[data-format*=gpx]
+{
+    background-image: url("../../images/icons/resources/gpx.svg");
+}
+.format-label[data-format=sqlite], .format-label[data-format*=sqlite],
+.format-label[data-format=geopackage], .format-label[data-format*=geopackage],
+{
+    background-image: url("../../images/icons/resources/sqlite.svg");
+}
+.format-label[data-format=wcs], .format-label[data-format*=wcs]
+{
+    background-image: url("../../images/icons/resources/wcs.svg");
+}
+.format-label[data-format=wps], .format-label[data-format*=wps]
+{
+    background-image: url("../../images/icons/resources/wps.svg");
+}
+
