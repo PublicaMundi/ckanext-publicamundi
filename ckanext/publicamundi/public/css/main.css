@@ -11,6 +11,12 @@ header > h6.inline {
     display: inline-block 
 } 
 
+.right{
+    float:right;
+}
+.left{
+    float:left;
+}
 .btn {
     font-weight: normal;
 }
@@ -484,6 +490,11 @@ section.tags {
     vertical-align: -5%;
 }
 
-section.additional-info header > .btn-group {
+section.additional-info header > .download-links {
     margin-top: 8px;
 }
+
+.metadata-label {
+    display: none;
+}
+

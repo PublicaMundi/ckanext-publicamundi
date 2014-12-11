@@ -25,6 +25,16 @@ a {
     font-family: 'ACMuli', Helvetica, Arial, sans-serif;
 }
 
+.left { 
+    float:left;
+}
+.right{
+    float:right;
+}
+
+.module h1{
+    margin-bottom: 10px;
+}
 #content{
     min-height: 70vh;
 }
@@ -203,8 +213,9 @@ a {
 
 .viewprofile, .viewprofile a{
     //margin: 0;
-    min-width: 80px;
-    max-width:230px;
+    min-width: 160px;
+    //max-width:230px;
+    //width: 100%;
     //padding: 5px;
 }
 .viewprofile span{
@@ -261,6 +272,7 @@ a {
     margin-top: 0;
     margin-bottom: 0;
     padding-bottom: 10px;
+    margin-right: 0;
     padding-top: 10px;
     border-radius: 0;
     border-right: 1px #7C7C7F solid;
@@ -299,14 +311,25 @@ a {
     //border-right: 8px solid transparent;
     //border-top: 10px solid #4E59A4;
 }
-.nav-tabs > li > a, .nav-pills > li > a {
-    margin-right: 0;
+.nav-tabs{
+    border-bottom: 1px #7C7C7F solid;
 }
-.nav-tabs {
- //   border-bottom: 0px;
+
+.nav-tabs > li > a{
+    border-radius: 0;
+    background-color: transparent;
+}
+.nav-tabs > li > a:hover{
+    border-color:#7C7C7F; 
+}
+.nav-tabs > li.active > a, .nav-tabs >li.active > a:hover{
+    border-color: #7C7C7F;
+    border-bottom-color: #fff;
 }
 .nav-tabs > li > a:focus{
     background: #F6F6F6;
+    border-bottom-color:#7C7C7F;
+    border-radius: 0;
 }
 /* Home background */
 .feedback-form{
@@ -456,6 +479,8 @@ a {
 }
 .page-header{
     background: none;
+    //border-bottom: none;
+    border-bottom: 1px #7C7C7F solid;
 }
 /* Breadcrumbs */
 
@@ -849,6 +874,10 @@ a {
 
 /* Dataset Page */
 
+.dataset-dates{
+    display:block;
+    position:relative;
+}
 .resource-actions {
     display: inline-block;
     position:relative;
@@ -878,10 +907,81 @@ a {
 .resource-info{
     max-width: 300px;
 }
+/* Metadata Tables */
+.table tr.toggle-separator{
+    display:none;
+}
+.table-bordered{
+    border-radius:0;
+}
+.table-striped tbody tr:nth-child(even) td, .table-striped tbody tr:nth-child(even) th{
+    background-color: #F9FAFC;
+}
+
+.table-bordered tbody:last-child tr:last-child > td:last-child{
+    border-bottom-right-radius:0;
+}
+.table-bordered tbody:last-child tr:last-child > td:first-child{
+    border-bottom-left-radius:0;
+}
+
+.toggle-show-more{
+    height:34px;
+    border-radius:0;
+    background: #A9B6D8;
+}
+.toggle-show-more:hover{
+}
+.show-more, .show-less{
+    position:relative;
+    color: #fff;
+    font-size: 14px;
+}
+.show-more:hover, .show-less:hover{
+    color: #fff;
+}
+
+.table-toggle-more:after{
+    position:absolute;
+    left: 61%;
+    content:"";
+    height:0;
+    width:0;
+    border-left:18px solid transparent;
+    border-right:17px solid transparent;
+    border-top: 11px #A9B6D8 solid;
+
+}
 .metadata-download{
     position:relative;
     float: right;
 }
+.metadata-label{
+    display: block;
+    padding: 6px 5px 2px 5px;
+    margin-right: 8px;
+    width: 7em;
+    text-align: center;
+    font-family: 'ACMuliLight';
+    font-weight: bold;
+    font-size: 14px;
+    //color: #4E59A4;
+    color: #666666;
+    //color: #fff;
+    background-color: #ECECEC;
+    //border-color: #4E59A4;
+    border-color: #ECECEC;
+}
+.metadata-label > i { 
+    font-size: 1.2em;
+}
+.metadata-label:after{
+    //color: #fff;
+    font-size: 14px;
+    //color: #4E59A4;
+}
+
+/* Resources */
 .resources {
     margin-bottom: 20px;
 }
@@ -900,6 +1000,17 @@ a {
     padding:7px 10px;
     border-radius: 0;
     vertical-align: top;
+}
+.border-divider{
+    margin-top:20px;
+    margin-bottom: 20px;
+    width: 35%;
+    border-top: 2px #4E59A4 solid;
+}
+.additional-info{
+}
+.additional-info h3{
+    margin-top:6px;
 }
 /* Search page */
 .search-form .filter-list{
@@ -1169,12 +1280,21 @@ a {
     border-top: 1px #545356 solid;
     border-bottom: 1px #545356 solid;
 }
-.module .pagination li a{
+.module .pagination ul > li > a{
     border-left: 1px #545356 solid;
+    border-right: none;
     color: #4E59A4;
 }
+
+.module .pagination ul > li:last-child > a{
+    border-right: 1px #545356 solid;
+}
+
+.module .pagination ul > li:first-child > a{
+    border-left-width: 1px;
+}
 .module .pagination li.active a{
-    background: #F3F4F4;
+    background: #F3F4F4; 
 }
 /* Resources */
 .resource-item .format-label{
