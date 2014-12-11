@@ -1,22 +1,24 @@
 /* Body */
 @font-face { 
     font-family: 'ACMuli';
-    src: url('../fonts/ACMuli/AC-Muli.ttf')
+    src: url('../fonts/ACMuli/AC-Muli.ttf') format('truetype');
 }
 
 @font-face {
     font-family: 'ACMuliLight';
-    src: url('../fonts/ACMuliLight/AC-MuliLight.ttf')
+    src: url('../fonts/ACMuliLight/AC-MuliLight.otf') format('opentype');
 }
+
 body { 
-    
     color: #666666;
     background: #fff;
     border: 4px #4E59A4 solid;
     font-family: 'ACMuliLight', Helvetica, Arial, sans-serif;
+    font-weight: 500;
 }
 textarea, input{
     font-family: 'ACMuliLight', Helvetica, Arial, sans-serif !important;
+    padding-top:5px;
 }
 a {
     color: #4E59A4;
@@ -250,7 +252,7 @@ a {
 }
 #homemenu .nav li a{
     font-size: 16px;
-    padding: 20px 10px 20px 10px;
+    padding: 20px 10px 21px 10px;
 }
 .mainmenu .section .nav { 
     float: left;
@@ -595,7 +597,7 @@ a {
 }
 
 .homepage .search-form .search-giant button{
-    margin-top:-48px;
+    margin-top:-46px;
 }
 .search-form .search-input.search-giant input{
     box-shadow: none;
@@ -958,13 +960,14 @@ a {
 }
 .metadata-label{
     display: block;
-    padding: 6px 5px 2px 5px;
+    padding: 7px 5px 4px 5px;
     margin-right: 8px;
     width: 7em;
     text-align: center;
     font-family: 'ACMuliLight';
     font-weight: bold;
     font-size: 14px;
+    letter-spacing: 0.03em;
     //color: #4E59A4;
     color: #666666;
     //color: #fff;
@@ -1185,12 +1188,14 @@ a {
 
 .dataset-resources li a{
     border: 1px #4E59A4 solid;
+    font-family: 'ACMuli';
     font-size: 12px;
     margin-bottom: 5px;
     border-radius: 0;
     background-color: #fff !important;
     color: #4E59A4 !important;
-    font-weight: bold;
+    //font-weight: bold;
+    letter-spacing: 0.02em;
 }
 .middle-text{
     margin-left:20%;
@@ -1215,6 +1220,7 @@ a {
 }
 .btn-group.open .btn-primary.dropdown-toggle, .btn-group.open .btn.dropdown-toggle{
     background: #4E59A4;
+    color: #fff;
     box-shadow: none;
 }
 .remove-opts.open .btn.dropdown-toggle{
