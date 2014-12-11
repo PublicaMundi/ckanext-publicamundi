@@ -11,6 +11,12 @@ header > h6.inline {
     display: inline-block 
 } 
 
+.right{
+    float:right;
+}
+.left{
+    float:left;
+}
 .btn {
     font-weight: normal;
 }
@@ -323,7 +329,15 @@ h1 > .label.package-state {
 .label.state-invalid { }
 
 /*
- * Resources List (Dataset)
+ * Resources (Search)
+ */
+
+.dataset-item .dataset-resources li a {
+   padding: 4px 4px 3px 4px;
+}  
+
+/*
+ * Resources (Dataset)
  */
 
 .resources li.resource-item {
@@ -345,7 +359,7 @@ h1 > .label.package-state {
 }
 
 /*
- * Resources List (Dashboard)
+ * Resources (Dashboard)
  */
 
 .dashboard-resources li.resource-item {
@@ -484,6 +498,11 @@ section.tags {
     vertical-align: -5%;
 }
 
-section.additional-info header > .btn-group {
+section.additional-info header > .download-links {
     margin-top: 8px;
 }
+
+.metadata-label {
+    display: none;
+}
+
