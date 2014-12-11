@@ -1337,6 +1337,8 @@ a {
 .format-label[data-format=gml], .format-label[data-format*=gml]
 {
     background-image: url("../../images/icons/resources/gml.svg");
+    background-position-x:10px;
+    background-position-y:5px;
 }
 .format-label[data-format=html], .format-label[data-format*=html]
 {
@@ -1407,6 +1409,8 @@ a {
 .format-label[data-format=wcs], .format-label[data-format*=wcs]
 {
     background-image: url("../../images/icons/resources/wcs.svg");
+    background-position-x:10px;
+    background-position-y:5px;
 }
 .format-label[data-format=wps], .format-label[data-format*=wps]
 {
