@@ -410,6 +410,7 @@ def _ingest_vector(
         _add_wms_resource(
             context,
             layer_name,
+            resource,
             created_db_table_resource,
             publishing_server,
             publishing_layer)
@@ -417,6 +418,7 @@ def _ingest_vector(
         _add_wfs_resource(
             context,
             layer_name,
+            resource,
             created_db_table_resource,
             publishing_server,
             publishing_layer)
@@ -425,7 +427,7 @@ def _add_db_table_resource(context, resource, geom_name, layer_name):
     db_table_resource = DBTableResource(
         context['package_id'],
         layer_name,
-        resource['description'],
+        'A PostGis table generated from `%s`' % (resource['name']),
         resource['id'],
         resource['url'],
         geom_name)
@@ -436,13 +438,14 @@ def _add_db_table_resource(context, resource, geom_name, layer_name):
 def _add_wms_resource(
         context,
         layer_name,
+        resource,
         parent_resource,
         wms_server,
         wms_layer):
     wms_resource = WMSResource(
         context['package_id'],
         layer_name,
-        parent_resource['description'],
+        'A WMS layer generated from `%s`' % (resource['name']),
         parent_resource['id'],
         wms_server,
         wms_layer)
@@ -453,13 +456,14 @@ def _add_wms_resource(
 def _add_wfs_resource(
         context,
         layer_name,
+        resource,
         parent_resource,
         wfs_server,
         wfs_layer):
     wfs_resource = WFSResource(
         context['package_id'],
         layer_name,
-        parent_resource['description'],
+        'A WFS layer generated from `%s`' % (resource['name']),
         parent_resource['id'],
         wfs_server,
         wfs_layer)

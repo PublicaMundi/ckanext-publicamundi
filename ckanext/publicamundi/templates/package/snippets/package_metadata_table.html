@@ -13,7 +13,12 @@
           >{{ _('Download as') }} <span class="caret"></span></a>
         <ul class="dropdown-menu">
            {% for link in pkg_dict.download_links|sort(attribute='weight') %}
-           <li><a href="{{ link.url }}" target="_blank">{{ h.render_markdown(link.title)|safe }}</a></li>
+           <li>
+             <a href="{{ link.url }}" target="_blank"
+               ><strong>{{ link.title }}</strong> {{ link.format|upper }} Metadata
+                {#{%- if link.generator %} - {{ link.generator }}{% endif -%}-#}
+             </a>
+           </li>
            {% endfor %}
         </ul>
       </div>
