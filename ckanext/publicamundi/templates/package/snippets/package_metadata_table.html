@@ -5,25 +5,18 @@
       dtspec = h.dataset_types().get(pkg_dict.dataset_type)
   -%}
   {%- if obj -%}
+
   <header>
     <h3 class="inline">{{ 'Metadata' }}</h3>
-    
-    {% with api_controller = 'ckanext.publicamundi.controllers.api:Controller' %}
     <div class="btn-group pull-right">
-      <a class="btn" href="{{ h.url_for(controller=api_controller, action='dataset_export', name_or_id=pkg_dict.name) }}"
-        >{{ _('Download as') }}</a>
-      <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+      <a class="btn dropdown-toggle" data-toggle="dropdown"
+        >{{ _('Download as') }} <span class="caret"></span></a>
       <ul class="dropdown-menu">
-        <li>
-          <a href="{{ h.url_for(controller=api_controller, action='dataset_export', name_or_id=pkg_dict.name) }}"
-            >{{ _('XML Metadata') }}</a></li>
-        <li>
-          <a href="{{ h.url_for('/api/action/dataset_show', id=pkg_dict.name) }}"
-            >{{ _('JSON Metadata') }}</a></li>
+         {% for link in pkg_dict.download_links|sort(attribute='weight') %}
+         <li><a href="{{ link.url }}" target="_blank">{{ h.render_markdown(link.title)|safe }}</a></li>
+         {% endfor %}
       </ul>
     </div>
-    {% endwith %} {# api_controller #}
-
   </header>
 
   {% with 
@@ -33,6 +26,11 @@
             {
                 'title': _('State'),
                 'value': pkg_dict.state,
+                'attrs': {},
+            },
+            {
+                'title': _('License'),
+                'value': h.link_to(pkg_dict.license_title, pkg_dict.license_url, target='_blank') if pkg_dict.license_id else none,
                 'attrs': {},
             },
             {

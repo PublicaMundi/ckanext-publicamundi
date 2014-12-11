@@ -1,0 +1,14 @@
+{%- set 
+    messages = 
+    {
+        'add-label': _('Add statement'),
+        'add-title': _('Add conformity statememt'), 
+        'clear-label': _('Clear all'),
+        'clear-title': _('Clear all conformity statements!'),
+        'add-description': false,
+        'maxlength-alert': _('You cannot add more than {{maxlength}} statements'),
+        'clear-alert': _('Are you sure you want to clear all ({{num}}) statements?'),
+    } 
+-%}
+
+{% extends 'package/snippets/fields/edit-list-items.html' %}

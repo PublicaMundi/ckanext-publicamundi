@@ -1,0 +1,22 @@
+{% from 'macros/markup_helpers.html' import mark_required -%}
+
+{%- if input_classes is not defined %}{% set input_classes = ['span5'] %}{% endif -%}
+
+<div class="control-group{{ " error" if errors }}{{ " " ~ classes|join(' ') }}">
+    {% if title %}<h3 class="title">{{ title }}</h3>{% endif -%}
+    {% if description %}<p class="description">{{ description }}</p>{% endif -%}
+    <label class="control-label" for="{{ 'input-' ~ qname }}.0">
+        {{- field.value_type.title }}{{ mark_required(required) }}</label>
+    <div class="controls">
+        {% for i in range(0, field.max_length) %}
+        <input type="text" id="{{ 'input-' ~ qname }}.{{ i }}"  name="{{ qname }}.{{ i }}"
+            class="{{ input_classes|join(" ") }}"
+            value="{{ value[i]|empty_and_escape }}"
+            placeholder="{{ field.value_type.title }} #{{ i }}"
+         />
+        {% endfor -%}
+        {% if errors -%}
+        <span class="help-inline">{{ errors|join(', ') }}</span>
+        {%- endif -%}
+    </div>
+</div>
