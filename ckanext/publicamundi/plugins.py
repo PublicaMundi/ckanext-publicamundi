@@ -4,6 +4,7 @@ import json
 import weberror
 import logging
 import string
+import urllib
 import geoalchemy
 from itertools import chain, ifilter
 from routes.mapper import SubMapper
@@ -26,6 +27,7 @@ from ckanext.publicamundi.lib.metadata import dataset_types
 _ = toolkit._
 asbool = toolkit.asbool
 aslist = toolkit.aslist
+url_for = toolkit.url_for
 
 log1 = logging.getLogger(__name__)
 
@@ -499,7 +501,32 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         log1.debug('before_view: Package %s is prepared for view', pkg_dict.get('name'))
         
-        dt = pkg_dict.get('dataset_type') 
+        dt = pkg_dict.get('dataset_type')
+        pkg_name, pkg_id = pkg_dict['name'], pkg_dict['id']
+        
+        # Provide alternative download links for dataset's metadata 
+        
+        download_links = pkg_dict.get('download_links', []) 
+        if not download_links:
+            pkg_dict['download_links'] = download_links
+       
+        api_controller = 'ckanext.publicamundi.controllers.api:Controller'
+        download_links.extend([
+            {
+                'title': _('Native JSON Metadata'),
+                'url': url_for('/api/action/dataset_show', id=pkg_name),
+                'weight': 0,
+                'format': 'json',
+            },
+            {
+                'title': _('Native **%s** XML Metadata') % (self._dataset_types[dt]['title']),
+                'url': url_for(
+                    controller=api_controller, action='dataset_export', name_or_id=pkg_name),
+                'weight': 5,
+                'format': 'xml',
+            },
+        ])
+        
         return pkg_dict
 
     ## IResourceController interface ##
@@ -528,15 +555,38 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 class PackageController(p.SingletonPlugin):
     '''Hook into the package controller
     '''
+
     p.implements(p.IConfigurable, inherit=True)
     p.implements(p.IPackageController, inherit=True)
+    
+    csw_output_schemata = {
+        'dc': 'http://www.opengis.net/cat/csw/2.0.2',
+        'iso-19115': 'http://www.isotc211.org/2005/gmd',
+        'fgdc': 'http://www.opengis.net/cat/csw/csdgm',
+        'atom': 'http://www.w3.org/2005/Atom',
+        'nasa-dif': 'http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/',
+    }
+   
+    _pycsw_config_file = None
+    _pycsw_service_endpoint = None
 
     ## IConfigurable interface ##
 
     def configure(self, config):
-        '''Apply configuration options to this plugin '''
+        '''Apply configuration settings to this plugin
+        '''
         
-        ext_pycsw_sync.setup(config)
+        cls = type(self)
+
+        site_url = config['ckan.site_url']
+        cls._pycsw_config_file = config.get(
+            'ckanext.publicamundi.pycsw.config', 
+            'pycsw.ini')
+        cls._pycsw_service_endpoint = config.get(
+            'ckanext.publicamundi.pycsw.service_endpoint', 
+            '%s/csw' % (site_url.rstrip('/')))
+        
+        ext_pycsw_sync.setup(site_url, self._pycsw_config_file)
 
         return
 
@@ -627,18 +677,88 @@ class PackageController(p.SingletonPlugin):
         
         The dictionary returned will be the one sent to the template.
         '''
+        
+        pkg_name, pkg_id = pkg_dict['name'], pkg_dict['id']
 
-        # An IPackageController can add/hide/transform package fields before sent to the template.
-        extras = pkg_dict.get('extras', [])
-        # or we can translate keys ...
-        field_key_map = {
-            u'updated_at': _(u'Updated'),
-            u'created_at': _(u'Created'),
-        }
-        for item in extras:
-            k = item.get('key')
-            item['key'] = field_key_map.get(k, k)
+        # Provide CSW-backed download links for dataset's metadata 
+       
+        download_links = pkg_dict.get('download_links', []) 
+        if not download_links:
+            pkg_dict['download_links'] = download_links
+
+        download_links.extend([
+            {
+                'title': _('CSW-backed **DC** XML Metadata'),
+                'url': self._build_csw_request_url(
+                    pkg_id, output_schema='dc', output_format='application/xml'),
+                'weight': 10,
+                'format': 'xml',
+            },
+            {
+                'title': _('CSW-backed **DC** JSON Metadata'),
+                'url': self._build_csw_request_url(
+                    pkg_id, output_schema='dc', output_format='application/json'),
+                'weight': 15,
+                'format': 'json',
+            },
+            {
+                'title': _('CSW-backed **ISO-19115** XML Metadata'),
+                'url': self._build_csw_request_url(
+                    pkg_id, output_schema='iso-19115', output_format='application/xml'),
+                'weight': 15,
+                'format': 'xml',
+            },
+            {
+                'title': _('CSW-backed **ISO-19115** JSON Metadata'),
+                'url': self._build_csw_request_url(
+                    pkg_id, output_schema='iso-19115', output_format='application/json'),
+                'weight': 20,
+                'format': 'json',
+            },
+            {
+                'title': _('CSW-backed **FGDC** XML Metadata'),
+                'url': self._build_csw_request_url(
+                    pkg_id, output_schema='fgdc', output_format='application/xml'),
+                'weight': 25,
+                'format': 'xml',
+            },
+            {
+                'title': _('CSW-backed **Atom** XML Metadata'),
+                'url': self._build_csw_request_url(
+                    pkg_id, output_schema='atom', output_format='application/xml'),
+                'weight': 30,
+                'format': 'xml',
+            },
+            {
+                'title': _('CSW-backed **NASA-Dif** XML Metadata'),
+                'url': self._build_csw_request_url(
+                    pkg_id, output_schema='nasa-dif', output_format='application/xml'),
+                'weight': 35,
+                'format': 'xml',
+            },
+        ])
+        
         return pkg_dict
+
+    ## Helpers ##
+    
+    def _build_csw_request_url(self, pkg_id, output_schema='dc', output_format=None):
+        '''Build a GetRecordById request to a CSW endpoint
+        '''
+        
+        qs_params = {
+            'service': 'CSW',
+            'version': '2.0.2',
+            'request': 'GetRecordById',
+            'ElementSetName': 'full',
+            'OutputSchema': self.csw_output_schemata.get(output_schema, ''),
+            'Id': pkg_id,
+        }
+        
+        if output_format:
+            qs_params['OutputFormat'] = output_format
+ 
+        return self._pycsw_service_endpoint + '?' + urllib.urlencode(qs_params)
 
     def _create_or_update_csw_record(self, session, pkg_dict):
         '''Sync dataset with CSW record'''

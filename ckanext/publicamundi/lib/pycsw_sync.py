@@ -28,23 +28,22 @@ pycsw_table_name = None
 
 _repo = None
 
-def setup(config):
+def setup(ckan_site_url, pycsw_config_file):
     '''Setup module when Pylons config is available
     '''
     
     global site_url
 
-    site_url = config['ckan.site_url'].rstrip('/')
+    site_url = ckan_site_url.rstrip('/')
     
     global pycsw_config, pycsw_context, pycsw_database, pycsw_table_name
     
-    pycsw_config_path = config['ckanext.publicamundi.pycsw.config']
-    pycsw_config = _load_config(pycsw_config_path)
+    pycsw_config = _load_config(pycsw_config_file)
     pycsw_context = pycsw.config.StaticContext()
     pycsw_database = pycsw_config.get('repository', 'database')
     pycsw_table_name = pycsw_config.get('repository', 'table')
     
-    log1.info('Initialized globals from config')
+    log1.info('Initialized module globals from Pylons config')
     
     return
 

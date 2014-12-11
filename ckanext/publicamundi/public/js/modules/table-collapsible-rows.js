@@ -35,15 +35,20 @@
                     opts = this.options,
                     templates = this.templates;
 
-                var numcols = parseInt(opts.numcols),
-                    $separator = $(render(templates.separator, { numcols: numcols })),
+                var numcols = parseInt(opts.numcols || $el.find('colgroup col').length),
+                    $separator = $(render(templates.separator, { 
+                        numcols: numcols 
+                    })),
                     $togglerow = $(render(templates.togglerow, { 
                         numcols: numcols,
                         showText: this.i18n('show'),
                         hideText: this.i18n('hide'),
                     }));
                 
-                $el.addClass('table-toggle-more');
+                $el.addClass(
+                    opts.state == 'more' ? 
+                        ('table-toggle-more') : ('table-toggle-less'));
+                
                 $separator.insertAfter($el.find('tbody > tr:last-child'));
                 $togglerow.insertAfter($separator);
 

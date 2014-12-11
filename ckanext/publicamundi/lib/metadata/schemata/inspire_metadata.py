@@ -201,7 +201,7 @@ class IInspireMetadata(IBaseMetadata):
         required = False,
         max_length = 4,
         value_type = zope.schema.Object(IConformity,
-            title = u'Conformity'))
+            title = u'Specification'))
 
     # Constraints 
     

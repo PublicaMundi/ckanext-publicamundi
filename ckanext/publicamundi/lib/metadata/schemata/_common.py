@@ -185,7 +185,7 @@ class ISpatialResolution(IObject):
 
 class IConformity(IObject):
 
-    title = zope.schema.TextLine(
+    title = zope.schema.Text(
         title = u'Specification',
         required = True)
 
