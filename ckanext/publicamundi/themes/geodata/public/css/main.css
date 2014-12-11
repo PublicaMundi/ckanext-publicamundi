@@ -772,6 +772,9 @@ a {
     text-align: center;
     margin: 15px 0 15px 0;
 }
+.social a:hover{
+    text-decoration: none;
+}
 .social a [class^="icon-"] {
     font-size: 22px;
 }
@@ -960,7 +963,7 @@ a {
 }
 .metadata-label{
     display: block;
-    padding: 7px 5px 4px 5px;
+    padding: 7px 5px 5px 5px;
     margin-right: 8px;
     width: 7em;
     text-align: center;
@@ -1075,10 +1078,11 @@ a {
     border: 2px #5cdbd4 solid;
 }
 .resources li.resource-item{
-    padding: 10px 5px 5px 60px;
+    padding: 10px 5px 10px 60px;
 }
 .resources li.resource-item .btn-group{
     float: right;
+    margin-top: 5px;
 }
 .resources li.resource-item p.description{
     width: 52%;
