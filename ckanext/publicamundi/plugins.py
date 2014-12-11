@@ -502,30 +502,32 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         log1.debug('before_view: Package %s is prepared for view', pkg_dict.get('name'))
         
         dt = pkg_dict.get('dataset_type')
+        dtspec = self._dataset_types.get(dt) if dt else None
         pkg_name, pkg_id = pkg_dict['name'], pkg_dict['id']
         
         # Provide alternative download links for dataset's metadata 
         
-        download_links = pkg_dict.get('download_links', []) 
-        if not download_links:
-            pkg_dict['download_links'] = download_links
-       
-        api_controller = 'ckanext.publicamundi.controllers.api:Controller'
-        download_links.extend([
-            {
-                'title': _('Native JSON Metadata'),
-                'url': url_for('/api/action/dataset_show', id=pkg_name),
-                'weight': 0,
-                'format': 'json',
-            },
-            {
-                'title': _('Native **%s** XML Metadata') % (self._dataset_types[dt]['title']),
-                'url': url_for(
-                    controller=api_controller, action='dataset_export', name_or_id=pkg_name),
-                'weight': 5,
-                'format': 'xml',
-            },
-        ])
+        if dt:
+            download_links = pkg_dict.get('download_links', []) 
+            if not download_links:
+                pkg_dict['download_links'] = download_links
+            download_links.extend([
+                {
+                    'title': _('Native JSON Metadata'),
+                    'url': url_for('/api/action/dataset_show', id=pkg_name),
+                    'weight': 0,
+                    'format': 'json',
+                },
+                {
+                    'title': _('Native **%s** XML Metadata') % (dtspec['title']),
+                    'url': url_for(
+                        controller='ckanext.publicamundi.controllers.api:Controller',
+                        action='dataset_export',
+                        name_or_id=pkg_name),
+                    'weight': 5,
+                    'format': 'xml',
+                },
+            ])
         
         return pkg_dict
 
@@ -678,65 +680,66 @@ class PackageController(p.SingletonPlugin):
         The dictionary returned will be the one sent to the template.
         '''
         
+        dt = pkg_dict.get('dataset_type')
         pkg_name, pkg_id = pkg_dict['name'], pkg_dict['id']
 
         # Provide CSW-backed download links for dataset's metadata 
        
-        download_links = pkg_dict.get('download_links', []) 
-        if not download_links:
-            pkg_dict['download_links'] = download_links
-
-        download_links.extend([
-            {
-                'title': _('CSW-backed **DC** XML Metadata'),
-                'url': self._build_csw_request_url(
-                    pkg_id, output_schema='dc', output_format='application/xml'),
-                'weight': 10,
-                'format': 'xml',
-            },
-            {
-                'title': _('CSW-backed **DC** JSON Metadata'),
-                'url': self._build_csw_request_url(
-                    pkg_id, output_schema='dc', output_format='application/json'),
-                'weight': 15,
-                'format': 'json',
-            },
-            {
-                'title': _('CSW-backed **ISO-19115** XML Metadata'),
-                'url': self._build_csw_request_url(
-                    pkg_id, output_schema='iso-19115', output_format='application/xml'),
-                'weight': 15,
-                'format': 'xml',
-            },
-            {
-                'title': _('CSW-backed **ISO-19115** JSON Metadata'),
-                'url': self._build_csw_request_url(
-                    pkg_id, output_schema='iso-19115', output_format='application/json'),
-                'weight': 20,
-                'format': 'json',
-            },
-            {
-                'title': _('CSW-backed **FGDC** XML Metadata'),
-                'url': self._build_csw_request_url(
-                    pkg_id, output_schema='fgdc', output_format='application/xml'),
-                'weight': 25,
-                'format': 'xml',
-            },
-            {
-                'title': _('CSW-backed **Atom** XML Metadata'),
-                'url': self._build_csw_request_url(
-                    pkg_id, output_schema='atom', output_format='application/xml'),
-                'weight': 30,
-                'format': 'xml',
-            },
-            {
-                'title': _('CSW-backed **NASA-Dif** XML Metadata'),
-                'url': self._build_csw_request_url(
-                    pkg_id, output_schema='nasa-dif', output_format='application/xml'),
-                'weight': 35,
-                'format': 'xml',
-            },
-        ])
+        if dt:
+            download_links = pkg_dict.get('download_links', []) 
+            if not download_links:
+                pkg_dict['download_links'] = download_links
+            download_links.extend([
+                {
+                    'title': _('CSW-backed **DC** XML Metadata'),
+                    'url': self._build_csw_request_url(
+                        pkg_id, output_schema='dc', output_format='application/xml'),
+                    'weight': 10,
+                    'format': 'xml',
+                },
+                {
+                    'title': _('CSW-backed **DC** JSON Metadata'),
+                    'url': self._build_csw_request_url(
+                        pkg_id, output_schema='dc', output_format='application/json'),
+                    'weight': 15,
+                    'format': 'json',
+                },
+                {
+                    'title': _('CSW-backed **ISO-19115** XML Metadata'),
+                    'url': self._build_csw_request_url(
+                        pkg_id, output_schema='iso-19115', output_format='application/xml'),
+                    'weight': 15,
+                    'format': 'xml',
+                },
+                {
+                    'title': _('CSW-backed **ISO-19115** JSON Metadata'),
+                    'url': self._build_csw_request_url(
+                        pkg_id, output_schema='iso-19115', output_format='application/json'),
+                    'weight': 20,
+                    'format': 'json',
+                },
+                {
+                    'title': _('CSW-backed **FGDC** XML Metadata'),
+                    'url': self._build_csw_request_url(
+                        pkg_id, output_schema='fgdc', output_format='application/xml'),
+                    'weight': 25,
+                    'format': 'xml',
+                },
+                {
+                    'title': _('CSW-backed **Atom** XML Metadata'),
+                    'url': self._build_csw_request_url(
+                        pkg_id, output_schema='atom', output_format='application/xml'),
+                    'weight': 30,
+                    'format': 'xml',
+                },
+                {
+                    'title': _('CSW-backed **NASA-Dif** XML Metadata'),
+                    'url': self._build_csw_request_url(
+                        pkg_id, output_schema='nasa-dif', output_format='application/xml'),
+                    'weight': 35,
+                    'format': 'xml',
+                },
+            ])
         
         return pkg_dict
 
