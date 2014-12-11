@@ -50,6 +50,12 @@ The most common settings are:
     # services, apis
        %(ckanext.publicamundi.api_resource_formats)s
 
+    # Specify the path to pycsw configuration 
+    ckanext.publicamundi.pycsw.config = %(here)s/pycsw.ini
+
+    # Specify the endpoint under which CSW service is running (if it exists)
+    ckanext.publicamundi.pycsw.service_endpoint = %(ckan.site_url)s/csw
+
 Manage
 ------
 
