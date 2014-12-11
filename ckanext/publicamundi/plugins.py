@@ -133,31 +133,33 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         '''Setup routes before CKAN defines core routes.'''
 
         api_controller = 'ckanext.publicamundi.controllers.api:Controller'
+  
+        with SubMapper(mapper, controller=api_controller) as m:
         
-        mapper.connect(
-            '/api/publicamundi/util/resource/mimetype_autocomplete',
-            controller=api_controller, action='resource_mimetype_autocomplete')
+            m.connect(
+                '/api/publicamundi/util/resource/mimetype_autocomplete',
+                action='resource_mimetype_autocomplete')
         
-        mapper.connect(
-            '/api/publicamundi/util/resource/format_autocomplete',
-            controller=api_controller, action='resource_format_autocomplete')
+            m.connect(
+                '/api/publicamundi/util/resource/format_autocomplete',
+                action='resource_format_autocomplete')
 
-        mapper.connect(
-            '/api/publicamundi/vocabularies',
-            controller=api_controller, action='vocabularies_list')
+            m.connect(
+                '/api/publicamundi/vocabularies',
+                action='vocabularies_list')
          
-        mapper.connect(
-            '/api/publicamundi/vocabularies/{name}',
-            controller=api_controller, action='vocabulary_get')
+            m.connect(
+                '/api/publicamundi/vocabularies/{name}',
+                action='vocabulary_get')
         
-        mapper.connect(
-            '/api/publicamundi/dataset/export/{name_or_id}', 
-            controller=api_controller, action='dataset_export')
+            m.connect(
+                '/api/publicamundi/dataset/export/{name_or_id}', 
+                action='dataset_export')
         
-        mapper.connect(
-            '/api/publicamundi/dataset/import', 
-            controller=api_controller, action='dataset_import',
-            conditions=dict(method=['POST']))
+            m.connect(
+                '/api/publicamundi/dataset/import', 
+                action='dataset_import',
+                conditions=dict(method=['POST']))
 
         user_controller = 'ckanext.publicamundi.controllers.user:UserController'
 
@@ -165,46 +167,63 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             
             # Fixme: unneeded parameters to mapper.connect ?
 
-            m.connect('user_dashboard_resources', '/dashboard/resources',
-                      action='show_dashboard_resources')
-            m.connect('admin_page_resources', '/user/resources',
-                      action='show_admin_page_resources')
-            m.connect('reject_resource',
-                      '/{parent}/resources/reject/{resource_id}',
-                      action='reject_resource', parent='{parent}')
-            m.connect('identify_vector_resource', # Fixme: adapt
-                      '/{parent}/resources/identify_vector/{resource_id}',
-                      action='identify_resource', resource_id='{resource_id}',
-                      storer_type='vector', parent='{parent}')
-            m.connect('render_ingestion',
-                      '/{parent}/resources/ingest/{resource_id}',
-                      action='render_ingestion_template',
-                      resource_id='{resource_id}', parent='{parent}')
+            m.connect(
+                'user_dashboard_resources',
+                '/dashboard/resources',
+                 action='show_dashboard_resources')
+            
+            m.connect(
+                'admin_page_resources', 
+                '/user/resources',
+                 action='show_admin_page_resources')
+            
+            m.connect(
+                'reject_resource',
+                '/{parent}/resources/reject/{resource_id}',
+                action='reject_resource')
+            
+            m.connect(
+                'identify_vector_resource', # Fixme: adapt
+                '/{parent}/resources/identify_vector/{resource_id}',
+                 action='identify_resource',
+                 storer_type='vector')
+            
+            m.connect(
+                'render_ingestion',
+                '/{parent}/resources/ingest/{resource_id}',
+                action='render_ingestion_template')
       
         files_controller = 'ckanext.publicamundi.controllers.files:Controller'
         
-        mapper.connect(
-            '/publicamundi/files/{object_type}/{name_or_id}/download/{filename:.*?}',
-            controller=files_controller, action='download_file')
+        with SubMapper(mapper, controller=files_controller) as m:
         
-        mapper.connect(
-            '/publicamundi/files/{object_type}', 
-            controller=files_controller, action='upload_file',
-            conditions=dict(method=['POST']))
+            m.connect(
+                '/publicamundi/files/{object_type}/{name_or_id}/download/{filename:.*?}',
+                action='download_file')
+        
+            m.connect(
+                '/publicamundi/files/{object_type}', 
+                action='upload_file',
+                conditions=dict(method=['POST']))
         
         package_controller = 'ckanext.publicamundi.controllers.package:Controller'
 
         mapper.connect(
             '/dataset/import_metadata',
-            controller=package_controller, action='import_metadata')
+            controller=package_controller,
+            action='import_metadata')
        
         tests_controller = 'ckanext.publicamundi.controllers.tests:Controller'
 
-        mapper.connect('publicamundi-tests', 
-            '/testing/publicamundi/{action}/{id}', controller=tests_controller)
+        mapper.connect(
+            'publicamundi-tests', 
+            '/testing/publicamundi/{action}/{id}',
+            controller=tests_controller)
         
-        mapper.connect('publicamundi-tests', 
-            '/testing/publicamundi/{action}', controller=tests_controller)
+        mapper.connect(
+            'publicamundi-tests', 
+            '/testing/publicamundi/{action}',
+            controller=tests_controller)
 
         return mapper
 
@@ -283,9 +302,6 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         # Add or replace resource field-level validators/converters
 
         guess_resource_type = ext_validators.guess_resource_type_if_empty
-        
-        def convert_format_1(key, data, errors, context):
-            assert False
 
         schema['resources'].update({
             'resource_type': [
@@ -513,13 +529,13 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
                 pkg_dict['download_links'] = download_links
             download_links.extend([
                 {
-                    'title': _('Native JSON Metadata'),
+                    'title': dtspec['title'],
                     'url': url_for('/api/action/dataset_show', id=pkg_name),
                     'weight': 0,
                     'format': 'json',
                 },
                 {
-                    'title': _('Native **%s** XML Metadata') % (dtspec['title']),
+                    'title': dtspec['title'],
                     'url': url_for(
                         controller='ckanext.publicamundi.controllers.api:Controller',
                         action='dataset_export',
@@ -691,49 +707,57 @@ class PackageController(p.SingletonPlugin):
                 pkg_dict['download_links'] = download_links
             download_links.extend([
                 {
-                    'title': _('CSW-backed **DC** XML Metadata'),
+                    'title': 'DC',
+                    'generator': 'CSW',
                     'url': self._build_csw_request_url(
                         pkg_id, output_schema='dc', output_format='application/xml'),
                     'weight': 10,
                     'format': 'xml',
                 },
                 {
-                    'title': _('CSW-backed **DC** JSON Metadata'),
+                    'title': 'DC',
+                    'generator': 'CSW',
+                    'generator': 'CSW',
                     'url': self._build_csw_request_url(
                         pkg_id, output_schema='dc', output_format='application/json'),
                     'weight': 15,
                     'format': 'json',
                 },
                 {
-                    'title': _('CSW-backed **ISO-19115** XML Metadata'),
+                    'title': 'ISO-19115',
+                    'generator': 'CSW',
                     'url': self._build_csw_request_url(
                         pkg_id, output_schema='iso-19115', output_format='application/xml'),
                     'weight': 15,
                     'format': 'xml',
                 },
                 {
-                    'title': _('CSW-backed **ISO-19115** JSON Metadata'),
+                    'title': 'ISO-19115',
+                    'generator': 'CSW',
                     'url': self._build_csw_request_url(
                         pkg_id, output_schema='iso-19115', output_format='application/json'),
                     'weight': 20,
                     'format': 'json',
                 },
                 {
-                    'title': _('CSW-backed **FGDC** XML Metadata'),
+                    'title': 'FGDC',
+                    'generator': 'CSW',
                     'url': self._build_csw_request_url(
                         pkg_id, output_schema='fgdc', output_format='application/xml'),
                     'weight': 25,
                     'format': 'xml',
                 },
                 {
-                    'title': _('CSW-backed **Atom** XML Metadata'),
+                    'title': 'Atom',
+                    'generator': 'CSW',
                     'url': self._build_csw_request_url(
                         pkg_id, output_schema='atom', output_format='application/xml'),
                     'weight': 30,
                     'format': 'xml',
                 },
                 {
-                    'title': _('CSW-backed **NASA-Dif** XML Metadata'),
+                    'title': 'NASA-DIF',
+                    'generator': 'CSW',
                     'url': self._build_csw_request_url(
                         pkg_id, output_schema='nasa-dif', output_format='application/xml'),
                     'weight': 35,
