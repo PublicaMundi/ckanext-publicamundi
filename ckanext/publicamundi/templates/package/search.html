@@ -4,9 +4,45 @@
 {% if h.check_access('package_create') %}
   {% snippet 'snippets/add_dataset_button.html', group=none %}
 {% endif %}
-{% endblock %}
+{% endblock %} {# page_primary_action #}
+
+{% block form %}
+  {% set facets = {
+      'fields': c.fields_grouped,
+      'search': c.search_facets,
+      'titles': c.facet_titles,
+      'labels': c.facet_labels,
+      'translated_fields': c.translated_fields,
+      'remove_field': c.remove_field }
+  %}
+  {% set sorting = [
+      (_('Relevance'), 'score desc, metadata_modified desc'),
+      (_('Name Ascending'), 'title_string asc'),
+      (_('Name Descending'), 'title_string desc'),
+      (_('Last Modified'), 'metadata_modified desc'),
+      (_('Popular'), 'views_recent desc') if g.tracking_enabled else (false, false) ]
+  %}
+  {% snippet 'snippets/search_form.html', 
+      type = 'dataset', 
+      query = c.q, 
+      sorting = sorting,
+      sorting_selected = c.sort_by_selected,
+      count = c.page.item_count,
+      facets = facets,
+      show_empty = request.params,
+      error = c.query_error,
+      fields = c.fields 
+  %}
+{% endblock %} {# form #}
 
 {% block secondary_content %}
-  {% snippet "spatial/snippets/spatial_query.html" %}
-  {{ super() }}
-{% endblock %}
+  {# Map widget #}
+  {% snippet "spatial/snippets/spatial_query.html", default_extent="{ \"type\":\"Polygon\", \"coordinates\": [[[20.150247097,35.1192143555],[20.150247097,41.8958331781],[28.5535736084,41.8958331781],[28.5535736084,35.1192143555],[20.150247097,35.1192143555]]] }" %}
+  
+  {# Facets #}
+  {% with labels = c.facet_labels or {} %}
+  {% for facet, title in c.facet_titles.items() %}
+    {% snippet 'snippets/facet_list.html', title=title, name=facet, label_function=labels.get(facet) %}
+  {% endfor %}
+  {% endwith %}
+{% endblock %} {# secondary_content #}

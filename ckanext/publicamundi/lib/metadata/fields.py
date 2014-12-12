@@ -7,6 +7,8 @@ from zope.schema-related modules.
 
 '''
 
+from itertools import islice
+
 import zope.interface
 import zope.schema
 import zope.schema.interfaces
@@ -220,4 +222,26 @@ def build_adaptee(field, expand_collection=True):
         adaptee[-1] = get_object_factory(y.schema)()
 
     return adaptee
+
+def check_multiadapter_ifaces(required_ifaces):
+    '''Check if a vector of required interfaces is valid to be registered as a field
+    multiadapter.
+    '''
+    
+    # Lazily load from base
+    from ckanext.publicamundi.lib.metadata import IObject
+    
+    nf = len(required_ifaces)
+    assert nf > 1, 'A non-trivial interface vector (length > 1) is needed'
+    
+    for iface in islice(required_ifaces, 0, nf - 1):
+        assert iface.extends(IContainerField), (
+            'The multiadapter decorator is meant to be used for container-based fields')
+    
+    tail_iface = required_ifaces[-1]
+    assert not tail_iface is IObjectField, (
+        'The registry will never provide a multiadapter on a zope.schema.IObject item.'
+        'Use the underlying schema instead.')
+    assert tail_iface.extends(IField) or tail_iface.isOrExtends(IObject), (
+        '%r is not a suitable interface' % (tail_iface))
 

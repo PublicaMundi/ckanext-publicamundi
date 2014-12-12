@@ -6,12 +6,19 @@ from ckan.plugins import toolkit
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata.widgets import (
-    object_widget_adapter, field_widget_adapter, field_widget_multiadapter)
+    object_widget_adapter,
+    field_widget_adapter,
+    field_widget_multiadapter)
 from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 from ckanext.publicamundi.lib.metadata.widgets.base import (
-    EditFieldWidget, EditObjectWidget, 
-    ReadFieldWidget, ReadObjectWidget,
-    ListFieldWidgetTraits, DictFieldWidgetTraits)
+    EditFieldWidget,
+    EditObjectWidget, 
+    ReadFieldWidget,
+    ReadObjectWidget,
+    ListFieldWidgetTraits,
+    DictFieldWidgetTraits)
+
+from ._common import TableObjectReadWidget
 
 _ = toolkit._
 
@@ -83,6 +90,13 @@ class LineageEditWidget(EditFieldWidget):
     def get_template(self):
         return 'package/snippets/fields/edit-text-lineage-inspire.html'
 
+@field_widget_multiadapter([IListField, ITextLineField],
+    qualifiers=['access_constraints.inspire'], is_fallback=False)
+class AccessConstraintsEditWidget(EditFieldWidget):
+ 
+    def get_template(self):
+        return 'package/snippets/fields/edit-list-textline.html'
+
 @object_widget_adapter(schemata.IInspireMetadata, 
     qualifiers=['datasetform'], is_fallback=True)
 class InspireEditWidget(EditObjectWidget):
@@ -149,6 +163,9 @@ class InspireEditWidget(EditObjectWidget):
             ('lineage', 'lineage.inspire'),
             ('spatial_resolution', 'spatial_resolution.inspire'),
             ('responsible_party', 'contacts.inspire'),
+            ('conformity', 'conformity.inspire'),
+            ('access_constraints', 'access_constraints.inspire'),
+            ('limitations', 'access_constraints.inspire'),
             ('contact', 'contacts.inspire'),
             ('languagecode', 'select2'),
             ('datestamp', None),
@@ -176,4 +193,42 @@ class InspireReadWidget(ReadObjectWidget):
 
     def get_template(self):
         return None # use glue template
+
+@object_widget_adapter(schemata.IInspireMetadata, qualifiers=['table'])
+class TableInspireReadWidget(TableObjectReadWidget):
+
+    def get_field_order(self):
+        return [
+           # Identification
+           'identifier',
+           'title',
+           'abstract',
+           'locator',
+           'resource_language',
+           # Metadata on metadata
+           'contact',
+           'languagecode',
+           'datestamp',
+           # Classification
+           'topic_category',
+           # Keywords
+           'keywords',
+           # Geographic
+           'bounding_box',
+           # Temporal
+           'temporal_extent',
+           'creation_date',
+           'publication_date',
+           'revision_date',
+           # Quality 
+           'lineage',
+           'spatial_resolution',
+           # Conformity
+           'conformity',
+           # Contraints
+           'access_constraints',
+           'limitations',
+           # Responsible Party
+           'responsible_party',
+        ]
 

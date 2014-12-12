@@ -36,7 +36,7 @@ class TextLineEditWidget(base_widgets.EditFieldWidget):
 class EmailEditWidget(base_widgets.EditFieldWidget):
 
     def get_template(self):
-        return 'package/snippets/fields/edit-textline-email.html'
+        return 'package/snippets/fields/edit-email.html'
 
 @field_widget_adapter(IURIField)
 class UriEditWidget(base_widgets.EditFieldWidget):
@@ -75,8 +75,9 @@ class FloatEditWidget(base_widgets.EditFieldWidget):
     def prepare_template_vars(self, name_prefix, data):
         tpl_vars = base_widgets.EditFieldWidget.prepare_template_vars(self, name_prefix, data)
         minval, maxval = self.field.min, self.field.max
-        tpl_vars['input_classes'] = [ \
-            'input-small' if ((minval is None) or (maxval is None) or (maxval - minval > 1e3)) else 'span2' ]
+        tpl_vars['input_classes'] = [
+            'input-small' if (
+                (minval is None) or (maxval is None) or (maxval - minval > 1e3)) else 'span2']
         return tpl_vars
    
     def get_template(self):
@@ -223,10 +224,11 @@ class TextAsItemReadWidget(base_widgets.ReadFieldWidget):
         return 'package/snippets/fields/read-text-item.html'
 
 @field_widget_adapter(ITextLineField, qualifiers=['email'])
+@field_widget_adapter(IEmailAddressField)
 class EmailReadWidget(base_widgets.ReadFieldWidget):
 
     def get_template(self):
-        return 'package/snippets/fields/read-textline-email.html'
+        return 'package/snippets/fields/read-email.html'
 
 @field_widget_adapter(IURIField)
 class UriReadWidget(base_widgets.ReadFieldWidget):
@@ -294,6 +296,12 @@ class ListReadWidget(base_widgets.ReadFieldWidget, base_widgets.ListFieldWidgetT
 
     def get_template(self):
         return 'package/snippets/fields/read-list.html'
+
+@field_widget_multiadapter([IListField, IChoiceField])
+class ChoicesReadWidget(base_widgets.ReadFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/read-list-choice.html'
 
 @field_widget_multiadapter([ITupleField, ITextLineField], qualifiers=['tags'])
 @field_widget_multiadapter([IListField, ITextLineField], qualifiers=['tags'])

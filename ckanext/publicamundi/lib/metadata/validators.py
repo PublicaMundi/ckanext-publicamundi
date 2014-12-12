@@ -5,21 +5,26 @@ import zope.schema.interfaces
 import itertools
 from collections import Counter
 
+from pylons import config
 import ckan.plugins.toolkit as toolkit
 from ckan.lib.navl.dictization_functions import missing, StopOnError, Invalid
 
 from ckanext.publicamundi.lib import logger
 from ckanext.publicamundi.lib import dictization
-from ckanext.publicamundi.lib.util import Breakpoint
 from ckanext.publicamundi.lib.util import find_all_duplicates
 from ckanext.publicamundi.lib.metadata import (
     dataset_types, Object, ErrorDict,
     serializer_for_object, serializer_for_field, serializer_for_key_tuple)
 
-_t = toolkit._
+_ = toolkit._
+aslist = toolkit.aslist
+asbool = toolkit.asbool
 
-## Helpers
+#
+# Helpers
+#
 
+# Todo Rewrite as BaseMetadata method
 def objectify(factory, data, key_prefix):
     '''Build an object from received converter/validator data. 
     '''
@@ -43,6 +48,7 @@ def objectify(factory, data, key_prefix):
     assert not obj or isinstance(obj, Object)
     return obj
 
+# Todo Rewrite as BaseMetadata method
 def dictize_for_extras(obj, key_prefix):
     '''Dictize an object in proper way so that it's fields can be stored 
     under package_extra KV pairs.
@@ -67,7 +73,9 @@ def must_validate(context, data):
         ('skip_validation' in context) or 
         (data.get(('state',), '') == 'invalid'))
 
-## Validators/Converters 
+#
+# Validators/Converters for package
+#
 
 def is_dataset_type(value, context):
     if not value in dataset_types:
@@ -297,3 +305,35 @@ def get_field_read_processor(field):
 
     return convert
 
+#
+# Validators/Converters for resources
+#
+
+def guess_resource_type_if_empty(key, data, errors, context):
+    '''Guess the resource-type from the the rest of the resource dict.
+    
+    Try to guess the resource-type from the format (which should be always
+    present and non-empty). We shall not assume that the format is converted
+    to its canonical form since we dont know the order at which these field
+    validators will run.
+    '''
+    
+    value = data[key]
+    if value:
+        return 
+    
+    key0, pos, key2 = key
+    assert key0 == 'resources' and key2 == 'resource_type'
+    
+    resource_format = data[('resources', pos, 'format')]
+    resource_format = resource_format.encode('ascii').lower()
+    
+    api_formats = aslist(
+        config.get('ckanext.publicamundi.api_resource_formats'))
+    if resource_format in api_formats:
+        value = 'api'
+    else:
+        value = 'file'
+
+    data[key] = value
+    return

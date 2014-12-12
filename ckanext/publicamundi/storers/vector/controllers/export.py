@@ -51,25 +51,6 @@ class ExportController(BaseController):
         else:
             abort(400, _('No Export Format was defined !'))
 
-    def search_epsg(self):
-        query = request.params.get('term')
-        prj2epsg_api = "http://www.prj2epsg.org/search.json?terms=%s" % query
-
-        response = urllib2.urlopen(prj2epsg_api).read()
-
-        autocomplete_json = []
-
-        results = json.loads(response)['codes']
-
-        for idx, val in enumerate(results):
-            autocomplete_dict = {}
-            autocomplete_dict['label'] = val['name'] + " - " + val['code']
-            autocomplete_dict['value'] = val['code']
-
-            autocomplete_json.append(autocomplete_dict)
-
-        return json.dumps(autocomplete_json)
-
     def _init_export(self, resource_id, export_format, export_projection):
 
         postgis_layer, connection = self._get_layer(resource_id)
@@ -82,10 +63,8 @@ class ExportController(BaseController):
         tmp_folder = self._create_temp_export_folder()
 
         resource_name = self._get_resource_name(resource_id)
-        if DBTableResource.name_extention in resource_name:
-            resource_name = resource_name.replace(
-                DBTableResource.name_extention,
-                '')
+        if DBTableResource.name_suffix in resource_name:
+            resource_name = resource_name.replace(DBTableResource.name_suffix, '')
 
         export_datasource, export_layer = self._create_export_datasource(
             tmp_folder, resource_name, export_format, export_projection,
@@ -157,7 +136,7 @@ class ExportController(BaseController):
         shutil.rmtree(tmp_folder)
 
         resp = self._send_file_response(file_path, resource_name)
-        os.remove(file_path)
+        #os.remove(file_path) Needs Fix to delete files
 
         return resp
 
@@ -296,19 +275,19 @@ class ExportController(BaseController):
 
         headers = [
             ('Content-Disposition',
-             'attachment; filename=\"' +
-             resource_name +
-             '.zip\"'),
+             'attachment; filename=\"'+str(resource_name)+'.zip\"'),
             ('Content-Type',
-             'text/plain'),
+             'text/html'),
             ('Content-Length',
              str(file_size))]
 
         from paste.fileapp import FileApp
 
         fapp = FileApp(filepath, headers=headers)
-
-        return fapp(request.environ, self.start_response)
+        status, headers, app_it = request.call_application(fapp)
+        response.headers = headers
+        response.status = status
+        return app_it
 
     def _get_gdal_driver_list(self):
         gdal_drvs = []
@@ -343,7 +322,7 @@ class ExportController(BaseController):
             c.package = _get_action('package_show')(context, {'id': id})
             c.pkg = context['package']
             c.pkg_dict = c.package
-            if not ('vectorstorer_resource' in c.resource and 
+            if not ('vectorstorer_resource' in c.resource and
                     c.resource['format'].lower() == DBTableResource.FORMAT):
                 raise NotVectorStorerDB
 

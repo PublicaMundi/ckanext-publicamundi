@@ -1,0 +1,11 @@
+{% with vocabulary = field.value_type.vocabulary %}
+<ul class="{{ classes|join(' ') }}">
+  {% for v in value %}
+  {% with term = vocabulary.getTerm(v) %}
+  <li class="choice {{ item_classes|join(' ') }}" data-value="{{ v|safe }}">
+    {{- term.title|safe -}}
+  </li>
+  {% endwith %}
+  {% endfor %}
+</ul>
+{% endwith %}

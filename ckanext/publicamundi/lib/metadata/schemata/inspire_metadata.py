@@ -25,7 +25,7 @@ class IInspireMetadata(IBaseMetadata):
         min_length = 1,
         max_length = 4,
         value_type = zope.schema.Object(IResponsibleParty,
-            title = u'Point of Contact',
+            title = u'Contact',
             required = True))
 
     datestamp = zope.schema.Date(
@@ -54,7 +54,7 @@ class IInspireMetadata(IBaseMetadata):
         description = u"This a characteristic (and often unique) name by which the resource is known.",
         required = True)
 
-    identifier = zope.schema.URI(
+    identifier = zope.schema.NativeStringLine(
         title = u'Identifier',
         description = u"A value uniquely identifying the dataset. The value domain of this metadata element is a mandatory character string code, generally assigned by the data owner, and a character string namespace uniquely identifying the context of the identifier code (for example, the data owner).",
         required = True)
@@ -94,6 +94,7 @@ class IInspireMetadata(IBaseMetadata):
         value_type = zope.schema.Choice(
             title = u'Topic Category',
             vocabulary = vocabularies.get_by_name('topic-category').get('vocabulary'),))
+    topic_category.setTaggedValue('format:markup', { 'descend-if-dictized': False })
 
     # Keywords
 
@@ -109,6 +110,7 @@ class IInspireMetadata(IBaseMetadata):
             title = u'Keyword Thesaurus'),
         value_type = zope.schema.Object(IThesaurusTerms, 
             title = u'Keywords'))
+    keywords.setTaggedValue('format:markup', { 'descend-if-dictized': False })
 
     @zope.interface.invariant
     def check_keywords(obj):
@@ -126,7 +128,8 @@ class IInspireMetadata(IBaseMetadata):
         min_length = 1,
         max_length = 4,
         value_type = zope.schema.Object(IGeographicBoundingBox,
-            title = u'Geographic Bounding Box'))
+            title = u'Bounding Box'))
+    bounding_box.setTaggedValue('format:markup', { 'descend-if-dictized': True })
 
     # Temporal 
 
@@ -136,7 +139,7 @@ class IInspireMetadata(IBaseMetadata):
         required = False,
         max_length = 3,
         value_type = zope.schema.Object(ITemporalExtent,
-            title = u'Temporal Extent'))
+            title = u'Extent'))
 
     creation_date = zope.schema.Date(
         title = u'Creation Date',
@@ -188,8 +191,7 @@ class IInspireMetadata(IBaseMetadata):
         required = False,
         max_length = 6,
         value_type = zope.schema.Object(ISpatialResolution,
-            title = u'Spatial Resolution'))
-   
+            title = u'Resolution'))
     spatial_resolution.value_type.setTaggedValue('allow-partial-update', False)
 
     # Conformity
@@ -199,14 +201,14 @@ class IInspireMetadata(IBaseMetadata):
         required = False,
         max_length = 4,
         value_type = zope.schema.Object(IConformity,
-            title = u'Conformity'))
+            title = u'Specification'))
 
     # Constraints 
     
     # Todo: The following fields should have suggestions (autocompleted?) values.
 
     access_constraints = zope.schema.List(
-        title = u'Conditions applying to access and use',
+        title = u'Access Constraints',
         description = u'Define the conditions for access and use of spatial data sets and services, and where applicable, corresponding fees as required by Article 5(2)(b) and Article 11(2)(f) of Directive 2007/2/EC. The value domain of this metadata element is free text. The element must have values. If no conditions apply to the access and use of the resource, "no conditions apply" shall be used. If conditions are unknown, "conditions unknown" shall be used. This element shall also provide information on any fees necessary to access and use the resource, if applicable, or refer to a uniform resource locator (URL) where information on fees is available.',
         required = True,
         min_length = 1,
@@ -214,7 +216,7 @@ class IInspireMetadata(IBaseMetadata):
         value_type = zope.schema.TextLine(title = u'Condition'))
 
     limitations = zope.schema.List(
-        title = u'Limitations on public access',
+        title = u'Limitations',
         description = u"When member states limit public access to spatial data sets and spatial data services under Article 13 of Directive 2007/2/EC, this metadata element shall provide information on the limitations and the reasons for them. If there are no limitations on public access, this metadata element shall indicate that fact. The value domain of this metadata element is free text.",
         required = True,
         min_length = 1,

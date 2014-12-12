@@ -1,0 +1,9 @@
+<div class="{{ classes|join(' ') }}">
+  {% if title %}<h3 class="title">{{ title }}</h3>{% endif -%}
+  <dl>
+    {% for k, f in fields.items() -%}
+    <dt data-name="{{ k }}">{{ f.field.title }}</dt>
+    <dd>{{ f.markup }}</dd>
+    {%- endfor %}
+  </dl>
+</div>

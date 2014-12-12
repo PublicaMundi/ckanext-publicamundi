@@ -153,7 +153,4 @@
   {{ super() }}
   {% resource 'ckanext-publicamundi-geodata-theme/styles' %}
   {% resource 'ckanext-publicamundi-geodata-theme/scripts' %}
-  <script src="{{ h.url_for_static('/fonts/ACMuli/AC-Muli.ttf') }}" ></script>
-
-  <script src="{{ h.url_for_static('fonts/fontello/font/geodata.ttf') }}" ></script>
-{% endblock -%}
+  {% endblock -%}
