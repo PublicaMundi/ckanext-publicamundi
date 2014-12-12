@@ -17,22 +17,22 @@
     <ul class="dropdown-menu">
         {% if res.format == 'wcs' %}
         <li>
-            <a data-resource-id="{{res.id}}" data-resource-format="csv" class="raster-export-button" href="#" target="_blank">CSV</a>
+            <a data-resource-id="{{res.wcs_coverage}}" data-resource-format="csv" class="raster-export-button" href="#" target="_blank">CSV</a>
         </li>
         <li>
-            <a data-resource-id="{{res.id}}" data-resource-format="jpeg" class="raster-export-button" href="#" target="_blank">JPEG</a>
+            <a data-resource-id="{{res.wcs_coverage}}" data-resource-format="jpeg" class="raster-export-button" href="#" target="_blank">JPEG</a>
         </li>
         <li>
-            <a data-resource-id="{{res.id}}" data-resource-format="jpeg2000" class="raster-export-button" href="#" target="_blank">JPEG2000</a>
+            <a data-resource-id="{{res.wcs_coverage}}" data-resource-format="jpeg2000" class="raster-export-button" href="#" target="_blank">JPEG2000</a>
         </li>
         <li>
-            <a data-resource-id="{{res.id}}" data-resource-format="netcdf" class="raster-export-button" href="#" target="_blank">NetCDF</a>
+            <a data-resource-id="{{res.wcs_coverage}}" data-resource-format="netcdf" class="raster-export-button" href="#" target="_blank">NetCDF</a>
         </li>
         <li>
-            <a data-resource-id="{{res.id}}" data-resource-format="png" class="raster-export-button" href="#" target="_blank">PNG</a>
+            <a data-resource-id="{{res.wcs_coverage}}" data-resource-format="png" class="raster-export-button" href="#" target="_blank">PNG</a>
         </li>
         <li>
-            <a data-resource-id="{{res.id}}" data-resource-format="tiff" class="raster-export-button" href="#" target="_blank">TIFF</a>
+            <a data-resource-id="{{res.wcs_coverage}}" data-resource-format="tiff" class="raster-export-button" href="#" target="_blank">TIFF</a>
         </li>
 
         {% endif %} {# res.format #}
