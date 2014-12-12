@@ -1,9 +1,6 @@
 """
 Classes that transform a gdal supported file into a gml file
 """
-
-import osgeo.gdal as gdal
-import osgeo.osr as osr
 import os
 import magic
 
@@ -29,6 +26,7 @@ class GDALToGmlConverter:
         usually this is the same as the gdal_file_path. Please note that an url format is required
         (i.e. local files should be file://path)
         """
+        import osgeo.gdal as gdal
         self.coverage_id = coverage_id
         self.url_to_coverage_data = url_to_coverage_data
         self.gdal_file_path = gdal_file_path
@@ -49,6 +47,7 @@ class GDALToGmlConverter:
 
         :return: a list of range type fields in gml format
         """
+        import osgeo.gdal as gdal
         fields = []
         for i in range(1, self.gdal_dataset.RasterCount + 1):
             template = self.range_type_template
@@ -122,6 +121,8 @@ class GDALToGmlConverter:
 
         :return: string - the CRS of the dataset
         """
+
+        import osgeo.osr as osr
         wkt = self.gdal_dataset.GetProjection()
         spatial_ref = osr.SpatialReference()
         spatial_ref.ImportFromWkt(wkt)

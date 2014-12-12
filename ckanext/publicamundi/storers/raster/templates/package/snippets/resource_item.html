@@ -1,0 +1,40 @@
+{% ckan_extends %}
+
+{% block resource_item_explore_links %}
+<li>
+    <a href="{{ h.url_for(controller='package', action='resource_read', id=pkg.name, resource_id=tab_res.id) }}">
+        <i class="icon-table"></i> {{ _('Preview table') }}</a>
+</li>
+{% endif %}
+{% endwith %}
+{% endif %}
+
+{{ super() }}
+{% endblock %}
+
+{% block resource_item_download %}
+{% if res.rasterstorer_resource and res.format in ['wcs'] %}
+<div class="dropdown btn-group resource-download-opts pull-right">
+    <a href="#" class="btn dropdown-toggle" data-toggle="dropdown"
+            >{#<i class="icon-download"></i> #}{{ _('Download as') }} <span class="caret"></span></a>
+    <ul class="dropdown-menu">
+        {% if res.format == 'wcs' %}
+        <li>
+            <a data-resource-id="{{res.id}}" data-resource-format="csv" class="raster-export-button" href="#" target="_blank">CSV</a>
+        </li>
+        <li>
+            <a data-resource-id="{{res.id}}" data-resource-format="jpeg" class="raster-export-button" href="#" target="_blank">JPEG</a>
+        </li>
+        <li>
+            <a data-resource-id="{{res.id}}" data-resource-format="png" class="raster-export-button" href="#" target="_blank">PNG</a>
+        </li>
+        <li>
+            <a data-resource-id="{{res.id}}" data-resource-format="tiff" class="raster-export-button" href="#" target="_blank">TIFF</a>
+        </li>
+
+        {% endif %} {# res.format #}
+    </ul>
+</div>
+{% resource 'ckanext-publicamundi-raster/export' %}
+{% endif %}
+{% endblock %}
