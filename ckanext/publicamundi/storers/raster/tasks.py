@@ -1,5 +1,5 @@
 import logging
-
+import json
 from raster_plugin_util import RasterUtil, CannotDownload
 from ckan.lib.celery_app import celery as celery_app
 import ckanext.publicamundi.storers.raster as rasterstorer
@@ -7,13 +7,16 @@ import ckanext.publicamundi.storers.raster as rasterstorer
 
 
 
-@celery_app.task(name='rasterstorer.identify', max_retries=2)
+@celery_app.task(name='rasterstorer.identify', max_retries=3)
 def rasterstorer_identify(context):
     """
     Task for downloading the resource and preparing it for ingest
     @:param context: the context in which to execute the task
     """
     log = rasterstorer_identify.get_logger()
+
+    log.info('Received an identify task: context=\n%s' % (json.dumps(context, indent=4)))
+
     try:
         log.info("[Raster_Identify]Downloading resource %s..." % context["resource_dict"]["id"])
         util = RasterUtil(context, log)
@@ -21,7 +24,7 @@ def rasterstorer_identify(context):
         log.info('[Raster_Identify]Downloaded resource %s' % context["resource_dict"]["id"])
     except CannotDownload as ex:
         # Retry later, maybe the resource is still uploading
-        log.error('[Raster_Identify]Failed to identify: %s' % ex.message)
+        log.error('[Raster_Identify] Failed to download: %s' % ex.message)
         rasterstorer_identify.retry(exc=ex, countdown=60)
 
 

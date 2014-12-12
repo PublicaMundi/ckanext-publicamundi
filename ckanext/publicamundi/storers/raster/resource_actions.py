@@ -59,9 +59,17 @@ def create_identify_resource_task(resource):
     Creates the celery task to identify the resource
     :param resource: the resource to be identified
     """
+
     task_id = make_uuid()
+    
+    # We are using resource_dictize() just to force CKAN to provide an absolute url
+    # Note Maybe a more clean way to achive this would be to call something like 
+    # url_for(controller='package', action='resource_download', id=package_id, resource_id=resource_id)
+    package_id = resource.as_dict()['package_id']
+    resource_dict = resource_dictize(resource, {'model': model})
+    resource_dict['package_id'] = package_id
+    
     context = _make_default_context()
-    resource_dict = resource.as_dict()
     context['resource_dict'] = resource_dict
     celery.send_task(
         'rasterstorer.identify',
