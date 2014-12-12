@@ -5,6 +5,9 @@
     <a href="{{ h.url_for(controller='package', action='resource_read', id=pkg.name, resource_id=tab_res.id) }}">
         <i class="icon-table"></i> {{ _('Preview table') }}</a>
 </li>
+{% endif %}
+{% endwith %}
+{% endif %}
 
 {{ super() }}
 {% endblock %}
@@ -21,6 +24,12 @@
         </li>
         <li>
             <a data-resource-id="{{res.id}}" data-resource-format="jpeg" class="raster-export-button" href="#" target="_blank">JPEG</a>
+        </li>
+        <li>
+            <a data-resource-id="{{res.id}}" data-resource-format="jpeg2000" class="raster-export-button" href="#" target="_blank">JPEG2000</a>
+        </li>
+        <li>
+            <a data-resource-id="{{res.id}}" data-resource-format="netcdf" class="raster-export-button" href="#" target="_blank">NetCDF</a>
         </li>
         <li>
             <a data-resource-id="{{res.id}}" data-resource-format="png" class="raster-export-button" href="#" target="_blank">PNG</a>

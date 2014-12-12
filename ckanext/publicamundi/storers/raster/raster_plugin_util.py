@@ -267,7 +267,8 @@ class RasterUtil:
             self.resource_dict['description'],
             self.resource_dict['id'],
             self.wms_url,
-            self.coverage_id)
+            self.coverage_id,
+            self.resource_dict['name'])
         created_wms_resource = self.invoke_api_resource_action(wms_resource.as_dict(), 'resource_create')
 
     def add_wcs_resource(self):
@@ -280,7 +281,8 @@ class RasterUtil:
             self.resource_dict['description'],
             self.resource_dict['id'],
             self.wcst_url,
-            self.coverage_id)
+            self.coverage_id,
+            self.resource_dict['name'])
         created_wcs_resource = self.invoke_api_resource_action(wms_resource.as_dict(), 'resource_create')
 
     def finalize(self):

@@ -23,11 +23,12 @@ class WMSResource:
             description,
             parent_resource_id,
             wms_server,
-            wms_layer):
+            wms_layer,
+            resource_name):
         self._package_id = package_id
         self._layer_name = layer_name
-        self._name = layer_name + self.name_suffix
-        self._description = description
+        self._name = resource_name + self.name_suffix
+        self._description = "A WMS layer resource generated from " + resource_name
         base_url = urlparse(wms_server)
 
         self._url = urljoin(base_url.netloc, self._get_capabilities_url)
@@ -72,11 +73,12 @@ class WCSResource:
             description,
             parent_resource_id,
             wcs_server,
-            wcs_coverage):
+            wcs_coverage,
+            resource_name):
         self._package_id = package_id
         self._layer_name = layer_name
-        self._name = layer_name + self.name_suffix
-        self._description = description
+        self._name = resource_name + self.name_suffix
+        self._description = "A WCS resource generated from " + resource_name
         base_url = urlparse(wcs_server)
 
         self._url = urljoin(base_url.netloc, self._get_capabilities_url)
