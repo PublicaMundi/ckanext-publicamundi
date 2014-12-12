@@ -132,8 +132,10 @@ def make_record(pkg_dict, repo=None):
     else:
         log1.debug('Extracted metadata for dataset %s' % (pkg_id))
 
-    if record and not record.identifier:
-        record.identifier = pkg_id
+    # Note The following should always hold true when #13 is resolved, and
+    # identifier is linked to package.id at validation phase.
+    #assert record.identifier == pkg_id
+    record.identifier = pkg_id
     
     return record
 
