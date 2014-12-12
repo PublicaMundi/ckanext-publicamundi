@@ -5,9 +5,6 @@
     <a href="{{ h.url_for(controller='package', action='resource_read', id=pkg.name, resource_id=tab_res.id) }}">
         <i class="icon-table"></i> {{ _('Preview table') }}</a>
 </li>
-{% endif %}
-{% endwith %}
-{% endif %}
 
 {{ super() }}
 {% endblock %}
