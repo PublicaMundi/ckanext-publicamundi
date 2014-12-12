@@ -164,7 +164,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
 
         topic_list = []
         for topic in md.identification.topiccategory:
-            topic_list.append(vocabularies.munge(topic))
+            topic_list.append(topic)
         
         keywords_dict = {}
         for it in md.identification.keywords:
@@ -177,10 +177,8 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
                 try:
                     thes_name = vocabularies.munge('Keywords-' + thes_title)
                     term_list = []
-                    # Munge Keywords before adding
                     for t in it['keywords']:
-                        term_list.append(vocabularies.munge(t))
-                    #thes = Thesaurus.make(vocabularies.munge('Keywords-' + thes_title))
+                        term_list.append(t)
                     thes = Thesaurus.make(thes_name)
                     if thes:
                         kw = ThesaurusTerms(thesaurus=thes, terms=term_list)
