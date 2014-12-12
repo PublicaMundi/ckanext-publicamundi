@@ -252,7 +252,7 @@ a {
 }
 #homemenu .nav li a{
     font-size: 16px;
-    padding: 20px 10px 21px 10px;
+    padding: 21px 10px 21px 10px;
 }
 .mainmenu .section .nav { 
     float: left;
@@ -312,6 +312,10 @@ a {
     //border-left: 8px solid transparent;
     //border-right: 8px solid transparent;
     //border-top: 10px solid #4E59A4;
+}
+.alt-nav li a:focus{
+    background: transparent;
+    color: #fff;
 }
 .nav-tabs{
     border-bottom: 1px #7C7C7F solid;
@@ -718,7 +722,7 @@ a {
 .secondary .module-heading{
     border-top: 2px #4E59A4 solid;
     border-bottom: 1px #4E59A4 solid;
-    padding: 8px 25px 7px 15px;
+    padding: 8px 15px 7px 15px;
     text-align: left;
     background-color: #F6F6F6;
     font-size: 18px;
@@ -777,6 +781,12 @@ a {
 }
 .social a [class^="icon-"] {
     font-size: 22px;
+}
+.dataset-map-expanded #dataset-map{
+    top: -396px;
+    left:0;
+    height:396px;
+    border: 2px #4E59A4 solid;
 }
 .group{
     margin: 0 !important;
@@ -1019,6 +1029,7 @@ a {
     margin-top:6px;
 }
 /* Search page */
+
 .search-form .filter-list{
     display: block;
     float: left;
@@ -1239,6 +1250,7 @@ a {
 /* Preview */
 .ckanext-datapreview iframe{
     //border: 4px #4E59A4 solid;
+    //height: 450px !important;
 }
 /* New package */
 .stages li.active .highlight{
