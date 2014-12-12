@@ -1,5 +1,6 @@
 <section class="module module-narrow module-shallow tags">
-    <h2 class="module-heading"><i class="icon-medium icon-lock"></i> {{ _('Tags') }}</h2>
+<h2 class="module-heading"> {{ _('Tags') }}</h2>
+{# <i class="icon-medium icon-lock"></i> #}
 {% if tags %}
   <section class="tags">
     {% snippet 'snippets/tag_list.html', tags=tags, _class='tag-list well' %}

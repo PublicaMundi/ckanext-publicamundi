@@ -18,6 +18,19 @@
   {% endif %} {# state #}
 {% endblock %}
 
+{% block package_notes %}
+      {% if c.pkg_notes_formatted %}
+        <div class="notes embedded-content">
+          {{ c.pkg_notes_formatted }}
+      </div>
+      {% else %}
+      <div class="notes embedded-content">
+          <i>{{_('No description')}}</i>
+      </div>
+      {% endif %}
+    {% endblock %}
+
+
 {% block package_additional_info %}
   {# This is a replacement for additional_info.html -#}
   {#{% snippet "package/snippets/additional_info.html", pkg_dict=pkg %}#}
