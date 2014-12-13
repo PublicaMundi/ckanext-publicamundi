@@ -40,6 +40,8 @@ setup(
 
         publicamundi_vector = ckanext.publicamundi.storers.vector.plugin:VectorStorer
 
+	publicamundi_raster = ckanext.publicamundi.storers.raster.plugin:RasterStorer
+
         [paste.paster_command]
         
         publicamundi-setup = ckanext.publicamundi.commands:Setup
@@ -57,7 +59,8 @@ setup(
         [ckan.celery_task]
         
         vector_tasks = ckanext.publicamundi.storers.vector.celery_import:task_imports
-
+	
+	raster_taks = ckanext.publicamundi.storers.raster.celery_import:task_imports
         """,
     # The following only stands as an example. The actual message_extractors should be defined into 
     # ckan's setup.py (from where message extraction is invoked).
