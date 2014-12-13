@@ -13,7 +13,8 @@ from ckanext.publicamundi.lib.metadata.ibase import (
 from ckanext.publicamundi.lib.metadata.formatters import (
     field_format_adapter, 
     field_format_multiadapter, 
-    formatter_for_field)
+    formatter_for_field,
+    FieldFormatter)
 
 from ckanext.publicamundi.lib.metadata.serializers import (
     serializer_for_field, 
@@ -93,9 +94,24 @@ dataset_types = {
     },
 }
 
-def make_object(t):
-    assert t in dataset_types
-    factory = dataset_types[t]['class']
+def make_metadata_object(dataset_type, pkg_dict=None):
+    '''Create a metadata object according to the given dataset-type.
+    
+    If param `pkg_dict` is given, we attempt to load the newly created metadata
+    object from a flattened dict with serialized key/values.
+    '''
+    assert dataset_type in dataset_types
+    
+    factory = dataset_types[dataset_type]['class']
     obj = factory()
+
+    if pkg_dict:
+        dictz_opts = {
+            'unserialize-keys': True,
+            'key-prefix': dataset_type,
+            'unserialize-values': 'default',
+        }
+        obj.from_dict(pkg_dict, is_flat=True, opts=dictz_opts)
+
     return obj
 

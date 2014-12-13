@@ -16,7 +16,10 @@ from ckan.lib.uploader import get_storage_path
 from ckanext.publicamundi.cache_manager import get_cache
 from ckanext.publicamundi.lib.actions import (NameConflict, InvalidParameter)
 from ckanext.publicamundi.lib.metadata import (
-    dataset_types, make_object, serializer_for, xml_serializer_for)
+    dataset_types,
+    make_metadata_object,
+    serializer_for,
+    xml_serializer_for)
 
 log = logging.getLogger(__name__)
 
@@ -134,7 +137,7 @@ def dataset_import(context, data_dict):
 
     # Parse XML data as metadata of `dtype` schema
     
-    obj = make_object(dtype)
+    obj = make_metadata_object(dtype)
     try:
         obj = xml_serializer_for(obj).loads(xmldata)
     except:
@@ -196,7 +199,7 @@ def dataset_import(context, data_dict):
         'name': name,
         'title': pkg_dict['title'],
         'state': pkg_dict.get('state'),
-        # Provide details on validation (only if allow_validation_errors)
+        # Provide details on validation (meaningfull if allow_validation_errors)
         'validation': {
             'message': error_message,
             'errors': validation_errors,

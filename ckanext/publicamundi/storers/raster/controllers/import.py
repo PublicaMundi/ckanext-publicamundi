@@ -1,12 +1,14 @@
 import urlparse
-import os
 
-from ckan.lib.base import BaseController, request
+from ckan.lib.base import BaseController,  c, request, abort
 from ckan.logic import model
+import ckan.plugins.toolkit as toolkit
 import ckan
-import wcst
-from raster_plugin_util import RasterUtil
+from ckanext.publicamundi.storers.raster import resource_actions
 
+_ = toolkit._
+_check_access = toolkit.check_access
+_get_action = toolkit.get_action
 
 class RasterImportController(BaseController):
     """
@@ -16,15 +18,32 @@ class RasterImportController(BaseController):
     /api/raster/delete/{resource_id} - deleting the raster from rasdaman through WCST
     """
 
+    def _make_default_context(self):
+        """
+        Creates a default context
+        :return: the default context
+        """
+        return {
+            'model': model,
+            'session': model.Session,
+            'user': c.user,
+            }
+
     def publish(self, resource_id):
         """
         Publishes a raster resource in WCST
 
         :param resource_id: String the id of the resource
         """
-        base_url = "http://" + urlparse.urlparse(request.url).netloc + "/"
-        resource = ckan.model.Session.query(model.Resource).get(resource_id)
-        self.insert_coverage(resource.url, resource_id, base_url)
+        context = self._make_default_context()
+        try:
+            _check_access('resource_update', context, dict(id=resource_id))
+        except toolkit.ObjectNotFound as ex:
+            abort(404)
+        except toolkit.NotAuthorized as ex:
+            abort(403, _('Not authorized to update resource'))
+        resource = model.Session.query(model.Resource).get(resource_id)
+        resource_actions.create_ingest_resource_task(resource)
 
     def delete(self, resource_id):
         """
@@ -32,43 +51,21 @@ class RasterImportController(BaseController):
 
         :param resource_id: String the id of the resource
         """
-        self.delete_coverage(resource_id)
+        context = self._make_default_context()
+        try:
+            _check_access('resource_update', context, dict(id=resource_id))
+        except toolkit.ObjectNotFound as ex:
+            abort(404)
+        except toolkit.NotAuthorized as ex:
+            abort(403, _('Not authorized to update resource'))
+        resource = model.Session.query(model.Resource).get(resource_id)
+        resource_actions.create_delete_resource_task(resource)
 
-    @staticmethod
-    def insert_coverage(coverage_url, dataset_id, base_url):
+    def finalize(self, resource_id):
         """
-        Inserts a coverage attached to a dataset into the WCST service
+        Finalizes the ingestion process and marks the resource as published
 
-        :param coverage_url: string - url to the coverage to be inserted (can be in any gdal supported format + GML)
-        :param dataset_id: string - the id of the dataset to which this coverage is attached to
+        :param resource_id: String the id of the resource
         """
-
-        coverage_local_path = RasterUtil.get_gml_path_from_dataset(coverage_url, dataset_id)
-        gml_url = base_url + os.path.basename(coverage_local_path)
-
-        # Execute the wcst insert request
-        request = wcst.WCSTInsertRequest(gml_url)
-        executor = wcst.WCSTExecutor(RasterUtil.get_wcst_url())
-        response = executor.execute(request)
-
-        wms_request = wcst.WMSFromWCSInsertRequest(response)
-        wms_request.execute(RasterUtil.get_wms_url())
-        # Cleanup
-        os.remove(coverage_local_path)
-        os.remove(coverage_local_path.replace(".xml", ".raster"))
-
-        return response
-
-    @staticmethod
-    def delete_coverage(dataset_id):
-        """
-        Deletes a coverage attached to a dataset from the WCST service
-        :param dataset_id: string - the id of the dataset to which this coverage is attached to
-        """
-        request = wcst.WCSTDeleteRequest(RasterUtil.dataset_id_to_coverage_id(dataset_id))
-        executor = wcst.WCSTExecutor(RasterUtil.get_wcst_url())
-        response = executor.execute(request)
-
-        wms_request = wcst.WMSFromWCSDeleteRequest(response)
-        wms_request.execute(RasterUtil.get_wms_url())
-        return response
+        resource = model.Session.query(model.Resource).get(resource_id)
+        resource_actions.change_resource_to_published(resource)

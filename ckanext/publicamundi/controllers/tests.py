@@ -6,8 +6,6 @@ import os
 import random
 from collections import namedtuple
 from cgi import FieldStorage
-import requests
-from unidecode import unidecode
 
 from pylons import url
 
@@ -38,6 +36,21 @@ class Controller(BaseController):
 
     def brk(self):
         raise Breakpoint()
+
+    def test_csw_hooks(self, id):
+        from ckanext.publicamundi.lib import pycsw_sync
+        context = {'model': model, 'session': model.Session, 'api_version': 3}
+        pkg_dict = toolkit.get_action('package_show')(context, {'id': id})
+        pycsw_sync.create_or_update_record(context['session'], pkg_dict)
+        return ['Done']
+    
+    def test_formatter(self):
+        from ckanext.publicamundi.lib.metadata import formatter_for_field
+        x = fixtures.inspire1
+        f = x.get_field('spatial_resolution')
+        fo = formatter_for_field(f, 'markup')
+        s = fo.format()
+        return [unicode(s)]
     
     def test_cache(self):
         from ckanext.publicamundi.cache_manager import get_cache
@@ -65,7 +78,6 @@ class Controller(BaseController):
         field_name = request.params.get('name')
         upload = request.params.get(field_name + '-upload') if field_name else 'upload'
         if not isinstance(upload, FieldStorage):
-            assert 0
             abort(400, 'Expected a file upload')
         
         name = datetime.datetime.now().strftime('%s') + '-' + upload.filename
@@ -339,10 +351,8 @@ class Controller(BaseController):
         
         #raise Breakpoint('Break')
 
-        c.markup = markup_for_object('read:table', obj, errors={}, name_prefix=k, 
-            data = {
-                'title': u'%s: Metadata' %(pkg_dict['title'])
-            })
+        data = { 'title': u'%s: Metadata' % (pkg_dict['title']) }
+        c.markup = markup_for_object('read:table', obj, name_prefix=k, data=data)
 
         return render('tests/page.html')
         

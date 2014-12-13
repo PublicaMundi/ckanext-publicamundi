@@ -2,8 +2,8 @@ import logging
 
 import ckan.plugins as plugins
 import ckan.model as model
-from ckanext.publicamundi.storers.raster import resource_actions
-
+import resource_actions
+import pylons.config as global_config
 
 log = logging.getLogger(__name__)
 
@@ -32,13 +32,19 @@ class RasterStorer(plugins.SingletonPlugin):
         map.connect("raster-delete", "/api/raster/delete/{resource_id}",
                     controller='ckanext.publicamundi.storers.raster.controllers.import:RasterImportController', action='delete',
                     resource_id='{resource_id}')
+        map.connect("raster-finalize", "/api/raster/finalize/{resource_id}",
+                    controller='ckanext.publicamundi.storers.raster.controllers.import:RasterImportController', action='finalize',
+                    resource_id='{resource_id}')
         return map
 
     def update_config(self, config):
         """
         Exposes the public folder of this extension. The intermediary gml files will be stored here.
         """
+        plugins.toolkit.add_public_directory(config, global_config.get("ckanext.publicamundi.rasterstorer.temp_dir", ""))
         plugins.toolkit.add_public_directory(config, 'public')
+        plugins.toolkit.add_template_directory(config, 'templates')
+        plugins.toolkit.add_resource('public', 'ckanext-publicamundi-raster')
 
     def notify(self, entity, operation=None):
         """
@@ -51,11 +57,18 @@ class RasterStorer(plugins.SingletonPlugin):
                 if entity.format.lower() in self.SUPPORTED_FROMATS:
                     if operation == model.domain_object.DomainObjectOperation.new:
                         # A new raster resource has been created
-                        resource_actions.create_ingest_resource_task(entity)
+                        resource_actions.create_identify_resource_task(entity)
                     elif operation == model.domain_object.DomainObjectOperation.deleted:
                         # A raster resource has been deleted
-                        resource_actions.create_delete_resource_task(entity.as_dict()['id'])
+                        # resource_actions.create_delete_resource_task(entity)
                         pass
                     elif operation is None:
                         # The URL of a raster resource has been updated
                         pass
+        elif isinstance(entity, model.Package):
+            log.info('Notified on modification %r of dataset %r (state=%r)' % (
+                operation, entity.id, entity.state))
+            if entity.state == 'deleted':
+                for resource in entity.as_dict()['resources']:
+                    if resource['format'] in self.SUPPORTED_FROMATS:
+                        resource_actions.create_delete_resource_task(resource)

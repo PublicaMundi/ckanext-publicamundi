@@ -15,7 +15,7 @@ from ckanext.publicamundi.lib.metadata.widgets.base import (
 _ = toolkit._
 
 #
-# IObject - Tabular views
+# IObject - Table/Dl views
 #
 
 @object_widget_adapter(schemata.IObject, qualifiers=['table'])
@@ -25,20 +25,35 @@ class TableObjectReadWidget(ReadObjectWidget):
     
     def get_template(self):
         return 'package/snippets/objects/read-object-table.html'
+    
+    def get_field_order(self):
+        '''Explicitly define the order at which fields are listed in rows
+        ''' 
+        cls = TableObjectReadWidget
+        return super(cls, self).get_field_qualifiers().keys()
 
     def prepare_template_vars(self, name_prefix, data):
-        cls = type(self)
+        
+        cls = TableObjectReadWidget
+        Td, Th, Tr = cls._Td, cls._Th, cls._Tr
+        
         tpl_vars = super(cls, self).prepare_template_vars(name_prefix, data)
 
-        # Preprocess self.obj to be displayed as table rows
+        # Dictize self.obj, format leafs as markup
         
         max_depth = data.get('max_depth', 0) or self.max_depth
 
-        obj_dict = self.obj.to_dict(flat=False, opts={ 
-            'max-depth': max_depth,
-            'format-values': 'default', })
+        dictz_opts = {'max-depth': max_depth, 'format-values': 'markup:q=td'}
+        obj_dict = self.obj.to_dict(flat=False, opts=dictz_opts)
+
+        # Re-order according to this widget's field ordering
         
-        num_rows, num_cols, rows = cls._tabulate(obj_dict)
+        ordered_fields = self.get_field_order()
+        od = OrderedDict(((k, obj_dict[k]) for k in self.get_field_order()))
+        
+        # Preprocess ordered obj_dict to be displayed as table rows
+                
+        num_rows, num_cols, rows = cls._tabulate(od)
        
         # Provide human-friendly names for TH elements 
         
@@ -47,11 +62,23 @@ class TableObjectReadWidget(ReadObjectWidget):
                 kp = th.key_path()
                 field = self.obj.get_field(kp)
                 th.title = field.context.title or field.title
-                
+        
+        # Prepend extra rows if needed
+
+        for extra in reversed(data.get('extras', [])):
+            if extra['value']:
+                td = Td(
+                    data=extra['value'], 
+                    colspan=(num_cols - 1), 
+                    attrs=extra.get('attrs'))
+                th = Th(data=extra['title'])
+                row = Tr([th, td])
+                row.display = True
+                rows.insert(0, row)
+        
         # Provide vars to template
 
         tpl_vars.update({
-            'obj_dict': obj_dict,
             'rows': rows,
             'num_rows': num_rows,
             'num_cols': num_cols,
@@ -61,16 +88,21 @@ class TableObjectReadWidget(ReadObjectWidget):
 
     # Helpers
 
+    class _Tr(list):
+
+        __slots__ = ('attrs', 'display')
+    
     class _Td(object):
 
-        __slots__ = ('parent', 'data', 'rowspan', 'colspan')
+        __slots__ = ('parent', 'data', 'rowspan', 'colspan', 'attrs')
 
         tag = 'td'
         
-        def  __init__(self, data, rowspan=1, colspan=1):
+        def  __init__(self, data, rowspan=1, colspan=1, attrs=None):
             self.data = data
             self.rowspan = rowspan
             self.colspan = colspan
+            self.attrs = attrs 
             self.parent = None
 
         def __repr__(self):
@@ -84,8 +116,8 @@ class TableObjectReadWidget(ReadObjectWidget):
 
         tag = 'th'
         
-        def  __init__(self, data, rowspan=1, colspan=1):
-            super(type(self), self).__init__(data, rowspan, colspan)
+        def  __init__(self, data, rowspan=1, colspan=1, attrs=None):
+            super(type(self), self).__init__(data, rowspan, colspan, attrs)
             self.title = self.data
 
         def key(self):
@@ -114,7 +146,7 @@ class TableObjectReadWidget(ReadObjectWidget):
     @classmethod 
     def _tabulate_rows(cls, x):
         
-        Td, Th = cls._Td, cls._Th
+        Td, Th, Tr = cls._Td, cls._Th, cls._Tr
         
         itr = None
         if isinstance(x, dict):
@@ -141,9 +173,96 @@ class TableObjectReadWidget(ReadObjectWidget):
                     res.extend(rows)
         else:
             if x:
-                res.append([Td(data=unicode(x), colspan=1)])
+                row = Tr([Td(data=unicode(x), colspan=1)])
+                row.display = False
+                res.append(row)
         
         return res
+
+@object_widget_adapter(schemata.IObject, qualifiers=['dl'])
+class DlObjectReadWidget(ReadObjectWidget):
+    
+    def get_field_qualifiers(self):
+        qualifiers = super(ReadObjectWidget, self).get_field_qualifiers()
+        for key in qualifiers:
+            qualifiers[key] = 'dd'
+        return qualifiers
+
+    def get_glue_template(self):
+        return 'package/snippets/objects/glue-read-object-dl.html'
+
+@object_widget_adapter(schemata.IObject, qualifiers=['td'])
+class TdObjectReadWidget(ReadObjectWidget):
+    
+    def get_field_qualifiers(self):
+        qualifiers = super(ReadObjectWidget, self).get_field_qualifiers()
+        for key in qualifiers:
+            qualifiers[key] = 'dd'
+        return qualifiers
+
+    def get_glue_template(self):
+        return 'package/snippets/objects/glue-read-object-td.html'
+
+@field_widget_adapter(IStringField, qualifiers=['dd', 'td'])
+@field_widget_adapter(IStringLineField, qualifiers=['dd', 'td'])
+@field_widget_adapter(ITextField, qualifiers=['dd', 'td'])
+@field_widget_adapter(ITextLineField, qualifiers=['dd', 'td'])
+class DataTextReadWidget(ReadFieldWidget):
+    
+    def get_template(self):
+        return 'package/snippets/fields/read-text-dd.html'
+
+@field_widget_adapter(ITextLineField, qualifiers=['dd.email', 'td.email'])
+@field_widget_adapter(IEmailAddressField, qualifiers=['dd', 'td'])
+class DataEmailReadWidget(ReadFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/read-email-dd.html'
+
+@field_widget_adapter(IURIField, qualifiers=['dd', 'td'])
+class DataUriReadWidget(ReadFieldWidget):
+    
+    def get_template(self):
+        return 'package/snippets/fields/read-uri-dd.html'
+
+@field_widget_adapter(IDateField, qualifiers=['dd', 'td'])
+@field_widget_adapter(IDatetimeField, qualifiers=['dd', 'td'])
+@field_widget_adapter(ITimeField, qualifiers=['dd', 'td'])
+@field_widget_adapter(ITimedeltaField, qualifiers=['dd', 'td'])
+class DataDatetimeReadWidget(ReadFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/read-datetime-dd.html'
+
+@field_widget_adapter(IIntField, qualifiers=['dd', 'td'])
+class DataIntReadWidget(ReadFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/read-int-dd.html'
+
+@field_widget_adapter(IFloatField, qualifiers=['dd', 'td'])
+class DataFloatReadWidget(ReadFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/read-float-dd.html'
+
+@field_widget_adapter(IBoolField, qualifiers=['dd', 'td'])
+class DataBoolReadWidget(ReadFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/read-bool-dd.html'
+
+@field_widget_adapter(IChoiceField, qualifiers=['dd', 'td'])
+class DataChoiceReadWidget(ReadFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/read-choice-dd.html'
+
+@field_widget_multiadapter([IListField, IChoiceField], qualifiers=['td'])
+class TdChoicesReadWidget(ReadFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/read-list-choice-td.html'
 
 #
 # IPoint
@@ -182,6 +301,12 @@ class TemporalExtentReadWidget(ReadObjectWidget):
 
     def get_template(self):
         return 'package/snippets/objects/read-temporal_extent.html'
+
+@object_widget_adapter(schemata.ITemporalExtent, qualifiers=['td'])
+class TdTemporalExtentReadWidget(ReadObjectWidget):
+
+    def get_template(self):
+        return 'package/snippets/objects/read-temporal_extent-td.html'
 
 #
 # IPostalAddress
@@ -303,9 +428,22 @@ class ThesaurusTermsS2EditWidget(EditObjectWidget):
 
 @object_widget_adapter(schemata.IThesaurusTerms)
 class ThesaurusTermsReadWidget(ReadObjectWidget):
-        
+    
     def get_template(self):
-        return None 
+        return 'package/snippets/objects/read-thesaurus_terms.html' 
+
+@object_widget_adapter(schemata.IThesaurusTerms, qualifiers=['td'])
+class TdThesaurusTermsReadWidget(ReadObjectWidget):
+    
+    def get_template(self):
+        return 'package/snippets/objects/read-thesaurus_terms-td.html' 
+
+@field_widget_multiadapter([IDictField, schemata.IThesaurusTerms],
+    qualifiers=['td', 'dl'], is_fallback=True)
+class DictOfThesaurusTermsReadWidget(ReadFieldWidget):
+ 
+     def get_template(self):
+         return 'package/snippets/fields/read-dict-thesaurus_terms.html'
 
 @field_widget_multiadapter([IDictField, schemata.IThesaurusTerms],
     qualifiers=['select'], is_fallback=True)
@@ -379,6 +517,25 @@ class GeographicBoundingBoxReadWidget(ReadObjectWidget):
         
     def get_template(self):
         return None 
+
+@field_widget_multiadapter([IListField, schemata.IGeographicBoundingBox],
+    qualifiers=['td'], is_fallback=False)
+class ListOfGeographicBoundingBoxEditWidget(ReadFieldWidget, ListFieldWidgetTraits):
+
+    def prepare_template_vars(self, name_prefix, data):
+        cls = type(self)
+        tpl_vars = super(cls, self).prepare_template_vars(name_prefix, data)
+        tpl_vars.update({
+            'title': None,
+            'description': None,
+        })
+        return tpl_vars
+
+    def get_item_qualifier(self):
+        return 'dl' 
+    
+    def get_template(self):
+        return 'package/snippets/fields/read-list.html' 
 
 #
 # IConformity

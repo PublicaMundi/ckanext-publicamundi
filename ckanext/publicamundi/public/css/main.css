@@ -11,6 +11,12 @@ header > h6.inline {
     display: inline-block 
 } 
 
+.right{
+    float:right;
+}
+.left{
+    float:left;
+}
 .btn {
     font-weight: normal;
 }
@@ -42,6 +48,14 @@ header > h6.inline {
     padding: 3px 6px;
 }
 
+.btn.dropdown-toggle > .caret {
+    margin-left: 2px;
+}
+
+.dropdown-menu li > a > p {
+    margin: 2px 0px;
+}
+
 .datepicker {
     width: 250px
 }
@@ -49,6 +63,10 @@ header > h6.inline {
 div.controls .help-block {
     font-size: 0.92em;
     margin-top: 8px;
+}
+
+.slug-preview {
+    margin: 3px 0px 0px 0px;
 }
 
 div.accordion-group {
@@ -101,6 +119,10 @@ label.checkbox {
 label.radio {
     font-weight: inherit;
     margin: 0px 0px 0px 0px;
+}
+
+.actions li {
+    margin-right: 0px;
 }
 
 .control-group .btn {
@@ -217,6 +239,32 @@ span.space-x3 { padding: 0px 12px }
 .table {
     margin-bottom: 10px;
     margin-top:10px;
+    border-radius: 2px;
+}
+
+.table td.value > dl, 
+.table td.value > .field-read-widget > dl, 
+.table td.value > .field-read-widget > .object-read-widget > dl {
+    margin: 0px 0px 0px 5px;
+}
+
+.table td.value li.tag {
+    margin-bottom: 0px;
+} 
+
+.table td.value span.number { 
+    /*font-family: monospace;*/
+}
+
+.table tr.toggle-separator {
+    display: table-row;
+}
+
+.table tr.toggle-separator td {
+    padding: 0px;
+    height: 5px;
+    background-image: url('/base/images/table-seperator.png')
+    /*background: repeating-linear-gradient(-45deg, #ccc, #ccc 5px, #fff 5px, #fff 10px);*/
 }
 
 .control-required {
@@ -271,13 +319,25 @@ span.space-x3 { padding: 0px 12px }
  * Package states
  */
 
+h1 > .label.package-state {
+    vertical-align: super;
+}
+
 .label.state-active { }
 .label.state-draft { }
 .label.state-deleted { }
 .label.state-invalid { }
 
 /*
- * Resources List (Dataset)
+ * Resources (Search)
+ */
+
+.dataset-item .dataset-resources li a {
+   padding: 4px 4px 3px 4px;
+}  
+
+/*
+ * Resources (Dataset)
  */
 
 .resources li.resource-item {
@@ -287,7 +347,7 @@ span.space-x3 { padding: 0px 12px }
 .resources li.resource-item .btn-group {
     position: relative;
     top: 0px;
-    right: 0px;
+    right: 5px;
 }
 
 .resources li.resource-item .btn-group + .btn-group {
@@ -299,7 +359,7 @@ span.space-x3 { padding: 0px 12px }
 }
 
 /*
- * Resources List (Dashboard)
+ * Resources (Dashboard)
  */
 
 .dashboard-resources li.resource-item {
@@ -321,19 +381,28 @@ span.space-x3 { padding: 0px 12px }
 
 .label[data-resource-status="identifying"] {
     background-color: #DFB100;
+    border: 2px #C6B489 solid;
 }
 .label[data-resource-status="rejected"] {
-    background-color: #D22727;
+    background-color: #C43210;
+    border: 2px #C43210 solid;
 }
 .label[data-resource-status="published"] {
     background-color: #62C462;
+    border: 2px #62C462 solid;
 }
 .label[data-resource-status="publish-failed"],
 .label[data-resource-status="identify-failed"] {
-    background-color: #FF6600;
+    background-color: #C6B489;
+    border: 2px #C6B489 solid;
 }
 .label[data-resource-status="identified"] {
-    background-color: #36ABD2;
+    background-color: #5CDBD4;
+    border: 2px #5CDBD4 solid;
+}
+.label[data-resource-status="no-action"] {
+    background-color: #999999;
+    border: 2px #999999 solid;
 }
 
 /*
@@ -421,6 +490,10 @@ span.space-x3 { padding: 0px 12px }
  * Dataset search/view
  */
 
+section.tags {
+    margin-bottom: 10px;
+}
+
 .search-form {
     margin-top: 10px;
 }
@@ -430,10 +503,15 @@ span.space-x3 { padding: 0px 12px }
     border-radius: 2px;
     padding: 2px 8px;
 }
-.pill a.remove {
+.search-form .filter-list .pill a.remove {
     vertical-align: -5%;
 }
 
-section.additional-info header > .btn-group {
+section.additional-info header > .download-links {
     margin-top: 8px;
 }
+
+.metadata-label {
+    display: none;
+}
+

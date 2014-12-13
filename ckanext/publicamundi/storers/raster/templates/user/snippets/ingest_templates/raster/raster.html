@@ -1,0 +1,14 @@
+{% extends 'user/snippets/ingest_templates/ingest_base.html'%}
+
+{% set resource_name = c.resource_id %}
+{% set resource_id = c.resource_id %}
+
+{% block ingest_content %}
+<div id="resource-message-container">
+    Resource {{resource_name}} will be ingested as a WCS coverage and as a WMS layer.
+    </br>
+    <button data-success-message="The data is being ingested, you will be redirected to the resources page in a couple of seconds" data-resource-id="{{resource_id}}" class="btn btn-success" id="ingest_button"> {{ _('Ingest') }}</button>
+</div>
+
+{% resource 'ckanext-publicamundi-raster/raster_ingest'%}
+{% endblock %}

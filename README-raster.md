@@ -7,13 +7,14 @@ The extension allows any gdal raster formats (GeoTIFF, JPEG2000 etc) and GML ras
 
 ## Configuration
 
-You **need** to set the *wcst_base_url* and *wms_base_url* variables in your ckan main config file for this plugin to work. The value has to be an url pointing
-to a working WCST service.
+You **need** to set the *wcst_base_url*, *wms_base_url*, *temp_dir* and *gdal_folder* variables in your ckan main config file for this plugin to work. 
 
 Example:
-`ckanext.rasterimport.wcst_base_url = http://localhost/wcst`
-`ckanext.publicamundi.rasterstorer.wcst_base_url = http://localhost/wcst`
-`ckanext.publicamundi.rasterstorer.wms_base_url = http://localhost/wms`
+`ckanext.publicamundi.rasterstorer.wcst_base_url=http://myRasdamanMachine/rasdaman/ows`
+`ckanext.publicamundi.rasterstorer.wms_base_url=http://myRasdamanMachine/rasdaman/ows/wms13`
+`ckanext.publicamundi.rasterstorer.temp_dir = %(cache_dir)s/rasterstorer`
+`ckanext.publicamundi.rasterstorer.gdal_folder = /usr/lib/python2.7/dist-packages`
+
 
 
 ## Dependencies

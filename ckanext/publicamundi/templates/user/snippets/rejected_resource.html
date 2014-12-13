@@ -4,4 +4,4 @@
   {% set reidentify_url = h.url_for('identify_raster_resource', resource_id=res.id) %}
 {% endif %}
 
-<a href="{{reidentify_url}}" class="btn btn-small">{{ _('Re-Identify') }}</a>
+<a href="{{reidentify_url}}" class="btn btn-small resource-ingest-opts">{{ _('Re-Identify') }}</a>

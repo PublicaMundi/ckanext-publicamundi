@@ -55,11 +55,11 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
         toolkit.add_resource('public', 'ckanext-publicamundi-geodata-theme')
 
     # IConfigurable
-    
+
     def configure(self, config):
         '''Pass configuration to plugins and extensions'''
-        
-        global _feedback_form 
+
+        global _feedback_form
         _feedback_form = config.get('ckanext.publicamundi.themes.geodata.feedback_form')
         return
 
@@ -67,8 +67,7 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
 
     def before_map(self, mapper):
 
-        mapper.connect('maps', '') 
-        #mapper.redirect('/dashboard', '/dashboard/datasets')
+        mapper.connect('maps', '/maps') 
 
         return mapper
 

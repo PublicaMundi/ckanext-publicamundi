@@ -38,17 +38,13 @@ class IFoo(IBaseMetadata):
             constraint = re.compile('[-a-z0-9]+$').match),
         min_length = 1,
         max_length = 5,)
-    tags.setTaggedValue('format', {
-        'default': { 'descend-if-dictized': False, 'extra-opts': {}, },
-    })
     tags.setTaggedValue('allow-partial-update', False)
+    tags.setTaggedValue('format', { 'descend-if-dictized': False, 'extra-opts': {}, })
 
     temporal_extent = zope.schema.Object(ITemporalExtent,
         title = u'Temporal Extent',
         required = False)
-    temporal_extent.setTaggedValue('format', {
-        'default': { 'descend-if-dictized': False, }
-    })
+    temporal_extent.setTaggedValue('format', { 'descend-if-dictized': False })
 
     geometry = zope.schema.List(
         title = u'Geometry Feature',

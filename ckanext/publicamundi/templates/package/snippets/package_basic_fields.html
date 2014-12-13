@@ -13,9 +13,9 @@
 {% endblock %} {# package_basic_fields_dataset_type #}
 
 {% block package_basic_fields_title %}
-  
 {{ 
-    form.input('title', 
+    form.input(
+        'title', 
         id = 'field-title', 
         label = _('Title'), 
         placeholder = _('eg. A descriptive title'), 
@@ -25,7 +25,6 @@
         attrs = { 'data-module': 'slug-preview-target' }
     ) 
 }}
-
 {% endblock %} {# package_basic_fields_title #}
 
 {% block package_basic_fields_url %}
@@ -35,7 +34,8 @@
 {% set domain = domain|replace("http://", "")|replace("https://", "") %}
 {% set attrs = {'data-module': 'slug-preview-slug', 'data-module-prefix': domain, 'data-module-placeholder': '<dataset>'} %}
 {{ 
-    form.prepend('name', 
+    form.prepend(
+        'name', 
         id = 'field-name', 
         label = _('Locator (URL)'), 
         prepend = prefix, 
@@ -46,15 +46,13 @@
         is_required = true
     ) 
 }}
-
 {#{% resource 'ckanext-publicamundi/show-dataset-name' %}#} {# Force `name` input to be always visible #}
-
 {% endblock %} {# package_basic_fields_url #}
 
 {% block package_basic_fields_description %}
-
 {{ 
-    form.markdown('notes', 
+    form.markdown(
+        'notes', 
         id = 'field-notes', 
         label = _('Description'), 
         placeholder = _('eg. Some useful notes about the data'), 
@@ -62,18 +60,17 @@
         error = errors.notes
     )        
 }}
-
 {% endblock %} {# package_basic_fields_description #}
 
 {% block package_basic_fields_tags %}
-
 {% with tag_attrs = {
     'data-module': 'autocomplete', 
     'data-module-tags': '', 
     'data-module-source': '/api/2/util/tag/autocomplete?incomplete=?'} 
 %}
 {{ 
-    form.input('tag_string', 
+    form.input(
+        'tag_string', 
         id = 'field-tags', 
         label = _('Tags'), 
         placeholder = _('eg. economy, mental health, government'), 
@@ -83,34 +80,28 @@
         attrs = tag_attrs) 
 }}
 {% endwith %}
-
 {% endblock %}
 
 {% block package_basic_fields_license %}
-
 <div class="control-group">
   {% set error = errors.license_id %}
   <label class="control-label" for="field-license">{{ _("License") }}</label>
   <div class="controls">
     <select id="field-license" name="license_id" data-module="autocomplete" class="input-xlarge">
       {% for license_desc, license_id in licenses|sort if license_desc  %}
-        <option value="{{ license_id }}" {% if data.get('license_id', 'notspecified') == license_id %}selected="selected"{% endif %}>{{ license_desc }}</option>
+      <option value="{{ license_id }}" 
+        {%- if data.get('license_id', 'notspecified') == license_id %}selected="selected"{% endif %}>{{ license_desc }}</option>
       {% endfor %}
     </select>
     {% if error %}<span class="error-block">{{ error }}</span>{% endif %}
-    
-    <span class="info-block info-inline">
-      {#<i class="icon-info-sign"></i>#}
-      {% trans %}License definitions at <a href="http://opendefinition.org/licenses/">opendefinition.org</a>{% endtrans %}
-    </span>
-    
+    <div class="help-block">
+      {% trans %}Check license definitions at <a href="http://opendefinition.org/licenses/">opendefinition.org</a>{% endtrans %}
+    </div>
   </div>
 </div>
-
 {% endblock %}
 
 {% block package_basic_fields_org %}
-
 {# if we have a default group then this wants remembering #}
 {% if data.group_id %}
 <input type="hidden" name="groups__0__id" value="{{ data.group_id }}" />
@@ -118,11 +109,10 @@
 
 {% if h.check_access('sysadmin') or is_new or is_draft %}
 {% snippet 'package/snippets/edit-organization.html', 
-    name = 'owner_org', 
-    value = data.owner_org or data.group_id,
-    required = false,
-    orgs_available = h.organizations_available('create_dataset')
+    name='owner_org', 
+    value=data.owner_org or data.group_id,
+    required=false,
+    orgs_available=h.organizations_available('create_dataset')
 %}
 {% endif %}
-
 {% endblock %}

@@ -98,3 +98,5 @@ class UserController(BaseController):
 
         if res_identify_obj.storer_type == ResourceStorerType.VECTOR: # Fixme: adapt
             return render('user/snippets/ingest_templates/vector/vector.html')
+        elif res_identify_obj.storer_type == ResourceStorerType.RASTER:
+            return render('user/snippets/ingest_templates/raster/raster.html')

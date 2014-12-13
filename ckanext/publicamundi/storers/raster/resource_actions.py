@@ -5,6 +5,7 @@ from ckan.lib.celery_app import celery
 import ckan.lib.helpers as h
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
+from ckan.lib.dictization.model_dictize import resource_dictize
 from ckanext.publicamundi.model.resource_ingest import (
     ResourceIngest, ResourceStorerType, IngestStatus)
 
@@ -46,24 +47,33 @@ def _make_default_context():
         'user_name': user['name'],
         'user_api_key': user['apikey'],
         # Configuration needed to setup raster storer
-        'temp_folder': config.get(
-            'ckanext.publicamundi.rasterstorer.temp_dir'),
+        'temp_folder': config.get('ckanext.publicamundi.rasterstorer.temp_dir', ""),
+        'wms_base_url': config.get("ckanext.publicamundi.rasterstorer.wms_base_url", ""),
+        'wcst_base_url': config.get("ckanext.publicamundi.rasterstorer.wcst_base_url", ""),
+        'gdal_folder': config.get("ckanext.publicamundi.rasterstorer.gdal_folder", "")
         }
 
 
+def create_identify_resource_task(resource):
+    """
+    Creates the celery task to identify the resource
+    :param resource: the resource to be identified
+    """
 
-def create_ingest_resource_task(resource):
-    """
-    Creates the celery task for raster resource ingestion
-    :param resource: the the resource to be ingested
-    """
     task_id = make_uuid()
-    context = {
-        'service_call': _get_site_url() + "api/raster/publish/" + resource.id
-    }
+    
+    # We are using resource_dictize() just to force CKAN to provide an absolute url
+    # Note Maybe a more clean way to achive this would be to call something like 
+    # url_for(controller='package', action='resource_download', id=package_id, resource_id=resource_id)
+    package_id = resource.as_dict()['package_id']
+    resource_dict = resource_dictize(resource, {'model': model})
+    resource_dict['package_id'] = package_id
+    
+    context = _make_default_context()
+    context['resource_dict'] = resource_dict
     celery.send_task(
-        'rasterstorer.import',
-        args=[resource.id, context],
+        'rasterstorer.identify',
+        args=[context],
         task_id=task_id
     )
 
@@ -76,8 +86,8 @@ def create_ingest_resource_task(resource):
         new_res_identify = ResourceIngest(
             task_id,
             resource.id,
-            ResourceStorerType.RASTER,
-            IngestStatus.PUBLISHED)
+            ResourceStorerType.RASTER
+        )
         model.Session.add(new_res_identify)
         model.Session.commit()
     else:
@@ -85,22 +95,48 @@ def create_ingest_resource_task(resource):
         new_res_identify = ResourceIngest(
             task_id,
             resource.id,
-            ResourceStorerType.RASTER,
-            IngestStatus.PUBLISHED)
+            ResourceStorerType.RASTER
+        )
         model.Session.add(new_res_identify)
 
 
-def create_delete_resource_task(resource_id):
+def create_ingest_resource_task(resource):
+    """
+    Creates the celery task for raster resource ingestion
+    :param resource: the resource to be ingested
+    """
+    task_id = make_uuid()
+    context = _make_default_context()
+    resource_dict = resource.as_dict()
+    context['resource_dict'] = resource_dict
+    celery.send_task(
+        'rasterstorer.import',
+        args=[context],
+        task_id=task_id
+    )
+
+
+def create_delete_resource_task(resource):
     """
     Creates the celery task for raster resource deletion
-    :param resource_id: the id of the resource to be deleted
+    :param resource: the resource to be deleted
     """
-    context = {
-        'service_call': _get_site_url() + "api/raster/delete/" + resource_id
-    }
+    context = _make_default_context()
+    context['resource_dict'] = resource
     task_id = make_uuid()
     celery.send_task(
         'rasterstorer.delete',
-        args=[resource_id, context],
+        args=[context],
         task_id=task_id
     )
+
+
+def change_resource_to_published(resource):
+    """
+    Marks the resource as published
+    :param resource: the resource to be marked
+    """
+    res_ingest = model.Session.query(ResourceIngest).filter(
+        ResourceIngest.resource_id == resource.id).first()
+    res_ingest.status = IngestStatus.PUBLISHED
+    model.Session.commit()

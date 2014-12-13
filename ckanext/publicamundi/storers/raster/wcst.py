@@ -11,6 +11,10 @@ class WCSTRequest:
     Generic class for WCST requests
     """
     __metaclass__ = ABCMeta
+    SERVICE_PARAMETER = "service"
+    SERVICE_VALUE = "WCS"
+    VERSION_PARAMETER = "version"
+    VERSION_VALUE = "2.0.1"
     REQUEST_PARAMETER = "request"
 
     def get_query_string(self):
@@ -22,7 +26,9 @@ class WCSTRequest:
         extra_params = ""
         for key, value in self._get_request_type_parameters().iteritems():
             extra_params += "&" + key + "=" + value
-        return self.REQUEST_PARAMETER + "=" + self._get_request_type() + extra_params
+        return self.SERVICE_PARAMETER + "=" + self.SERVICE_VALUE + "&" +\
+               self.VERSION_PARAMETER + "=" + self.VERSION_VALUE + "&" +\
+               self.REQUEST_PARAMETER + "=" + self._get_request_type() + extra_params
 
     @abstractmethod
     def _get_request_type_parameters(self):
@@ -91,7 +97,7 @@ class WCSTDeleteRequest(WCSTRequest):
             self.__COVERAGE_REF_PARAMETER: self.coverage_ref
         }
 
-    __COVERAGE_REF_PARAMETER = "coverageRef"
+    __COVERAGE_REF_PARAMETER = "coverageId"
     __REQUEST_TYPE = "DeleteCoverage"
 
 
@@ -100,12 +106,15 @@ class WCSTException(Exception):
     Exception that is thrown when a WCST request has gone wrong
     """
 
-    def __init__(self, exception_code, exception_text):
+    def __init__(self, exception_code, exception_text, service_call):
         self.exception_code = exception_code
         self.exception_text = exception_text
+        self.service_call = service_call
+        self.message = self.__str__()
 
     def __str__(self):
-        return "Error Code: " + self.exception_code + "\nError Text: " + self.exception_text
+        return "Service Call: " + self.service_call + "\nError Code: " + self.exception_code + \
+               "\nError Text: " + self.exception_text
 
 
 class WCSTExecutor():
@@ -118,26 +127,24 @@ class WCSTExecutor():
         self.base_url = base_url
 
     @staticmethod
-    def __check_request_for_errors(response, namespaces):
+    def __check_request_for_errors(response, namespaces, service_call):
         """
         Checks if the WCST request was successful and if not raises an exception with the corresponding error code and
         error message
 
         :param response: string - the response from the server
         :param namespaces: dict - of namespaces to be used inside the xml parsing
+        :param service_call: string - the service call to the wcst
         :return: does not return anything, just raises an exception if errors were detected
         """
         if response.find("ows:ExceptionReport") != -1:
-            xml = XMLProcessor.fromstring(response).getRoot()
+            xml = XMLProcessor.fromstring(response)
             error_code = ""
-            error_text = ""
+            error_text = response
             for error in xml.findall("ows:Exception", namespaces):
                 error_code = error.attrib["exceptionCode"]
 
-            for error in xml.findall("ows:ExceptionText", namespaces):
-                error_text = error.text
-
-            raise WCSTException(error_code, error_text)
+            raise WCSTException(error_code, error_text, service_call)
 
     def execute(self, request):
         """
@@ -149,9 +156,13 @@ class WCSTExecutor():
         service_call = self.base_url + "?" + request.get_query_string()
         response = url_lib.urlopen(service_call).read()
         namespaces = {"ows": "http://www.opengis.net/ows/2.0"}
-        self.__check_request_for_errors(response, namespaces)
-        xml = XMLProcessor.fromstring(response)
-        return xml.text
+        self.__check_request_for_errors(response, namespaces, service_call)
+        try:
+            xml = XMLProcessor.fromstring(response)
+            result = xml.text
+        except Exception as ex:
+            result = ""
+        return result
 
 
 class WMSFromWCSInsertRequest():
@@ -159,6 +170,7 @@ class WMSFromWCSInsertRequest():
     Class to insert a wcs coverage into wms. This is not a standard way in OGC but a custom method in the
     WMS service offered by rasdaman to allow for automatic insertion
     """
+
     def __init__(self, wcs_coverage_id):
         """
         Constructor for the class
@@ -183,6 +195,7 @@ class WMSFromWCSDeleteRequest():
     Class to delete a wcs coverage into wms. This is not a standard way in OGC but a custom method in the
     WMS service offered by rasdaman to allow for automatic insertion
     """
+
     def __init__(self, wcs_coverage_id):
         self.wcs_coverage_id = wcs_coverage_id
 
@@ -191,7 +204,7 @@ class WMSFromWCSDeleteRequest():
         Executes the request and inserts the layer
         @:param base_url the base url to the wms service
         """
-        service_call = base_url + "?service=WMS&version=1.3&request=DeleteLayer&layerName="
+        service_call = base_url + "?service=WMS&version=1.3&request=DeleteLayer&layer="
         service_call += self.wcs_coverage_id
         response = url_lib.urlopen(service_call).read()
         return response
