@@ -118,6 +118,9 @@ class Controller(BaseController):
             # Parameters are valid, but source XML file is not parse-able
             log.error('Cannot import package, source is invalid: %s' % (ex))
             session['error_summary'] = ex.error
+        except AssertionError as ex:
+            # Re-raise failed assertions
+            raise
         except Exception as ex:
             log.error('Cannot import package (unexpected error): %s' % (ex))
             abort(400, 'Cannot import package')

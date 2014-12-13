@@ -252,7 +252,7 @@ a {
 }
 #homemenu .nav li a{
     font-size: 16px;
-    padding: 20px 10px 21px 10px;
+    padding: 21px 10px 21px 10px;
 }
 .mainmenu .section .nav { 
     float: left;
@@ -312,6 +312,10 @@ a {
     //border-left: 8px solid transparent;
     //border-right: 8px solid transparent;
     //border-top: 10px solid #4E59A4;
+}
+.alt-nav li a:focus{
+    background: transparent;
+    color: #fff;
 }
 .nav-tabs{
     border-bottom: 1px #7C7C7F solid;
@@ -718,7 +722,7 @@ a {
 .secondary .module-heading{
     border-top: 2px #4E59A4 solid;
     border-bottom: 1px #4E59A4 solid;
-    padding: 8px 25px 7px 15px;
+    padding: 8px 15px 7px 15px;
     text-align: left;
     background-color: #F6F6F6;
     font-size: 18px;
@@ -777,6 +781,12 @@ a {
 }
 .social a [class^="icon-"] {
     font-size: 22px;
+}
+.dataset-map-expanded #dataset-map{
+    top: -396px;
+    left:0;
+    height:396px;
+    border: 2px #4E59A4 solid;
 }
 .group{
     margin: 0 !important;
@@ -998,6 +1008,19 @@ a {
     border-radius:0;
     text-shadow: none;
 }
+.dashboard-resources li.resource-item .resource-ingest-opts, .dashboard-resources li.resource-item .btn-group.resource-ingest-opts{
+    position: relative;
+    float: left;
+    right: 10px;
+    top: -5px;
+
+}
+.label[data-resource-status="identified"], .label[data-resource-status="rejected"]{
+    position:relative;
+    float: right;
+        //left: -12px;
+    //top: 7px;
+}
 .dataset-private.pull-right{
     padding: 7px 10px;
 }
@@ -1019,6 +1042,7 @@ a {
     margin-top:6px;
 }
 /* Search page */
+
 .search-form .filter-list{
     display: block;
     float: left;
@@ -1082,7 +1106,7 @@ a {
 }
 .resources li.resource-item .btn-group{
     float: right;
-    margin-top: 5px;
+    //margin-top: 5px;
 }
 .resources li.resource-item p.description{
     width: 52%;
@@ -1239,6 +1263,7 @@ a {
 /* Preview */
 .ckanext-datapreview iframe{
     //border: 4px #4E59A4 solid;
+    //height: 450px !important;
 }
 /* New package */
 .stages li.active .highlight{
@@ -1318,6 +1343,13 @@ a {
     top: 5px;
     left: 5px;
 }
+
+/* Matsakonies */
+.label[data-format=data_table]{
+    display:none;
+}
+
+
 .format-label[data-format=csv], .format-label[data-format*=csv]
 {
     background-image: url("../../images/icons/resources/csv.svg");

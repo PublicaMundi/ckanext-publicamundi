@@ -18,13 +18,18 @@
       </li>
       <li>
         <a href="{{ res.url }}" class="resource-url-analytics" target="_blank">
-          {% if res.can_be_previewed %}
+            {# {% if res.can_be_previewed %} #}
+            {% if res.resource_type == 'api' %}
+            <div class="btn"> <i class="icon-beaker"></i>
+              {{ _('Endpoint') }}</div>
+            {% else %} 
           <div class="btn"> <i class="icon-download"></i>
               {{ _('Download') }}</div>
-          {% else %}
-          <div class="btn"><i class="icon-external-link"></i>
-              {{ _('Go to resource') }}</div>
           {% endif %}
+          {# {% else %}
+           <div class="btn"><i class="icon-external-link"></i>
+              {{ _('Go to resource') }}</div> #}
+          {# {% endif %} #}
         </a>
       </li>
       {% if can_edit %}

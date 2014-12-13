@@ -199,7 +199,7 @@ def dataset_import(context, data_dict):
         'name': name,
         'title': pkg_dict['title'],
         'state': pkg_dict.get('state'),
-        # Provide details on validation (only if allow_validation_errors)
+        # Provide details on validation (meaningfull if allow_validation_errors)
         'validation': {
             'message': error_message,
             'errors': validation_errors,
