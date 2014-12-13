@@ -66,8 +66,10 @@ class GDALToGmlConverter:
 
             # Add the color interpretation to the template
             if band.GetColorInterpretation() is not None:
-                template = template.replace("$VarFieldName",
-                                            gdal.GetColorInterpretationName(band.GetColorInterpretation()))
+            	bandName = gdal.GetColorInterpretationName(band.GetColorInterpretation())
+            	if bandName.lower() == "undefined":
+            		bandName = "field_" + str(i)
+                template = template.replace("$VarFieldName", bandName)
             else:
                 template = template.replace("$VarFieldName", "")
 
