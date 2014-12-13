@@ -1008,6 +1008,19 @@ a {
     border-radius:0;
     text-shadow: none;
 }
+.dashboard-resources li.resource-item .resource-ingest-opts, .dashboard-resources li.resource-item .btn-group.resource-ingest-opts{
+    position: relative;
+    float: left;
+    right: 10px;
+    top: -5px;
+
+}
+.label[data-resource-status="identified"], .label[data-resource-status="rejected"]{
+    position:relative;
+    float: right;
+        //left: -12px;
+    //top: 7px;
+}
 .dataset-private.pull-right{
     padding: 7px 10px;
 }
@@ -1093,7 +1106,7 @@ a {
 }
 .resources li.resource-item .btn-group{
     float: right;
-    margin-top: 5px;
+    //margin-top: 5px;
 }
 .resources li.resource-item p.description{
     width: 52%;
@@ -1330,6 +1343,13 @@ a {
     top: 5px;
     left: 5px;
 }
+
+/* Matsakonies */
+.label[data-format=data_table]{
+    display:none;
+}
+
+
 .format-label[data-format=csv], .format-label[data-format*=csv]
 {
     background-image: url("../../images/icons/resources/csv.svg");
