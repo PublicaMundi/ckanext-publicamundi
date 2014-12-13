@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gmlcov:ReferenceableGridCoverage
+        xmlns:gmlcov="http://www.opengis.net/gmlcov/1.0"
+        xmlns:gml="http://www.opengis.net/gml/3.2"
+        xmlns:swe="http://www.opengis.net/swe/2.0"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlns:ows="http://www.opengis.net/ows/1.1"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.w3.org/2001/XMLSchema"
+        xsi:schemaLocation="http://www.opengis.net/gmlcov/1.0 http://schemas.opengis.net/gmlcov/1.0/gmlcovAll.xsd
+http://www.opengis.net/ows/1.1 "
+        gml:id="$VarGmlId">
+    <gml:boundedBy>
+        <gml:Envelope srsName="$VarSrsName" axisLabels="None None" uomLabels="None None" srsDimension="0">
+            <gml:lowerCorner>0.0 0.0</gml:lowerCorner>
+            <gml:upperCorner>0.0 0.0</gml:upperCorner>
+        </gml:Envelope>
+    </gml:boundedBy>
+    <gml:domainSet>
+        <gml:RectifiedGrid gml:id="None" dimension="2">
+            <gml:limits>
+                <gml:GridEnvelope>
+                    <gml:low>$VarGridEnvelopeLow</gml:low>
+                    <gml:high>$VarGridEnvelopeHigh</gml:high>
+                </gml:GridEnvelope>
+            </gml:limits>
+            <gml:axisLabels>None None</gml:axisLabels>
+            <gml:origin>
+                <gml:Point gml:id="None None" srsName="">
+                    <gml:pos>$VarOriginGmlPos</gml:pos>
+                </gml:Point>
+            </gml:origin>
+            $VarGmlOffsetVectors
+        </gml:RectifiedGrid>
+    </gml:domainSet>
+    <gml:rangeSet>
+        <gml:File>
+            <gml:fileReference><![CDATA[
+                $VarFileName
+            ]]></gml:fileReference>
+            <gml:fileStructure>$VarMimeType</gml:fileStructure>
+        </gml:File>
+    </gml:rangeSet>
+    <gmlcov:rangeType>
+        <swe:DataRecord>
+            $VarFields
+        </swe:DataRecord>
+    </gmlcov:rangeType>
+</gmlcov:ReferenceableGridCoverage>
