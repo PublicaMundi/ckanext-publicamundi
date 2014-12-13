@@ -381,19 +381,28 @@ h1 > .label.package-state {
 
 .label[data-resource-status="identifying"] {
     background-color: #DFB100;
+    border: 2px #C6B489 solid;
 }
 .label[data-resource-status="rejected"] {
-    background-color: #D22727;
+    background-color: #C43210;
+    border: 2px #C43210 solid;
 }
 .label[data-resource-status="published"] {
     background-color: #62C462;
+    border: 2px #62C462 solid;
 }
 .label[data-resource-status="publish-failed"],
 .label[data-resource-status="identify-failed"] {
-    background-color: #FF6600;
+    background-color: #C6B489;
+    border: 2px #C6B489 solid;
 }
 .label[data-resource-status="identified"] {
-    background-color: #36ABD2;
+    background-color: #5CDBD4;
+    border: 2px #5CDBD4 solid;
+}
+.label[data-resource-status="no-action"] {
+    background-color: #999999;
+    border: 2px #999999 solid;
 }
 
 /*
