@@ -250,6 +250,7 @@ span.space-x3 { padding: 0px 12px }
 
 .table td.value li.tag {
     margin-bottom: 0px;
+    margin-top: 5px;
 } 
 
 .table td.value span.number { 
