@@ -191,6 +191,16 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
             temporal_extent = [TemporalExtent(
                 start = to_date(md.identification.temporalextent_start),
                 end = to_date(md.identification.temporalextent_end))]
+
+        bbox = []
+        if md.identification.extent:
+            if md.identification.extent.boundingBox:
+                bbox = [GeographicBoundingBox(
+                    nblat = float(md.identification.extent.boundingBox.maxy),
+                    sblat = float(md.identification.extent.boundingBox.miny),
+                    eblng = float(md.identification.extent.boundingBox.maxx),
+                    wblng = float(md.identification.extent.boundingBox.minx))]
+
         creation_date = None
         publication_date = None
         revision_date = None
@@ -282,12 +292,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         #obj.resource_language = md.identification.resourcelanguage
         obj.topic_category = topic_list
         obj.keywords = keywords_dict
-        obj.bounding_box = [GeographicBoundingBox(
-            nblat = float(md.identification.extent.boundingBox.maxy),
-            sblat = float(md.identification.extent.boundingBox.miny),
-            eblng = float(md.identification.extent.boundingBox.maxx),
-            wblng = float(md.identification.extent.boundingBox.minx))]
-        
+        obj.bounding_box = bbox
         obj.temporal_extent = temporal_extent
         obj.creation_date = creation_date
         obj.publication_date = publication_date
