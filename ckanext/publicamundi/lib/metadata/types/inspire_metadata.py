@@ -159,8 +159,9 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         id_list = md.identification.uricode
 
         url_list = []
-        for it in md.distribution.online:
-            url_list.append(it.url)
+        if md.distribution:
+            for it in md.distribution.online:
+                url_list.append(it.url)
 
         topic_list = []
         for topic in md.identification.topiccategory:

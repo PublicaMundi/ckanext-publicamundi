@@ -140,9 +140,10 @@ def dataset_import(context, data_dict):
     obj = make_metadata_object(dtype)
     try:
         obj = xml_serializer_for(obj).loads(xmldata)
-    except:
-        # Map all parse exceptions to Invalid (even assertions)
-        raise toolkit.Invalid(_('The given XML file is malformed'))
+    except Exception as ex:
+        # Map all parse exceptions to Invalid (even assertion errors!)
+        log.info('Failed to parse XML metadata: %s', ex)
+        raise toolkit.Invalid(_('The given XML file is malformed: %s') % (ex))
 
     # Prepare package dict
     

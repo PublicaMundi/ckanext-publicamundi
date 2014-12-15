@@ -1,4 +1,12 @@
 <span class="{{ classes|join(' ') }}">
     {#- Todo Format dates with respect to lacale -#}
+    {% if obj.start and obj.end -%}
     {{- _('From %(start)s to %(end)s')|format(start=obj.start, end=obj.end) -}}
+    {% elif obj.start -%}
+    {{- _('From %(start)s')|format(start=obj.start) -}}
+    {% elif obj.end -%}
+    {{- _('Until %(end)s')|format(end=obj.end) -}}
+    {% else -%}
+    <i>{{- _('n/a') -}}</i>
+    {%- endif %}
 </span>
