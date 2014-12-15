@@ -159,8 +159,9 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         id_list = md.identification.uricode
 
         url_list = []
-        for it in md.distribution.online:
-            url_list.append(it.url)
+        if md.distribution:
+            for it in md.distribution.online:
+                url_list.append(it.url)
 
         topic_list = []
         for topic in md.identification.topiccategory:
@@ -185,7 +186,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
                         keywords_dict.update({thes_name:kw})
                 except:
                     pass
-
+        temporal_extent = []
         if md.identification.temporalextent_start or md.identification.temporalextent_end:
             temporal_extent = [TemporalExtent(
                 start = to_date(md.identification.temporalextent_start),
@@ -287,8 +288,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
             eblng = float(md.identification.extent.boundingBox.maxx),
             wblng = float(md.identification.extent.boundingBox.minx))]
         
-        if md.identification.temporalextent_start:
-            obj.temporal_extent = temporal_extent
+        obj.temporal_extent = temporal_extent
         obj.creation_date = creation_date
         obj.publication_date = publication_date
         obj.revision_date = revision_date
