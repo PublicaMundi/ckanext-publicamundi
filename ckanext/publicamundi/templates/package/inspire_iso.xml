@@ -259,16 +259,18 @@
           </gmd:geographicElement>
           {% endfor -%} {# gbb -#}
           {% for te in data.temporal_extent -%}
+          {% if te.start or te.end %}
           <gmd:temporalElement>
             <gmd:EX_TemporalExtent>
               <gmd:extent>
                 <gml:TimePeriod gml:id="IDcd3b1c4f-b5f7-439a-afc4-3317a4cd89be" xsi:type="gml:TimePeriodType">
-                  {% if te.start %}<gml:beginPosition>{{ te.start }}</gml:beginPosition>{% endif -%}
-                  {% if te.end %}<gml:endPosition>{{ te.end }}</gml:endPosition>{% endif -%}
+                    {% if te.start %}<gml:beginPosition>{{ te.start }}</gml:beginPosition>{% endif -%}
+                    {% if te.end %}<gml:endPosition>{{ te.end }}</gml:endPosition>{% endif -%}
                 </gml:TimePeriod>
               </gmd:extent>
             </gmd:EX_TemporalExtent>
-          </gmd:temporalElement>
+        </gmd:temporalElement>
+        {% endif -%}
           {% endfor -%}
         </gmd:EX_Extent>
       </gmd:extent>
