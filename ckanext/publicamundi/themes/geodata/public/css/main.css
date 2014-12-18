@@ -334,7 +334,7 @@ a {
 }
 .nav-tabs > li > a:focus{
     background: #F6F6F6;
-    border-bottom-color:#7C7C7F;
+    border-color: #7C7C7F;
     border-radius: 0;
 }
 /* Home background */
