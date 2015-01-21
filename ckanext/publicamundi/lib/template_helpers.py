@@ -61,7 +61,7 @@ def get_organization_objects(org_names=[]):
             options['organizations'] = [org['name'] for org in org_names]
 
     orgs = toolkit.get_action('organization_list')(context, options)
-    return { org['name']: org for org in orgs }
+    return dict((org['name'], org) for org in orgs )
 
 def resource_ingestion_result(resource_id):
     return resource_ingestion.get_result(resource_id)
