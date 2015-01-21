@@ -24,7 +24,7 @@ def _update(data_file, name_prefix='', overwrite=False):
 # Utilities
 
 def get_titles():
-    return { k: vocabularies[k]['title'] for k in vocabularies }
+    return dict((k, vocabularies[k]['title']) for k in vocabularies )
 
 def get_names():
     return vocabularies.keys()

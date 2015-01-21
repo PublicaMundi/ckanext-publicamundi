@@ -37,7 +37,7 @@ def objectify(factory, data, key_prefix):
         return k[0].startswith(prefix)
     
     obj = None
-    obj_dict = { k[0]: data[k] for k in data if is_field_key(k) }
+    obj_dict = dict((k[0], data[k]) for k in data if is_field_key(k) )
     if obj_dict:
         obj = factory().from_dict(obj_dict, is_flat=True, opts={
             'unserialize-keys': True, 
@@ -62,7 +62,7 @@ def dictize_for_extras(obj, key_prefix):
         'key-prefix': key_prefix,
     }
     res = obj.to_dict(flat=True, opts=dictz_opts)
-    res = { k: v for k, v in res.iteritems() if v is not None }
+    res = dict((k, v) for (k, v) in res.iteritems() if v is not None )
     return res
 
 def must_validate(context, data):
@@ -191,7 +191,7 @@ def preprocess_dataset_for_edit(key, data, errors, context):
     
     #debug('context=%r' %(context.keys()))
     
-    received_data = { k:v for k,v in data.iteritems() if not (v is missing) }
+    received_data = dict((k, v) for (k, v) in data.iteritems() if not (v is missing) )
     unexpected_data = received_data.get(('__extras',), {})
     
     #debug('Received data: %r' %(received_data))
@@ -215,7 +215,7 @@ def preprocess_dataset_for_edit(key, data, errors, context):
         # Convert to expected flat fields
         key_converter = lambda k: '.'.join([key_prefix] + map(str, k))
         r = dictization.flatten(r, key_converter)
-        data.update({ (k,): v for k, v in r.iteritems() })
+        data.update(dict(((k,), v) for (k, v) in r.iteritems() ))
 
     #raise Breakpoint('preprocess_dataset_for_edit')
     pass

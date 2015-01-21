@@ -111,8 +111,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         # Set supported dataset types
 
         type_keys = aslist(config['ckanext.publicamundi.dataset_types'])
-        cls._dataset_types = { k: spec
-            for k, spec in dataset_types.items() if k in type_keys }
+        cls._dataset_types = dict((k, spec)
+            for (k, spec) in dataset_types.items() if k in type_keys )
 
         # Modify the pattern for valid names for {package, groups, organizations}
         

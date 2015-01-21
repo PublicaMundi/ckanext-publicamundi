@@ -412,10 +412,10 @@ class DictFieldWidgetTraits(ContainerFieldWidgetTraits):
             }
 
         tpl_vars.update({
-            'terms': { k: { 'title': v.title, 'token': v.token } 
-                for k, v in terms.iteritems() },
+            'terms': dict((k, { 'title': v.title, 'token': v.token }) 
+                for (k, v) in terms.iteritems() ),
             'item_template': render_item_template(),
-            'items': { k: render_item(k,y) for k,y in items if k in terms },
+            'items': dict((k, render_item(k,y)) for (k, y) in items if k in terms ),
         })
         
         return tpl_vars

@@ -9,7 +9,7 @@ def flatten(d, key_converter=None):
     res = None
     d1 = _flatten_items(d.iteritems())
     if key_converter and callable(key_converter):
-        res = { key_converter(k):v for k,v in d1.items() }
+        res = dict((key_converter(k), v) for (k, v) in d1.items() )
     else:
         res = d1
     return res
@@ -18,7 +18,7 @@ def unflatten(d, key_converter=None):
     '''Unflatten a dictionary'''
     res = None
     if key_converter and callable(key_converter):
-        d1 = { key_converter(k):v for k,v in d.items() }
+        d1 = dict((key_converter(k), v) for (k, v) in d.items() )
     else:
         d1 = d
     res = _unflatten(d)

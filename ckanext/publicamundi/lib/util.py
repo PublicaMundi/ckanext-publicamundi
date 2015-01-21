@@ -49,7 +49,7 @@ def quote(s):
 
 def find_all_duplicates(l):
     counter = collections.Counter(l)
-    dups = { k:n for k,n in counter.items() if n > 1 }
+    dups = dict((k, n) for (k, n) in counter.items() if n > 1 )
     return dups
 
 def attr_setter(o, k):

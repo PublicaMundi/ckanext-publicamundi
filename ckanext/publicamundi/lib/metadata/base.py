@@ -143,7 +143,7 @@ class Object(object):
         res = flatten_schema(schema)
         if opts.get('serialize-keys', False):
             kser = serializer_for_key_tuple(opts.get('key-prefix'))
-            return { kser.dumps(k): field for k, field in res.iteritems() }
+            return dict((kser.dumps(k), field) for (k, field) in res.iteritems() )
         else:
             return res
 
@@ -227,7 +227,7 @@ class Object(object):
             res = self.flatten(opts)
             if serialize_keys:
                 kser = serializer_for_key_tuple(opts.get('key-prefix'))
-                res = { kser.dumps(k): v for k, v in res.iteritems() }
+                res = dict((kser.dumps(k), v) for (k, v) in res.iteritems() )
         else:
             res = self.dictize(opts)
         
@@ -292,7 +292,7 @@ class Object(object):
                 key_prefix = opts.get('key-prefix')
                 kser = serializer_for_key_tuple(key_prefix)
                 is_key = kser.get_key_predicate(basestring, strict=True)
-                d = { kser.loads(k): v for k, v in d.iteritems() if is_key(k) }
+                d = dict((kser.loads(k), v) for (k, v) in d.iteritems() if is_key(k) )
             d = dictization.unflatten(d)
                 
         # Load self
@@ -915,8 +915,8 @@ class Object(object):
                 return [ dictize_field(y, field.value_type, max_depth -1) 
                     for y in f ]
             elif isinstance(field, zope.schema.Dict):
-                return { k: dictize_field(y, field.value_type, max_depth -1) 
-                    for k,y in f.items() } 
+                return dict((k, dictize_field(y, field.value_type, max_depth -1)) 
+                    for (k, y) in f.items() ) 
             else:
                 # Handle a leaf field 
                 return self._get_field_value(f, field)
@@ -1173,8 +1173,8 @@ class Object(object):
                 return [ self._create_field(y, field.value_type)
                     for i, y in iv ]
             elif isinstance(field, zope.schema.Dict):
-                return { k: self._create_field(y, field.value_type)
-                    for k, y in v.iteritems() }
+                return dict((k, self._create_field(y, field.value_type))
+                    for (k, y) in v.iteritems() )
             else:
                 return self._create_leaf_field(v, field)
 
