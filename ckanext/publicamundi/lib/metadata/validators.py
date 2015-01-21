@@ -3,7 +3,7 @@ import zope.interface
 import zope.schema
 import zope.schema.interfaces
 import itertools
-from collections import Counter
+#from collections import Counter
 
 from pylons import config
 import ckan.plugins.toolkit as toolkit
