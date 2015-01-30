@@ -5,10 +5,12 @@ import geojson
 import shapely
 import collections
 import itertools
+
 from dictdiffer import (
     dot_lookup, diff as diff_dicts, patch as patch_dict)
 
 from ckanext.publicamundi.lib.json_encoder import JsonEncoder
+from ckanext.publicamundi.lib.counter import Counter
 
 class Breakpoint(Exception):
     '''Exception used for Pylons debugging'''
@@ -48,7 +50,7 @@ def quote(s):
     return u'"' + s.replace('\\', '\\\\').replace('"', '\\"') + u'"'
 
 def find_all_duplicates(l):
-    counter = collections.Counter(l)
+    counter = Counter(l)
     dups = dict((k, n) for (k, n) in counter.items() if n > 1 )
     return dups
 
