@@ -66,11 +66,11 @@ setup(
     # The following only stands as an example. The actual message_extractors should be defined into 
     # ckan's setup.py (from where message extraction is invoked).
     message_extractors = {
-        'ckanext': [
-            ('publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json', 'publicamundi_extract_json', None),
+        'ckanext/publicamundi': [
+            #('publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json', 'publicamundi_extract_json', None),
             #('publicamundi/lib/metadata/schemata/inspire.py', 'publicamundi_extract_schema_info', None),
-            #('**.py', 'python', None),
-            #('**.html', 'ckan', None),
+            ('**.py', 'python', None),
+            ('**.html', 'ckan', None),
             #('multilingual/solr/*.txt', 'ignore', None),
             #('**.txt', 'genshi', {
             #    'template_class': 'genshi.template:TextTemplate'
