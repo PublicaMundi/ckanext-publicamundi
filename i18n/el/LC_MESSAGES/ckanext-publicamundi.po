@@ -323,7 +323,7 @@ msgstr "Δεν υπάρχει περιγραφή"
 
 #: ckanext/publicamundi/templates/package/resource_read.html:7
 msgid " View in Maps"
-msgstr "Εμφάνιση στους Χάρτες"
+msgstr "Επισκόπηση στους Χάρτες"
 
 #: ckanext/publicamundi/templates/package/resource_read.html:13
 msgid "Manage"
@@ -331,7 +331,7 @@ msgstr "Διαχείριση"
 
 #: ckanext/publicamundi/templates/package/resource_read.html:20
 msgid "View"
-msgstr "Προβολή"
+msgstr "Επισκόπηση"
 
 #: ckanext/publicamundi/templates/package/resource_read.html:23
 #: ckanext/publicamundi/templates/package/snippets/resource_item.html:38
@@ -707,7 +707,7 @@ msgstr "Υπηρεσίες"
 #: ckanext/publicamundi/templates/package/snippets/fields/edit-list-temporal_extent-inspire.html:4
 #: ckanext/publicamundi/templates/package/snippets/fields/edit-list-temporal_extent-inspire.html:5
 msgid "Add extent"
-msgstr "Προσθήκη εύρους"
+msgstr "Προσθήκη έκτασης"
 
 #: ckanext/publicamundi/templates/package/snippets/fields/edit-list-bounding_box-inspire.html:18
 #: ckanext/publicamundi/templates/package/snippets/fields/edit-list-conformity-inspire.html:6
@@ -719,17 +719,17 @@ msgstr "Διαγραφή όλων"
 #: ckanext/publicamundi/templates/package/snippets/fields/edit-list-bounding_box-inspire.html:19
 #: ckanext/publicamundi/templates/package/snippets/fields/edit-list-temporal_extent-inspire.html:7
 msgid "Clear all extents!"
-msgstr "Διαγραφή ευρών!"
+msgstr "Διαγραφή όλων των εκτάσεων!"
 
 #: ckanext/publicamundi/templates/package/snippets/fields/edit-list-bounding_box-inspire.html:21
 #: ckanext/publicamundi/templates/package/snippets/fields/edit-list-temporal_extent-inspire.html:9
 msgid "You cannot add more than {{maxlength}} extents"
-msgstr "Δεν μπορείτε να προσθέσετε πάνω από {{maxlength}} εύρη"
+msgstr "Δεν μπορείτε να προσθέσετε πάνω από {{maxlength}} εκτάσεις"
 
 #: ckanext/publicamundi/templates/package/snippets/fields/edit-list-bounding_box-inspire.html:22
 #: ckanext/publicamundi/templates/package/snippets/fields/edit-list-temporal_extent-inspire.html:10
 msgid "Are you sure you want to clear all ({{num}}) extents ?"
-msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε και τα ({{num}}) εύρη;"
+msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε και τις ({{num}}) εκτάσεις;"
 
 #: ckanext/publicamundi/templates/package/snippets/fields/edit-list-conformity-inspire.html:4
 msgid "Add statement"
@@ -905,7 +905,7 @@ msgstr "Μονάδα"
 #: ckanext/publicamundi/templates/package/snippets/objects/edit-temporal_extent-item.html:3
 #: ckanext/publicamundi/templates/package/snippets/objects/edit-temporal_extent.html:32
 msgid "Extent"
-msgstr "Εύρος"
+msgstr "Έκταση"
 
 #: ckanext/publicamundi/templates/package/snippets/objects/edit-temporal_extent.html:11
 #: ckanext/publicamundi/templates/package/snippets/objects/edit-temporal_extent.html:14
@@ -1025,7 +1025,7 @@ msgstr "Μέχρι %(end)s"
 
 #: ckanext/publicamundi/templates/package/snippets/objects/read-temporal_extent.html:2
 msgid "Temporal Extent"
-msgstr "Χρονικό Εύρος"
+msgstr "Χρονική Έκταση"
 
 #: ckanext/publicamundi/templates/snippets/add_dataset_button.html:12
 msgid "Add Dataset"
@@ -1247,7 +1247,7 @@ msgstr "GET"
 #: ckanext/publicamundi/themes/geodata/templates/header.html:82
 #: ckanext/publicamundi/themes/geodata/templates/home/index.html:18
 msgid "View profile"
-msgstr "Εμφάνιση προφίλ"
+msgstr "Επισκόπηση προφίλ"
 
 #: ckanext/publicamundi/themes/geodata/templates/header.html:90
 #: ckanext/publicamundi/themes/geodata/templates/home/index.html:24
