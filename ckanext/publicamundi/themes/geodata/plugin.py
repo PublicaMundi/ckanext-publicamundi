@@ -45,7 +45,7 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
         }
     
     # IConfigurer
-
+    
     def update_config(self, config):
 
         # Add this plugin's templates dir to CKAN's extra_template_paths, so
@@ -68,6 +68,7 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     def before_map(self, mapper):
 
         mapper.connect('maps', '/maps') 
+        mapper.connect('news', '/news') 
 
         return mapper
 

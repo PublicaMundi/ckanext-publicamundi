@@ -111,6 +111,7 @@
                 ('group_index', _('Topics')),
                 ('organizations_index', _('Organizations')),
                 ('maps', _('Maps')),
+                ('news', _('News')),
                 ('about', _('About'))
                 ) }}
             </div>
@@ -131,6 +132,7 @@
 {% endblock %}
 
 {% set homepage_style = ( g.homepage_style or '1' ) %}
+{% set homepage_style = ( g.homepage_style or '_slider' ) %}
 
 
 {% block content %}
@@ -155,7 +157,8 @@
             {% endblock %}
 
 
-    {% snippet "home/layout{0}.html".format(homepage_style) %}
+            {#  {% snippet "home/layout{0}.html".format(homepage_style) %} #}
+    {% snippet "home/layout_slider.html" %}
     {% endblock %}
 </div>
 

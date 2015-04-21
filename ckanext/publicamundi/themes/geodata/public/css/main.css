@@ -341,7 +341,7 @@ a {
 .feedback-form{
     //display: block;
     position: fixed;
-    top: 40vh;
+    top: 80vh;
     left:0;
     z-index: 1000;
     background: #fff;
@@ -371,17 +371,17 @@ a {
     background-repeat: no-repeat;
     background-size: cover;
     background-color: rgba(123,123,321,0.8);
-    height:70vh;
 }
 .stayinview{
 }
 .promotebox{
     position: relative;
     //top: 120px;
-    //margin-left:22%;
-    left: 25%;
-    top: 10vh;
-
+    margin-left:30%;
+    //left: 5%;
+    //top: 15vh;
+    top: 80px;
+    z-index: 1000;
     border: 4px #4E59A4 solid;
     max-width: 350px;
 
@@ -392,6 +392,76 @@ a {
     border: 0;
     padding: 30px;
 }
+
+/* Home Slider */
+
+#slider_container{
+
+}
+.slides img{
+    position:relative;
+}
+.slide{
+
+}
+.jssora21l, .jssora21r, .jssora21ldn, .jssora21rdn {    
+    position: absolute;
+    cursor: pointer;
+    display: block;   
+    background: url('/images/a11.png');
+    overflow: hidden;    
+}
+
+.jssora21l {
+    background-position: -3px -33px;
+
+}
+
+.jssora21r {
+    background-position: -63px -33px;
+}
+
+.jssora21l:hover {
+    background-position: -123px -33px;
+}
+
+.jssora21r:hover {
+    background-position: -183px -33px;
+}
+
+.jssora21ldn {
+    background-position: -243px -33px;
+}
+
+.jssora21rdn {
+    background-position: -303px -33px;
+}
+
+
+.jssorb21 div, .jssorb21 div:hover, .jssorb21 .av {                 
+    background: url('/images/b21.png') no-repeat;
+    z-index: 1;
+    overflow: hidden;
+    cursor: pointer;
+    }
+
+.jssorb21 div {
+    background-position: -5px -5px;
+}
+                    
+.jssorb21 div:hover, .jssorb21 .av:hover {
+    background-position: -35px -5px;
+}
+                
+.jssorb21 .av {                 
+    background-position: -65px -5px;
+}
+
+.jssorb21 .dn, .jssorb21 .dn:hover {
+    background-position: -95px -5px;
+}
+
+
 /* Main */
 [role=main] {
     padding: 0;
@@ -742,7 +812,7 @@ a {
     background: #F6F6F6;
     margin:0;
     padding: 5px 8px;
-    border-top: 1px #4E59A4 solid;
+    //border-top: 1px #4E59A4 solid;
 }
 .secondary .module-footer a{
     font-size: 12px;
@@ -756,6 +826,10 @@ a {
 }
 .secondary .nav-item.active a span{
     color : #fff;
+}
+.secondary .sort-count, .secondary .sort-name{
+    font-size: 14px;
+    margin-left:5px;
 }
 .alt-side-style .module-heading{
     font-size:20px;
@@ -795,7 +869,7 @@ a {
     border-bottom: 1px #4E59A4 solid;
 }
 .nav-simple > li:last-of-type{
-    //border-bottom: 1px #4E59A4 solid;
+    border-bottom: 1px #4E59A4 solid;
 }
 .nav-item.active > a, .nav-aside li.active a, .nav-item.active > a:hover{
     background: #4E59A4;
