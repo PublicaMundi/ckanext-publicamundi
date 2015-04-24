@@ -323,7 +323,7 @@ msgstr "Δεν υπάρχει περιγραφή"
 
 #: ckanext/publicamundi/templates/package/resource_read.html:7
 msgid " View in Maps"
-msgstr "Επισκόπηση στους Χάρτες"
+msgstr "Προβολή στους Χάρτες"
 
 #: ckanext/publicamundi/templates/package/resource_read.html:13
 msgid "Manage"
@@ -331,7 +331,7 @@ msgstr "Διαχείριση"
 
 #: ckanext/publicamundi/templates/package/resource_read.html:20
 msgid "View"
-msgstr "Επισκόπηση"
+msgstr "Προβολή"
 
 #: ckanext/publicamundi/templates/package/resource_read.html:23
 #: ckanext/publicamundi/templates/package/snippets/resource_item.html:38
@@ -1247,7 +1247,7 @@ msgstr "GET"
 #: ckanext/publicamundi/themes/geodata/templates/header.html:82
 #: ckanext/publicamundi/themes/geodata/templates/home/index.html:18
 msgid "View profile"
-msgstr "Επισκόπηση προφίλ"
+msgstr "Προβολή προφίλ"
 
 #: ckanext/publicamundi/themes/geodata/templates/header.html:90
 #: ckanext/publicamundi/themes/geodata/templates/home/index.html:24
