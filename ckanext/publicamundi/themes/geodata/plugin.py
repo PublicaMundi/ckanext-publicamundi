@@ -2,6 +2,7 @@ import datetime
 
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
+from ckan.lib.base import c
 
 def most_recent_datasets(limit=10):
     datasets = toolkit.get_action('package_search')(
@@ -12,12 +13,16 @@ def list_menu_items (limit=21):
     groups = toolkit.get_action('group_list')(
         data_dict={'sort': 'name desc', 'all_fields':True})
     groups = groups[:limit]
+    c.groups = groups
+    print 'HELLO GROUPS'
+    print groups
 
     return groups
 
 def friendly_date(date_str):
     date = datetime.datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S.%f").date()
     return date.strftime('%d, %b, %Y')
+
 
 _feedback_form = None
 
@@ -32,6 +37,7 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IConfigurable, inherit=True)
     plugins.implements(plugins.ITemplateHelpers)
     plugins.implements(plugins.IRoutes, inherit=True)
+    plugins.implements(plugins.IPackageController, inherit=True)
     
     # ITemplateHelpers
     
@@ -66,10 +72,13 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     # IRoutes
 
     def before_map(self, mapper):
-
         mapper.connect('maps', '/maps') 
-        mapper.connect('news', '/news') 
+        mapper.connect('news', '/news', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='redirect_news' )
 
         return mapper
 
+    # IPackageController
+    def before_view(self, pkg_dict):
+        list_menu_items()
+        return pkg_dict
 

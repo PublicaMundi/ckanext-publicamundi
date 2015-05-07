@@ -1,7 +1,7 @@
 {% ckan_extends %}
           
 {% block breadcrumb_content %}
-    <li class="active">{% link_for _('Datasets'), controller='package', action='search' %}</li>
+    <li class="active">  {{ h.nav_link(_('Datasets'), controller='package', action='search', highlight_actions = 'new index') }}</li>
 {% endblock %}
 {% block gap %}{% endblock %}
 

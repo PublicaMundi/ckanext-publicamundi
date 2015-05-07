@@ -500,12 +500,11 @@ section.tags {
 }
 
 .search-form .filter-list .pill {
-    background-color: #91939D;
+    background-color: #7C7C7F;
     border-radius: 2px;
     padding: 2px 8px;
 }
 .search-form .filter-list .pill a.remove {
-    vertical-align: -5%;
 }
 
 section.additional-info header > .download-links {

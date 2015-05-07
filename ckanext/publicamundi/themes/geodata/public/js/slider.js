@@ -61,15 +61,41 @@ function initialize() {
                 //responsive code begin
                 //you can remove responsive code if you don't want the slider scales while window resizes
                 function ScaleSlider() {
-                    var bodyWidth = document.body.clientWidth;
-                    if (bodyWidth)
-                        jssor_slider.$ScaleWidth(Math.min(bodyWidth, 1920));
+                    //var bodyWidth = document.body.clientWidth;
+                    var parentWidth = $('#slider_container').parent().parent().width();
+                    //if (bodyWidth && abs(bodyWidth - Math.min(bodyWidth, 1920))>10)
+                    if (parentWidth){
+                        jssor_slider.$ScaleWidth(Math.max(parentWidth,550));
+                    }
                     else
                         window.setTimeout(ScaleSlider, 30);
                     
 
                 }
-                //ScaleSlider();
+
+                /* function ScaleSlider() {
+                    var windowWidth = $(window).width();
+                    if (windowWidth) {
+                        var windowHeight = $(window).height();
+                        var originalWidth = jssor_slider.$OriginalWidth();
+                        
+                        var originalHeight = jssor_slider.$OriginalHeight();
+                        var scaleWidth = windowWidth;
+
+                        if (originalWidth / windowWidth > originalHeight / windowHeight) {
+
+                            scaleWidth = Math.ceil(windowHeight / originalHeight * originalWidth);
+                            
+                        }
+                        
+                        jssor_slider1.$ScaleWidth(scaleWidth);
+
+                        }                    
+                    else                         
+                        window.setTimeout(ScaleSlider, 30);
+                }
+                */
+                ScaleSlider();
 
                 $(window).bind("load", ScaleSlider);
                 $(window).bind("resize", ScaleSlider);

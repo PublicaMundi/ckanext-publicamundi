@@ -11,12 +11,12 @@
         {% block header_account_container_content %}
         {# {% snippet "snippets/user_selector_simple.html", c=c %} #}
         {% if c.userobj %}
-          <li class="authed down-arrow" data-module="me" data-me="{{ c.userobj.id }}">
+          <li class="authed" data-module="me" data-me="{{ c.userobj.id }}">
               {% block header_account_logged %}
               {# <ul class="unstyled"> #}
                   {# <li> #}
                 <a href="{{ h.url_for(controller='user', action='read', id=c.userobj.name) }}" class="viewprofile" title="{{ _('View profile') }}">
-                    <span>{{c.userobj.display_name }}</span>
+                    <span class="down-arrow" >{{h.truncate(c.userobj.display_name, 40) }}</span>
                     </a>
                 <ul>
                     {% if c.userobj.sysadmin %}
@@ -70,7 +70,7 @@
         {% endblock %}
         
         {% block header_lang %}
-        <li class="down-arrow language">
+        <li class="language">
             {% snippet "snippets/language_selector_simple.html" %}
             </li>
         {% endblock %}
@@ -105,7 +105,7 @@
 
             <nav class="section navigation">
           <ul class="nav nav-pills">
-            {% block header_site_navigation_tabs %}
+              {% block header_site_navigation_tabs %}
               {{ h.build_nav_main(
                 ('search', _('Datasets')),
                 ('group_index', _('Topics')),
@@ -114,6 +114,7 @@
                 ('news', _('News')),
                 ('about', _('About'))
                 ) }}
+                            
             </div>
             </div>
             {% endblock %}

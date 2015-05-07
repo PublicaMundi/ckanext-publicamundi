@@ -6,11 +6,11 @@ jQuery(document).ready(function ($) {
     var console = window.console
     var debug = $.proxy(console, 'debug') 
     
-    myFunction();
+    init();
 });
 
 
-function myFunction() {
+function init() {
         
     var obj = $('.nav-pills > li > a[href$="/group"]');
     
@@ -58,7 +58,6 @@ function myFunction() {
     });
 
     //Breadcrumbs auto hide all but last element
-
         brd_items = $('.breadcrumb li:first').next().nextAll();
         brd_items = brd_items.not(':last');
 
@@ -67,11 +66,48 @@ function myFunction() {
             //$(this).context.innerText = "...";
             $(this).addClass('breadcrumb-hide-text');
         });
-        brd_items.on('mouseenter', function(){
+       
+        tlbar = $('.toolbar');
+        brdcrmb = $('.breadcrumb');
+        tlbar.on('mouseenter', function(){
+            brd_items.each(function(idx) {
+            //console.log($(this).context.innerText);
+            //$(this).context.innerText = "...";
             $(this).removeClass('breadcrumb-hide-text');
+                //addClass('breadcrumb-hide-text');
+            });
+
+
         });
-        brd_items.on('mouseleave', function(){
+        
+        tlbar.on('mouseleave', function(){
+            brd_items.each(function(idx) {
+            //console.log($(this).context.innerText);
+            //$(this).context.innerText = "...";
             $(this).addClass('breadcrumb-hide-text');
+                //addClass('breadcrumb-hide-text');
+            });
+
         });
+        //brd_items.on('mouseenter', function(){
+           // $(this).removeClass('breadcrumb-hide-text');
+        //});
+        //brd_items.on('mouseleave', function(){
+          //  $(this).addClass('breadcrumb-hide-text');
+        //});
+
+        //Hide promotebox when dismiss clicked and remember with cookie
+        var dismiss = $('.btn-dismiss');
+        var pbox = $('.promotebox');
+        if ($.cookie("dismiss-promotebox") != 1 ){
+            pbox.addClass('shown');
+        }
+            dismiss.on('click', function(){ 
+                $.cookie("dismiss-promotebox", 1, {expires:10});
+                pbox.removeClass('shown');
+                pbox.addClass('hidden');
+            });
+
+        
 
 }

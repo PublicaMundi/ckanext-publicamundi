@@ -71,8 +71,8 @@ function handleFacets() {
             return parseInt($(b).attr("count")) < parseInt($(a).attr("count")) ? 1 : -1;
         };
         e.preventDefault();
-        $(this).text("1>9");
-        $(this).parent().find('.sort-name').text("A-Z");
+        $(this).text("1 -> 9");
+        $(this).parent().find('.sort-name').text("A    Z");
         var ul = $(this).parent().parent().find('.nav-facet');
         var list = ul.find('li');
 
@@ -99,8 +99,8 @@ function handleFacets() {
             return parseInt($(b).attr("count")) > parseInt($(a).attr("count")) ? 1 : -1;
         };
 
-        $(this).text("1<9");
-        $(this).parent().find('.sort-name').text("A-Z");
+        $(this).text("1 <- 9");
+        $(this).parent().find('.sort-name').text("A    Z");
         e.preventDefault();
         var ul = $(this).parent().parent().find('.nav-facet');
         var list = ul.find('li');
@@ -132,8 +132,8 @@ function handleFacets() {
             return ($(b).text().toUpperCase()) < ($(a).text().toUpperCase())? 1 : -1;
         };
 
-        $(this).text("A>Z");
-        $(this).parent().find('.sort-count').text("1-9");
+        $(this).text("A -> Z");
+        $(this).parent().find('.sort-count').text("1    9");
         e.preventDefault();
         var ul = $(this).parent().parent().find('.nav-facet');
         var list = ul.find('li');
@@ -161,8 +161,8 @@ function handleFacets() {
             return ($(b).text().toUpperCase()) > ($(a).text().toUpperCase())? 1 : -1;
         };
 
-        $(this).text("A<Z");
-        $(this).parent().find('.sort-count').text("1-9");
+        $(this).text("A <- Z");
+        $(this).parent().find('.sort-count').text("1    9");
         e.preventDefault();
         var ul = $(this).parent().parent().find('.nav-facet');
         var list = ul.find('li');
