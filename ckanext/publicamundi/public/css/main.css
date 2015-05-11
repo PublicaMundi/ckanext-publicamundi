@@ -336,10 +336,13 @@ h1 > .label.package-state {
 .dataset-item .dataset-resources li a {
    padding: 4px 4px 3px 4px;
 }  
-
 /*
  * Resources (Dataset)
  */
+
+.resources > header{
+    margin-bottom: 20px;
+}
 
 .resources li.resource-item {
     padding: 5px 5px 5px 60px;
@@ -513,7 +516,7 @@ section.tags {
 .search-form .filter-list .pill a.remove {
 }
 
-section.additional-info header > .download-links {
+.download-links {
     margin-top: 8px;
 }
 

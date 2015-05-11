@@ -1,11 +1,4 @@
-{% ckan_extends %}
-
-{# {% block resource_item_download %}
 {% if res.rasterstorer_resource and res.format in ['wcs'] %}
-<div class="dropdown btn-group resource-download-opts pull-right">
-    <a href="#" class="btn dropdown-toggle" data-toggle="dropdown"
-            >{{ _('Download as') }} <span class="caret"></span></a>
-    <ul class="dropdown-menu">
         {% if res.format == 'wcs' %}
         <li>
             <a data-resource-id="{{res.wcs_coverage}}" data-resource-format="csv" class="raster-export-button" href="#" target="_blank">CSV</a>
@@ -26,10 +19,6 @@
             <a data-resource-id="{{res.wcs_coverage}}" data-resource-format="tiff" class="raster-export-button" href="#" target="_blank">TIFF</a>
         </li>
 
-        {% endif %} 
-    </ul>
-</div>
+        {% endif %} {# res.format #}
 {% resource 'ckanext-publicamundi-raster/raster_export' %}
 {% endif %}
-{{ super() }}
-{% endblock %} #}
