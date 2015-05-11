@@ -369,6 +369,57 @@ msgstr "Μορφότυπος"
 msgid "License"
 msgstr "Άδεια"
 
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:13
+msgid "Utilities Communication"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:16
+msgid "Transportation"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:19
+msgid "Structure"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:22
+msgid "Society"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:25
+msgid "Planning Cadastre"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:28
+msgid "Oceans"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:31
+#: ckanext/publicamundi/themes/geodata/templates/spatial/snippets/spatial_query.html:17
+msgid "Location"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:34
+msgid "Intelligence Military"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:37
+msgid "Inland Waters"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:40
+msgid "Imagery Base Maps Earth Cover"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:43
+msgid "Health"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:46
+msgid "Geoscientific Information"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:49
+
 #: ckanext/publicamundi/templates/package/search.html:19
 #: ckanext/publicamundi/themes/geodata/templates/package/search.html:44
 msgid "Relevance"

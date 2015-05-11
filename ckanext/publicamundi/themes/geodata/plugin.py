@@ -71,7 +71,7 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
 
     def before_map(self, mapper):
         mapper.connect('maps', '/maps') 
-        mapper.connect('developers', '/developers') 
+        mapper.connect('developers', '/developers', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='developers') 
         mapper.connect('news', '/news', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='redirect_news' )
 
         return mapper

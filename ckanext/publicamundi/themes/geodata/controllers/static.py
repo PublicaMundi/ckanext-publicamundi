@@ -11,4 +11,5 @@ class Controller(BaseController):
 
         redirect(base_url+'?lang={0}'.format(locale))
         #redirect('/news?lang={0}'.format(locale))
-
+    def developers(self):
+        render('developers/index.html')
