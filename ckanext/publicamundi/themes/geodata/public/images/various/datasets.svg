@@ -5,11 +5,11 @@
 ]>
 <svg version="1.1"
 	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
-	 x="0px" y="0px" width="595px" height="842px" viewBox="-289.313 -413.535 595 842"
-	 overflow="visible" enable-background="new -289.313 -413.535 595 842" xml:space="preserve">
+	 x="0px" y="0px" width="18px" height="16px" viewBox="0 -0.5 18 16" overflow="visible" enable-background="new 0 -0.5 18 16"
+	 xml:space="preserve">
 <defs>
 </defs>
-<polygon fill="#A6B8DA" points="0,6.429 8.571,8.571 17.143,6.429 17.143,8.571 8.571,10.714 0,8.571 "/>
-<polygon fill="#A6B8DA" points="0,10.714 8.571,12.857 17.143,10.714 17.143,12.857 8.571,15 0,12.857 "/>
-<polygon fill="#A6B8DA" points="0,2.143 8.571,0 17.143,2.143 17.143,4.286 8.571,6.429 0,4.286 "/>
+<polygon fill="#A6B8DA" points="0,6.4 8.6,8.6 17.1,6.4 17.1,8.6 8.6,10.7 0,8.6 "/>
+<polygon fill="#A6B8DA" points="0,10.7 8.6,12.9 17.1,10.7 17.1,12.9 8.6,15 0,12.9 "/>
+<polygon fill="#A6B8DA" points="0,2.1 8.6,0 17.1,2.1 17.1,4.3 8.6,6.4 0,4.3 "/>
 </svg>
