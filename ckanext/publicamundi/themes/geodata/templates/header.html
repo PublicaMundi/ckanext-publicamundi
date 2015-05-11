@@ -35,6 +35,7 @@
                 ('group_index', _('Topics')),
                 ('organizations_index', _('Organizations')),
                 ('maps', _('Maps')),
+                ('developers', _(' API')),
                 ('news', _('News')),
                 ('about', _('About'))
                 ) }}
@@ -79,7 +80,7 @@
                   {# <li> #}
                 {% set new_activities = h.new_activities() %}
                 <a href="{{ h.url_for(controller='user', action='read', id=c.userobj.name) }}" class="viewprofile" title="{{ _('View profile') }}">
-                    <span class="down-arrow">{{ h.truncate(c.userobj.display_name, 17)}} </span>
+                    <span class="down-arrow">{{ h.truncate(c.userobj.display_name, 22)}} </span>
                     {# {% if new_activities > 0 %}({{new_activities}}) {% endif %} #}
                     </a>
                 <ul>

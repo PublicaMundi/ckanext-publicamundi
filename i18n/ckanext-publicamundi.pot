@@ -368,6 +368,84 @@ msgstr ""
 msgid "License"
 msgstr ""
 
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:13
+msgid "Utilities Communication"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:16
+msgid "Transportation"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:19
+msgid "Structure"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:22
+msgid "Society"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:25
+msgid "Planning Cadastre"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:28
+msgid "Oceans"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:31
+#: ckanext/publicamundi/themes/geodata/templates/spatial/snippets/spatial_query.html:17
+msgid "Location"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:34
+msgid "Intelligence Military"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:37
+msgid "Inland Waters"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:40
+msgid "Imagery Base Maps Earth Cover"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:43
+msgid "Health"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:46
+msgid "Geoscientific Information"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:49
+msgid "Farming"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:52
+msgid "Environment"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:55
+msgid "Elevation"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:58
+msgid "Economy"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:61
+msgid "Meteorology"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:64
+msgid "Boundaries"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:67
+msgid "Biota"
+msgstr ""
+
+
 #: ckanext/publicamundi/templates/package/search.html:19
 #: ckanext/publicamundi/themes/geodata/templates/package/search.html:44
 msgid "Relevance"
@@ -1213,6 +1291,12 @@ msgstr ""
 #: ckanext/publicamundi/themes/geodata/templates/header.html:38
 #: ckanext/publicamundi/themes/geodata/templates/home/index.html:113
 msgid "Maps"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/footer.html:40
+#: ckanext/publicamundi/themes/geodata/templates/header.html:38
+#: ckanext/publicamundi/themes/geodata/templates/home/index.html:114
+msgid "Developers"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/footer.html:40

@@ -236,7 +236,7 @@ msgstr "Δεδομένα"
 
 #: ckanext/publicamundi/storers/vector/templates/style/main.html:20
 msgid "Create Dataset"
-msgstr "Δημιουργία Δεδομένων"
+msgstr "Δημιουργία Συνόλου Δεδομένων"
 
 #: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/shapefile.html:4
 #: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/sqlite_gpkg.html:3
@@ -1225,6 +1225,13 @@ msgstr "Χάρτες"
 #: ckanext/publicamundi/themes/geodata/templates/footer.html:40
 #: ckanext/publicamundi/themes/geodata/templates/header.html:38
 #: ckanext/publicamundi/themes/geodata/templates/home/index.html:114
+msgid "Developers"
+msgstr "Προγραμματιστές"
+
+
+#: ckanext/publicamundi/themes/geodata/templates/footer.html:40
+#: ckanext/publicamundi/themes/geodata/templates/header.html:38
+#: ckanext/publicamundi/themes/geodata/templates/home/index.html:114
 msgid "News"
 msgstr "Νέα"
 
@@ -1463,7 +1470,7 @@ msgstr "Υποδομή"
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:25
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:27
 msgid "Create dataset"
-msgstr "Δημιουργία συνόλου δεδομένων"
+msgstr "Δημιουργία δεδομένων"
 
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:32
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:36

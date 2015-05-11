@@ -15,8 +15,6 @@ def list_menu_items (limit=21):
         data_dict={'sort': 'name desc', 'all_fields':True})
     groups = groups[:limit]
     c.groups = groups
-    print 'HELLO GROUPS'
-    print groups
 
     return groups
 
@@ -73,6 +71,7 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
 
     def before_map(self, mapper):
         mapper.connect('maps', '/maps') 
+        mapper.connect('developers', '/developers') 
         mapper.connect('news', '/news', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='redirect_news' )
 
         return mapper

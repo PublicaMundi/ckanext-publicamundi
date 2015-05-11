@@ -272,7 +272,7 @@ p a{
 }
 .mainmenu .section .nav { 
     float: left;
-    margin: 0 0 0 20px;
+    margin: 0 0 0 10px;
 }
 #mainlogo .logo {
     float : left;
@@ -280,7 +280,6 @@ p a{
 }
 #homemenu #mainlogo .logo {
     padding-top: 15px;
-    margin-right: 10%;
 }
 .nav-pills > .active > a, .nav-pills > .active > a:focus{
     background: #fff;
@@ -289,9 +288,8 @@ p a{
 .nav-pills > li > a {
     margin-top: 0;
     margin-bottom: 0;
-    padding-bottom: 10px;
+    padding: 10px 12px 10px 12px;
     margin-right: 0;
-    padding-top: 10px;
     border-radius: 0;
     border-right: 1px #7C7C7F solid;
 }
@@ -1481,6 +1479,11 @@ img[src="/images/various/tags.svg"]{
     //height: 450px !important;
 }
 /* New package */
+.stages li button.highlight {
+    padding: 5px 52px;
+    line-height: 20px;
+}
+
 .stages li.active .highlight{
     background: #4E59A4;
 }
