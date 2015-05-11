@@ -1,0 +1,1566 @@
+# English translations for ckanext-publicamundi.
+# Copyright (C) 2015 ORGANIZATION
+# This file is distributed under the same license as the
+# ckanext-publicamundi
+# project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ckanext-publicamundi 1.2dev\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2015-04-06 02:10+0300\n"
+"PO-Revision-Date: 2015-04-06 02:11+0300\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.6\n"
+
+#: ckanext/publicamundi/controllers/package.py:85
+msgid "No source specified: Upload or link to an XML file."
+msgstr ""
+
+#: ckanext/publicamundi/controllers/package.py:115
+msgid "The given metadata are invalid."
+msgstr ""
+
+#: ckanext/publicamundi/controllers/user.py:36
+msgid "User not found"
+msgstr ""
+
+#: ckanext/publicamundi/controllers/user.py:38
+msgid "Not authorized to see this page"
+msgstr ""
+
+#: ckanext/publicamundi/lib/actions/package.py:146
+#, python-format
+msgid "The given XML file is malformed: %s"
+msgstr ""
+
+#: ckanext/publicamundi/lib/actions/package.py:187
+msgid "The dataset contains invalid metadata"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/types/_common.py:95
+#, python-format
+msgid "From %(start)s To %(end)s"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/widgets/objects/_common.py:381
+msgid "Party Role"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/widgets/objects/_common.py:385
+msgid "Organization Name"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/widgets/objects/_common.py:550
+msgid "Specification"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/widgets/objects/_common.py:554
+msgid "Date"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/widgets/objects/_common.py:557
+msgid "Date Type"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/widgets/objects/_common.py:560
+msgid "Degree"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/widgets/objects/foo.py:55
+msgid "Web Site"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/widgets/objects/inspire_metadata.py:121
+msgid "Topic Category"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/widgets/objects/inspire_metadata.py:135
+msgid "Lineage Statement"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/widgets/objects/inspire_metadata.py:141
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-inspire-datasetform.html:27
+msgid "Language"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/widgets/objects/inspire_metadata.py:144
+msgid "Date Updated"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/widgets/objects/inspire_metadata.py:147
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-inspire-datasetform.html:185
+msgid "Contact Points"
+msgstr ""
+
+#: ckanext/publicamundi/storers/raster/controllers/import.py:44
+#: ckanext/publicamundi/storers/raster/controllers/import.py:60
+#: ckanext/publicamundi/storers/vector/controllers/vector.py:38
+msgid "Not authorized to update resource"
+msgstr ""
+
+#: ckanext/publicamundi/storers/raster/templates/package/snippets/resource_item.html:7
+#: ckanext/publicamundi/storers/vector/templates/package/snippets/resource_item.html:24
+#: ckanext/publicamundi/templates/package/snippets/additional_info.html:81
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_table.html:13
+msgid "Download as"
+msgstr ""
+
+#: ckanext/publicamundi/storers/raster/templates/user/snippets/ingest_templates/raster/raster.html:10
+#: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/vector.html:27
+msgid "Ingest"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/controllers/export.py:37
+msgid "Not found"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/controllers/export.py:52
+msgid "No Export Format was defined !"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/controllers/export.py:312
+#: ckanext/publicamundi/storers/vector/controllers/export.py:332
+#: ckanext/publicamundi/storers/vector/controllers/style.py:52
+#: ckanext/publicamundi/storers/vector/controllers/style.py:64
+#: ckanext/publicamundi/storers/vector/controllers/style.py:91
+msgid "Resource not found"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/controllers/export.py:330
+msgid "Not VectorStorerDB Resource."
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/controllers/export.py:334
+#: ckanext/publicamundi/storers/vector/controllers/style.py:93
+#, python-format
+msgid "Unauthorized to read resource %s"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/controllers/style.py:89
+msgid "Resource is not a vectorstorer WMS resource"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/controllers/vector.py:76
+#, python-format
+msgid "Bad Encoding : %s"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/controllers/vector.py:96
+#: ckanext/publicamundi/storers/vector/controllers/vector.py:98
+#: ckanext/publicamundi/storers/vector/controllers/vector.py:100
+#, python-format
+msgid "Bad EPSG code : %s"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/export/base.html:6
+msgid "Export Resource"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/export/export.html:35
+#: ckanext/publicamundi/storers/vector/templates/package/resource_read.html:24
+msgid "Export"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/export/export.html:39
+msgid "Select format"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/export/export.html:59
+msgid "Select GML version"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/export/export.html:77
+msgid "CVS Export Options"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/export/export.html:78
+msgid "Export Geometry"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/export/export.html:80
+msgid "WKT"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/export/export.html:82
+msgid "Latitude, Longitude"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/export/export.html:83
+msgid "Longitude, Latitude"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/export/export.html:91
+msgid "Select projection"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/export/export.html:100
+#: ckanext/publicamundi/templates/package/resource_read.html:25
+#: ckanext/publicamundi/templates/package/snippets/resource_item.html:36
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:27
+msgid "Download"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/package/resource_read.html:31
+msgid "Edit Style"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/package/snippets/resource_item.html:11
+msgid "Preview table"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/style/main.html:11
+#: ckanext/publicamundi/themes/geodata/templates/footer.html:38
+#: ckanext/publicamundi/themes/geodata/templates/header.html:37
+#: ckanext/publicamundi/themes/geodata/templates/home/index.html:112
+#: ckanext/publicamundi/themes/geodata/templates/organization/index.html:12
+msgid "Organizations"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/style/main.html:14
+#: ckanext/publicamundi/storers/vector/templates/style/main.html:19
+#: ckanext/publicamundi/templates/package/import_metadata.html:10
+#: ckanext/publicamundi/templates/snippets/organization.html:42
+#: ckanext/publicamundi/themes/geodata/templates/footer.html:36
+#: ckanext/publicamundi/themes/geodata/templates/header.html:35
+#: ckanext/publicamundi/themes/geodata/templates/home/index.html:110
+#: ckanext/publicamundi/themes/geodata/templates/package/search.html:4
+msgid "Datasets"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/style/main.html:20
+msgid "Create Dataset"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/shapefile.html:4
+#: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/sqlite_gpkg.html:3
+msgid "Resource Information"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/shapefile.html:9
+msgid "SRS not found"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/shapefile.html:19
+msgid "Enter projection"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/sqlite_gpkg.html:8
+msgid "Layer List"
+msgstr ""
+
+#: ckanext/publicamundi/templates/ajax_snippets/draw-bbox-dialog.html:10
+#: ckanext/publicamundi/templates/snippets/dialogs/draw-bbox.html:10
+msgid "Draw a Bounding Box"
+msgstr ""
+
+#: ckanext/publicamundi/templates/ajax_snippets/draw-bbox-dialog.html:17
+#: ckanext/publicamundi/templates/snippets/dialogs/draw-bbox.html:17
+msgid "Dismiss"
+msgstr ""
+
+#: ckanext/publicamundi/templates/ajax_snippets/draw-bbox-dialog.html:18
+#: ckanext/publicamundi/templates/snippets/dialogs/draw-bbox.html:18
+msgid "Apply"
+msgstr ""
+
+#: ckanext/publicamundi/templates/macros/markup_helpers.html:4
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-point.html:7
+msgid "This field is required"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/import_metadata.html:7
+#: ckanext/publicamundi/templates/package/import_metadata.html:15
+msgid "Import Metadata"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/import_metadata.html:11
+msgid "Import Dataset"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/new_package_metadata.html:3
+msgid "Add metadata to the dataset"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/new_resource.html:5
+msgid "Add data to the dataset"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/new_resource.html:11
+msgid "Add New Resource"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/read.html:13
+#: ckanext/publicamundi/templates/snippets/package_item.html:28
+#: ckanext/publicamundi/themes/geodata/templates/snippets/package_item_home.html:58
+#: ckanext/publicamundi/themes/geodata/templates/snippets/package_item_search.html:53
+msgid "Draft"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/read.html:15
+#: ckanext/publicamundi/templates/snippets/package_item.html:30
+#: ckanext/publicamundi/themes/geodata/templates/snippets/package_item_home.html:60
+#: ckanext/publicamundi/themes/geodata/templates/snippets/package_item_search.html:55
+msgid "Deleted"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/read.html:17
+#: ckanext/publicamundi/templates/snippets/package_item.html:32
+msgid "Invalid"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/read.html:28
+#: ckanext/publicamundi/templates/package/snippets/resource_item.html:67
+#: ckanext/publicamundi/templates/user/snippets/resource_item.html:34
+msgid "No description"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/resource_read.html:7
+msgid " View in Maps"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/resource_read.html:13
+msgid "Manage"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/resource_read.html:20
+msgid "View"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/resource_read.html:23
+#: ckanext/publicamundi/templates/package/snippets/resource_item.html:38
+msgid "Go to resource"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/resource_read.html:41
+msgid "Additional Information"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/resource_read.html:56
+msgid "Last updated"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/resource_read.html:57
+#: ckanext/publicamundi/templates/package/resource_read.html:61
+#: ckanext/publicamundi/templates/package/resource_read.html:65
+msgid "unknown"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/resource_read.html:60
+msgid "Created"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/resource_read.html:64
+#: ckanext/publicamundi/templates/package/snippets/resource_form.html:54
+#: ckanext/publicamundi/templates/package/snippets/resource_info.html:12
+msgid "Format"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/resource_read.html:68
+#: ckanext/publicamundi/templates/package/snippets/package_basic_fields.html:88
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_table.html:41
+#: ckanext/publicamundi/themes/geodata/templates/snippets/license.html:4
+msgid "License"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/search.html:19
+#: ckanext/publicamundi/themes/geodata/templates/package/search.html:44
+msgid "Relevance"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/search.html:20
+#: ckanext/publicamundi/themes/geodata/templates/package/search.html:45
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_form.html:4
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_form_top.html:4
+msgid "Name Ascending"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/search.html:21
+#: ckanext/publicamundi/themes/geodata/templates/package/search.html:46
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_form.html:4
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_form_top.html:4
+msgid "Name Descending"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/search.html:22
+#: ckanext/publicamundi/templates/package/snippets/resource_form.html:68
+#: ckanext/publicamundi/themes/geodata/templates/package/search.html:47
+msgid "Last Modified"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/search.html:23
+#: ckanext/publicamundi/templates/snippets/package_item.html:41
+#: ckanext/publicamundi/themes/geodata/templates/package/search.html:48
+#: ckanext/publicamundi/themes/geodata/templates/snippets/package_item_home.html:65
+#: ckanext/publicamundi/themes/geodata/templates/snippets/package_item_search.html:60
+msgid "Popular"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/additional_info.html:3
+msgid "Basic Metadata"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/additional_info.html:13
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_form.html:39
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_table.html:46
+msgid "Source"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/additional_info.html:20
+#: ckanext/publicamundi/templates/package/snippets/additional_info.html:25
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:41
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_table.html:51
+msgid "Author"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/additional_info.html:32
+#: ckanext/publicamundi/templates/package/snippets/additional_info.html:37
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:64
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_table.html:61
+msgid "Maintainer"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/additional_info.html:44
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:28
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_table.html:71
+msgid "Version"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/additional_info.html:51
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_table.html:36
+msgid "State"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/additional_info.html:86
+msgid "XML Metadata"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/additional_info.html:89
+msgid "JSON Metadata"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/edit-dataset_type.html:9
+#: ckanext/publicamundi/templates/package/snippets/edit-dataset_type.html:30
+msgid "Schema"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/edit-organization.html:6
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_form.html:21
+#: ckanext/publicamundi/themes/geodata/templates/snippets/organization.html:19
+msgid "Organization"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/edit-organization.html:13
+msgid "Select an organization..."
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_form.html:16
+#: ckanext/publicamundi/templates/package/snippets/package_basic_fields.html:10
+msgid "Specify the metadata schema the dataset aligns to."
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_form.html:23
+msgid "Specify the organization the dataset belongs to."
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_form.html:28
+msgid "Rename"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_form.html:29
+msgid "Rename dataset, if needed."
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_form.html:33
+msgid "Force create"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_form.html:34
+msgid "Create dataset, even if validation fails."
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_form.html:49
+msgid "Cancel"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_form.html:51
+msgid "Go ahead and import this dataset"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_form.html:52
+msgid "Import"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_basic_fields.html:20
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-inspire-datasetform.html:34
+msgid "Title"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_basic_fields.html:21
+msgid "eg. A descriptive title"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_basic_fields.html:40
+msgid "Locator (URL)"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_basic_fields.html:42
+msgid "eg. visitor-stats-2014b"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_basic_fields.html:57
+#: ckanext/publicamundi/templates/package/snippets/resource_form.html:37
+msgid "Description"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_basic_fields.html:58
+msgid "eg. Some useful notes about the data"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_basic_fields.html:75
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/tags.html:2
+msgid "Tags"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_basic_fields.html:76
+msgid "eg. economy, mental health, government"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_basic_fields.html:98
+msgid ""
+"Check license definitions at <a "
+"href=\"http://opendefinition.org/licenses/\">opendefinition.org</a>"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_form.html:41
+msgid ""
+"Important: By submitting content, you agree to release your contributions"
+" under the Open Database License."
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_form.html:49
+msgid "Are you sure you want to delete this dataset?"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_form.html:53
+#: ckanext/publicamundi/templates/package/snippets/resource_form.html:111
+msgid "Delete"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_form.html:56
+msgid "Next: Add Data"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:30
+msgid "1.0"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:43
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:66
+msgid "Joe Bloggs"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:51
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_table.html:56
+msgid "Author Email"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:53
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:76
+msgid "joe@example.com"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:74
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_table.html:66
+msgid "Maintainer Email"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_form.html:21
+#: ckanext/publicamundi/templates/package/snippets/resource_form.html:118
+msgid "Previous"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_metadata_form.html:22
+msgid "Finish"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resource_form.html:29
+msgid "File"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resource_form.html:29
+msgid "URL"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resource_form.html:33
+msgid "Name"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resource_form.html:33
+msgid "eg. January 2011 Gold Prices"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resource_form.html:37
+msgid "Some useful notes about the data"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resource_form.html:55
+msgid "eg. csv"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resource_form.html:69
+msgid "eg. 2012-06-05"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resource_form.html:76
+msgid "File Size"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resource_form.html:77
+msgid "eg. 1024"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resource_form.html:85
+#: ckanext/publicamundi/templates/package/snippets/resource_form.html:94
+msgid "MIME Type"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resource_form.html:86
+#: ckanext/publicamundi/templates/package/snippets/resource_form.html:95
+msgid "eg. application/json"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resource_form.html:107
+msgid "Are you sure you want to delete this resource?"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resource_form.html:121
+msgid "Save & add another"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resource_form.html:124
+msgid "Next: Additional Info"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resource_form.html:128
+msgid "Add"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resource_item.html:21
+msgid "Explore"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resource_item.html:27
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:12
+msgid "Preview"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resource_item.html:29
+msgid "More information"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resource_item.html:45
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:39
+msgid "Edit"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resources_list-all.html:12
+#: ckanext/publicamundi/templates/package/snippets/resources_list-grouped.html:23
+#: ckanext/publicamundi/templates/package/snippets/resources_list.html:23
+msgid "Data and Resources"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resources_list-all.html:24
+#: ckanext/publicamundi/templates/package/snippets/resources_list-grouped.html:40
+#: ckanext/publicamundi/templates/package/snippets/resources_list.html:40
+#, python-format
+msgid ""
+" <p class=\"empty\"> This dataset has no data, <a href=\"%(url)s\">why "
+"not add some?</a> </p> "
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resources_list-all.html:31
+#: ckanext/publicamundi/templates/package/snippets/resources_list-grouped.html:47
+#: ckanext/publicamundi/templates/package/snippets/resources_list.html:47
+msgid "This dataset has no data"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/resources_list-grouped.html:57
+#: ckanext/publicamundi/templates/package/snippets/resources_list.html:57
+msgid "Services"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-bounding_box-inspire.html:16
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-bounding_box-inspire.html:17
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-temporal_extent-inspire.html:4
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-temporal_extent-inspire.html:5
+msgid "Add extent"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-bounding_box-inspire.html:18
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-conformity-inspire.html:6
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-spatial_resolution-inspire.html:7
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-temporal_extent-inspire.html:6
+msgid "Clear all"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-bounding_box-inspire.html:19
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-temporal_extent-inspire.html:7
+msgid "Clear all extents!"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-bounding_box-inspire.html:21
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-temporal_extent-inspire.html:9
+msgid "You cannot add more than {{maxlength}} extents"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-bounding_box-inspire.html:22
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-temporal_extent-inspire.html:10
+msgid "Are you sure you want to clear all ({{num}}) extents ?"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-conformity-inspire.html:4
+msgid "Add statement"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-conformity-inspire.html:5
+msgid "Add conformity statememt"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-conformity-inspire.html:7
+msgid "Clear all conformity statements!"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-conformity-inspire.html:9
+msgid "You cannot add more than {{maxlength}} statements"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-conformity-inspire.html:10
+msgid "Are you sure you want to clear all ({{num}}) statements?"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-spatial_resolution-inspire.html:5
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-spatial_resolution-inspire.html:6
+msgid "Add resolution"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-spatial_resolution-inspire.html:8
+msgid "Clear all!"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-spatial_resolution-inspire.html:10
+msgid "You cannot add more than {{maxlength}} resolution descriptors"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-spatial_resolution-inspire.html:11
+msgid "Are you sure you want to clear all ({{num}}) resolution descriptors?"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/read-bool-dd.html:2
+#: ckanext/publicamundi/templates/package/snippets/fields/read-bool.html:3
+msgid "Yes"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/read-bool-dd.html:2
+#: ckanext/publicamundi/templates/package/snippets/fields/read-bool.html:3
+msgid "No"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/read-choice-dd.html:3
+#: ckanext/publicamundi/templates/package/snippets/fields/read-date.html:3
+#: ckanext/publicamundi/templates/package/snippets/fields/read-datetime-dd.html:3
+#: ckanext/publicamundi/templates/package/snippets/fields/read-datetime.html:3
+#: ckanext/publicamundi/templates/package/snippets/fields/read-email-dd.html:2
+#: ckanext/publicamundi/templates/package/snippets/fields/read-float-dd.html:7
+#: ckanext/publicamundi/templates/package/snippets/fields/read-int-dd.html:7
+#: ckanext/publicamundi/templates/package/snippets/fields/read-text-dd.html:7
+#: ckanext/publicamundi/templates/package/snippets/fields/read-uri-dd.html:2
+#: ckanext/publicamundi/templates/package/snippets/objects/read-postal_address.html:8
+#: ckanext/publicamundi/templates/package/snippets/objects/read-temporal_extent-td.html:10
+#: ckanext/publicamundi/templates/user/snippets/resource_ingest_status_label.html:1
+msgid "n/a"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-contact_info.html:10
+msgid "Email"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-contact_info.html:16
+#: ckanext/publicamundi/templates/package/snippets/objects/read-postal_address.html:2
+msgid "Postal Address"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-geographic_bbox-item.html:3
+msgid "Bounding Box"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-geographic_bbox.html:6
+msgid "West Longitude"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-geographic_bbox.html:7
+msgid "East Longitude"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-geographic_bbox.html:10
+msgid "South Latitude"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-geographic_bbox.html:11
+msgid "North Latitude"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-geographic_bbox.html:38
+msgid "Draw"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-comfortable.html:7
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-comfortable.html:13
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-compact.html:11
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address.html:7
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address.html:13
+msgid "Street Address"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-comfortable.html:12
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address.html:12
+msgid "Patission 183"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-comfortable.html:23
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-compact.html:24
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address.html:23
+msgid "Postal Code"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-comfortable.html:28
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-compact.html:17
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address.html:28
+msgid "13254"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-comfortable.html:29
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-compact.html:18
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address.html:29
+msgid "Postal (ZIP) Code"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-compact.html:10
+msgid "Patission 199"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-compact.html:13
+#: ckanext/publicamundi/templates/package/snippets/objects/read-postal_address.html:6
+msgid "Zip"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-compact.html:23
+msgid "Address"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-postal_address-compact.html:25
+msgid "As a whole"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-spatial_resolution.html:10
+msgid "Specify"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-spatial_resolution.html:14
+msgid "By equivalent scale"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-spatial_resolution.html:18
+msgid "By ground distance"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-spatial_resolution.html:23
+msgid "Equivalent Scale"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-spatial_resolution.html:27
+msgid "50000"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-spatial_resolution.html:36
+msgid "Distance"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-spatial_resolution.html:45
+msgid "Unit"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-temporal_extent-item.html:3
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-temporal_extent.html:32
+msgid "Extent"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-temporal_extent.html:11
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-temporal_extent.html:14
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-temporal_extent.html:30
+msgid "Start Date"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-temporal_extent.html:18
+msgid "To"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-temporal_extent.html:20
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-temporal_extent.html:23
+msgid "End Date"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-temporal_extent.html:31
+msgid "End date"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-thesaurus_terms-select2.html:5
+msgid "Enter a keyword..."
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/edit-thesaurus_terms.html:11
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-inspire-datasetform.html:107
+msgid "Keywords"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-foo-datasetform.html:7
+msgid "Basic Foo"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-foo-datasetform.html:12
+msgid "Contact Info"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-foo-datasetform.html:17
+msgid "Details"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-inspire-datasetform.html:18
+msgid "Locator"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-inspire-datasetform.html:49
+msgid "Identifier"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-inspire-datasetform.html:64
+msgid "Abstract"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-inspire-datasetform.html:88
+msgid "Identification"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-inspire-datasetform.html:98
+msgid "Classification"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-inspire-datasetform.html:116
+msgid "Geographic"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-inspire-datasetform.html:126
+msgid "Temporal"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-inspire-datasetform.html:133
+msgid "Significant Dates"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-inspire-datasetform.html:134
+msgid "Provide the significant dates in this dataset's lifecycle."
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-inspire-datasetform.html:143
+msgid "Quality and Validity"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-inspire-datasetform.html:155
+msgid "Conformity"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-inspire-datasetform.html:164
+msgid "Constraints"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-inspire-datasetform.html:176
+msgid "Responsible Party"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-inspire-datasetform.html:194
+msgid "Metadata on Metadata"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/read-point.html:2
+msgid "Point"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/read-temporal_extent-td.html:4
+#: ckanext/publicamundi/templates/package/snippets/objects/read-temporal_extent.html:3
+#, python-format
+msgid "From %(start)s to %(end)s"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/read-temporal_extent-td.html:6
+#, python-format
+msgid "From %(start)s"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/read-temporal_extent-td.html:8
+#, python-format
+msgid "Until %(end)s"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/objects/read-temporal_extent.html:2
+msgid "Temporal Extent"
+msgstr ""
+
+#: ckanext/publicamundi/templates/snippets/add_dataset_button.html:12
+msgid "Add Dataset"
+msgstr ""
+
+#: ckanext/publicamundi/templates/snippets/add_dataset_button.html:19
+msgid "Create from scratch"
+msgstr ""
+
+#: ckanext/publicamundi/templates/snippets/add_dataset_button.html:23
+msgid "Import existing metadata"
+msgstr ""
+
+#: ckanext/publicamundi/templates/snippets/custom_form_fields.html:23
+#: ckanext/publicamundi/templates/snippets/custom_form_fields.html:40
+msgid "Custom Field"
+msgstr ""
+
+#: ckanext/publicamundi/templates/snippets/organization.html:26
+msgid "read more"
+msgstr ""
+
+#: ckanext/publicamundi/templates/snippets/organization.html:29
+msgid "There is no description for this organization"
+msgstr ""
+
+#: ckanext/publicamundi/templates/snippets/organization.html:34
+msgid "Followers"
+msgstr ""
+
+#: ckanext/publicamundi/templates/snippets/organization.html:38
+msgid "Members"
+msgstr ""
+
+#: ckanext/publicamundi/templates/snippets/package_item.html:25
+#: ckanext/publicamundi/themes/geodata/templates/snippets/package_item_home.html:47
+#: ckanext/publicamundi/themes/geodata/templates/snippets/package_item_search.html:47
+msgid "Private"
+msgstr ""
+
+#: ckanext/publicamundi/templates/snippets/search_form.html:18
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_form.html:60
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_form_top.html:65
+msgid "Remove"
+msgstr ""
+
+#: ckanext/publicamundi/templates/snippets/upload-ajax.html:6
+#: ckanext/publicamundi/templates/snippets/upload-ajax.html:13
+msgid "Proceed"
+msgstr ""
+
+#: ckanext/publicamundi/templates/snippets/upload.html:21
+msgid "Upload"
+msgstr ""
+
+#: ckanext/publicamundi/templates/snippets/upload.html:24
+msgid "Link"
+msgstr ""
+
+#: ckanext/publicamundi/templates/snippets/upload.html:32
+#: ckanext/publicamundi/templates/snippets/upload.html:41
+msgid "Discard"
+msgstr ""
+
+#: ckanext/publicamundi/templates/tests/upload-form.html:5
+msgid "Metadata Source"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/admin_page_resources.html:5
+#: ckanext/publicamundi/templates/user/dashboard.html:11
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard.html:21
+msgid "My Datasets"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/dashboard.html:6
+#: ckanext/publicamundi/themes/geodata/templates/header.html:104
+#: ckanext/publicamundi/themes/geodata/templates/home/index.html:39
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard.html:16
+msgid "Edit settings"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/dashboard.html:10
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard.html:25
+msgid "News feed"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/dashboard.html:12
+#: ckanext/publicamundi/templates/user/dashboard_organizations.html:4
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard.html:23
+msgid "My Organizations"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/dashboard.html:13
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard.html:24
+msgid "My Groups"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/dashboard.html:14
+#: ckanext/publicamundi/templates/user/read_base.html:5
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard.html:22
+msgid "Resources"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/dashboard_organizations.html:12
+msgid "You are not a member of any organizations."
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/dashboard_organizations.html:14
+msgid "Create one now?"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/dashboard_resources.html:5
+msgid "My Resources"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/snippets/identified_resource.html:7
+msgid "Actions"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/snippets/identified_resource.html:12
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/data_api_button.html:7
+msgid "Loading..."
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/snippets/identified_resource.html:13
+msgid "Ingest resource"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/snippets/identified_resource.html:17
+msgid "Ignore"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/snippets/rejected_resource.html:7
+msgid "Re-Identify"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/snippets/resource_item.html:13
+msgid "No Action"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/snippets/resource_item.html:15
+msgid "Identified"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/snippets/resource_item.html:18
+msgid "Rejected"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/snippets/resource_item.html:21
+msgid "Published"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/snippets/resource_item.html:23
+msgid "Publishing"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/snippets/resource_item.html:25
+msgid "Publish Failed"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/snippets/resource_item.html:27
+msgid "Not Ready"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/snippets/resource_item.html:29
+msgid "Identify Failed"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/snippets/ingest_templates/ingest_base.html:4
+msgid "Ingest Resource"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/footer.html:12
+#: ckanext/publicamundi/themes/geodata/templates/home/snippets/search.html:3
+msgid "Search Datasets"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/footer.html:13
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_form.html:3
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_form_top.html:3
+msgid "Search datasets..."
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/footer.html:37
+#: ckanext/publicamundi/themes/geodata/templates/header.html:36
+#: ckanext/publicamundi/themes/geodata/templates/home/index.html:111
+#: ckanext/publicamundi/themes/geodata/templates/snippets/group.html:14
+msgid "Topics"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/footer.html:39
+#: ckanext/publicamundi/themes/geodata/templates/header.html:38
+#: ckanext/publicamundi/themes/geodata/templates/home/index.html:113
+msgid "Maps"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/footer.html:40
+#: ckanext/publicamundi/themes/geodata/templates/header.html:39
+#: ckanext/publicamundi/themes/geodata/templates/home/index.html:114
+msgid "About"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/footer.html:51
+msgid "IMIS"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/footer.html:52
+msgid "Rasdaman"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/footer.html:53
+msgid "Geolabs"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/footer.html:54
+msgid "GET"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/header.html:82
+#: ckanext/publicamundi/themes/geodata/templates/home/index.html:18
+msgid "View profile"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/header.html:90
+#: ckanext/publicamundi/themes/geodata/templates/home/index.html:24
+msgid "Sysadmin settings"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/header.html:96
+#: ckanext/publicamundi/themes/geodata/templates/home/index.html:31
+#, python-format
+msgid "Dashboard (%(num)d new item)"
+msgid_plural "Dashboard (%(num)d new items)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ckanext/publicamundi/themes/geodata/templates/header.html:98
+#: ckanext/publicamundi/themes/geodata/templates/home/index.html:33
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard.html:4
+msgid "Dashboard"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/header.html:105
+#: ckanext/publicamundi/themes/geodata/templates/home/index.html:40
+msgid "Settings"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/header.html:112
+#: ckanext/publicamundi/themes/geodata/templates/home/index.html:47
+msgid "Log out"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/header.html:113
+#: ckanext/publicamundi/themes/geodata/templates/home/index.html:48
+msgid "Logout"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/header.html:127
+#: ckanext/publicamundi/themes/geodata/templates/home/index.html:62
+msgid "Log in"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/header.html:129
+#: ckanext/publicamundi/themes/geodata/templates/home/index.html:64
+msgid "Register"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/page.html:19
+#: ckanext/publicamundi/themes/geodata/templates/home/index.html:152
+msgid "Leave your feedback"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/group/index.html:8
+msgid "Search groups..."
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/group/index.html:14
+msgid "Groups"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/group/index.html:22
+msgid "There are currently no groups for this site"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/group/index.html:24
+#: ckanext/publicamundi/themes/geodata/templates/organization/index.html:22
+msgid "How about creating one?"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/home/layout1.html:1
+msgid "Latest Updated"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/home/layout1.html:13
+msgid "Latest Updates"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/home/snippets/about_text.html:1
+msgid ""
+" <div class=\"about\"> <p><a "
+"href=\"http://labs.geodata.gov.gr\">Labs.geodata.gov.gr</a> is a constant"
+" work in progress, where you can find early prototypes of software and "
+"services before their release in <a "
+"href=\"http://geodata.gov.gr\">geodata.gov.gr</a>.</p> <p>Feel free to "
+"publish, discover, reuse, visualize open geospatial data, and give us "
+"your feedback. Check the available features for publishing geospatial "
+"data (vector and raster), our powerful OGC web services, INSPIRE "
+"conformance, Data APIs, and Mapping APIs.</p> <p> <a "
+"href=\"http://labs.geodata.gov.gr\">Labs.geodata.gov.gr</a> is powered by"
+" great open source software developed in the context of PublicaMundi, an "
+"FP7 project aiming to make open geospatial data easier to publish and "
+"reuse. For more information, please visit</p> <p><ul class=\"unstyled\"> "
+"<li>PublicaMundi: <a "
+"href=\"http://www.publicamundi.eu\">www.publicamundi.eu</a></li> "
+"<li>Source code: <a "
+"href=\"https://github.com/PublicaMundi\">github.com/PublicaMundi</a></li>"
+" </ul></p> </div> "
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/home/snippets/promoted.html:8
+msgid "Open Data"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/home/snippets/promoted.html:10
+msgid ""
+"Here you will find data, tools, and resources to conduct research, "
+"develop web and mobile applications, design data visualizations, and "
+"more."
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/home/snippets/search.html:12
+msgid "Search"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/organization/index.html:7
+msgid "Search organizations..."
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/organization/index.html:20
+msgid "There are currently no organizations for this site"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/read.html:16
+msgid "Publication:"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/read.html:16
+#: ckanext/publicamundi/themes/geodata/templates/package/read.html:17
+msgid "Never"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/read.html:17
+msgid "Last revision:"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/search.html:16
+msgid "Mapping API"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/search.html:19
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/data_api_button.html:9
+msgid "Data API"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/search.html:22
+msgid "CSW API"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/search.html:73
+msgid "API"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/search.html:74
+msgid "API Docs"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/search.html:76
+msgid "full {format} dump"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/search.html:77
+#, python-format
+msgid ""
+" You can also access this registry using the %(api_link)s (see "
+"%(api_doc_link)s) or download a %(dump_link)s. "
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/search.html:81
+#, python-format
+msgid ""
+" You can also access this registry using the %(api_link)s (see "
+"%(api_doc_link)s). "
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:15
+msgid "More"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:24
+msgid "Endpoint"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:25
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:27
+msgid "Create dataset"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:32
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:36
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:38
+msgid "Add data"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:44
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:48
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:50
+msgid "Additional info"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/facet_list.html:72
+msgid "Show More {facet_type}"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/facet_list.html:74
+msgid "Show Only Popular {facet_type}"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/facet_list.html:78
+msgid "There are no {facet_type} that match this search"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/license.html:15
+msgid "This dataset satisfies the Open Definition."
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/license.html:23
+msgid "No License Provided"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_form.html:16
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_form_top.html:17
+msgid "Submit"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_form.html:29
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_form_top.html:32
+msgid "Order by"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_form.html:37
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_form_top.html:40
+msgid "Go"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_form.html:71
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_form_top.html:76
+msgid " <p class=\"extra\">Please try another search.</p> "
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_form.html:77
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_form_top.html:82
+msgid ""
+" <p><strong>There was an error while searching.</strong> Please try "
+"again.</p> "
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_form_top.html:46
+msgid "Search Filters"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_result_text.html:15
+msgid "{number} dataset found for \"{query}\""
+msgid_plural "{number} datasets found for \"{query}\""
+msgstr[0] ""
+msgstr[1] ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_result_text.html:16
+msgid "No datasets found for \"{query}\""
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_result_text.html:17
+msgid "{number} dataset found"
+msgid_plural "{number} datasets found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_result_text.html:18
+msgid "No datasets found"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_result_text.html:21
+msgid "{number} group found for \"{query}\""
+msgid_plural "{number} groups found for \"{query}\""
+msgstr[0] ""
+msgstr[1] ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_result_text.html:22
+msgid "No groups found for \"{query}\""
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_result_text.html:23
+msgid "{number} group found"
+msgid_plural "{number} groups found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_result_text.html:24
+msgid "No groups found"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_result_text.html:27
+msgid "{number} organization found for \"{query}\""
+msgid_plural "{number} organizations found for \"{query}\""
+msgstr[0] ""
+msgstr[1] ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_result_text.html:28
+msgid "No organizations found for \"{query}\""
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_result_text.html:29
+msgid "{number} organization found"
+msgid_plural "{number} organizations found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/search_result_text.html:30
+msgid "No organizations found"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/social.html:3
+msgid "Share"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/user/edit.html:7
+msgid "Account Info"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/user/edit.html:9
+msgid ""
+" Your profile lets other Geodata.gov.gr users know about who you are and "
+"what you do. "
+msgstr ""
+
