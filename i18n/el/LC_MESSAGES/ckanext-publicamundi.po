@@ -501,7 +501,7 @@ msgstr "Συντάκτης"
 #: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:64
 #: ckanext/publicamundi/templates/package/snippets/package_metadata_table.html:61
 msgid "Maintainer"
-msgstr "Υπέυθυνος Συντήρησης"
+msgstr "Υπεύθυνος Συντήρησης"
 
 #: ckanext/publicamundi/templates/package/snippets/additional_info.html:44
 #: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:28
