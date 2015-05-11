@@ -1552,6 +1552,14 @@ msgstr ""
 msgid "Share"
 msgstr ""
 
+#: ckanext/publicamundi/themes/geodata/templates/spatial/snippets/spatial_query.html:17
+msgid "Location"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/spatial/snippets/spatial_query.html:18
+msgid "Clear"
+msgstr ""
+
 #: ckanext/publicamundi/themes/geodata/templates/user/edit.html:7
 msgid "Account Info"
 msgstr ""

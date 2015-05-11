@@ -232,11 +232,11 @@ msgstr "Οργανισμοί"
 #: ckanext/publicamundi/themes/geodata/templates/home/index.html:110
 #: ckanext/publicamundi/themes/geodata/templates/package/search.html:4
 msgid "Datasets"
-msgstr "Σύνολα Δεδομένων"
+msgstr "Δεδομένα"
 
 #: ckanext/publicamundi/storers/vector/templates/style/main.html:20
 msgid "Create Dataset"
-msgstr "Δημιουργία Συνόλου Δεδομένων"
+msgstr "Δημιουργία Δεδομένων"
 
 #: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/shapefile.html:4
 #: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/sqlite_gpkg.html:3
@@ -282,7 +282,7 @@ msgstr "Εισαγωγή Μεταδεδομένων"
 
 #: ckanext/publicamundi/templates/package/import_metadata.html:11
 msgid "Import Dataset"
-msgstr "Εισαγωγή Συνόλου Δεδομένων"
+msgstr "Εισαγωγή Δεδομένων"
 
 #: ckanext/publicamundi/templates/package/new_package_metadata.html:3
 msgid "Add metadata to the dataset"
@@ -1201,7 +1201,7 @@ msgstr "Φόρτωση Πόρου"
 #: ckanext/publicamundi/themes/geodata/templates/footer.html:12
 #: ckanext/publicamundi/themes/geodata/templates/home/snippets/search.html:3
 msgid "Search Datasets"
-msgstr "Αναζήτηση Συνόλων Δεδομένων"
+msgstr "Αναζήτηση Δεδομένων"
 
 #: ckanext/publicamundi/themes/geodata/templates/footer.html:13
 #: ckanext/publicamundi/themes/geodata/templates/snippets/search_form.html:3
@@ -1221,6 +1221,13 @@ msgstr "Θέματα"
 #: ckanext/publicamundi/themes/geodata/templates/home/index.html:113
 msgid "Maps"
 msgstr "Χάρτες"
+
+#: ckanext/publicamundi/themes/geodata/templates/footer.html:40
+#: ckanext/publicamundi/themes/geodata/templates/header.html:38
+#: ckanext/publicamundi/themes/geodata/templates/home/index.html:114
+msgid "News"
+msgstr "Νέα"
+
 
 #: ckanext/publicamundi/themes/geodata/templates/footer.html:40
 #: ckanext/publicamundi/themes/geodata/templates/header.html:39
@@ -1586,6 +1593,14 @@ msgstr "Δεν βρέθηκαν οργανισμοί"
 #: ckanext/publicamundi/themes/geodata/templates/snippets/social.html:3
 msgid "Share"
 msgstr "Μοιραστείτε"
+
+#: ckanext/publicamundi/themes/geodata/templates/spatial/snippets/spatial_query.html:17
+msgid "Location"
+msgstr "Έκταση"
+
+#: ckanext/publicamundi/themes/geodata/templates/spatial/snippets/spatial_query.html:18
+msgid "Clear"
+msgstr "Εκκαθάριση"
 
 #: ckanext/publicamundi/themes/geodata/templates/user/edit.html:7
 msgid "Account Info"

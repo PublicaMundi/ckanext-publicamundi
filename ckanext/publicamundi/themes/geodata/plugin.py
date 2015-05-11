@@ -3,6 +3,7 @@ import datetime
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckan.lib.base import c
+from ckan.lib.helpers import render_datetime
 
 def most_recent_datasets(limit=10):
     datasets = toolkit.get_action('package_search')(
@@ -20,8 +21,7 @@ def list_menu_items (limit=21):
     return groups
 
 def friendly_date(date_str):
-    date = datetime.datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%S.%f").date()
-    return date.strftime('%d, %b, %Y')
+    return render_datetime(date_str, '%d, %B, %Y')
 
 
 _feedback_form = None

@@ -1,4 +1,4 @@
-jQuery(document).ready(function ($) {
+jQuery(document).ready(function ($, _) {
     
     var console = window.console
     var debug = $.proxy(console, 'debug') 
@@ -6,7 +6,7 @@ jQuery(document).ready(function ($) {
     handleFacets();
 });
 
-var LIMIT = 4;
+var LIMIT = 5;
 
 function handleFacets() {
     
@@ -36,13 +36,16 @@ function handleFacets() {
         var list = ul.find('li');
         var title = ul.attr('title');
     
-        $(this).parent().parent().find('.read-more').text("Show Only Popular " + title);
+        //$(this).parent().parent().find('.read-more').text("Show Only Popular ");
+        //list.parent().addClass("li-hidden");
+        $(this).parent().parent().find('.read-more').addClass("hidden");
+        $(this).parent().parent().find('.read-less').removeClass("hidden");
 
         list.parent().removeClass('li-hidden');
         list.each(function(index){
             $(this).css("display","block");
         });
-        $(this).one('click', show_less);
+        $('.read-less').one('click', show_less);
     };
         function show_less(e){
         e.preventDefault();            
@@ -50,7 +53,10 @@ function handleFacets() {
         var list = ul.find('li');
         var title = ul.attr('title');
 
-        $(this).parent().parent().find('.read-more').text("Show More "+title);
+        //$(this).parent().parent().find('.read-more').text("Show More");
+        $(this).parent().parent().find('.read-less').addClass("hidden");
+        $(this).parent().parent().find('.read-more').removeClass("hidden");
+
         if (list.length >= LIMIT){
             list.parent().addClass("li-hidden");
         }
@@ -59,9 +65,10 @@ function handleFacets() {
                 $(this).css("display", "none");
             };
         });
-        $(this).one('click', show_more);
+        $('.read-more').one('click', show_more);
     };
 
+    $('.read-less').one('click', show_less);
     $('.read-more').one('click', show_more);
 
     // Sort by popularity ascending/descending handling

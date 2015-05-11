@@ -1,5 +1,5 @@
-{% set current_url = h.current_url() %}
-{% set current_lang = h.lang() %}
+{% set current_url = request.environ.CKAN_CURRENT_URL %}
+{% set current_lang = request.environ.CKAN_LANG %}
 
 {% for locale in h.get_available_locales() %}
 {% if locale == current_lang %}

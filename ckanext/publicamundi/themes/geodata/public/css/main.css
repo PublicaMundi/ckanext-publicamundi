@@ -762,6 +762,9 @@ p a{
     float:right;
     margin-top:-42px;
 }
+.search-medium > .search-form .search-input {
+    border: 2px #4E59A4 solid;
+}
 .search-form .search-input.search-giant button i{
     font-size: 27px;
 }
@@ -1101,8 +1104,9 @@ img[src="/images/various/tags.svg"]{
 }
 
 .resource-actions li {
+    display: inline-block;
     float: left;
-    margin-left: 5px;
+    margin-left: 7px;
 }
 .resource-actions .btn{
     padding: 4px 10px;
@@ -1197,6 +1201,13 @@ img[src="/images/various/tags.svg"]{
 }
 .resource-item .heading{
     font-weight: normal;
+}
+.resources li.resource-item .all-btns .btn-group{
+    right: 0px;
+}
+
+.resources li.resource-item .all-btns li{
+    margin-left: 8px;
 }
 .label{
     font-weight: normal;
@@ -1301,7 +1312,7 @@ img[src="/images/various/tags.svg"]{
 .resources li.resource-item{
     padding: 10px 5px 10px 60px;
 }
-.resources li.resource-item .btn-group{
+.resources  li.resource-item  .all-btns{
     float: right;
     //margin-top: 5px;
 }
@@ -1423,7 +1434,7 @@ img[src="/images/various/tags.svg"]{
     letter-spacing: 0.02em;
 }
 .middle-text{
-    margin-left:20%;
+    margin-left:0;
 }
 /* CKAN control overrides */
 .form-select select {

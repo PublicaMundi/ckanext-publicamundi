@@ -23,7 +23,6 @@
 
     </hgroup>
 
-
         </div>
         <div class="mainmenu">
 
@@ -44,13 +43,11 @@
     
             <div id="menu-block" class="container"  >
                 {% block groups_list %}
-                {{ c.groups }}
-        {# {% snippet "snippets/menu_list.html", items=h.list_menu_items() %} #}
+         {% snippet "snippets/menu_list.html", items=h.list_menu_items() %} 
 
         {% endblock %}
         </div>
         {% endblock %}
-
             </div>
             {% endblock %}
           </ul>
@@ -82,7 +79,7 @@
                   {# <li> #}
                 {% set new_activities = h.new_activities() %}
                 <a href="{{ h.url_for(controller='user', action='read', id=c.userobj.name) }}" class="viewprofile" title="{{ _('View profile') }}">
-                    <span class="down-arrow">{{ h.truncate(c.userobj.display_name, 21)}} </span>
+                    <span class="down-arrow">{{ h.truncate(c.userobj.display_name, 17)}} </span>
                     {# {% if new_activities > 0 %}({{new_activities}}) {% endif %} #}
                     </a>
                 <ul>
