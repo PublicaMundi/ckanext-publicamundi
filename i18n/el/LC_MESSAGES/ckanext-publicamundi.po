@@ -1678,10 +1678,6 @@ msgstr "Δεν βρέθηκαν οργανισμοί"
 msgid "Share"
 msgstr "Μοιραστείτε"
 
-#: ckanext/publicamundi/themes/geodata/templates/spatial/snippets/spatial_query.html:17
-msgid "Location"
-msgstr "Έκταση"
-
 #: ckanext/publicamundi/themes/geodata/templates/spatial/snippets/spatial_query.html:18
 msgid "Clear"
 msgstr "Εκκαθάριση"
