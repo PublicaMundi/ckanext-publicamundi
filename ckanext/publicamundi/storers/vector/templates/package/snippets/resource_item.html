@@ -17,11 +17,11 @@
     {{ super() }}
 {% endblock %}
 
-{% block resource_item_download %}
+{# {% block resource_item_download %}
     {% if res.vectorstorer_resource and res.format in ['wfs'] %}
     <div class="dropdown btn-group resource-download-opts pull-right">
         <a href="#" class="btn dropdown-toggle" data-toggle="dropdown"
-            >{#<i class="icon-download"></i> #}{{ _('Download as') }} <span class="caret"></span></a>
+            >{{ _('Download as') }} <span class="caret"></span></a>
         <ul class="dropdown-menu">
             {% if res.format == 'wfs' %}
             {% for fmt in h.vectorstorer_wfs_output_formats() %}
@@ -30,9 +30,9 @@
                   >{{ fmt.display_name|safe }}</a>
             </li>
             {% endfor %}
-            {% endif %} {# res.format #}
+            {% endif %} 
         </ul>
     </div>
     {% endif %}
     {{ super() }}
-{% endblock %}
+    {% endblock %} #}

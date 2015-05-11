@@ -3,7 +3,7 @@
 
 {% for locale in h.get_available_locales() %}
 {% if locale == current_lang %}
-<a href="{{ h.url_for(current_url, locale=locale) }}"><span >
+<a href="{{ h.url_for(current_url, locale=locale) }}"><span class="down-arrow">
             {{ locale.display_name or locale.english_name }}</span></a>
 {% endif %}
 {% endfor %}

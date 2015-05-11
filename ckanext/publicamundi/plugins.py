@@ -81,6 +81,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'markup_for_object': ext_metadata.markup_for_object,
             'markup_for': ext_metadata.markup_for,
             'resource_ingestion_result': ext_template_helpers.resource_ingestion_result,
+            'get_ingested_raster_resources': ext_template_helpers.get_ingested_raster_resources,
+            'get_ingested_vector_resources': ext_template_helpers.get_ingested_vector_resources,
         }
 
     ## IConfigurer interface ##

@@ -5,13 +5,12 @@
 ]>
 <svg version="1.1"
 	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
-	 x="0px" y="0px" width="595px" height="842px" viewBox="-287.63 -411.114 595 842"
-	 overflow="visible" enable-background="new -287.63 -411.114 595 842" xml:space="preserve">
+	 x="0px" y="0px" width="21px" height="21px" viewBox="0 -0.5 21 21" overflow="visible" enable-background="new 0 -0.5 21 21"
+	 xml:space="preserve">
 <defs>
 </defs>
-<path fill="#676767" d="M10.161,2.717c4.103,0,7.441,3.339,7.441,7.443s-3.338,7.443-7.441,7.443c-4.104,0-7.444-3.339-7.444-7.443
-	S6.057,2.717,10.161,2.717 M10.161,0C4.55,0,0,4.549,0,10.16s4.55,10.16,10.161,10.16c5.611,0,10.158-4.549,10.158-10.16
-	S15.772,0,10.161,0L10.161,0z"/>
-<path fill="none" stroke="#555356" stroke-width="2" stroke-miterlimit="10" d="M13.706,13.1c-0.863,1.078-2.189,1.769-3.677,1.769
-	c-2.6,0-4.708-2.108-4.708-4.708s2.108-4.708,4.708-4.708c1.615,0,3.041,0.813,3.886,2.054"/>
+<path fill="#676767" d="M10.2,2.7c4.1,0,7.4,3.3,7.4,7.4s-3.3,7.4-7.4,7.4c-4.1,0-7.4-3.3-7.4-7.4S6.1,2.7,10.2,2.7 M10.2,0
+	C4.5,0,0,4.5,0,10.2c0,5.6,4.5,10.2,10.2,10.2c5.6,0,10.2-4.5,10.2-10.2C20.3,4.5,15.8,0,10.2,0L10.2,0z"/>
+<path fill="none" stroke="#555356" stroke-width="2" stroke-miterlimit="10" d="M13.7,13.1c-0.9,1.1-2.2,1.8-3.7,1.8
+	c-2.6,0-4.7-2.1-4.7-4.7c0-2.6,2.1-4.7,4.7-4.7c1.6,0,3,0.8,3.9,2.1"/>
 </svg>

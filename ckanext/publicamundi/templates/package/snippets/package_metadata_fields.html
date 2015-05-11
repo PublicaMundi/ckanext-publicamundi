@@ -113,7 +113,6 @@
 %}
 {% do obj.from_dict(data, is_flat=true, opts=loader_opts) %}
 {% endif -%} {# if errors #}
-
 {{ 
     h.markup_for('edit:datasetform', obj, 
         errors=errors, 

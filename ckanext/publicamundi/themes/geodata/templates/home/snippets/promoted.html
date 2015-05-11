@@ -4,7 +4,8 @@
   <header>
     {% if intro %}
       {{ h.render_markdown(intro) }}
-    {% else %}
+      {% else %}
+      <button id="promote-close" class="btn-dismiss" type="button">x</button>
       <h1 class="page-heading">{{ _("Open Data") }}</h1>
       <p>
         {% trans %}Here you will find data, tools, and resources to conduct research, develop web and mobile applications, design data visualizations, and more.{% endtrans %}
@@ -12,6 +13,6 @@
     {% endif %}
   </header>
   <section class="featured media-overlay">
-  <a href="about"><button class="btn bnt-primary">Learn More</button></a>
+  <a href="about"><button class="btn bnt-primary">{{_('Learn More')}}</button></a>
   </section>
 </div>

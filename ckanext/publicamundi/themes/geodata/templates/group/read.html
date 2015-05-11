@@ -3,9 +3,11 @@
 
 {% block primary_content_inner %}
 {% block groups_search_form %}
-    {{ super() }}
-         {% endblock %}
-      <div class="supergap"></div>
+    <div class="search-medium">
+        {{ super() }}
+    </div>
+    {% endblock %}
+      <div class="gap"></div>
   {% block packages_list %}
   {{ super() }}
   {% endblock %}
