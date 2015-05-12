@@ -41,6 +41,7 @@ setup(
         publicamundi_vector = ckanext.publicamundi.storers.vector.plugin:VectorStorer
 
 	publicamundi_raster = ckanext.publicamundi.storers.raster.plugin:RasterStorer
+	publicamundi_analytics = ckanext.publicamundi.analytics.plugin:AnalyticsPlugin
 
         [paste.paster_command]
         

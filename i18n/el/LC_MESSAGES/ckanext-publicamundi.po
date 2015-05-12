@@ -33,7 +33,7 @@ msgstr "Δεν βρέθηκε ο χρήστης"
 
 #: ckanext/publicamundi/controllers/user.py:38
 msgid "Not authorized to see this page"
-msgstr "Δεν έχετε πρόσβαση σε αυτή τη σελίδα"
+msgstr "Δεν έχετε εξουσιοδότηση να δείτε αυτή τη σελίδα"
 
 #: ckanext/publicamundi/lib/actions/package.py:146
 #, python-format
@@ -131,7 +131,7 @@ msgstr "Δεν προσδιορίστηκε ο μορφότυπος εξαγωγ
 #: ckanext/publicamundi/storers/vector/controllers/style.py:64
 #: ckanext/publicamundi/storers/vector/controllers/style.py:91
 msgid "Resource not found"
-msgstr "Δεν βρέθηκε ο πόρος"
+msgstr "Δεν βρέθηκε πόρος"
 
 #: ckanext/publicamundi/storers/vector/controllers/export.py:330
 msgid "Not VectorStorerDB Resource."
@@ -236,7 +236,7 @@ msgstr "Δεδομένα"
 
 #: ckanext/publicamundi/storers/vector/templates/style/main.html:20
 msgid "Create Dataset"
-msgstr "Δημιουργία Συνόλου Δεδομένων"
+msgstr "Δημιουργία Δεδομένων"
 
 #: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/shapefile.html:4
 #: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/sqlite_gpkg.html:3
@@ -371,54 +371,80 @@ msgstr "Άδεια"
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:13
 msgid "Utilities Communication"
-msgstr ""
+msgstr "Επιχειρήσεις Κοινής Ωφελείας Επικοινωνία"
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:16
 msgid "Transportation"
-msgstr ""
+msgstr "Μεταφορές"
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:19
 msgid "Structure"
-msgstr ""
+msgstr "Κατασκευές"
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:22
 msgid "Society"
-msgstr ""
+msgstr "Κοινωνία"
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:25
 msgid "Planning Cadastre"
-msgstr ""
+msgstr "Χωροταξία Κτηματολόγιο"
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:28
 msgid "Oceans"
-msgstr ""
+msgstr "Θάλασσες"
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:31
 #: ckanext/publicamundi/themes/geodata/templates/spatial/snippets/spatial_query.html:17
 msgid "Location"
-msgstr ""
+msgstr "Γεωγραφική Θέση"
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:34
 msgid "Intelligence Military"
-msgstr ""
+msgstr "Στρατιωτικές Πληροφορίες"
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:37
 msgid "Inland Waters"
-msgstr ""
+msgstr "Εσωτερικά Ύδατα"
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:40
 msgid "Imagery Base Maps Earth Cover"
-msgstr ""
+msgstr "Ορθοεικόνες Βασικοί Χάρτες Κάλυψη Γης"
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:43
 msgid "Health"
-msgstr ""
+msgstr "Υγεία"
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:46
 msgid "Geoscientific Information"
-msgstr ""
+msgstr "Γεωεπιστημονικές Πληροφορίες"
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:49
+msgid "Farming"
+msgstr "Γεωργία"
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:52
+msgid "Environment"
+msgstr "Περιβάλλον"
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:55
+msgid "Elevation"
+msgstr "Υψομετρία"
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:58
+msgid "Economy"
+msgstr "Οικονομία"
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:61
+msgid "Meteorology"
+msgstr "Μετεωρολογία Κλιματολογία Ατμόσφαιρα"
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:64
+msgid "Boundaries"
+msgstr "Όρια"
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:67
+msgid "Biota"
+msgstr "Βιόκοσμος"
 
 #: ckanext/publicamundi/templates/package/search.html:19
 #: ckanext/publicamundi/themes/geodata/templates/package/search.html:44
@@ -430,14 +456,14 @@ msgstr "Συνάφεια"
 #: ckanext/publicamundi/themes/geodata/templates/snippets/search_form.html:4
 #: ckanext/publicamundi/themes/geodata/templates/snippets/search_form_top.html:4
 msgid "Name Ascending"
-msgstr "Όνομα σε Αύξουσα σειρά"
+msgstr "Όνομα (Αύξουσα σειρά)"
 
 #: ckanext/publicamundi/templates/package/search.html:21
 #: ckanext/publicamundi/themes/geodata/templates/package/search.html:46
 #: ckanext/publicamundi/themes/geodata/templates/snippets/search_form.html:4
 #: ckanext/publicamundi/themes/geodata/templates/snippets/search_form_top.html:4
 msgid "Name Descending"
-msgstr "Όνομα σε Φθίνουσα σειρά"
+msgstr "Όνομα (Φθίνουσα σειρά)"
 
 #: ckanext/publicamundi/templates/package/search.html:22
 #: ckanext/publicamundi/templates/package/snippets/resource_form.html:68
@@ -475,7 +501,7 @@ msgstr "Συντάκτης"
 #: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:64
 #: ckanext/publicamundi/templates/package/snippets/package_metadata_table.html:61
 msgid "Maintainer"
-msgstr "Υπέυθυνος Συντήρησης"
+msgstr "Υπεύθυνος Συντήρησης"
 
 #: ckanext/publicamundi/templates/package/snippets/additional_info.html:44
 #: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:28
@@ -572,7 +598,7 @@ msgstr "Περιγραφή"
 
 #: ckanext/publicamundi/templates/package/snippets/package_basic_fields.html:58
 msgid "eg. Some useful notes about the data"
-msgstr "π.χ. Μερικές χρήσιμες σημειώσεις σχετικά με τα δεδομένα"
+msgstr "π.χ. Χρήσιμες πληροφορίες σχετικά με τα δεδομένα"
 
 #: ckanext/publicamundi/templates/package/snippets/package_basic_fields.html:75
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/tags.html:2
@@ -596,12 +622,12 @@ msgid ""
 "Important: By submitting content, you agree to release your contributions"
 " under the Open Database License."
 msgstr ""
-"Σημαντικό: Με την υποβολή περιεχομένου, συμφωνείτε να κυκλοφορήσετε τις συνεισφορές σας"
-" στο πλαίσιο της Ανοιχτής Άδειας Βάσης Δεδομένων (ODL)."
+"Σημαντικό: Με την υποβολή περιεχομένου, συμφωνείτε να κυκλοφορήσετε τις "
+"συνεισφορές σας στο πλαίσιο της Ανοιχτής Άδειας Βάσης Δεδομένων (ODL)."
 
 #: ckanext/publicamundi/templates/package/snippets/package_form.html:49
 msgid "Are you sure you want to delete this dataset?"
-msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτό το σύνολο δεδομένων;"
+msgstr "Είστε σίγουροι ότι θέλετε να διαγράψετε αυτό το σύνολο δεδομένων;"
 
 #: ckanext/publicamundi/templates/package/snippets/package_form.html:53
 #: ckanext/publicamundi/templates/package/snippets/resource_form.html:111
@@ -619,7 +645,7 @@ msgstr "1.0"
 #: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:43
 #: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:66
 msgid "Joe Bloggs"
-msgstr "Joe Bloggs"
+msgstr "Θοδωρής Παπαδόπουλος"
 
 #: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:51
 #: ckanext/publicamundi/templates/package/snippets/package_metadata_table.html:56
@@ -629,12 +655,12 @@ msgstr "Email Συντάκτη"
 #: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:53
 #: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:76
 msgid "joe@example.com"
-msgstr "joe@example.com"
+msgstr "thodoris@example.com"
 
 #: ckanext/publicamundi/templates/package/snippets/package_metadata_fields.html:74
 #: ckanext/publicamundi/templates/package/snippets/package_metadata_table.html:66
 msgid "Maintainer Email"
-msgstr "Email Υπεύθυνου Συντήρησης"
+msgstr "Email Υπευθύνου Συντήρησης"
 
 #: ckanext/publicamundi/templates/package/snippets/package_metadata_form.html:21
 #: ckanext/publicamundi/templates/package/snippets/resource_form.html:118
@@ -651,7 +677,7 @@ msgstr "Αρχείο"
 
 #: ckanext/publicamundi/templates/package/snippets/resource_form.html:29
 msgid "URL"
-msgstr "Ενιαίος Εντοπιστής Πόρου"
+msgstr "URL"
 
 #: ckanext/publicamundi/templates/package/snippets/resource_form.html:33
 msgid "Name"
@@ -659,11 +685,11 @@ msgstr "Όνομα"
 
 #: ckanext/publicamundi/templates/package/snippets/resource_form.html:33
 msgid "eg. January 2011 Gold Prices"
-msgstr "π.χ. Τιμές Χρυσού Ιανουαρίου 2011 "
+msgstr "π.χ. Τιμές Χρυσού Ιανουαρίου 2011"
 
 #: ckanext/publicamundi/templates/package/snippets/resource_form.html:37
 msgid "Some useful notes about the data"
-msgstr "Μερικές χρήσιμες σημειώσεις σχετικά με τα δεδομένα"
+msgstr "Χρήσιμες πληροφορίες σχετικά με τα δεδομένα"
 
 #: ckanext/publicamundi/templates/package/snippets/resource_form.html:55
 msgid "eg. csv"
@@ -693,7 +719,7 @@ msgstr "π.χ. application/json"
 
 #: ckanext/publicamundi/templates/package/snippets/resource_form.html:107
 msgid "Are you sure you want to delete this resource?"
-msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε αυτόν τον πόρο;"
+msgstr "Είστε σίγουροι ότι θέλετε να διαγράψετε αυτόν τον πόρο;"
 
 #: ckanext/publicamundi/templates/package/snippets/resource_form.html:121
 msgid "Save & add another"
@@ -1097,7 +1123,7 @@ msgstr "Προσαρμοσμένο Πεδίο"
 
 #: ckanext/publicamundi/templates/snippets/organization.html:26
 msgid "read more"
-msgstr "περισσότερα"
+msgstr "διαβάστε περισσότερα"
 
 #: ckanext/publicamundi/templates/snippets/organization.html:29
 msgid "There is no description for this organization"
@@ -1130,7 +1156,7 @@ msgstr "Συνέχεια"
 
 #: ckanext/publicamundi/templates/snippets/upload.html:21
 msgid "Upload"
-msgstr "Μεταφόρτωση"
+msgstr "Ανέβασμα Αρχείου"
 
 #: ckanext/publicamundi/templates/snippets/upload.html:24
 msgid "Link"
@@ -1156,12 +1182,12 @@ msgstr "Τα Δεδομένα μου"
 #: ckanext/publicamundi/themes/geodata/templates/home/index.html:39
 #: ckanext/publicamundi/themes/geodata/templates/user/dashboard.html:16
 msgid "Edit settings"
-msgstr "Ρυθμίσεις Επεξεργασίας"
+msgstr "Επεξεργασία ρυθμίσεων"
 
 #: ckanext/publicamundi/templates/user/dashboard.html:10
 #: ckanext/publicamundi/themes/geodata/templates/user/dashboard.html:25
 msgid "News feed"
-msgstr "Ροή Νέων"
+msgstr "Ροή ειδήσεων"
 
 #: ckanext/publicamundi/templates/user/dashboard.html:12
 #: ckanext/publicamundi/templates/user/dashboard_organizations.html:4
@@ -1186,7 +1212,7 @@ msgstr "Δεν είστε μέλος κάποιου οργανισμού."
 
 #: ckanext/publicamundi/templates/user/dashboard_organizations.html:14
 msgid "Create one now?"
-msgstr "Δημιουργία ενός τώρα;"
+msgstr "Δημιουργία τώρα;"
 
 #: ckanext/publicamundi/templates/user/dashboard_resources.html:5
 msgid "My Resources"
@@ -1258,7 +1284,7 @@ msgstr "Αναζήτηση Δεδομένων"
 #: ckanext/publicamundi/themes/geodata/templates/snippets/search_form.html:3
 #: ckanext/publicamundi/themes/geodata/templates/snippets/search_form_top.html:3
 msgid "Search datasets..."
-msgstr "Αναζήτηση Συνόλων Δεδομένων..."
+msgstr "Αναζήτηση Δεδομένων..."
 
 #: ckanext/publicamundi/themes/geodata/templates/footer.html:37
 #: ckanext/publicamundi/themes/geodata/templates/header.html:36
@@ -1469,7 +1495,7 @@ msgstr "Τελευταία αναθεώρηση"
 
 #: ckanext/publicamundi/themes/geodata/templates/package/search.html:16
 msgid "Mapping API"
-msgstr "Προγραμματιστική Διεπαφή Χαρτογράφησης"
+msgstr "Χαρτογραφικό API"
 
 #: ckanext/publicamundi/themes/geodata/templates/package/search.html:19
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/data_api_button.html:9
@@ -1482,7 +1508,7 @@ msgstr "API Καταλόγου (CSW)"
 
 #: ckanext/publicamundi/themes/geodata/templates/package/search.html:73
 msgid "API"
-msgstr "Προγραμματιστική Διεπαφή (API)"
+msgstr "API"
 
 #: ckanext/publicamundi/themes/geodata/templates/package/search.html:74
 msgid "API Docs"
@@ -1537,11 +1563,11 @@ msgstr "Πρόσθετες πληροφορίες"
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/facet_list.html:72
 msgid "Show More {facet_type}"
-msgstr "Εμφάνιση Περισσοτέρων {facet_type}"
+msgstr "Εμφάνιση Περισσοτέρων"
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/facet_list.html:74
 msgid "Show Only Popular {facet_type}"
-msgstr "Εμφάνιση Μόνο των Δημοφιλέστερων {facet_type}"
+msgstr "Εμφάνιση Μόνο των Δημοφιλέστερων"
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/facet_list.html:78
 msgid "There are no {facet_type} that match this search"
@@ -1606,7 +1632,7 @@ msgstr[1] "Βρέθηκαν {number} σύνολα δεδομένων"
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/search_result_text.html:18
 msgid "No datasets found"
-msgstr "Δεν βρέθηκαν σύνολα δεδομένων "
+msgstr "Δεν βρέθηκαν σύνολα δεδομένων"
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/search_result_text.html:21
 msgid "{number} group found for \"{query}\""
@@ -1651,10 +1677,6 @@ msgstr "Δεν βρέθηκαν οργανισμοί"
 #: ckanext/publicamundi/themes/geodata/templates/snippets/social.html:3
 msgid "Share"
 msgstr "Μοιραστείτε"
-
-#: ckanext/publicamundi/themes/geodata/templates/spatial/snippets/spatial_query.html:17
-msgid "Location"
-msgstr "Έκταση"
 
 #: ckanext/publicamundi/themes/geodata/templates/spatial/snippets/spatial_query.html:18
 msgid "Clear"
