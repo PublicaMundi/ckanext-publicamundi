@@ -436,7 +436,7 @@ msgstr "Οικονομία"
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:61
 msgid "Meteorology"
-msgstr "Κλιματολογία / Μετεωρολογία / Ατμόσφαιρα"
+msgstr "Μετεωρολογία Κλιματολογία Ατμόσφαιρα"
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:64
 msgid "Boundaries"
