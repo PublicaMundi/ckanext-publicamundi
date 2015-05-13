@@ -1694,3 +1694,98 @@ msgstr ""
 " Το προφίλ σας επιτρέπει σε άλλους χρήστες του Geodata.gov.gr να γνωρίζουν ποιος είστε και "
 "με τι ασχολείστε. "
 
+msgid "Metadata Point of Contact"
+msgstr "Αρμόδιος για επικοινωνία σχετικά με τα μεταδεδομένα"
+
+msgid "Metadata Date"
+msgstr "Ημερομηνία Μεταδεδομένων"
+
+msgid "Metadata Language"
+msgstr "Γλώσσα Μεταδεδομένων"
+
+msgid "Type"
+msgstr "Τύπος"
+
+msgid "Resource Title"
+msgstr "Τίτλος Πόρου"
+
+msgid "Identifier"
+msgstr "Αναγνωριστικό"
+
+msgid "Resource Abstract"
+msgstr "Σύνοψη Πόρου"
+
+msgid "Resource Locator"
+msgstr "Εντοπιστής Πόρου"
+
+msgid "Resource Languages"
+msgstr "Γλώσσες Πόρου"
+
+msgid "Resource Language"
+msgstr "Γλώσσα Πόρου"
+
+msgid "Contact"
+msgstr "Αρμόδιος για επικοινωνία"
+
+msgid "Linkage"
+msgstr "Σύνδεσμος"
+
+msgid "Topic Categories"
+msgstr "Θεματικές Κατηγορίες"
+
+msgid "Topic Category"
+msgstr "Θεματική Κατηγορία"
+
+msgid "Keywords"
+msgstr "Λέξεις Κλειδιά"
+
+msgid "Keyword Thesaurus"
+msgstr "Λεξιλόγιο Προέλευσης"
+
+msgid "Geographic Bounding Box"
+msgstr "Περίγραμμα Γεωγραφικών Συντεταγμένων"
+
+msgid "Temporal Extents"
+msgstr "Χρονική Έκταση"
+
+msgid "Creation Date"
+msgstr "Ημερομηνία δημιουργίας"
+
+msgid "Publication Date"
+msgstr "Ημερομηνία δημοσίευσης"
+
+msgid "Revision Date"
+msgstr "Ημερομηνία τελευταίας αναθεώρησης"
+
+msgid "Lineage"
+msgstr "Καταγωγή"
+
+msgid "Spatial Resolution"
+msgstr "Χωρική Ανάλυση"
+
+msgid "Resolution"
+msgstr "Ανάλυση"
+
+msgid "Conformity"
+msgstr "Συμμόρφωση"
+
+msgid "Specification"
+msgstr "Προδιαγραφή"
+
+msgid "Access Constraints"
+msgstr "Περιορισμοί Πρόσβασης"
+
+msgid "Condition"
+msgstr "Προϋπόθεση"
+
+msgid "Limitations"
+msgstr "Περιορισμοί"
+
+msgid "Limitation"
+msgstr "Περιορισμός"
+
+msgid "Responsible Party"
+msgstr "Αρμόδιο Μέρος"
+
+msgid "Party"
+msgstr "Αρμόδιο Μέρος"
