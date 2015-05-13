@@ -64,14 +64,18 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
         '''Pass configuration to plugins and extensions'''
 
         global _feedback_form
+
         _feedback_form = config.get('ckanext.publicamundi.themes.geodata.feedback_form')
+        
         return
 
     # IRoutes
 
     def before_map(self, mapper):
-        mapper.connect('maps', '/maps') 
-        mapper.connect('developers', '/developers', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='developers') 
+        mapper.connect('developers', '/developers', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='developers')
+        #mapper.connect('maps', '/maps', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='redirect_maps' )
+        mapper.connect('maps', '/maps')
+        
         mapper.connect('news', '/news', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='redirect_news' )
 
         return mapper
