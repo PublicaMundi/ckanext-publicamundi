@@ -422,10 +422,11 @@ p a{
     display: block;
 }
 .hero {
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-color: rgba(123,123,321,0.8);
-    max-height: 500px;
+    height: 60vh;
+    //background-repeat: no-repeat;
+    //background-size: cover;
+    //background-color: rgba(123,123,321,0.8);
+    //max-height: 500px;
     //min-height: 450px;
     //height: 60vh;
     //min-height: 100px;
@@ -476,72 +477,43 @@ p a{
 }
 /* Home Slider */
 
-#slider_container{
+.carousel{
+    height: 100%;
+}
 
+.carousel-inner{
+    height: 100%;    
 }
-.slides img{
-    position:relative;
-}
-.slide{
 
-}
-.jssora21l, .jssora21r, .jssora21ldn, .jssora21rdn {    
+.carousel-inner > .item {
+    background-size: cover;
+    background-repeat: no-repeat;
     position: absolute;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+}
+.carousel-layer{
+    background-color: rgba(0,0,0, 0.2);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.carousel-indicators{
+    bottom: 70px;
+    top: initial;
+    right:45vw;
+}
+.carousel-indicators li{
+    border-radius:0;
+    border: 2px #fff solid;
+}
+.carousel-indicators li:hover{
     cursor: pointer;
-    display: block;   
-    background: url('/images/a11.png');
-    overflow: hidden;    
 }
-
-.jssora21l {
-    background-position: -3px -33px;
-
-}
-
-.jssora21r {
-    background-position: -63px -33px;
-}
-
-.jssora21l:hover {
-    background-position: -123px -33px;
-}
-
-.jssora21r:hover {
-    background-position: -183px -33px;
-}
-
-.jssora21ldn {
-    background-position: -243px -33px;
-}
-
-.jssora21rdn {
-    background-position: -303px -33px;
-}
-
-
-.jssorb21 div, .jssorb21 div:hover, .jssorb21 .av {                 
-    background: url('/images/b21.png') no-repeat;
-    z-index: 1;
-    overflow: hidden;
-    cursor: pointer;
-    }
-
-.jssorb21 div {
-    background-position: -5px -5px;
-}
-                    
-.jssorb21 div:hover, .jssorb21 .av:hover {
-    background-position: -35px -5px;
-}
-                
-.jssorb21 .av {                 
-    background-position: -65px -5px;
-}
-
-.jssorb21 .dn, .jssorb21 .dn:hover {
-    background-position: -95px -5px;
-}
-
 
 /* Main */
 [role=main] {
@@ -598,7 +570,7 @@ p a{
     display: block;
     float: left;
     width: 80px;
-    height: 80px;
+    height: 84px;
     padding: 15px;
     margin: 10px;
     text-align: center;
@@ -724,7 +696,7 @@ p a{
     background: #F6F6F6;
 }
 .homepage [role=main]{
-
+    padding: 0;
     overflow: hidden;
 }
 .homepage .searchfw, .homepage .searchfw input{
@@ -1685,7 +1657,7 @@ format-label[data-format=csv], .format-label[data-format*=csv]
 
 @media screen and (max-width : 900px){
     .hero{
-        min-height: 0 !important;
+        //min-height: 0 !important;
     }
     body{
         border: none;
