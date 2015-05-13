@@ -1709,9 +1709,6 @@ msgstr "Τύπος"
 msgid "Resource Title"
 msgstr "Τίτλος Πόρου"
 
-msgid "Identifier"
-msgstr "Αναγνωριστικό"
-
 msgid "Resource Abstract"
 msgstr "Σύνοψη Πόρου"
 
@@ -1732,12 +1729,6 @@ msgstr "Σύνδεσμος"
 
 msgid "Topic Categories"
 msgstr "Θεματικές Κατηγορίες"
-
-msgid "Topic Category"
-msgstr "Θεματική Κατηγορία"
-
-msgid "Keywords"
-msgstr "Λέξεις Κλειδιά"
 
 msgid "Keyword Thesaurus"
 msgstr "Λεξιλόγιο Προέλευσης"
@@ -1766,12 +1757,6 @@ msgstr "Χωρική Ανάλυση"
 msgid "Resolution"
 msgstr "Ανάλυση"
 
-msgid "Conformity"
-msgstr "Συμμόρφωση"
-
-msgid "Specification"
-msgstr "Προδιαγραφή"
-
 msgid "Access Constraints"
 msgstr "Περιορισμοί Πρόσβασης"
 
@@ -1783,9 +1768,6 @@ msgstr "Περιορισμοί"
 
 msgid "Limitation"
 msgstr "Περιορισμός"
-
-msgid "Responsible Party"
-msgstr "Αρμόδιο Μέρος"
 
 msgid "Party"
 msgstr "Αρμόδιο Μέρος"
