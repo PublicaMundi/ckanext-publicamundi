@@ -354,11 +354,16 @@ h1 > .label.package-state {
     //right: 10px;
     float: right;
 }
+.resource-item .resource-action-buttons{
+    display: block;
+    float: right;
+}
+.resource-item .resource-action-buttons .btn{
+}
 .resource-item .btn-group{
     position: relative;
     top: 0;
     right: 0;
-    float: right;
 }
 .resources li.resource-item .btn-group + .btn-group {
     //margin-right: 5px;
@@ -367,7 +372,9 @@ h1 > .label.package-state {
 .resources li.resource-item p.description {
     width: 60%;
 }
-
+.resource-item .resource-explore-opts{
+    margin-left: 10px;
+}
 /*
  * Resources (Dashboard)
  */

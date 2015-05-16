@@ -13,16 +13,18 @@ function handleFacets() {
     // Initially hide facet items with index over LIMIT
     function init_hide(){
         var cat_list = $('.secondary .nav-facet');
-        console.log(cat_list);
         cat_list.each(function(index){
             $(this).addClass('li-hidden');
             
             var list = $(this).find('li');
-            console.log(list);
             list.each(function(index){
                 if (index>LIMIT){
                     $(this).css("display","none");
                 }
+                if (index==LIMIT){
+                        $(this).addClass("no-bottom-border");
+                }
+
             });
 
         });
@@ -44,6 +46,7 @@ function handleFacets() {
         list.parent().removeClass('li-hidden');
         list.each(function(index){
             $(this).css("display","block");
+            $(this).removeClass("no-bottom-border");
         });
         $('.read-less').one('click', show_less);
     };
@@ -64,6 +67,9 @@ function handleFacets() {
             if (index > LIMIT){
                 $(this).css("display", "none");
             };
+            if (index == LIMIT){
+                $(this).addClass("no-bottom-border");
+            }
         });
         $('.read-more').one('click', show_more);
     };
@@ -78,9 +84,13 @@ function handleFacets() {
             return parseInt($(b).attr("count")) < parseInt($(a).attr("count")) ? 1 : -1;
         };
         e.preventDefault();
-        $(this).text("1 -> 9");
-        $(this).parent().find('.sort-name').text("A    Z");
-        var ul = $(this).parent().parent().find('.nav-facet');
+        //$(this).text("1 -> 9");
+        //$(this).parent().find('.sort-name').text("A    Z");
+        $(this).addClass("up");
+        $(this).removeClass("down");
+        $(this).parent().find('.sort-name').removeClass("down");
+        $(this).parent().find('.sort-name').removeClass("up");
+        var ul = $(this).parent().parent().parent().find('.nav-facet');
         var list = ul.find('li');
 
         ul.toggleClass("count_asc");
@@ -88,8 +98,12 @@ function handleFacets() {
         list.sort(asc_count_sort).appendTo(ul);
         if (ul.hasClass("li-hidden")){
             list.each(function(index){
+                $(this).removeClass("no-bottom-border");
                 if (index<=LIMIT){
                     $(this).css("display","block");
+                    if (index==LIMIT){
+                        $(this).addClass("no-bottom-border");
+                    }
                 }
                 else{
                     $(this).css("display","none");
@@ -106,10 +120,14 @@ function handleFacets() {
             return parseInt($(b).attr("count")) > parseInt($(a).attr("count")) ? 1 : -1;
         };
 
-        $(this).text("1 <- 9");
-        $(this).parent().find('.sort-name').text("A    Z");
+        //$(this).text("1 <- 9");
+        //$(this).parent().find('.sort-name').text("A    Z");
+        $(this).addClass("down");
+        $(this).removeClass("up");
+        $(this).parent().find('.sort-name').removeClass("down");
+        $(this).parent().find('.sort-name').removeClass("up");
         e.preventDefault();
-        var ul = $(this).parent().parent().find('.nav-facet');
+        var ul = $(this).parent().parent().parent().find('.nav-facet');
         var list = ul.find('li');
 
         ul.toggleClass("count_asc");
@@ -118,8 +136,13 @@ function handleFacets() {
         
         if (ul.hasClass("li-hidden")){
             list.each(function(index){
+                $(this).removeClass("no-bottom-border");
                 if (index<= LIMIT){
                     $(this).css("display","block");
+                    if (index==LIMIT){
+                        $(this).addClass("no-bottom-border");
+                    }
+
                 }
                 else{
                     $(this).css("display","none");
@@ -139,20 +162,28 @@ function handleFacets() {
             return ($(b).text().toUpperCase()) < ($(a).text().toUpperCase())? 1 : -1;
         };
 
-        $(this).text("A -> Z");
-        $(this).parent().find('.sort-count').text("1    9");
+        //$(this).text("A -> Z");
+        //$(this).parent().find('.sort-count').text("1    9");
+        $(this).addClass("down");
+        $(this).removeClass("up");
+        $(this).parent().find('.sort-count').removeClass("down");
+        $(this).parent().find('.sort-count').removeClass("up");
         e.preventDefault();
-        var ul = $(this).parent().parent().find('.nav-facet');
+        var ul = $(this).parent().parent().parent().find('.nav-facet');
         var list = ul.find('li');
-
         ul.toggleClass("name_asc");
         ul.toggleClass("name_desc");
         list.sort(asc_alpha_sort).appendTo(ul);
         
         if (ul.hasClass("li-hidden")){
             list.each(function(index){
+                $(this).removeClass("no-bottom-border");
                 if (index<=LIMIT){
                     $(this).css("display","block");
+                    if (index==LIMIT){
+                        $(this).addClass("no-bottom-border");
+                    }
+
                 }
                 else{
                     $(this).css("display","none");
@@ -168,10 +199,14 @@ function handleFacets() {
             return ($(b).text().toUpperCase()) > ($(a).text().toUpperCase())? 1 : -1;
         };
 
-        $(this).text("A <- Z");
-        $(this).parent().find('.sort-count').text("1    9");
+        //$(this).text("A <- Z");
+        //$(this).parent().find('.sort-count').text("1    9");
+        $(this).addClass("up");
+        $(this).removeClass("down");
+        $(this).parent().find('.sort-count').removeClass("down");
+        $(this).parent().find('.sort-count').removeClass("up");
         e.preventDefault();
-        var ul = $(this).parent().parent().find('.nav-facet');
+        var ul = $(this).parent().parent().parent().find('.nav-facet');
         var list = ul.find('li');
 
         ul.toggleClass("name_asc");
@@ -180,8 +215,13 @@ function handleFacets() {
         
         if (ul.hasClass("li-hidden")){
             list.each(function(index){
+                $(this).removeClass("no-bottom-border");
                 if (index<=LIMIT){
                     $(this).css("display","block");
+                    if (index==LIMIT){
+                        $(this).addClass("no-bottom-border");
+                    }
+
                 }
                 else{
                     $(this).css("display","none");

@@ -11,7 +11,8 @@ jQuery(document).ready(function ($) {
 
 
 function init() {
-        
+    
+
     var obj = $('.nav-pills > li > a[href$="/group"]');
     
     // Mouse enter and leave listeners on groups button

@@ -13,9 +13,9 @@ e.g.
 #}
 <section id="dataset-map" class="module module-narrow module-shallow">
   <h2 class="module-heading">
-    <img class="facet-icon" src="{{ h.url_for_static('/images/various/location.svg') }}"></img>
+    <img class="facet-icon" src="{{ h.url_for_static('/images/icons/various/location.svg') }}"></img>
     {{ _('Location') }}
-    <a href="{{ h.remove_url_param(['ext_bbox','ext_prev_extent', 'ext_location']) }}" class="action">{{ _('Clear') }}</a>
+    <a href="{{ h.remove_url_param(['ext_bbox','ext_prev_extent', 'ext_location']) }}" class="action dataset-map-clear">&#x2715</a>
   </h2>
   {% set map_config = h.get_common_map_config() %}
   <div class="dataset-map" data-module="spatial-query" data-default_extent="{{ default_extent }}" data-module-map_config="{{ h.dump_json(map_config) }}">

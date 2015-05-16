@@ -434,7 +434,7 @@ msgid "Economy"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:61
-msgid "Meteorology"
+msgid "Climatology Meteorology Atmposphere"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:64
@@ -1422,6 +1422,23 @@ msgid ""
 "</ul></p> </div> "
 msgstr ""
 
+#: ckanext/publicamundi/themes/geodata/templates/home/snippets/carousel.html:3
+msgid "Blue flag beaches 2010"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/home/snippets/carousel.html:6
+#: ckanext/publicamundi/themes/geodata/templates/home/snippets/carousel.html:15
+msgid "Railway network"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/home/snippets/carousel.html:9
+msgid "City blocks Kalamaria"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/home/snippets/carousel.html:12
+msgid "Urban & rural regions"
+msgstr ""
+
 #: ckanext/publicamundi/themes/geodata/templates/home/snippets/promoted.html:8
 msgid "Open Data"
 msgstr ""
@@ -1430,6 +1447,15 @@ msgstr ""
 msgid ""
 "Here you will find data, tools, and resources to conduct research, develop "
 "web and mobile applications, design data visualizations, and more."
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/home/snippets/promoted.html:16
+#: ckanext/publicamundi/themes/geodata/templates/home/snippets/promoted_new.html:6
+msgid "Learn More"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/home/snippets/promoted_new.html:3
+msgid "Open data, accessible to everyone!"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/home/snippets/search.html:12
@@ -1519,6 +1545,10 @@ msgstr ""
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:48
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:50
 msgid "Additional info"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/facet_list.html:64
+msgid "A...Z "
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/facet_list.html:72

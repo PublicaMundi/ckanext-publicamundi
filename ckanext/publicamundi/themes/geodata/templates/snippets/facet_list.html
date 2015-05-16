@@ -50,18 +50,18 @@ within_tertiary
 
     <h2 class="module-heading">
         {% if name == 'organization' %}
-        <img class="facet-icon" src="{{ h.url_for_static('/images/various/organizations.svg') }}"></img>
+        <img class="facet-icon" src="{{ h.url_for_static('/images/icons/various/organizations.svg') }}"></img>
         {% elif name == 'groups' %}
-        <img class="facet-icon" src="{{ h.url_for_static('/images/various/topics.svg') }}"></img>
+        <img class="facet-icon" src="{{ h.url_for_static('/images/icons/various/topics.svg') }}"></img>
         {% elif name == 'tags' %}
-        <img class="facet-icon" src="{{ h.url_for_static('/images/various/tags.svg') }}"></img>
+        <img class="facet-icon" src="{{ h.url_for_static('/images/icons/various/tags.svg') }}"></img>
         {% elif name == 'res_format' %}
-        <img class="facet-icon" src="{{ h.url_for_static('/images/various/filetype.svg') }}"></img>
+        <img class="facet-icon" src="{{ h.url_for_static('/images/icons/various/filetype.svg') }}"></img>
         {% elif name == 'license_id' %}
-        <img class="facet-icon" src="{{ h.url_for_static('/images/various/license.svg') }}"></img>
+        <img class="facet-icon" src="{{ h.url_for_static('/images/icons/various/license.svg') }}"></img>
         {% endif %}
         {% set title = title or h.get_facet_title(name) %}
-                {{ title }} <br> <a href="#" class="sort-name">{{_('A Z')}}</a> <a href="#" class="sort-count">{{_('1 <- 9')}}</a> 
+        {{ title }} <br> <div class="sorting"><a href="#" class="sort-name">{{_('A...Z ')}}</a> <a href="#" class="sort-count down">{{_('1...9 ')}}</a> </div>
       </h2>
         <nav>
         <ul id={{ name }}  title={{title}} class="{{ nav_class or 'unstyled nav nav-simple nav-facet' }} count_desc">
