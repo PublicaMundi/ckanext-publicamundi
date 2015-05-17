@@ -1,0 +1,110 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-05-14 21:40+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: /home/ckaner/ckanext-publicamundi/ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:22
+msgid "Metadata Point of Contact"
+msgstr ""
+
+#: /home/ckaner/ckanext-publicamundi/ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:28
+msgid "Contact"
+msgstr ""
+
+#: /home/ckaner/ckanext-publicamundi/ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:32
+msgid "Metadata Date"
+msgstr ""
+
+#: /home/ckaner/ckanext-publicamundi/ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:33
+msgid ""
+"The date which specifies when the metadata record was created or updated. "
+"This date shall be expressed in conformity with ISO 8601."
+msgstr ""
+
+#: /home/ckaner/ckanext-publicamundi/ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:38
+msgid "Metadata Language"
+msgstr ""
+
+#: /home/ckaner/ckanext-publicamundi/ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:40
+msgid ""
+"This is the language in which the metadata elements are expressed. The value "
+"domain of this metadata element is limited to the official languages of the "
+"Community expressed in conformity with ISO 639-2."
+msgstr ""
+
+#: /home/ckaner/ckanext-publicamundi/ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:47
+msgid "Type"
+msgstr ""
+
+#: /home/ckaner/ckanext-publicamundi/ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:53
+msgid "Resource Title"
+msgstr ""
+
+#: /home/ckaner/ckanext-publicamundi/ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:54
+msgid ""
+"This a characteristic (and often unique) name by which the resource is known."
+msgstr ""
+
+#: /home/ckaner/ckanext-publicamundi/ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:58
+msgid "Identifier"
+msgstr ""
+
+#: /home/ckaner/ckanext-publicamundi/ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:59
+msgid ""
+"A value uniquely identifying the dataset. The value domain of this metadata "
+"element is a mandatory character string code, generally assigned by the data "
+"owner, and a character string namespace uniquely identifying the context of "
+"the identifier code (for example, the data owner)."
+msgstr ""
+
+#: /home/ckaner/ckanext-publicamundi/ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:63
+msgid "Resource Abstract"
+msgstr ""
+
+#: /home/ckaner/ckanext-publicamundi/ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:64
+msgid "This is a brief narrative summary of the contents of this dataset."
+msgstr ""
+
+#: /home/ckaner/ckanext-publicamundi/ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:68
+msgid "Resource Locator"
+msgstr ""
+
+#: /home/ckaner/ckanext-publicamundi/ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:69
+msgid ""
+"The resource locator defines the link(s) to the resource and/or the link to "
+"additional information about the resource. The value domain of this metadata "
+"element is a character string, commonly expressed as uniform resource "
+"locator (URL)."
+msgstr ""
+
+#: /home/ckaner/ckanext-publicamundi/ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:74
+msgid "Linkage"
+msgstr ""
+
+#: /home/ckaner/ckanext-publicamundi/ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:78
+msgid "Resource Languages"
+msgstr ""
+
+#: /home/ckaner/ckanext-publicamundi/ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:79
+msgid ""
+"The language(s) used within the resource. The value domain of this metadata "
+"element is limited to the languages defined in ISO 639-2."
+msgstr ""
+
+#: /home/ckaner/ckanext-publicamundi/ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:83
+msgid "Resource Language"
+msgstr ""

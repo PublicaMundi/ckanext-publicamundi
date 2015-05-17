@@ -1,5 +1,12 @@
 {% ckan_extends %}
 
+{% block resource_item_download_links %}
+    {{ super() }}
+    {% for raster_res in raster_resources %}
+        {% snippet 'package/snippets/raster.html', res=raster_res %} 
+        {% endfor %}
+{% endblock %}
+
 {# {% block resource_item_download %}
 {% if res.rasterstorer_resource and res.format in ['wcs'] %}
 <div class="dropdown btn-group resource-download-opts pull-right">
