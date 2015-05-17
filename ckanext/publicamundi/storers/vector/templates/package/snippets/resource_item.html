@@ -17,6 +17,14 @@
     {{ super() }}
 {% endblock %}
 
+{% block resource_item_download_links %}
+  {{ super() }}
+   {% for vector_res in vector_resources %}
+        {% snippet 'package/snippets/vector.html', res=vector_res %} 
+    {% endfor %}
+{% endblock %}
+
+
 {# {% block resource_item_download %}
     {% if res.vectorstorer_resource and res.format in ['wfs'] %}
     <div class="dropdown btn-group resource-download-opts pull-right">

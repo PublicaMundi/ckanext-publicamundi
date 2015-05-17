@@ -279,7 +279,7 @@ p a{
     padding-top: 8px;
 }
 #homemenu #mainlogo .logo {
-    padding-top: 15px;
+    padding-top: 20px;
 }
 .nav-pills > .active > a, .nav-pills > .active > a:focus{
     background: #fff;
@@ -331,6 +331,9 @@ p a{
 .alt-nav li a:focus{
     background: transparent;
     color: #fff;
+}
+.no-bottom-border{
+    border-bottom: none !important;
 }
 .nav-tabs{
     border-bottom: 1px #7C7C7F solid;
@@ -422,7 +425,7 @@ p a{
     display: block;
 }
 .hero {
-    height: 60vh;
+    height: 50vh;
     //background-repeat: no-repeat;
     //background-size: cover;
     //background-color: rgba(123,123,321,0.8);
@@ -479,18 +482,19 @@ p a{
 
 .carousel{
     height: 100%;
+    margin-bottom: 0;
 }
 
 .carousel-inner{
     height: 100%;    
 }
-
-.carousel-inner > .item {
+.carousel .item{
+    height: 100%;
+    width: 100%;
+}
+.carousel .slide{
     background-size: cover;
     background-repeat: no-repeat;
-    position: absolute;
-    top:0;
-    left:0;
     width: 100%;
     height: 100%;
 }
@@ -501,19 +505,82 @@ p a{
     left: 0;
     width: 100%;
     height: 100%;
+    z-index:1500;
+    -webkit-transition: .3s linear;
+    -moz-transition: .3s linear;
+    -o-transition: .3s linear;
+    transition: .3s linear;
+}
+.carousel:hover .carousel-layer{
+    //background-color: rgba(0,0,0,0.1);
+}
+.carousel:hover .promotion h1{
+    //text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
+}
+.carousel:hover .caption a{
+    //text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
 }
 .carousel-indicators{
-    bottom: 70px;
-    top: initial;
-    right:45vw;
+    right: 45%;
+    left: 45%;
+    top: auto;
+    bottom: 20px;
+    text-align: center;
+    z-index: 1600;
 }
+
 .carousel-indicators li{
+    display: inline-block;
+    float: center;
     border-radius:0;
     border: 2px #fff solid;
 }
 .carousel-indicators li:hover{
     cursor: pointer;
 }
+
+.carousel .caption{
+    position:relative;
+    float: right;
+    margin-right: 20px;
+    color: #fff;
+    background: none;
+    //background: rgba(0,0,0,0.3);
+    bottom: 35px;
+    z-index: 1600;
+}
+.carousel .caption a{
+    font-family: 'ACMuliLight';
+    font-weight: normal;
+    font-size: 15px;
+    color: #fff;
+}
+.carousel .caption a:hover, .caption a:focus{
+    color: #4E59A4;
+    text-decoration: none;
+}
+
+.promotion{
+    background: none;
+    position: absolute;
+    top: 25%;
+    width: 100%;
+    z-index: 1600;
+    text-align: center;
+    color: #fff;
+}
+.promotion header h1{
+    font-family: 'ACMuliLight';
+    font-size: 40px;
+    cursor: default;
+}
+.promotion .btn{
+    background: transparent;
+    margin-top: 10px;
+    border-color: #fff;
+    color: #fff;
+}
+
 
 /* Main */
 [role=main] {
@@ -576,9 +643,8 @@ p a{
     text-align: center;
 }
 .menu-item span{
-    max-width: 75px;
-    margin-top: 8px;
-    margin-right: 0;
+    width:95px;
+    margin: 8px 0 0 -7px;
     line-height: 15px;
 }
 .icons-grid li img{
@@ -771,7 +837,6 @@ p a{
     border: 0;
     box-shadow: none;
     height:50px;
-    position: absolute;
     width: 100%;
     bottom: 0;
 }
@@ -860,9 +925,8 @@ p a{
     //border: 1px #666666 solid;
 }
 .facet-icon{
-    margin:0 5px 0 0;
-}
-img[src="/images/various/tags.svg"]{
+    margin:0 2px 0 0;
+    height: 20px;
 }
 .paintme{
     border: 2px #4E59A4 solid;
@@ -898,7 +962,11 @@ img[src="/images/various/tags.svg"]{
     padding: 5px 8px;
     //border-top: 1px #4E59A4 solid;
 }
+.secondary .dataset-map-clear:hover, .dataset-map-clear:focus{
+    text-decoration: none;
+}
 .secondary .module-footer{
+    border-top: 1px #4E59A4 solid;
 }
 .secondary .module-footer a{
     font-size: 12px;
@@ -913,9 +981,39 @@ img[src="/images/various/tags.svg"]{
 .secondary .nav-item.active a span{
     color : #fff;
 }
-.secondary .sort-count, .secondary .sort-name{
-    font-size: 14px;
+.sorting{
+    float: left;
+    width: 55%;
+    margin-top:8px;
+    font-size: 15px;
+    font-weight: bold;
+}
+.sort-count, .sort-name
+{
+    display:inline-block;
+    transition: color 0.2s ease-in-out;
     margin-left:5px;
+}
+.sort-name{
+}
+.sort-count{
+}
+.sort-name:after, .sort-count:after{
+    content:'\00A0\00A0\00A0';
+}
+.up:after{
+    content:'\25B2'
+}
+.down:after{
+    content:'\25BC'
+}
+.secondary .sort-count:focus, .sort-name:focus{
+    color: #4E59a4;
+    text-decoration: none;
+}
+.secondary .sort-count:hover, .sort-name:hover{
+    color: #000;
+    text-decoration: none;
 }
 .alt-side-style .module-heading{
     font-size:20px;
@@ -955,7 +1053,8 @@ img[src="/images/various/tags.svg"]{
     border-bottom: 1px #4E59A4 solid;
 }
 .nav-simple > li:last-of-type{
-    border-bottom: 1px #4E59A4 solid;
+    //border-bottom: 1px #4E59A4 solid;
+    border-bottom:none;
 }
 .nav-item.active > a, .nav-aside li.active a, .nav-item.active > a:hover, .nav-item.active > a:focus{
     background: #4E59A4;
@@ -1269,6 +1368,9 @@ img[src="/images/various/tags.svg"]{
     color: #fff !important;
     border: 2px #4E59A4 solid;
 }
+.btn:first-child{
+    text-decoration: none;
+}
 .dataset-private{
     text-transform: none;
     margin-right: 0;
@@ -1550,7 +1652,8 @@ img[src="/images/various/tags.svg"]{
     display:none;
 }
 
-
+.format-label{
+}
 
 format-label[data-format=csv], .format-label[data-format*=csv]
 {
@@ -1575,8 +1678,6 @@ format-label[data-format=csv], .format-label[data-format*=csv]
 .format-label[data-format=gml], .format-label[data-format*=gml]
 {
     background-image: url("../../images/icons/resources/gml.svg");
-    background-position-x:10px;
-    background-position-y:5px;
 }
 .format-label[data-format=html], .format-label[data-format*=html]
 {
@@ -1647,12 +1748,14 @@ format-label[data-format=csv], .format-label[data-format*=csv]
 .format-label[data-format=wcs], .format-label[data-format*=wcs]
 {
     background-image: url("../../images/icons/resources/wcs.svg");
-    background-position-x:10px;
-    background-position-y:5px;
 }
 .format-label[data-format=wps], .format-label[data-format*=wps]
 {
     background-image: url("../../images/icons/resources/wps.svg");
+}
+.format-label[data-format=csw], .format-label[data-format*=csw]
+{
+    background-image: url("../../images/icons/resources/csw.svg");
 }
 
 @media screen and (max-width : 900px){

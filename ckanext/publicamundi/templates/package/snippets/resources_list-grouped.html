@@ -24,7 +24,7 @@ pkg - A package object that the resources belong to.
     class="resources {% if resources and not file_resources %}hide{% endif %}"
  >
  <header><h3 class="inline">{{ _('Data and Resources') }}</h3>
- {% block resource_download_ingested %}
+ {# {% block resource_download_ingested %}
  {% if raster_resources|length >0 or vector_resources|length>0 %}
     <div class="download-links pull-right">
       <div class="btn-group pull-right">
@@ -41,8 +41,8 @@ pkg - A package object that the resources belong to.
       </div>
   </div>
   {% endif %}
-  {% endblock %}
-    </header>
+  {% endblock %} #}
+  </header>
 
     {% block resource_file_list %}
     {% if file_resources %}

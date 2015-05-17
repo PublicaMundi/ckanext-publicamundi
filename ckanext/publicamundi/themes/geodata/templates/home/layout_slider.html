@@ -2,14 +2,12 @@
 
 <div role="main" class="hero">
     {% snippet 'home/snippets/carousel.html' %}
-    <div class="container">
-          <div class = "promotebox">
-              {% snippet 'home/snippets/promoted.html' %}
-          </div>
-    </div>
+        <!-- <div class = "promotebox">-->
+            {#    {% snippet 'home/snippets/promoted.html' %} #}
+       <!-- </div> -->
    
-    {% snippet 'home/snippets/search.html' %}
     </div> 
+    {% snippet 'home/snippets/search.html' %}
     
 </div>
 <div id="package-list-home">
@@ -20,4 +18,4 @@
 </div>
 </div>
 
-{% resource 'ckanext-publicamundi-geodata-theme/jssor' %}
+{% resource 'ckanext-publicamundi-geodata-theme/slider' %}

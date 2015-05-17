@@ -1,0 +1,36 @@
+{% set slides = [
+            {'name':'blue-flag-beaches-2010',
+             'display_name': _('Blue flag beaches 2010')
+             },
+             {'name':'city-blocks-kalamaria',
+             'display_name': _('City blocks Kalamaria')
+             },
+             {'name':'urban-rural-regions',
+             'display_name': _('Urban & rural regions')
+             },
+             {'name':'railway-network-5',
+             'display_name': _('Railway network')
+             },
+
+             ] %}
+<div id="carousel-homepage" class="carousel slide" data-interval="6000" >
+{% snippet 'home/snippets/promoted_new.html' %}
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        {% for slide in slides %}
+        <li data-target="#carousel-homepage" data-slide-to="{{loop.index-1}}" {% if loop.index == 1 %}class="active"{% endif %}></li>
+        {% endfor %}
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+        {% for slide in slides %}
+        <div class="item {% if loop.index == 1 %}active{% endif %}"> 
+            <div class="slide" style="background-image:url('/images/slides/{{slide.name}}.png');" alt></div> 
+            <div class="caption"><a href="{{ h.url_for(controller='package', action='read', id=slide.name) }}">{{ slide.display_name}}</a></div>
+            <div class="carousel-layer"></div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+

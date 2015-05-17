@@ -14,30 +14,63 @@
         </a>
         {% endblock %} {# resource_item_title #}
 
+        <div class="resource-action-buttons">
+        {% block resource_item_download %}
+        {% if res.resource_type == 'file' %} 
+        {% if raster_resources|length>0 or vector_resources|length>0 %}
+        {# <div class="btn-group">
+                <a class="btn" href="{{ res.url }}" class="btn resource-url-analytics" target="_blank">
+                    <i class="icon-download"></i> {{ _('Download') }}</a>
+                <button class="btn dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button> #}
+                <div class="btn-group dropdown dropdown-toggle download-toggle">
+                    <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">
+                    <i class="icon-download"> </i>{{ _('Download as') }} <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    {% block resource_item_download_links %}
+                    {# Placeholder for vector/raster storers to fill in download links #}
+                    {% endblock %}
+                </ul>
+            </div>
+    
+        {% endif %}
+        {% endif %}
+        {% endblock %}
+
+
         {% block resource_item_explore %}
         {% if not url_is_edit %}
         <div class="dropdown btn-group resource-explore-opts pull-right">
             <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">
-              <i class="icon-compass"></i> {{ _('Explore') }} <span class="caret"></span></a>
+              <i class="icon-compass"></i> {{ _('Options') }} <span class="caret"></span></a>
             <ul class="dropdown-menu">
                 {% block resource_item_explore_links %}
                 <li>
                     <a href="{{ url }}">
                       {% if res.can_be_previewed %}
-                        <i class="icon-bar-chart"></i> {{ _('Preview') }}
+                        <i class="icon-eye-open"></i> {{ _('Preview') }}
                       {% else %}
                         <i class="icon-info-sign"></i> {{ _('More information') }}
                       {% endif %}
                     </a>
                 </li>
                 <li>
-                    <a href="{{ res.url }}" class="resource-url-analytics" target="_blank">
-                      {% if res.can_be_previewed %}
-                        <i class="icon-download"></i> {{ _('Download') }}
-                      {% else %}
-                        <i class="icon-external-link"></i> {{ _('Go to resource') }}
-                      {% endif %}
-                    </a>
+                        {% if res.resource_type == 'api' %}
+                            <a href="{{ res.url }}" class="resource-url-analytics" target="_blank">
+                                <i class="icon-beaker"></i>
+                                    {{ _('Endpoint') }}
+                            </a>
+                            {% else %}
+                            {% if res.can_be_previewed  %}
+                                    <a href="{{ res.url }}" class="resource-url-analytics" target="_blank">
+                                        <i class="icon-download"></i> {{ _('Download') }}</a>
+                            {% else %}
+                            <a href="{{ res.url }}" class="resource-url-analytics" target="_blank">
+                            <i class="icon-external-link"></i> {{ _('Go to resource') }}
+                            </a>
+                            {% endif %}
+                        {% endif %}
                 </li>
                 {% if can_edit %}
                 <li>
@@ -51,10 +84,8 @@
         </div>
         {% endif %} {# url_is_edit #}
         {% endblock %} {# resource_item_explore #}
+        </div> {# resource-action-buttons #}
         
-        {% block resource_item_download %}
-        {# Placeholder for storer/ingestor plugins that provide format-specific download options -#}
-        {% endblock %}
 
     </header>
     {% endblock %} {# resource_item_header #}
@@ -69,4 +100,12 @@
     </p>
     {% endblock %} {# resource_item_description #}
 
-</li>
+    </li>
+
+
+    {# {% if res.resource_type == 'api' %}
+        <a href="{{ res.url }}" class="resource-url-analytics" target="_blank">
+            <div class="btn"> <i class="icon-beaker"></i>
+                {{ _('Endpoint') }}</div>
+        </a> #}
+
