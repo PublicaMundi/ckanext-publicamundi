@@ -1,0 +1,13 @@
+{% ckan_extends %} 
+
+{% set pkg = c.package %}
+{% set res = c.resource %}
+
+{% block resources_list %}
+    {% snippet "package/snippets/resources_simplified.html", pkg=pkg, active=res.id %}
+  {% endblock %}
+
+{% block data_preview %}
+    {{ h.preview_resource_or_ingested(res, pkg) }}
+{% endblock %}
+

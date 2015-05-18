@@ -2,6 +2,9 @@
 {% set url_action = 'resource_edit' if url_is_edit and can_edit else 'resource_read' %}
 {% set url = h.url_for(controller='package', action=url_action, id=pkg.name, resource_id=res.id) %}
 
+{% set raster_resources = h.get_ingested_raster_resources(pkg) %}
+{% set vector_resources = h.get_ingested_vector_resources(pkg) %}
+
 <li class="resource-item clearfix" data-id="{{ res.id }}">
     {% block resource_item_header %}
     <header>
