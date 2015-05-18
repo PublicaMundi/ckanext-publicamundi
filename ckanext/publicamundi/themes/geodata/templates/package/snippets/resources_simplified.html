@@ -1,17 +1,16 @@
-
 {% set resources = pkg.resources or [] %}
 {% if resources %}
   <section class="module module-narrow resources">
     <h2 class="module-heading"><i class="icon-copy"></i> {{ _("Resources") }}</h2>
     <ul class="unstyled nav nav-simple">
     {% for resource in resources %}
-        {% if (resource.vectorstorer_resource or resource.rasterstorer_resource) %}
-        {% set res_display_name = pkg.title+' ('+resource.format|upper+')' %}
+    {% if (resource.vectorstorer_resource or resource.rasterstorer_resource) %}
+        {% set res_display_name = pkg.title|truncate(25)+' ('+resource.format|upper+')' %}
         {%  else %}
         {% set res_display_name = h.resource_display_name(resource) %}
         {% endif %}
         <li class="nav-item{{ ' active' if active == resource.id }}">
-          {% link_for res_display_name|truncate(25), controller='package', action=action or 'resource_read', id=pkg.name, resource_id=resource.id, inner_span=true %}
+          {% link_for res_display_name|truncate(34), controller='package', action=action or 'resource_read', id=pkg.name, resource_id=resource.id, inner_span=true %}
         </li>
       {% endfor %}
     </ul>

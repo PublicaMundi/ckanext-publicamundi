@@ -1,9 +1,11 @@
 {% ckan_extends %}
 
+{% set raster_resources = h.get_ingested_raster_resources(pkg) %}
+
 {% block resource_item_download_links %}
     {{ super() }}
     {% for raster_res in raster_resources %}
-        {% snippet 'package/snippets/raster.html', res=raster_res %} 
+        {% snippet 'package/snippets/resource_item_raster.html', res=raster_res %} 
         {% endfor %}
 {% endblock %}
 

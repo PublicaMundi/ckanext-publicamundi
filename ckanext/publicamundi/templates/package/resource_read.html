@@ -80,13 +80,6 @@
   {% resource 'ckanext-publicamundi/table-collapsible-rows' %}
 {% endblock %}
 
-{% block data_preview %}
-
-{{ h.resource_preview(c.resource, c.package) }}
-{% endblock %}
 
 
-  {% block resources_list %}
-    {% snippet "package/snippets/resources_simplified.html", pkg=pkg, active=res.id %}
-  {% endblock %}
 

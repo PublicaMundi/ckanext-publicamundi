@@ -1,5 +1,7 @@
 {% ckan_extends %}
 
+{% set vector_resources = h.get_ingested_vector_resources(pkg) %}
+
 {% block resource_item_explore_links %}
 
     {% if res.vectorstorer_resource and res.format == 'wfs' %}
@@ -20,7 +22,7 @@
 {% block resource_item_download_links %}
   {{ super() }}
    {% for vector_res in vector_resources %}
-        {% snippet 'package/snippets/vector.html', res=vector_res %} 
+        {% snippet 'package/snippets/resource_item_vector.html', res=vector_res %} 
     {% endfor %}
 {% endblock %}
 

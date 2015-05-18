@@ -3,7 +3,7 @@ import datetime
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckan.lib.base import c
-from ckan.lib.helpers import render_datetime
+from ckan.lib.helpers import render_datetime, resource_preview
 
 def most_recent_datasets(limit=10):
     datasets = toolkit.get_action('package_search')(
@@ -23,9 +23,23 @@ def friendly_date(date_str):
 
 
 _feedback_form = None
+_non_previewable_formats = ['geotiff', 'gml', 'shapefile', 'shp' ]
 
 def feedback_form():
     return _feedback_form
+
+def get_non_previewable_formats():
+    return _non_previewable_formats
+
+def preview_resource_or_ingested(res, pkg):
+    snippet = resource_preview(res, pkg)
+    non_previewable = get_non_previewable_formats()
+
+    if res.get('format') in non_previewable:
+        for ing_res in pkg.get('resources'):
+            if (ing_res.get('vectorstorer_resource') or ing_res.get('rasterstorer_resource')) and ing_res.get('parent_resource_id') == res.get('id') and not ing_res.get('format') in non_previewable:
+                snippet = resource_preview(ing_res, pkg)
+    return snippet
 
 class GeodataThemePlugin(plugins.SingletonPlugin):
     '''Theme plugin for geodata.gov.gr.
@@ -46,6 +60,7 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
             'list_menu_items': list_menu_items,
             'friendly_date': friendly_date,
             'feedback_form': feedback_form,
+            'preview_resource_or_ingested': preview_resource_or_ingested,
         }
     
     # IConfigurer
