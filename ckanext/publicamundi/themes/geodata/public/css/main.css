@@ -129,7 +129,7 @@ p a{
 
 .user-menu {
     text-align: left;
-    z-index: 5000;
+    z-index: 1000;
     position: relative;
     margin: 0;
     list-style: none;
@@ -1459,6 +1459,12 @@ p a{
     border-top-color: #fff;
     border-bottom-color: #fff;
 }
+.btn:focus .caret, .btn-primary:focus .caret,  .btn-info:focus .caret, .btn-success:focus .caret, .btn-inverse:focus .caret{
+    border-top-color: #fff;
+    border-bottom-color: #fff;
+}
+
+
 .btn-warning:hover .caret{
     background: #C6B489;
 }
@@ -1541,7 +1547,10 @@ p a{
 .remove-opts.open .btn.dropdown-toggle{
     background: #C43210 !important;
 }
-.dropdown-menu > li:hover > a{
+.dropdown-menu > li > a:hover{
+    background: #4E59A4;
+}
+.dropdown-menu > li > a:focus{
     background: #4E59A4;
 }
 .select2-drop.select2-drop-above.select2-drop-active{

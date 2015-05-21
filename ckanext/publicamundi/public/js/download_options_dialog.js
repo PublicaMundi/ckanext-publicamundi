@@ -1,0 +1,103 @@
+ckan.module('download_options_dialog', function ($, _) {
+      return {
+          options: {
+                BASE_URL: 'http://labs.geodata.gov.gr/',
+                type: null,
+                format: null,
+                srs: null,
+            },
+            elements: {
+                format_type: null,
+                srs_type: null,
+                download_btn: null,
+            },
+            initialize: function () {
+                $.proxyAll(this, /_on/);
+                this.el.on('click', this._onClick);
+                                
+            },
+            _onClick: function(){
+                
+                var active_modal = $(this.el).parent().find('[id^="download_options"]');
+                this.elements.format_type = active_modal.find('[name="format_type"]');
+                this.elements.srs_type = active_modal.find('[name="srs_type"]');
+                this.elements.download_btn = active_modal.find('[name="download"]');
+                
+                
+                var selected = this.elements.format_type.find('option:selected');
+                this.options.format = selected.val();
+                this.options.srs = this.elements.srs_type.val();
+                this.options.type = selected.data('resource-type');
+
+                this.elements.format_type.on('change', this._onTypeSelect);
+                this.elements.srs_type.on('change', this._onSrsSelect);
+               
+                this._onUpdateDownloadButton();
+
+            },
+            _onTypeSelect: function(e) {
+                var selected = this.elements.format_type.find('option:selected');
+                this.options.format = this.elements.format_type.val();
+                this.options.type = selected.data('resource-type');
+                
+                this._onUpdateDownloadButton();
+
+            },
+            _onSrsSelect: function(e){
+                this.options.srs = this.elements.srs_type.val();
+                this._onUpdateDownloadButton();
+
+            },
+            _onUpdateDownloadButton: function(){
+                if (this.options.type == "vector"){
+                    this.elements.download_btn.attr("href", this._onGetVectorUrl());
+                    $('.control-srs_type').removeClass('hide');
+                }
+                else{
+                    this.elements.download_btn.attr("href", this._onGetRasterUrl());
+                    $('.control-srs_type').addClass('hide');
+                }
+            },
+            _onGetRasterUrl: function(){
+                var service = 'WCS';
+                var version = '2.0.1';
+                var request = 'ProcessCoverages';
+
+                var selected = this.elements.format_type.find('option:selected');
+                var coverage_id = selected.data('resource-id');
+                var format = selected.data('resource-format');
+                
+                var url = this.options.BASE_URL+'rasdaman/ows/?service='+service+'&version='+version+'&request='+request+'&query=for c in ('+coverage_id+') return encode(c, "'+format+'")';
+                
+                return url;
+
+                //var request = 'http://labs.geodata.gov.gr/rasdaman/ows/?service=WCS&version=2.0.1&request=ProcessCoverages&query=for c in (coverage_id) return encode(c, "format")'
+
+            },
+            _onGetVectorUrl: function(){
+                var service = 'WFS';
+                var version = '1.0.0';
+                var request = 'GetFeature';
+                
+                var selected = this.elements.format_type.find('option:selected');
+                var layer_name = selected.data('resource-layer');
+                var format = selected.data('resource-format');
+
+                var srs = this.options.srs;
+                
+                var url = this.options.BASE_URL+'geoserver/wfs/?service='+service+'&version='+version+'&request='+request+'&typeName='+layer_name+'&outputFormat='+format+'&srs='+srs;
+              /*  qs_params = OrderedDict([
+                    ('service', 'WFS'),
+                    ('version', '1.0.0'),
+                    ('request', 'GetFeature'),
+                    ('typeName', str(layer_name)),
+                    ('outputFormat', str(output_format)),
+                    ('srs', str(srs)),
+                ])
+                return service_endpoint + '?' + urllib.urlencode(qs_params) */
+
+                return url;
+            },
+              
+      };
+});

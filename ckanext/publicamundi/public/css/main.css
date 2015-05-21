@@ -140,7 +140,12 @@ input[type='checkbox'], input[type='radio'] {
 .form-horizontal .control-label {
     width: 140px;
 }
-
+.modal-body.form-horizontal{
+    margin-top: 20px;
+}
+.modal-body.form-horizontal .control-label{
+    text-align:left;
+}
 .form-horizontal .controls {
     margin-left: 146px;
 }
@@ -352,18 +357,23 @@ h1 > .label.package-state {
     //position: relative;
     //top: 0px;
     //right: 10px;
-    float: right;
 }
 .resource-item .resource-action-buttons{
     display: block;
     float: right;
+    margin-right: 5px;
 }
-.resource-item .resource-action-buttons .btn{
+.resource-action-buttons .action-button{
+    margin-left: 10px;
+    float: left;
 }
 .resource-item .btn-group{
     position: relative;
     top: 0;
     right: 0;
+}
+.resource-item .heading i{
+    color: #4E59A4;
 }
 .resources li.resource-item .btn-group + .btn-group {
     //margin-right: 5px;
