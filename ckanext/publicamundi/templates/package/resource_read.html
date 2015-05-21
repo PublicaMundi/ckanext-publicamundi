@@ -14,16 +14,23 @@
     {% endif %}
     {% if res.url %}
         {% if  res.resource_type != 'api' %}
+
+        {% if res.resource_type in ('listing', 'service') %}
         <li>
         <a class="btn btn-primary resource-url-analytics resource-type-{{ res.resource_type }}" href="{{ res.url }}">
-            {% if res.resource_type in ('listing', 'service') %}
+
             <i class="icon-eye-open"></i> {{ _('View') }}
             {# <i class="icon-key"></i> {{ _('API Endpoint') }} #}
-            {% else %}
-            <i class="icon-download"></i> {{ _('Download') }}
-            {% endif %}
+            {# {% else %}
+            <i class="icon-download"></i> {{ _('Download') }} #}
         </a>
+
         </li>
+
+        {% endif %}
+
+
+
         {% endif %}
     {% endif %}
     {% if 'datastore' in g.plugins and res.datastore_active %}

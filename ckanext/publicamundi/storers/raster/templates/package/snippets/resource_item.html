@@ -2,12 +2,12 @@
 
 {% set raster_resources = h.get_ingested_raster_from_resource(pkg,res) %}
 
-{% block resource_item_download_links %}
+{# {% block resource_item_download_links %}
     {{ super() }}
     {% for raster_res in raster_resources %}
         {% snippet 'package/snippets/resource_item_raster.html', res=raster_res %} 
         {% endfor %}
-{% endblock %}
+        {% endblock %} #}
 
 {# {% block resource_item_download %}
 {% if res.rasterstorer_resource and res.format in ['wcs'] %}
