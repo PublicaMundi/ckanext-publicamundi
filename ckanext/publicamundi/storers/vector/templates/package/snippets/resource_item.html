@@ -1,17 +1,18 @@
 {% ckan_extends %}
 
-{% set vector_resources = h.get_ingested_vector_resources(pkg) %}
+{% set vector_resources = h.get_ingested_vector_from_resource(pkg,res) %}
 
 {% block resource_item_explore_links %}
-
     {% if res.vectorstorer_resource and res.format == 'wfs' %}
     {# In case of a WFS resource, we also provide a tabular preview #}
     {% with tab_res = h.vectorstorer_table_resource(pkg, res) %}
     {% if tab_res %}
-    <li>
-        <a href="{{ h.url_for(controller='package', action='resource_read', id=pkg.name, resource_id=tab_res.id) }}">
+    {# <li> #}
+    <div class="action-button">  
+        <a class="btn" href="{{ h.url_for(controller='package', action='resource_read', id=pkg.name, resource_id=tab_res.id) }}">
             <i class="icon-table"></i> {{ _('Preview table') }}</a>
-    </li>
+    </div>
+    {# </li> #}
     {% endif %}
     {% endwith %}
     {% endif %}
