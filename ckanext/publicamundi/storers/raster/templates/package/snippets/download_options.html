@@ -1,0 +1,15 @@
+{% ckan_extends %}
+{# {% extends "package/snippets/download_options.html" %} #}
+
+{% set raster_resources = h.get_ingested_raster_from_resource(pkg,res) %}
+
+{% block download_options_items %}
+{{ super() }}
+{# <option data-resource-type="raster" data-resource-id="Cov_a78360bb_16ac_490b_9266_de29a9b935b7" data-resource-format="csv" >RASTER</option>
+<option data-resource-type="raster" data-resource-id="coverageid2" data-resource-format="xsd">{{ raster_resources }}</option> #}
+    {% for raster_res in raster_resources %}
+        {% snippet 'package/snippets/resource_item_raster.html', res=raster_res %} 
+    {% endfor %}
+{% endblock %}
+
+

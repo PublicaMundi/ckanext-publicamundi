@@ -80,3 +80,45 @@ def get_ingested_vector_resources(package):
             vector_resources.append(res)
     return vector_resources
 
+_preferable_metadata_format = [
+        {'name':'INSPIRE',
+         'format':'xml'},
+        {'name': 'CKAN',
+        'format': 'json'}]
+
+_default_metadata_format = 'xml'
+
+# Returns the most suitable primary download format for each schema
+# based on _preferable_metadata_format list of dictionaries
+def get_primary_metadata_url(links, metadata_type):
+    pformat = _default_metadata_format
+
+    for mtype in _preferable_metadata_format:
+        if mtype.get('name') == metadata_type:
+            pformat = mtype.get('format')
+
+    url = ''
+    for link in links:
+        if link.get('title') == metadata_type and link.get('format') == pformat:
+            url = link.get('url')
+            break
+    return url
+
+
+def get_ingested_raster_from_resource(package,resource):
+    ing_resources = []
+    for res in package.get('resources'):
+        if res.get('rasterstorer_resource') and res.get('parent_resource_id')==resource.get('id'):
+            ing_resources.append(res)
+    #if resource.get('format') == 'gml':
+    #    ing_resources = ['GML']
+    return ing_resources
+
+def get_ingested_vector_from_resource(package,resource):
+    ing_resources = []
+    for res in package.get('resources'):
+        if res.get('vectorstorer_resource') and res.get('parent_resource_id')==resource.get('id'):
+            ing_resources.append(res)
+    #if resource.get('format') == 'kml':
+    #    ing_resources = ['KML']
+    return ing_resources

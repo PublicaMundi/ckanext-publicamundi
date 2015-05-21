@@ -1,6 +1,6 @@
 {% ckan_extends %}
 
-{% set raster_resources = h.get_ingested_raster_resources(pkg) %}
+{% set raster_resources = h.get_ingested_raster_from_resource(pkg,res) %}
 
 {% block resource_item_download_links %}
     {{ super() }}

@@ -24,6 +24,8 @@ def friendly_date(date_str):
 
 _feedback_form = None
 _non_previewable_formats = ['geotiff', 'gml', 'shapefile', 'shp' ]
+_previewable_formats = ['wms', 'wfs']
+
 
 def feedback_form():
     return _feedback_form
@@ -31,13 +33,18 @@ def feedback_form():
 def get_non_previewable_formats():
     return _non_previewable_formats
 
+def get_previewable_formats():
+    return _previewable_formats
+
+# Returns the most suitable preview by checking whether ingested resources provide a better preview visualization
 def preview_resource_or_ingested(res, pkg):
     snippet = resource_preview(res, pkg)
     non_previewable = get_non_previewable_formats()
+    previewable = get_previewable_formats()
 
     if res.get('format') in non_previewable:
         for ing_res in pkg.get('resources'):
-            if (ing_res.get('vectorstorer_resource') or ing_res.get('rasterstorer_resource')) and ing_res.get('parent_resource_id') == res.get('id') and not ing_res.get('format') in non_previewable:
+            if (ing_res.get('vectorstorer_resource') or ing_res.get('rasterstorer_resource')) and ing_res.get('parent_resource_id') == res.get('id') and ing_res.get('format') in previewable:
                 snippet = resource_preview(ing_res, pkg)
     return snippet
 
@@ -89,8 +96,8 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     def before_map(self, mapper):
         mapper.connect('developers', '/developers', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='developers')
         #mapper.connect('maps', '/maps', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='redirect_maps' )
+        #mapper.redirect('maps', 'http://http://83.212.118.10:5000/maps')
         mapper.connect('maps', '/maps')
-        
         mapper.connect('news', '/news', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='redirect_news' )
 
         return mapper

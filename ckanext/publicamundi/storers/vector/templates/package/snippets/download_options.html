@@ -1,0 +1,21 @@
+{% ckan_extends %}
+
+{% set vector_resources = h.get_ingested_vector_from_resource(pkg,res) %}
+
+{% block download_options_items %}    
+{{ super() }}
+{# <option value="vector" data-resource-type="vector" data-resource-layer="publicamundi%3A36f40411-a5f7-4ffa-bd91-fb1d7223f7e2" data-resource-format="csv" >VECTOR</option>
+<option data-resource-type="raster" data-resource-id="Cov_a78360bb_16ac_490b_9266_de29a9b935b7" data-resource-format="csv" >RASTER</option>
+<option value="list" data-test="2">{{ vector_resources}}</option> #}
+    {% for vector_res in vector_resources %}
+        {% if vector_res.vectorstorer_resource and vector_res.format in ['wfs'] %}
+        {% if vector_res.format == 'wfs' %}
+            {% for fmt in h.vectorstorer_wfs_output_formats() %}
+            <option value="{{fmt}}" data-wfs_server="{{vector_res.wfs_server}}" data-wfs_layer="{{vector_res.wfs_layer}}" data-fmt_name="{{fmt.name}}">
+               {{ fmt.display_name|safe }}
+            </option>
+            {% endfor %}
+        {% endif %} {# res.format #}
+        {% endif %}
+    {% endfor %}
+{% endblock %}

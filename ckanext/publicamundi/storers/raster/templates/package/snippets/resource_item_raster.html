@@ -1,24 +1,30 @@
-{% if res.rasterstorer_resource and res.format in ['wcs'] %}
-        {% if res.format == 'wcs' %}
-        <li>
-            <a data-resource-id="{{res.wcs_coverage}}" data-resource-format="csv" class="raster-export-button" href="#" target="_blank">CSV</a>
-        </li>
-        <li>
-            <a data-resource-id="{{res.wcs_coverage}}" data-resource-format="jpeg" class="raster-export-button" href="#" target="_blank">JPEG</a>
-        </li>
-        <li>
-            <a data-resource-id="{{res.wcs_coverage}}" data-resource-format="jpeg2000" class="raster-export-button" href="#" target="_blank">JPEG2000</a>
-        </li>
-        <li>
-            <a data-resource-id="{{res.wcs_coverage}}" data-resource-format="netcdf" class="raster-export-button" href="#" target="_blank">NetCDF</a>
-        </li>
-        <li>
-            <a data-resource-id="{{res.wcs_coverage}}" data-resource-format="png" class="raster-export-button" href="#" target="_blank">PNG</a>
-        </li>
-        <li>
-            <a data-resource-id="{{res.wcs_coverage}}" data-resource-format="tiff" class="raster-export-button" href="#" target="_blank">TIFF</a>
-        </li>
+{% set formats = [
+            {'name':'csv', 
+             'title': 'CSV',
+             },
+            {'name':'jpeg', 
+             'title': 'JPEG',
+             },
+            {'name':'jpeg2000', 
+             'title': 'JPEG2000',
+             },
+            {'name':'netcdf', 
+             'title': 'NetCDF',
+             },
+            {'name':'png', 
+             'title': 'PNG',
+             },
+            {'name':'tiff', 
+             'title': 'TIFF',
+             },]
+             %}
 
+{% if res.rasterstorer_resource and res.format in ['wcs'] %}
+    {% if res.format == 'wcs' %}
+        {% for format in formats %}
+        <option value="{{format.name}}" data-resource-type="raster" data-resource-id="{{res.wcs_coverage}}" data-resource-format="{{format.name}}" href="#" target="_blank">{{format.title}}
+        </option>
+        {% endfor %}
         {% endif %} {# res.format #}
 {% resource 'ckanext-publicamundi-raster/raster_export' %}
 {% endif %}
