@@ -6,17 +6,17 @@
   -%}
   {%- if obj -%}
   <header>
-    <h3 class="inline">{{ 'Metadata' }}</h3>
+    <h3 class="inline">{{ _('Metadata') }}</h3>
     
     <div class="download-links pull-right">
-    <div class="btn-group">
-    <a class="btn btn-primary" href="{{ h.get_primary_metadata_url(pkg_dict.download_links, dtspec.title) }}"
-        ><i class="icon-download"></i> {{ _('Download') }}</a>
-    <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-        <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu">
-            {% for link in pkg_dict.download_links|sort(attribute='weight') %}
+      <div class="btn-group">
+        <a class="btn btn-primary" href="{{ h.get_primary_metadata_url(pkg_dict.download_links, dtspec.title) }}"
+          ><i class="icon-download"></i> {{ _('Download') }}</a>
+        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+           {% for link in pkg_dict.download_links|sort(attribute='weight') %}
            <li>
              <a href="{{ link.url }}" target="_blank"
                ><strong>{{ link.title }}</strong> {{ link.format|upper }} Metadata
@@ -24,10 +24,9 @@
              </a>
            </li>
            {% endfor %}
-    </ul>
-    </div>
-
-    <div class="metadata-label pull-left">
+        </ul>
+      </div>
+      <div class="metadata-label pull-left">
         <span>{{ dtspec.title|title|upper }}</span> <i class="icon-ok-sign"></i>
       </div>
     </div>

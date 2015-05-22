@@ -40,9 +40,10 @@
 
             {% for raster_res in raster_resources %}
             {% if raster_res.format == 'wms' %}
-                <a class="btn" href={{ "/maps/" + raster_res.id}} >
+            <div class="action-button"><a class="btn" href={{ "/maps/" + raster_res.id}} >
                         <i class="icon-medium icon-globe"></i>{{ _(' Map')}}
                     </a>
+            </div>
             {% endif %}
             {% endfor %}
 
@@ -54,29 +55,28 @@
                     <span class="icon-reorder"></span>
                 </a>
                 {% snippet 'package/snippets/download_options.html', pkg=pkg, res=res %}
-                <ul class="dropdown-menu">
+                {#  <ul class="dropdown-menu">
                     {% block resource_item_download_links %}
                     {# Placeholder for vector/raster storers to fill in download links #}
                     {% endblock %}
-                </ul>
+                </ul> #}
                 {% endif %}
             </div>
-            
 
 
-        {% block resource_item_download %}
+            {# {% block resource_item_download %}
         {% if raster_resources|length>0 or vector_resources|length>0 %}
-        {# <div class="btn-group">
+         <div class="btn-group">
                 <a class="btn" href="{{ res.url }}" class="btn resource-url-analytics" target="_blank">
                     <i class="icon-download"></i> {{ _('Download') }}</a>
                 <button class="btn dropdown-toggle" data-toggle="dropdown">
                     <span class="caret"></span>
                 </button> #}
                 {# <a href="#" class="btn resource-url-analytics" data-module="download_as_popup" target="_blank">
-                    <i class="icon-download"> </i>{{ _('Download as') }}</a> #}
+                    <i class="icon-download"> </i>{{ _('Download as') }}</a> 
     
         {% endif %}
-        {% endblock %}
+        {% endblock %} #}
 
 
         {% elif res.resource_type == 'api' %}

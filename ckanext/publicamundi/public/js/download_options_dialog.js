@@ -23,11 +23,20 @@ ckan.module('download_options_dialog', function ($, _) {
                 this.elements.srs_type = active_modal.find('[name="srs_type"]');
                 this.elements.download_btn = active_modal.find('[name="download"]');
                 
+                console.log('elements=');
+                console.log(this.elements.format_type);
+                console.log(this.elements.srs_type);
+                console.log(this.elements.download_btn);
                 
                 var selected = this.elements.format_type.find('option:selected');
                 this.options.format = selected.val();
                 this.options.srs = this.elements.srs_type.val();
                 this.options.type = selected.data('resource-type');
+                
+                console.log('options=');
+                console.log(this.options.format);
+                console.log(this.options.srs);
+                console.log(this.options.type);
 
                 this.elements.format_type.on('change', this._onTypeSelect);
                 this.elements.srs_type.on('change', this._onSrsSelect);
@@ -52,10 +61,16 @@ ckan.module('download_options_dialog', function ($, _) {
                 if (this.options.type == "vector"){
                     this.elements.download_btn.attr("href", this._onGetVectorUrl());
                     $('.control-srs_type').removeClass('hide');
+                    //this.elements.download_btn.removeClass('hide');
                 }
-                else{
+                else if (this.options.type == "raster"){
                     this.elements.download_btn.attr("href", this._onGetRasterUrl());
                     $('.control-srs_type').addClass('hide');
+                    //this.elements.download_btn.removeClass('hide');
+                }
+                else{
+                    //this.elements.download_btn.addClass('hide');
+                    this.elements.download_btn.attr("href", '/');
                 }
             },
             _onGetRasterUrl: function(){
