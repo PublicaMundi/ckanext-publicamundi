@@ -1,7 +1,6 @@
 {% ckan_extends %}
 {# {% extends "package/snippets/download_options.html" %} #}
 
-{% set raster_resources = h.get_ingested_raster_from_resource(pkg,res) %}
 {% set available_formats = [
             {'name':'csv', 
              'title': 'CSV',
@@ -24,14 +23,12 @@
              %}
 
 {% block download_options_items %}
-{{ raster_resources }}
+{% set raster_resources = h.get_ingested_raster_from_resource(pkg,res) %}
 {{ super() }}
-{# <option data-resource-type="raster" data-resource-id="Cov_a78360bb_16ac_490b_9266_de29a9b935b7" data-resource-format="csv" >RASTER</option>
-<option data-resource-type="raster" data-resource-id="coverageid2" data-resource-format="xsd">{{ raster_resources }}</option> #}
     {% for raster_res in raster_resources %}
         {% if raster_res.rasterstorer_resource and raster_res.format in ['wcs'] %}
             {% if raster_res.format == 'wcs' %}
-                {% for format in availabel_formats %}
+                {% for format in available_formats %}
                 <option value="{{format.name}}" data-resource-type="raster" data-resource-id="{{raster_res.wcs_coverage}}" data-resource-format="{{format.name}}" href="#" target="_blank">{{format.title}}
                 </option>
                 {% endfor %}
