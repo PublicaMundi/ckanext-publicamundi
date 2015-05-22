@@ -1568,7 +1568,7 @@ msgstr "Περισσότερα"
 
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:24
 msgid "Endpoint"
-msgstr "Endpoint"
+msgstr "Σύνδεσμος"
 
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:25
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:27

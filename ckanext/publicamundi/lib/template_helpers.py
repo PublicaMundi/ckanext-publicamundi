@@ -104,7 +104,6 @@ def get_primary_metadata_url(links, metadata_type):
             break
     return url
 
-
 def get_ingested_raster_from_resource(package,resource):
     ing_resources = []
     for res in package.get('resources'):
@@ -121,6 +120,4 @@ def get_ingested_vector_from_resource(package,resource):
             for resb in package.get('resources'):
                 if resb.get('vectorstorer_resource') and resb.get('parent_resource_id')==resa.get('id'):
                     ing_resources.append(resb)
-    #if resource.get('format') == 'kml':
-    #    ing_resources = ['KML']
     return ing_resources

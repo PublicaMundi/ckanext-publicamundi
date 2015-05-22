@@ -35,9 +35,11 @@ header > h6.inline {
 .modal {
     border-radius: 2px;
 }
-
+.select2-chosen{
+    font-size: 15px;
+}
 .modal .modal-header h3 {
-    font-size: 1.5em;
+    //font-size: 18px;
 }
 
 .btn-small {

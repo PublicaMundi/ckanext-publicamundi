@@ -1,6 +1,5 @@
 {% ckan_extends %}
 
-
 {% block download_options_items %}    
 {% set vector_resources = h.get_ingested_vector_from_resource(pkg,res) %}
 {{ super() }}
@@ -8,11 +7,11 @@
         {% if vector_res.vectorstorer_resource and vector_res.format in ['wfs'] %}
         {% if vector_res.format == 'wfs' %}
             {% for fmt in h.vectorstorer_wfs_output_formats() %}
-            <option value="{{fmt.name}}"  data-resource-type="vector" data-wfs_server="{{vector_res.wfs_server}}" data-wfs_layer="{{vector_res.wfs_layer}}" data-fmt_name="{{fmt.name}}">
+            <option value="{{fmt.name}}"  data-resource-type="vector" data-resource-layer="{{vector_res.wfs_layer}}" data-resource-format="{{fmt.name}}">
                {{ fmt.display_name|safe }}
             </option>
-            {% endfor %}
+            {% endfor %} 
         {% endif %} {# res.format #}
-        {% endif %}
+        {% endif %} {# res.vectorstorer_resource #}
     {% endfor %}
 {% endblock %}

@@ -7,6 +7,7 @@ ckan.module('download_options_dialog', function ($, _) {
                 srs: null,
             },
             elements: {
+                active_modal: null,
                 format_type: null,
                 srs_type: null,
                 download_btn: null,
@@ -14,14 +15,14 @@ ckan.module('download_options_dialog', function ($, _) {
             initialize: function () {
                 $.proxyAll(this, /_on/);
                 this.el.on('click', this._onClick);
-                                
+                
             },
             _onClick: function(){
                 
-                var active_modal = $(this.el).parent().find('[id^="download_options"]');
-                this.elements.format_type = active_modal.find('[name="format_type"]');
-                this.elements.srs_type = active_modal.find('[name="srs_type"]');
-                this.elements.download_btn = active_modal.find('[name="download"]');
+                this.elements.active_modal = $(this.el).parent().find('[id^="download_options"]');
+                this.elements.format_type = this.elements.active_modal.find('[name="format_type"]');
+                this.elements.srs_type = this.elements.active_modal.find('[name="srs_type"]');
+                this.elements.download_btn = this.elements.active_modal.find('[name="download"]');
                 
                 console.log('elements=');
                 console.log(this.elements.format_type);
@@ -41,6 +42,7 @@ ckan.module('download_options_dialog', function ($, _) {
                 this.elements.format_type.on('change', this._onTypeSelect);
                 this.elements.srs_type.on('change', this._onSrsSelect);
                
+                this.elements.download_btn.on('click', this._onDownloadClicked);
                 this._onUpdateDownloadButton();
 
             },
@@ -85,6 +87,13 @@ ckan.module('download_options_dialog', function ($, _) {
                     $('.control-srs_type').addClass('hide');
                 }
             },
+            _onDownloadClicked: function(e){
+                
+                //var active_modal = $(this.el).parent().find('[id^="download_options"]');
+                //active_modal.modal('hide');
+                //e.preventDefault();
+                //alert('download clicked');
+            },
             _onGetRasterUrl: function(){
                 var service = 'WCS';
                 var version = '2.0.1';
@@ -107,9 +116,9 @@ ckan.module('download_options_dialog', function ($, _) {
                 var request = 'GetFeature';
                 
                 var selected = this.elements.format_type.find('option:selected');
+                console.log(selected);
                 var layer_name = selected.data('resource-layer');
                 var format = selected.data('resource-format');
-
                 var srs = this.options.srs;
                 
                 var url = this.options.BASE_URL+'geoserver/wfs/?service='+service+'&version='+version+'&request='+request+'&typeName='+layer_name+'&outputFormat='+format+'&srs='+srs;

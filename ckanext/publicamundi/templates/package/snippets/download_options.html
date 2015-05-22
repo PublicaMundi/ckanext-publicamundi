@@ -15,7 +15,7 @@
 
 {% resource 'ckanext-publicamundi/download_options' %}
 
-<div class="modal hide no-fade" id="download_options-{{res.id}}" tabindex="-1" aria-hidden="true" > 
+<div class="modal no-fade" id="download_options-{{res.id}}" tabindex="-1" aria-hidden="true" > 
     {% block download_options_header %}
     <div class="modal-header">
         <a class="close" data-dismiss="modal">&times;</a>
@@ -28,8 +28,8 @@
                 <label class="control-label" for="field-format_type">
                 {{ _('Format') }}</label>
                 <div class="controls ">      
-                    <select  class="input-xlarge" id="field-format_type" name="format_type" 
-                        data-module="doesntwork-input-select2">
+                    <select  class="input-xlarge " id="field-format_type" name="format_type" 
+                        data-module="input-select2">
                         {% block download_options_items %}
                             {# Placeholder for vector/raster storers to fill in download links #}
                         {% endblock %}
@@ -45,7 +45,7 @@
                 {{ _('SRS') }}</label>
                 <div class="controls ">      
                     <select class="input-xlarge" id="field-srs_type" name="srs_type" 
-                        data-module="doesnt-work-input-select2">
+                        data-module="input-select2">
                       {%- for srs in srs_types %} 
                         <option value="{{ srs.value }}" 
                             {%- if srs.value == default_srs %} selected="selected"{% endif %}>{{ srs.title }}</option>
