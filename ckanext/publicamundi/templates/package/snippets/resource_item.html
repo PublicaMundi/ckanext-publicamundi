@@ -16,18 +16,13 @@
                 {% else %}
                 <i class="icon-info-sign"></i>
                 {% endif %}
-
             {{ h.resource_display_name(res)|truncate(50) }} 
-                
             <span class="format-label" 
                 property="dc:format" data-format="{{ res.format.lower() or 'data' }}">{{ res.format }}</span>
             {{ h.popular('views', res.tracking_summary.total, min=10) }}
         </a>
         {% endblock %} {# resource_item_title #}
-
         <div class="resource-action-buttons">
-        
-
         {% block resource_item_explore %}
         {% if not url_is_edit %}
             {% if can_edit %}
@@ -35,9 +30,7 @@
                       <i class="icon-edit"></i> {{ _('Edit') }}
               </a></div>
                 {% endif %}
-            
-            {% if res.resource_type == 'file' %}
-
+        {% if res.resource_type == 'file' %}
             {% for raster_res in raster_resources %}
             {% if raster_res.format == 'wms' %}
             <div class="action-button"><a class="btn" href={{ "/maps/" + raster_res.id}} >
@@ -50,36 +43,14 @@
             <div class="action-button btn-group pull-right">
                 <a class="btn btn-primary resource-url-analytics" href="{{ res.url }}"
                     ><i class="icon-download"></i> {{ _('Download') }}</a>
-                {% if raster_resources|length>0 or vector_resources|length>0 %}
-                <a class="btn btn-primary dropdown-toggle" data-toggle="modal" data-target="#download_options-{{res.id}}" data-module="download_options_dialog" >
-                    <span class="icon-reorder"></span>
-                </a>
-                {% snippet 'package/snippets/download_options.html', pkg=pkg, res=res %}
-                <!--
-                <ul class="dropdown-menu">
-                    {% block resource_item_download_links %}
-                    {# Placeholder for vector/raster storers to fill in download links #}
-                    {% endblock %}
-                </ul>
-                -->
-                {% endif %}
-            </div>
+            {% if raster_resources|length>0 or vector_resources|length>0 %}
+            <a class="btn btn-primary dropdown-toggle" data-toggle="modal" data-target="#download_options-{{res.id}}" data-module="download_options_dialog" >
+                <span class="icon-reorder"></span>
+            </a>
+            {% snippet 'package/snippets/download_options.html', pkg=pkg, res=res %}
 
-
-            {# {% block resource_item_download %}
-        {% if raster_resources|length>0 or vector_resources|length>0 %}
-         <div class="btn-group">
-                <a class="btn" href="{{ res.url }}" class="btn resource-url-analytics" target="_blank">
-                    <i class="icon-download"></i> {{ _('Download') }}</a>
-                <button class="btn dropdown-toggle" data-toggle="dropdown">
-                    <span class="caret"></span>
-                </button> #}
-                {# <a href="#" class="btn resource-url-analytics" data-module="download_as_popup" target="_blank">
-                    <i class="icon-download"> </i>{{ _('Download as') }}</a> 
-    
-        {% endif %}
-        {% endblock %} #}
-
+            {% endif %}
+        </div>
 
         {% elif res.resource_type == 'api' %}
             <div class="action-button">            
@@ -95,8 +66,6 @@
 
         {% endblock %} {# resource_item_explore #}
         </div> {# resource-action-buttons #}
-        
-
     </header>
     {% endblock %} {# resource_item_header #}
 

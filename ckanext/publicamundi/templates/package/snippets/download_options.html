@@ -1,4 +1,4 @@
-{% set default_value = 'epsg:2100' %}
+{% set default_srs = 'epsg:2100' %}
 {% set srs_types = [
                 {'title': _('Web Mercator (EPSG:3857)'),
                 'value': 'epsg:3857'},
@@ -29,7 +29,7 @@
                 {{ _('Format') }}</label>
                 <div class="controls ">      
                     <select class="input-xlarge" id="field-format_type" name="format_type" 
-                        data-module="input-select2">
+                        data-module="doesntwork-input-select2">
                         {% block download_options_items %}
                             {# Placeholder for vector/raster storers to fill in download links #}
                         {% endblock %}
@@ -40,16 +40,16 @@
                     </div>
             </div>
 
-            <div class="control-group control-select control-srs_type">
+            <div class="control-group control-srs_type">
                 <label class="control-label" for="field-srs_type">
                 {{ _('SRS') }}</label>
                 <div class="controls ">      
                     <select class="input-xlarge" id="field-srs_type" name="srs_type" 
-                        data-module="input-select2">
-                        {%- for srs in srs_types %} 
+                        data-module="doesnt-work-input-select2">
+                      {%- for srs in srs_types %} 
                         <option value="{{ srs.value }}" 
-                            {%- if srs.value == default_value %} selected{% endif %}>{{ srs.title }}</option>
-                        {% endfor -%}
+                            {%- if srs.value == default_srs %} selected="selected"{% endif %}>{{ srs.title }}</option>
+                            {% endfor -%} 
                     </select>
                     {% if verbose|default(true) and description %}
                     <p class="help-block">{{ description }}</p>

@@ -111,7 +111,7 @@ def get_ingested_raster_from_resource(package,resource):
         if res.get('rasterstorer_resource') and res.get('parent_resource_id')==resource.get('id'):
             ing_resources.append(res)
     #if resource.get('format') == 'gml':
-    #    ing_resources = ['GML']
+    ing_resources = ['GML']
     return ing_resources
 
 def get_ingested_vector_from_resource(package,resource):
