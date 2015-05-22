@@ -110,15 +110,17 @@ def get_ingested_raster_from_resource(package,resource):
     for res in package.get('resources'):
         if res.get('rasterstorer_resource') and res.get('parent_resource_id')==resource.get('id'):
             ing_resources.append(res)
-    #if resource.get('format') == 'gml':
-    ing_resources = ['GML']
     return ing_resources
 
 def get_ingested_vector_from_resource(package,resource):
     ing_resources = []
-    for res in package.get('resources'):
-        if res.get('vectorstorer_resource') and res.get('parent_resource_id')==resource.get('id'):
-            ing_resources.append(res)
+    for resa in package.get('resources'):
+        # Ingested vector resources are derived from table which is derived from resource
+        # Finding all resources that are ingested from table that is created from original resource
+        if resa.get('vectorstorer_resource') and resa.get('parent_resource_id')==resource.get('id') and resa.get('format')=='data_table':
+            for resb in package.get('resources'):
+                if resb.get('vectorstorer_resource') and resb.get('parent_resource_id')==resa.get('id'):
+                    ing_resources.append(resb)
     #if resource.get('format') == 'kml':
     #    ing_resources = ['KML']
     return ing_resources

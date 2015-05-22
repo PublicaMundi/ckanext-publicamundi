@@ -80,7 +80,7 @@ ckan.module('download_options_dialog', function ($, _) {
                 }
                 else{
                     //this.elements.download_btn.addClass('hide');
-                    this.elements.download_btn.attr("href", '/');
+                    this.elements.download_btn.attr("href", '#');
                     //this.elements.download_btn.attr("href", this._onGetVectorUrl());
                     $('.control-srs_type').addClass('hide');
                 }
