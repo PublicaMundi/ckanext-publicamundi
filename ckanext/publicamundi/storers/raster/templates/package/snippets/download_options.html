@@ -24,11 +24,11 @@
              %}
 
 {% block download_options_items %}
+{{ raster_resources }}
 {{ super() }}
 {# <option data-resource-type="raster" data-resource-id="Cov_a78360bb_16ac_490b_9266_de29a9b935b7" data-resource-format="csv" >RASTER</option>
 <option data-resource-type="raster" data-resource-id="coverageid2" data-resource-format="xsd">{{ raster_resources }}</option> #}
     {% for raster_res in raster_resources %}
-    
         {% if raster_res.rasterstorer_resource and raster_res.format in ['wcs'] %}
             {% if raster_res.format == 'wcs' %}
                 {% for format in availabel_formats %}

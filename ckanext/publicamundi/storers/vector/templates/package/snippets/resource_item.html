@@ -20,13 +20,13 @@
     {{ super() }}
 {% endblock %}
 
-{% block resource_item_download_links %}
+{# {% block resource_item_download_links %}
   {{ super() }}
    {% for vector_res in vector_resources %}
         {% snippet 'package/snippets/resource_item_vector.html', res=vector_res %} 
     {% endfor %}
 {% endblock %}
-
+#}
 
 {# {% block resource_item_download %}
     {% if res.vectorstorer_resource and res.format in ['wfs'] %}

@@ -48,13 +48,23 @@ ckan.module('download_options_dialog', function ($, _) {
                 var selected = this.elements.format_type.find('option:selected');
                 this.options.format = this.elements.format_type.val();
                 this.options.type = selected.data('resource-type');
-                
+                console.log('options=');
+                console.log(this.options.format);
+                console.log(this.options.srs);
+                console.log(this.options.type);
+
                 this._onUpdateDownloadButton();
 
             },
             _onSrsSelect: function(e){
                 this.options.srs = this.elements.srs_type.val();
                 this._onUpdateDownloadButton();
+
+                console.log('options=');
+                console.log(this.options.format);
+                console.log(this.options.srs);
+                console.log(this.options.type);
+
 
             },
             _onUpdateDownloadButton: function(){
@@ -71,6 +81,8 @@ ckan.module('download_options_dialog', function ($, _) {
                 else{
                     //this.elements.download_btn.addClass('hide');
                     this.elements.download_btn.attr("href", '/');
+                    //this.elements.download_btn.attr("href", this._onGetVectorUrl());
+                    $('.control-srs_type').addClass('hide');
                 }
             },
             _onGetRasterUrl: function(){
