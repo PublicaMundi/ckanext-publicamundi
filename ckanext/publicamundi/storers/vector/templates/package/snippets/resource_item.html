@@ -1,49 +1,33 @@
 {% ckan_extends %}
 
+{% block resource_item_file %}
 {% set vector_resources = h.get_ingested_vector_from_resource(pkg,res) %}
 
-{% block resource_item_explore %}
+{% for vector_res in vector_resources %}
+            {% if vector_res.format == 'wms' %}
+            <div class="action-button"><a class="btn" href={{ "/maps/" + vector_res.id}} >
+                        <i class="icon-medium icon-globe"></i>{{ _(' Map')}}
+                    </a>
+            </div>
+            {% endif %}
+            {% endfor %}
+{% endblock %}
+
+
+
+{% block resource_item_service %}
+{% set vector_resources = h.get_ingested_vector_from_resource(pkg,res) %}
     {% if res.vectorstorer_resource and res.format == 'wfs' %}
     {# In case of a WFS resource, we also provide a tabular preview #}
     {% with tab_res = h.vectorstorer_table_resource(pkg, res) %}
     {% if tab_res %}
-    {# <li> #}
     <div class="action-button">  
         <a class="btn" href="{{ h.url_for(controller='package', action='resource_read', id=pkg.name, resource_id=tab_res.id) }}">
-            <i class="icon-table"></i> {{ _('Preview table') }}</a>
+            <i class="icon-table"></i> {{ _('Table') }}</a>
     </div>
-    {# </li> #}
     {% endif %}
     {% endwith %}
     {% endif %}
     
     {{ super() }}
 {% endblock %}
-
-{# {% block resource_item_download_links %}
-  {{ super() }}
-   {% for vector_res in vector_resources %}
-        {% snippet 'package/snippets/resource_item_vector.html', res=vector_res %} 
-    {% endfor %}
-{% endblock %}
-#}
-
-{# {% block resource_item_download %}
-    {% if res.vectorstorer_resource and res.format in ['wfs'] %}
-    <div class="dropdown btn-group resource-download-opts pull-right">
-        <a href="#" class="btn dropdown-toggle" data-toggle="dropdown"
-            >{{ _('Download as') }} <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-            {% if res.format == 'wfs' %}
-            {% for fmt in h.vectorstorer_wfs_output_formats() %}
-            <li>
-               <a href="{{ h.vectorstorer_wfs_feature_url(res.wfs_server, res.wfs_layer, fmt.name) }}" target="_blank"
-                  >{{ fmt.display_name|safe }}</a>
-            </li>
-            {% endfor %}
-            {% endif %} 
-        </ul>
-    </div>
-    {% endif %}
-    {{ super() }}
-    {% endblock %} #}

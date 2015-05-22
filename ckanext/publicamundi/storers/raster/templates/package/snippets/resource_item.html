@@ -1,6 +1,17 @@
 {% ckan_extends %}
 
+{% block resource_item_file %}
 {% set raster_resources = h.get_ingested_raster_from_resource(pkg,res) %}
+
+{% for raster_res in raster_resources %}
+            {% if raster_res.format == 'wms' %}
+            <div class="action-button"><a class="btn" href={{ "/maps/" + raster_res.id}} >
+                        <i class="icon-medium icon-globe"></i>{{ _(' Map')}}
+                    </a>
+            </div>
+            {% endif %}
+            {% endfor %}
+{% endblock %}
 
 {# {% block resource_item_download_links %}
     {{ super() }}
@@ -42,3 +53,5 @@
 {% endif %}
 {{ super() }}
 {% endblock %} #}
+
+

@@ -4,6 +4,7 @@ import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckan.lib.base import c
 from ckan.lib.helpers import render_datetime, resource_preview
+import ckanext.publicamundi.lib.template_helpers as ext_template_helpers
 
 def most_recent_datasets(limit=10):
     datasets = toolkit.get_action('package_search')(
@@ -43,9 +44,19 @@ def preview_resource_or_ingested(res, pkg):
     previewable = get_previewable_formats()
 
     if res.get('format') in non_previewable:
-        for ing_res in pkg.get('resources'):
-            if (ing_res.get('vectorstorer_resource') or ing_res.get('rasterstorer_resource')) and ing_res.get('parent_resource_id') == res.get('id') and ing_res.get('format') in previewable:
+        raster_resources = ext_template_helpers.get_ingested_raster_from_resource(pkg,res)
+        vector_resources = ext_template_helpers.get_ingested_vector_from_resource(pkg,res)
+
+        for ing_res in raster_resources:
+            if ing_res.get('rasterstorer_resource') and ing_res.get('parent_resource_id') == res.get('id') and ing_res.get('format') in previewable:
                 snippet = resource_preview(ing_res, pkg)
+        for ing_res in vector_resources:
+            if ing_res.get('vectorstorer_resource') and ing_res.get('parent_resource_id') == res.get('id') and ing_res.get('format') in previewable:
+                snippet = resource_preview(ing_res, pkg)
+
+        #for ing_res in pkg.get('resources'):
+        #    if (ing_res.get('vectorstorer_resource') or ing_res.get('rasterstorer_resource')) and ing_res.get('parent_resource_id') == res.get('id') and ing_res.get('format') in previewable:
+        #        snippet = resource_preview(ing_res, pkg)
     return snippet
 
 class GeodataThemePlugin(plugins.SingletonPlugin):

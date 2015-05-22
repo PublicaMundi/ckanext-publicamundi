@@ -31,15 +31,9 @@
               </a></div>
                 {% endif %}
         {% if res.resource_type == 'file' %}
-            {% for raster_res in raster_resources %}
-            {% if raster_res.format == 'wms' %}
-            <div class="action-button"><a class="btn" href={{ "/maps/" + raster_res.id}} >
-                        <i class="icon-medium icon-globe"></i>{{ _(' Map')}}
-                    </a>
-            </div>
-            {% endif %}
-            {% endfor %}
-
+            {% block resource_item_file %}
+                {# Placeholder for extra data/resources buttons #} 
+            {% endblock %}
             <div class="action-button btn-group pull-right">
                 <a class="btn btn-primary resource-url-analytics" href="{{ res.url }}"
                     ><i class="icon-download"></i> {{ _('Download') }}</a>
@@ -53,6 +47,10 @@
         </div>
 
         {% elif res.resource_type == 'api' %}
+            {% block resource_item_service %}
+                {# Placeholder for extra service buttons #} 
+            {% endblock %}
+
             <div class="action-button">            
                 <a href="{{ res.url }}" class="btn resource-url-analytics" target="_blank">
                                     <i class="icon-beaker"></i>
