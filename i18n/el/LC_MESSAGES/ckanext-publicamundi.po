@@ -1801,3 +1801,6 @@ msgstr "Περιορισμός"
 
 msgid "Party"
 msgstr "Αρμόδιο Μέρος"
+
+msgid "Table"
+msgstr "Πίνακας"
