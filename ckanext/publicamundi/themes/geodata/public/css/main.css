@@ -129,7 +129,7 @@ p a{
 
 .user-menu {
     text-align: left;
-    z-index: 1000;
+    z-index: 2000;
     position: relative;
     margin: 0;
     list-style: none;
@@ -288,7 +288,7 @@ p a{
 .nav-pills > li > a {
     margin-top: 0;
     margin-bottom: 0;
-    padding: 10px 12px 10px 12px;
+    padding: 10px 8px 10px 8px;
     margin-right: 0;
     border-radius: 0;
     border-right: 1px #7C7C7F solid;
