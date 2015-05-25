@@ -1,6 +1,7 @@
 {% ckan_extends %}
 
 {% block resource_item_file %}
+{{ super() }}
 {% set raster_resources = h.get_ingested_raster_from_resource(pkg,res) %}
 
 {% for raster_res in raster_resources %}

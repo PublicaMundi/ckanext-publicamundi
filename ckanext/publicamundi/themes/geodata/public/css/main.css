@@ -531,7 +531,7 @@ p a{
 
 .carousel-indicators li{
     display: inline-block;
-    float: center;
+    float: none;
     border-radius:0;
     border: 2px #fff solid;
 }

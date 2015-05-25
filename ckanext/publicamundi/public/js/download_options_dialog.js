@@ -90,7 +90,7 @@ ckan.module('download_options_dialog', function ($, _) {
             _onDownloadClicked: function(e){
                 
                 //var active_modal = $(this.el).parent().find('[id^="download_options"]');
-                //active_modal.modal('hide');
+                this.elements.active_modal.modal('hide');
                 //e.preventDefault();
                 //alert('download clicked');
             },

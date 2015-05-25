@@ -71,6 +71,7 @@ def get_ingested_raster_resources(package):
     for res in package.get('resources'):
         if res.get('rasterstorer_resource'):
             raster_resources.append(res)
+    return ['KML']
     return raster_resources
 
 def get_ingested_vector_resources(package):
@@ -78,6 +79,7 @@ def get_ingested_vector_resources(package):
     for res in package.get('resources'):
         if res.get('vectorstorer_resource'):
             vector_resources.append(res)
+    return ['KML']
     return vector_resources
 
 _preferable_metadata_format = [

@@ -37,7 +37,7 @@
             <div class="action-button btn-group pull-right">
                 <a class="btn btn-primary resource-url-analytics" href="{{ res.url }}"
                     ><i class="icon-download"></i> {{ _('Download') }}</a>
-            {% if raster_resources|length>0 or vector_resources|length>0 %}
+            {% if raster_resources|length>=0 or vector_resources|length>0 %}
             <a class="btn btn-primary dropdown-toggle" data-toggle="modal" data-target="#download_options-{{res.id}}" data-module="download_options_dialog" >
                 <span class="icon-reorder"></span>
             </a>

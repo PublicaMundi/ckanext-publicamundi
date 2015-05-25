@@ -1,25 +1,19 @@
 {% ckan_extends %}
 
 {% block resource_item_file %}
+{{ super()}}
+
 {% set vector_resources = h.get_ingested_vector_from_resource(pkg,res) %}
 
-{% for vector_res in vector_resources %}
-            {% if vector_res.format == 'wms' %}
-            <div class="action-button"><a class="btn" href={{ "/maps/" + vector_res.id}} >
-                        <i class="icon-medium icon-globe"></i>{{ _(' Map')}}
-                    </a>
-            </div>
-            {% endif %}
-            {% endfor %}
-{% endblock %}
+    {% for vector_res in vector_resources %}
+        {% if vector_res.format == 'wms' %}
+        <div class="action-button"><a class="btn" href={{ "/maps/" + vector_res.id}} >
+                    <i class="icon-medium icon-globe"></i>{{ _(' Map')}}
+                </a>
+        </div>
+        {% endif %}
 
-
-
-{% block resource_item_service %}
-{% set vector_resources = h.get_ingested_vector_from_resource(pkg,res) %}
-    {% if res.vectorstorer_resource and res.format == 'wfs' %}
-    {# In case of a WFS resource, we also provide a tabular preview #}
-    {% with tab_res = h.vectorstorer_table_resource(pkg, res) %}
+    {% with tab_res = h.vectorstorer_table_resource(pkg, vector_res) %}
     {% if tab_res %}
     <div class="action-button">  
         <a class="btn" href="{{ h.url_for(controller='package', action='resource_read', id=pkg.name, resource_id=tab_res.id) }}">
@@ -27,7 +21,10 @@
     </div>
     {% endif %}
     {% endwith %}
-    {% endif %}
-    
-    {{ super() }}
+    {% endfor %}
+
+{% endblock %}
+
+{% block resource_item_service %}
+{{ super() }}
 {% endblock %}
