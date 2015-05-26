@@ -8,13 +8,13 @@
     <a href="{{ h.url_for(controller='organization', action='index')}}">{{_('Organizations')}}</a>
 </li>
 <li>
-<a href="{{ h.get_maps_suffix() }}">{{_('Maps')}}</a>
+<a href="{{ h.get_maps_url() }}">{{_('Maps')}}</a>
 </li>
 <li>
     <a href="{{ h.url_for(controller='ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='developers')}}">{{_('Apps')}}</a>
 </li>
 <li>
-<a href="{{ h.get_wp_suffix() }}">{{_('News')}}</a>
+<a href="{{ h.get_news_url() }}">{{_('News')}}</a>
 </li>
 <li>
     <a href="{{ h.url_for(controller='home', action='about')}}">{{_('About')}}</a>
