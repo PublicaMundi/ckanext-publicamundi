@@ -4,7 +4,6 @@
 {{ super()}}
 
 {% set vector_resources = h.get_ingested_vector_from_resource(pkg,res) %}
-
     {% for vector_res in vector_resources %}
         {% if vector_res.format == 'wms' %}
         <div class="action-button"><a class="btn" href={{ "/maps/" + vector_res.id}} >
@@ -12,7 +11,7 @@
                 </a>
         </div>
         {% endif %}
-
+    {% if vector_res.format == 'wfs' %}
     {% with tab_res = h.vectorstorer_table_resource(pkg, vector_res) %}
     {% if tab_res %}
     <div class="action-button">  
@@ -21,6 +20,7 @@
     </div>
     {% endif %}
     {% endwith %}
+    {% endif %}
     {% endfor %}
 
 {% endblock %}

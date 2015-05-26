@@ -13,6 +13,9 @@ pkg - A package object that the resources belong to.
 #}
 
 {% if not filtered_formats is defined %}{% set filtered_formats = [] %}{% endif %}
+{% if not 'data_table' in filtered_formats %}
+{% do filtered_formats.append('data_table') %}
+{% endif %}
 
 {% set file_resources = h.filtered_list(resources, 'resource_type', 'api', 'ne') %}
 {% set api_resources = h.filtered_list(resources, 'resource_type', 'api', 'eq') %}
@@ -21,25 +24,25 @@ pkg - A package object that the resources belong to.
 {% set vector_resources = h.get_ingested_vector_resources(pkg) %}
 <section id="dataset-resources-files" 
     class="resources {% if resources and not file_resources %}hide{% endif %}"
- >
+    >
  <header><h3 class="inline">{{ _('Data and Resources') }}</h3>
  {# {% block resource_download_ingested %}
- {% if raster_resources|length >0 or vector_resources|length>0 %}
-    <div class="download-links pull-right">
+ {% if raster_resources|length >0 or vector_resources|length>0 %} #}
+ <!--   <div class="download-links pull-right">
       <div class="btn-group pull-right">
         <a class="btn dropdown-toggle" data-toggle="dropdown"
-          >{{ _('Download as') }} <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-            {% for res in vector_resources %}
+            >{{ _('Download as') }} <span class="caret"></span></a> 
+        <ul class="dropdown-menu">-->
+            {#    {% for res in vector_resources %}
                 {% snippet 'package/snippets/resource_item_vector.html', res=res %} 
             {% endfor %}
             {% for res in raster_resources %}
                 {% snippet 'package/snippets/resource_item_raster.html', res=res %} 
-            {% endfor %}
-        </ul>
+                {% endfor %} #}
+                <!--       </ul>
       </div>
-  </div>
-  {% endif %}
+  </div> -->
+  {# {% endif %}
   {% endblock %} #}
   </header>
 

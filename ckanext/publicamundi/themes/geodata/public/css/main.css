@@ -1274,6 +1274,9 @@ p a{
 .resources li.resource-item .all-btns .btn-group{
     right: 0px;
 }
+.resource-item .heading i{
+    color: #4E59A4;
+}
 
 .resources li.resource-item .all-btns li{
     margin-left: 8px;
@@ -1357,6 +1360,7 @@ p a{
     font-family: 'ACMuli';
     border-radius: 0;
     border: 2px #4E59A4 solid;
+    padding: 5px 8px 5px 8px;
     background: #fff;
     color: #4E59A4;
     text-shadow: none;
@@ -1480,7 +1484,10 @@ p a{
 .controls input[type="button" i]{
     cursor: pointer !important;
 }
-
+.btn-right-fix{
+    float:right;
+    margin-left: -1px;
+}
 /* Accordion */
 .accordion{
     margin-top:30px;

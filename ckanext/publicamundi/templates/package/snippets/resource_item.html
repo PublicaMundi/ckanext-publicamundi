@@ -25,16 +25,17 @@
         <div class="resource-action-buttons">
         {% block resource_item_explore %}
         {% if not url_is_edit %}
-            {% if can_edit %}
-            <div class="action-button"><a class="btn" href="{{ h.url_for(controller='package', action='resource_edit', id=pkg.name, resource_id=res.id) }}">
+        {#  {% if can_edit %} #}
+           <!-- <div class="action-button"><a class="btn" href="{{ h.url_for(controller='package', action='resource_edit', id=pkg.name, resource_id=res.id) }}">
                       <i class="icon-edit"></i> {{ _('Edit') }}
-              </a></div>
-                {% endif %}
+              </a></div> -->
+              {#   {% endif %} #}
         {% if res.resource_type == 'file' %}
             {% block resource_item_file %}
                 {# Placeholder for extra data/resources buttons #} 
             {% endblock %}
-            <div class="action-button btn-group pull-right">
+            
+            <div class="newline-action action-button btn-group pull-right">
                 <a class="btn btn-primary resource-url-analytics" href="{{ res.url }}"
                     ><i class="icon-download"></i> {{ _('Download') }}</a>
             {% if raster_resources|length>0 or vector_resources|length>0 %}
