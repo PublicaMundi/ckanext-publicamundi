@@ -1807,3 +1807,9 @@ msgstr "Πίνακας"
 
 msgid "Map"
 msgstr "Χάρτης"
+
+msgid "SRS"
+msgstr "Σύστημα Αναφοράς"
+
+msgid "Download options:"
+msgstr "Επιλογές μεταφόρτωσης:"
