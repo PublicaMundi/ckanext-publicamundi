@@ -89,8 +89,8 @@ ckan.module('download_options_dialog', function ($, _) {
             },
             _onDownloadClicked: function(e){
                 
-                //var active_modal = $(this.el).parent().find('[id^="download_options"]');
-                //active_modal.modal('hide');
+                // hide modal
+                this.elements.active_modal.modal('hide');
                 //e.preventDefault();
                 //alert('download clicked');
             },
@@ -98,13 +98,15 @@ ckan.module('download_options_dialog', function ($, _) {
                 var service = 'WCS';
                 var version = '2.0.1';
                 var request = 'ProcessCoverages';
-
+                
                 var selected = this.elements.format_type.find('option:selected');
                 var coverage_id = selected.data('resource-id');
                 var format = selected.data('resource-format');
                 
-                var url = this.options.BASE_URL+'rasdaman/ows/?service='+service+'&version='+version+'&request='+request+'&query=for c in ('+coverage_id+') return encode(c, "'+format+'")';
-                
+                var query = 'for c in ('+coverage_id+') return encode(c, "'+format+'")';
+
+                var url = this.options.BASE_URL+'rasdaman/ows/?service='+service+'&version='+version+'&request='+request+'&query='+query;
+                console.log(url); 
                 return url;
 
                 //var request = 'http://labs.geodata.gov.gr/rasdaman/ows/?service=WCS&version=2.0.1&request=ProcessCoverages&query=for c in (coverage_id) return encode(c, "format")'

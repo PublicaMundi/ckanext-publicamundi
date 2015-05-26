@@ -32,16 +32,8 @@
               {#<li><a href="{{ api_url }}">{{ _('CKAN API') }}</a></li>
               <li><a href="http://www.okfn.org/">{{ _('Open Knowledge Foundation') }}</a></li>
               <li><a href="http://www.opendefinition.org/okd/"><img src="http://assets.okfn.org/images/ok_buttons/od_80x15_blue.png"></a></li> #}
-            {{ h.build_nav_main(
-                ('search', _('Datasets')),
-                ('group_index', _('Topics')),
-                ('organizations_index', _('Organizations')),
-                ('maps', _('Maps')),
-                ('developers', _('Developers')),
-                ('news', _('News')),
-                ('about', _('About'))
-                ) }}
-            {% endblock %}
+                {% snippet 'snippets/main_menu.html' %}                            
+                {% endblock %}
             </ul>
         </div>
         

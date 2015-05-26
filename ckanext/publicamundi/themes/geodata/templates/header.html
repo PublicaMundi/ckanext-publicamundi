@@ -30,16 +30,8 @@
         <nav class="section navigation">
           <ul class="nav nav-pills">
               {% block header_site_navigation_tabs %}
-              {{ h.build_nav_main(
-                ('search', _('Datasets')),
-                ('group_index', _('Topics')),
-                ('organizations_index', _('Organizations')),
-                ('maps', _('Maps')),
-                ('developers', _(' API')),
-                ('news', _('News')),
-                ('about', _('About'))
-                ) }}
-
+                {% snippet 'snippets/main_menu.html' %}                            
+              
     {% block menucontainer %}
     
             <div id="menu-block" class="container"  >
