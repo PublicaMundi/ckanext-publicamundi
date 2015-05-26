@@ -1,37 +1,39 @@
 {% ckan_extends %}
 
 {% block resource_actions_inner %}
-    {% if res.format == 'wms' %}
-    <li>
-    <a class="btn" href={{ "/maps/" + res.id}} >
-            <i class="icon-medium icon-globe"></i>{{ _(' View in Maps')}}
-        </a>
-    </li>
-    {% endif %}
-
     {% if h.check_access('package_update', {'id':pkg.id }) %}
         <li>{% link_for _('Manage'), controller='package', action='resource_edit', id=pkg.name, resource_id=res.id, class_='btn', icon='wrench' %}</li>
     {% endif %}
     {% if res.url %}
-        {% if  res.resource_type != 'api' %}
-
-        {% if res.resource_type in ('listing', 'service') %}
+        
+        {% if res.format == 'wms' %}
         <li>
-        <a class="btn btn-primary resource-url-analytics resource-type-{{ res.resource_type }}" href="{{ res.url }}">
-
-            <i class="icon-eye-open"></i> {{ _('View') }}
-            {# <i class="icon-key"></i> {{ _('API Endpoint') }} #}
-            {# {% else %}
-            <i class="icon-download"></i> {{ _('Download') }} #}
-        </a>
-
+        <a class="btn" href={{ "/maps/" + res.id}} >
+                <i class="icon-medium icon-globe"></i>{{ _(' View in Maps')}}
+            </a>
         </li>
+        {% endif %}
+        {% if res.resource_type == 'file' %}
+        <li>
+            <a class="btn resource-url-analytics" href="{{ res.url }}"
+                    ><i class="icon-download"></i> {{ _('Download') }}</a>
+                {# {% if raster_resources|length>0 or vector_resources|length>0 %} #}
+           <!-- <a class="btn btn-right-fix dropdown-toggle" data-toggle="modal" data-target="#download_options-{{res.id}}" data-module="download_options_dialog" >
+                <span class="icon-reorder"></span>
+            </a> -->
+            {# {% snippet 'package/snippets/download_options.html', pkg=pkg, res=res %} 
 
+            {% endif %} #}
+        </li>
+        {% elif res.resource_type == 'api' %}
+        <li>            
+                <a href="{{ res.url }}" class="btn resource-url-analytics" target="_blank">
+                                    <i class="icon-beaker"></i>
+                                        {{ _('Endpoint') }}
+                                    </a>
+        </li>
         {% endif %}
 
-
-
-        {% endif %}
     {% endif %}
     {% if 'datastore' in g.plugins and res.datastore_active %}
         <li>{% snippet 'package/snippets/data_api_button.html', resource=res, datastore_root_url=c.datastore_api %}</li>
