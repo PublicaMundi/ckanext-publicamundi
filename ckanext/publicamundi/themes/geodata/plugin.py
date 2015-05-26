@@ -63,10 +63,10 @@ def preview_resource_or_ingested(res, pkg):
         vector_resources = ext_template_helpers.get_ingested_vector_from_resource(pkg,res)
 
         for ing_res in raster_resources:
-            if ing_res.get('rasterstorer_resource') and ing_res.get('parent_resource_id') == res.get('id') and ing_res.get('format') in previewable:
+            if ing_res.get('format') in previewable:
                 snippet = resource_preview(ing_res, pkg)
         for ing_res in vector_resources:
-            if ing_res.get('vectorstorer_resource') and ing_res.get('parent_resource_id') == res.get('id') and ing_res.get('format') in previewable:
+            if ing_res.get('format') in previewable:
                 snippet = resource_preview(ing_res, pkg)
 
         #for ing_res in pkg.get('resources'):
