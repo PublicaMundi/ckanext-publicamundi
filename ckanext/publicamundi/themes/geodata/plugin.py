@@ -26,7 +26,7 @@ def friendly_date(date_str):
 
 _feedback_form = None
 _maps_url = None
-_wp_url = None
+_news_url = None
 _non_previewable_formats = ['geotiff', 'gml', 'shapefile', 'shp' ]
 _previewable_formats = ['wms', 'wfs']
 
@@ -39,16 +39,16 @@ def get_non_previewable_formats():
 def get_previewable_formats():
     return _previewable_formats
 
-def get_maps_suffix():
+def get_maps_url():
     if _maps_url:
         return _maps_url
     else:
         return '/'
 
-def get_wp_suffix():
+def get_news_url():
     locale = helpers.lang()
-    if _wp_url:
-        return(_wp_url+'?lang={0}'.format(locale))
+    if _news_url:
+        return(_news_url+'?lang={0}'.format(locale))
     else:
         return '/'
 
@@ -63,10 +63,10 @@ def preview_resource_or_ingested(res, pkg):
         vector_resources = ext_template_helpers.get_ingested_vector_from_resource(pkg,res)
 
         for ing_res in raster_resources:
-            if ing_res.get('rasterstorer_resource') and ing_res.get('parent_resource_id') == res.get('id') and ing_res.get('format') in previewable:
+            if ing_res.get('format') in previewable:
                 snippet = resource_preview(ing_res, pkg)
         for ing_res in vector_resources:
-            if ing_res.get('vectorstorer_resource') and ing_res.get('parent_resource_id') == res.get('id') and ing_res.get('format') in previewable:
+            if ing_res.get('format') in previewable:
                 snippet = resource_preview(ing_res, pkg)
 
         #for ing_res in pkg.get('resources'):
@@ -94,8 +94,8 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
             'friendly_date': friendly_date,
             'feedback_form': feedback_form,
             'preview_resource_or_ingested': preview_resource_or_ingested,
-            'get_wp_suffix': get_wp_suffix,
-            'get_maps_suffix': get_maps_suffix,
+            'get_news_url': get_news_url,
+            'get_maps_url': get_maps_url,
         }
     
     # IConfigurer
@@ -113,13 +113,11 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     def configure(self, config):
         '''Pass configuration to plugins and extensions'''
 
-        global _feedback_form
-        global _wp_url
-        global _maps_url
+        global _feedback_form, _news_url, _maps_url
 
         _feedback_form = config.get('ckanext.publicamundi.themes.geodata.feedback_form')
-        _maps_url = config.get('ckanext.publicamundi.themes.geodata.maps_suffix')
-        _wp_url = config.get('ckanext.publicamundi.themes.geodata.wp_suffix')
+        _maps_url = config.get('ckanext.publicamundi.themes.geodata.maps_url')
+        _news_url = config.get('ckanext.publicamundi.themes.geodata.news_url')
 
         return
 
