@@ -1804,3 +1804,6 @@ msgstr "Αρμόδιο Μέρος"
 
 msgid "Table"
 msgstr "Πίνακας"
+
+msgid "Map"
+msgstr "Χάρτης"
