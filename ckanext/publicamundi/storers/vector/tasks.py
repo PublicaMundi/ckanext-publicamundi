@@ -6,7 +6,6 @@ import json
 import shutil
 import magic
 from urlparse import urlparse
-from geoserver.catalog import Catalog
 from pyunpack import Archive
 
 import celery
@@ -602,6 +601,7 @@ def _delete_from_datastore(resource_id, db_conn_params, context):
     _db.commit_and_close()
 
 def _unpublish_from_geoserver(resource_id, geoserver_context):
+    from geoserver.catalog import Catalog
     geoserver_url = geoserver_context['url']
     cat = Catalog(
         geoserver_url.rstrip('/') + '/rest',
