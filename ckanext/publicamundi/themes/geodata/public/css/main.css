@@ -516,7 +516,7 @@ p a{
     transition: .3s linear;
 }
 .carousel:hover .carousel-layer{
-    background-color: rgba(0,0,0,0.1);
+    //background-color: rgba(0,0,0,0.1);
 }
 .carousel:hover .promotion h1{
     //text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
@@ -585,6 +585,9 @@ p a{
     color: #fff;
 }
 
+.promotion .btn:hover{
+    border-color: #4E59A4;
+}
 
 /* Main */
 [role=main] {
