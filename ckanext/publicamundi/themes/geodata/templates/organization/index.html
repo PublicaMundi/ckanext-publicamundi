@@ -23,7 +23,11 @@
         {% endif %}
       </p>
     {% endif %}
+    {% endblock %}
+{% block page_pagination %}
+    {{ c.page.pager() }}
   {% endblock %}
+
 {% endblock %}
 
 {% block gap %}{% endblock %}
@@ -33,4 +37,6 @@
 <div class="alt-side-style">
         {% snippet "organization/snippets/helper.html" %}
     </div>
-{% endblock %}
+    {% endblock %}
+
+

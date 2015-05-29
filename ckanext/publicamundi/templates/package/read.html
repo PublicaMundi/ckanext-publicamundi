@@ -43,4 +43,9 @@
   {% if pkg.spatial %}
   {% snippet "spatial/snippets/dataset_map_sidebar.html", extent=pkg.spatial %}
   {% endif %}
+  {% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{% resource 'ckanext-publicamundi/download_options' %}
 {% endblock %}

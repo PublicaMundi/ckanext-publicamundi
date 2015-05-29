@@ -1,9 +1,9 @@
 {% extends 'page.html' %}
 
-{% block subtitle %}{{ _('Developers') }}{% endblock %}
+{% block subtitle %}{{ _('Applications') }}{% endblock %}
 
 {% block breadcrumb_content %}
-  <li class="active">{% link_for _('Developers'), controller='ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='developers' %}</li>
+  <li class="active">{% link_for _('Applications'), controller='ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='applications' %}</li>
 {% endblock %}
 
 {% block altbar %}
@@ -44,7 +44,7 @@
         {% if g.site_about %}
           {{ h.render_markdown(g.site_about) }}
         {% else %}
-          <h1 class="page-heading">{{ _('Developers') }}</h1>
+          <h1 class="page-heading">{{ _('Applications') }}</h1>
           
           {% endif %}
       {% endblock %}

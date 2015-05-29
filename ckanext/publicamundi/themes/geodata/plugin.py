@@ -4,8 +4,7 @@ import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 from ckan.lib import helpers
 from ckan.lib.base import c
-from ckan.lib.helpers import render_datetime, resource_preview
-import ckanext.publicamundi.lib.template_helpers as ext_template_helpers
+from ckan.lib.helpers import render_datetime
 
 def most_recent_datasets(limit=10):
     datasets = toolkit.get_action('package_search')(
@@ -27,17 +26,9 @@ def friendly_date(date_str):
 _feedback_form = None
 _maps_url = None
 _news_url = None
-_non_previewable_formats = ['geotiff', 'gml', 'shapefile', 'shp' ]
-_previewable_formats = ['wms', 'wfs']
 
 def feedback_form():
     return _feedback_form
-
-def get_non_previewable_formats():
-    return _non_previewable_formats
-
-def get_previewable_formats():
-    return _previewable_formats
 
 def get_maps_url():
     if _maps_url:
@@ -52,27 +43,16 @@ def get_news_url():
     else:
         return '/'
 
-# Returns the most suitable preview by checking whether ingested resources provide a better preview visualization
-def preview_resource_or_ingested(res, pkg):
-    snippet = resource_preview(res, pkg)
-    non_previewable = get_non_previewable_formats()
-    previewable = get_previewable_formats()
+def friendly_name(name):
+    max_chars = 15
+    if len(name) > max_chars:
+        friendly_name = name.split(" ")[0]
+        if len(friendly_name)+3 >= max_chars:
+            friendly_name = friendly_name[:max_chars-4] + "..."
+    else:
+        friendly_name = name
 
-    if res.get('format') in non_previewable:
-        raster_resources = ext_template_helpers.get_ingested_raster_from_resource(pkg,res)
-        vector_resources = ext_template_helpers.get_ingested_vector_from_resource(pkg,res)
-
-        for ing_res in raster_resources:
-            if ing_res.get('format') in previewable:
-                snippet = resource_preview(ing_res, pkg)
-        for ing_res in vector_resources:
-            if ing_res.get('format') in previewable:
-                snippet = resource_preview(ing_res, pkg)
-
-        #for ing_res in pkg.get('resources'):
-        #    if (ing_res.get('vectorstorer_resource') or ing_res.get('rasterstorer_resource')) and ing_res.get('parent_resource_id') == res.get('id') and ing_res.get('format') in previewable:
-        #        snippet = resource_preview(ing_res, pkg)
-    return snippet
+    return friendly_name
 
 class GeodataThemePlugin(plugins.SingletonPlugin):
     '''Theme plugin for geodata.gov.gr.
@@ -92,8 +72,8 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
             'newest_datasets': most_recent_datasets,
             'list_menu_items': list_menu_items,
             'friendly_date': friendly_date,
+            'friendly_name': friendly_name,
             'feedback_form': feedback_form,
-            'preview_resource_or_ingested': preview_resource_or_ingested,
             'get_news_url': get_news_url,
             'get_maps_url': get_maps_url,
         }
@@ -124,7 +104,7 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     # IRoutes
 
     def before_map(self, mapper):
-        mapper.connect('developers', '/developers', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='developers')
+        mapper.connect('applications', '/applications', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='applications')
         #mapper.connect('maps', '/maps', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='redirect_maps' )
         #mapper.redirect('maps', 'http://http://83.212.118.10:5000/maps')
         #mapper.connect('maps', '/maps')

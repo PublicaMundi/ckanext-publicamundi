@@ -122,9 +122,9 @@ label.radio {
     font-weight: inherit;
     margin: 0px 0px 0px 0px;
 }
-
 .actions li {
     margin-right: 0px;
+    margin-left: 5px;
 }
 
 .control-group .btn {

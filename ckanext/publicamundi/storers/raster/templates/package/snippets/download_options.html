@@ -23,7 +23,7 @@
              %}
 
 {% block download_options_items %}
-{% set raster_resources = h.get_ingested_raster_from_resource(pkg,res) %}
+{% set raster_resources = h.get_ingested_raster(pkg,res) %}
 {{ super() }}
     {% for raster_res in raster_resources %}
         {% if raster_res.rasterstorer_resource and raster_res.format in ['wcs'] %}

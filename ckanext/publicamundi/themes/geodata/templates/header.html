@@ -72,7 +72,7 @@
                   {# <li> #}
                 {% set new_activities = h.new_activities() %}
                 <a href="{{ h.url_for(controller='user', action='read', id=c.userobj.name) }}" class="viewprofile" title="{{ _('View profile') }}">
-                    <span class="down-arrow">{{ h.truncate(c.userobj.display_name, 22)}} </span>
+                    <span class="down-arrow">{{ h.friendly_name(c.userobj.display_name)}}</span>
                     {# {% if new_activities > 0 %}({{new_activities}}) {% endif %} #}
                     </a>
                 <ul>
