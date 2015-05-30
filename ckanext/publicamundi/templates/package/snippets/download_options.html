@@ -13,8 +13,6 @@
 
 {% set raster_resources = h.get_ingested_from_vector_resource(pkg,res) %}
 
-{% resource 'ckanext-publicamundi/download_options' %}
-
 <div class="modal hide no-fade" id="download_options-{{res.id}}" tabindex="-1" aria-hidden="true" > 
     {% block download_options_header %}
     <div class="modal-header">

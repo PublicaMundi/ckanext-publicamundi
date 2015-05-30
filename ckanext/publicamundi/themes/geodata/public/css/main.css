@@ -83,7 +83,7 @@ p a{
     text-align: left;
     color: #4E59A4;
     line-height: 30px;
-    padding: 0 0 0 10px;
+    padding: 0 5px 0 5px;
     font-weight: normal;
 }
 
@@ -91,12 +91,10 @@ p a{
     font-weight: normal;
 }
 .account-masthead .authed > a{
-    //display: block;
-    //min-width:100px;
-    //width: 100%;
-    //max-width:160px;
-    //white-space: nowrap;
-    //overflow: hidden;
+    padding: 0 0 0 10px;
+}
+.account-masthead .language > a{
+    padding: 0 0 0 10px;
 }
 .account-masthead .account ul li a:hover{
     background-color: #4E59A4;
@@ -129,7 +127,7 @@ p a{
 
 .user-menu {
     text-align: left;
-    z-index: 2000;
+    z-index: 1000;
     position: relative;
     margin: 0;
     list-style: none;
@@ -144,15 +142,16 @@ p a{
 
 
 .user-menu > li {
-        display: inline;
+        display: block;
+        float: left;
         position: relative;
         cursor: pointer;
         margin: 0;
         border-radius: 0;
-
+        //word-break: break-space;
        }
 
-.user-menu li:hover {
+.user-menu:hover {
         z-index: 5000;
     }
 
@@ -161,7 +160,7 @@ p a{
     border-left: 2px transparent solid;
     border-right: 2px transparent solid;
     padding: 0;
-    min-width: 75px;
+    //min-width: 75px;
     max-height: 32px;
     overflow: hidden;
 }
@@ -170,7 +169,8 @@ p a{
         border-left: 2px #4E59A4 solid;
         border-right: 2px #4E59A4 solid;
     }
-
+.user-menu > li > a > span{
+}
 .user-menu > li:hover > a{
         border-top: 2px #4E59A4 solid;
     }
@@ -219,7 +219,14 @@ p a{
         opacity: 1;
         visibility: visible;
 }
-
+.user-menu .language{
+    width: 100px;
+    //white-space: normal;
+}
+.user-menu .authed {
+    min-width: 95px;
+    max-width: 135px;
+}
 .viewprofile, .viewprofile a{
     //margin: 0;
     //min-width: 160px;
@@ -228,9 +235,6 @@ p a{
     //padding: 5px;
 }
 .viewprofile span{
-}
-.language, .language a{
-    //min-width: 80px;
 }
 .down-arrow:before{
     content:"";
@@ -288,7 +292,7 @@ p a{
 .nav-pills > li > a {
     margin-top: 0;
     margin-bottom: 0;
-    padding: 10px 8px 10px 8px;
+    padding: 10px 10px 10px 10px;
     margin-right: 0;
     border-radius: 0;
     border-right: 1px #7C7C7F solid;
@@ -399,7 +403,7 @@ p a{
     //display: block;
     position: fixed;
     top: 80vh;
-    left:0;
+    left:3px;
     z-index: 1000;
     background: #fff;
 
@@ -581,6 +585,9 @@ p a{
     color: #fff;
 }
 
+.promotion .btn:hover{
+    border-color: #4E59A4;
+}
 
 /* Main */
 [role=main] {
@@ -722,13 +729,19 @@ p a{
     overflow: hidden;
     line-height: 30px;
 }
+.toolbar .sixtypercent .breadcrumb{
+    max-width: 65%;
+}
 .toolbar .breadcrumb .active a, .toolbar .breadcrumb a.active{
     font-weight: normal;
 }
 .toolbar .breadcrumb a{
     color: #fff;
 }
-
+.page_primary_action{
+    float: right;
+    margin-bottom: 0;
+}
 .toolbar { 
     display: block;
     background: #4E59A4;
@@ -896,6 +909,7 @@ p a{
 }
 .media-grid {
     background: #fff;
+    border: none;
 }
 .media-item {
     width: 160px;
@@ -1366,11 +1380,15 @@ p a{
     text-shadow: none;
     box-shadow: none;
 }
+.btn-primary{
+    //border: 3px #4E59A4 solid;
+
+}
 .btn:hover, .btn-hover{
     border-radius: 0;
     background: #4E59A4;
     color: #fff !important;
-    border: 2px #4E59A4 solid;
+    //border: 2px #4E59A4 solid;
 }
 .btn:first-child{
     text-decoration: none;
@@ -1783,5 +1801,8 @@ format-label[data-format=csv], .format-label[data-format*=csv]
     }
     .promotebox{
         display: none!important;
+    }
+    .carousel-indicators{
+        display: none;
     }
 }
