@@ -1,44 +1,46 @@
 {% ckan_extends %}
-
 {% block resource_actions_inner %}
-    {% if h.check_access('package_update', {'id':pkg.id }) %}
-        <li>{% link_for _('Manage'), controller='package', action='resource_edit', id=pkg.name, resource_id=res.id, class_='btn', icon='wrench' %}</li>
-    {% endif %}
-    {% if res.url %}
+
+        {% if h.check_access('package_update', {'id':pkg.id }) %}
+            <li>{% link_for _('Manage'), controller='package', action='resource_edit', id=pkg.name, resource_id=res.id, class_='btn', icon='wrench' %}</li>
+        {% endif %}
         
-        {% if res.format == 'wms' %}
-        <li>
-        <a class="btn" href={{ "/maps/" + res.id}} >
-                <i class="icon-medium icon-globe"></i>{{ _(' View in Maps')}}
-            </a>
-        </li>
+        {% if 'datastore' in g.plugins %}
+              <li>{% snippet 'package/snippets/data_api_button.html', resource=res, datastore_root_url=c.datastore_api %}</li>
         {% endif %}
+
         {% if res.resource_type == 'file' %}
-        <li>
-            <a class="btn resource-url-analytics" href="{{ res.url }}"
-                    ><i class="icon-download"></i> {{ _('Download') }}</a>
-                {# {% if raster_resources|length>0 or vector_resources|length>0 %} #}
-           <!-- <a class="btn btn-right-fix dropdown-toggle" data-toggle="modal" data-target="#download_options-{{res.id}}" data-module="download_options_dialog" >
-                <span class="icon-reorder"></span>
-            </a> -->
-            {# {% snippet 'package/snippets/download_options.html', pkg=pkg, res=res %} 
+        {% block resource_item_file %}
 
-            {% endif %} #}
-        </li>
+            <li>
+                    <a class="btn btn-primary resource-url-analytics" href="{{ res.url }}"
+                        ><i class="icon-download"></i> {{ _('Download') }}</a>
+                {% if raster_resources|length>0 or vector_resources|length>0 %}
+                <a class="btn btn-right-fix dropdown-toggle" data-toggle="modal" data-module-id={{res.id}} data-target="#download_options-{{res.id}}" data-module="download_options_dialog" >
+                    <span class="icon-reorder"></span>
+                </a>
+                {% endif %}
+                </li>
+            {% endblock %}
         {% elif res.resource_type == 'api' %}
-        <li>            
+            {% block resource_item_service %}
+                {% if res.format == 'wms' %}
+                    <li>
+                    <a class="btn" href={{ "/maps/" + res.id}} >
+                            <i class="icon-medium icon-globe"></i>{{ _(' View in Maps')}}
+                    </a>
+                    </li>
+                {% endif %}
+                
+                <li>            
                 <a href="{{ res.url }}" class="btn resource-url-analytics" target="_blank">
-                                    <i class="icon-beaker"></i>
-                                        {{ _('Endpoint') }}
-                                    </a>
-        </li>
+                    <i class="icon-beaker"></i>{{ _('Endpoint') }}
+                </a>
+                </li>
+
+            {% endblock %}
         {% endif %}
 
-    {% endif %}
-    {% if 'datastore' in g.plugins and res.datastore_active %}
-        <li>{% snippet 'package/snippets/data_api_button.html', resource=res, datastore_root_url=c.datastore_api %}</li>
-    {% endif %}
-            
 {% endblock %}
 
 {% block resource_additional_information %}
@@ -87,6 +89,16 @@
   {% resource 'ckanext-publicamundi/table-collapsible-rows' %}
 {% endblock %}
 
+{% block data_preview %}
+    {{ h.preview_resource_or_ingested(pkg, res) }}
+{% endblock %}
 
+{% block page %}
+{{ super() }}
+{% snippet 'package/snippets/download_options.html', pkg=pkg, res=res %}
+{% endblock %}
 
-
+{% block scripts %}
+{{ super() }}
+{% resource 'ckanext-publicamundi/download_options' %}
+{% endblock %}

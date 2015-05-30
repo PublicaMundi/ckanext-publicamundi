@@ -2,8 +2,8 @@
 {% set url_action = 'resource_edit' if url_is_edit and can_edit else 'resource_read' %}
 {% set url = h.url_for(controller='package', action=url_action, id=pkg.name, resource_id=res.id) %}
 
-{% set raster_resources = h.get_ingested_raster_from_resource(pkg,res) %}
-{% set vector_resources = h.get_ingested_vector_from_resource(pkg,res) %}
+{% set raster_resources = h.get_ingested_raster(pkg,res) %}
+{% set vector_resources = h.get_ingested_vector(pkg,res) %}
 
 {# {% resource 'ckanext-publicamundi/download_as_options' %} #}
 <li class="resource-item clearfix" data-id="{{ res.id }}">
@@ -11,7 +11,7 @@
     <header>
         {% block resource_item_title %}
         <a class="heading inline" href="{{ url }}" title="{{ res.name or res.description }}">
-            {% if res.can_be_previewed %}
+            {% if h.can_preview_resource_or_ingested(pkg, res) %}
                 <i class="icon-eye-open"></i>
                 {% else %}
                 <i class="icon-info-sign"></i>
@@ -39,7 +39,7 @@
                 <a class="btn btn-primary resource-url-analytics" href="{{ res.url }}"
                     ><i class="icon-download"></i> {{ _('Download') }}</a>
             {% if raster_resources|length>0 or vector_resources|length>0 %}
-            <a class="btn btn-primary dropdown-toggle" data-toggle="modal" data-target="#download_options-{{res.id}}" data-module="download_options_dialog" >
+            <a class="btn btn-primary dropdown-toggle" data-toggle="modal" data-module-id={{res.id}} data-target="#download_options-{{res.id}}" data-module="download_options_dialog" >
                 <span class="icon-reorder"></span>
             </a>
             {% snippet 'package/snippets/download_options.html', pkg=pkg, res=res %}

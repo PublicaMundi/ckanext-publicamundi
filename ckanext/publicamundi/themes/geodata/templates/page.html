@@ -14,11 +14,10 @@
  {%- block main %}
 
     {% block feedback %}
-
-                <div class="feedback-form">
-                    <a href="{{ h.feedback_form() }}"><button class="btn btn-primary">{{_('Leave your feedback')}}</button></a>
-                                    </div>
-            {% endblock %}
+        <div class="feedback-form">
+            <a href="{{ h.feedback_form() }}"><button class="btn btn-primary">{{_('Leave your feedback')}}</button></a>
+                            </div>
+    {% endblock %}
 
   {# The content block allows you to replace the content of the page if needed #}
   {%- block content %}
@@ -39,7 +38,6 @@
                           {% block page_primary_action %}{% endblock %}
                         </div>
                       {% endif %}
-
 
               {% endblock %}
             </div>

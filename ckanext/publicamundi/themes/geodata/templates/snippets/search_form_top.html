@@ -5,7 +5,7 @@
 {% set search_class = search_class if search_class else 'search-giant' %}
 {% set no_bottom_border = no_bottom_border if no_bottom_border else false %}
 
-<form class="search-form-top search-form{% if no_bottom_border %} no-bottom-border{% endif %}" method="get" data-module="select-switch">
+<form class="search-form-top search-form{% if no_bottom_border %} no-bottom-border{% endif %}" method="get" data-module="select-switch" >
 
   {% block search_input %}
  
@@ -30,7 +30,7 @@
   {% if sorting %}
       <div class="form-select control-group control-order-by">
         <label for="field-order-by">{{ _('Order by') }}</label>
-        <select id="field-order-by" class="select-style" name="sort" data-module="input-select2">
+        <select id="field-order-by" class="select-style" name="sort" data-module="autocomplete">
           {% for label, value in sorting %}
             {% if label and value %}
               <option value="{{ value }}"{% if sorting_selected == value %} selected="selected"{% endif %}>{{ label }}</option>

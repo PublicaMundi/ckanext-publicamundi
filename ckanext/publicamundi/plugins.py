@@ -82,10 +82,10 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'markup_for': ext_metadata.markup_for,
             'resource_ingestion_result': ext_template_helpers.resource_ingestion_result,
             'get_primary_metadata_url': ext_template_helpers.get_primary_metadata_url,
-            'get_ingested_raster_resources': ext_template_helpers.get_ingested_raster_resources,
-            'get_ingested_vector_resources': ext_template_helpers.get_ingested_vector_resources,
-            'get_ingested_raster_from_resource': ext_template_helpers.get_ingested_raster_from_resource,
-            'get_ingested_vector_from_resource': ext_template_helpers.get_ingested_vector_from_resource,
+            'get_ingested_raster': ext_template_helpers.get_ingested_raster,
+            'get_ingested_vector': ext_template_helpers.get_ingested_vector,
+            'preview_resource_or_ingested': ext_template_helpers.preview_resource_or_ingested,
+            'can_preview_resource_or_ingested': ext_template_helpers.can_preview_resource_or_ingested,
         }
 
     ## IConfigurer interface ##

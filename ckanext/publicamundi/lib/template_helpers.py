@@ -3,7 +3,7 @@ import datetime
 
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
-
+from ckan.lib.helpers import resource_preview
 from ckanext.publicamundi.lib import resource_ingestion
 
 def filtered_list(l, key, value, op='eq'):
@@ -66,21 +66,21 @@ def get_organization_objects(org_names=[]):
 def resource_ingestion_result(resource_id):
     return resource_ingestion.get_result(resource_id)
 
-def get_ingested_raster_resources(package):
-    raster_resources = []
-    for res in package.get('resources'):
-        if res.get('rasterstorer_resource'):
-            raster_resources.append(res)
-    return ['KML']
-    return raster_resources
+#def get_ingested_raster_resources(package):
+#    raster_resources = []
+#    for res in package.get('resources'):
+#        if res.get('rasterstorer_resource'):
+#            raster_resources.append(res)
+#    return ['KML']
+#    return raster_resources
 
-def get_ingested_vector_resources(package):
-    vector_resources = []
-    for res in package.get('resources'):
-        if res.get('vectorstorer_resource'):
-            vector_resources.append(res)
-    return ['KML']
-    return vector_resources
+#def get_ingested_vector_resources(package):
+#    vector_resources = []
+#    for res in package.get('resources'):
+#        if res.get('vectorstorer_resource'):
+#            vector_resources.append(res)
+#    return ['KML']
+#    return vector_resources
 
 _preferable_metadata_format = [
         {'name':'INSPIRE',
@@ -106,14 +106,14 @@ def get_primary_metadata_url(links, metadata_type):
             break
     return url
 
-def get_ingested_raster_from_resource(package,resource):
+def get_ingested_raster(package,resource):
     ing_resources = []
     for res in package.get('resources'):
         if res.get('rasterstorer_resource') and res.get('parent_resource_id')==resource.get('id'):
             ing_resources.append(res)
     return ing_resources
 
-def get_ingested_vector_from_resource(package,resource):
+def get_ingested_vector(package,resource):
     ing_resources = []
     for resa in package.get('resources'):
         # Ingested vector resources are derived from table which is derived from resource
@@ -123,3 +123,42 @@ def get_ingested_vector_from_resource(package,resource):
                 if resb.get('vectorstorer_resource') and resb.get('parent_resource_id')==resa.get('id'):
                     ing_resources.append(resb)
     return ing_resources
+
+#_previewable_formats = ['wms', 'wfs']
+#def get_previewable_formats():
+#    return _previewable_formats
+
+# Returns the most suitable preview by checking whether ingested resources provide a better preview visualization
+
+def preview_resource_or_ingested(pkg, res):
+    snippet = resource_preview(res, pkg)
+    if not res.get('can_be_previewed'):
+        raster_resources = get_ingested_raster(pkg,res)
+        vector_resources = get_ingested_vector(pkg,res)
+
+        for ing_res in raster_resources:
+            if ing_res.get('can_be_previewed'):
+                snippet = resource_preview(ing_res, pkg)
+                break
+        for ing_res in vector_resources:
+            if ing_res.get('can_be_previewed'):
+                snippet = resource_preview(ing_res, pkg)
+                break
+    return snippet
+
+def can_preview_resource_or_ingested(pkg, res):
+    previewable = res.get('can_be_previewed')
+    if not previewable:
+        raster_resources = get_ingested_raster(pkg,res)
+        vector_resources = get_ingested_vector(pkg,res)
+
+        for ing_res in raster_resources:
+            if ing_res.get('can_be_previewed'):
+                previewable = True
+                break
+        for ing_res in vector_resources:
+            if ing_res.get('can_be_previewed'):
+                previewable = True
+                break
+    return previewable
+

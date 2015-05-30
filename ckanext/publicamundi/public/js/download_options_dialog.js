@@ -19,7 +19,7 @@ ckan.module('download_options_dialog', function ($, _) {
             },
             _onClick: function(){
                 
-                this.elements.active_modal = $(this.el).parent().find('[id^="download_options"]');
+                this.elements.active_modal = $('#download_options-'+this.options.id);
                 this.elements.format_type = this.elements.active_modal.find('[name="format_type"]');
                 this.elements.srs_type = this.elements.active_modal.find('[name="srs_type"]');
                 this.elements.download_btn = this.elements.active_modal.find('[name="download"]');
