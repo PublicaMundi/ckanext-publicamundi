@@ -44,7 +44,7 @@ class Vector:
     def get_layer(self, layer_idx):
         return self.dataSource.GetLayer(layer_idx)
 
-    def handle_layer(self, layer, geom_name, table_name, srs):
+    def handle_layer(self, layer, geom_name, table_name, srs, layer_encoding):
         featureCount = layer.GetFeatureCount()
         layerDefinition = layer.GetLayerDefn()
         self._db = db_helpers.DB(self.db_conn_params)
@@ -60,7 +60,7 @@ class Vector:
             geom_name,
             srs,
             coordinate_dimension)
-        self.write_to_db(table_name, layer, srs, geom_name)
+        self.write_to_db(table_name, layer, srs, geom_name, layer_encoding)
 
     def get_SRS(self, layer):
         if not layer.GetSpatialRef() is None:
@@ -153,7 +153,7 @@ class Vector:
             break
         return feat_data
 
-    def write_to_db(self, table_name, layer, srs, layer_geom_name):
+    def write_to_db(self, table_name, layer, srs, layer_geom_name, layer_encoding):
         i = 0
         for feat in layer:
             feature_fields = '%s,' % i
@@ -165,7 +165,7 @@ class Vector:
                     if layer.GetLayerDefn().GetFieldDefn(y).GetType() in (4, 9, 10, 11):
                         field_value = str(
                             feat.GetField(y).decode(
-                                'utf8',
+                                layer_encoding,
                                 'replace').encode('utf8'))
                         feature_fields += psycopg2.extensions.adapt(
                             field_value).getquoted().decode('utf-8') + ','

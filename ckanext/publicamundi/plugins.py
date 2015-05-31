@@ -81,6 +81,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'markup_for_object': ext_metadata.markup_for_object,
             'markup_for': ext_metadata.markup_for,
             'resource_ingestion_result': ext_template_helpers.resource_ingestion_result,
+            'remove_get_param': ext_template_helpers.remove_get_param,
+            'add_get_param': ext_template_helpers.add_get_param,
             'get_primary_metadata_url': ext_template_helpers.get_primary_metadata_url,
             'get_ingested_raster': ext_template_helpers.get_ingested_raster,
             'get_ingested_vector': ext_template_helpers.get_ingested_vector,
@@ -178,13 +180,13 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             m.connect(
                 'user_dashboard_resources',
                 '/dashboard/resources',
-                 action='show_dashboard_resources')
-            
+                action='show_dashboard_resources')
+
             m.connect(
-                'admin_page_resources', 
+                'admin_page_resources',
                 '/user/resources',
                  action='show_admin_page_resources')
-            
+
             m.connect(
                 'reject_resource',
                 '/{parent}/resources/reject/{resource_id}',
@@ -193,8 +195,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             m.connect(
                 'identify_vector_resource', # Fixme: adapt
                 '/{parent}/resources/identify_vector/{resource_id}',
-                 action='identify_resource',
-                 storer_type='vector')
+                action='identify_resource',
+                storer_type='vector')
             
             m.connect(
                 'render_ingestion',
