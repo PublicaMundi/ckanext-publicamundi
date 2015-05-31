@@ -66,21 +66,19 @@ def get_organization_objects(org_names=[]):
 def resource_ingestion_result(resource_id):
     return resource_ingestion.get_result(resource_id)
 
-#def get_ingested_raster_resources(package):
-#    raster_resources = []
-#    for res in package.get('resources'):
-#        if res.get('rasterstorer_resource'):
-#            raster_resources.append(res)
-#    return ['KML']
-#    return raster_resources
+def get_ingested_raster_resources(package):
+    raster_resources = []
+    for res in package.get('resources'):
+        if res.get('rasterstorer_resource'):
+            raster_resources.append(res)
+    return raster_resources
 
-#def get_ingested_vector_resources(package):
-#    vector_resources = []
-#    for res in package.get('resources'):
-#        if res.get('vectorstorer_resource'):
-#            vector_resources.append(res)
-#    return ['KML']
-#    return vector_resources
+def get_ingested_vector_resources(package):
+    vector_resources = []
+    for res in package.get('resources'):
+        if res.get('vectorstorer_resource'):
+            vector_resources.append(res)
+    return vector_resources
 
 _preferable_metadata_format = [
         {'name':'INSPIRE',
