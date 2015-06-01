@@ -83,18 +83,12 @@ p a{
     text-align: left;
     color: #4E59A4;
     line-height: 30px;
-    padding: 0 5px 0 5px;
+    padding: 0 7px 0 7px;
     font-weight: normal;
 }
 
 .account-masthead .account ul li a.sub{
     font-weight: normal;
-}
-.account-masthead .authed > a{
-    padding: 0 0 0 10px;
-}
-.account-masthead .language > a{
-    padding: 0 0 0 10px;
 }
 .account-masthead .account ul li a:hover{
     background-color: #4E59A4;
