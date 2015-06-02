@@ -1,4 +1,3 @@
 gsconfig
-pyunpack
 patool
 psycopg2

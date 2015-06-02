@@ -100,32 +100,13 @@ class CswRecord(Base):
 def post_setup(engine):
     table_name = CswRecord.__tablename__
     table_language = 'english'
-    postgis_geometry_column='wkb_geometry'
-    postgis_lib_version = None
-    create_column_sql = ''
-    conn = engine.connect()
-
-    try:
-        for row in conn.execute('select(postgis_lib_version())'):
-            postgis_lib_version = row[0]
-    except:
-        pass
-
-    # Creating PostgreSQL Free Text Search (FTS) GIN index
-    tsvector_fts = "ALTER TABLE %s add column anytext_tsvector tsvector" % table_name
-    conn.execute(tsvector_fts)
-    index_fts = "CREATE INDEX fts_gin_idx on %s using gin(anytext_tsvector)" % table_name
-    conn.execute(index_fts)
-    trigger_fts = "CREATE TRIGGER ftsupdate before insert or update on %s " \
-       "for each row execute procedure tsvector_update_trigger" \
-       " ('anytext_tsvector', 'pg_catalog.%s', 'anytext')" % (table_name, table_language)
-    conn.execute(trigger_fts)
-
-    if postgis_lib_version < '2':
-        create_column_sql = "SELECT AddGeometryColumn('public', '%s', '%s', 4326, 'POLYGON', 2)" % (table_name, postgis_geometry_column)
-    else:
-        create_column_sql = "ALTER TABLE %s ADD COLUMN %s geometry(Geometry,4326);" % (table_name, postgis_geometry_column)
     
+    tsvector_column = 'anytext_tsvector'
+    geometry_column = 'wkb_geometry'
+    
+    postgis_lib_version = None
+
+    create_column_sql = ''
     create_insert_update_trigger_sql = '''
 DROP TRIGGER IF EXISTS %(table)s_update_geometry ON %(table)s;
 DROP FUNCTION IF EXISTS %(table)s_update_geometry();
@@ -141,14 +122,62 @@ $%(table)s_update_geometry$ LANGUAGE plpgsql;
 
 CREATE TRIGGER %(table)s_update_geometry BEFORE INSERT OR UPDATE ON %(table)s
 FOR EACH ROW EXECUTE PROCEDURE %(table)s_update_geometry();
-''' % {'table': table_name, 'geometry': postgis_geometry_column}
+''' 
+    create_spatial_index_sql = 'CREATE INDEX %(geometry)s_idx ON %(table)s USING GIST (%(geometry)s);'
+    
+    conn = engine.connect()
+    
+    try:
+        for row in conn.execute('select(postgis_lib_version())'):
+            postgis_lib_version = row[0]
+    except:
+        pass
+    
+    conn.execute('START TRANSACTION')
 
-    create_spatial_index_sql = 'CREATE INDEX %(geometry)s_idx ON %(table)s USING GIST (%(geometry)s);' \
-    % {'table': table_name, 'geometry': postgis_geometry_column}
+    # Create PostgreSQL Free Text Search (FTS) GIN index
+    
+    initialize_fts = False
+    try:
+       res = conn.execute('SELECT "%s" FROM %s LIMIT 1' % (tsvector_column, table_name))
+    except:
+        initialize_fts = True
 
-    conn.execute(create_column_sql)
-    conn.execute(create_insert_update_trigger_sql)
-    conn.execute(create_spatial_index_sql)
+    if initialize_fts:
+        tsvector_fts = "ALTER TABLE %s add column %s tsvector" % (table_name, tsvector_column)
+        conn.execute(tsvector_fts)
+        index_fts = "CREATE INDEX fts_gin_idx on %s using gin(%s)" % (table_name, tsvector_column)
+        conn.execute(index_fts)
+        trigger_fts = "CREATE TRIGGER ftsupdate before insert or update on %s " \
+           "for each row execute procedure tsvector_update_trigger" \
+           " ('%s', 'pg_catalog.%s', 'anytext')" % (table_name, tsvector_column, table_language)
+        conn.execute(trigger_fts)
+
+    # Create PostGIS column and triggers
+    
+    initialize_geometry = False
+    try:
+       res = conn.execute('SELECT "%s" FROM %s LIMIT 1' % (geometry_column, table_name))
+    except:
+        initialize_geometry = True
+
+    if initialize_geometry:
+        if postgis_lib_version < '2':
+            create_column_sql = \
+                "SELECT AddGeometryColumn('public', '%s', '%s', 4326, 'POLYGON', 2)" % (table_name, geometry_column)
+        else:
+            create_column_sql = \
+                "ALTER TABLE %s ADD COLUMN %s geometry(Geometry,4326);" % (table_name, geometry_column)
+        create_insert_update_trigger_sql = \
+            create_insert_update_trigger_sql % {'table': table_name, 'geometry': geometry_column}
+        create_spatial_index_sql = \
+            create_spatial_index_sql  % {'table': table_name, 'geometry': geometry_column}
+        conn.execute(create_column_sql)
+        conn.execute(create_insert_update_trigger_sql)
+        conn.execute(create_spatial_index_sql)
+    
+    # Done
+    conn.execute('COMMIT')
     conn.close()
 
 def pre_cleanup(engine):

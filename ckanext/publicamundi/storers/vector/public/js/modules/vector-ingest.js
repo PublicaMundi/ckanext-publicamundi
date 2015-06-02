@@ -2,7 +2,9 @@ var layers_array;
 
 function simple_layer(idx) {
     this.idx = idx;
+    this.name = $("#layer_name_" + idx).val();
     this.srs = $("#layer_srs_" + idx).val();
+    this.encoding = $("#layer_encoding_" + idx).val();
     this.is_selected = $("#checkbox_" + idx).is(":checked");
 };
 
@@ -36,15 +38,8 @@ ckan.module('vector-ingest', function(jQuery, _) {
             var layers = this.options.layers;
             for (var i = 0; i < layers.length; i++) {
                 var curr_layer = layers[i];
-                if (false) {
-                    alert();
-                } else {
-
-                    layers_array.push(new simple_layer(curr_layer.idx));
-                }
-
+                layers_array.push(new simple_layer(curr_layer.idx));
             }
-
             var base_url = (this.options.ingest_base_url);
 
             var json_data = {

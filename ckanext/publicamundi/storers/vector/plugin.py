@@ -1,5 +1,7 @@
 import logging
 from pylons import config
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 import ckan.plugins as p
 import ckan.plugins.toolkit as toolkit
@@ -8,11 +10,16 @@ import ckan.model as model
 import ckanext.publicamundi.storers.vector as vectorstorer
 from ckanext.publicamundi.storers.vector import resource_actions
 from ckanext.publicamundi.storers.vector.resources import (
-    DBTableResource, WMSResource) 
+    DBTableResource, WMSResource, WFSResource) 
 from ckanext.publicamundi.storers.vector.lib.template_helpers import (
     get_wfs_output_formats, url_for_wfs_feature_layer, get_table_resource)
 
 log = logging.getLogger(__name__)
+vector_child_formars = [
+    DBTableResource.FORMAT,
+    WMSResource.FORMAT,
+    WFSResource.FORMAT]
+
 
 class VectorStorer(p.SingletonPlugin):
 
@@ -137,7 +144,7 @@ class VectorStorer(p.SingletonPlugin):
     def configure(self, config):
         
         # Setup vectorstorer module
-        
+        self.config = config
         gdal_folder = config.get(
             'ckanext.publicamundi.vectorstorer.gdal_folder')
 
@@ -151,27 +158,70 @@ class VectorStorer(p.SingletonPlugin):
     # IDomainObjectModification
 
     def notify(self, entity, operation=None):
-
         if isinstance(entity, model.resource.Resource):
-            if entity.format.lower() in vectorstorer.supported_formats:
-                # Yes, we are interested in this format
-                log.info('Notified on modification %r of vector resource %r (state=%s)' % (
-                    operation, entity.id, entity.state))
-                if operation == model.domain_object.DomainObjectOperation.new:
+
+            if operation == model.domain_object.DomainObjectOperation.new:
+                
+                if entity.format.lower() in vectorstorer.supported_formats:
+                    # Yes, we are interested in this format
+                    log.info('Notified on modification %r of vector resource %r (state=%s)' % (
+                        operation, entity.id, entity.state))
                     # A new vector resource has been created
                     resource_actions.identify_resource(entity)
-                elif operation == model.domain_object.DomainObjectOperation.deleted:
-                    # A vector resource has been deleted
-                    #resource_actions.delete_ingest_resource(entity.as_dict())
+                    
+            elif operation == model.domain_object.DomainObjectOperation.changed:
+               
+                if entity.state == 'deleted':
+                    
+                    if entity.format.lower() in vectorstorer.supported_formats:
+                        # A parent vector resource has recieved a 'deleted' notification
+                        # so we also delete the ingestion produced resources
+                        resource_actions.delete_ingest_resource(entity.as_dict())
+                        
+                    elif entity.format.lower() in vector_child_formars:
+                        # A child vector resource has recieved a 'deleted' notification
+                        # so we also delete all other resources associated to the deleted
+                        resource_actions.delete_ingest_resource(entity.as_dict())
+                
+                elif entity.state == 'active':
+                    # The metadata of a resource has been updated so we get
+                    # the Resource object as it was before the update in order
+                    # to check if this can be updated 
+
+                    #old_resource = self._get_resource_before_commit(entity.id)
+                    #if old_resource.format.lower() in vector_child_formars:
+                        #log.info('Notified on metadata update of %s vector resource %r' % (
+                            #old_resource.format, old_resource.id ))
+                        ## A vector child resource (e.g WMS) has recieved an update
+                        ## notification so we abort the operation 
+                        #raise toolkit.abort(400,
+                        #"%s resources can't be updated." % (old_resource.format))
                     pass
-                elif operation is None:
-                    # The URL of a vector resource has been updated
+
+                
+            
+            elif operation is None:
+                # The URL of a vector resource has been updated
+                #if entity.format.lower() in vectorstorer.supported_formats:
                     #resource_actions.update_ingest_resource(entity)
-                    pass
-        elif isinstance(entity, model.Package):
+                pass
+        elif isinstance(entity, model.package.Package):
             log.info('Notified on modification %r of dataset %r (state=%r)' % (
                 operation, entity.id, entity.state))
             if entity.state == 'deleted':
-                resource_actions.delete_ingest_resources_in_package(
-                    entity.as_dict())
-        return
+                #resource_actions.delete_ingest_resources_in_package(
+                    #entity.as_dict())
+                pass
+    
+    def _get_resource_before_commit(self, resource_id):
+        '''Returns a Resource object as it was before
+        the update action'''
+        
+        sqlalchemy_url = config.get('sqlalchemy.url')
+        sqlalchemy_engine = create_engine(sqlalchemy_url)
+
+        session_before_commit = sessionmaker(bind=sqlalchemy_engine)
+        temp_session = session_before_commit()
+        resource_old=temp_session.query(model.Resource).get(resource_id)
+        temp_session.close()
+        return resource_old
