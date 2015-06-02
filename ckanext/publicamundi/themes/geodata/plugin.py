@@ -30,11 +30,16 @@ _news_url = None
 def feedback_form():
     return _feedback_form
 
-def get_maps_url():
+def get_maps_url(id=None):
+    locale = helpers.lang()
     if _maps_url:
-        return _maps_url
+        if id:
+            return('{0}/{1}?lang={2}'.format(_maps_url, id, locale))
+        else:
+            return('{0}?lang={1}'.format(_maps_url, locale))
     else:
         return '/'
+
 
 def get_news_url():
     locale = helpers.lang()

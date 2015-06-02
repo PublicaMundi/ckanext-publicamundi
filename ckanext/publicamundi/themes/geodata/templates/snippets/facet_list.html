@@ -60,7 +60,13 @@ within_tertiary
         {% elif name == 'license_id' %}
         <img class="facet-icon" src="{{ h.url_for_static('/images/icons/various/license.svg') }}"></img>
         {% endif %}
-        {% set title = title or h.get_facet_title(name) %}
+        {% set facet_titles = {'organization': _('Organizations'),
+                    'groups': _('Topics'),
+                    'tags': _('Tags'),
+                    'res_format': _('Formats'),
+                    'license': _('Licenses'), } %}
+
+        {% set title = facet_titles.get(name)|capitalize %}
         {{ title }} <br> <div class="sorting"><a href="#" class="sort-name">{{_('A...Z ')}}</a> <a href="#" class="sort-count down">{{_('1...9 ')}}</a> </div>
       </h2>
         <nav>

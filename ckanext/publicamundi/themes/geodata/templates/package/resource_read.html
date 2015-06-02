@@ -6,3 +6,40 @@
 {% block resources_list %}
     {% snippet "package/snippets/resources_simplified.html", pkg=pkg, active=res.id %}
 {% endblock %}
+
+{% block resource_item_service %}
+{% if (res.vectorstorer_resource or res.rasterstorer_resource) and res.format == 'wms' %}
+    <li>
+    <a class="btn" href={{ h.get_maps_url(id=res.id)}} >
+            <i class="icon-medium icon-globe"></i>{{ _(' View in Maps')}}
+    </a>
+    </li>
+    {% endif %}
+{{ super() }}
+{% endblock %}
+
+{% block resource_item_file %}
+{% set raster_resources = h.get_ingested_raster(pkg,res) %}
+{% set vector_resources = h.get_ingested_vector(pkg,res) %}
+
+{% for raster_res in raster_resources %}
+    {% if raster_res.format == 'wms' %}
+    <li>
+        <a class="btn" href={{ h.get_maps_url(id=raster_res.id)}} >
+                <i class="icon-medium icon-globe"></i>{{ _(' View in Maps')}}
+            </a>
+    </li>
+    {% endif %}
+{% endfor %}
+{% for vector_res in vector_resources %}
+    {% if vector_res.format == 'wms' %}
+    <div class="action-button"><a class="btn" href={{ h.get_maps_url(id=vector_res.id)}} >
+                <i class="icon-medium icon-globe"></i>{{ _(' Map')}}
+            </a>
+    </div>
+    {% endif %}
+{% endfor %}
+
+{{ super() }}
+{% endblock %}
+
