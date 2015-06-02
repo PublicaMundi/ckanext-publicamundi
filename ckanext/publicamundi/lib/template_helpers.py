@@ -131,18 +131,18 @@ def get_ingested_vector(package,resource):
 # Returns the most suitable preview by checking whether ingested resources provide a better preview visualization
 
 def preview_resource_or_ingested(pkg, res):
-    snippet = resource_preview(res, pkg)
+    snippet = resource_preview(pkg, res)
     if not res.get('can_be_previewed'):
         raster_resources = get_ingested_raster(pkg,res)
         vector_resources = get_ingested_vector(pkg,res)
 
         for ing_res in raster_resources:
             if ing_res.get('can_be_previewed'):
-                snippet = resource_preview(ing_res, pkg)
+                snippet = resource_preview(pkg, ing_res)
                 break
         for ing_res in vector_resources:
             if ing_res.get('can_be_previewed'):
-                snippet = resource_preview(ing_res, pkg)
+                snippet = resource_preview(pkg, ing_res)
                 break
     return snippet
 
