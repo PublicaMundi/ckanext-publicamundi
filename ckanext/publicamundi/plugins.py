@@ -487,7 +487,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         if (r['controller'] == 'api' and r.get('action') == 'action' and 
                 r.get('logic_function') in (
                     'package_show', 'package_create', 'package_update',
-                    'dataset_show', 'dataset_create', 'dataset_update')):
+                    'dataset_show', 'dataset_create', 'dataset_update',
+                    'user_show')):
             # Remove flat field values (won't be needed anymore)
             for k in keys:
                 pkg_dict.pop(k)
