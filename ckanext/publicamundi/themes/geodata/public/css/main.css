@@ -83,18 +83,12 @@ p a{
     text-align: left;
     color: #4E59A4;
     line-height: 30px;
-    padding: 0 5px 0 5px;
+    padding: 0 7px 0 7px;
     font-weight: normal;
 }
 
 .account-masthead .account ul li a.sub{
     font-weight: normal;
-}
-.account-masthead .authed > a{
-    padding: 0 0 0 10px;
-}
-.account-masthead .language > a{
-    padding: 0 0 0 10px;
 }
 .account-masthead .account ul li a:hover{
     background-color: #4E59A4;
@@ -225,7 +219,7 @@ p a{
 }
 .user-menu .authed {
     min-width: 95px;
-    max-width: 135px;
+    max-width: 137px;
 }
 .viewprofile, .viewprofile a{
     //margin: 0;
@@ -1251,7 +1245,7 @@ p a{
 }
 .metadata-label{
     display: block;
-    padding: 6px 5px 4px 5px;
+    padding: 8px 5px 6px 5px;
     margin-right: 8px;
     width: 7em;
     text-align: center;
