@@ -6,7 +6,7 @@
 
 @font-face {
     font-family: 'ACMuliLight';
-    src: url('../fonts/ACMuliLight/AC-MuliLight.otf') format('opentype');
+    src: url('../fonts/ACMuliLight/AC-MuliLight.otf') format('truetype');
 }
 
 body { 
@@ -83,7 +83,7 @@ p a{
     text-align: left;
     color: #4E59A4;
     line-height: 30px;
-    padding: 0 7px 0 7px;
+    padding: 0 0 0 10px;
     font-weight: normal;
 }
 
@@ -218,7 +218,7 @@ p a{
     //white-space: normal;
 }
 .user-menu .authed {
-    min-width: 95px;
+    min-width: 100px;
     max-width: 137px;
 }
 .viewprofile, .viewprofile a{
@@ -234,7 +234,7 @@ p a{
     content:"";
     margin-top: 13px;
     margin-right: 5px;
-    margin-left: 10px;
+    margin-left: 0;
     display: block;
     position: relative;
     float: right;
@@ -1333,6 +1333,9 @@ p a{
     display: block;
     float: none;
     margin: 20px 0;
+}
+.pill {
+    border-radius: 0;
 }
 .pill a.remove{
     font-size: 12px;

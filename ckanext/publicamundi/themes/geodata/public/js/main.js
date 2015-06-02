@@ -109,6 +109,21 @@ function init() {
                 pbox.addClass('hidden');
             });
 
-        
 
+        // Detect OS for switching linux font
+        /*var os = navigator.platform;
+        console.log(os);
+        if (os.indexOf('Linux') == 0){
+        $("head").prepend("<style type=\"text/css\">" + 
+                "@font-face {\n" +
+                "\tfont-family: \"ACMuliLight\";\n" + 
+                "\tsrc: url('../fonts/ACMuli/AC-Muli.ttf') format('opentype');\n" + 
+                "}\n" + 
+                "\tp.myClass {\n" + 
+                "\tfont-family: ACMuliLight !important;\n" + 
+                "}\n" + 
+                "</style>");
+
+        }
+        */
 }
