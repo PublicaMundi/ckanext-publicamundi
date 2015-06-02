@@ -11,7 +11,7 @@
 {% if (res.vectorstorer_resource or res.rasterstorer_resource) and res.format == 'wms' %}
     <li>
     <a class="btn" href={{ h.get_maps_url(id=res.id)}} >
-            <i class="icon-medium icon-globe"></i>{{ _(' View in Maps')}}
+            <i class="icon-medium icon-globe"></i>{{ _(' Map')}}
     </a>
     </li>
     {% endif %}
@@ -26,18 +26,31 @@
     {% if raster_res.format == 'wms' %}
     <li>
         <a class="btn" href={{ h.get_maps_url(id=raster_res.id)}} >
-                <i class="icon-medium icon-globe"></i>{{ _(' View in Maps')}}
+                <i class="icon-medium icon-globe"></i>{{ _(' Maps')}}
             </a>
     </li>
     {% endif %}
 {% endfor %}
 {% for vector_res in vector_resources %}
     {% if vector_res.format == 'wms' %}
-    <div class="action-button"><a class="btn" href={{ h.get_maps_url(id=vector_res.id)}} >
+    <li>
+        <a class="btn" href={{ h.get_maps_url(id=vector_res.id)}} >
                 <i class="icon-medium icon-globe"></i>{{ _(' Map')}}
             </a>
-    </div>
+    </li>
     {% endif %}
+
+    {% if vector_res.format == 'wfs' %}
+    {% with tab_res = h.vectorstorer_table_resource(pkg, vector_res) %}
+    {% if tab_res %}
+    <li>  
+        <a class="btn" href="{{ h.url_for(controller='package', action='resource_read', id=pkg.name, resource_id=tab_res.id) }}">
+            <i class="icon-table"></i> {{ _('Table') }}</a>
+    </li>
+    {% endif %}
+    {% endwith %}
+    {% endif %}
+
 {% endfor %}
 
 {{ super() }}
