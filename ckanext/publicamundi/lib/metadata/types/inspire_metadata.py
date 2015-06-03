@@ -84,6 +84,7 @@ class InspireMetadata(BaseMetadata):
     def deduce_basic_fields(self):
         data = super(InspireMetadata, self).deduce_basic_fields()
         data.update({
+            'id': self.identifier,
             'notes': self.abstract,
         })
         return data
