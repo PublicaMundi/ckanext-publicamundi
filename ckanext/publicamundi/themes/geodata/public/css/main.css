@@ -1301,9 +1301,14 @@ p a{
     top: -5px;
 
 }
+.dashboard-resources .dropdown-menu > li > a{
+    padding: 3px 20px 3px 15px;
+}
+.dashboard-resources .dropdown-menu .label{
+}
 .label[data-resource-status="identified"], .label[data-resource-status="rejected"]{
-    position:relative;
-    float: right;
+    //position:relative;
+    //float: right;
         //left: -12px;
     //top: 7px;
 }
@@ -1334,6 +1339,7 @@ p a{
     float: none;
     margin: 20px 0;
 }
+
 .pill {
     border-radius: 0;
 }

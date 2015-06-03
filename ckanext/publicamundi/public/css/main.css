@@ -524,14 +524,22 @@ section.tags {
     margin-top: 10px;
 }
 
-.search-form .filter-list .pill {
+.pill {
     background-color: #7C7C7F;
     border-radius: 2px;
     padding: 2px 8px;
 }
-.search-form .filter-list .pill a.remove {
+.filter-list{
+    display: block;
+    float: none;
+    margin: 20px 0;
+    width: 100%;
 }
-
+.filter-buttons{
+    display:inline-block;
+    position: relative;
+    width:100%;
+}
 .download-links {
     margin-top: 8px;
 }
