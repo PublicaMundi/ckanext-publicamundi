@@ -1,10 +1,13 @@
 import datetime
+import copy
 
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
+import ckan.lib.datapreview as datapreview
 from ckan.lib import helpers
 from ckan.lib.base import c
-from ckan.lib.helpers import render_datetime
+from ckan.lib.helpers import render_datetime, resource_preview
+import ckanext.publicamundi.lib.template_helpers as ext_template_helpers
 
 def most_recent_datasets(limit=10):
     datasets = toolkit.get_action('package_search')(
@@ -40,7 +43,6 @@ def get_maps_url(id=None):
     else:
         return '/'
 
-
 def get_news_url():
     locale = helpers.lang()
     if _news_url:
@@ -58,6 +60,57 @@ def friendly_name(name):
         friendly_name = name
 
     return friendly_name
+
+#_previewable_formats = ['wms', 'wfs']
+#def get_previewable_formats():
+#    return _previewable_formats
+
+# Returns the most suitable preview by checking whether ingested resources provide a better preview visualization
+def preview_resource_or_ingested(pkg, res):
+    snippet = resource_preview(res, pkg)
+    data_dict = copy.copy(pkg)
+    data_dict.update({'resource':res})
+
+    if not _resource_preview(data_dict):
+        raster_resources = ext_template_helpers.get_ingested_raster(pkg,res)
+        vector_resources = ext_template_helpers.get_ingested_vector(pkg,res)
+
+        for ing_res in raster_resources:
+        #for ing_res in pkg.get('resources'):
+            data_dict.update({'resource':ing_res})
+            if _resource_preview(data_dict):
+                snippet = resource_preview(ing_res, pkg)
+                break
+        for ing_res in vector_resources:
+            data_dict.update({'resource':ing_res})
+            if _resource_preview(data_dict):
+                snippet = resource_preview(ing_res, pkg)
+                break
+    return snippet
+
+def can_preview_resource_or_ingested(pkg, res):
+    previewable = res.get('can_be_previewed')
+    if not previewable:
+        raster_resources = ext_template_helpers.get_ingested_raster(pkg,res)
+        vector_resources = ext_template_helpers.get_ingested_vector(pkg,res)
+
+        for ing_res in raster_resources:
+        #for ing_res in pkg.get('resources'):
+            if ing_res.get('can_be_previewed'):
+                previewable = True
+                break
+        for ing_res in vector_resources:
+            if ing_res.get('can_be_previewed'):
+                previewable = True
+                break
+    return previewable
+
+def _resource_preview(data_dict):
+    return bool(datapreview.res_format(data_dict['resource'])
+                    in datapreview.direct() + datapreview.loadable()
+                    or datapreview.get_preview_plugin(
+                        data_dict, return_first=True))
+
 
 class GeodataThemePlugin(plugins.SingletonPlugin):
     '''Theme plugin for geodata.gov.gr.
@@ -81,6 +134,8 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
             'feedback_form': feedback_form,
             'get_news_url': get_news_url,
             'get_maps_url': get_maps_url,
+            'preview_resource_or_ingested': preview_resource_or_ingested,
+            'can_preview_resource_or_ingested': can_preview_resource_or_ingested,
         }
     
     # IConfigurer
