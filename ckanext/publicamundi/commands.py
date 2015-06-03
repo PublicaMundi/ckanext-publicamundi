@@ -50,6 +50,10 @@ class Command(CommandDispatcher):
             make_option('--id', type='string', dest='identifier', default=None, 
                 help='e.g. 8a728488-4453-4aef-a0f6-98d088294d5f'), 
         ],
+        'import-dataset': [
+            make_option('--owner', type='string', dest='owner_org', default=None),
+            make_option('--dtype', type='string', dest='dtype', default='inspire'),
+        ],
         'adapter-registry-info': [
             make_option('--no-fields', action='store_false', dest='show_fields', default=True),
             make_option('--field-cls', type='string', dest='field_cls', 
@@ -61,6 +65,12 @@ class Command(CommandDispatcher):
     }
 
     def _fake_request_context(self):
+        '''Create a minimal (fake) web context for this command.
+
+        This is commonly needed e.g. for toolkit.render() to work as it references several 
+        Pylons context (thread-local) objects.
+        '''
+
         import pylons
         from pylons.util import AttribSafeContextObj
         
@@ -79,7 +89,8 @@ class Command(CommandDispatcher):
         url1 = AttribSafeContextObj()
         self.registry.register(pylons.url, url1)
 
-        self.logger.info('Created a fake request context for pylons')
+        self.logger.debug('Created a fake request context for Pylons')
+        return
 
     # Subcommands
     
@@ -97,8 +108,6 @@ class Command(CommandDispatcher):
         '''An example that creates a dataset using the action api.
         '''
        
-        # Note We will need a (fake) web context for toolkit.render() to work,
-        # as it references Pylons context objects.
         self._fake_request_context()
         
         # Create a context for action api calls
@@ -114,7 +123,7 @@ class Command(CommandDispatcher):
         # Decide how to handle package identifiers
         if opts.identifier:
             # Create a dataset reusing an existing UUID
-            # Note Prepare a call-wide schema to override the catalog-wide schema
+            # Note Override the catalog-wide schema inside this context
             from ckan.lib.plugins import lookup_package_plugin
             sch1 = lookup_package_plugin().create_package_schema()
             sch1['id'] = [unicode]
@@ -147,6 +156,43 @@ class Command(CommandDispatcher):
         pkg = get_action('package_create')(context, pkg_dict);
         print 'Created dataset with: id=%(id)s name=%(name)s:' %(pkg)
        
+    @subcommand(
+        name='import-dataset', options=options_config['import-dataset'])
+    def import_dataset(self, opts, *args):
+        '''Import a dataset from XML metadata
+        '''
+    
+        self._fake_request_context()
+        
+        if not args:
+            raise ValueError('Expected an input file')
+
+        source_path = os.path.realpath(args[0])
+        if not os.access(source_path, os.R_OK):
+            raise ValueError('The input (%s) is not a readable file' %(args[0]))
+        self.logger.info('Reading XML metadata from %s' %(source_path))
+        
+        # Create a context for action api calls
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': self.site_user.get('name'),
+            'ignore_auth': True,
+            'api_version': '3',
+        }
+        
+        # Create api request
+        with open(source_path, 'r') as source:
+            data_dict = {
+                'source': source,
+                'dtype': opts.dtype,
+                'owner_org': opts.owner_org,
+            }
+            result = get_action('dataset_import')(context, data_dict)
+        
+        self.logger.info('Imported dataset %(id)s (%(name)s)' %(result))
+        return
+    
     @subcommand(
         name='formatter-info', options=options_config['adapter-registry-info'])
     def print_formatter_info(self, opts, *args):

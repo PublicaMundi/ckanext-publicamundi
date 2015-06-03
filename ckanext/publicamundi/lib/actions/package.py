@@ -11,6 +11,7 @@ from pylons import g, config
 import ckan.model as model
 import ckan.logic as logic
 import ckan.plugins.toolkit as toolkit
+from ckan.lib.plugins import lookup_package_plugin
 from ckan.lib.uploader import get_storage_path
 
 from ckanext.publicamundi.cache_manager import get_cache
@@ -141,7 +142,7 @@ def dataset_import(context, data_dict):
     try:
         obj = xml_serializer_for(obj).loads(xmldata)
     except Exception as ex:
-        # Map all parse exceptions to Invalid (even assertion errors!)
+        # Map all parse exceptions to Invalid (even assertion failures!)
         log.info('Failed to parse XML metadata: %s', ex)
         raise toolkit.Invalid(_('The given XML file is malformed: %s') % (ex))
 
@@ -154,10 +155,10 @@ def dataset_import(context, data_dict):
         'dataset_type': dtype,
         dtype: obj.to_dict(flat=False),
     })
-    
+ 
     # Find and assign a machine-name for this package
     # Note We just find the 1st available name, of course this does not guarantee
-    # that it will remain available the actual time package_create is called.
+    # that it will remain available when package_create is actually called.
     
     basename = pkg_dict['name']
     max_num_probes = 10 if allow_rename else 1
@@ -172,8 +173,15 @@ def dataset_import(context, data_dict):
     # Create/Update package
     
     validation_errors, error_message = None, None
-
+    
     ctx = _make_context(context)
+    identifier = pkg_dict.get('id') 
+    if identifier:
+        # Must override catalog-wide schema for actions in this context
+        schema1 = lookup_package_plugin().create_package_schema()
+        schema1['id'] = [unicode]
+        ctx['schema'] = schema1
+    
     _check_access('package_create', ctx, dict(name=name))
     try:
         pkg_dict = _get_action('package_create')(ctx, data_dict=pkg_dict)
@@ -193,7 +201,8 @@ def dataset_import(context, data_dict):
             raise ex
 
     assert name == pkg_dict['name']
-    
+    assert (not identifier) or (identifier == pkg_dict['id'])
+
     return {
         # Provide basic package fields
         'id': pkg_dict['id'], 
