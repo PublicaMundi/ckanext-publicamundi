@@ -3,8 +3,10 @@
 {% block primary_content_inner %}
   <div class="dashboard-resources">
     <h2 class="hide-heading">{{ _('My Resources') }}</h2>
-    {% if c.user_dict.datasets %}
-    {% snippet 'user/snippets/package_list.html', packages=c.user_dict.datasets, parent='dashboard' %}
+    {# { % if c.user_dict.datasets %} #}
+    {% if c.page.items %}
+    {% snippet 'user/snippets/package_list.html', packages=c.page.items, parent='dashboard' %}
+    {{ c.page.pager() }}
     {% endif %}
   </div>
-{% endblock %}
+  {% endblock %}
