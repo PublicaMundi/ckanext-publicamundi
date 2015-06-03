@@ -174,8 +174,6 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         user_controller = 'ckanext.publicamundi.controllers.user:UserController'
 
         with SubMapper(mapper, controller=user_controller) as m:
-            
-            # Fixme: unneeded parameters to mapper.connect ?
 
             m.connect(
                 'user_dashboard_resources',
@@ -462,13 +460,17 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         
         # Note If we attempt to pop() flat keys here (e.g. to replace them by a 
         # nested structure), resource forms will clear all extra fields !!
-
+        
+        # Fixme: Move to a BaseMetadata method
         prefix = key_prefix + '.'
         keys = filter(lambda k: k.startswith(prefix), pkg_dict.iterkeys())
         obj_dict = {}
         for k in keys:
             k1 = k[len(prefix):]
             obj_dict[k1] = pkg_dict[k] = str(pkg_dict[k])
+        if not obj_dict:
+            # Noop: No keys associated with a dataset-type
+            return
 
         # Objectify 
         
@@ -482,9 +484,9 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         
         # Note We use this bit of hack when package is shown directly from the
         # action api, normally at /api/action/(package|dataset)_show.
-            
-        r = toolkit.c.environ['pylons.routes_dict']
-        if (r['controller'] == 'api' and r.get('action') == 'action' and 
+        req_environ = toolkit.c.environ
+        r = req_environ['pylons.routes_dict'] if req_environ else None
+        if (r and r['controller'] == 'api' and r.get('action') == 'action' and 
                 r.get('logic_function') in (
                     'package_show', 'package_create', 'package_update',
                     'dataset_show', 'dataset_create', 'dataset_update',

@@ -42,6 +42,14 @@ class Command(CommandDispatcher):
             make_option('--name', type='string', dest='name'),
             make_option('--num', type='int', dest='num', default=5),
         ],
+        'test-create-dataset': [
+            make_option('--name', type='string', dest='name', default='hello-world'),
+            make_option('--owner', type='string', dest='owner_org', default=None),
+            make_option('--title', type='string', dest='title', default=u'Hello World'),
+            make_option('--description', type='string', dest='description', default=u'Hello _World_'),
+            make_option('--id', type='string', dest='identifier', default=None, 
+                help='e.g. 8a728488-4453-4aef-a0f6-98d088294d5f'), 
+        ],
         'adapter-registry-info': [
             make_option('--no-fields', action='store_false', dest='show_fields', default=True),
             make_option('--field-cls', type='string', dest='field_cls', 
@@ -49,9 +57,32 @@ class Command(CommandDispatcher):
             make_option('--no-objects', action='store_false', dest='show_objects', default=True),
             make_option('--object-cls', type='string', dest='object_cls', 
                 help='Filter results regarding only this object class'),
-        ], 
+        ],
     }
 
+    def _fake_request_context(self):
+        import pylons
+        from pylons.util import AttribSafeContextObj
+        
+        req1 = AttribSafeContextObj()
+        self.registry.register(pylons.request, req1)
+        pylons.request.environ = dict()
+        pylons.request.params = dict()
+
+        res1 = AttribSafeContextObj()
+        self.registry.register(pylons.response, res1)
+        pylons.response.headers = dict()
+
+        ses1 = AttribSafeContextObj()
+        self.registry.register(pylons.session, ses1)
+
+        url1 = AttribSafeContextObj()
+        self.registry.register(pylons.url, url1)
+
+        self.logger.info('Created a fake request context for pylons')
+
+    # Subcommands
+    
     @subcommand(
         name='greet', options=options_config['greet'])
     def greet(self, opts, *args):
@@ -60,6 +91,62 @@ class Command(CommandDispatcher):
         self.logger.info('Running "greet" with args: %r %r', opts, args)
         print 'Hello %s' %(opts.name)
     
+    @subcommand(
+        name='test-create-dataset', options=options_config['test-create-dataset'])
+    def test_create_dataset(self, opts, *args):
+        '''An example that creates a dataset using the action api.
+        '''
+       
+        # Note We will need a (fake) web context for toolkit.render() to work,
+        # as it references Pylons context objects.
+        self._fake_request_context()
+        
+        # Create a context for action api calls
+        context = {
+            'model': model,
+            'session': model.Session,
+            'user': self.site_user.get('name'),
+            'ignore_auth': True,
+            'api_version': '3',
+            'allow_partial_update': False
+        }
+        
+        # Decide how to handle package identifiers
+        if opts.identifier:
+            # Create a dataset reusing an existing UUID
+            # Note Prepare a call-wide schema to override the catalog-wide schema
+            from ckan.lib.plugins import lookup_package_plugin
+            sch1 = lookup_package_plugin().create_package_schema()
+            sch1['id'] = [unicode]
+            context['schema'] = sch1
+        else:
+            # Generate a new UUID; use package_create's default behavior
+            pass
+        
+        # Create an api request body
+        pkg_dict = {
+            'title': opts.title,
+            'name': opts.name,
+            'notes': opts.description,
+            'license_id': 'cc-zero',
+            'dataset_type': u'inspire',
+            'owner_org': opts.owner_org,
+            'inspire': {
+                'title': opts.title,
+                'abstract': opts.description,
+                'topic_category': ["economy"],
+            }
+        }
+
+        # If reusing an identifier, add the relevant keys
+        if opts.identifier:
+            pkg_dict['id'] = opts.identifier
+            pkg_dict['inspire']['identifier'] = opts.identifier
+        
+        # Perform action
+        pkg = get_action('package_create')(context, pkg_dict);
+        print 'Created dataset with: id=%(id)s name=%(name)s:' %(pkg)
+       
     @subcommand(
         name='formatter-info', options=options_config['adapter-registry-info'])
     def print_formatter_info(self, opts, *args):
@@ -174,23 +261,27 @@ class Example1(CkanCommand):
         self.log = logging.getLogger(__name__)
 
         # Create a context for action api calls
-        context = {'model':model,'session':model.Session,'ignore_auth':True}
-        self.admin_user = get_action('get_site_user')(context,{})
-        context.update({'user': self.admin_user.get('name')})
-
-        context['allow_partial_update'] = True
+        context = {
+            'model': model,
+            'session': model.Session,
+            'ignore_auth': True,
+            'user': self.site_user.get('name'),
+            'allow_partial_update': True,
+            'api_version': '3' 
+        }
 
         pkg_dict = {
             'id': "8a728488-4453-4aef-a0f6-98d088294d5f",
-            'notes': 'i said _hello_ to the entire world',
+            'title': u'Hellooooo World',
+            'name': 'hello-world-1',
+            'notes': u'I say _hello_, you say _goodbye_',
             'license_id': 'cc-zero',
-            'music_title': u'Queen - Another one bites the dust',
-            'music_genre': 'rock',
+            'dataset_type': u'ckan',
+            'owner_org': 'acme',
         }
 
-        pkg = get_action('package_update') (context, pkg_dict);
-
-        print json.dumps(pkg, indent=4)
+        pkg = get_action('package_create')(context, pkg_dict);
+        print 'Created dataset id=%(id)s name=%(name)s:' %(pkg_dict)
 
 class Setup(CkanCommand):
     '''Setup publicamundi extension (create tables, populate with initial data).
