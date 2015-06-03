@@ -430,6 +430,10 @@ h1 > .label.package-state {
     background-color: #999999;
     border: 2px #999999 solid;
 }
+.label[data-resource-status="all"] {
+    background-color: #fff;
+    border: 2px #000 solid;
+}
 
 /*
  * Uploads 

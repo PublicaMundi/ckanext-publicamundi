@@ -21,7 +21,7 @@
     </a>
     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
         <li>
-        <a href="{{h.remove_get_param(request.url,'storer_type') }}"  title="Remove"><span></span> {{_('All')}}</a>
+        <a href="{{h.remove_get_param(request.url,'storer_type') }}"  title="Remove"><span></span> {{_('All types')}}</a>
         </li>
 
         {% for sorting_storer_type in sorting_storer_type_list%}
@@ -42,7 +42,8 @@
     </a>
     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
         <li>
-        <a href="{{h.remove_get_param(request.url,'status') }}"  title="Remove"><span>&nbsp;&nbsp;&nbsp;</span> {{_('All')}}</a>
+        <a href="{{h.remove_get_param(request.url,'status') }}">
+            <span class="label" data-resource-status="all" title="Remove">&nbsp;&nbsp;&nbsp;</span> {{_('All statuses')}}</a>
         </li>
       {% for sorting_status in sorting_status_list%}
         <li>
@@ -55,7 +56,6 @@
     </ul>
    </div>
 </div> {# filter-buttons #}
-<div class="filter-list">
     
     {# {% if request.GET|length>1 %} #}
  <!-- <span class="filtered pill" >
@@ -66,34 +66,43 @@
 </span> -->
   {# {% endif %} #}
 
-{% for key,value in request.GET.iteritems() %}
-{% if key in ['storer_type','status'] %}
-      {% if key == 'storer_type' %}
-            {{_('Type')}}: 
-        {% for sorting_storer_type in sorting_storer_type_list%}
-          {% if sorting_storer_type['get_param']==value %}
-            <span class="filtered pill" >
-                {{sorting_storer_type['display_name']}}
-            <a href="{{h.remove_get_param(request.url,key,param_val=value) }}" class="remove" title="Remove">
-                <i class="icon-remove"></i>
-            </a>
-            </span>
-          {% endif %}
-        {% endfor %}
-        {% elif key == 'status' %}
-            {{_('Status')}}: 
-        {% for sorting_status in sorting_status_list%}
-          {% if sorting_status['get_param']==value %}
-            <span class="filtered pill" >
-            {{sorting_status['display_name']}}
-            <a href="{{h.remove_get_param(request.url,key,param_val=value) }}" class="remove" title="Remove">
-                <i class="icon-remove"></i>
-            </a>
-            </span>
-          {% endif %}
-        {% endfor %}
-      {% endif%}
-        {% endif %} 
-{% endfor %}
+  <div class="filter-list">
+      {% set found = [] %}
+      
+      {% for key, value in request.GET.iteritems() %}
+        {% if key == 'storer_type' %}
+            {% for sorting_storer_type in sorting_storer_type_list%}
+                {% if sorting_storer_type['get_param']==value %}
+                        {% do found.append(sorting_storer_type['display_name']) %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+ 
+      {{_('Type')}}:  
+        {% if found %}
+            <span class="filtered pill" >{{found[0]}}</span>
+        {% else %}
+        <span class="filtered pill" > {{ _('All types')}} </span>
+        {% endif %}
+
+    {% set found = [] %}
+    
+    {% for key, value in request.GET.iteritems() %}
+        {% if key == 'status' %}
+            {% for sorting_status in sorting_status_list%}
+                {% if sorting_status['get_param']==value %}
+                    {% do found.append(sorting_status['display_name']) %}
+                {% endif %}
+            {% endfor %}
+        {% endif%}
+    {% endfor %}
+
+    {{_('Status')}}: 
+        {% if found %}
+            <span class="filtered pill" >{{found[0]}}</span>
+        {% else %}
+        <span class="filtered pill" > {{ _('All statuses')}} </span>
+        {% endif %}
 
 </div> {# filter-list #}
