@@ -1,5 +1,7 @@
 import json
 
+from pylons import config
+
 import ckan.model as model
 from ckan.lib.base import (
     c, BaseController, render, request, abort, redirect)
@@ -24,7 +26,6 @@ class UserController(BaseController):
         user_dict = self._check_access()
         user_dict = self._filter_user_dict(user_dict)
         self._setup_template_variables(user_dict)
-
         return render('user/dashboard_resources.html')
 
     def show_admin_page_resources(self):
@@ -68,7 +69,7 @@ class UserController(BaseController):
             dataset['resources'] = filtered_resources
             filtered_datasets_dict.append(dataset)
         user_dict['datasets'] = filtered_datasets_dict
-
+        
         return user_dict
 
     def _filter_resources_by_status(self, resources_dict, sorting):
@@ -91,12 +92,15 @@ class UserController(BaseController):
         c.user_dict = user_dict
         c.is_myself = user_dict['name'] == c.user
         c.about_formatted = h.render_markdown(user_dict['about'])
+
+        # Resources page items
+        _resources_page_items = int(config.get('ckanext.publicamundi.dashboard.resources_page_items', 1))
         # datasets paging
         c.page = h.Page(
             collection=user_dict['datasets'],
             page=request.params.get('page', 1),
             url=h.pager_url,
-            items_per_page=4
+            items_per_page=_resources_page_items
         )
 
     # Fixme: Maybe reject should be renamed (throughout this project) to ignore,
