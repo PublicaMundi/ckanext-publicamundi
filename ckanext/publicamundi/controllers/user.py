@@ -1,4 +1,5 @@
 import json
+from urllib import urlencode
 
 from pylons import config
 
@@ -25,6 +26,7 @@ class UserController(BaseController):
     def show_dashboard_resources(self):
         user_dict = self._check_access()
         user_dict = self._filter_user_dict(user_dict)
+        user_dict = self._filter_deleted(user_dict)
         self._setup_template_variables(user_dict)
         return render('user/dashboard_resources.html')
 
@@ -53,6 +55,15 @@ class UserController(BaseController):
         data_dict = {'user_obj': c.userobj}
         return context, data_dict
 
+    def _filter_deleted(self, user_dict):
+        datasets = user_dict['datasets']
+        filtered = []
+        for dataset in datasets:
+            if not dataset.get('state') == 'deleted':
+                filtered.append(dataset)
+        user_dict.update({'datasets':filtered})
+        return user_dict
+
     def _filter_user_dict(self, user_dict):
         datasets_dict = user_dict['datasets']
         filtered_datasets_dict = []
@@ -67,9 +78,10 @@ class UserController(BaseController):
                         filtered_resources, param)
 
             dataset['resources'] = filtered_resources
-            filtered_datasets_dict.append(dataset)
+            if len(filtered_resources)>0:
+                filtered_datasets_dict.append(dataset)
         user_dict['datasets'] = filtered_datasets_dict
-        
+
         return user_dict
 
     def _filter_resources_by_status(self, resources_dict, sorting):
@@ -77,6 +89,7 @@ class UserController(BaseController):
         for resource in resources_dict:
                 res_ingestion = resource_ingestion.get_result(
                     resource["id"])
+                #res_ingestion = {'found':True, 'status':'published', 'storer_type':'raster'}
                 if res_ingestion["found"]:
                     if sorting == accepted_sortings[0]:
                         if res_ingestion["status"] == request.params.get(
@@ -89,20 +102,39 @@ class UserController(BaseController):
         return filtered_resources
 
     def _setup_template_variables(self, user_dict):
+        def search_url(params):
+            url = h.url_for(controller='ckanext.publicamundi.controllers.user:UserController', action='show_dashboard_resources')
+            return url_with_params(url, params)
+
+        def url_with_params(url, params):
+            params = _encode_params(params)
+            return url + u'?' + urlencode(params)
+
+        def _encode_params(params):
+            return [(k, v.encode('utf-8') if isinstance(v, basestring) else str(v))
+                    for k, v in params]
+
+        def pager_url(q=None, page=None):
+            params_nopage = [(k, v) for k, v in request.params.items()
+                         if k != 'page']
+
+            params = list(params_nopage)
+            params.append(('page', page))
+            return search_url(params)
+
         c.user_dict = user_dict
         c.is_myself = user_dict['name'] == c.user
         c.about_formatted = h.render_markdown(user_dict['about'])
 
-        # Resources page items
+        #Resources page items
         _resources_page_items = int(config.get('ckanext.publicamundi.dashboard.resources_page_items', 1))
         # datasets paging
         c.page = h.Page(
             collection=user_dict['datasets'],
             page=request.params.get('page', 1),
-            url=h.pager_url,
+            url=pager_url,
             items_per_page=_resources_page_items
         )
-
     # Fixme: Maybe reject should be renamed (throughout this project) to ignore,
     # because in fact the original resource never gets actually rejected.
 
