@@ -1,4 +1,4 @@
-{% set sorting_status_list =[
+{# {% set sorting_status_list =[
     {'display_name': _('Publish Failed'), 'get_param': 'publish-failed'},
     {'display_name': _('Published'), 'get_param': 'published'},
     {'display_name': _('Identified'), 'get_param': 'identified'},
@@ -10,7 +10,21 @@
     {'display_name': _('Vector'), 'get_param': 'vector'},
     {'display_name': _('Raster'), 'get_param': 'raster'},
     ] %}
+#}
 
+{% set sorting_statuses ={
+    'publish-failed': _('Publish Failed'),
+    'published': _('Published'), 
+    'identified': _('Identified'),
+    'identify-failed': _('Identify Failed'),
+    'rejected': _('Rejected'), 
+    }
+%}
+
+{% set sorting_storer_types ={
+    'vector': _('Vector'),
+    'raster': _('Raster'),
+    } %}
 
 <div class="filter-buttons">
   <div id="storer_type_filter" class="btn-group">
@@ -21,13 +35,13 @@
     </a>
     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
         <li>
-        <a href="{{h.remove_get_param(request.url,'storer_type') }}"  title="Remove"><span></span> {{_('All types')}}</a>
+        <a href="{{ h.remove_url_param('storer_type') }}"><span></span> {{_('All types')}}</a>
         </li>
 
-        {% for sorting_storer_type in sorting_storer_type_list%}
+        {% for storer_type_key, storer_type_name in sorting_storer_types.iteritems() %}
          <li>
-          <a  href="{{h.add_get_param(request.url, 'storer_type',sorting_storer_type['get_param'] )}}"> 
-               {{ sorting_storer_type['display_name'] }}
+             <a href="{{ h.remove_url_param('storer_type', replace=storer_type_key) }}">
+                 {{ storer_type_name }}
            </a>
          </li>
        {% endfor %}
@@ -42,14 +56,14 @@
     </a>
     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
         <li>
-        <a href="{{h.remove_get_param(request.url,'status') }}">
-            <span class="label" data-resource-status="all" title="Remove">&nbsp;&nbsp;&nbsp;</span> {{_('All statuses')}}</a>
+            <a href="{{ h.remove_url_param('status') }}">
+                <span class="label" data-resource-status="all" title="Remove">&nbsp;&nbsp;&nbsp;</span> {{_('All statuses')}}</a>
         </li>
-      {% for sorting_status in sorting_status_list%}
+      {% for status_key, status_name in sorting_statuses.iteritems() %}
         <li>
-            <a href="{{h.add_get_param(request.url, 'status',sorting_status['get_param'] )}}">
-            <span class="label" data-resource-status="{{sorting_status['get_param']}}">&nbsp;&nbsp;&nbsp;</span>
-             {{ sorting_status['display_name'] }}
+            <a href="{{ h.remove_url_param('status', replace= status_key) }}">
+            <span class="label" data-resource-status="{{status_key}}">&nbsp;&nbsp;&nbsp;</span>
+             {{ status_name }}
             </a>
         </li>
        {% endfor %}
@@ -57,52 +71,13 @@
    </div>
 </div> {# filter-buttons #}
     
-    {# {% if request.GET|length>1 %} #}
- <!-- <span class="filtered pill" >
-      <span class="facet"> Clear All</span>
-    <a href="{{h.url_for(request.path) }}" class="remove" title="Remove">
-    <i class="icon-remove"></i>
-    </a>
-</span> -->
-  {# {% endif %} #}
+<div class="filter-list">
+    {% set storer_type = h.get_request_param('storer_type') %}
+    {% set status = h.get_request_param('status') %}
 
-  <div class="filter-list">
-      {% set found = [] %}
-      
-      {% for key, value in request.GET.iteritems() %}
-        {% if key == 'storer_type' %}
-            {% for sorting_storer_type in sorting_storer_type_list%}
-                {% if sorting_storer_type['get_param']==value %}
-                        {% do found.append(sorting_storer_type['display_name']) %}
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-    {% endfor %}
- 
-      {{_('Type')}}:  
-        {% if found %}
-            <span class="filtered pill" >{{found[0]}}</span>
-        {% else %}
-        <span class="filtered pill" > {{ _('All types')}} </span>
-        {% endif %}
-
-    {% set found = [] %}
-    
-    {% for key, value in request.GET.iteritems() %}
-        {% if key == 'status' %}
-            {% for sorting_status in sorting_status_list%}
-                {% if sorting_status['get_param']==value %}
-                    {% do found.append(sorting_status['display_name']) %}
-                {% endif %}
-            {% endfor %}
-        {% endif%}
-    {% endfor %}
+    {{_('Type')}}:  
+    <span class="filtered pill" > {% if storer_type in sorting_storer_types.keys() %} {{ sorting_storer_types[storer_type] }} {% else %}{{_('All types')}} {% endif %}</span>
 
     {{_('Status')}}: 
-        {% if found %}
-            <span class="filtered pill" >{{found[0]}}</span>
-        {% else %}
-        <span class="filtered pill" > {{ _('All statuses')}} </span>
-        {% endif %}
-
+    <span class="filtered pill" > {% if status in sorting_statuses.keys() %} {{ sorting_statuses[status] }} {% else %}{{_('All statuses')}} {% endif %}</span>
 </div> {# filter-list #}

@@ -123,48 +123,48 @@ def get_ingested_vector(package,resource):
                     ing_resources.append(resb)
     return ing_resources
 
-def remove_get_param(request_url, param_key, param_val=None):
-    parsed_url = urlparse.urlparse(request_url)
-    parsed_query = urlparse.parse_qs(parsed_url.query)
-    idxs_to_remove = []
+#def remove_get_param(request_url, param_key, param_val=None):
+#    parsed_url = urlparse.urlparse(request_url)
+#    parsed_query = urlparse.parse_qs(parsed_url.query)
+#    idxs_to_remove = []
+#
+#    if (param_key in parsed_query) and len(parsed_query) != 0:
+#        for idx in range(len(parsed_query[param_key])):
+#            if param_val:
+#                if parsed_query[param_key][idx] == param_val:
+#                    idxs_to_remove.append(idx)
+#            else:
+#                idxs_to_remove.append(idx)
+#
+#        for idx in reversed(idxs_to_remove):
+#            del parsed_query[param_key][idx]
+#
+#    new_query = urllib.urlencode(parsed_query, True)
+#
+#    new_url = urlparse.ParseResult(
+#        parsed_url.scheme,
+#        parsed_url.netloc,
+#        parsed_url.path,
+#        parsed_url.params,
+#        new_query,
+#        parsed_url.fragment).geturl()
+#    return new_url
 
-    if (param_key in parsed_query) and len(parsed_query) != 0:
-        for idx in range(len(parsed_query[param_key])):
-            if param_val:
-                if parsed_query[param_key][idx] == param_val:
-                    idxs_to_remove.append(idx)
-            else:
-                idxs_to_remove.append(idx)
-
-        for idx in reversed(idxs_to_remove):
-            del parsed_query[param_key][idx]
-
-    new_query = urllib.urlencode(parsed_query, True)
-
-    new_url = urlparse.ParseResult(
-        parsed_url.scheme,
-        parsed_url.netloc,
-        parsed_url.path,
-        parsed_url.params,
-        new_query,
-        parsed_url.fragment).geturl()
-    return new_url
-
-def add_get_param(current_url, param_key, param_val):
-    parsed_url = urlparse.urlparse(current_url)
-    parsed_query = urlparse.parse_qs(parsed_url.query)
-    if param_key not in parsed_query:
-        parsed_query[param_key] = []
-        parsed_query[param_key].append(param_val)
-    else:
-        parsed_query[param_key][0] = (param_val)
-    new_query = urllib.urlencode(parsed_query, True)
-    new_url = urlparse.ParseResult(
-        parsed_url.scheme,
-        parsed_url.netloc,
-        parsed_url.path,
-        parsed_url.params,
-        new_query,
-        parsed_url.fragment).geturl()
-    return new_url
+#def add_get_param(current_url, param_key, param_val):
+#    parsed_url = urlparse.urlparse(current_url)
+#    parsed_query = urlparse.parse_qs(parsed_url.query)
+#    if param_key not in parsed_query:
+#        parsed_query[param_key] = []
+#        parsed_query[param_key].append(param_val)
+#    else:
+#        parsed_query[param_key][0] = (param_val)
+#    new_query = urllib.urlencode(parsed_query, True)
+#    new_url = urlparse.ParseResult(
+#        parsed_url.scheme,
+#        parsed_url.netloc,
+#        parsed_url.path,
+#        parsed_url.params,
+#        new_query,
+#        parsed_url.fragment).geturl()
+#    return new_url
 
