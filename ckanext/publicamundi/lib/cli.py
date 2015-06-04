@@ -16,7 +16,7 @@ def parser_error(msg):
 class CommandDispatcher(CkanCommand):
     '''A command dispatcher for various publicamundi-related subcommands'''
 
-    __usage = '''paster [PASTER-OPTS] publicamundi --config FILE [--setup-app] %(name)s [%(name)s-OPTS]'''
+    __usage = '''paster [PASTER-OPTS] publicamundi --config FILE [--setup-app] %(name)s [%(name)s-OPTS] ARGS'''
 
     __specs = {}
 
