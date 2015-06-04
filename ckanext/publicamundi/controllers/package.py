@@ -43,7 +43,9 @@ class Controller(BaseController):
         if not owner_org:
             abort(400, 'The owner organization is not given')
 
-        redirect_url = _url('', group=owner_org)
+        uv = {'group': owner_org}
+        uv.update(request.urlvars)
+        redirect_url = _url(**uv)
         
         dtype = post.get('dataset_type')
         if not dtype in dataset_types:
@@ -106,17 +108,20 @@ class Controller(BaseController):
 
         try:
             result = _get_action('dataset_import')(context, data_dict)
-        except (ext_actions.InvalidParameter, ext_actions.NameConflict) as ex:
-            log.error('Cannot import package: %s' % (ex))
+        except ext_actions.InvalidParameter as ex:
+            log.error('Cannot import package: invalid action parameters: %s' % (ex))
+            session['error_summary'] = ex.message
+        except (ext_actions.IdentifierConflict, ext_actions.NameConflict) as ex:
+            log.error('Cannot import package: name/id conflict: %s' % (ex))
             session['error_summary'] = ex.message
         except toolkit.ValidationError as ex:
             # Parameters are valid, but result in an invalid package
-            log.error('Cannot import, resulting package is invalid: %s' % (ex))
+            log.error('Cannot import package: metadata are invalid: %s' % (ex))
             session['error_summary'] = _('The given metadata are invalid.')
             session['errors'] = ex.error_dict
         except toolkit.Invalid as ex:
-            # Parameters are valid, but source XML file is not parse-able
-            log.error('Cannot import package, source is invalid: %s' % (ex))
+            # Parameters are valid, but source XML file is not parseable
+            log.error('Cannot import package: source is invalid: %s' % (ex))
             session['error_summary'] = ex.error
         except AssertionError as ex:
             # Re-raise failed assertions
