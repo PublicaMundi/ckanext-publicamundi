@@ -1563,6 +1563,22 @@ msgstr ""
 msgid "There are no {facet_type} that match this search"
 msgstr ""
 
+#: ckanext/publicamundi/templates/user/snippets/filter_bar.html:39
+#: ckanext/publicamundi/templates/user/snippets/filter_bar.html:82
+msgid "<span class=\"all-types\"></span>All"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/snippets/filter_bar.html:55
+#: ckanext/publicamundi/templates/user/snippets/filter_bar.html:85
+msgid "Status"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/snippets/filter_bar.html:61
+#: ckanext/publicamundi/templates/user/snippets/filter_bar.html:87
+msgid "<span class=\"all-statuses\"></span>All"
+msgstr ""
+
+
 #: ckanext/publicamundi/themes/geodata/templates/snippets/license.html:15
 msgid "This dataset satisfies the Open Definition."
 msgstr ""
