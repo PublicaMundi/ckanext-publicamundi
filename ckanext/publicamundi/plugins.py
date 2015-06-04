@@ -118,7 +118,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         
         if asbool(config.get('ckanext.publicamundi.validation.relax_name_pattern')):
             logic.validators.name_match = re.compile('[a-z][a-z0-9~_\-]*$')
-            log1.info('Using pattern for valid names: %r', 
+            log1.debug('Using pattern for valid names: %r', 
                 logic.validators.name_match.pattern)
               
         # Setup extension-wide cache manager
