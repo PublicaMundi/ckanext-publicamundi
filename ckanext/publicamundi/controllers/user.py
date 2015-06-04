@@ -78,7 +78,7 @@ class UserController(BaseController):
                         filtered_resources, param)
 
             dataset['resources'] = filtered_resources
-            if len(filtered_resources)>0:
+            if len(filtered_resources):
                 filtered_datasets_dict.append(dataset)
         user_dict['datasets'] = filtered_datasets_dict
 
@@ -127,7 +127,7 @@ class UserController(BaseController):
         c.about_formatted = h.render_markdown(user_dict['about'])
 
         #Resources page items
-        _resources_page_items = int(config.get('ckanext.publicamundi.dashboard.resources_page_items', 1))
+        _resources_page_items = int(config.get('ckanext.publicamundi.dashboard.resources.num_page_items', 10))
         # datasets paging
         c.page = h.Page(
             collection=user_dict['datasets'],
