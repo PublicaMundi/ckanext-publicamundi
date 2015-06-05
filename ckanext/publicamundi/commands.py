@@ -26,7 +26,7 @@ subcommand = CommandDispatcher.subcommand
 class Command(CommandDispatcher):
     '''This is a Paster command for several publicamundi-related subcommands
     
-    >>> paster [PASTER-OPTS] publicamundi --config FILE [--setup-app] [COMMAND] [COMMAND-OPTS]
+    >>> paster [PASTER-OPTS] publicamundi --config FILE [--setup-app] [COMMAND] [COMMAND-OPTS] [COMMAND-ARGS]
 
     Invoke with '?' as a COMMAND in order to get a list of available commands.
     '''
@@ -53,6 +53,10 @@ class Command(CommandDispatcher):
         'import-dataset': [
             make_option('--owner', type='string', dest='owner_org', default=None),
             make_option('--dtype', type='string', dest='dtype', default='inspire'),
+            make_option('--allow-rename', action='store_true', dest='allow_rename', default=False,
+                help='Rename dataset if a naming conflict occurs'),
+            make_option('--force', action='store_true', dest='force', default=False, 
+                help='Create the dataset even if validation fails'),
         ],
         'adapter-registry-info': [
             make_option('--no-fields', action='store_false', dest='show_fields', default=True),
@@ -63,7 +67,7 @@ class Command(CommandDispatcher):
                 help='Filter results regarding only this object class'),
         ],
     }
-
+    
     def _fake_request_context(self):
         '''Create a minimal (fake) web context for this command.
 
@@ -161,16 +165,16 @@ class Command(CommandDispatcher):
     def import_dataset(self, opts, *args):
         '''Import a dataset from XML metadata
         '''
-    
-        self._fake_request_context()
-        
         if not args:
             raise ValueError('Expected an input file')
-
+        
         source_path = os.path.realpath(args[0])
         if not os.access(source_path, os.R_OK):
             raise ValueError('The input (%s) is not a readable file' %(args[0]))
         self.logger.info('Reading XML metadata from %s' %(source_path))
+   
+        # Provide a request context for templating to function
+        self._fake_request_context()
         
         # Create a context for action api calls
         context = {
@@ -181,12 +185,14 @@ class Command(CommandDispatcher):
             'api_version': '3',
         }
         
-        # Create api request
+        # Perform api request
         with open(source_path, 'r') as source:
             data_dict = {
                 'source': source,
                 'dtype': opts.dtype,
                 'owner_org': opts.owner_org,
+                'rename_if_conflict': opts.allow_rename,
+                'continue_on_errors': opts.force,
             }
             result = get_action('dataset_import')(context, data_dict)
         

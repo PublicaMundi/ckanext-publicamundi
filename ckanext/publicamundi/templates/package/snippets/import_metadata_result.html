@@ -2,7 +2,7 @@
 {% set validation_errors = result.validation.errors %}
 
 <div class="alert alert-info">
-    A dataset named <a href="{{ '/dataset/' ~ result.name }}">{{ result.title }}</a> was successfully imported.
+    A dataset named <a href="{{ h.url_for('dataset_read', id=result.name) }}">{{ result.title }}</a> was successfully imported.
 </div>
 
 
@@ -12,12 +12,12 @@
     found, and must be fixed before the dataset can be published.
 </p>
 </p>
-    You can review, edit and fix errors <a href="{{ '/dataset/edit/' ~ result.name }}">here</a>.
-    Note that, you can always view your datasets (published or not) at your personal <a href="{{ '/user/' ~ user }}" >dashboard</a>.
+    You can review, edit and fix errors <a href="{{ h.url_for('dataset_edit', id=result.name) }}">here</a>.
+    Note that, you can always view your datasets (published or not) at your personal <a href="{{ h.url_for('user_datasets', id=user) }}" >dashboard</a>.
 </p>
 {% else %} {# validation_errors #}
 <p>
-    The imported dataset is perfecty valid! View the new dataset <a href="{{ '/dataset/' ~ result.name }}">here</a>.
+    The imported dataset is perfecty valid! View the new dataset <a href="{{ h.url_for('dataset_read', id=result.name) }}">here</a>.
 </p>
 {% endif %}
 

@@ -15,12 +15,10 @@ from ckan.lib.plugins import lookup_package_plugin
 from ckan.lib.uploader import get_storage_path
 
 from ckanext.publicamundi.cache_manager import get_cache
-from ckanext.publicamundi.lib.actions import (NameConflict, InvalidParameter)
+from ckanext.publicamundi.lib.actions import (
+    NameConflict, IdentifierConflict, InvalidParameter)
 from ckanext.publicamundi.lib.metadata import (
-    dataset_types,
-    make_metadata_object,
-    serializer_for,
-    xml_serializer_for)
+    dataset_types, make_metadata_object, serializer_for, xml_serializer_for)
 
 log = logging.getLogger(__name__)
 
@@ -38,7 +36,6 @@ def dataset_export(context, data_dict):
     rtype: string
     '''
 
-    _check_access('package_show', context, data_dict)
     pkg = _get_action('package_show')(context, data_dict)
     
     dtype = pkg.get('dataset_type')
@@ -155,10 +152,19 @@ def dataset_import(context, data_dict):
         'dataset_type': dtype,
         dtype: obj.to_dict(flat=False),
     })
+    
+    # If an identifier is passed, check that this is not already present.
+    # Note This is not guarantee that the identifier will be available when
+    # `package_create` is actually invoked.
+
+    identifier = pkg_dict.get('id')
+    if identifier and _check_package_id_exists(context, identifier):
+        raise IdentifierConflict(
+            'A package identified as %s already exists' % (identifier))
  
     # Find and assign a machine-name for this package
-    # Note We just find the 1st available name, of course this does not guarantee
-    # that it will remain available when package_create is actually called.
+    # Note We just find the 1st available name. As noted before, this is not 
+    # a guarantee that will be available when `package_create` is invoked.
     
     basename = pkg_dict['name']
     max_num_probes = 10 if allow_rename else 1
@@ -175,14 +181,12 @@ def dataset_import(context, data_dict):
     validation_errors, error_message = None, None
     
     ctx = _make_context(context)
-    identifier = pkg_dict.get('id') 
     if identifier:
         # Must override catalog-wide schema for actions in this context
         schema1 = lookup_package_plugin().create_package_schema()
         schema1['id'] = [unicode]
         ctx['schema'] = schema1
     
-    _check_access('package_create', ctx, dict(name=name))
     try:
         pkg_dict = _get_action('package_create')(ctx, data_dict=pkg_dict)
     except toolkit.ValidationError as ex:
@@ -194,7 +198,6 @@ def dataset_import(context, data_dict):
             validation_errors = ex.error_dict
             error_message = ex.message or _('The dataset contains invalid metadata')
             ctx = _make_context(context, skip_validation=True)
-            _check_access('package_create', ctx, dict(name=name))
             pkg_dict = _get_action('package_create')(ctx, data_dict=pkg_dict)
             log.warn('Forced to create an invalid package as %r ' % (name))
         else:
@@ -236,6 +239,17 @@ def _make_context(context, **opts):
     
     return ctx
 
+def _check_package_id_exists(context, identifier):
+    '''Check if a package with the given identifier already exists
+    '''
+    res = True
+    ctx = _make_context(context, return_id_only=True)
+    try:
+         _get_action('package_show')(ctx, data_dict=dict(id=identifier))
+    except toolkit.ObjectNotFound:
+        res = False
+    return res
+
 def _find_a_package_name(context, basename, max_num_probes=12):
     '''Probe until you find an available (non-occupied) package name.
     
@@ -253,7 +267,6 @@ def _find_a_package_name(context, basename, max_num_probes=12):
     while not (found or exhausted):
         try:
             num_probes += 1
-            _check_access('package_show', ctx, dict(id=name))
             _get_action('package_show')(ctx, data_dict=dict(id=name))
         except toolkit.ObjectNotFound:
             found = True

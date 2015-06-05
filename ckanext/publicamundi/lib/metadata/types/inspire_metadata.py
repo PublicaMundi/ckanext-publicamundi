@@ -1,4 +1,5 @@
 import os
+import uuid
 import zope.interface
 import zope.schema
 from zope.schema.vocabulary import SimpleVocabulary
@@ -83,10 +84,17 @@ class InspireMetadata(BaseMetadata):
 
     def deduce_basic_fields(self):
         data = super(InspireMetadata, self).deduce_basic_fields()
-        data.update({
-            'id': self.identifier,
-            'notes': self.abstract,
-        })
+        
+        data['notes'] = self.abstract
+        
+        identifier = None
+        try:
+            identifier = uuid.UUID(self.identifier)
+        except:
+            pass
+        else:
+            data['id'] = str(identifier)
+        
         return data
 
 # XML serialization
