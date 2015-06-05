@@ -37,9 +37,9 @@ def get_maps_url(package_id=None, resource_id=None):
     locale = helpers.lang()
     if _maps_url:
         if package_id and resource_id:
-            return('{0}?package={1}&resource={2}&lang={3}'.format(_maps_url, package_id, resource_id, locale))
+            return('{0}?package={1}&resource={2}&locale={3}'.format(_maps_url, package_id, resource_id, locale))
         else:
-            return('{0}?lang={1}'.format(_maps_url, locale))
+            return('{0}?locale={1}'.format(_maps_url, locale))
     else:
         return '/'
 
