@@ -9,25 +9,8 @@
           >{{ h.resource_display_name(res)|truncate(50) }}<span class="format-label" property="dc:format" data-format="{{ res.format.lower() or 'data' }}">{{ res.format }}</span></a>
       
       <div class="resource-ingest-actions pull-right">
-        {% if not task.found %}
           {% snippet 'user/snippets/resource_ingest_status_label.html', status=none, status_text=_('No Action') %}
-	    {% elif task.status == "identified" %}
-          {% snippet 'user/snippets/resource_ingest_status_label.html', status=task.status, status_text=_('Identified') %}
-	      {% snippet 'user/snippets/identified_resource.html', pkg=pkg, res=res, task=task, parent= parent %}
-	    {% elif task.status == "rejected" %}
-          {% snippet 'user/snippets/resource_ingest_status_label.html', status=task.status, status_text=_('Rejected') %}
-	      {% snippet 'user/snippets/rejected_resource.html', pkg=pkg, res=res, task=task, parent= parent %}
-	    {% elif task.status == "published" %}
-          {% snippet 'user/snippets/resource_ingest_status_label.html', status=task.status, status_text=_('Published') %}
-	    {% elif task.status == "publishing" %}
-          {% snippet 'user/snippets/resource_ingest_status_label.html', status=task.status, status_text=_('Publishing') %}
-	    {% elif task.status == "publish-failed" %}
-          {% snippet 'user/snippets/resource_ingest_status_label.html', status=task.status, status_text=_('Publish Failed') %}
-	    {% elif task.status == "identifying" %}
-          {% snippet 'user/snippets/resource_ingest_status_label.html', status=task.status, status_text=_('Not Ready') %}
-	    {% elif task.status == "identify-failed" %}
-          {% snippet 'user/snippets/resource_ingest_status_label.html', status=task.status, status_text=_('Identify Failed') %}
-	    {% endif %}
+
       </div>
       
       {% with description = res.description|truncate(90)  %}

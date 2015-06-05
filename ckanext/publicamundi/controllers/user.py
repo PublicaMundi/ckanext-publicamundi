@@ -78,7 +78,7 @@ class UserController(BaseController):
                         filtered_resources, param)
 
             dataset['resources'] = filtered_resources
-            if len(filtered_resources)>0:
+            if len(filtered_resources):
                 filtered_datasets_dict.append(dataset)
         user_dict['datasets'] = filtered_datasets_dict
 
@@ -87,18 +87,19 @@ class UserController(BaseController):
     def _filter_resources_by_status(self, resources_dict, sorting):
         filtered_resources = []
         for resource in resources_dict:
-                res_ingestion = resource_ingestion.get_result(
-                    resource["id"])
-                #res_ingestion = {'found':True, 'status':'published', 'storer_type':'raster'}
-                if res_ingestion["found"]:
-                    if sorting == accepted_sortings[0]:
-                        if res_ingestion["status"] == request.params.get(
-                                sorting).lower():
-                            filtered_resources.append(resource)
-                    elif sorting == accepted_sortings[1]:
-                        if res_ingestion["storer_type"] == request.params.get(
-                                sorting).lower():
-                            filtered_resources.append(resource)
+            res_ingestion = {}
+            if resource.get('vectorstorer_resource') or resource.get('rasterstorer_resource'):
+                res_ingestion = resource_ingestion.get_result(resource["id"])
+            #res_ingestion = {'found':True, 'status':'published', 'storer_type':'raster'}
+            if res_ingestion.get('found'):
+                if sorting == accepted_sortings[0]:
+                    if res_ingestion["status"] == request.params.get(
+                            sorting).lower():
+                        filtered_resources.append(resource)
+                elif sorting == accepted_sortings[1]:
+                    if res_ingestion["storer_type"] == request.params.get(
+                            sorting).lower():
+                        filtered_resources.append(resource)
         return filtered_resources
 
     def _setup_template_variables(self, user_dict):
@@ -127,7 +128,7 @@ class UserController(BaseController):
         c.about_formatted = h.render_markdown(user_dict['about'])
 
         #Resources page items
-        _resources_page_items = int(config.get('ckanext.publicamundi.dashboard.resources_page_items', 1))
+        _resources_page_items = int(config.get('ckanext.publicamundi.dashboard.resources.num_page_items', 10))
         # datasets paging
         c.page = h.Page(
             collection=user_dict['datasets'],
