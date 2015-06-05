@@ -176,6 +176,38 @@
         </gmd:MD_Keywords>
       </gmd:descriptiveKeywords>
       {% endfor -%}
+      {% for k in data.free_keywords -%}
+       <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>{{ k['value'] }}</gco:CharacterString>
+          </gmd:keyword>
+          {% if k['originating_vocabulary'] -%}
+          <gmd:thesaurusName>
+            <gmd:CI_Citation>
+              <gmd:title>
+                <gco:CharacterString>{{ k['originating_vocabulary'] }}</gco:CharacterString>
+              </gmd:title>
+              <gmd:date>
+                <gmd:CI_Date>
+                  <gmd:date>
+                    <gco:Date>{{ k['reference_date'] }}</gco:Date>
+                  </gmd:date>
+                  <gmd:dateType>
+                    <gmd:CI_DateTypeCode
+                      codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode"
+                      codeListValue={{ "\"%s\""|safe % k['date_type'] }}
+                      >{{ k['date_type'] }}</gmd:CI_DateTypeCode>
+                  </gmd:dateType>
+                </gmd:CI_Date>
+              </gmd:date>
+            </gmd:CI_Citation>
+        </gmd:thesaurusName>
+        {% endif -%}
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+ 
+      {% endfor -%}
       {% for rc in data.access_constraints -%}
       <gmd:resourceConstraints>
         <gmd:MD_Constraints>

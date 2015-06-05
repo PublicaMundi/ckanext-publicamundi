@@ -63,6 +63,7 @@ class InspireMetadata(BaseMetadata):
     topic_category = list
 
     keywords = KeywordsFactory()
+    free_keywords = list
 
     bounding_box = list
 
@@ -177,9 +178,18 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
             topic_list.append(topic)
         
         keywords_dict = {}
+        free_keywords = []
+        print 'start here'
         for it in md.identification.keywords:
+            print it
             thes_title = it['thesaurus']['title']
-            if thes_title is not None:
+            if thes_title is None:
+                date = to_date(it['thesaurus']['date'])
+                datetype= it['thesaurus']['datetype']
+                title = it['thesaurus']['title']
+                for t in it['keywords']:
+                    free_keywords.append(FreeKeyword(value=t, reference_date=date, date_type=datetype, originating_vocabulary=title ))
+            else:
                 thes_split = thes_title.split(',')
                 # TODO thes_split[1] (=version) can be used in a get_by_title_and_version() 
                 # to enforce a specific thesaurus version.
@@ -193,8 +203,15 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
                     if thes:
                         kw = ThesaurusTerms(thesaurus=thes, terms=term_list)
                         keywords_dict.update({thes_name:kw})
-                except:
-                    pass
+
+                except ValueError:
+                    print 'free keywords with name'
+                    date = to_date(it['thesaurus']['date'])
+                    datetype= it['thesaurus']['datetype']
+                    title = it['thesaurus']['title']
+                    for t in it['keywords']:
+                        free_keywords.append(FreeKeyword(value=t, reference_date=date, date_type=datetype, originating_vocabulary=title ))
+
         temporal_extent = []
         if md.identification.temporalextent_start or md.identification.temporalextent_end:
             temporal_extent = [TemporalExtent(
@@ -301,6 +318,8 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         #obj.resource_language = md.identification.resourcelanguage
         obj.topic_category = topic_list
         obj.keywords = keywords_dict
+        print free_keywords
+        obj.free_keywords = free_keywords
         obj.bounding_box = bbox
         obj.temporal_extent = temporal_extent
         obj.creation_date = creation_date

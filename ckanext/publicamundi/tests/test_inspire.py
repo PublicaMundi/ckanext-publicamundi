@@ -253,6 +253,10 @@ insp9.keywords = {
 insp10 = copy.deepcopy(fixtures.inspire1)
 insp10.keywords = {}
 
+# Keywords completely empty
+insp11 = copy.deepcopy(fixtures.inspire1)
+insp11.free_keywords = FreeKeywords(value="free-keyword")
+
 #
 # Tests
 #
