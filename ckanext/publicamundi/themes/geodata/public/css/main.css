@@ -1289,6 +1289,14 @@ p a{
 .resources li.resource-item .all-btns li{
     margin-left: 8px;
 }
+.label{
+    font-weight: normal;
+    border-radius:0;
+    text-shadow: none;
+}
+.dashboard-resources .filter-list .label{
+    padding: 5px 10px;
+}
 .dashboard-resources li.resource-item .resource-ingest-opts, .dashboard-resources li.resource-item .btn-group.resource-ingest-opts{
     position: relative;
     float: left;
@@ -1299,11 +1307,8 @@ p a{
 .dashboard-resources .dropdown-menu > li > a{
     padding: 3px 20px 3px 15px;
 }
-.dashboard-resources .dropdown-menu .label{
-    font-weight: normal;
-    border-radius:0;
-    text-shadow: none;
-    border: 2px #000 solid;
+.dashboard-resources .dropdown-menu .label{ 
+    border: 1px #000 solid;
     margin-right: 5px;
 }
 .label[data-resource-status="identified"], .label[data-resource-status="rejected"]{

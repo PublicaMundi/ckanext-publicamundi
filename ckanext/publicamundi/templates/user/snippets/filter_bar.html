@@ -13,10 +13,10 @@
 #}
 
 {% set sorting_statuses ={
-    'publish-failed': _('Publish Failed'),
-    'published': _('Published'), 
     'identified': _('Identified'),
+    'published': _('Published'), 
     'identify-failed': _('Identify Failed'),
+    'publish-failed': _('Publish Failed'),
     'rejected': _('Rejected'), 
     }
 %}
@@ -27,6 +27,7 @@
     } %}
 
 <div class="filter-buttons">
+    {% block filter_buttons %}
   <div id="storer_type_filter" class="btn-group">
   <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
     <i class="icon-filter"></i>
@@ -35,7 +36,7 @@
     </a>
     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
         <li>
-        <a href="{{ h.remove_url_param('storer_type') }}"><span></span> {{_('All types')}}</a>
+        <a href="{{ h.remove_url_param('storer_type') }}"> {% trans %}<span class="all-types"></span>All{% endtrans %}</a>
         </li>
 
         {% for storer_type_key, storer_type_name in sorting_storer_types.iteritems() %}
@@ -57,7 +58,7 @@
     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
         <li>
             <a href="{{ h.remove_url_param('status') }}">
-                <span class="label" data-resource-status="all" title="Remove">&nbsp;&nbsp;&nbsp;</span> {{_('All statuses')}}</a>
+                <span class="label" data-resource-status="all" title="Remove">&nbsp;&nbsp;&nbsp;</span> {% trans %}<span class="all-statuses"></span>All{% endtrans %}</a>
         </li>
       {% for status_key, status_name in sorting_statuses.iteritems() %}
         <li>
@@ -68,16 +69,22 @@
         </li>
        {% endfor %}
     </ul>
-   </div>
+    </div>
+    {% endblock %}
 </div> {# filter-buttons #}
     
 <div class="filter-list">
+    {% block filter_list %}
     {% set storer_type = h.get_request_param('storer_type') %}
     {% set status = h.get_request_param('status') %}
-
-    {{_('Type')}}:  
-    <span class="filtered pill" > {% if storer_type in sorting_storer_types.keys() %} {{ sorting_storer_types[storer_type] }} {% else %}{{_('All types')}} {% endif %}</span>
+        {{_('Type')}}:  
+    <span class="filtered pill label"> 
+        {% if storer_type in sorting_storer_types.keys() %} {{ sorting_storer_types[storer_type] }} {% else %} {% trans %}<span class="all-types"></span>All{% endtrans %} {% endif %}
+    </span>
 
     {{_('Status')}}: 
-    <span class="filtered pill" > {% if status in sorting_statuses.keys() %} {{ sorting_statuses[status] }} {% else %}{{_('All statuses')}} {% endif %}</span>
+    <span class="filtered pill label"  {% if status in sorting_statuses.keys() %}data-resource-status="{{status}}"{% endif %} > 
+        {% if status in sorting_statuses.keys() %} {{ sorting_statuses[status] }} {% else %} {% trans %}<span class="all-statuses"></span>All{% endtrans %} {% endif %}
+    </span>
+    {% endblock %}
 </div> {# filter-list #}
