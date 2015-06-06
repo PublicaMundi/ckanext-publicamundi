@@ -6,14 +6,14 @@
 {# Display a list of ingestion-aware resources #}
 {% block package_item_resources %}
   <ul class="resources unstyled">
-  {% for resource in package.resources %}
-    {% if resource.vectorstorer_resource or resource.rasterstorer_resource %}
-        {% with task_result = h.resource_ingestion_result(resource.id) %}
-            {% snippet 'user/snippets/resource_item_ingested.html', pkg=package, res=resource, task=task_result, parent=parent %}
-        {% endwith %} {# task_result #}
-    {% else %}
-        {% snippet 'user/snippets/resource_item.html', pkg=package, res=resource,  parent=parent %}
-    {% endif %}
+      {% for resource in package.resources %}
+       {% if resource.vectorstorer_resource or resource.rasterstorer_resource  %} 
+        {% set task_result = h.resource_ingestion_result(resource.id) %}
+      {% else %}  
+        {% set task_result = {} %}
+      {% endif %}
+         
+        {% snippet 'user/snippets/resource_item.html', pkg=package, res=resource, task=task_result, parent=parent %}
   {% endfor %} {# resource #}
   </ul>
 {% endblock %}

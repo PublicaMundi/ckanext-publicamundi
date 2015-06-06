@@ -10,7 +10,7 @@
 {% block resource_item_service %}
 {% if (res.vectorstorer_resource or res.rasterstorer_resource) and res.format == 'wms' %}
     <li>
-    <a class="btn" href={{ h.get_maps_url(id=res.id)}} >
+    <a class="btn" href={{ h.get_maps_url(package_id=pkg.id, resource_id=res.id)}} >
             <i class="icon-medium icon-globe"></i>{{ _(' Map')}}
     </a>
     </li>
@@ -25,7 +25,7 @@
 {% for raster_res in raster_resources %}
     {% if raster_res.format == 'wms' %}
     <li>
-        <a class="btn" href={{ h.get_maps_url(id=raster_res.id)}} >
+    <a class="btn" href={{ h.get_maps_url(package_id=pkg.id, resource_id=raster_res.id) }} >
                 <i class="icon-medium icon-globe"></i>{{ _(' Maps')}}
             </a>
     </li>
@@ -34,7 +34,8 @@
 {% for vector_res in vector_resources %}
     {% if vector_res.format == 'wms' %}
     <li>
-        <a class="btn" href={{ h.get_maps_url(id=vector_res.id)}} >
+        <a class="btn" href={{ h.get_maps_url(package_id=pkg.id, resource_id=vector_res.id) }} >
+        
                 <i class="icon-medium icon-globe"></i>{{ _(' Map')}}
             </a>
     </li>
