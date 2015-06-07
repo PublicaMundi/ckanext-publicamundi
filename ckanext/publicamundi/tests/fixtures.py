@@ -144,9 +144,9 @@ thesaurus_gemet_concepts = Thesaurus(
     date_type = 'creation'
 )
 
-thesaurus_gemet_themes = Thesaurus.make('keywords-gemet-themes')
+thesaurus_gemet_themes = Thesaurus.lookup('keywords-gemet-themes')
 
-thesaurus_gemet_inspire_data_themes = Thesaurus.make('keywords-gemet-inspire-themes')
+thesaurus_gemet_inspire_data_themes = Thesaurus.lookup('keywords-gemet-inspire-themes')
 
 # Baz 
 

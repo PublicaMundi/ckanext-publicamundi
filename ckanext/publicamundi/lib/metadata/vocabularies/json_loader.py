@@ -6,10 +6,8 @@ import zope.interface
 import zope.schema
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
-def munge(name):
-    '''Convert human-friendly to machine-friendly terms.
-    
-    Needed when a machine-friendly version is not supplied.
+def _munge(name):
+    '''Convert human-friendly to machine-friendly names.
     '''
 
     re_bad = re.compile('[\(\),]+')
@@ -23,24 +21,32 @@ def munge(name):
 
     return name
 
+def normalize_keyword(name):
+    return _munge(name)
+
+def normalize_thesaurus_title(name, for_keywords=False):
+    if not for_keywords:
+        return _munge(name)
+    else:
+        return _munge('keywords' + ' ' + name)
+
 def make_vocabulary(data):
     '''Convert raw data to a SimpleVocabulary instance.
     
     The input data can be one of the following:
      * a list of human-readable terms or a
      * a dict that maps machine-readable to human-readable terms.
-    
     '''
     
     terms = []
     if isinstance(data, list):
         for t in data:
-            k = munge(t)
-            terms.append(SimpleTerm(k, k, t))
+            k = normalize_keyword(t)
+            terms.append(SimpleTerm(k, t, t))
     elif isinstance(data, dict):     
         for k, t in data.items():
-            #k = munge(k)
-            terms.append(SimpleTerm(k, k, t))
+            #k = normalize_keyword(k)
+            terms.append(SimpleTerm(k, t, t))
     return SimpleVocabulary(terms, swallow_duplicates=True)
 
 def make_vocabularies(data_file):
@@ -54,7 +60,7 @@ def make_vocabularies(data_file):
         data = json.loads(fp.read())
 
     for title in (set(data.keys()) - set(['Keywords'])):
-        name = munge(title)
+        name = normalize_thesaurus_title(title)
         desc = {
             'name': name,
             'title': title,
@@ -66,8 +72,7 @@ def make_vocabularies(data_file):
     for title in keywords_data.keys():
         keywords = keywords_data.get(title)
         keywords_terms = make_vocabulary(keywords.get('terms'))
-
-        name = munge('Keywords-' + title)
+        name = normalize_thesaurus_title(title, for_keywords=True)
         desc = {
             'name': name,
             'title': title,

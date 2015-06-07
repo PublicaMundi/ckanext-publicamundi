@@ -121,15 +121,15 @@ class Controller(BaseController):
         name = str(name)
         r = None
         
-        vocab = vocabularies.get_by_name(name)
+        vocab = vocabularies.get_by_name(name) 
         if vocab:
-            terms = vocab['vocabulary'].by_value
             r = {
                 'date_type': vocab.get('date_type'),
                 'reference_date': vocab.get('reference_date'),
                 'title': vocab.get('title'),
                 'name': vocab.get('name'),
-                'terms': [{ 'value': k, 'title': terms[k].title } for k in terms],
+                'terms': [{'token': t.token, 'value': t.value, 'title': t.title} 
+                    for t in vocab['vocabulary']],
             }
                 
         response.headers['Content-Type'] = content_types['json']
@@ -149,7 +149,7 @@ class Controller(BaseController):
         return
     
     def dataset_import(self):
-
+        
         post = request.params
 
         # Forward to the dataset_import action

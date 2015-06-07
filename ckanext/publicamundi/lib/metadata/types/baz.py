@@ -7,7 +7,7 @@ from ckanext.publicamundi.lib.metadata.types import BaseMetadata
 from ckanext.publicamundi.lib.metadata.types import Thesaurus, ThesaurusTerms
 from ckanext.publicamundi.lib.metadata.types._common import *
 
-thesaurus_gemet_themes = Thesaurus.make('keywords-gemet-themes')
+thesaurus_gemet_themes = Thesaurus.lookup('keywords-gemet-themes')
 
 class KeywordsFactory(object):
     

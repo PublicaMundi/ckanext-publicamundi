@@ -119,6 +119,15 @@ class IInspireMetadata(IBaseMetadata):
                 raise zope.interface.Invalid(
                     'You need to select at least one keyword from INSPIRE data themes')
 
+    free_keywords = zope.schema.List(
+            title= u'Free Keywords',
+            description = u"The keyword value is a commonly used word, formalised word or phrase used to describe the subject. While the topic category is too coarse for detailed queries, keywords help narrowing a full text search and they allow for structured keyword search.",
+            required = False,
+            max_length = 10,
+            value_type = zope.schema.Object(IFreeKeyword,
+                title = u'Free Keyword'))
+    free_keywords.setTaggedValue('format:markup', { 'descend-if-dictized': False })
+
     # Geographic
 
     bounding_box = zope.schema.List(
