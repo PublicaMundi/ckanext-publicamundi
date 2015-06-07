@@ -1,4 +1,5 @@
 import os
+import re
 import uuid
 import zope.interface
 import zope.schema
@@ -27,7 +28,7 @@ class KeywordsFactory(object):
     def __call__(self):
         keywords = {}
         keywords[self._name] = ThesaurusTerms(
-            terms=[], thesaurus=Thesaurus.make(self._name))
+            terms=[], thesaurus=Thesaurus.lookup(self._name))
         return keywords
 
 class TemporalExtentFactory(object):
@@ -162,6 +163,8 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
                     role = it.role))
             return result
 
+        # Parse object
+
         md = MD_Metadata(e)
 
         datestamp = to_date(md.datestamp)
@@ -176,25 +179,43 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         for topic in md.identification.topiccategory:
             topic_list.append(topic)
         
-        keywords_dict = {}
+        free_keywords = []
+        keywords = {}
         for it in md.identification.keywords:
             thes_title = it['thesaurus']['title']
-            if thes_title is not None:
-                thes_split = thes_title.split(',')
-                # TODO thes_split[1] (=version) can be used in a get_by_title_and_version() 
-                # to enforce a specific thesaurus version.
-                thes_title = thes_split[0]
+            # Lookup and instantiate a named thesaurus
+            thes = None
+            if thes_title:
                 try:
-                    thes_name = vocabularies.munge('Keywords-' + thes_title)
-                    term_list = []
-                    for t in it['keywords']:
-                        term_list.append(t)
-                    thes = Thesaurus.make(thes_name)
-                    if thes:
-                        kw = ThesaurusTerms(thesaurus=thes, terms=term_list)
-                        keywords_dict.update({thes_name:kw})
+                    thes_title, thes_version = thes_title.split(',')
                 except:
-                    pass
+                    thes_version = None
+                else:
+                    thes_version = re.sub(r'^[ ]*version[ ]+(\d\.\d)$', r'\1', thes_version)
+                thes_name = 'keywords-' + vocabularies.munge(thes_title)
+                # Note thes_version can be used to enforce a specific thesaurus version
+                try:
+                    thes = Thesaurus.lookup(thes_name)
+                except ValueError:
+                    thes = None
+            # Treat present keywords depending on if they belong to a thesaurus
+            if thes:
+                # Treat as thesaurus terms; discard unknown terms
+                terms = []
+                for keyword in it['keywords']:
+                    term = thes.vocabulary.by_value.get(keyword)
+                    if not term:
+                        term = thes.vocabulary.by_token.get(keyword)
+                    if term:
+                        terms.append(term.value)
+                keywords[thes.name] = ThesaurusTerms(thesaurus=thes, terms=terms)
+            else:
+                # Treat as free keywords
+                # Todo Build a list of FreeKeyword items
+                for keyword in it['keywords']:
+                    # Todo Maybe convert keyword to a canonical form (e.g. munge)
+                    free_keywords.append(keyword)
+                
         temporal_extent = []
         if md.identification.temporalextent_start or md.identification.temporalextent_end:
             temporal_extent = [TemporalExtent(
@@ -300,7 +321,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         obj.locator = url_list
         #obj.resource_language = md.identification.resourcelanguage
         obj.topic_category = topic_list
-        obj.keywords = keywords_dict
+        obj.keywords = keywords
         obj.bounding_box = bbox
         obj.temporal_extent = temporal_extent
         obj.creation_date = creation_date

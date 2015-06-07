@@ -58,9 +58,9 @@ def flatten_field(field):
             'Only zope.schema.Choice supported for key_type'
         res = {}
         res1 = flatten_field(field.value_type)
-        for v in field.key_type.vocabulary:
+        for t in field.key_type.vocabulary:
             for k1, field1 in res1.items():
-                res[(v.token,) + k1] = field1
+                res[(t.value,) + k1] = field1
     else:
         res = { (): field }
     

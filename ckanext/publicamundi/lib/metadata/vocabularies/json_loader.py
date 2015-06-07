@@ -29,18 +29,19 @@ def make_vocabulary(data):
     The input data can be one of the following:
      * a list of human-readable terms or a
      * a dict that maps machine-readable to human-readable terms.
-    
     '''
+
+    # Note: A SimpleTerm is a tuple (value, token, title) 
     
     terms = []
     if isinstance(data, list):
         for t in data:
             k = munge(t)
-            terms.append(SimpleTerm(k, k, t))
+            terms.append(SimpleTerm(k, t, t))
     elif isinstance(data, dict):     
         for k, t in data.items():
             #k = munge(k)
-            terms.append(SimpleTerm(k, k, t))
+            terms.append(SimpleTerm(k, t, t))
     return SimpleVocabulary(terms, swallow_duplicates=True)
 
 def make_vocabularies(data_file):

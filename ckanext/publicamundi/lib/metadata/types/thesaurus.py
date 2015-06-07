@@ -28,12 +28,12 @@ class Thesaurus(Object):
     # Factory for Thesaurus
 
     @classmethod
-    def make(cls, name):
-        '''Create a new Thesaurus instance from it's machine-name name.
-        The metadata for this thesaurus are queried from vocabularies module.
-
-        Note: Maybe rename this class-method to lookup
+    def lookup(cls, name):
+        '''Lookup a thesaurus by it's name and return a Thesaurus instance.
+        The metadata for a newly created thesaurus are queried from vocabularies 
+        module.
         '''
+
         spec = vocabularies.get_by_name(name)
         if spec:
             kwargs = {
