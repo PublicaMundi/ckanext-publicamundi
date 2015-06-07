@@ -192,10 +192,9 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
                     thes_version = None
                 else:
                     thes_version = re.sub(r'^[ ]*version[ ]+(\d\.\d)$', r'\1', thes_version)
-                thes_name = 'keywords-' + vocabularies.munge(thes_title)
                 # Note thes_version can be used to enforce a specific thesaurus version
                 try:
-                    thes = Thesaurus.lookup(name=thes_name)
+                    thes = Thesaurus.lookup(title=thes_title, for_keywords=True)
                 except ValueError:
                     thes = None
             # Treat present keywords depending on if they belong to a thesaurus
@@ -214,7 +213,6 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
                 vocab_date = to_date(it['thesaurus']['date'])
                 vocab_datetype = it['thesaurus']['datetype']
                 for keyword in it['keywords']:
-                    # Todo Maybe convert keyword to a canonical form (e.g. munge)
                     free_keywords.append(FreeKeyword(
                         value = keyword,
                         reference_date = vocab_date,

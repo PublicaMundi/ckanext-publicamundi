@@ -68,6 +68,17 @@ class FreeKeyword(Object):
     reference_date = None
     date_type = None
 
+    @classmethod
+    def normalize_keyword(cls, s):
+        from inflection import dasherize, underscore
+        return dasherize(underscore(unicode(s)))
+    
+    def __init__(self, **kwargs):
+        value = kwargs.get('value')
+        if value:
+            kwargs['value'] = self.normalize_keyword(value)
+        super(FreeKeyword, self).__init__(**kwargs)
+        
 @object_null_adapter()
 class GeographicBoundingBox(Object):
     
