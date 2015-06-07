@@ -253,6 +253,12 @@ insp9.keywords = {
 insp10 = copy.deepcopy(fixtures.inspire1)
 insp10.keywords = {}
 
+# Some free keywords are present
+insp11 = copy.deepcopy(fixtures.inspire1)
+insp11.free_keywords = [
+    FreeKeyword(value="hello-world", originating_vocabulary="HelloWorld"),
+    FreeKeyword(value="goodbye")]
+
 #
 # Tests
 #

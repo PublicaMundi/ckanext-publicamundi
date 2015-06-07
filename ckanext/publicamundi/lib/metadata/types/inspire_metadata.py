@@ -1,6 +1,7 @@
 import os
 import re
 import uuid
+import datetime
 import zope.interface
 import zope.schema
 from zope.schema.vocabulary import SimpleVocabulary
@@ -17,6 +18,8 @@ from ckanext.publicamundi.lib.metadata.xml_serializers import object_xml_seriali
 from ckanext.publicamundi.lib.metadata.types import BaseMetadata
 from ckanext.publicamundi.lib.metadata.types.thesaurus import Thesaurus, ThesaurusTerms
 from ckanext.publicamundi.lib.metadata.types._common import *
+
+strptime = datetime.datetime.strptime
 
 class KeywordsFactory(object):
     
@@ -64,6 +67,7 @@ class InspireMetadata(BaseMetadata):
     topic_category = list
 
     keywords = KeywordsFactory()
+    free_keywords = list
 
     bounding_box = list
 
@@ -144,17 +148,13 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         return e
 
     def from_xml(self, e):
-        '''Build and return an InspireMetadata object serialized as an etree
-        Element e.
+        '''Build and return an InspireMetadata object from a (serialized) etree Element e.
         '''
 
-        def to_date(string):
-            if isinstance(string, str):
-                return datetime.datetime.strptime(string,'%Y-%m-%d').date()
-            else:
-                return None
+        def to_date(s):
+            return strptime(s, '%Y-%m-%d').date() if isinstance(s, str) else None
 
-        def to_resp_party(alist):
+        def to_responsible_party(alist):
             result = []
             for it in alist:
                 result.append(ResponsibleParty(
@@ -195,7 +195,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
                 thes_name = 'keywords-' + vocabularies.munge(thes_title)
                 # Note thes_version can be used to enforce a specific thesaurus version
                 try:
-                    thes = Thesaurus.lookup(thes_name)
+                    thes = Thesaurus.lookup(name=thes_name)
                 except ValueError:
                     thes = None
             # Treat present keywords depending on if they belong to a thesaurus
@@ -210,12 +210,17 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
                         terms.append(term.value)
                 keywords[thes.name] = ThesaurusTerms(thesaurus=thes, terms=terms)
             else:
-                # Treat as free keywords
-                # Todo Build a list of FreeKeyword items
+                # Treat as free keywords (not really a thesaurus)
+                vocab_date = to_date(it['thesaurus']['date'])
+                vocab_datetype = it['thesaurus']['datetype']
                 for keyword in it['keywords']:
                     # Todo Maybe convert keyword to a canonical form (e.g. munge)
-                    free_keywords.append(keyword)
-                
+                    free_keywords.append(FreeKeyword(
+                        value = keyword,
+                        reference_date = vocab_date,
+                        date_type = vocab_datetype,
+                        originating_vocabulary = thes_title))
+
         temporal_extent = []
         if md.identification.temporalextent_start or md.identification.temporalextent_end:
             temporal_extent = [TemporalExtent(
@@ -242,13 +247,6 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
                 publication_date = to_date(it.date)
             elif it.type == 'revision':
                 revision_date = to_date(it.date)
-
-        #if not creation_date:
-        #    raise Exception('creation date not present','')
-        #elif not publication_date:
-        #    raise Exception('publication date not present','')
-        #elif not revision_date:
-        #    raise Exception('revision date not present','')
 
         spatial_list = []
 
@@ -312,7 +310,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
 
         obj = InspireMetadata()
 
-        obj.contact = to_resp_party(md.contact)
+        obj.contact = to_responsible_party(md.contact)
         obj.datestamp = datestamp
         obj.languagecode = md.languagecode
         obj.title = unicode(md.identification.title)
@@ -322,6 +320,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         #obj.resource_language = md.identification.resourcelanguage
         obj.topic_category = topic_list
         obj.keywords = keywords
+        obj.free_keywords = free_keywords
         obj.bounding_box = bbox
         obj.temporal_extent = temporal_extent
         obj.creation_date = creation_date
@@ -332,7 +331,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         obj.conformity = conf_list
         obj.access_constraints = limit_list
         obj.limitations = constr_list
-        obj.responsible_party = to_resp_party(md.identification.contact)
+        obj.responsible_party = to_responsible_party(md.identification.contact)
 
         return obj
 
