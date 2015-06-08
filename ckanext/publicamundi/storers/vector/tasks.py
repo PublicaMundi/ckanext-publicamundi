@@ -174,9 +174,15 @@ def _ingest_resource(
     db_conn_params = context['db_params']
     layer_params = context['layer_params']['layers']
 
-    _encoding = 'utf-8'
+    #_encoding = 'utf-8'
 
     if gdal_driver:
+        
+        if gdal_driver == vector.SHAPEFILE:
+            _encoding = layer_params[0]['encoding']
+        else:
+            _encoding = 'utf-8'
+
         _vector = vector.Vector(
             gdal_driver,
             vector_file_path,

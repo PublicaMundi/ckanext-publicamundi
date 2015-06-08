@@ -1,3 +1,6 @@
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 import psycopg2
 import urlparse
 
@@ -15,6 +18,7 @@ class DB:
             user=user,
             password=password,
             host=hostname)
+        
         self.cursor = self.conn.cursor()
 
     def check_if_table_exists(self, table_name):
@@ -48,6 +52,7 @@ class DB:
             geometry_text,
             convert_to_multi,
             srs):
+        
         if convert_to_multi:
             insert = (
                 '''INSERT INTO \"%s\"
@@ -57,8 +62,11 @@ class DB:
             insert = (
                 "INSERT INTO \"%s\" VALUES (%s ST_GeomFromText('%s',%s));" %
                 (table, fields, geometry_text, srs))
-        self.cursor.execute(insert)
-
+        try:
+            self.cursor.execute(insert)
+        except Exception:
+            pass
+        
     def create_spatial_index(self, table):
         indexing = (
             '''CREATE INDEX \"%s_the_geom_idx\"

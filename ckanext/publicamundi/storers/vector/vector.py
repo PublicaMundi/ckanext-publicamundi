@@ -33,6 +33,11 @@ class Vector:
         self.gdal_driver = gdal_driver
         self.encoding = encoding
         self.db_conn_params = db_conn_params
+        if gdal_driver == SHAPEFILE:
+            # Set the SHAPE_ENCODING gdal option in order to read the
+            # dbf file (for shapefiles) with the right encoding
+            vectorstorer.gdal.SetConfigOption('SHAPE_ENCODING',encoding)
+
         driver = vectorstorer.ogr.GetDriverByName(gdal_driver)
         self.dataSource = driver.Open(file_path, 0)
         if self.dataSource is None:
@@ -107,6 +112,7 @@ class Vector:
         return fields
 
     def get_geometry_name(self, layer):
+        '''Returns the geometry name of the layer (Polygon, Point, etc.)'''
         geometry_names = []
         for feat in layer:
             if not feat:
@@ -163,12 +169,12 @@ class Vector:
             for y in range(feat.GetFieldCount()):
                 if not feat.GetField(y) is None:
                     if layer.GetLayerDefn().GetFieldDefn(y).GetType() in (4, 9, 10, 11):
-                        field_value = str(
-                            feat.GetField(y).decode(
-                                layer_encoding,
-                                'replace').encode('utf8'))
+                        try:
+                            field_value =  feat.GetField(y).encode( 'utf8','replace' )
+                        except UnicodeDecodeError:
+                            field_value = 'NULL'
                         feature_fields += psycopg2.extensions.adapt(
-                            field_value).getquoted().decode('utf-8') + ','
+                            field_value).getquoted() + ','
                     else:
                         feature_fields += str(feat.GetField(y)) + ','
                 else:
