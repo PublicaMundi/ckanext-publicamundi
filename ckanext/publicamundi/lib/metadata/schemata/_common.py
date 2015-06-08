@@ -79,7 +79,7 @@ class IFreeKeyword(IObject):
     value = zope.schema.TextLine(
         title = u"Keyword value",
         description = u"The keyword value is a commonly used word, formalised word or phrase used to describe the subject. While the topic category is too coarse for detailed queries, keywords help narrowing a full text search and they allow for structured keyword search.\nThe value domain of this metadata element is free text.",
-        required = False)
+        required = True)
 
     originating_vocabulary = zope.schema.TextLine(
         title = u'Title',
@@ -97,8 +97,8 @@ class IFreeKeyword(IObject):
 
     @zope.interface.invariant
     def check_mandatory_parts(obj):
-        if obj.value or obj.originating_vocabulary or obj.reference_date or obj.date_type:
-            if not obj.value or not obj.originating_vocabulary or not obj.reference_date or not obj.date_type:
+        if obj.originating_vocabulary or obj.reference_date or obj.date_type:
+            if not obj.originating_vocabulary or not obj.reference_date or not obj.date_type:
                 raise zope.interface.Invalid('You need to fill in the rest free-keyword fields')
 
 class IGeographicBoundingBox(IObject):
