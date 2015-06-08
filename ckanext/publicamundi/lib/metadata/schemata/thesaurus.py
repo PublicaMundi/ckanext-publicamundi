@@ -54,6 +54,10 @@ class IThesaurusTerms(IObject):
         min_length = 1,
         max_length = 8)
 
+    def iter_terms():
+        '''Provide an iterator on terms.
+        '''
+
     @zope.interface.invariant
     def check_terms(obj):
         unexpected_terms = []

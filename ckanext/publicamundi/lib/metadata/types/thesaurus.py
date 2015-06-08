@@ -62,8 +62,16 @@ class ThesaurusTerms(Object):
     
     zope.interface.implements(IThesaurusTerms)
 
-    # Fixme: Maybe point here to a factory for named Thesaurus objects
     thesaurus = Thesaurus 
     
     terms = list
+
+    def iter_terms(self):
+        vocabulary = self.thesaurus.vocabulary.by_value
+        for t in self.terms:
+            yield vocabulary.get(t)
+    
+    __iter__ = iter_terms
+
+
 

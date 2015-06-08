@@ -88,10 +88,13 @@ class InspireMetadata(BaseMetadata):
     responsible_party = list
 
     def deduce_basic_fields(self):
+        '''Deduce basic (i.e. core CKAN) fields from self.
+        '''
+
         data = super(InspireMetadata, self).deduce_basic_fields()
         
-        data['notes'] = self.abstract
-        
+        # id (applicable only for imported/harvested)
+
         identifier = None
         try:
             identifier = uuid.UUID(self.identifier)
@@ -100,6 +103,26 @@ class InspireMetadata(BaseMetadata):
         else:
             data['id'] = str(identifier)
         
+        # notes
+
+        data['notes'] = self.abstract
+        
+        # Todo version
+        
+        # tags: Collect free keywords and thesauri terms (see #135)
+
+        tags = []
+
+        for kw in self.free_keywords:
+            tags.append(dict(name=kw.value, display_name=kw.value))
+        
+        for thes_name, thes_terms in self.keywords.items():
+            for term in thes_terms.iter_terms():
+                tags.append(dict(name=term.value, display_name=term.title))
+
+        if tags:
+            data['tags'] = tags
+
         return data
 
 # XML serialization
