@@ -283,6 +283,13 @@ msgstr ""
 msgid "Import Dataset"
 msgstr ""
 
+#: ckanext/publicamundi/templates/package/import_metadata.html:17
+msgid ""
+" <p>Create a new dataset by importing an existing <strong>XML</strong> "
+"metadata file. You can either upload a local file from your computer, or use "
+"a link (if already published somewhere).</p> "
+msgstr ""
+
 #: ckanext/publicamundi/templates/package/new_package_metadata.html:3
 msgid "Add metadata to the dataset"
 msgstr ""
@@ -572,6 +579,36 @@ msgstr ""
 
 #: ckanext/publicamundi/templates/package/snippets/import_metadata_form.html:52
 msgid "Import"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_result.html:10
+#, python-format
+msgid ""
+" A dataset named <a href=\"%(read_url)s\">%(title)s</a> was successfully "
+"imported. "
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_result.html:18
+#, python-format
+msgid ""
+" <p> The dataset was created successfully. However, several "
+"<strong>(%(validation_errors_count)s)</strong> validation errors were found, "
+"and must be fixed before the dataset can be published. </p> "
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_result.html:24
+#, python-format
+msgid ""
+" <p> You can review, edit and fix errors <a href=\"%(edit_url)s\">here</a>. "
+"Note that, you can always view your datasets (published or not) at your "
+"personal <a href=\"%(dashboard_url)s\" >dashboard</a>. </p> "
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_result.html:31
+#, python-format
+msgid ""
+" <p> The imported dataset is perfecty valid! View the new dataset <a "
+"href=\"%(read_url)s\">here</a>. </p> "
 msgstr ""
 
 #: ckanext/publicamundi/templates/package/snippets/package_basic_fields.html:20

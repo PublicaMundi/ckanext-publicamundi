@@ -284,6 +284,16 @@ msgstr "Εισαγωγή Μεταδεδομένων"
 msgid "Import Dataset"
 msgstr "Εισαγωγή Δεδομένων"
 
+#: ckanext/publicamundi/templates/package/import_metadata.html:17
+msgid ""
+" <p>Create a new dataset by importing an existing <strong>XML</strong> "
+"metadata file. You can either upload a local file from your computer, or use "
+"a link (if already published somewhere).</p> "
+msgstr ""
+" <p>Δημιουργήστε νέο σύνολο δεδομένων εισάγοντας ένα υπάρχον <strong>XML</strong>"
+"αρχείο μεταδεδομένων. Μπορείτε να φορτώσετε είτε ένα τοπικό αρχείο από τον υπολογιστή σας, ή να χρησιμοποιήσετε "
+"ένα σύνδεσμο (αν έχει ήδη δημοσιευθεί κάπου). </p> "
+
 #: ckanext/publicamundi/templates/package/new_package_metadata.html:3
 msgid "Add metadata to the dataset"
 msgstr "Προσθήκη μεταδεδομένων στο σύνολο δεδομένων"
@@ -573,6 +583,44 @@ msgstr "Προχωρήστε σε εισαγωγή αυτού του συνόλ�
 #: ckanext/publicamundi/templates/package/snippets/import_metadata_form.html:52
 msgid "Import"
 msgstr "Εισαγωγή"
+
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_result.html:10
+#, python-format
+msgid ""
+" A dataset named <a href=\"%(read_url)s\">%(title)s</a> was successfully "
+"imported. "
+msgstr " Ένα σύνολο δεδομένων με όνομα <a href=\"%(read_url)s\">%(title)s</a> εισήχθη επιτυχώς."
+
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_result.html:18
+#, python-format
+msgid ""
+" <p> The dataset was created successfully. However, several "
+"<strong>(%(validation_errors_count)s)</strong> validation errors were found, "
+"and must be fixed before the dataset can be published. </p> "
+msgstr ""
+" <p> Το σύνολο δεδομένων φτιάχτηκε επιτυχώς. Ωστόσο, βρέθηκαν κάποια "
+"<strong>(%(validation_errors_count)s)</strong> σφάλματα επικύρωσης, "
+"που πρέπει να διορθωθούν πριν το σύνολο δεδομένων μπορεί να δημοσιευθεί. </p> "
+
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_result.html:24
+#, python-format
+msgid ""
+" <p> You can review, edit and fix errors <a href=\"%(edit_url)s\">here</a>. "
+"Note that, you can always view your datasets (published or not) at your "
+"personal <a href=\"%(dashboard_url)s\" >dashboard</a>. </p> "
+msgstr ""
+" <p> Μπορείτε να δείτε, να επεξεργαστείτε και να διορθώσετε λάθη <a href=\"%(edit_url)s\">εδώ</a>. "
+"Σημειώστε ότι μπορείτε πάντα να δείτε τα σύνολα δεδομένων σας (δημοσιευμένα ή μη)" 
+"στον προσωπικό σας <a href=\"%(dashboard_url)s\" >πίνακα λειτουργιών</a>. </p> "
+
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_result.html:31
+#, python-format
+msgid ""
+" <p> The imported dataset is perfecty valid! View the new dataset <a "
+"href=\"%(read_url)s\">here</a>. </p> "
+msgstr ""
+" <p> Το σύνολο δεδομένων είναι απολύτως έγκυρο! Μπορείτε να δείτε το νέο σύνολο δεδομένων <a "
+"href=\"%(read_url)s\">εδώ</a>. </p> "
 
 #: ckanext/publicamundi/templates/package/snippets/package_basic_fields.html:20
 #: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-inspire-datasetform.html:34
