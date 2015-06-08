@@ -1326,7 +1326,7 @@ class ObjectFormatter(BaseFormatter):
         '''
        
         # Note We want to pass a 'quote' option to all our fields (this will be
-        # interpreted by the field formatter itself). If not allready set, we
+        # interpreted by the field formatter itself). If not already set, we
         # need to create a copy of opts, in order not to break our caller's 
         # formatting (sharing the same opts dict).
         

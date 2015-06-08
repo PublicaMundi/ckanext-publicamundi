@@ -16,7 +16,7 @@ def _update(data_file, name_prefix='', overwrite=False):
     '''
     for name, desc in make_vocabularies(data_file):
         assert overwrite or not (name in vocabularies), (
-            'A vocabulary named %r is allready loaded' % (name))
+            'A vocabulary named %r is already loaded' % (name))
         vocabularies[name_prefix + name] = desc
 
 # Utilities
