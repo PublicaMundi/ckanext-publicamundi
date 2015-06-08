@@ -291,8 +291,8 @@ msgid ""
 "a link (if already published somewhere).</p> "
 msgstr ""
 " <p>Δημιουργήστε νέο σύνολο δεδομένων εισάγοντας ένα υπάρχον <strong>XML</strong>"
-"αρχείο μεταδεδομένων. Μπορείτε να φορτώσετε είτε ένα τοπικό αρχείο από τον υπολογιστή σας, ή να χρησιμοποιήσετε "
-"ένα σύνδεσμο (αν έχει ήδη δημοσιευθεί κάπου). </p> "
+"αρχείο μεταδεδομένων. Μπορείτε να ανεβάσετε είτε ένα τοπικό αρχείο από τον υπολογιστή σας, ή να χρησιμοποιήσετε "
+"έναν σύνδεσμο (αν έχει ήδη δημοσιευθεί κάπου). </p> "
 
 #: ckanext/publicamundi/templates/package/new_package_metadata.html:3
 msgid "Add metadata to the dataset"
@@ -589,7 +589,7 @@ msgstr "Εισαγωγή"
 msgid ""
 " A dataset named <a href=\"%(read_url)s\">%(title)s</a> was successfully "
 "imported. "
-msgstr " Ένα σύνολο δεδομένων με όνομα <a href=\"%(read_url)s\">%(title)s</a> εισήχθη επιτυχώς."
+msgstr " Το σύνολο δεδομένων με όνομα <a href=\"%(read_url)s\">%(title)s</a> δημιουργήθηκε επιτυχώς."
 
 #: ckanext/publicamundi/templates/package/snippets/import_metadata_result.html:18
 #, python-format
@@ -598,9 +598,9 @@ msgid ""
 "<strong>(%(validation_errors_count)s)</strong> validation errors were found, "
 "and must be fixed before the dataset can be published. </p> "
 msgstr ""
-" <p> Το σύνολο δεδομένων φτιάχτηκε επιτυχώς. Ωστόσο, βρέθηκαν κάποια "
+" <p> Το σύνολο δεδομένων  επιτυχώς. Ωστόσο, βρέθηκαν κάποια "
 "<strong>(%(validation_errors_count)s)</strong> σφάλματα επικύρωσης, "
-"που πρέπει να διορθωθούν πριν το σύνολο δεδομένων μπορεί να δημοσιευθεί. </p> "
+"που πρέπει να διορθωθούν πριν το σύνολο δεδομένων μπορέσει να δημοσιευθεί. </p> "
 
 #: ckanext/publicamundi/templates/package/snippets/import_metadata_result.html:24
 #, python-format
