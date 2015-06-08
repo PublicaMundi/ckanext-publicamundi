@@ -14,8 +14,10 @@
 {% block primary_content_inner %}
     <h3>{{ _('Import Metadata') }}</h3>
     {% if not result %}
+    {% trans %}
     <p>Create a new dataset by importing an existing <strong>XML</strong> metadata file. You can either upload a local file 
-    from your computer, or use a link (if allready published somewhere).</p>
+    from your computer, or use a link (if already published somewhere).</p>
+    {% endtrans %}
     {% snippet 'package/snippets/import_metadata_form.html', 
         owner_org=c.group_id, errors=errors, error_summary=error_summary 
     %}
