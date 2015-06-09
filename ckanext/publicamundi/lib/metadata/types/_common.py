@@ -115,6 +115,15 @@ class SpatialResolution(Object):
     uom = None
 
 @object_null_adapter()
+class ReferenceSystem(Object):
+    
+    zope.interface.implements(IReferenceSystem)
+
+    code = None
+    code_space = None
+    version = None
+
+@object_null_adapter()
 class Conformity(Object):
     
     zope.interface.implements(IConformity)
