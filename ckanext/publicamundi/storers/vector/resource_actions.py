@@ -1,6 +1,7 @@
 import json
 from pylons import config
 
+import ckan
 import ckan.model as model
 from ckan.model.types import make_uuid
 import ckan.plugins.toolkit as toolkit
@@ -11,7 +12,12 @@ from ckan.lib.dictization.model_dictize import resource_dictize
 from ckanext.publicamundi.model.resource_ingest import (
     ResourceIngest, ResourceStorerType, IngestStatus)
 from ckanext.publicamundi.storers.vector.resources import (
-    DBTableResource, WMSResource)
+    DBTableResource, WMSResource, WFSResource)
+
+vector_child_formars = [
+    DBTableResource.FORMAT,
+    WMSResource.FORMAT,
+    WFSResource.FORMAT]
 
 def _get_site_url():
     try:
@@ -134,65 +140,127 @@ def update_ingest_resource(resource):
         args=[resource_dict, context, geoserver_context],
         task_id=task_id)
 
-def delete_ingest_resource(resource, pkg_delete=False):
-    resource_dict = resource_dictize(resource, {'model': model})
+def delete_ingest_resource(resource_dict):
+    '''Called when a parent or child vector resource is being deleted.
+    Creates a celery task that does the unpublish from Geoserver workf
+    and the deletion from the database for all the resources that are
+    affected from the deleted one'''
+
     resource_list_to_delete = None
-    if ((resource_dict['format'] == WMSResource.FORMAT or
-            resource_dict['format'] == DBTableResource.FORMAT) and
-            'vectorstorer_resource' in resource_dict):
-        if pkg_delete:
-            resource_list_to_delete = _get_child_resources(resource)
-    else:
-        resource_list_to_delete = _get_child_resources(resource)
-    context = _make_default_context()
-    context.update({
-        'resource_list_to_delete': resource_list_to_delete,
-        'db_params': config['ckan.datastore.write_url']
-    })
-    geoserver_context = _make_geoserver_context()
-    task_id = make_uuid()
-    celery.send_task(
-        'vectorstorer.delete',
-        args=[resource_dict, context, geoserver_context],
-        task_id=task_id)
 
-    if 'vectorstorer_resource' in resource and not pkg_delete:
-        _delete_child_resources(resource)
-
-def _delete_child_resources(parent_resource):
     user = _get_site_user()
     action_context = {'model': model, 'user': user.get('name')}
     current_package = toolkit.get_action('package_show')(
-        action_context, {'id': parent_resource['package_id']})
-    resources = current_package['resources']
-    for child_resource in resources:
-        if 'parent_resource_id' in child_resource:
-            if child_resource['parent_resource_id'] == parent_resource['id']:
-                action_result = toolkit.get_action('resource_delete')(
-                    action_context, {'id': child_resource['id']})
-    return
+        action_context, {'id': resource_dict['package_id']})
+    package_resources = current_package['resources']
+    
+    if resource_dict['format'] in vector_child_formars:
+        # Handles wms, wfs and data_table resources that have been deleted
+
+        parent_resource = _get_parent_resource(resource_dict, package_resources)
+        if parent_resource is not None:
+            # If parent resource is not deleted then send the deleted resource
+            # to the celery delete task with all the resources that are
+            # affected from this deletion. For example if a wfs resource is
+            # being deleted and the wms resource has been deleted before
+            # the DBTableResource will also be deleted
+            resource = resource_dict
+            resource_list_to_delete = _get_resource_list_for_deletion(
+                resource_dict,
+                package_resources,
+                parent_resource)
+        else:
+            # If parent resource has been deleted, vector child resources
+            # will be ignored, beacause the are already unpublished from
+            # Geoserver (for WMS, WFS) or deleted from database (DATA_TABLE).
+            # This happens when the parent resource format is deleted and
+            # all the child resources are being send to the celety delete
+            # task.
+
+            resource = None
+            resource_list_to_delete = None
+    else:
+        # Handles parent resources (e.g Shapefile) that have been deleted
+        # set the resource as None. Creates a resource list containing all
+        # the resources which have as parent id the id of the resource whick
+        # was deleted and their child resources. These resources firstly are
+        # being unpublished from Geoserver or deleted from Database and
+        # secondly they are being deleted from ckan through the resource_delete
+        # api action
+        resource = None
+        resource_list_to_delete = _get_child_resources(resource_dict)
+        for res in resource_list_to_delete:
+            _chilreds=_get_child_resources(res)
+            for child_res in _chilreds:
+                resource_list_to_delete.append(child_res)
+
+    # start the delete tast only if the resource list to delete
+    # has at least 1 item.
+    if resource_list_to_delete is not None and len(resource_list_to_delete)>0 :
+        context = _make_default_context()
+        context.update({
+            'resource_list_to_delete': resource_list_to_delete,
+            'db_params': config['ckan.datastore.write_url']
+        })
+        geoserver_context = _make_geoserver_context()
+        task_id = make_uuid()
+        celery.send_task(
+            'vectorstorer.delete',
+            args=[resource, context, geoserver_context],
+            task_id=task_id)
+
+def _get_resource_list_for_deletion(
+        resource_dict,
+        package_resources,
+        parent_resource):
+    '''Returns a list with the resources that have to be deleted'''
+
+    resources_to_delete = []
+    if resource_dict['format'] == DBTableResource.FORMAT:
+        resources_to_delete = _get_child_resources(resource_dict)
+    else:
+        parent_child_resources = []
+        if parent_resource is not None:
+            #find the parent resource of the deleted one
+            for child_res in package_resources:
+                if ('parent_resource_id' in child_res and
+                        child_res['parent_resource_id'] == resource_dict[
+                            'parent_resource_id'] and
+                        child_res['state'] == 'active'):
+                    parent_child_resources.append(child_res)
+        if len(parent_child_resources) < 1:
+            resources_to_delete.append(parent_resource)
+    return resources_to_delete
+
+def _get_parent_resource(resource_dict, package_resources):
+    '''Searches in package resources to find the parent
+    resource of the requested one. If not found retuns None'''
+    parent_resource = None
+    for resource in package_resources:
+        if (resource['id'] == resource_dict['parent_resource_id'] and
+                resource['state'] == 'active'):
+            parent_resource = resource
+    return parent_resource
 
 def _get_child_resources(parent_resource):
-    child_resources = []
+    '''Returns the child resources of the parent resource'''
+    
+    # Get the resource again as an Object and then dict
+    # because the dict returned from the api doesn't contain
+    # the package id
+    par_resource_obj = model.Session.query(model.Resource).get(
+        parent_resource['id'])
+    parent_resource = par_resource_obj.as_dict()
+    
     user = _get_site_user()
     action_context = {'model': model, 'user': user.get('name')}
     current_package = toolkit.get_action('package_show')(
         action_context, {'id': parent_resource['package_id']})
-    resources = current_package['resources']
-    for child_resource in resources:
+    package_resources = current_package['resources']
+    
+    child_resources = []
+    for child_resource in package_resources:
         if 'parent_resource_id' in child_resource:
-            if child_resource['parent_resource_id'] == parent_resource['id']:
-                child_resources.append(child_resource['id'])
+            if child_resource['parent_resource_id'] == parent_resource['id'] and child_resource['state']=='active':
+                child_resources.append(child_resource)
     return child_resources
-
-def delete_ingest_resources_in_package(package):
-    user = _get_site_user()
-    context = {'model': model,
-               'session': model.Session,
-               'user': user.get('name')}
-    resources = package['resources']
-    for res in resources:
-        if ('vectorstorer_resource' in res and 
-                res['format'] == DBTableResource.FORMAT):
-            res['package_id'] = package['id']
-            delete_ingest_resource(res, True)

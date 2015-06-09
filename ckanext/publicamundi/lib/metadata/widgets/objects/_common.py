@@ -61,7 +61,7 @@ class TableObjectReadWidget(ReadObjectWidget):
             for th in filter(lambda t: t.tag == 'th', row):
                 kp = th.key_path()
                 field = self.obj.get_field(kp)
-                th.title = field.context.title or field.title
+                th.title = _(field.context.title) or _(field.title)
         
         # Prepend extra rows if needed
 

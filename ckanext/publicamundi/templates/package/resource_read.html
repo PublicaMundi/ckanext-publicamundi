@@ -1,37 +1,41 @@
 {% ckan_extends %}
-
 {% block resource_actions_inner %}
-    {% if res.format == 'wms' %}
-    <li>
-    <a class="btn" href={{ "/maps/" + res.id}} >
-            <i class="icon-medium icon-globe"></i>{{ _(' View in Maps')}}
-        </a>
-    </li>
-    {% endif %}
 
-    {% if h.check_access('package_update', {'id':pkg.id }) %}
-        <li>{% link_for _('Manage'), controller='package', action='resource_edit', id=pkg.name, resource_id=res.id, class_='btn', icon='wrench' %}</li>
-    {% endif %}
-    {% if res.url %}
-        {% if  res.resource_type != 'api' %}
-        <li>
-        <a class="btn btn-primary resource-url-analytics resource-type-{{ res.resource_type }}" href="{{ res.url }}">
-            {% if res.resource_type in ('listing', 'service') %}
-            <i class="icon-eye-open"></i> {{ _('View') }}
-            {# <i class="icon-key"></i> {{ _('API Endpoint') }} #}
-            {% elif not res.can_be_previewed %}
-            <i class="icon-external-link"></i> {{ _('Go to resource') }}
-            {% else %}
-            <i class="icon-download"></i> {{ _('Download') }}
-            {% endif %}
-        </a>
-        </li>
+        {% if h.check_access('package_update', {'id':pkg.id }) %}
+            <li>{% link_for _('Manage'), controller='package', action='resource_edit', id=pkg.name, resource_id=res.id, class_='btn', icon='wrench' %}</li>
         {% endif %}
-    {% endif %}
-    {% if 'datastore' in g.plugins and res.datastore_active %}
-        <li>{% snippet 'package/snippets/data_api_button.html', resource=res, datastore_root_url=c.datastore_api %}</li>
-    {% endif %}
-            
+        
+        {% if 'datastore' in g.plugins %}
+              <li>{% snippet 'package/snippets/data_api_button.html', resource=res, datastore_root_url=c.datastore_api %}</li>
+        {% endif %}
+
+        {% if res.resource_type == 'file' %}
+        {% block resource_item_file %}
+
+            {% set raster_resources = h.get_ingested_raster(pkg,res) %}
+            {% set vector_resources = h.get_ingested_vector(pkg,res) %}
+            <li>
+                    <a class="btn btn-primary resource-url-analytics" href="{{ res.url }}"
+                        ><i class="icon-download"></i> {{ _('Download') }}</a>
+                {% if raster_resources|length>0 or vector_resources|length>0 %}
+                <a class="btn btn-right-fix dropdown-toggle" data-toggle="modal" data-module-id={{res.id}} data-target="#download_options-{{res.id}}" data-module="download_options_dialog" >
+                    <span class="icon-reorder"></span>
+                </a>
+                {% endif %}
+                </li>
+            {% endblock %}
+        {% elif res.resource_type == 'api' %}
+            {% block resource_item_service %}
+                                
+                <li>            
+                <a href="{{ res.url }}" class="btn resource-url-analytics" target="_blank">
+                    <i class="icon-beaker"></i>{{ _('Endpoint') }}
+                </a>
+                </li>
+
+            {% endblock %}
+        {% endif %}
+
 {% endblock %}
 
 {% block resource_additional_information %}
@@ -80,3 +84,16 @@
   {% resource 'ckanext-publicamundi/table-collapsible-rows' %}
 {% endblock %}
 
+{% block data_preview %}
+    {{ h.preview_resource_or_ingested(pkg, res) }}
+{% endblock %}
+
+{% block page %}
+{{ super() }}
+{% snippet 'package/snippets/download_options.html', pkg=pkg, res=res %}
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{% resource 'ckanext-publicamundi/download_options' %}
+{% endblock %}

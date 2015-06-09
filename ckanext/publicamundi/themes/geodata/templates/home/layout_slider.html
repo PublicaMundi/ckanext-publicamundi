@@ -1,0 +1,21 @@
+{% set sorting = [(_('Latest Updated'), 'name desc')] %}
+
+<div role="main" class="hero">
+    {% snippet 'home/snippets/carousel.html' %}
+        <!-- <div class = "promotebox">-->
+            {#    {% snippet 'home/snippets/promoted.html' %} #}
+       <!-- </div> -->
+   
+    </div> 
+    {% snippet 'home/snippets/search.html' %}
+    
+</div>
+<div id="package-list-home">
+<div class="container">
+    <h4>{{ _('Latest Updates') }}</h4>
+    {% snippet 'snippets/package_list_home.html', packages = h.newest_datasets().get('results'), hide_resources=true %}
+</div>
+</div>
+</div>
+
+{% resource 'ckanext-publicamundi-geodata-theme/slider' %}

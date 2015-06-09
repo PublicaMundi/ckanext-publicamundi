@@ -22,39 +22,56 @@ class Thesaurus(Object):
 
     @property
     def vocabulary(self):
-        spec = vocabularies.get_by_name(self.name)
-        return spec.get('vocabulary') if spec else None
+        vocab = vocabularies.get_by_name(self.name)
+        return vocab.get('vocabulary') if vocab else None
 
     # Factory for Thesaurus
 
     @classmethod
-    def make(cls, name):
-        '''Create a new Thesaurus instance from it's machine-name name.
-        The metadata for this thesaurus are queried from vocabularies module.
+    def lookup(cls, name=None, title=None, for_keywords=False):
+        '''Lookup by name or title and return a Thesaurus instance.
 
-        Note: Maybe rename this class-method to lookup
+        This is a factory method that tries to instantiate a Thesaurus object
+        from a collection of well-known (mostly related to INSPIRE) vocabularies.
         '''
-        spec = vocabularies.get_by_name(name)
-        if spec:
+        
+        vocab = None
+        
+        if (name is None) and title:
+            name = vocabularies.normalize_thesaurus_title(title, for_keywords)
+        
+        if name:
+            vocab = vocabularies.get_by_name(name)
+        else:
+            raise ValueError('Expected a name/title lookup')
+
+        if vocab:
             kwargs = {
-               'title': spec.get('title'),
-               'name': spec.get('name'),
-               'reference_date': spec.get('reference_date'),
-               'version' : spec.get('version'),
-               'date_type': spec.get('date_type'),
+               'title': vocab.get('title'),
+               'name': vocab.get('name'),
+               'reference_date': vocab.get('reference_date'),
+               'version' : vocab.get('version'),
+               'date_type': vocab.get('date_type'),
             }
             return cls(**kwargs)
         else:
-            raise ValueError(
-                'Cannot find an INSPIRE thesaurus named "%s"' %(name))
+            raise ValueError('Cannot find a thesaurus named "%s"' %(name))
 
 @object_null_adapter()
 class ThesaurusTerms(Object):
     
     zope.interface.implements(IThesaurusTerms)
 
-    # Fixme: Maybe point here to a factory for named Thesaurus objects
     thesaurus = Thesaurus 
     
     terms = list
+
+    def iter_terms(self):
+        vocabulary = self.thesaurus.vocabulary.by_value
+        for t in self.terms:
+            yield vocabulary.get(t)
+    
+    __iter__ = iter_terms
+
+
 

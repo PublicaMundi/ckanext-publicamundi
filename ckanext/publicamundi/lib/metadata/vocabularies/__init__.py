@@ -8,17 +8,15 @@ vocabularies = {}
 
 # Import loader
 
-from ckanext.publicamundi.lib.metadata.vocabularies import json_loader
-
-munge = json_loader.munge
+from ckanext.publicamundi.lib.metadata.vocabularies.json_loader import (
+    make_vocabularies, normalize_keyword, normalize_thesaurus_title)
 
 def _update(data_file, name_prefix='', overwrite=False):
     '''Update the module-global vocabularies from external JSON data.
     '''
-    
-    for name, desc in json_loader.make_vocabularies(data_file):
+    for name, desc in make_vocabularies(data_file):
         assert overwrite or not (name in vocabularies), (
-            'A vocabulary named %r is allready loaded' % (name))
+            'A vocabulary named %r is already loaded' % (name))
         vocabularies[name_prefix + name] = desc
 
 # Utilities

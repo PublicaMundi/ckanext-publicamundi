@@ -13,15 +13,21 @@ pkg - A package object that the resources belong to.
 #}
 
 {% if not filtered_formats is defined %}{% set filtered_formats = [] %}{% endif %}
+{% if not 'data_table' in filtered_formats %}
+{% do filtered_formats.append('data_table') %}
+{% endif %}
 
 {% set file_resources = h.filtered_list(resources, 'resource_type', 'api', 'ne') %}
 {% set api_resources = h.filtered_list(resources, 'resource_type', 'api', 'eq') %}
 
 <section id="dataset-resources-files" 
     class="resources {% if resources and not file_resources %}hide{% endif %}"
- >
-    <header><h3 class="inline">{{ _('Data and Resources') }}</h3></header>
-    
+    >
+ <header><h3 class="inline">{{ _('Data and Resources') }}</h3>
+ {# {% block resource_download_ingested %}
+   {% endblock %} #}
+  </header>
+
     {% block resource_file_list %}
     {% if file_resources %}
     <ul class="resource-list">
@@ -67,4 +73,5 @@ pkg - A package object that the resources belong to.
     {% endif %} {# api_resources #}
     {% endblock %} {# resource_api_list #}
 </section>
+
 

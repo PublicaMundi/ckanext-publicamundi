@@ -1,23 +1,37 @@
 
 {% set validation_errors = result.validation.errors %}
 
+{% set edit_url = h.url_for('dataset_edit', id=result.name) %}
+{% set read_url = h.url_for('dataset_read', id=result.name) %}
+{% set dashboard_url = h.url_for('user_datasets', id=user) %}
+{% set title = result.title %}
+
 <div class="alert alert-info">
-    A dataset named <a href="{{ '/dataset/' ~ result.name }}">{{ result.title }}</a> was successfully imported.
+    {% trans %}
+    A dataset named <a href="{{ read_url }}">{{ title }}</a> was successfully imported.
+    {% endtrans %}
 </div>
 
 
 {% if validation_errors %}
+{% set validation_errors_count = result.validation.errors|count %}
+{% trans %}
 <p>
-    The dataset was created successfully. However, several <strong>({{ validation_errors|count }})</strong> validation errors were 
+    The dataset was created successfully. However, several <strong>({{ validation_errors_count }})</strong> validation errors were 
     found, and must be fixed before the dataset can be published.
 </p>
-</p>
-    You can review, edit and fix errors <a href="{{ '/dataset/edit/' ~ result.name }}">here</a>.
-    Note that, you can always view your datasets (published or not) at your personal <a href="{{ '/user/' ~ user }}" >dashboard</a>.
-</p>
-{% else %} {# validation_errors #}
+{% endtrans %}
+{% trans %}
 <p>
-    The imported dataset is perfecty valid! View the new dataset <a href="{{ '/dataset/' ~ result.name }}">here</a>.
+    You can review, edit and fix errors <a href="{{ edit_url }}">here</a>.
+    Note that, you can always view your datasets (published or not) at your personal <a href="{{ dashboard_url }}" >dashboard</a>.
 </p>
+{% endtrans %}
+{% else %} {# validation_errors #}
+{% trans %}
+<p>
+    The imported dataset is perfecty valid! View the new dataset <a href="{{ read_url }}">here</a>.
+</p>
+{% endtrans %}
 {% endif %}
 

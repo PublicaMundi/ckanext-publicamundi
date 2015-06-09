@@ -6,7 +6,7 @@
   {% if organizations %}
     <div class="wide">
       {% snippet "organization/snippets/organization_list.html", organizations=organizations %}
-    </div>
+  </div>
   {% else %}
     <p class="empty">
       {{ _('You are not a member of any organizations.') }}
@@ -15,4 +15,4 @@
       {% endif %}
     </p>
   {% endif %}
-{% endblock %}
+  {% endblock %}

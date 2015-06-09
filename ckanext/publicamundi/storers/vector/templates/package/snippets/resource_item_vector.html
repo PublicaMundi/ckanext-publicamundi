@@ -1,0 +1,10 @@
+{% if res.vectorstorer_resource and res.format in ['wfs'] %}
+        {% if res.format == 'wfs' %}
+            {% for fmt in h.vectorstorer_wfs_output_formats() %}
+            <option value="{{fmt.name}}" data-resource-type="vector" data-resource-layer="{{res.wfs_layer}}" data-resource-format="{{fmt.name}}">
+            {#   <a href="{{ h.vectorstorer_wfs_feature_url(res.wfs_server, res.wfs_layer, fmt.name) }}" target="_blank"
+                >#} {{ fmt.display_name|safe }} {#</a>#}
+            </option>
+            {% endfor %}
+            {% endif %} {# res.format #}
+{% endif %}

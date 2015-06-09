@@ -1,9 +1,10 @@
 import operator
 import datetime
+import urlparse
+import urllib
 
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
-
 from ckanext.publicamundi.lib import resource_ingestion
 
 def filtered_list(l, key, value, op='eq'):
@@ -65,4 +66,105 @@ def get_organization_objects(org_names=[]):
 
 def resource_ingestion_result(resource_id):
     return resource_ingestion.get_result(resource_id)
+
+#def get_ingested_raster_resources(package):
+#    raster_resources = []
+#    for res in package.get('resources'):
+#        if res.get('rasterstorer_resource'):
+#            raster_resources.append(res)
+#    return raster_resources
+
+#def get_ingested_vector_resources(package):
+#    vector_resources = []
+#    for res in package.get('resources'):
+#        if res.get('vectorstorer_resource'):
+#            vector_resources.append(res)
+#    return vector_resources
+
+_preferable_metadata_format = [
+        {'name':'INSPIRE',
+         'format':'xml'},
+        {'name': 'CKAN',
+        'format': 'json'}]
+
+_default_metadata_format = 'xml'
+
+# Returns the most suitable primary download format for each schema
+# based on _preferable_metadata_format list of dictionaries
+def get_primary_metadata_url(links, metadata_type):
+    pformat = _default_metadata_format
+
+    for mtype in _preferable_metadata_format:
+        if mtype.get('name') == metadata_type:
+            pformat = mtype.get('format')
+
+    url = ''
+    for link in links:
+        if link.get('title') == metadata_type and link.get('format') == pformat:
+            url = link.get('url')
+            break
+    return url
+
+def get_ingested_raster(package,resource):
+    ing_resources = []
+    for res in package.get('resources'):
+        if res.get('rasterstorer_resource') and res.get('parent_resource_id')==resource.get('id'):
+            ing_resources.append(res)
+    return ing_resources
+
+def get_ingested_vector(package,resource):
+    ing_resources = []
+    for resa in package.get('resources'):
+        # Ingested vector resources are derived from table which is derived from resource
+        # Finding all resources that are ingested from table that is created from original resource
+        if resa.get('vectorstorer_resource') and resa.get('parent_resource_id')==resource.get('id') and resa.get('format')=='data_table':
+            for resb in package.get('resources'):
+                if resb.get('vectorstorer_resource') and resb.get('parent_resource_id')==resa.get('id'):
+                    ing_resources.append(resb)
+    return ing_resources
+
+#def remove_get_param(request_url, param_key, param_val=None):
+#    parsed_url = urlparse.urlparse(request_url)
+#    parsed_query = urlparse.parse_qs(parsed_url.query)
+#    idxs_to_remove = []
+#
+#    if (param_key in parsed_query) and len(parsed_query) != 0:
+#        for idx in range(len(parsed_query[param_key])):
+#            if param_val:
+#                if parsed_query[param_key][idx] == param_val:
+#                    idxs_to_remove.append(idx)
+#            else:
+#                idxs_to_remove.append(idx)
+#
+#        for idx in reversed(idxs_to_remove):
+#            del parsed_query[param_key][idx]
+#
+#    new_query = urllib.urlencode(parsed_query, True)
+#
+#    new_url = urlparse.ParseResult(
+#        parsed_url.scheme,
+#        parsed_url.netloc,
+#        parsed_url.path,
+#        parsed_url.params,
+#        new_query,
+#        parsed_url.fragment).geturl()
+#    return new_url
+
+#def add_get_param(current_url, param_key, param_val):
+#    parsed_url = urlparse.urlparse(current_url)
+#    parsed_query = urlparse.parse_qs(parsed_url.query)
+#    if param_key not in parsed_query:
+#        parsed_query[param_key] = []
+#        parsed_query[param_key].append(param_val)
+#    else:
+#        parsed_query[param_key][0] = (param_val)
+#    new_query = urllib.urlencode(parsed_query, True)
+#    new_url = urlparse.ParseResult(
+#        parsed_url.scheme,
+#        parsed_url.netloc,
+#        parsed_url.path,
+#        parsed_url.params,
+#        new_query,
+#        parsed_url.fragment).geturl()
+#    return new_url
 

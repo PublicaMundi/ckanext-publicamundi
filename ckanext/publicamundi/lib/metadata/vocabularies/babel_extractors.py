@@ -8,7 +8,7 @@ from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 # Babel string extraction functions
 
 def extract_json(fileobj, keywords, comment_tags, options):
-    """Extract messages from XXX files.
+    """Extract messages from files.
     :param fileobj: the file-like object the messages should be extracted from
     :param keywords: a list of keywords (i.e. function names) that should be recognized as translation functions
     :param comment_tags: a list of translator tags to search for and include in the results

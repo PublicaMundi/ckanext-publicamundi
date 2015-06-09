@@ -49,7 +49,7 @@ setup(
         publicamundi-setup = ckanext.publicamundi.commands:Setup
 
         publicamundi-cleanup = ckanext.publicamundi.commands:Cleanup
-
+        
         publicamundi = ckanext.publicamundi.commands:Command
         
         #publicamundi-example1 = ckanext.publicamundi.commands:Example1

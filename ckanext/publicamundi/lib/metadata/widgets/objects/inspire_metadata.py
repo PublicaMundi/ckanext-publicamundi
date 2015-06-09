@@ -104,7 +104,7 @@ class InspireEditWidget(EditObjectWidget):
     def get_field_template_vars(self):
         
         # Note We are going to override some field titles because their full names 
-        # seem quite verbose when placed in our form (as inputs are allready grouped
+        # seem quite verbose when placed in our form (as inputs are already grouped
         # in accordion sections).
         
         return {

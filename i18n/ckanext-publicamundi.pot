@@ -283,6 +283,13 @@ msgstr ""
 msgid "Import Dataset"
 msgstr ""
 
+#: ckanext/publicamundi/templates/package/import_metadata.html:17
+msgid ""
+" <p>Create a new dataset by importing an existing <strong>XML</strong> "
+"metadata file. You can either upload a local file from your computer, or use "
+"a link (if already published somewhere).</p> "
+msgstr ""
+
 #: ckanext/publicamundi/templates/package/new_package_metadata.html:3
 msgid "Add metadata to the dataset"
 msgstr ""
@@ -367,6 +374,84 @@ msgstr ""
 #: ckanext/publicamundi/themes/geodata/templates/snippets/license.html:4
 msgid "License"
 msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:13
+msgid "Utilities Communication"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:16
+msgid "Transportation"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:19
+msgid "Structure"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:22
+msgid "Society"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:25
+msgid "Planning Cadastre"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:28
+msgid "Oceans"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:31
+#: ckanext/publicamundi/themes/geodata/templates/spatial/snippets/spatial_query.html:17
+msgid "Location"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:34
+msgid "Intelligence Military"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:37
+msgid "Inland Waters"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:40
+msgid "Imagery Base Maps Earth Cover"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:43
+msgid "Health"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:46
+msgid "Geoscientific Information"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:49
+msgid "Farming"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:52
+msgid "Environment"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:55
+msgid "Elevation"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:58
+msgid "Economy"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:61
+msgid "Climatology Meteorology Atmposphere"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:64
+msgid "Boundaries"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/menu_list.html:67
+msgid "Biota"
+msgstr ""
+
 
 #: ckanext/publicamundi/templates/package/search.html:19
 #: ckanext/publicamundi/themes/geodata/templates/package/search.html:44
@@ -494,6 +579,36 @@ msgstr ""
 
 #: ckanext/publicamundi/templates/package/snippets/import_metadata_form.html:52
 msgid "Import"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_result.html:10
+#, python-format
+msgid ""
+" A dataset named <a href=\"%(read_url)s\">%(title)s</a> was successfully "
+"imported. "
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_result.html:18
+#, python-format
+msgid ""
+" <p> The dataset was created successfully. However, several "
+"<strong>(%(validation_errors_count)s)</strong> validation errors were found, "
+"and must be fixed before the dataset can be published. </p> "
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_result.html:24
+#, python-format
+msgid ""
+" <p> You can review, edit and fix errors <a href=\"%(edit_url)s\">here</a>. "
+"Note that, you can always view your datasets (published or not) at your "
+"personal <a href=\"%(dashboard_url)s\" >dashboard</a>. </p> "
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/import_metadata_result.html:31
+#, python-format
+msgid ""
+" <p> The imported dataset is perfecty valid! View the new dataset <a "
+"href=\"%(read_url)s\">here</a>. </p> "
 msgstr ""
 
 #: ckanext/publicamundi/templates/package/snippets/package_basic_fields.html:20
@@ -1216,6 +1331,12 @@ msgid "Maps"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/footer.html:40
+#: ckanext/publicamundi/themes/geodata/templates/header.html:38
+#: ckanext/publicamundi/themes/geodata/templates/home/index.html:114
+msgid "Developers"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/footer.html:40
 #: ckanext/publicamundi/themes/geodata/templates/header.html:39
 #: ckanext/publicamundi/themes/geodata/templates/home/index.html:114
 msgid "About"
@@ -1338,6 +1459,23 @@ msgid ""
 "</ul></p> </div> "
 msgstr ""
 
+#: ckanext/publicamundi/themes/geodata/templates/home/snippets/carousel.html:3
+msgid "Blue flag beaches 2010"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/home/snippets/carousel.html:6
+#: ckanext/publicamundi/themes/geodata/templates/home/snippets/carousel.html:15
+msgid "Railway network"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/home/snippets/carousel.html:9
+msgid "City blocks Kalamaria"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/home/snippets/carousel.html:12
+msgid "Urban & rural regions"
+msgstr ""
+
 #: ckanext/publicamundi/themes/geodata/templates/home/snippets/promoted.html:8
 msgid "Open Data"
 msgstr ""
@@ -1346,6 +1484,15 @@ msgstr ""
 msgid ""
 "Here you will find data, tools, and resources to conduct research, develop "
 "web and mobile applications, design data visualizations, and more."
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/home/snippets/promoted.html:16
+#: ckanext/publicamundi/themes/geodata/templates/home/snippets/promoted_new.html:6
+msgid "Learn More"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/home/snippets/promoted_new.html:3
+msgid "Open data, accessible to everyone!"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/home/snippets/search.html:12
@@ -1437,6 +1584,10 @@ msgstr ""
 msgid "Additional info"
 msgstr ""
 
+#: ckanext/publicamundi/themes/geodata/templates/snippets/facet_list.html:64
+msgid "A...Z "
+msgstr ""
+
 #: ckanext/publicamundi/themes/geodata/templates/snippets/facet_list.html:72
 msgid "Show More {facet_type}"
 msgstr ""
@@ -1448,6 +1599,22 @@ msgstr ""
 #: ckanext/publicamundi/themes/geodata/templates/snippets/facet_list.html:78
 msgid "There are no {facet_type} that match this search"
 msgstr ""
+
+#: ckanext/publicamundi/templates/user/snippets/filter_bar.html:39
+#: ckanext/publicamundi/templates/user/snippets/filter_bar.html:82
+msgid "<span class=\"all-types\"></span>All"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/snippets/filter_bar.html:55
+#: ckanext/publicamundi/templates/user/snippets/filter_bar.html:85
+msgid "Status"
+msgstr ""
+
+#: ckanext/publicamundi/templates/user/snippets/filter_bar.html:61
+#: ckanext/publicamundi/templates/user/snippets/filter_bar.html:87
+msgid "<span class=\"all-statuses\"></span>All"
+msgstr ""
+
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/license.html:15
 msgid "This dataset satisfies the Open Definition."
@@ -1550,6 +1717,14 @@ msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/social.html:3
 msgid "Share"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/spatial/snippets/spatial_query.html:17
+msgid "Location"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/spatial/snippets/spatial_query.html:18
+msgid "Clear"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/user/edit.html:7

@@ -9,8 +9,8 @@
             <li>
                 <form class="section site-search simple-input" action="{% url_for controller='package', action='search' %}" method="get">
                     <div class="field">
-                    <label for="field-sitewide-search">{{ _('Search Datasets') }}</label>
-                    <input id="field-sitewide-search" type="text" name="q" placeholder="{{ _('Search datasets...') }}" />
+                    <label for="field-sitewide-search">{{ _('Search') }}</label>
+                    <input id="field-sitewide-search" type="text" name="q" placeholder="{{ _('Search...') }}" />
                     <button class="btn-search" type="submit"><i class="icon-search"></i></button>
                     </div>
                 </form>
@@ -28,18 +28,8 @@
         <div class="quarter footer-links">
             <ul class="unstyled">
             {% block footer_links_ckan %}
-              {% set api_url = 'http://docs.ckan.org/en/{0}/api.html'.format(g.ckan_doc_version) %}
-              {#<li><a href="{{ api_url }}">{{ _('CKAN API') }}</a></li>
-              <li><a href="http://www.okfn.org/">{{ _('Open Knowledge Foundation') }}</a></li>
-              <li><a href="http://www.opendefinition.org/okd/"><img src="http://assets.okfn.org/images/ok_buttons/od_80x15_blue.png"></a></li> #}
-            {{ h.build_nav_main(
-                ('search', _('Datasets')),
-                ('group_index', _('Topics')),
-                ('organizations_index', _('Organizations')),
-                ('maps', _('Maps')),
-                ('about', _('About'))
-                ) }}
-            {% endblock %}
+              {% snippet 'snippets/main_menu.html' %}                            
+                {% endblock %}
             </ul>
         </div>
         
@@ -49,28 +39,25 @@
         <div class="quarter footer-links">
             <ul class="unstyled">
                 <li><a href="http://www.imis.athena-innovation.gr"> {{ _('IMIS') }} </a></li>
-                <li><a href="http://www.rasdaman.com"> {{ _('Rasdaman') }} </a></li>
-                <li><a href="http://www.geolabs.fr"> {{ _('Geolabs') }} </a></li>
-                <li><a href="http://www.getmap.gr"> {{ _('GET') }} </a></li>
+                <li><a href="http://inspire.ec.europa.eu/"> {{ _('INSPIRE') }} </a></li>
+                <li><a href="http://open-data.europa.eu/en/data/"> {{ _('EU Open Data Portal') }} </a></li>
             </ul>
         </div>
 
         <div class="quarter footer-links">
             <ul class="unstyled">
             <li><a href="http://www.publicamundi.eu">PublicaMundi</a></li>
-            <li><a href="https://github.com/PublicaMundi">Github</a></li>
-            <li><a href="https://twitter.com/PublicaMundi">Twitter</a></li>
+            <li><a href="https://twitter.com/geodatagovgr">Twitter</a></li>
+            <li><a href="https://github.com/PublicaMundi/geodata.gov.gr">Github</a></li>
+            <li><a href="https://github.com/PublicaMundi/geodata.gov.gr/issues/new">{{_('Report issue') }}</a></li>
             </ul>
         </div>   
       
-
           {% block footer_attribution %}
-        {#<p>{% trans %}{{ _('Powered by')}} <a class="hide-text ckan-footer-logo" href="http://ckan.org">CKAN</a>{% endtrans %}</p> #}
         {% endblock %}
               
-  </div>
-    
-       {% endblock %}
+    </div>
+    {% endblock %}
   </div>
 
   {% block footer_debug %}

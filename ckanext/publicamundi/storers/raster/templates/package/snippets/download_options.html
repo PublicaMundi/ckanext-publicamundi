@@ -1,0 +1,40 @@
+{% ckan_extends %}
+{# {% extends "package/snippets/download_options.html" %} #}
+
+{% set available_formats = [
+            {'name':'csv', 
+             'title': 'CSV',
+             },
+            {'name':'jpeg', 
+             'title': 'JPEG',
+             },
+            {'name':'jpeg2000', 
+             'title': 'JPEG2000',
+             },
+            {'name':'netcdf', 
+             'title': 'NetCDF',
+             },
+            {'name':'png', 
+             'title': 'PNG',
+             },
+            {'name':'tiff', 
+             'title': 'TIFF',
+             }]
+             %}
+
+{% block download_options_items %}
+{% set raster_resources = h.get_ingested_raster(pkg,res) %}
+{{ super() }}
+    {% for raster_res in raster_resources %}
+        {% if raster_res.rasterstorer_resource and raster_res.format in ['wcs'] %}
+            {% if raster_res.format == 'wcs' %}
+                {% for format in available_formats %}
+                <option value="{{format.name}}" data-resource-type="raster" data-resource-id="{{raster_res.wcs_coverage}}" data-resource-format="{{format.name}}" href="#" target="_blank">{{format.title}}
+                </option>
+                {% endfor %}
+            {% endif %} {# res.format #}
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+
+

@@ -1,0 +1,45 @@
+{% set layer = task_result.layers[0] %}
+
+<div class="info ">
+    <label>{{ _('Resource Information')}}</label> 
+    GDAL Driver : {{task_result.gdal_driver}}</br>
+    Layer Name : {{layer.layer_name}}</br>
+    Layer Geometry : {{layer.layer_geometry}}</br>
+    {% if layer.layer_srs==-1 %}
+      Layer Srs : {{ _('SRS not found')}}</br>
+    {% else %}
+      Layer Srs : {{layer.layer_srs}}</br>
+    {% endif %}
+</div>
+</br>
+<div>
+
+   <input type="checkbox" id="checkbox_{{layer.idx}}"  name="checkbox_layer" style="display: none;" checked>
+    <div id="divproj" class="form-select ">
+    
+    <label>{{ _('Layer Name')}}</label> 
+    
+    <input  id="layer_name_{{layer.idx}}" type="text" name="layer_name_input"  value="{{layer.layer_name}}">
+    </br>
+    <label>{{ _('Projection')}}</label> 
+    {% if layer.layer_srs==-1 %}
+    <input  id="layer_srs_{{layer.idx}}" type="text" name="srs_input">
+    {% else %}
+    <input  id="layer_srs_{{layer.idx}}" type="text" name="srs_input" value="{{layer.layer_srs}}">
+    {% endif %}
+     
+    <label>{{ _('Layer Encoding')}}</label> 
+    
+    <input  id="layer_encoding_{{layer.idx}}" type="text" name="layer_encoding_input">
+    </br>
+    </div>
+
+
+    <div id="proj-error" class="projection-error"></div>
+
+
+</div>
+
+ 
+ 
+ 
