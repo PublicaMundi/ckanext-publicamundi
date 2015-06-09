@@ -187,20 +187,20 @@ class IReferenceSystem(IObject):
 
     code = zope.schema.Choice(
             title= u'Coordinate reference system',
-            description = u'',
+            description = u'Geographical coordinate reference system',
             vocabulary = vocabularies.get_by_name('reference-systems').get('vocabulary'),
-            default = '2100',
+            default = '2100', # Todo read from configuration 
             required = True)
 
     code_space = zope.schema.NativeStringLine(
             title = u'Reference System code-space',
-            description = u'',
+            description = u'Reference System code-space',
             default = 'urn:ogc:def:crs:EPSG',
             required = True)
 
     version = zope.schema.NativeStringLine(
             title = u'Reference System version',
-            description = u'',
+            description = u'Reference System version',
             default = '6.11.2',
             required = True)
 

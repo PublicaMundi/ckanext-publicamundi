@@ -79,7 +79,7 @@ class InspireMetadata(BaseMetadata):
     lineage = None
     
     spatial_resolution = SpatialResolutionFactory()
-    reference_system = None
+    reference_system = ReferenceSystem
 
     conformity = list 
     
@@ -291,7 +291,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         #    code_space = md.referenceSystem.codeSpace
         reference_system = None
         if md.referencesystem:
-            reference_system = ReferenceSystem(code = md.referencesystem.code)
+            reference_system = ReferenceSystem(code=md.referencesystem.code)
 
             if md.referencesystem.codeSpace:
                 reference_system.code_space = md.referencesystem.codeSpace
