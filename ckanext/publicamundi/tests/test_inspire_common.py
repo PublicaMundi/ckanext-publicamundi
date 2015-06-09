@@ -87,20 +87,36 @@ def test_cnf2():
 
 # Fixtures
 
-# Find schema validation errors: originating_vocabulary,date_type
+# Find schema validation errors: date_type
 fkw1 = FreeKeyword(
     value = u"val",
-    reference_date = datetime.date(1000,1,1),
+    originating_vocabulary = u"Vocabulary",
+    reference_date = datetime.date(800,1,1),
     date_type = "creationn")
 
-# Find schema validation invariant error - not all fields set
+# Find schema validation error - value not set
 fkw2 = FreeKeyword(
+    originating_vocabulary = u"Vocabulary",
+    reference_date = datetime.date(800,1,1),
+    date_type = "creation")
+
+# Find schema validation invariant error - dates set without originating vocabulary
+fkw3 = FreeKeyword(
     value = u"val",
     reference_date = datetime.date.today(),
     date_time = 'creation')
 
-# Validate correct schema
+# Find schema validation invariant error - originating vocabulary without dates
+fkw4 = FreeKeyword(
+    value = u"val",
+    originating_vocabulary = u"Vocabulary")
+
+# Only value set - correct
 fkw_correct = FreeKeyword(
+    value = u"val")
+
+# Validate correct schema
+fkw_correct_2 = FreeKeyword(
     value = u"val",
     originating_vocabulary = u"original",
     reference_date = datetime.date.today(),
@@ -109,18 +125,32 @@ fkw_correct = FreeKeyword(
 # Tests
 
 def test_fkw1():
-    '''Free Keywords validation errors: originating_vocabulary,date_type'''
+    '''Free Keywords validation errors: date_type'''
     assert_faulty_keys(fkw1,
         expected_keys=set(['date_type']))
 
 def test_fkw2():
-    '''Free Keywords validation invariant error - not all fields set'''
+    '''Free Keywords validation errors: date_type'''
     assert_faulty_keys(fkw2,
-        expected_keys=set(['__after']), expected_invariants=["You need to fill in the rest free-keyword fields"])
+        expected_keys=set(['value']))
 
 def test_fkw3():
+    '''Free Keywords validation invariant error - not all fields set'''
+    assert_faulty_keys(fkw3,
+        expected_keys=set(['__after']), expected_invariants=["You need to fill in the rest free-keyword fields"])
+
+def test_fkw4():
+    '''Free Keywords validation invariant error - not all fields set'''
+    assert_faulty_keys(fkw4,
+        expected_keys=set(['__after']), expected_invariants=["You need to fill in the rest free-keyword fields"])
+
+def test_fkw5():
     '''Free Keywords correct schema'''
     assert_faulty_keys(fkw_correct)
+
+def test_fkw6():
+    '''Free Keywords correct schema 2'''
+    assert_faulty_keys(fkw_correct_2)
 
 
 #
@@ -178,11 +208,11 @@ te2 = TemporalExtent(
 
 # Find schema invariant error - start date greater than end date
 te3 = TemporalExtent(
-    start = datetime.date(2015,01,01),end = datetime.date.today())
+    start = datetime.date(2555,01,01),end = datetime.date.today())
 
 # Validate correct schema
 te_correct = TemporalExtent(
-    start = datetime.date.today(), end = datetime.date(2015,01,01))
+    start = datetime.date.today(), end = datetime.date(2555,01,01))
 
 # Tests
 
@@ -252,6 +282,46 @@ def test_sr5():
 
 def test_sr6():
     assert_faulty_keys(sr6)
+
+#
+# Reference system
+#
+
+# Fixtures
+
+# Find reference system non-existing code
+rs1 = ReferenceSystem(code='210000')
+
+# Find reference system unicode version error
+rs2 = ReferenceSystem(code='2100', code_space ='CustomSpace', version=u'5:2')
+
+# Reference system correct
+rs4 = ReferenceSystem(code='3857', code_space='CustomSpace', version='123')
+
+# Reference system correct
+rs5 = ReferenceSystem(code='2100')
+
+# Tests
+
+def test_rs1():
+    '''Reference system non-existing code error'''
+    assert_faulty_keys(rs1,
+        expected_keys=set(['code']))
+
+def test_rs2():
+    ''' Find reference system unicode version error'''
+    assert_faulty_keys(rs2,
+        expected_keys=set(['version']))
+
+def test_rs_correct():
+    '''Reference system correct schema '''
+    assert_faulty_keys(rs4)
+
+def test_rs_correct_2():
+    '''Reference system correct schema '''
+    assert_faulty_keys(rs5)
+    assert rs1.code_space == 'urn:ogc:def:crs:EPSG'
+    assert rs1.version == '6.11.2'
 
 #
 # Main 

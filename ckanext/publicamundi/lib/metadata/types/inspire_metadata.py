@@ -79,7 +79,8 @@ class InspireMetadata(BaseMetadata):
     lineage = None
     
     spatial_resolution = SpatialResolutionFactory()
-    
+    reference_system = None
+
     conformity = list 
     
     access_constraints = list
@@ -286,6 +287,16 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
                         denominator = int(md.identification.denominators[i])))
         conf_list = []
         invalid_degree = False
+        #if md.referencesystem.codeSpace:
+        #    code_space = md.referenceSystem.codeSpace
+        reference_system = None
+        if md.referencesystem:
+            reference_system = ReferenceSystem(code = md.referencesystem.code)
+
+            if md.referencesystem.codeSpace:
+                reference_system.code_space = md.referencesystem.codeSpace
+            if md.referencesystem.version:
+                reference_system.version = md.referencesystem.version
 
         if len(md.dataquality.conformancedate) != len(md.dataquality.conformancedatetype):
             # Date list is unequal to datetype list, this means wrong XML so exception is thrown
@@ -349,6 +360,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         obj.revision_date = revision_date
         obj.lineage = unicode(md.dataquality.lineage)
         obj.spatial_resolution = spatial_list
+        obj.reference_system = reference_system
         obj.conformity = conf_list
         obj.access_constraints = limit_list
         obj.limitations = constr_list
