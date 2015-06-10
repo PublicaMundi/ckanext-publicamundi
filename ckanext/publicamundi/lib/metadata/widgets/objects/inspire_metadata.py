@@ -137,6 +137,11 @@ class InspireEditWidget(EditObjectWidget):
                     'rows': 5,
                 }
             },
+            'reference_system': {
+                'title': _('Coordinate Reference System'),
+                'description': _(
+                    'The geographical coordinate system (CRS) in which resources are provided.'),
+            },
             'languagecode': {
                 'title': _('Language'),
             },
@@ -161,6 +166,7 @@ class InspireEditWidget(EditObjectWidget):
             ('publication_date', None),
             ('revision_date', None),
             ('lineage', 'lineage.inspire'),
+            ('reference_system', None),
             ('spatial_resolution', 'spatial_resolution.inspire'),
             ('responsible_party', 'contacts.inspire'),
             ('conformity', 'conformity.inspire'),
@@ -220,8 +226,9 @@ class TableInspireReadWidget(TableObjectReadWidget):
            'creation_date',
            'publication_date',
            'revision_date',
-           # Quality 
+           # Quality - Validity 
            'lineage',
+           'reference_system',
            'spatial_resolution',
            # Conformity
            'conformity',

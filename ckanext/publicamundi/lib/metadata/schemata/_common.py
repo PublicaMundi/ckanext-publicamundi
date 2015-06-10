@@ -186,24 +186,23 @@ class ISpatialResolution(IObject):
 class IReferenceSystem(IObject):
 
     code = zope.schema.Choice(
-            title= u'Coordinate reference system',
-            description = u'Geographical coordinate reference system',
-            vocabulary = vocabularies.get_by_name('reference-systems').get('vocabulary'),
-            default = '2100', # Todo read from configuration 
-            required = True)
+        title= u'System',
+        description = u'Coordinate Reference System',
+        vocabulary = vocabularies.get_by_name('reference-systems').get('vocabulary'),
+        default = '2100', # Todo read from configuration 
+        required = True)
 
     code_space = zope.schema.NativeStringLine(
-            title = u'Reference System code-space',
-            description = u'Reference System code-space',
-            default = 'urn:ogc:def:crs:EPSG',
-            required = True)
+        title = u'Code-Space',
+        description = u'Reference System Code-Space',
+        default = 'urn:ogc:def:crs:EPSG',
+        required = True)
 
     version = zope.schema.NativeStringLine(
-            title = u'Reference System version',
-            description = u'Reference System version',
-            default = '6.11.2',
-            required = True)
-
+        title = u'Version',
+        description = u'Reference System version',
+        default = '6.11.2',
+        required = True)
 
 class IConformity(IObject):
 

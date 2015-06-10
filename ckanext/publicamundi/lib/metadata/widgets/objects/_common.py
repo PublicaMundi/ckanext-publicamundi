@@ -578,3 +578,31 @@ class ConformityReadWidget(ReadObjectWidget):
     def get_template(self):
         return None 
 
+#
+# IReferenceSystem
+#
+
+@object_widget_adapter(schemata.IReferenceSystem)
+class ReferenceSystemEditWidget(EditObjectWidget):
+    
+    def get_field_qualifiers(self):
+        return OrderedDict([
+            ('code', 'select2'),
+        ])
+
+    def get_field_template_vars(self):
+        return {
+            'code': {
+                'title': _('CRS Code'),
+            },
+        }
+
+    def get_template(self):
+        return None 
+
+@object_widget_adapter(schemata.IReferenceSystem)
+class ReferenceSystemReadWidget(ReadObjectWidget):
+
+    def get_template(self):
+        return None 
+
