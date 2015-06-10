@@ -13,6 +13,11 @@
              },
 
              ] %}
+
+{# Image preloading #}
+{% for slide in slides %}
+    <img class="hidden" width="1" height="1" src='/images/slides/{{slide.name}}.png'></img> 
+{% endfor %}
 <div id="carousel-homepage" class="carousel slide" data-interval="6000" >
 {% snippet 'home/snippets/promoted_new.html' %}
     <!-- Indicators -->
