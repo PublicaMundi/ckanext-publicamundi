@@ -87,9 +87,8 @@ class UserController(BaseController):
     def _filter_resources_by_status(self, resources_dict, sorting):
         filtered_resources = []
         for resource in resources_dict:
-            res_ingestion = {}
-            if resource.get('vectorstorer_resource') or resource.get('rasterstorer_resource'):
-                res_ingestion = resource_ingestion.get_result(resource["id"])
+            #res_ingestion = {}
+            res_ingestion = resource_ingestion.get_result(resource["id"])
             #res_ingestion = {'found':True, 'status':'published', 'storer_type':'raster'}
             if res_ingestion.get('found'):
                 if sorting == accepted_sortings[0]:
