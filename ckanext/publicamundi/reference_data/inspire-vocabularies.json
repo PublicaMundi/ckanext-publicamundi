@@ -1121,7 +1121,33 @@
             "(g) the interests or protection of any person who supplied the information requested on a voluntary basis without being under, or capable of being put under, a legal obligation to do so, unless that person has consented to the release of the information concerned",
             "(h) the protection of the environment to which such information relates, such as the location of rare species."
             ]
+    },
+    "Reference Systems" : {
+        "terms" : {
+            "2100": "GGRS87",
+            "3857": "WGS84 Web Mercator",
+            "4326": "WGS84",
+            "4936": "ETRS89-XYZ",
+            "4937": "ETRS89-GRS80h",
+            "4258": "ETRS89-GRS80",
+            "3035": "ETRS89-LAEA",
+            "3034": "ETRS89-LCC",
+            "3038": "ETRS89-TM26N",
+            "3039": "ETRS89-TM27N",
+            "3040": "ETRS89-TM28N",
+            "3041": "ETRS89-TM29N",
+            "3042": "ETRS89-TM30N",
+            "3043": "ETRS89-TM31N",
+            "3044": "ETRS89-TM32N",
+            "3045": "ETRS89-TM33N",
+            "3056": "ETRS89-TM34N",
+            "3047": "ETRS89-TM35N",
+            "3048": "ETRS89-TM36N",
+            "3049": "ETRS89-TM37N",
+            "3050": "ETRS89-TM38N",
+            "3051": "ETRS89-TM39N",
+            "5730": "EVRS",
+            "7409": "ETRS89-GRS80-EVRS"
+        }
     }
-
-
 }

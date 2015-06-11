@@ -2,6 +2,10 @@ body {
     font-family: sans-serif;
 }
 
+hr {
+    margin: 15px 0px;
+}
+
 header > h1.inline,
 header > h2.inline,
 header > h3.inline,

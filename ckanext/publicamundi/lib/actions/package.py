@@ -145,7 +145,8 @@ def dataset_import(context, data_dict):
 
     # Prepare package dict
     
-    pkg_dict = obj.deduce_basic_fields()
+    pkg_dict = {'version': '1.0'}
+    pkg_dict.update(obj.deduce_basic_fields())
     pkg_dict.update({ 
         'owner_org': owner_org,
         'type': 'dataset',

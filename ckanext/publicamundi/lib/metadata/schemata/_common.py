@@ -183,6 +183,27 @@ class ISpatialResolution(IObject):
                 raise zope.interface.Invalid(
                     'At least of one of (i) a denominator, or (ii) a distance must be given.')
 
+class IReferenceSystem(IObject):
+
+    code = zope.schema.Choice(
+        title= u'System',
+        description = u'Coordinate Reference System',
+        vocabulary = vocabularies.get_by_name('reference-systems').get('vocabulary'),
+        default = '2100', # Todo read from configuration 
+        required = True)
+
+    code_space = zope.schema.NativeStringLine(
+        title = u'Code-Space',
+        description = u'Reference System Code-Space',
+        default = 'urn:ogc:def:crs:EPSG',
+        required = True)
+
+    version = zope.schema.NativeStringLine(
+        title = u'Version',
+        description = u'Reference System version',
+        default = '6.11.2',
+        required = True)
+
 class IConformity(IObject):
 
     title = zope.schema.Text(

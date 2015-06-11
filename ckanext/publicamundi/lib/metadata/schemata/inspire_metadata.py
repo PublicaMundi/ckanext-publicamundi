@@ -203,6 +203,11 @@ class IInspireMetadata(IBaseMetadata):
             title = u'Resolution'))
     spatial_resolution.value_type.setTaggedValue('allow-partial-update', False)
 
+    reference_system = zope.schema.Object(IReferenceSystem,
+        title = u'Coordinate Reference System',
+        description = u'Coordinate Reference System',
+        required = False)
+    
     # Conformity
 
     conformity = zope.schema.List(

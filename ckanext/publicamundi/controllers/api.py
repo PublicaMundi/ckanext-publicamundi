@@ -87,7 +87,7 @@ class Controller(BaseController):
         # The result will be calculated as the merge of matches from 2 sources:
         #  * a static list of application-domain formats supplied at configuration time 
         #  * a dynamic list of formats supplied for other resources: that's what CKAN's 
-        #    action `format_autocomplete` allready does.
+        #    action `format_autocomplete` already does.
 
         results = []
         

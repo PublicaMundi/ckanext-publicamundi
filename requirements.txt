@@ -9,11 +9,11 @@ zope.schema==4.4
 zope.component==4.1
 zope.dottedname
 z3c.schema
-owslib>=0.8.10
 inflection
 unidecode
 pytz
 isodate
 dictdiffer
 pytidylib
+-e git+https://github.com/PublicaMundi/owslib.git@dev.publicamundi.eu#egg=owslib
 -e git+https://github.com/PublicaMundi/pycsw.git@dev.publicamundi.eu#egg=pycsw

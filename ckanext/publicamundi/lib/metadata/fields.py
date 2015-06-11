@@ -200,7 +200,7 @@ def build_adaptee(field, expand_collection=True):
     formatting, widgets etc.).
     '''
 
-    # Load (if not allready) the object-factory lookup function. 
+    # Load (if not already) the object-factory lookup function. 
     # Note it must be lazily loaded, as is not available at module's load time.
     from ckanext.publicamundi.lib.metadata import get_object_factory
     
