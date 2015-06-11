@@ -87,7 +87,7 @@
           <gmd:date>
             <gmd:CI_Date>
               <gmd:date>
-                <gco:DateTime>{{ data.creation_date }}</gco:DateTime>
+                <gco:Date>{{ data.creation_date }}</gco:Date>
               </gmd:date>
               <gmd:dateType>
                   <gmd:CI_DateTypeCode
@@ -103,7 +103,7 @@
           <gmd:date>
             <gmd:CI_Date>
               <gmd:date>
-                <gco:DateTime>{{ data.publication_date }}</gco:DateTime>
+                <gco:Date>{{ data.publication_date }}</gco:Date>
               </gmd:date>
               <gmd:dateType>
                 <gmd:CI_DateTypeCode
@@ -119,7 +119,7 @@
           <gmd:date>
             <gmd:CI_Date>
               <gmd:date>
-                <gco:DateTime>{{ data.revision_date }}</gco:DateTime>
+                <gco:Date>{{ data.revision_date }}</gco:Date>
               </gmd:date>
               <gmd:dateType>
                 <gmd:CI_DateTypeCode

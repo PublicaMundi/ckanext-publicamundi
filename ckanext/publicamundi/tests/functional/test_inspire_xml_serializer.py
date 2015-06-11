@@ -33,23 +33,31 @@ class TestController(BaseTestController):
 
     @nose.tools.istest
     def test_from_xml(self):
-        # 3.xml contains wrong thesaurus name, fails as invariant
-        yield self._from_xml, 'tests/samples/3.xml', set(['keywords', 'responsible_party', 'contact'])
-        # 3b.xml fails on temporal extent
-        yield self._from_xml, 'tests/samples/3b.xml', set(['languagecode', 'responsible_party', 'contact'])
-        # aktogrammh.xml fails on several fields during validation
-        yield self._from_xml, 'tests/samples/aktogrammh.xml', set([
+        # test1.xml contains wrong thesaurus name, fails as invariant
+        yield self._from_xml, 'tests/samples/test1.xml', set(['keywords', 'responsible_party', 'contact'])
+        # test2.xml fails on temporal extent
+        yield self._from_xml, 'tests/samples/test2.xml', set(['languagecode', 'responsible_party', 'contact'])
+        # test3.xml fails on several fields during validation
+        yield self._from_xml, 'tests/samples/test3.xml', set([
             'responsible_party', 'locator', 'temporal_extent'])
-        # dhmosia_kthria.xml fails on several fields during validation
-        yield self._from_xml, 'tests/samples/dhmosia_kthria.xml', set([
-            'locator', 'temporal_extent'])
-        # full.xml fails during etree parse, why?
-        #yield self._from_xml, 'tests/samples/full.xml', set([])
+
+    @nose.tools.istest
+    def test_from_xml_real(self):
+        # __after: creation date later than publication
+        yield self._from_xml, 'tests/samples/12e4e303-6fe8-4f95-b1cb-991b0c3b6c92.xml', set(['__after'])
+        # __after: creation date later than publication
+        yield self._from_xml, 'tests/samples/d59c2895-49c0-416f-a77e-122459cc8cac.xml', set(['__after'])
+        # resource locator not present
+        yield self._from_xml, 'tests/samples/57d0f331-6950-4deb-a2f6-30e560915a2e.xml', set(['locator'])
+        # valid
+        yield self._from_xml, 'tests/samples/9e109365-b9eb-4500-b664-4f3962c4d6e7.xml', set([])
 
     @nose.tools.istest
     def test_to_xsd(self):
-        yield self._validate_with_xsd, 'inspire1', 'tests/samples/3.xml', False
-        yield self._validate_with_xsd, 'inspire1', 'tests/samples/aktogrammh.xml', True
+        yield self._validate_with_xsd, 'inspire1', 'tests/samples/test1.xml', False
+        yield self._validate_with_xsd, 'inspire1', 'tests/samples/test2.xml', False
+        yield self._validate_with_xsd, 'inspire1', 'tests/samples/12e4e303-6fe8-4f95-b1cb-991b0c3b6c92.xml', True
+        yield self._validate_with_xsd, 'inspire1', 'tests/samples/57d0f331-6950-4deb-a2f6-30e560915a2e.xml', True
 
     @with_request_context('publicamundi-tests', 'index')
     def _to_xml(self, fixture_name, outfile):
