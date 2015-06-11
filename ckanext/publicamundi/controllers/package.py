@@ -108,24 +108,24 @@ class Controller(BaseController):
 
         try:
             result = _get_action('dataset_import')(context, data_dict)
-        except ext_actions.InvalidParameter as ex:
-            log.error('Cannot import package: invalid action parameters: %s' % (ex))
-            session['error_summary'] = ex.message
+        except ext_actions.Invalid as ex:
+            log.error('Cannot import package (invalid input): %r' % (ex.error_dict))
+            if len(ex.error_dict) > 1:
+                session['error_summary'] = _('Received invalid input (%s)' %(
+                    ','.join(ex.error_dict.keys())))
+                session['errors'] = ex.error_dict 
+            else:
+                session['error_summary'] = next(ex.error_dict.itervalues())
         except (ext_actions.IdentifierConflict, ext_actions.NameConflict) as ex:
-            log.error('Cannot import package: name/id conflict: %s' % (ex))
-            session['error_summary'] = ex.message
+            log.error('Cannot import package (name/id conflict): %r' % (ex.error_dict))
+            session['error_summary'] = ex.error_summary
         except toolkit.ValidationError as ex:
-            # Parameters are valid, but result in an invalid package
-            log.error('Cannot import package: metadata are invalid: %s' % (ex))
+            # The input is valid, but results in an invalid package
+            log.error('Cannot import package (metadata are invalid): %r' % (ex.error_dict))
             session['error_summary'] = _('The given metadata are invalid.')
             session['errors'] = ex.error_dict
-        except toolkit.Invalid as ex:
-            # Parameters are valid, but source XML file is not parseable
-            log.error('Cannot import package: source is invalid: %s' % (ex))
-            session['error_summary'] = ex.error
         except AssertionError as ex:
-            # Re-raise failed assertions
-            raise
+            raise 
         except Exception as ex:
             log.error('Cannot import package (unexpected error): %s' % (ex))
             abort(400, 'Cannot import package')
