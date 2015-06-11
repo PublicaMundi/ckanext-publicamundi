@@ -61,12 +61,16 @@
                   <gmd:code>
                       <gco:CharacterString>{{ data.reference_system.code }}</gco:CharacterString>
                   </gmd:code>
+                  {% if data.reference_system.code_space %}
                   <gmd:codeSpace>
                       <gco:CharacterString>{{ data.reference_system.code_space }}</gco:CharacterString>
                   </gmd:codeSpace>
+                  {% endif %}
+                  {% if data.reference_system.version %}
                   <gmd:version>
                       <gco:CharacterString>{{ data.reference_system.version }}</gco:CharacterString>
                   </gmd:version>
+                  {% endif %}
               </gmd:RS_Identifier>
           </gmd:referenceSystemIdentifier>
       </gmd:MD_ReferenceSystem>

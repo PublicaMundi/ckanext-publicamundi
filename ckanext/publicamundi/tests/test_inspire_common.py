@@ -290,16 +290,13 @@ def test_sr6():
 # Fixtures
 
 # Find reference system non-existing code
-rs1 = ReferenceSystem(code='210000')
+rs1 = ReferenceSystem(code='2100')
 
-# Find reference system unicode version error
-rs2 = ReferenceSystem(code='2100', code_space ='CustomSpace', version=u'5:2')
-
-# Reference system correct
-rs4 = ReferenceSystem(code='3857', code_space='CustomSpace', version='123')
+# Find reference system codespace and version provided
+rs2 = ReferenceSystem(code='http://www.opengis.net/def/crs/EPSG/0/2100', code_space ='CustomSpace', version='5')
 
 # Reference system correct
-rs5 = ReferenceSystem(code='2100')
+rs5 = ReferenceSystem(code='http://www.opengis.net/def/crs/EPSG/0/2100')
 
 # Tests
 
@@ -310,18 +307,13 @@ def test_rs1():
 
 def test_rs2():
     ''' Find reference system unicode version error'''
-    assert_faulty_keys(rs2,
-        expected_keys=set(['version']))
-
-def test_rs_correct():
-    '''Reference system correct schema '''
-    assert_faulty_keys(rs4)
+    assert_faulty_keys(rs2)
+    assert rs2.code_space == 'CustomSpace'
+    assert rs2.version == '5'
 
 def test_rs_correct_2():
     '''Reference system correct schema '''
     assert_faulty_keys(rs5)
-    assert rs1.code_space == 'urn:ogc:def:crs:EPSG'
-    assert rs1.version == '6.11.2'
 
 #
 # Main 
