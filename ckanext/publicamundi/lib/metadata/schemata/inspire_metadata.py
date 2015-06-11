@@ -123,10 +123,10 @@ class IInspireMetadata(IBaseMetadata):
             title= u'Free Keywords',
             description = u"The keyword value is a commonly used word, formalised word or phrase used to describe the subject. While the topic category is too coarse for detailed queries, keywords help narrowing a full text search and they allow for structured keyword search.",
             required = False,
-            max_length = 10,
+            max_length = 20,
             value_type = zope.schema.Object(IFreeKeyword,
                 title = u'Free Keyword'))
-    free_keywords.setTaggedValue('format:markup', { 'descend-if-dictized': False })
+    #free_keywords.setTaggedValue('format:markup', { 'descend-if-dictized': False })
 
     # Geographic
 

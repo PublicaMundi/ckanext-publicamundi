@@ -239,6 +239,8 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
                 # Treat as free keywords (not really a thesaurus)
                 vocab_date = to_date(it['thesaurus']['date'])
                 vocab_datetype = it['thesaurus']['datetype']
+                if thes_title:
+                    thes_title = unicode(thes_title)
                 for keyword in it['keywords']:
                     free_keywords.append(FreeKeyword(
                         value = keyword,
