@@ -8,6 +8,8 @@ from zope.schema.vocabulary import SimpleVocabulary
 from lxml import etree
 from owslib.iso import MD_Metadata
 
+from ckan.plugins.toolkit import toolkit
+
 from ckanext.publicamundi import reference_data
 from ckanext.publicamundi.lib.metadata.base import Object, object_null_adapter
 from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import IInspireMetadata
@@ -19,6 +21,7 @@ from ckanext.publicamundi.lib.metadata.types import BaseMetadata
 from ckanext.publicamundi.lib.metadata.types.thesaurus import Thesaurus, ThesaurusTerms
 from ckanext.publicamundi.lib.metadata.types._common import *
 
+_ = toolkit._
 strptime = datetime.datetime.strptime
 
 class KeywordsFactory(object):
@@ -273,9 +276,8 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         spatial_list = []
 
         if len(md.identification.distance) != len(md.identification.uom):
-            raise Exception(
-                'Found unequal list lengths distance,uom (%s, %s)' % (
-                    md.identification.distance,md.identification.uom))
+            raise Exception(_('Found unequal list lengths distance,uom (%s, %s)' % (
+                    md.identification.distance,md.identification.uom)))
         else:
                 for i in range(0,len(md.identification.distance)):
                     spatial_list.append(SpatialResolution(
@@ -291,7 +293,18 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         #    code_space = md.referenceSystem.codeSpace
         reference_system = None
         if md.referencesystem:
-            reference_system = ReferenceSystem(code=md.referencesystem.code)
+            code = md.referencesystem.code
+            reference_systems = vocabularies.get_by_name('reference-systems').get('vocabulary')
+            if code in reference_systems:
+                # Check whether the URI is provided 
+                reference_system = ReferenceSystem(code = code)
+            else:
+                # Check whether just the EPSG code suffix is provided
+                code_full = 'http://www.opengis.net/def/crs/EPSG/0/{code}'.format(code=code)
+                if code_full in reference_systems:
+                    reference_system = ReferenceSystem(code = code_full)
+                else:
+                    raise Exception(_('Reference system not recognizable'))
 
             if md.referencesystem.codeSpace:
                 reference_system.code_space = md.referencesystem.codeSpace
@@ -300,7 +313,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
 
         if len(md.dataquality.conformancedate) != len(md.dataquality.conformancedatetype):
             # Date list is unequal to datetype list, this means wrong XML so exception is thrown
-            raise Exception('Found unequal list lengths: conformance date, conformancedatetype')
+            raise Exception(_('Found unequal list lengths: conformance date, conformancedatetype'))
         if len(md.dataquality.conformancedegree) != len(md.dataquality.conformancedate):
             # Degree list is unequal to date/datetype lists, so we are unable to conclude
             # to which conformity item each degree value corresponds, so all are set to 
