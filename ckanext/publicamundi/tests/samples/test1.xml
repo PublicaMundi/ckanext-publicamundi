@@ -5,7 +5,7 @@
     <gco:CharacterString>12314213123</gco:CharacterString>
   </gmd:fileIdentifier>
   <gmd:language>
-    <gmd:LanguageCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#LanguageCode" codeListValue="eng">el</gmd:LanguageCode>
+    <gmd:LanguageCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/Codelist/ML_gmxCodelists.xml#LanguageCode" codeListValue="eng">gre</gmd:LanguageCode>
   </gmd:language>
   <gmd:hierarchyLevel>
     <gmd:MD_ScopeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset" codeSpace="ISOTC211/19115">dataset</gmd:MD_ScopeCode>
@@ -32,7 +32,7 @@
     </gmd:CI_ResponsibleParty>
   </gmd:contact>
   <gmd:dateStamp>
-    <gco:Date>2014-05-27</gco:Date>
+    <gco:Date>2014-07-30</gco:Date>
   </gmd:dateStamp>
   <gmd:metadataStandardName>
     <gco:CharacterString>ISO 19115</gco:CharacterString>
@@ -50,7 +50,7 @@
           <gmd:date>
             <gmd:CI_Date>
               <gmd:date>
-                <gco:DateTime>2013-01-01</gco:DateTime>
+                <gco:Date>2013-01-01</gco:Date>
               </gmd:date>
               <gmd:dateType>
                 <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication" codeSpace="ISOTC211/19115">publication</gmd:CI_DateTypeCode>
@@ -60,7 +60,7 @@
           <gmd:date>
             <gmd:CI_Date>
               <gmd:date>
-                <gco:DateTime>2012-01-01</gco:DateTime>
+                <gco:Date>2012-01-01</gco:Date>
               </gmd:date>
               <gmd:dateType>
                 <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation" codeSpace="ISOTC211/19115">creation</gmd:CI_DateTypeCode>
@@ -70,7 +70,7 @@
           <gmd:date>
             <gmd:CI_Date>
               <gmd:date>
-                <gco:DateTime>2014-01-01</gco:DateTime>
+                <gco:Date>2014-01-01</gco:Date>
               </gmd:date>
               <gmd:dateType>
                 <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="revision" codeSpace="ISOTC211/19115">revision</gmd:CI_DateTypeCode>
@@ -80,7 +80,7 @@
           <gmd:identifier>
             <gmd:RS_Identifier>
               <gmd:code>
-                <gco:CharacterString>12314213123</gco:CharacterString>
+                <gco:CharacterString>http://acme.example.com/datasets/12314213123</gco:CharacterString>
               </gmd:code>
             </gmd:RS_Identifier>
           </gmd:identifier>
@@ -110,20 +110,50 @@
           </gmd:role>
         </gmd:CI_ResponsibleParty>
       </gmd:pointOfContact>
+      <gmd:pointOfContact>
+        <gmd:CI_ResponsibleParty>
+          <gmd:organisationName>
+            <gco:CharacterString>Org2</gco:CharacterString>
+          </gmd:organisationName>
+          <gmd:contactInfo>
+            <gmd:CI_Contact>
+              <gmd:address>
+                <gmd:CI_Address>
+                  <gmd:electronicMailAddress>
+                    <gco:CharacterString>email2@asd.gr</gco:CharacterString>
+                  </gmd:electronicMailAddress>
+                </gmd:CI_Address>
+              </gmd:address>
+            </gmd:CI_Contact>
+          </gmd:contactInfo>
+          <gmd:role>
+            <gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="pointofcontact" codeSpace="ISOTC211/19115">pointofcontact</gmd:CI_RoleCode>
+          </gmd:role>
+        </gmd:CI_ResponsibleParty>
+      </gmd:pointOfContact>
       <gmd:descriptiveKeywords>
         <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>lala1</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:keyword>
+            <gco:CharacterString>lala2</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:keyword>
+            <gco:CharacterString>lala3</gco:CharacterString>
+          </gmd:keyword>
           <gmd:thesaurusName>
             <gmd:CI_Citation>
               <gmd:title>
-                <gco:CharacterString>gemet_inspire_data_themes</gco:CharacterString>
+                <gco:CharacterString>Inspire Data Themes</gco:CharacterString>
               </gmd:title>
               <gmd:date>
                 <gmd:CI_Date>
                   <gmd:date>
-                    <gco:Date>None</gco:Date>
+                    <gco:Date>2000-01-01</gco:Date>
                   </gmd:date>
                   <gmd:dateType>
-                    <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="None">None</gmd:CI_DateTypeCode>
+                    <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation">creation</gmd:CI_DateTypeCode>
                   </gmd:dateType>
                 </gmd:CI_Date>
               </gmd:date>
@@ -170,7 +200,7 @@
           <gmd:equivalentScale>
             <gmd:MD_RepresentativeFraction>
               <gmd:denominator>
-                <gco:Integer>0</gco:Integer>
+                <gco:Integer>10</gco:Integer>
               </gmd:denominator>
             </gmd:MD_RepresentativeFraction>
           </gmd:equivalentScale>
@@ -181,7 +211,7 @@
           <gmd:equivalentScale>
             <gmd:MD_RepresentativeFraction>
               <gmd:denominator>
-                <gco:Integer>0</gco:Integer>
+                <gco:Integer>2</gco:Integer>
               </gmd:denominator>
             </gmd:MD_RepresentativeFraction>
           </gmd:equivalentScale>
@@ -192,13 +222,24 @@
           <gmd:equivalentScale>
             <gmd:MD_RepresentativeFraction>
               <gmd:denominator>
-                <gco:Integer>meters</gco:Integer>
+                <gco:Integer>2</gco:Integer>
               </gmd:denominator>
             </gmd:MD_RepresentativeFraction>
           </gmd:equivalentScale>
         </gmd:MD_Resolution>
       </gmd:spatialResolution>
-      <gmd:language>
+      <gmd:spatialResolution>
+        <gmd:MD_Resolution>
+          <gmd:equivalentScale>
+            <gmd:MD_RepresentativeFraction>
+              <gmd:denominator>
+                <gco:Integer>3</gco:Integer>
+              </gmd:denominator>
+            </gmd:MD_RepresentativeFraction>
+          </gmd:equivalentScale>
+        </gmd:MD_Resolution>
+      </gmd:spatialResolution>
+        <gmd:language>
         <gmd:LanguageCode codeList="http://www.isotc211.org/2005/resources/Codelist/ML_gmxCodelists.xml#LanguageCode" codeListValue="el">el</gmd:LanguageCode>
       </gmd:language>
       <gmd:topicCategory>
@@ -231,7 +272,7 @@
               <gmd:extent>
                 <gml:TimePeriod xsi:type="gml:TimePeriodType">
                   <gml:beginPosition>2012-01-01</gml:beginPosition>
-                  <gml:endPosition>2013-01-01</gml:endPosition>
+                  <gml:endPosition>2014-01-01</gml:endPosition>
                 </gml:TimePeriod>
               </gmd:extent>
             </gmd:EX_TemporalExtent>
@@ -253,7 +294,14 @@
           <gmd:onLine>
             <gmd:CI_OnlineResource>
               <gmd:linkage>
-                <gmd:URL></gmd:URL>
+                <gmd:URL>http://www.google.com</gmd:URL>
+              </gmd:linkage>
+            </gmd:CI_OnlineResource>
+          </gmd:onLine>
+          <gmd:onLine>
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL>http://publicamundi.eu</gmd:URL>
               </gmd:linkage>
             </gmd:CI_OnlineResource>
           </gmd:onLine>
@@ -292,7 +340,7 @@
                   <gmd:date>
                     <gmd:CI_Date>
                       <gmd:date>
-                        <gco:Date>2014-05-27</gco:Date>
+                        <gco:Date>2014-07-30</gco:Date>
                       </gmd:date>
                       <gmd:dateType>
                         <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/ML_gmxCodelists.xml#CI_DateTypeCode" codeListValue="creation">creation</gmd:CI_DateTypeCode>
@@ -305,7 +353,7 @@
                 <gco:CharacterString>See the referenced specification</gco:CharacterString>
               </gmd:explanation>
               <gmd:pass>
-                <gco:Boolean>conformant</gco:Boolean>
+                <gco:Boolean>true</gco:Boolean>
               </gmd:pass>
             </gmd:DQ_ConformanceResult>
           </gmd:result>

@@ -1243,6 +1243,9 @@ p a{
     position:relative;
     float: right;
 }
+.download-links .btn-group{
+    float:right;
+}
 .metadata-label{
     display: block;
     padding: 8px 5px 6px 5px;
