@@ -1,0 +1,5 @@
+<ul class="{{ classes|join(' ') }}">
+  {% for keyword in value %}
+  <li class="{{ item_classes|join(' ') }}">{{ keyword.value }}</li>
+  {% endfor %}
+</ul>

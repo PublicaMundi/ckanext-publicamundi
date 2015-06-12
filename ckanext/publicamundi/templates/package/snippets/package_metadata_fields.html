@@ -5,7 +5,7 @@
 {% block package_metadata_fields_url %}
 {# Note: 
    The following is not really needed since we give the user the option to import
-   an allready existing metadata file (in a dedicated form)
+   an already existing metadata file (in a dedicated form)
 #}
 {#
 {{ 
@@ -113,7 +113,6 @@
 %}
 {% do obj.from_dict(data, is_flat=true, opts=loader_opts) %}
 {% endif -%} {# if errors #}
-
 {{ 
     h.markup_for('edit:datasetform', obj, 
         errors=errors, 

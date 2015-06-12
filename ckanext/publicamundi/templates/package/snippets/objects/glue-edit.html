@@ -2,6 +2,7 @@
 
 <div class="{{ classes|join(' ') }}">
     <header>{% if title %}<h3 class="inline">{{ title }}</h3>{% endif %}</header>
+    {% if description %}<p class="description">{{ description }}</p>{% endif -%}
     {{- markup_helpers.error_messages(errors[errors.global_key]) -}} 
     {%- for k, f in fields.items() -%}
     {{ f.markup }}

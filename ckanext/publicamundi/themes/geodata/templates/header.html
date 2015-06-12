@@ -23,31 +23,24 @@
 
     </hgroup>
 
-
         </div>
         <div class="mainmenu">
 
         
         <nav class="section navigation">
           <ul class="nav nav-pills">
-            {% block header_site_navigation_tabs %}
-              {{ h.build_nav_main(
-                ('search', _('Datasets')),
-                ('group_index', _('Topics')),
-                ('organizations_index', _('Organizations')),
-                ('maps', _('Maps')),
-                ('about', _('About'))
-                ) }}
-
+              {% block header_site_navigation_tabs %}
+                {% snippet 'snippets/main_menu.html' %}                            
+              
     {% block menucontainer %}
     
             <div id="menu-block" class="container"  >
-        {% block groups_list %}
-             {% snippet "snippets/menu_list.html", items=h.list_menu_items() %} 
+                {% block groups_list %}
+         {% snippet "snippets/menu_list.html", items=h.list_menu_items() %} 
+
         {% endblock %}
         </div>
         {% endblock %}
-
             </div>
             {% endblock %}
           </ul>
@@ -70,19 +63,17 @@
     <div class="account avatar">
         {# class="account avatar" #}
     <ul class="user-menu">
-                
         {% block header_account_container_content %}
         {# {% snippet "snippets/user_selector_simple.html", c=c %} #}
         {% if c.userobj %}
-          <li class="authed down-arrow" data-module="me" data-me="{{ c.userobj.id }}">
+          <li class="authed" data-module="me" data-me="{{ c.userobj.id }}">
               {% block header_account_logged %}
               {# <ul class="unstyled"> #}
                   {# <li> #}
                 {% set new_activities = h.new_activities() %}
                 <a href="{{ h.url_for(controller='user', action='read', id=c.userobj.name) }}" class="viewprofile" title="{{ _('View profile') }}">
-                    <span>{{c.userobj.display_name}} </span>
+                    <span class="down-arrow">{{ h.friendly_name(c.userobj.display_name)}}</span>
                     {# {% if new_activities > 0 %}({{new_activities}}) {% endif %} #}
-                    
                     </a>
                 <ul>
                     {% if c.userobj.sysadmin %}
@@ -135,7 +126,7 @@
         {% endblock %}
         
         {% block header_lang %}
-        <li class="down-arrow language">
+        <li class="language">
             {% snippet "snippets/language_selector_simple.html" %}
             </li>
         {% endblock %}

@@ -16,7 +16,7 @@ def get_result(resource_id):
     result = {}
 
     res_identify_query = ckan.model.Session.query(ResourceIngest).filter(
-        ResourceIngest.resource_id == resource_id)
+            ResourceIngest.resource_id == resource_id)
     res_identify = res_identify_query.first()
 
     if res_identify:
@@ -34,7 +34,6 @@ def get_result(resource_id):
             result['status'] = ingest_status
     else:
         result['found'] = False
-    
     return result
 
 def get_celery_identification_result(res_identify_obj):

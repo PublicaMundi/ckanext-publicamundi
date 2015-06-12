@@ -8,7 +8,9 @@
 {%- macro message_list(messages, key=None, titles={}) -%}
     {% if messages -%}
     {% if key %}<h4 data-key="{{ key }}" class="title">{{ titles.get(key, key|title) }}</h4>{% endif %}
-    {% if messages is mapping -%}
+    {% if messages is string %}
+    <span>{{ messages }}</span>
+    {% elif messages is mapping -%}
     <ul>
         {% for k in messages -%}<li>{{ message_list(messages[k], k, titles) }}</li>{% endfor -%}
     </ul>

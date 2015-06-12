@@ -68,6 +68,17 @@ class FreeKeyword(Object):
     reference_date = None
     date_type = None
 
+    @classmethod
+    def normalize_keyword(cls, s):
+        from inflection import dasherize, underscore
+        return dasherize(underscore(unicode(s)))
+    
+    def __init__(self, **kwargs):
+        value = kwargs.get('value')
+        if value:
+            kwargs['value'] = self.normalize_keyword(value)
+        super(FreeKeyword, self).__init__(**kwargs)
+        
 @object_null_adapter()
 class GeographicBoundingBox(Object):
     
@@ -90,8 +101,6 @@ class TemporalExtent(Object):
 class TemporalExtentFormatter(ObjectFormatter):
 
     def _format(self, obj, opts):
-        # Fixme
-        _ = lambda s: s
         s = _('From %(start)s To %(end)s') % dict(start=obj.start, end=obj.end)
         return u'<%s>' % s if opts.get('quote') else s
 
@@ -102,6 +111,15 @@ class SpatialResolution(Object):
 
     distance = None
     uom = None
+
+@object_null_adapter()
+class ReferenceSystem(Object):
+    
+    zope.interface.implements(IReferenceSystem)
+
+    code = None
+    code_space = None
+    version = None
 
 @object_null_adapter()
 class Conformity(Object):

@@ -1,0 +1,90 @@
+{# {% set sorting_status_list =[
+    {'display_name': _('Publish Failed'), 'get_param': 'publish-failed'},
+    {'display_name': _('Published'), 'get_param': 'published'},
+    {'display_name': _('Identified'), 'get_param': 'identified'},
+    {'display_name': _('Identify Failed'), 'get_param': 'identify-failed'},
+    {'display_name': _('Rejected'), 'get_param': 'rejected'},
+    ] %}
+
+{% set sorting_storer_type_list =[
+    {'display_name': _('Vector'), 'get_param': 'vector'},
+    {'display_name': _('Raster'), 'get_param': 'raster'},
+    ] %}
+#}
+
+{% set sorting_statuses ={
+    'identified': _('Identified'),
+    'published': _('Published'), 
+    'identify-failed': _('Identify Failed'),
+    'publish-failed': _('Publish Failed'),
+    'rejected': _('Rejected'), 
+    }
+%}
+
+{% set sorting_storer_types ={
+    'vector': _('Vector'),
+    'raster': _('Raster'),
+    } %}
+
+<div class="filter-buttons">
+    {% block filter_buttons %}
+  <div id="storer_type_filter" class="btn-group">
+  <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
+    <i class="icon-filter"></i>
+    <span class="facet">{{_('Type')}}</span>
+      <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+        <li>
+        <a href="{{ h.remove_url_param('storer_type') }}"> {% trans %}<span class="all-types"></span>All{% endtrans %}</a>
+        </li>
+
+        {% for storer_type_key, storer_type_name in sorting_storer_types.iteritems() %}
+         <li>
+             <a href="{{ h.remove_url_param('storer_type', replace=storer_type_key) }}">
+                 {{ storer_type_name }}
+           </a>
+         </li>
+       {% endfor %}
+    </ul>
+  </div>
+
+   <div id="status_filter" class="btn-group">
+  <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
+    <i class="icon-filter"></i>
+    <span class="facet">{{_('Status')}}</span>
+      <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+        <li>
+            <a href="{{ h.remove_url_param('status') }}">
+                <span class="label" data-resource-status="all" title="Remove">&nbsp;&nbsp;&nbsp;</span> {% trans %}<span class="all-statuses"></span>All{% endtrans %}</a>
+        </li>
+      {% for status_key, status_name in sorting_statuses.iteritems() %}
+        <li>
+            <a href="{{ h.remove_url_param('status', replace= status_key) }}">
+            <span class="label" data-resource-status="{{status_key}}">&nbsp;&nbsp;&nbsp;</span>
+             {{ status_name }}
+            </a>
+        </li>
+       {% endfor %}
+    </ul>
+    </div>
+    {% endblock %}
+</div> {# filter-buttons #}
+    
+<div class="filter-list">
+    {% block filter_list %}
+    {% set storer_type = h.get_request_param('storer_type') %}
+    {% set status = h.get_request_param('status') %}
+        {{_('Type')}}:  
+    <span class="filtered pill label"> 
+        {% if storer_type in sorting_storer_types.keys() %} {{ sorting_storer_types[storer_type] }} {% else %} {% trans %}<span class="all-types"></span>All{% endtrans %} {% endif %}
+    </span>
+
+    {{_('Status')}}: 
+    <span class="filtered pill label"  {% if status in sorting_statuses.keys() %}data-resource-status="{{status}}"{% endif %} > 
+        {% if status in sorting_statuses.keys() %} {{ sorting_statuses[status] }} {% else %} {% trans %}<span class="all-statuses"></span>All{% endtrans %} {% endif %}
+    </span>
+    {% endblock %}
+</div> {# filter-list #}

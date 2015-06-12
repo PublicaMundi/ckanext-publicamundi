@@ -1,0 +1,55 @@
+{% extends 'page.html' %}
+
+{% block subtitle %}{{ _('Applications') }}{% endblock %}
+
+{% block breadcrumb_content %}
+  <li class="active">{% link_for _('Applications'), controller='ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='applications' %}</li>
+{% endblock %}
+
+{% block altbar %}
+<div class="altbar">
+        <div class="container">
+            {% block altbar_content %}
+            
+            <nav class="section alt-navigation">
+          <ul class="alt-nav nav nav-pills">
+              <li>
+              {# <img class="facet-icon" src="{{ h.url_for_static('/images/icons/resources/api-mapping.svg') }}"></img> #}
+              <a href="/mapping-api/">{{_('Mapping API')}}</a>
+              </li>
+              <li>
+              {# <img class="facet-icon" src="{{ h.url_for_static('/images/icons/resources/api-data.svg') }}"></img> #}
+              <a href="/maps/demo/data-api.html">{{_('Data API')}}</a>
+              </li>
+              <li>
+              {# <img class="facet-icon" src="{{ h.url_for_static('/images/icons/resources/csw.svg') }}"></img> #}
+              <a href="/csw?service=CSW&version=2.0.2&request=GetCapabilities">{{_('CSW API')}}</a>
+              </li>
+              {% block header_site_navigation_tabs %}
+            
+            {% endblock %}
+          </ul>
+          </nav>
+     
+            {% endblock %}
+        </div>
+    </div>
+    {% endblock %}
+
+    
+{% block primary %}
+  <article class="module">
+    <div class="module-content">
+      {% block about %}
+        {% if g.site_about %}
+          {{ h.render_markdown(g.site_about) }}
+        {% else %}
+          <h1 class="page-heading">{{ _('Applications') }}</h1>
+          
+          {% endif %}
+      {% endblock %}
+    </div>
+  </article>
+{% endblock %}
+
+{% block secondary %}{% endblock %}

@@ -79,7 +79,7 @@ class IFreeKeyword(IObject):
     value = zope.schema.TextLine(
         title = u"Keyword value",
         description = u"The keyword value is a commonly used word, formalised word or phrase used to describe the subject. While the topic category is too coarse for detailed queries, keywords help narrowing a full text search and they allow for structured keyword search.\nThe value domain of this metadata element is free text.",
-        required = False)
+        required = True)
 
     originating_vocabulary = zope.schema.TextLine(
         title = u'Title',
@@ -97,8 +97,8 @@ class IFreeKeyword(IObject):
 
     @zope.interface.invariant
     def check_mandatory_parts(obj):
-        if obj.value or obj.originating_vocabulary or obj.reference_date or obj.date_type:
-            if not obj.value or not obj.originating_vocabulary or not obj.reference_date or not obj.date_type:
+        if obj.originating_vocabulary or obj.reference_date or obj.date_type:
+            if not obj.originating_vocabulary or not obj.reference_date or not obj.date_type:
                 raise zope.interface.Invalid('You need to fill in the rest free-keyword fields')
 
 class IGeographicBoundingBox(IObject):
@@ -182,6 +182,28 @@ class ISpatialResolution(IObject):
             if not (obj.distance and obj.uom):
                 raise zope.interface.Invalid(
                     'At least of one of (i) a denominator, or (ii) a distance must be given.')
+
+class IReferenceSystem(IObject):
+
+    code = zope.schema.Choice(
+            title= u'System',
+            description = u'Coordinate Reference System',
+            vocabulary = vocabularies.get_by_name('reference-systems').get('vocabulary'),
+            default = 'http://www.opengis.net/def/crs/EPSG/0/2100',
+            required = True)
+
+    code_space = zope.schema.NativeStringLine(
+            title = u'Code-Space',
+            description = u'Reference System Code-Space',
+            #default = 'urn:ogc:def:crs:EPSG',
+            required = False)
+
+    version = zope.schema.NativeStringLine(
+            title = u'Version',
+            description = u'Reference System version',
+            #default = '6.11.2',
+            required = False)
+
 
 class IConformity(IObject):
 

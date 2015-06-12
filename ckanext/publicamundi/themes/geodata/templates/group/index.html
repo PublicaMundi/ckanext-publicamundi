@@ -1,5 +1,10 @@
 {% ckan_extends %}
 
+{% block breadcrumb_content %}
+  <li class="active">{% link_for _('Topics'), controller='group', action='index' %}</li>
+{% endblock %}
+
+
 {% block page_header %}{% endblock %}
 {% block searchbar %}
 <div class="searchbar">
@@ -11,7 +16,7 @@
   {% endblock %}
 
 {% block primary_content_inner %}
-  <h1 class="hide-heading">{{ _('Groups') }}</h1>
+  <h1 class="hide-heading">{{ _('Topics') }}</h1>
     {% block groups_list %}
     {% if c.page.items or request.params %}
       {% if c.page.items %}
@@ -38,4 +43,6 @@
     <div class="alt-side-style">
         {% snippet "group/snippets/helper.html" %}
     </div>
-{% endblock %}
+    {% endblock %}
+
+

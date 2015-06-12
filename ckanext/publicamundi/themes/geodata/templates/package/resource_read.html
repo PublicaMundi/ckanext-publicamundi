@@ -1,0 +1,59 @@
+{% ckan_extends %} 
+
+{% set pkg = c.package %}
+{% set res = c.resource %}
+
+{% block resources_list %}
+    {% snippet "package/snippets/resources_simplified.html", pkg=pkg, active=res.id %}
+{% endblock %}
+
+{% block resource_item_service %}
+{% if (res.vectorstorer_resource or res.rasterstorer_resource) and res.format == 'wms' %}
+    <li>
+    <a class="btn" href={{ h.get_maps_url(package_id=pkg.id, resource_id=res.id)}} >
+            <i class="icon-medium icon-globe"></i>{{ _(' Map')}}
+    </a>
+    </li>
+    {% endif %}
+{{ super() }}
+{% endblock %}
+
+{% block resource_item_file %}
+{% set raster_resources = h.get_ingested_raster(pkg,res) %}
+{% set vector_resources = h.get_ingested_vector(pkg,res) %}
+
+{% for raster_res in raster_resources %}
+    {% if raster_res.format == 'wms' %}
+    <li>
+    <a class="btn" href={{ h.get_maps_url(package_id=pkg.id, resource_id=raster_res.id) }} >
+                <i class="icon-medium icon-globe"></i>{{ _(' Maps')}}
+            </a>
+    </li>
+    {% endif %}
+{% endfor %}
+{% for vector_res in vector_resources %}
+    {% if vector_res.format == 'wms' %}
+    <li>
+        <a class="btn" href={{ h.get_maps_url(package_id=pkg.id, resource_id=vector_res.id) }} >
+        
+                <i class="icon-medium icon-globe"></i>{{ _(' Map')}}
+            </a>
+    </li>
+    {% endif %}
+
+    {% if vector_res.format == 'wfs' %}
+    {% with tab_res = h.vectorstorer_table_resource(pkg, vector_res) %}
+    {% if tab_res %}
+    <li>  
+        <a class="btn" href="{{ h.url_for(controller='package', action='resource_read', id=pkg.name, resource_id=tab_res.id) }}">
+            <i class="icon-table"></i> {{ _('Table') }}</a>
+    </li>
+    {% endif %}
+    {% endwith %}
+    {% endif %}
+
+{% endfor %}
+
+{{ super() }}
+{% endblock %}
+

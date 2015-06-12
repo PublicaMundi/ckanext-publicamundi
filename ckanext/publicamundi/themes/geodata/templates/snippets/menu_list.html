@@ -7,7 +7,68 @@ Example:
 
     {% snippet "group/snippets/group_list.html" %}
 
-#}
+    #}
+    
+{# INSPIRE Groups #}
+{% set items = [{'name':'utilities-communication',
+                'display_name': _('Utilities Communication'),
+                },
+                {'name':'transportation',
+                'display_name': _('Transportation'),
+                },
+                {'name':'structure',
+                'display_name': _('Structure'),
+                },
+                {'name':'society',
+                'display_name': _('Society'),
+                },
+                {'name':'planning-cadastre',
+                'display_name': _('Planning Cadastre'),
+                },
+                {'name':'oceans',
+                'display_name':_('Oceans'),
+                },
+                {'name':'location',
+                'display_name':_('Location'),
+                },
+                {'name':'intelligence-military',
+                'display_name':_('Intelligence Military'),
+                },
+                {'name':'inland-waters',
+                'display_name':_('Inland Waters'),
+                },
+                {'name':'imagery-base-maps-earth-cover',
+                'display_name':_('Imagery Base Maps Earth Cover'),
+                },
+                {'name':'health',
+                'display_name':_('Health'),
+                },
+                {'name':'geoscientific-information',
+                'display_name':_('Geoscientific Information'),
+                },
+                {'name':'climatology-meteorology-atmosphere',
+                'display_name':_('Climatology Meteorology Atmosphere'),
+                },
+                {'name':'environment',
+                'display_name':_('Environment'),
+                },
+                {'name':'elevation',
+                'display_name':_('Elevation'),
+                },
+                {'name':'economy',
+                'display_name':_('Economy'),
+                },
+                {'name':'farming',
+                'display_name':_('Farming'),
+                },
+                {'name':'boundaries',
+                'display_name':_('Boundaries'),
+                },
+                {'name':'biota',
+                'display_name':_('Biota'),
+                }
+                
+                ] %}
 <ul class="icons-grid" >
   {% for item in items %}
     {% snippet "snippets/menu_item.html", item=item, position=loop.index %}

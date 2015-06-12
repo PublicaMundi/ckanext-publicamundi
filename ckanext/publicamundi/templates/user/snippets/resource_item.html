@@ -9,6 +9,9 @@
           >{{ h.resource_display_name(res)|truncate(50) }}<span class="format-label" property="dc:format" data-format="{{ res.format.lower() or 'data' }}">{{ res.format }}</span></a>
       
       <div class="resource-ingest-actions pull-right">
+       {% if not task %}  
+        {% snippet 'user/snippets/resource_ingest_status_label.html', status=none, status_text=_('No Action') %}
+       {% else %}
         {% if not task.found %}
           {% snippet 'user/snippets/resource_ingest_status_label.html', status=none, status_text=_('No Action') %}
 	    {% elif task.status == "identified" %}
@@ -28,6 +31,7 @@
 	    {% elif task.status == "identify-failed" %}
           {% snippet 'user/snippets/resource_ingest_status_label.html', status=task.status, status_text=_('Identify Failed') %}
 	    {% endif %}
+	   {% endif %}
       </div>
       
       {% with description = res.description|truncate(90)  %}

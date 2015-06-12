@@ -81,6 +81,9 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'markup_for_object': ext_metadata.markup_for_object,
             'markup_for': ext_metadata.markup_for,
             'resource_ingestion_result': ext_template_helpers.resource_ingestion_result,
+            'get_primary_metadata_url': ext_template_helpers.get_primary_metadata_url,
+            'get_ingested_raster': ext_template_helpers.get_ingested_raster,
+            'get_ingested_vector': ext_template_helpers.get_ingested_vector,
         }
 
     ## IConfigurer interface ##
@@ -118,7 +121,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         
         if asbool(config.get('ckanext.publicamundi.validation.relax_name_pattern')):
             logic.validators.name_match = re.compile('[a-z][a-z0-9~_\-]*$')
-            log1.info('Using pattern for valid names: %r', 
+            log1.debug('Using pattern for valid names: %r', 
                 logic.validators.name_match.pattern)
               
         # Setup extension-wide cache manager
@@ -165,19 +168,17 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         user_controller = 'ckanext.publicamundi.controllers.user:UserController'
 
         with SubMapper(mapper, controller=user_controller) as m:
-            
-            # Fixme: unneeded parameters to mapper.connect ?
 
             m.connect(
                 'user_dashboard_resources',
                 '/dashboard/resources',
-                 action='show_dashboard_resources')
-            
+                action='show_dashboard_resources')
+
             m.connect(
-                'admin_page_resources', 
+                'admin_page_resources',
                 '/user/resources',
                  action='show_admin_page_resources')
-            
+
             m.connect(
                 'reject_resource',
                 '/{parent}/resources/reject/{resource_id}',
@@ -186,8 +187,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             m.connect(
                 'identify_vector_resource', # Fixme: adapt
                 '/{parent}/resources/identify_vector/{resource_id}',
-                 action='identify_resource',
-                 storer_type='vector')
+                action='identify_resource',
+                storer_type='vector')
             
             m.connect(
                 'render_ingestion',
@@ -451,13 +452,17 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         
         # Note If we attempt to pop() flat keys here (e.g. to replace them by a 
         # nested structure), resource forms will clear all extra fields !!
-
+        
+        # Fixme: Move to a BaseMetadata method
         prefix = key_prefix + '.'
         keys = filter(lambda k: k.startswith(prefix), pkg_dict.iterkeys())
         obj_dict = {}
         for k in keys:
             k1 = k[len(prefix):]
             obj_dict[k1] = pkg_dict[k]
+        if not obj_dict:
+            # Noop: No keys associated with a dataset-type
+            return
 
         # Objectify 
         
@@ -471,12 +476,13 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         
         # Note We use this bit of hack when package is shown directly from the
         # action api, normally at /api/action/(package|dataset)_show.
-            
-        r = toolkit.c.environ['pylons.routes_dict']
-        if (r['controller'] == 'api' and r.get('action') == 'action' and 
+        req_environ = toolkit.c.environ
+        r = req_environ['pylons.routes_dict'] if req_environ else None
+        if (r and r['controller'] == 'api' and r.get('action') == 'action' and 
                 r.get('logic_function') in (
                     'package_show', 'package_create', 'package_update',
-                    'dataset_show', 'dataset_create', 'dataset_update')):
+                    'dataset_show', 'dataset_create', 'dataset_update',
+                    'user_show')):
             # Remove flat field values (won't be needed anymore)
             for k in keys:
                 pkg_dict.pop(k)

@@ -58,9 +58,9 @@ def flatten_field(field):
             'Only zope.schema.Choice supported for key_type'
         res = {}
         res1 = flatten_field(field.value_type)
-        for v in field.key_type.vocabulary:
+        for t in field.key_type.vocabulary:
             for k1, field1 in res1.items():
-                res[(v.token,) + k1] = field1
+                res[(t.value,) + k1] = field1
     else:
         res = { (): field }
     
@@ -1326,7 +1326,7 @@ class ObjectFormatter(BaseFormatter):
         '''
        
         # Note We want to pass a 'quote' option to all our fields (this will be
-        # interpreted by the field formatter itself). If not allready set, we
+        # interpreted by the field formatter itself). If not already set, we
         # need to create a copy of opts, in order not to break our caller's 
         # formatting (sharing the same opts dict).
         

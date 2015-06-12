@@ -16,7 +16,7 @@ def parser_error(msg):
 class CommandDispatcher(CkanCommand):
     '''A command dispatcher for various publicamundi-related subcommands'''
 
-    __usage = '''paster [PASTER-OPTS] publicamundi --config FILE [--setup-app] %(name)s [%(name)s-OPTS]'''
+    __usage = '''paster [PASTER-OPTS] publicamundi --config FILE [--setup-app] %(name)s [%(name)s-OPTS] ARGS'''
 
     __specs = {}
 
@@ -47,10 +47,19 @@ class CommandDispatcher(CkanCommand):
     
     def __init__(self, name):
         CkanCommand.__init__(self, name)
-        self.parser.add_option('--setup-app', 
-            action='store_true', dest='setup_app', default=False)
-        self.parser.disable_interspersed_args()        
+        parser = self.parser
         
+        if 'CKAN_CONFIG' in os.environ:
+            parser.remove_option('--config')
+            parser.add_option('--config', 
+                type=str, dest='config', default=os.environ['CKAN_CONFIG'])
+
+        parser.add_option('--setup-app', 
+            action='store_true', dest='setup_app', default=False)
+        
+        parser.disable_interspersed_args()        
+        return
+
     def command(self):        
         '''Load environment, parse args and dispatch to the proper subcommand
         '''

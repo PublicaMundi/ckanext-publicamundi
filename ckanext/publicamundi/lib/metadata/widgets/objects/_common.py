@@ -61,7 +61,7 @@ class TableObjectReadWidget(ReadObjectWidget):
             for th in filter(lambda t: t.tag == 'th', row):
                 kp = th.key_path()
                 field = self.obj.get_field(kp)
-                th.title = field.context.title or field.title
+                th.title = _(field.context.title) or _(field.title)
         
         # Prepend extra rows if needed
 
@@ -520,7 +520,7 @@ class GeographicBoundingBoxReadWidget(ReadObjectWidget):
 
 @field_widget_multiadapter([IListField, schemata.IGeographicBoundingBox],
     qualifiers=['td'], is_fallback=False)
-class ListOfGeographicBoundingBoxEditWidget(ReadFieldWidget, ListFieldWidgetTraits):
+class ListOfGeographicBoundingBoxReadWidget(ReadFieldWidget, ListFieldWidgetTraits):
 
     def prepare_template_vars(self, name_prefix, data):
         cls = type(self)
@@ -577,4 +577,55 @@ class ConformityReadWidget(ReadObjectWidget):
         
     def get_template(self):
         return None 
+
+#
+# IReferenceSystem
+#
+
+@object_widget_adapter(schemata.IReferenceSystem)
+class ReferenceSystemEditWidget(EditObjectWidget):
+    
+    def get_field_qualifiers(self):
+        return OrderedDict([
+            ('code', 'select2'),
+        ])
+
+    def get_field_template_vars(self):
+        return {
+            'code': {
+                'title': _('CRS Code'),
+            },
+        }
+
+    def get_template(self):
+        return None 
+
+@object_widget_adapter(schemata.IReferenceSystem)
+class ReferenceSystemReadWidget(ReadObjectWidget):
+
+    def get_template(self):
+        return None 
+
+@object_widget_adapter(schemata.IReferenceSystem, 
+    qualifiers=['td'], is_fallback=False)
+class TdReferenceSystemReadWidget(ReadObjectWidget):
+    
+    def get_template(self):
+        return 'package/snippets/objects/read-reference_system-td.html' 
+
+#
+# IFreeKeyword
+#
+
+@field_widget_multiadapter([IListField, schemata.IFreeKeyword])
+class FreeKeywordsReadWidget(ReadFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/read-list-free_keyword.html'
+
+@field_widget_multiadapter([IListField, schemata.IFreeKeyword], qualifiers=['td'])
+class TdFreeKeywordsReadWidget(ReadFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/read-list-free_keyword-td.html'
 

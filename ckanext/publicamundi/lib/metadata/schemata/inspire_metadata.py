@@ -119,6 +119,15 @@ class IInspireMetadata(IBaseMetadata):
                 raise zope.interface.Invalid(
                     'You need to select at least one keyword from INSPIRE data themes')
 
+    free_keywords = zope.schema.List(
+            title= u'Free Keywords',
+            description = u"The keyword value is a commonly used word, formalised word or phrase used to describe the subject. While the topic category is too coarse for detailed queries, keywords help narrowing a full text search and they allow for structured keyword search.",
+            required = False,
+            max_length = 20,
+            value_type = zope.schema.Object(IFreeKeyword,
+                title = u'Free Keyword'))
+    free_keywords.setTaggedValue('format:markup', { 'descend-if-dictized': False })
+
     # Geographic
 
     bounding_box = zope.schema.List(
@@ -194,6 +203,12 @@ class IInspireMetadata(IBaseMetadata):
             title = u'Resolution'))
     spatial_resolution.value_type.setTaggedValue('allow-partial-update', False)
 
+    reference_system = zope.schema.Object(IReferenceSystem,
+        title = u'Coordinate Reference System',
+        description = u'Coordinate Reference System',
+        required = False)
+    reference_system.setTaggedValue('format:markup', { 'descend-if-dictized': False })
+    
     # Conformity
 
     conformity = zope.schema.List(

@@ -52,7 +52,30 @@
   </gmd:metadataStandardName>
   <gmd:metadataStandardVersion>
     <gco:CharacterString>2003/Cor.1:2006</gco:CharacterString>
-  </gmd:metadataStandardVersion>
+</gmd:metadataStandardVersion>
+{% if data.reference_system -%}
+  <gmd:referenceSystemInfo>
+      <gmd:MD_ReferenceSystem>
+          <gmd:referenceSystemIdentifier>
+              <gmd:RS_Identifier>
+                  <gmd:code>
+                      <gco:CharacterString>{{ data.reference_system.code }}</gco:CharacterString>
+                  </gmd:code>
+                  {% if data.reference_system.code_space %}
+                  <gmd:codeSpace>
+                      <gco:CharacterString>{{ data.reference_system.code_space }}</gco:CharacterString>
+                  </gmd:codeSpace>
+                  {% endif %}
+                  {% if data.reference_system.version %}
+                  <gmd:version>
+                      <gco:CharacterString>{{ data.reference_system.version }}</gco:CharacterString>
+                  </gmd:version>
+                  {% endif %}
+              </gmd:RS_Identifier>
+          </gmd:referenceSystemIdentifier>
+      </gmd:MD_ReferenceSystem>
+  </gmd:referenceSystemInfo>
+  {% endif -%}
   <gmd:identificationInfo>
     <gmd:MD_DataIdentification>
       <gmd:citation>
@@ -64,7 +87,7 @@
           <gmd:date>
             <gmd:CI_Date>
               <gmd:date>
-                <gco:DateTime>{{ data.creation_date }}</gco:DateTime>
+                <gco:Date>{{ data.creation_date }}</gco:Date>
               </gmd:date>
               <gmd:dateType>
                   <gmd:CI_DateTypeCode
@@ -80,7 +103,7 @@
           <gmd:date>
             <gmd:CI_Date>
               <gmd:date>
-                <gco:DateTime>{{ data.publication_date }}</gco:DateTime>
+                <gco:Date>{{ data.publication_date }}</gco:Date>
               </gmd:date>
               <gmd:dateType>
                 <gmd:CI_DateTypeCode
@@ -96,7 +119,7 @@
           <gmd:date>
             <gmd:CI_Date>
               <gmd:date>
-                <gco:DateTime>{{ data.revision_date }}</gco:DateTime>
+                <gco:Date>{{ data.revision_date }}</gco:Date>
               </gmd:date>
               <gmd:dateType>
                 <gmd:CI_DateTypeCode
@@ -145,29 +168,29 @@
         </gmd:CI_ResponsibleParty>
       </gmd:pointOfContact>
       {% endfor -%}
-      {% for k,v in data.keywords.iteritems() -%}
+      {% for k,terms in data.keywords.iteritems() -%}
       <gmd:descriptiveKeywords>
         <gmd:MD_Keywords>
-          {% for kw in v['terms'] -%}
+          {% for term in terms -%}
           <gmd:keyword>
-            <gco:CharacterString>{{ kw }}</gco:CharacterString>
+            <gco:CharacterString>{{ term.title }}</gco:CharacterString>
           </gmd:keyword>
           {% endfor -%}
           <gmd:thesaurusName>
             <gmd:CI_Citation>
               <gmd:title>
-                <gco:CharacterString>{{ v['thesaurus']['title'] }}</gco:CharacterString>
+                <gco:CharacterString>{{ terms['thesaurus']['title'] }}</gco:CharacterString>
               </gmd:title>
               <gmd:date>
                 <gmd:CI_Date>
                   <gmd:date>
-                    <gco:Date>{{ v['thesaurus']['reference_date'] }}</gco:Date>
+                    <gco:Date>{{ terms['thesaurus']['reference_date'] }}</gco:Date>
                   </gmd:date>
                   <gmd:dateType>
                     <gmd:CI_DateTypeCode
                       codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode"
                       codeListValue={{ "\"%s\""|safe % k['datetype'] }}
-                      >{{ v['thesaurus']['date_type'] }}</gmd:CI_DateTypeCode>
+                      >{{ terms['thesaurus']['date_type'] }}</gmd:CI_DateTypeCode>
                   </gmd:dateType>
                 </gmd:CI_Date>
               </gmd:date>
@@ -175,6 +198,38 @@
           </gmd:thesaurusName>
         </gmd:MD_Keywords>
       </gmd:descriptiveKeywords>
+      {% endfor -%}
+      {% for k in data.free_keywords -%}
+       <gmd:descriptiveKeywords>
+        <gmd:MD_Keywords>
+          <gmd:keyword>
+            <gco:CharacterString>{{ k['value'] }}</gco:CharacterString>
+          </gmd:keyword>
+          {% if k['originating_vocabulary'] -%}
+          <gmd:thesaurusName>
+            <gmd:CI_Citation>
+              <gmd:title>
+                <gco:CharacterString>{{ k['originating_vocabulary'] }}</gco:CharacterString>
+              </gmd:title>
+              <gmd:date>
+                <gmd:CI_Date>
+                  <gmd:date>
+                    <gco:Date>{{ k['reference_date'] }}</gco:Date>
+                  </gmd:date>
+                  <gmd:dateType>
+                    <gmd:CI_DateTypeCode
+                      codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode"
+                      codeListValue={{ "\"%s\""|safe % k['date_type'] }}
+                      >{{ k['date_type'] }}</gmd:CI_DateTypeCode>
+                  </gmd:dateType>
+                </gmd:CI_Date>
+              </gmd:date>
+            </gmd:CI_Citation>
+        </gmd:thesaurusName>
+        {% endif -%}
+        </gmd:MD_Keywords>
+      </gmd:descriptiveKeywords>
+ 
       {% endfor -%}
       {% for rc in data.access_constraints -%}
       <gmd:resourceConstraints>

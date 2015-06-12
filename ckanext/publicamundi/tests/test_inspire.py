@@ -250,8 +250,20 @@ insp9.keywords = {
         }
 
 # Keywords completely empty
-insp10 = copy.deepcopy(fixtures.inspire1)
-insp10.keywords = {}
+insp91 = copy.deepcopy(fixtures.inspire1)
+insp91.keywords = {}
+
+# Free keywords originating vocabulary dates not set
+insp92 = copy.deepcopy(fixtures.inspire1)
+insp92.free_keywords = [
+    FreeKeyword(value="hello-world", originating_vocabulary=u"Vocabulary"),
+    FreeKeyword(value="goodbye")]
+
+# Some free keywords are present
+insp93 = copy.deepcopy(fixtures.inspire1)
+insp93.free_keywords = [
+        FreeKeyword(value="lala", originating_vocabulary=u"HelloWorld", reference_date=datetime.date.today(), date_type="creation"),
+        FreeKeyword(value="goodbye")]
 
 #
 # Tests
@@ -308,10 +320,19 @@ def test_insp9():
     assert_faulty_keys(insp9,
         expected_keys=set(['__after']))
 
-def test_insp10():
+def test_insp91():
     '''Completely empty keywords'''
-    assert_faulty_keys(insp10,
+    assert_faulty_keys(insp91,
         expected_keys=set(['keywords']))
+
+def test_insp92():
+    ''' Free keywords originating vocabulary dates not set'''
+    assert_faulty_keys(insp92,
+        expected_keys=set(['free_keywords']))
+
+def test_insp93():
+    ''' Some free keywords are present'''
+    assert_faulty_keys(insp93)
 
 def test_fixtures_inspire1():
     '''Everything should be ok'''

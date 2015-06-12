@@ -2,6 +2,10 @@ body {
     font-family: sans-serif;
 }
 
+hr {
+    margin: 15px 0px;
+}
+
 header > h1.inline,
 header > h2.inline,
 header > h3.inline,
@@ -35,9 +39,11 @@ header > h6.inline {
 .modal {
     border-radius: 2px;
 }
-
+.select2-chosen{
+    font-size: 15px;
+}
 .modal .modal-header h3 {
-    font-size: 1.5em;
+    //font-size: 18px;
 }
 
 .btn-small {
@@ -120,9 +126,9 @@ label.radio {
     font-weight: inherit;
     margin: 0px 0px 0px 0px;
 }
-
 .actions li {
     margin-right: 0px;
+    margin-left: 5px;
 }
 
 .control-group .btn {
@@ -140,7 +146,12 @@ input[type='checkbox'], input[type='radio'] {
 .form-horizontal .control-label {
     width: 140px;
 }
-
+.modal-body.form-horizontal{
+    margin-top: 20px;
+}
+.modal-body.form-horizontal .control-label{
+    text-align:left;
+}
 .form-horizontal .controls {
     margin-left: 146px;
 }
@@ -336,29 +347,47 @@ h1 > .label.package-state {
 .dataset-item .dataset-resources li a {
    padding: 4px 4px 3px 4px;
 }  
-
 /*
  * Resources (Dataset)
  */
+
+.resources > header{
+    margin-bottom: 20px;
+}
 
 .resources li.resource-item {
     padding: 5px 5px 5px 60px;
 }
 
-.resources li.resource-item .btn-group {
-    position: relative;
-    top: 0px;
-    right: 5px;
+.resources li.resource-item .btn-download {
+    //position: relative;
+    //top: 0px;
+    //right: 10px;
 }
-
-.resources li.resource-item .btn-group + .btn-group {
+.resource-item .resource-action-buttons{
+    display: block;
+    float: right;
     margin-right: 5px;
+}
+.resource-action-buttons .action-button{
+    margin-left: 7px;
+    float: left;
+}
+.resource-item .btn-group{
+    position: relative;
+    top: 0;
+    right: 0;
+}
+.resources li.resource-item .btn-group + .btn-group {
+    //margin-right: 5px;
 }
 
 .resources li.resource-item p.description {
     width: 60%;
 }
-
+.resource-item .resource-explore-opts{
+    margin-left: 10px;
+}
 /*
  * Resources (Dashboard)
  */
@@ -404,6 +433,10 @@ h1 > .label.package-state {
 .label[data-resource-status="no-action"] {
     background-color: #999999;
     border: 2px #999999 solid;
+}
+.label[data-resource-status="all"] {
+    background-color: #fff;
+    border: 2px #000 solid;
 }
 
 /*
@@ -499,16 +532,23 @@ section.tags {
     margin-top: 10px;
 }
 
-.search-form .filter-list .pill {
-    background-color: #91939D;
+.pill {
+    background-color: #7C7C7F;
     border-radius: 2px;
     padding: 2px 8px;
 }
-.search-form .filter-list .pill a.remove {
-    vertical-align: -5%;
+.filter-list{
+    display: block;
+    float: none;
+    margin: 20px 0;
+    width: 100%;
 }
-
-section.additional-info header > .download-links {
+.filter-buttons{
+    display:inline-block;
+    position: relative;
+    width:100%;
+}
+.download-links {
     margin-top: 8px;
 }
 
