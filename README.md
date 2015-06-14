@@ -19,7 +19,7 @@ plugins as usual. For now, the supported plugins are:
 
  * `publicamundi_dataset`: Provides validation logic, storage logic and ui controls for metadata described in alternative schemata (e.g. INSPIRE).
  * `publicamundi_dataset_with_spatial`: Extends `publicamundi_dataset` by providing a bridge to `spatial_metadata` plugin: recognizes the `spatial` extra field. 
- * `publicamundi_package`: Provides synchronization of package metadata to other databases (e.g. to the intergrated CSW service).
+ * `publicamundi_package`: Provides synchronization of package metadata to other databases (e.g. to the integrated CSW service).
  * `publicamundi_vector`: Provide processing and services for vector-based spatial resources. See more at README-vector.md
  * `publicamundi_raster`: Provide processing and services for raster-based spatial resources. See more at README-raster.md 
 
