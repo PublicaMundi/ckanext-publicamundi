@@ -42,14 +42,16 @@
     {% endif %}
 
     {% if vector_res.format == 'wfs' %}
-    {% with tab_res = h.vectorstorer_table_resource(pkg, vector_res) %}
-    {% if tab_res %}
-    <li>  
-        <a class="btn" href="{{ h.url_for(controller='package', action='resource_read', id=pkg.name, resource_id=tab_res.id) }}">
-            <i class="icon-table"></i> {{ _('Table') }}</a>
-    </li>
+    {% if h.check_access('sysadmin') %}
+        {% with tab_res = h.vectorstorer_table_resource(pkg, vector_res) %}
+        {% if tab_res %}
+        <li>  
+            <a class="btn" href="{{ h.url_for(controller='package', action='resource_read', id=pkg.name, resource_id=tab_res.id) }}">
+                <i class="icon-table"></i> {{ _('Table') }}</a>
+        </li>
+        {% endif %}
+        {% endwith %}
     {% endif %}
-    {% endwith %}
     {% endif %}
 
 {% endfor %}

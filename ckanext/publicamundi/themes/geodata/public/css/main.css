@@ -6,7 +6,7 @@
 
 @font-face {
     font-family: 'ACMuliLight';
-    src: url('../fonts/ACMuliLight/AC-MuliLight.otf') format('truetype');
+    src: url('../fonts/ACMuliLight/AC-MuliLight.ttf') format('truetype');
 }
 
 body { 
@@ -15,6 +15,10 @@ body {
     border: 4px #4E59A4 solid;
     font-family: 'ACMuliLight', Helvetica, Arial, sans-serif;
     font-weight: 500;
+}
+a, b { 
+    font-family: 'ACMuli', Helvetica, Arial, sans-serif;
+    font-weight: normal;
 }
 textarea, input{
     font-family: 'ACMuliLight', Helvetica, Arial, sans-serif !important;
@@ -1094,6 +1098,9 @@ p a{
 .mindthegap{
     margin-top:30px;
 }
+.tag{
+    color: #666;
+}
 .tag-list{
     background: none;
     border: none;
@@ -1194,7 +1201,14 @@ p a{
 .resource-info{
     max-width: 300px;
 }
+.package-rating a:hover, .package-rating a:focus{
+    text-decoration: none;
+}
+
 /* Metadata Tables */
+.table th{
+    font-family: 'ACMuli', Helvetica, Arial, sans-serif;
+}
 .table tr.toggle-separator{
     display:none;
 }
