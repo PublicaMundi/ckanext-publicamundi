@@ -352,7 +352,9 @@ h1 > .label.package-state {
 .rating-count{
     margin-left: 14px;
 }
-
+.package-rating a:hover{
+    text-decoration: none;
+}
 /*
  * Resources (Search)
  */

@@ -3,6 +3,8 @@ import datetime
 import urlparse
 import urllib
 
+from pylons import config
+
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 from ckanext.publicamundi.lib import resource_ingestion
@@ -108,3 +110,7 @@ def get_ingested_vector(package,resource):
                 if resb.get('vectorstorer_resource') and resb.get('parent_resource_id')==resa.get('id'):
                     ing_resources.append(resb)
     return ing_resources
+
+def package_rating_enabled():
+    return config.get('ckanext.publicamundi.package_rating', False)
+
