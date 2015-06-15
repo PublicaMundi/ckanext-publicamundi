@@ -8,14 +8,16 @@
 
 {% block page_heading %}
 {{ super() }}
-
 {% endblock %}
 
+
 {% block package_notes %}
-<div class="dataset-dates">
+    {% block package_dates %}
+    <div class="dataset-dates">
     <div> {{_('Publication:')}} {{ pkg.metadata_created.split('T')[0] or pkg.metadata_created or _('Never')}}</div>
     <div> {{_('Last revision:')}} {{ pkg.metadata_modified.split('T')[0] or pkg.metadata_modified or  _('Never') }}</div>
 </div>
+{% endblock %}
 <hr class="border-divider"/>
 
 {{ super() }}
@@ -72,3 +74,5 @@
 {% endblock %} 
 
 {% endblock %}
+
+
