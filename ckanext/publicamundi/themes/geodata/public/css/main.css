@@ -6,7 +6,7 @@
 
 @font-face {
     font-family: 'ACMuliLight';
-    src: url('../fonts/ACMuliLight/AC-MuliLight.otf') format('truetype');
+    src: url('../fonts/ACMuliLight/AC-MuliLight.otf') format('opentype');
 }
 
 body { 
@@ -15,6 +15,10 @@ body {
     border: 4px #4E59A4 solid;
     font-family: 'ACMuliLight', Helvetica, Arial, sans-serif;
     font-weight: 500;
+}
+a, b { 
+    font-family: 'ACMuli', Helvetica, Arial, sans-serif;
+    font-weight: normal;
 }
 textarea, input{
     font-family: 'ACMuliLight', Helvetica, Arial, sans-serif !important;
@@ -397,9 +401,9 @@ p a{
     //display: block;
     position: fixed;
     top: 80vh;
-    left:3px;
-    z-index: 1000;
-    background: #fff;
+    left:-4px;
+    z-index: 2000;
+    //background: #fff;
 
     -ms-transform: translate(-39%) rotate(-90deg); /* IE 9 */
     -webkit-transform: translate(-39%) rotate(-90deg); /* Chrome, Safari, Opera */
@@ -409,9 +413,9 @@ p a{
     display: none;
     background: #fff;
     z-index: 1000;
-    border: 3px #4E59A4 solid;
+    border: 2px #4E59A4 solid;
     color: #4E59A4;
-   position:absolute;
+    position:absolute;
     padding: 10px;
     
    -ms-transform: translate(-41%) rotate(-90deg); /* IE 9 */
@@ -421,6 +425,17 @@ p a{
 }
 .feedback-form:hover .feedback-slideout{
     display: block;
+}
+.imis-logo-side{
+    display: block;
+    float: right;
+    margin-top: 3px;
+    height: 27px;
+    width: 68px;
+    background: url('../images/imis-logo.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: rgba(123,123,321,0);
 }
 .hero {
     height: 50vh;
@@ -724,7 +739,7 @@ p a{
     line-height: 30px;
 }
 .toolbar .sixtypercent .breadcrumb{
-    max-width: 65%;
+    max-width: 61%;
 }
 .toolbar .breadcrumb .active a, .toolbar .breadcrumb a.active{
     font-weight: normal;
@@ -1051,7 +1066,7 @@ p a{
 .dataset-map-expanded #dataset-map{
     top: -396px;
     left:0;
-    height:396px;
+    height:399px;
     border: 2px #4E59A4 solid;
 }
 .group{
@@ -1093,6 +1108,9 @@ p a{
 }
 .mindthegap{
     margin-top:30px;
+}
+.tag{
+    color: #666;
 }
 .tag-list{
     background: none;
@@ -1194,7 +1212,14 @@ p a{
 .resource-info{
     max-width: 300px;
 }
+.package-rating a:hover, .package-rating a:focus{
+    text-decoration: none;
+}
+
 /* Metadata Tables */
+.table th{
+    font-family: 'ACMuli', Helvetica, Arial, sans-serif;
+}
 .table tr.toggle-separator{
     display:none;
 }

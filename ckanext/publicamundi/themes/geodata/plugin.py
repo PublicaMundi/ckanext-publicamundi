@@ -7,7 +7,11 @@ import ckan.lib.datapreview as datapreview
 from ckan.lib import helpers
 from ckan.lib.base import c
 from ckan.lib.helpers import render_datetime, resource_preview
+#from ckan import rating
+
 import ckanext.publicamundi.lib.template_helpers as ext_template_helpers
+#import ckanext.publicamundi.themes.geodata.logic.action as action
+#import ckanext.publicamundi.themes.geodata.logic.auth
 
 def most_recent_datasets(limit=10):
     datasets = toolkit.get_action('package_search')(
@@ -25,6 +29,24 @@ def list_menu_items (limit=21):
 def friendly_date(date_str):
     return render_datetime(date_str, '%d, %B, %Y')
 
+def get_contact_email(pkg):
+    if pkg.get('dataset_type', None) == 'inspire':
+        return {'organization': pkg.get('inspire.contact.0.organization', None),
+                'email': pkg.get('inspire.contact.0.email', None)
+                }
+    else:
+        return {}
+#def create_rating(name_or_id, rating):
+#    print 'hello'
+#    ratings = toolkit.get_action('publica_rating_create')(data_dict={'package':name_or_id, 'rating':rating})
+#    print ratings
+#    return ''
+
+#def get_rating(name_or_id):
+#    ratings = toolkit.get_action('publica_rating_show')(data_dict={'package':name_or_id})
+#    print 'ratings'
+#    print ratings
+#    return ratings
 
 _feedback_form = None
 _maps_url = None
@@ -60,10 +82,6 @@ def friendly_name(name):
         friendly_name = name
 
     return friendly_name
-
-#_previewable_formats = ['wms', 'wfs']
-#def get_previewable_formats():
-#    return _previewable_formats
 
 # Returns the most suitable preview by checking whether ingested resources provide a better preview visualization
 def preview_resource_or_ingested(pkg, res):
@@ -121,7 +139,7 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.ITemplateHelpers)
     plugins.implements(plugins.IRoutes, inherit=True)
     plugins.implements(plugins.IPackageController, inherit=True)
-    
+
     # ITemplateHelpers
     
 
@@ -136,6 +154,9 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
             'get_maps_url': get_maps_url,
             'preview_resource_or_ingested': preview_resource_or_ingested,
             'can_preview_resource_or_ingested': can_preview_resource_or_ingested,
+            #'get_contact_email': get_contact_email,
+           # 'create_rating': create_rating,
+           # 'get_rating': get_rating,
         }
     
     # IConfigurer
@@ -176,4 +197,5 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     def before_view(self, pkg_dict):
         list_menu_items()
         return pkg_dict
+
 
