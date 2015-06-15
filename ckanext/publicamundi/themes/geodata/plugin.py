@@ -29,6 +29,13 @@ def list_menu_items (limit=21):
 def friendly_date(date_str):
     return render_datetime(date_str, '%d, %B, %Y')
 
+def get_contact_email(pkg):
+    if pkg.get('dataset_type', None) == 'inspire':
+        return {'organization': pkg.get('inspire.contact.0.organization', None),
+                'email': pkg.get('inspire.contact.0.email', None)
+                }
+    else:
+        return {}
 #def create_rating(name_or_id, rating):
 #    print 'hello'
 #    ratings = toolkit.get_action('publica_rating_create')(data_dict={'package':name_or_id, 'rating':rating})
@@ -147,6 +154,7 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
             'get_maps_url': get_maps_url,
             'preview_resource_or_ingested': preview_resource_or_ingested,
             'can_preview_resource_or_ingested': can_preview_resource_or_ingested,
+            #'get_contact_email': get_contact_email,
            # 'create_rating': create_rating,
            # 'get_rating': get_rating,
         }

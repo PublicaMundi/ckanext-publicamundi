@@ -429,6 +429,7 @@ p a{
 .imis-logo-side{
     display: block;
     float: right;
+    margin-top: 3px;
     height: 27px;
     width: 68px;
     background: url('../images/imis-logo.png');
@@ -738,7 +739,7 @@ p a{
     line-height: 30px;
 }
 .toolbar .sixtypercent .breadcrumb{
-    max-width: 63%;
+    max-width: 61%;
 }
 .toolbar .breadcrumb .active a, .toolbar .breadcrumb a.active{
     font-weight: normal;
@@ -1065,7 +1066,7 @@ p a{
 .dataset-map-expanded #dataset-map{
     top: -396px;
     left:0;
-    height:396px;
+    height:399px;
     border: 2px #4E59A4 solid;
 }
 .group{
