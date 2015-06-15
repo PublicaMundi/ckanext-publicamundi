@@ -40,20 +40,24 @@ class VectorStorer(p.SingletonPlugin):
         vectorController = (controllers_base + "vector:VectorController")
 
         map.connect(
-            'edit_current_sld',
-            '/dataset/{id}/resource/{resource_id}/edit_style/{operation}',
+            'render_style_popup',
+            '/dataset/{id}/resource/{resource_id}/style',
             controller=styleController,
-            action='edit_current_sld', id='{id}', resource_id='{resource_id}',
-            operation='{operation}')
-
+            action='render_style_popup', id='id',
+            resource_id='{resource_id}', template='{template}')
+        
         map.connect(
-            'upload_sld',
-            '/dataset/{id}/resource/{resource_id}/upload_sld/{operation}',
+            'edit_current_sld',
+            '/dataset/{id}/resource/{resource_id}/style/edit_current_sld',
             controller=styleController,
-            action='upload_sld',
-            id='{id}',
-            resource_id='{resource_id}',
-            operation='{operation}')
+            action='edit_current_sld', id='{id}', resource_id='{resource_id}')
+        
+        map.connect(
+            'upload_edited_sld',
+            '/dataset/{id}/resource/{resource_id}/style/upload_edited_sld',
+            controller=styleController,
+            action='upload_edited_sld',
+            id='{id}', resource_id='{resource_id}')
 
         map.connect(
             'vector_export',
@@ -76,6 +80,8 @@ class VectorStorer(p.SingletonPlugin):
             controller=vectorController,
             action='ingest',
             resource_id='{resource_id}')
+        
+        
 
         return map
 

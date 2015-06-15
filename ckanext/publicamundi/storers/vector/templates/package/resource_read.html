@@ -16,19 +16,20 @@
     
     #}
 
-    {# {% if res.vectorstorer_resource and res.format == 'data_table' %} #}
-   {% if h.check_access('package_update', {'id':pkg.id }) and res.format == 'data_table' %}
-	{% set export_dialog_url = h.url_for('vector_export',  action='export',operation='index', id=pkg.name, resource_id=res.id) %} 
-    <li><a class="btn" href="{{ export_dialog_url }}" 
+    {% if res.vectorstorer_resource and res.format == 'data_table' %}
+        {% set export_dialog_url = h.url_for('vector_export',  action='export',operation='index', id=pkg.name, resource_id=res.id) %} 
+        <a class="btn btn-success" href="{{ export_dialog_url }}" 
         data-module="api-info" data-module-template="{{ export_dialog_url }}" data-loading-text="{{ loading_text }}"
-        ><i class="icon-cloud-download"></i> {{ _('Export') }}</a></li>
-	{% resource 'ckanext-publicamundi-vector/dialog' %}
+        ><i class="icon-cloud-download"></i> {{ _('Export') }}</a>
+        {% resource 'ckanext-publicamundi-vector/dialog' %}
     {% endif %}
 
-    {% if h.check_access('package_update', {'id':pkg.id }) and res.vectorstorer_resource and res.format == 'wms'%}
-        {% set edit_style_url = h.url_for('edit_current_sld', action='edit_current_sld', id=pkg.name, resource_id=res.id,operation='show') %} 
-        <li><a class="btn" href="{{ edit_style_url }}"
-            ><i class="icon-magic"></i> {{ _('Edit Style') }}</a></li>
+    {% if res.vectorstorer_resource  and res.format == 'wms' %}
+        {% set style_dialog_url = h.url_for('render_style_popup', id=pkg.name, resource_id=res.id) %} 
+        <a class="btn btn-success" href="{{ style_dialog_url }}" 
+        data-module="api-info" data-module-template="{{ style_dialog_url }}" data-loading-text="{{ loading_text }}"
+        ><i class="icon-cloud-download"></i> {{ _('Edit Style') }}</a>
+        {% resource 'ckanext-publicamundi-vector/dialog' %}
     {% endif %}
 
 {% endblock %}

@@ -7,36 +7,36 @@
     <h3>Upload an SLD XML File</h3>
 
     {% block sld_file_upload %}
-	<form action="{{h.url_for('upload_sld', action='upload_sld' ,id=c.pkg.id,resource_id=c.resource.id,operation='upload')}}" method="post" accept-charset="utf-8"
-	    enctype="multipart/form-data">
-	    <input id="file" name="sld_file" accept="*/xml" type="file" value="" />
-	    <br> <br>
-	    <input type="submit" value="Upload" />
-	</form>
+    <form action="{{h.url_for('upload_sld', action='upload_sld' ,id=c.pkg.id,resource_id=c.resource.id,operation='upload')}}" method="post" accept-charset="utf-8"
+        enctype="multipart/form-data">
+        <input id="file" name="sld_file" accept="*/xml" type="file" value="" />
+        <br> <br>
+        <input type="submit" value="Upload" />
+    </form>
 
     {% endblock %}
 
     {% if c.error %}
-	 
-	<div class="error-explanation alert alert-error ">
-	    <p>There was an error while uploading this SLD :</p>
-	    <ul>
+     
+    <div class="error-explanation alert alert-error ">
+        <p>There was an error while uploading this SLD :</p>
+        <ul>
         
-		<li data-field-label="Name">{{c.error}}</li>
+        <li data-field-label="Name">{{c.error}}</li>
         
-	    </ul>
-	</div>
-	
+        </ul>
+    </div>
+    
     {% endif %}
     
     {% if c.success %}
-	<div class="alert in alert-success">
-	    <strong>SLD file was successfully uploaded.</strong>
-	</div>
+    <div class="alert in alert-success">
+        <strong>SLD file was successfully uploaded.</strong>
+    </div>
     {% endif %}
     
     {% if c.sld_body %}
-	{% snippet 'style/snippets/sld_editor.html', action='upload_sld',id=c.pkg.id,resource_id=c.resource.id,sld_body=c.sld_body %}
+    {% snippet 'style/snippets/sld_editor.html', action='upload_sld',id=c.pkg.id,resource_id=c.resource.id,sld_body=c.sld_body %}
     {% endif %}
   
 
