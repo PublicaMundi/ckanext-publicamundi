@@ -352,7 +352,7 @@ h1 > .label.package-state {
 .rating-count{
     margin-left: 14px;
 }
-.package-rating a:hover{
+.package-rating a:hover, .package-rating a:focus{
     text-decoration: none;
 }
 /*
