@@ -6,7 +6,7 @@
 
 @font-face {
     font-family: 'ACMuliLight';
-    src: url('../fonts/ACMuliLight/AC-MuliLight.ttf') format('truetype');
+    src: url('../fonts/ACMuliLight/AC-MuliLight.otf') format('opentype');
 }
 
 body { 
@@ -401,9 +401,9 @@ p a{
     //display: block;
     position: fixed;
     top: 80vh;
-    left:3px;
-    z-index: 1000;
-    background: #fff;
+    left:-4px;
+    z-index: 2000;
+    //background: #fff;
 
     -ms-transform: translate(-39%) rotate(-90deg); /* IE 9 */
     -webkit-transform: translate(-39%) rotate(-90deg); /* Chrome, Safari, Opera */
@@ -413,9 +413,9 @@ p a{
     display: none;
     background: #fff;
     z-index: 1000;
-    border: 3px #4E59A4 solid;
+    border: 2px #4E59A4 solid;
     color: #4E59A4;
-   position:absolute;
+    position:absolute;
     padding: 10px;
     
    -ms-transform: translate(-41%) rotate(-90deg); /* IE 9 */
@@ -425,6 +425,16 @@ p a{
 }
 .feedback-form:hover .feedback-slideout{
     display: block;
+}
+.imis-logo-side{
+    display: block;
+    float: right;
+    height: 27px;
+    width: 68px;
+    background: url('../images/imis-logo.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: rgba(123,123,321,0);
 }
 .hero {
     height: 50vh;
@@ -728,7 +738,7 @@ p a{
     line-height: 30px;
 }
 .toolbar .sixtypercent .breadcrumb{
-    max-width: 65%;
+    max-width: 63%;
 }
 .toolbar .breadcrumb .active a, .toolbar .breadcrumb a.active{
     font-weight: normal;
