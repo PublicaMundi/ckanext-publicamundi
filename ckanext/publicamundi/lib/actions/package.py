@@ -179,13 +179,15 @@ def dataset_import(context, data_dict):
     
     # Create/Update package
     
-    validation_errors, error_message = None, None
+    schema1, validation_errors, error_message = None, None, None
     
-    ctx = _make_context(context)
     if identifier:
         # Must override catalog-wide schema for actions in this context
         schema1 = lookup_package_plugin().create_package_schema()
         schema1['id'] = [unicode]
+    
+    ctx = _make_context(context)
+    if schema1:
         ctx['schema'] = schema1
     
     try:
@@ -199,6 +201,8 @@ def dataset_import(context, data_dict):
             validation_errors = ex.error_dict
             error_message = ex.message or _('The dataset contains invalid metadata')
             ctx = _make_context(context, skip_validation=True)
+            if schema1:
+                ctx['schema'] = schema1
             pkg_dict = _get_action('package_create')(ctx, data_dict=pkg_dict)
             log.warn('Forced to create an invalid package as %r ' % (name))
         else:
