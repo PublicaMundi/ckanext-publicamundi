@@ -1,0 +1,24 @@
+{% set current_rating = current_rating or 0 %}
+{% set num_ratings = num_ratings or 0 %}
+<div class="hidden" id="rating-average">{{ current_rating}}</div>
+<div class="package-rating">
+{% for rating in [1,2,3,4,5] %}
+ {% if rating <= current_rating %}
+    {% set star_class='icon-star' %}
+{% elif rating > current_rating and rating <= current_rating +0.5 %}
+    {% set star_class='icon-star-half-full' %}
+{% else %}
+    {% set star_class='icon-star-empty' %}
+    {% endif %} 
+
+{% if user %}
+<a title="{{rating}}" class="{{ star_class}}" href="#" data-module='dataset-rating' data-module-pkg_name="{{pkg.name}}" data-module-rating="{{rating}}"></a>
+{% else %}
+<i title="{{rating}}" class="{{star_class}}"></i>
+
+{% endif %}
+{% endfor %}
+<div class="rating-count">(<span id="rating-count">{{ num_ratings}}</span> {{_('votes')}})</div>
+</div>
+ 
+
