@@ -16,7 +16,7 @@ import ckanext.publicamundi.lib.template_helpers as ext_template_helpers
 
 def most_recent_datasets(limit=10):
     datasets = toolkit.get_action('package_search')(
-        data_dict={'sort': 'metadata_modified desc', 'rows':8})
+        data_dict={'sort': 'metadata_modified desc', 'rows':limit})
 
     # Add terms for translation and call get_translation_terms
     #locale = helpers.lang()
