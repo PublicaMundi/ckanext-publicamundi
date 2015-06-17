@@ -1,22 +1,28 @@
 import datetime
 import copy
+import sets
+
+from pylons import request, config
 
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 import ckan.lib.datapreview as datapreview
+from ckan import model 
 from ckan.lib import helpers, munge
 from ckan.lib.base import c
 from ckan.lib.helpers import render_datetime, resource_preview, url_for_static
-#from ckan import rating
 
 import ckanext.publicamundi.lib.template_helpers as ext_template_helpers
-#import ckanext.publicamundi.themes.geodata.logic.action as action
-#import ckanext.publicamundi.themes.geodata.logic.auth
 
 def most_recent_datasets(limit=10):
     datasets = toolkit.get_action('package_search')(
         data_dict={'sort': 'metadata_modified desc', 'rows':8})
-    return datasets
+
+    # Add terms for translation and call get_translation_terms
+    #locale = helpers.lang()
+    #translated = get_translated_dataset_groups(datasets.get('results'), locale)
+
+    return datasets.get('results')
 
 def list_menu_items (limit=21):
     groups = toolkit.get_action('group_list')(
@@ -119,6 +125,55 @@ def _resource_preview(data_dict):
                     or datapreview.get_preview_plugin(
                         data_dict, return_first=True))
 
+def get_translated_dataset_groups(datasets, desired_lang_code):
+    terms = sets.Set()
+    for dataset in datasets:
+        groups = dataset.get('groups')
+        organization = dataset.get('organization')
+        if groups:
+            terms.add(groups[0].get('title'))
+        if organization:
+            terms.add(organization.get('title'))
+    # Look up translations for all datasets in one db query.
+    translations = toolkit.get_action('term_translation_show')(
+        {'model': model},
+        {'terms': terms,
+            'lang_codes': (desired_lang_code)})
+
+    for dataset in datasets:
+        groups = dataset.get('groups')
+        organization = dataset.get('organization')
+        items = []
+        if groups:
+            items.append(groups[0])
+        if organization:
+            items.append(organization)
+        for item in items:
+            matching_translations = [translation for
+                    translation in translations
+                    if translation['term'] == item.get('title')
+                    and translation['lang_code'] == desired_lang_code]
+            if matching_translations:
+                assert len(matching_translations) == 1
+                item['title'] = (
+                        matching_translations[0]['term_translation'])
+    return datasets
+
+# Helper function to ask for specific term to be translated
+def get_term_translation(term, desired_lang_code):
+    translations = toolkit.get_action('term_translation_show')(
+        {'model': model},
+        {'terms': term,
+            'lang_codes': (desired_lang_code)})
+    matching_translations = [translation for
+                    translation in translations
+                    if translation['term'] == term
+                    and translation['lang_code'] == desired_lang_code]
+    if matching_translations:
+        assert len(matching_translations) == 1
+        term = (
+                matching_translations[0]['term_translation'])
+    return term
 
 class GeodataThemePlugin(plugins.SingletonPlugin):
     '''Theme plugin for geodata.gov.gr.
@@ -144,6 +199,8 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
             'get_maps_url': get_maps_url,
             'preview_resource_or_ingested': preview_resource_or_ingested,
             'can_preview_resource_or_ingested': can_preview_resource_or_ingested,
+            'get_translated_dataset_groups' : get_translated_dataset_groups,
+            'get_term_translation': get_term_translation,
             #'get_contact_email': get_contact_email,
            # 'create_rating': create_rating,
            # 'get_rating': get_rating,
@@ -187,5 +244,48 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     def before_view(self, pkg_dict):
         list_menu_items()
         return pkg_dict
+
+    # IPackageController 
+    # this has been moved here from ckanext/multilingual MultilingualDataset
+    def after_search(self, search_results, search_params):
+
+        # Translate the unselected search facets.
+        facets = search_results.get('search_facets')
+        if not facets:
+            return search_results
+
+        desired_lang_code = request.environ['CKAN_LANG']
+        fallback_lang_code = config.get('ckan.locale_default', 'en')
+
+        # Look up translations for all of the facets in one db query.
+        terms = sets.Set()
+        for facet in facets.values():
+            for item in facet['items']:
+                terms.add(item['display_name'])
+        translations = toolkit.get_action('term_translation_show')(
+                {'model': model},
+                {'terms': terms,
+                    #'lang_codes': (desired_lang_code, fallback_lang_code)})
+                    'lang_codes': (desired_lang_code)})
+
+        # Replace facet display names with translated ones.
+        for facet in facets.values():
+            for item in facet['items']:
+                matching_translations = [translation for
+                        translation in translations
+                        if translation['term'] == item['display_name']
+                        and translation['lang_code'] == desired_lang_code]
+                if not matching_translations:
+                    matching_translations = [translation for
+                            translation in translations
+                            if translation['term'] == item['display_name']
+                            and translation['lang_code'] == fallback_lang_code]
+                if matching_translations:
+                    assert len(matching_translations) == 1
+                    item['display_name'] = (
+                        matching_translations[0]['term_translation'])
+
+        return search_results
+
 
 
