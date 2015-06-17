@@ -151,16 +151,16 @@ function handleFacets() {
         }
 
         $(this).one('click', sort_count_up);
-    };
-    
-    
-            
-    // Sort alphabetically ascending/descending handling
-    function sort_name_up(e) {
-        function remove_accented(str) {
+    }; 
+          
+    //remove greek accented characters
+    function remove_accented(str) {
             return str.replace('Ά', 'Α').replace('Έ', 'Ε').replace('Ή', 'Η').replace('Ί', 'Ι').replace('Ό', 'Ο').replace('Ύ', 'Υ').replace('Ώ', 'Ω');
         }
 
+    // Sort alphabetically ascending/descending handling
+    function sort_name_up(e) {
+        
         //ascending alphabetical sort
         function asc_alpha_sort(a, b) {
             return (remove_accented($(b).text().toUpperCase())) < (remove_accented($(a).text().toUpperCase()))? 1 : -1;
@@ -198,10 +198,7 @@ function handleFacets() {
         $(this).one('click', sort_name_down);
     };
     function sort_name_down(e) {
-        //remove greek accented characters
-        function remove_accented(str) {
-            return str.replace('Ά', 'Α').replace('Έ', 'Ε').replace('Ή', 'Η').replace('Ί', 'Ι').replace('Ό', 'Ο').replace('Ύ', 'Υ').replace('Ώ', 'Ω');
-        }
+        
         //descending alphabetical sort
         function desc_alpha_sort(a, b) {
             return (remove_accented($(b).text().toUpperCase())) > (remove_accented($(a).text().toUpperCase()))? 1 : -1;
