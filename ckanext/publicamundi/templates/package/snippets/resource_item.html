@@ -2,16 +2,12 @@
 {% set url_action = 'resource_edit' if url_is_edit and can_edit else 'resource_read' %}
 {% set url = h.url_for(controller='package', action=url_action, id=pkg.name, resource_id=res.id) %}
 
-{% set raster_resources = h.get_ingested_raster(pkg,res) %}
-{% set vector_resources = h.get_ingested_vector(pkg,res) %}
-
-{# {% resource 'ckanext-publicamundi/download_as_options' %} #}
 <li class="resource-item clearfix" data-id="{{ res.id }}">
     {% block resource_item_header %}
     <header>
         {% block resource_item_title %}
         <a class="heading inline" href="{{ url }}" title="{{ res.name or res.description }}">
-            {% if h.can_preview_resource_or_ingested(pkg, res) %}
+            {% if res.can_be_previewed %}
                 <i class="icon-eye-open"></i>
                 {% else %}
                 <i class="icon-info-sign"></i>
