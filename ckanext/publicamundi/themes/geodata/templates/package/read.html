@@ -37,16 +37,13 @@
 {% endblock %}
 
  {% block secondary_content %}
-{# {% block secondary_help_content %}{% endblock %} #}
 
-{#  {% block package_info %}
-    {% snippet 'package/snippets/info.html', pkg=pkg %}
-    {% endblock %} #}
-        {% if pkg.organization %}
-  {% block package_organization %}
-      {% snippet "snippets/organization.html", organization=pkg.organization , has_context_title=true  %}
-      {% endblock %}
-      {% endif %}
+    {% if pkg.organization %}
+    {% block package_organization %}
+      {% set org = h.get_organization(pkg.organization.name) %}
+      {% snippet "snippets/organization.html", organization=org , has_context_title=true  %}
+    {% endblock %}
+    {% endif %}
 
       {% if pkg.groups %}
     {% block package_group %}

@@ -4,9 +4,9 @@ import copy
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 import ckan.lib.datapreview as datapreview
-from ckan.lib import helpers
+from ckan.lib import helpers, munge
 from ckan.lib.base import c
-from ckan.lib.helpers import render_datetime, resource_preview
+from ckan.lib.helpers import render_datetime, resource_preview, url_for_static
 #from ckan import rating
 
 import ckanext.publicamundi.lib.template_helpers as ext_template_helpers
@@ -36,17 +36,7 @@ def get_contact_email(pkg):
                 }
     else:
         return {}
-#def create_rating(name_or_id, rating):
-#    print 'hello'
-#    ratings = toolkit.get_action('publica_rating_create')(data_dict={'package':name_or_id, 'rating':rating})
-#    print ratings
-#    return ''
 
-#def get_rating(name_or_id):
-#    ratings = toolkit.get_action('publica_rating_show')(data_dict={'package':name_or_id})
-#    print 'ratings'
-#    print ratings
-#    return ratings
 
 _feedback_form = None
 _maps_url = None
