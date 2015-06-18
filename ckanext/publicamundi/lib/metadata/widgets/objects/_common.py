@@ -520,7 +520,7 @@ class GeographicBoundingBoxReadWidget(ReadObjectWidget):
 
 @field_widget_multiadapter([IListField, schemata.IGeographicBoundingBox],
     qualifiers=['td'], is_fallback=False)
-class ListOfGeographicBoundingBoxEditWidget(ReadFieldWidget, ListFieldWidgetTraits):
+class ListOfGeographicBoundingBoxReadWidget(ReadFieldWidget, ListFieldWidgetTraits):
 
     def prepare_template_vars(self, name_prefix, data):
         cls = type(self)
@@ -605,4 +605,27 @@ class ReferenceSystemReadWidget(ReadObjectWidget):
 
     def get_template(self):
         return None 
+
+@object_widget_adapter(schemata.IReferenceSystem, 
+    qualifiers=['td'], is_fallback=False)
+class TdReferenceSystemReadWidget(ReadObjectWidget):
+    
+    def get_template(self):
+        return 'package/snippets/objects/read-reference_system-td.html' 
+
+#
+# IFreeKeyword
+#
+
+@field_widget_multiadapter([IListField, schemata.IFreeKeyword])
+class FreeKeywordsReadWidget(ReadFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/read-list-free_keyword.html'
+
+@field_widget_multiadapter([IListField, schemata.IFreeKeyword], qualifiers=['td'])
+class TdFreeKeywordsReadWidget(ReadFieldWidget):
+
+    def get_template(self):
+        return 'package/snippets/fields/read-list-free_keyword-td.html'
 

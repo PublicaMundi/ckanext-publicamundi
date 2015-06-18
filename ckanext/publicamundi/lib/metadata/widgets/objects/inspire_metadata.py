@@ -218,6 +218,7 @@ class TableInspireReadWidget(TableObjectReadWidget):
            # Classification
            'topic_category',
            # Keywords
+           'free_keywords',
            'keywords',
            # Geographic
            'bounding_box',
