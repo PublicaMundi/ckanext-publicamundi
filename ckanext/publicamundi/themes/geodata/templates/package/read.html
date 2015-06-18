@@ -1,11 +1,35 @@
 {%ckan_extends %}
 
 {% set pkg = c.pkg_dict %}
+{% if pkg %} 
+    {% if pkg.organization %}
+        {% set org = h.get_organization(pkg.organization.name) %}
+        {# fix for organization title not translating in sidebar #}
+        {% do org.update(title = h.get_term_translation(org.title, h.lang()))%}
+    {% endif %}
+{% endif %}
+
+
 {% block toolbar %}
 {{ super() }}
 {% endblock %}
 
+{% block breadcrumb_content %}
+  {% if pkg %}
+    {% set dataset = pkg.title or pkg.name %}
+    {% if pkg.organization %}
 
+      <li>{% link_for _('Organizations'), controller='organization', action='index' %}</li>
+      <li>{% link_for org.title|truncate(30) or org.name, controller='organization', action='read', id=pkg.organization.name %}</li>
+    {% else %}
+      <li>{% link_for _('Datasets'), controller='package', action='search' %}</li>
+    {% endif %}
+    <li{{ self.breadcrumb_content_selected() }}>{% link_for dataset|truncate(30), controller='package', action='read', id=pkg.name %}</li>
+  {% else %}
+    <li>{% link_for _('Datasets'), controller='package', action='search' %}</li>
+    <li class="active"><a href="">{{ _('Create Dataset') }}</a></li>
+  {% endif %}
+{% endblock %}
 {% block page_heading %}
 {{ super() }}
 {% endblock %}
@@ -37,11 +61,10 @@
 {% endblock %}
 
  {% block secondary_content %}
-
     {% if pkg.organization %}
     {% block package_organization %}
-      {% set org = h.get_organization(pkg.organization.name) %}
-      {% snippet "snippets/organization.html", organization=org , has_context_title=true  %}
+
+        {% snippet "snippets/organization.html", organization=org , has_context_title=true  %}
     {% endblock %}
     {% endif %}
 
