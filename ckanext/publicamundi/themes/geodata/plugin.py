@@ -125,7 +125,8 @@ def _resource_preview(data_dict):
                     or datapreview.get_preview_plugin(
                         data_dict, return_first=True))
 
-def get_translated_dataset_groups(datasets, desired_lang_code):
+def get_translated_dataset_groups(datasets):
+    desired_lang_code = helpers.lang()
     terms = sets.Set()
     for dataset in datasets:
         groups = dataset.get('groups')
@@ -160,7 +161,8 @@ def get_translated_dataset_groups(datasets, desired_lang_code):
     return datasets
 
 # Helper function to ask for specific term to be translated
-def get_term_translation(term, desired_lang_code):
+def get_term_translation(term):
+    desired_lang_code = helpers.lang()
     translations = toolkit.get_action('term_translation_show')(
         {'model': model},
         {'terms': term,

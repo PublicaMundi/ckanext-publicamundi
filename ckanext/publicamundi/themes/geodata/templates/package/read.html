@@ -10,7 +10,7 @@
 {% endif %}
 
 {# fix for organization and group title non translation in sidebar #}
-{% do h.get_translated_dataset_groups([c.pkg_dict], h.lang()) %}
+{% do h.get_translated_dataset_groups([c.pkg_dict]) %}
 
 {% block toolbar %}
 {{ super() }}
