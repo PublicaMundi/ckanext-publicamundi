@@ -31,7 +31,7 @@
     <div class="module-content">
   
       {% block package_search_results_list %}
-        {{ h.snippet('snippets/package_list_search.html', packages=h.get_translated_dataset_groups(c.page.items, h.lang())) }}
+        {{ h.snippet('snippets/package_list_search.html', packages=h.get_translated_dataset_groups(c.page.items)) }}
       {% endblock %}
     </div>
 

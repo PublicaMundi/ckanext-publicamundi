@@ -29,7 +29,7 @@ a {
     color: #4E59A4;
 }
 p a{
-    font-weight: bold;
+    //font-weight: bold;
 }
 .module a{
     font-weight: normal;
@@ -402,7 +402,7 @@ p a{
     position: fixed;
     top: 80vh;
     left:-4px;
-    z-index: 2000;
+    z-index: 1000;
     //background: #fff;
 
     -ms-transform: translate(-39%) rotate(-90deg); /* IE 9 */

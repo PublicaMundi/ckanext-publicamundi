@@ -1,10 +1,19 @@
 {% ckan_extends %}
 
+{% set pkg = c.pkg_dict %}
+{% if pkg %} 
+    {% if pkg.organization %}
+        {% set org = h.get_organization(pkg.organization.name) %}
+        {% do pkg.update(organization = org) %} 
+    {% endif %}
+{% endif %}
+{# fix for organization and group title non translation in sidebar #}
+{% do h.get_translated_dataset_groups([c.pkg_dict]) %}
 {% block secondary_content %}
     {% if pkg.organization %}
     {% block package_organization %}
       {% set org = h.get_organization(pkg.organization.name) %}
-      {% snippet "snippets/organization.html", organization=org , has_context_title=true  %}
+      {% snippet "snippets/organization.html", organization=pkg.organization , has_context_title=true  %}
     {% endblock %}
     {% endif %}
 
