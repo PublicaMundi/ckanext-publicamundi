@@ -73,6 +73,18 @@ class VectorStorer(p.SingletonPlugin):
             '/api/publicamundi/search_epsg',
             controller=vectorController,
             action='search_epsg')
+        
+        map.connect(
+            'search_encoding',
+            '/api/publicamundi/search_encoding',
+            controller=vectorController,
+            action='search_encoding')
+        
+        map.connect(
+            'validation_check',
+            '/api/publicamundi/vector/validation_check',
+            controller=vectorController,
+            action='validation_check')
 
         map.connect(
             'vector_ingest',

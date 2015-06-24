@@ -55,7 +55,7 @@ ckan.module('export-module', function(jQuery, _) {
         },
        _init_export: function() {
 
-            projection = $('#projection').val();
+            projection = $('#layer_srs_0').val();
             export_format = $('#field-export_format').val();
             if (this.options.non_srs_formats.indexOf(export_format) < 0) {
                 if (this._is_valid_srs(projection)) {
@@ -77,7 +77,7 @@ ckan.module('export-module', function(jQuery, _) {
             if ($('#divproj').is(":hidden")) {
                 proj = 4326;
             } else {
-                proj = $('#projection').val();
+                proj = $('#layer_srs_0').val();
             }
             var export_url = this.options.base_url + "?format=" + $('#field-export_format').val() + "&projection=" + proj;
 
