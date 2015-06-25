@@ -15,6 +15,8 @@ from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata.ibase import IXmlSerializer, IObject
 from ckanext.publicamundi.lib.metadata.base import Object, FieldContext
 
+
+
 __all__ = [
     'field_xml_serialize_adapter',
     'object_xml_serialize_adapter',
@@ -158,7 +160,8 @@ class BaseSerializer(object):
         return s
 
     def loads(self, s):
-        e = etree.fromstring(s)
+        parser = etree.XMLParser(resolve_entities=False)
+        e = etree.fromstring(s, parser)
         o = self.from_xml(e)
         return o
     

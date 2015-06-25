@@ -5,6 +5,7 @@ from abc import ABCMeta, abstractmethod
 import urllib as url_lib
 import xml.etree.ElementTree as XMLProcessor
 
+parser = etree.XMLParser(resolve_entities=False)
 
 class WCSTRequest:
     """
@@ -137,8 +138,9 @@ class WCSTExecutor():
         :param service_call: string - the service call to the wcst
         :return: does not return anything, just raises an exception if errors were detected
         """
+
         if response.find("ows:ExceptionReport") != -1:
-            xml = XMLProcessor.fromstring(response)
+            xml = XMLProcessor.fromstring(response, parser)
             error_code = ""
             error_text = response
             for error in xml.findall("ows:Exception", namespaces):
@@ -158,7 +160,7 @@ class WCSTExecutor():
         namespaces = {"ows": "http://www.opengis.net/ows/2.0"}
         self.__check_request_for_errors(response, namespaces, service_call)
         try:
-            xml = XMLProcessor.fromstring(response)
+            xml = XMLProcessor.fromstring(response, parser)
             result = xml.text
         except Exception as ex:
             result = ""
