@@ -1006,29 +1006,26 @@ p a{
 }
 .sorting{
     float: left;
-    width: 55%;
     margin-top:8px;
     font-size: 15px;
     font-weight: bold;
 }
 .sort-count, .sort-name
 {
-    display:inline-block;
+    width: 60px;
+    margin-left: 5px;
+    font-weight: bold !important;
+    display:block;
     transition: color 0.2s ease-in-out;
-    margin-left:5px;
 }
 .sort-name{
+    float: left;
 }
 .sort-count{
+    float: right;
 }
-.sort-name:after, .sort-count:after{
-    content:'\00A0\00A0\00A0';
-}
-.up:after{
-    content:'\25B2'
-}
-.down:after{
-    content:'\25BC'
+.sort-count-icon, .sort-name-icon{
+    font-size:11px;
 }
 .secondary .sort-count:focus, .sort-name:focus{
     color: #4E59a4;
@@ -1425,6 +1422,9 @@ p a{
     background: #4E59A4;
     color: #fff !important;
     //border: 2px #4E59A4 solid;
+}
+.btn:focus{
+    outline: none;
 }
 .btn:first-child{
     text-decoration: none;

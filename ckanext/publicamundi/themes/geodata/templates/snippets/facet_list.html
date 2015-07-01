@@ -67,7 +67,14 @@ within_tertiary
                     'license_id': _('Licenses'), } %}
 
                     {% set title = facet_titles.get(name)|capitalize %}
-        {{ title }} <br> <div class="sorting"><a href="#" class="sort-name">{{_('A...Z ')}}</a> <a href="#" class="sort-count down">{{_('1...9 ')}}</a> </div>
+                    {{ title }} <br> 
+                    <div class="sorting">
+                        <a href="#" class="sort-name">{{_('A...Z ')}} 
+                            <i class="sort-name-icon"></i>
+                        </a> 
+                        <a href="#" class="sort-count">{{_('1...9 ')}} <i class="sort-count-icon icon-chevron-down"></i>
+                        </a> 
+                    </div>
       </h2>
         <nav>
         <ul id={{ name }}  title={{title}} class="{{ nav_class or 'unstyled nav nav-simple nav-facet' }} count_desc">
