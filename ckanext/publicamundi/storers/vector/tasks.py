@@ -14,7 +14,7 @@ from celery.task.http import HttpDispatchTask
 from ckan.lib.celery_app import celery as celery_app
 
 import ckanext.publicamundi.storers.vector as vectorstorer
-from ckanext.publicamundi.storers.vector import vector
+from ckanext.publicamundi.storers.vector import vector, mapserver_utils
 from ckanext.publicamundi.storers.vector.resources import(
     WMSResource, DBTableResource, WFSResource)
 from ckanext.publicamundi.storers.vector.db_helpers import DB
@@ -44,7 +44,7 @@ def setup_vectorstorer_in_task_context(context):
 
     temp_folder = context['temp_folder']
     gdal_folder = context['gdal_folder']
-    vectorstorer.setup(gdal_folder, temp_folder)    
+    vectorstorer.setup(gdal_folder, temp_folder)
     return
 
 @celery_app.task(name='vectorstorer.identify', max_retries=2)
@@ -110,7 +110,7 @@ def _identify_resource(resource, user_api_key, resource_tmp_folder, filename):
     return result
 
 @celery_app.task(name='vectorstorer.upload')
-def vectorstorer_upload(resource_dict, context, geoserver_context):
+def vectorstorer_upload(resource_dict, context, mapservers_context):
     setup_vectorstorer_in_task_context(context)
     
     db_conn_params = context['db_params']
@@ -137,7 +137,7 @@ def vectorstorer_upload(resource_dict, context, geoserver_context):
         _ingest_resource(
             resource_dict,
             context1,
-            geoserver_context,
+            mapservers_context,
             tmp_folder,
             filename)
         logger.info('Ingested resource %s' % (resource_id))
@@ -151,7 +151,7 @@ def vectorstorer_upload(resource_dict, context, geoserver_context):
     # Reload configuration at backend 
     
     try:
-        _reload_geoserver_config(context1, geoserver_context)
+        _reload_geoserver_config(context1, mapservers_context['geoserver_context'])
     except Exception as ex:
         logger.warning('Failed to reload backend configuration: %s' % (ex))
 
@@ -160,7 +160,7 @@ def vectorstorer_upload(resource_dict, context, geoserver_context):
 def _ingest_resource(
         resource,
         context,
-        geoserver_context,
+        mapservers_context,
         resource_tmp_folder,
         filename):
     
@@ -200,7 +200,7 @@ def _ingest_resource(
                     layer_name,
                     resource,
                     context,
-                    geoserver_context,
+                    mapservers_context,
                     srs,
                     encoding)
 
@@ -381,7 +381,7 @@ def _ingest_vector(
         layer_name,
         resource,
         context,
-        geoserver_context,
+        mapservers_context,
         srs,
         encoding):
     
@@ -399,7 +399,7 @@ def _ingest_vector(
         geom_name = _vector.get_geometry_name(layer)
         spatial_ref = vectorstorer.osr.SpatialReference()
         spatial_ref.ImportFromEPSG(srs)
-        srs_wkt = spatial_ref.ExportToWkt()
+        #srs_wkt = spatial_ref.ExportToWkt()
         
         created_db_table_resource = _add_db_table_resource(
             context,
@@ -414,17 +414,31 @@ def _ingest_vector(
             created_db_table_resource['id'].lower(),
             srs,
             encoding)
-        
-        publishing_server, publishing_layer = _publish_layer(
-            context, geoserver_context, layer_name, created_db_table_resource, srs_wkt)
+
+        publishing_server = mapservers_context['default_publishing_server']
+        publishing_server_url = None
+        publishing_layer = None
+
+        # Publish to Geoserver or Mapserver (Based on configuration)
+        if publishing_server == 'geoserver':
+            publishing_server_url, publishing_layer = _publish_layer_to_geoserver(
+                mapservers_context['geoserver_context'], layer_name,
+                created_db_table_resource, spatial_ref)
+        elif publishing_server == 'mapserver':
+
+            publishing_server_url, publishing_layer = _publish_layer_to_mapserver(
+                context, mapservers_context['mapserver_context'], layer_name,
+                created_db_table_resource,spatial_ref, srs, layer, geom_name)
+            mapping_server = "mapserver"
+
         logger.info('Published layer as %s' % (publishing_layer))
-        
+
         _add_wms_resource(
             context,
             layer_name,
             resource,
             created_db_table_resource,
-            publishing_server,
+            publishing_server_url,
             publishing_layer)
 
         _add_wfs_resource(
@@ -432,7 +446,7 @@ def _ingest_vector(
             layer_name,
             resource,
             created_db_table_resource,
-            publishing_server,
+            publishing_server_url,
             publishing_layer)
 
 def _add_db_table_resource(context, resource, geom_name, layer_name):
@@ -505,8 +519,8 @@ def _is_shapefile(res_folder_path):
     else:
         return (False, None, False)
 
-def _publish_layer(context, geoserver_context, layer_name, resource, srs_wkt):
-    
+def _publish_layer_to_geoserver(geoserver_context, layer_name, resource, spatial_ref):
+    srs_wkt = spatial_ref.ExportToWkt()
     geoserver_url = geoserver_context['url']
     geoserver_workspace = geoserver_context['workspace']
     geoserver_username = geoserver_context['username']
@@ -539,10 +553,77 @@ def _publish_layer(context, geoserver_context, layer_name, resource, srs_wkt):
         raise CannotPublishLayer(
             'Failed to publish layer %r: %s: %s' % (layer_name, ex, detail))
 
-    publishing_server = geoserver_url
+    publishing_server_url = geoserver_url+"/ows"
     layer_name = geoserver_workspace + ':' + resource['id']
     
-    return (publishing_server, layer_name)
+    return (publishing_server_url, layer_name)
+
+def _publish_layer_to_mapserver(
+        context,
+        mapserver_context,
+        layer_name,
+        resource,
+        spatial_ref,
+        srs,
+        layer,
+        geom_name):
+
+    mapscript = vectorstorer.mapscript
+
+    srs_wkt = spatial_ref.ExportToWkt()
+    package_id = context['package_id']
+    package = {'id': package_id}
+    pkg_dict = _invoke_api_resource_action(
+                    context,
+                    package,
+                    'package_show')
+    pkg_name = pkg_dict['name']
+    mapfile_name = pkg_name + '.map'
+
+    mapfile_folder = mapserver_context['mapfile_folder']
+    if not os.path.exists(mapfile_folder):
+        os.makedirs(mapfile_folder)
+    abs_mapfile = os.path.join(mapfile_folder, mapfile_name)
+    
+    mapsrv_params = 'map='+ abs_mapfile
+    
+    mapserver_url =mapserver_context['url']+ "?" + mapsrv_params
+
+    _mapserverutils = mapserver_utils.MapServerUtils(vectorstorer)
+    map = None
+
+    if os.path.exists(abs_mapfile):
+        map = _mapserverutils.load_mapfile(abs_mapfile)
+    else:
+        map =_mapserverutils.create_mapfile_obj(
+                mapfile_folder,
+                mapserver_url,
+                pkg_name)
+
+    new_layer = _mapserverutils.create_layer(
+                    map,
+                    resource['id'],
+                    layer,
+                    layer_name,
+                    geom_name,
+                    srs,
+                    srs_wkt,
+                    context['db_params'])
+
+    map.insertLayer(new_layer)
+    mapserver_layer_name = new_layer.name
+    minx, miny, maxx, maxy = _mapserverutils._calc_mapfile_extent(map)
+
+    r_obj = _mapserverutils.create_mapscript_rect_obj(minx, miny, maxx, maxy)
+    map.extent = r_obj
+
+    map.setExtent(r_obj.minx, r_obj.miny, r_obj.maxx, r_obj.maxy)
+
+    map.save(abs_mapfile)
+
+    return mapserver_url, mapserver_layer_name
+
+
 
 def _invoke_api_resource_action(context, resource, action):
     api_key = context['user_api_key']
@@ -566,13 +647,13 @@ def _update_resource_metadata(context, resource):
 @celery_app.task(name='vectorstorer.update')
 def vectorstorer_update(resource_dict, context, geoserver_context): 
     setup_vectorstorer_in_task_context(context)
-    
+
     db_conn_params = context['db_params']
     resource_ids = context['resource_list_to_delete']
-    
+
     logger = vectorstorer_update.get_logger()
     context['logger'] = logger
-    
+
     if len(resource_ids) > 0:
         for res_id in resource_ids:
             res = {'id': res_id}
@@ -588,12 +669,12 @@ def vectorstorer_update(resource_dict, context, geoserver_context):
 @celery_app.task(name='vectorstorer.delete')
 def vectorstorer_delete(resource_dict, context, geoserver_context): 
     setup_vectorstorer_in_task_context(context)
-    
+
     db_conn_params = context['db_params']
-    
+
     logger = vectorstorer_delete.get_logger()
     context['logger'] = logger
-    
+
     resources_to_delete = context['resource_list_to_delete']   
 
     # If resource dict is None a parent vector resource

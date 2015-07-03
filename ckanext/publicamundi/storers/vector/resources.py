@@ -6,7 +6,7 @@ class WMSResource:
     FORMAT = 'wms'
     
     name_suffix = " (WMS)"
-    _get_capabilities_url = "?service=WMS&request=GetCapabilities"
+    _get_capabilities_query = "service=WMS&request=GetCapabilities"
     _name = None
     _description = None
     _package_id = None
@@ -30,15 +30,15 @@ class WMSResource:
         self._description = description
         base_url = urlparse(wms_server)
 
-        self._url = urljoin(base_url.netloc, self._get_capabilities_url)
+        self._url = build_capabilities_url(wms_server, self._get_capabilities_query)
         self._parent_resource_id = parent_resource_id
-        self._wms_server = wms_server+"/wms"
+        self._wms_server = wms_server
         self._wms_layer = wms_layer
 
     def as_dict(self):
         resource = {
             "package_id": unicode(self._package_id),
-            "url": self._wms_server + self._get_capabilities_url,
+            "url": self._url,
             "format": self.FORMAT,
             "parent_resource_id": self._parent_resource_id,
             'vectorstorer_resource': self._vectorstorer_resource,
@@ -96,7 +96,7 @@ class WFSResource:
     FORMAT = 'wfs'
     
     name_suffix = " (WFS)"
-    _get_capabilities_url = "?service=WFS&request=GetCapabilities"
+    _get_capabilities_query = "service=WFS&request=GetCapabilities"
     _name = None
     _description = None
     _package_id = None
@@ -120,15 +120,15 @@ class WFSResource:
         self._description = description
         base_url = urlparse(wfs_server)
 
-        self._url = urljoin(base_url.netloc, self._get_capabilities_url)
+        self._url = build_capabilities_url(wfs_server,self._get_capabilities_query)
         self._parent_resource_id = parent_resource_id
-        self._wfs_server = wfs_server+"/wfs"
+        self._wfs_server = wfs_server
         self._wfs_layer = wfs_layer
 
     def as_dict(self):
         resource = {
             "package_id": unicode(self._package_id),
-            "url": self._wfs_server + self._get_capabilities_url,
+            "url": self._url,
             "format": self.FORMAT,
             "parent_resource_id": self._parent_resource_id,
             'vectorstorer_resource': self._vectorstorer_resource,
@@ -138,3 +138,10 @@ class WFSResource:
             "description": self._description
         }
         return resource
+
+def build_capabilities_url(server_url, get_capabilities_query):
+    if "?" in server_url:
+        return server_url+"&"+get_capabilities_query
+    else:
+        return server_url+"?"+get_capabilities_query
+        

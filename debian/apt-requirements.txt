@@ -4,3 +4,4 @@ python-gdal
 unzip
 unrar
 p7zip-full
+python-mapscript
