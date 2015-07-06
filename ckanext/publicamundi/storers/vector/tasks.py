@@ -614,6 +614,8 @@ def _publish_layer_to_mapserver(
     mapserver_layer_name = new_layer.name
     minx, miny, maxx, maxy = _mapserverutils._calc_mapfile_extent(map)
 
+    map = _mapserverutils.update_srs_list(map, srs)
+
     r_obj = _mapserverutils.create_mapscript_rect_obj(minx, miny, maxx, maxy)
     map.extent = r_obj
 

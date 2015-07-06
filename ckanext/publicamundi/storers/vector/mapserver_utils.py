@@ -2,7 +2,7 @@ import os
 import urlparse
 
 MAP_PROJECTION = 4326
-OWS_SRS_LIST = [4326, 2100, 3857, 32632]
+OWS_SRS_LIST = [4326, 900913]
 
 mapscript = None
 ogr = None
@@ -247,3 +247,17 @@ class MapServerUtils:
 
         geom.Transform(coordTrans)
         return geom
+
+    def update_srs_list(self, map, srs):
+        '''Returns a map object which contains the updated srs list
+        for WMS and WFS. The updated srs list contains the srs of the
+        created layer'''
+
+        srs_list_str = map.web.metadata.get("wms_srs")
+        srs_list = [int(x.strip()) for x in srs_list_str.split('EPSG:') if x]
+        if not srs in srs_list:
+            srs_list.append(srs)
+        ows_srs_val = " ".join("EPSG:{0}".format(srs) for srs in srs_list)
+        map.web.metadata.set("wms_srs", ows_srs_val)
+        map.web.metadata.set("wfs_srs", ows_srs_val)
+        return map
