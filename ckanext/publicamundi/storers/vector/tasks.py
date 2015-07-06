@@ -18,6 +18,7 @@ from ckanext.publicamundi.storers.vector import vector, mapserver_utils
 from ckanext.publicamundi.storers.vector.resources import(
     WMSResource, DBTableResource, WFSResource)
 from ckanext.publicamundi.storers.vector.db_helpers import DB
+from ckanext.publicamundi.storers.vector.lib import utils
 
 # List MIME types recognized as archives from pyunpack
 archive_mime_types = [
@@ -647,7 +648,7 @@ def _update_resource_metadata(context, resource):
     urllib2.urlopen(request, data_string)
 
 @celery_app.task(name='vectorstorer.update')
-def vectorstorer_update(resource_dict, context, geoserver_context): 
+def vectorstorer_update(resource_dict, context, mapservers_context): 
     setup_vectorstorer_in_task_context(context)
 
     db_conn_params = context['db_params']
@@ -666,10 +667,10 @@ def vectorstorer_update(resource_dict, context, geoserver_context):
                 print e.reason
 
     # Fixme: Wrap in an try block as inside vectorstorer.upload
-    _ingest_resource(resource_dict, context, geoserver_context)
+    _ingest_resource(resource_dict, context, mapservers_context)
 
 @celery_app.task(name='vectorstorer.delete')
-def vectorstorer_delete(resource_dict, context, geoserver_context): 
+def vectorstorer_delete(resource_dict, context, mapservers_context): 
     setup_vectorstorer_in_task_context(context)
 
     db_conn_params = context['db_params']
@@ -695,18 +696,27 @@ def vectorstorer_delete(resource_dict, context, geoserver_context):
             elif resource_dict['format'] in [
                 WMSResource.FORMAT, WFSResource.FORMAT]:
                 # A WMS or WFS resource was deleted, so unpublish it
-                # from Geoserver
-                _unpublish_from_geoserver(
-                    resource_dict,
-                    geoserver_context,
-                    logger)
+                # from Geoserver or Mapserver
+                if (utils.get_publishing_server(resource_dict, mapservers_context) ==
+                    utils.PUBLISHED_AT_GEOSERVER):
+                    _unpublish_from_geoserver(
+                        resource_dict,
+                        mapservers_context['geoserver_context'],
+                        logger)
+                elif (utils.get_publishing_server(resource_dict, mapservers_context) ==
+                    utils.PUBLISHED_AT_MAPSERVER):
+                    _unpublish_from_mapserver(
+                        resource_dict,
+                        context,
+                        mapservers_context['mapserver_context'],
+                        logger)
     
     # Delete the resources that are in the list. For example
     # if a DB_Table resouce was deleted, this list contains
     # the WMS and WFS resource.
     for resource in resources_to_delete:
         if resource is not None:
-            if resource['format'] == DBTableResource.FORMAT:        
+            if resource['format'] == DBTableResource.FORMAT:
                 # A DBTable resource was deleted, so delete the table
                 # from the database
                 _delete_from_datastore(
@@ -715,13 +725,23 @@ def vectorstorer_delete(resource_dict, context, geoserver_context):
                     context,
                     logger)
             elif resource['format'] in [
-                WMSResource.FORMAT, WFSResource.FORMAT]:            
+                WMSResource.FORMAT, WFSResource.FORMAT]:
                 # A WMS or WFS resource will be deleted, so unpublish it
-                # from Geoserver
-                _unpublish_from_geoserver(
-                    resource,
-                    geoserver_context,
-                    logger)
+                # from Geoserver or Mapserver
+                if (utils.get_publishing_server(resource, mapservers_context) ==
+                    utils.PUBLISHED_AT_GEOSERVER):
+                    _unpublish_from_geoserver(
+                        resource,
+                        mapservers_context['geoserver_context'],
+                        logger)
+                elif (utils.get_publishing_server(resource, mapservers_context) ==
+                    utils.PUBLISHED_AT_MAPSERVER):
+                    _unpublish_from_mapserver(
+                        resource,
+                        context,
+                        mapservers_context['mapserver_context'],
+                        logger)
+
     # After doing unpublish and delete operations for child resources
     # delete the from ckan
     for resource in resources_to_delete:
@@ -767,3 +787,35 @@ def _unpublish_from_geoserver(resource, geoserver_context, logger):
     except FailedRequestError as ex:
          logger.error('Failed to unpublish layer %s: %s'
             % (layer_name, ex))
+
+def _unpublish_from_mapserver(resource, context, mapserver_context, logger):
+    layer_name = None
+    if resource['format'] == WMSResource.FORMAT:
+        layer_name = resource['wms_layer']
+    else:
+        layer_name = resource['wfs_layer']
+
+    package_id = context['package_id']
+    package = {'id': package_id}
+    pkg_dict = _invoke_api_resource_action(
+                    context,
+                    package,
+                    'package_show')
+    pkg_name = pkg_dict['name']
+    mapfile_name = pkg_name + '.map'
+
+    mapfile_folder = mapserver_context['mapfile_folder']
+
+    abs_mapfile = os.path.join(mapfile_folder, mapfile_name)
+
+    _mapserverutils = mapserver_utils.MapServerUtils(vectorstorer)
+
+    try:
+        map = _mapserverutils.load_mapfile(abs_mapfile)
+        _mapserverutils.delete_layer(map, layer_name)
+        map.save(abs_mapfile)
+
+    except Exception as ex:
+        logger.error('Failed to unpublish layer %s: %s'
+            % (layer_name, ex))
+

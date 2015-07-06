@@ -250,11 +250,13 @@ def delete_ingest_resource(resource_dict):
 
     # start the delete tast only if the resource list to delete
     # has at least 1 item.
+
     if resource_list_to_delete is not None and len(resource_list_to_delete)>0 :
         context = _make_default_context()
         context.update({
             'resource_list_to_delete': resource_list_to_delete,
-            'db_params': config['ckan.datastore.write_url']
+            'db_params': config['ckan.datastore.write_url'],
+            'package_id': resource_dict['package_id']
         })
         mapservers_context = _make_mapservers_context()
         task_id = make_uuid()

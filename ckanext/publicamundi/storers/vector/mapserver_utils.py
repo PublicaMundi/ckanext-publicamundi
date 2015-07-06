@@ -2,7 +2,7 @@ import os
 import urlparse
 
 MAP_PROJECTION = 4326
-OWS_SRS_LIST = [4326, 900913]
+OWS_SRS_LIST = [4326, 3857, 900913]
 
 mapscript = None
 ogr = None
@@ -117,6 +117,10 @@ class MapServerUtils:
         new_layer.insertClass(classobj)
 
         return new_layer
+
+    def delete_layer(self, map, layer_name):
+        layer_idx = map.getLayerByName(layer_name).index
+        map.removeLayer(layer_idx)
 
     def create_mapscript_rect_obj(self, minx, miny, maxx, maxy):
         '''Returns a mapscript rectangle object.'''
