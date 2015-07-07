@@ -104,17 +104,4 @@ function init() {
           //  $(this).addClass('breadcrumb-hide-text');
         //});
 
-        //Hide promotebox when dismiss clicked and remember with cookie
-        var dismiss = $('.btn-dismiss');
-        var pbox = $('.promotebox');
-        if ($.cookie("dismiss-promotebox") != 1 ){
-            pbox.addClass('shown');
-        }
-            dismiss.on('click', function(){ 
-                $.cookie("dismiss-promotebox", 1, {expires:10});
-                pbox.removeClass('shown');
-                pbox.addClass('hidden');
-            });
-
-
 }
