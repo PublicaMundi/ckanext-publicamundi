@@ -337,6 +337,9 @@ p a{
 .no-bottom-border{
     border-bottom: none !important;
 }
+.page-header .nav-tabs{
+    margin-top: 15px;
+}
 .nav-tabs{
     border-bottom: 1px #7C7C7F solid;
 }

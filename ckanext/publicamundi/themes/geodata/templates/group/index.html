@@ -1,5 +1,7 @@
 {% ckan_extends %}
 
+{% block subtitle %}{{ _('Topics') }}{% endblock %}
+
 {% block breadcrumb_content %}
   <li class="active">{% link_for _('Topics'), controller='group', action='index' %}</li>
 {% endblock %}
@@ -14,6 +16,14 @@
   {% endblock %}
 </div>
   {% endblock %}
+
+
+{% block page_primary_action %}
+  {% if h.check_access('group_create') %}
+    {% link_for _('Add Topic'), controller='group', action='new', class_='btn btn-primary', icon='plus-sign-alt' %}
+  {% endif %}
+{% endblock %}
+
 
 {% block primary_content_inner %}
   <h1 class="hide-heading">{{ _('Topics') }}</h1>
