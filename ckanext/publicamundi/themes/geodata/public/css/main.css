@@ -337,6 +337,9 @@ p a{
 .no-bottom-border{
     border-bottom: none !important;
 }
+.page-header .content_action{
+    margin-top: -20px;
+}
 .page-header .nav-tabs{
     margin-top: 15px;
 }
@@ -1070,6 +1073,42 @@ p a{
     height:399px;
     border: 2px #4E59A4 solid;
 }
+.section-contact{
+    //margin:10px 0 10px 5px;
+    padding: 15px 0 10px 5px;
+    //float: left;
+    //margin-right: 10px;
+}
+.section-contact .btn i{
+    margin-right: 2px;
+}
+/* Contact form */
+
+#contact-form-modal-items{
+    padding:0 10px 0 10px;
+    margin-bottom: 0;
+}
+#contact-form-modal-success, #contact-form-modal-failure, #contact-form-modal-loading{
+    padding: 0 0 15px 20px;
+}
+#contact-form-modal-success i{
+    font-size: 20px;
+    color: #2CC423;
+}
+#contact-form-modal-failure i{
+    font-size: 20px;
+    color: #CC2323;
+}
+.ajax-loader{
+    display: block;
+    float: left;
+    margin-right: 15px;
+    background-image: url("../../images/ajaxload-circle.gif");
+    background-repeat: no-repeat;
+    background-size:cover;
+    width: 23px;
+    height: 23px;
+}
 .group{
     margin: 0 !important;
 }
@@ -1110,14 +1149,19 @@ p a{
 .mindthegap{
     margin-top:30px;
 }
+section.tags{
+    margin-bottom: 0;
+}
 .tag{
     color: #666;
+    border-color: #aaa;
+    border-radius: 0;
 }
 .tag-list{
     background: none;
     border: none;
     box-shadow: none;
-    padding: 10px;
+    padding: 20px 10px 20px 10px;
 
 }
 .tag-list li{
@@ -1126,12 +1170,12 @@ p a{
 .tag{
     box-shadow: none;
 }
-.tag:hover{
+a.tag:hover{
     box-shadow: none;
 }
 .tag-list li:hover{
 }
-.tag-list li:hover a{
+.tag-list li a:hover{
     background: #4E59A4;
 }
 .well{
@@ -1590,6 +1634,11 @@ p a{
 .select2-container-multi .select2-choices .select2-search-choice{
     font-size: 14px;
     line-height: 13px;
+    background-image: none;
+    background-color: #f6f6f6;
+    border-radius: 0;
+    box-shadow: none;
+    background-clip: none;
 }
 .select2-container .select2-choice, .select2-dropdown-open.select2-drop-above .select2-choice, .select2-dropdown-open.select2-drop-above .select2-choices{
     background-image: none;

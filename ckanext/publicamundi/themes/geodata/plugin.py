@@ -35,14 +35,16 @@ def list_menu_items (limit=21):
 def friendly_date(date_str):
     return render_datetime(date_str, '%d, %B, %Y')
 
-def get_contact_email(pkg):
-    if pkg.get('dataset_type', None) == 'inspire':
-        return {'organization': pkg.get('inspire.contact.0.organization', None),
+def get_contact_point(pkg):
+    if pkg.get('dataset_type') == 'inspire':
+        return {'name': pkg.get('inspire.contact.0.organization', None),
                 'email': pkg.get('inspire.contact.0.email', None)
                 }
+        #return pkg.get('inspire.contact.0.email')
     else:
-        return {}
-
+        return {'name': pkg.get('maintainer'),
+                'email': pkg.get('maintainer_email')
+                }
 
 _feedback_form = None
 _maps_url = None
@@ -187,8 +189,43 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IRoutes, inherit=True)
     plugins.implements(plugins.IPackageController, inherit=True)
 
-    # ITemplateHelpers
-    
+    def init_contact_captcha(self):
+
+        from wheezy.captcha.image import captcha
+        from wheezy.captcha.image import background
+        from wheezy.captcha.image import curve
+        from wheezy.captcha.image import noise
+        from wheezy.captcha.image import smooth
+        from wheezy.captcha.image import text
+
+        from wheezy.captcha.image import offset
+        from wheezy.captcha.image import rotate
+        from wheezy.captcha.image import warp
+
+        import random
+        import string
+
+        captcha_image = captcha(drawings=[
+            background(),
+            text(
+                fonts = [
+                    'public/fonts/AC-Muli/AC-Muli.ttf'
+                    ],
+                drawings=[
+                    warp(0.5),
+                    rotate(),
+                    offset()
+                ]),
+            curve(),
+            noise(),
+            smooth()
+        ])
+        image = captcha_image(list('lalala'))
+
+        image.save('/tmp/captcha.jpg', 'JPEG', quality=75)
+
+
+    # ITemplateHelpers    
 
     def get_helpers(self):
         return {
@@ -203,7 +240,6 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
             'can_preview_resource_or_ingested': can_preview_resource_or_ingested,
             'get_translated_dataset_groups' : get_translated_dataset_groups,
             'get_term_translation': get_term_translation,
-            #'get_contact_email': get_contact_email,
            # 'create_rating': create_rating,
            # 'get_rating': get_rating,
         }
@@ -228,13 +264,13 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
         _feedback_form = config.get('ckanext.publicamundi.themes.geodata.feedback_form')
         _maps_url = config.get('ckanext.publicamundi.themes.geodata.maps_url')
         _news_url = config.get('ckanext.publicamundi.themes.geodata.news_url')
-
         return
 
     # IRoutes
 
     def before_map(self, mapper):
         mapper.connect('applications', '/applications', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='applications')
+        mapper.connect('epikoinwnia', '/epikoinwnia', controller= 'ckanext.publicamundi.themes.geodata.controllers.contact:Controller', action='send_email')
         #mapper.connect('maps', '/maps', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='redirect_maps' )
         #mapper.redirect('maps', 'http://http://83.212.118.10:5000/maps')
         #mapper.connect('maps', '/maps')
@@ -245,6 +281,7 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     # IPackageController
     def before_view(self, pkg_dict):
         list_menu_items()
+        self.init_contact_captcha()
         return pkg_dict
 
     # IPackageController 

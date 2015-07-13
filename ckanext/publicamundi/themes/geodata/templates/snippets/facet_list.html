@@ -36,17 +36,21 @@ within_tertiary
   Boolean for when a facet list should appear in the the right column of the
   page and not the left column.
 
+hide_section 
+  Parameter to hide organization/group facet section when only one item is present
 #}
+
 {% set hide_empty = hide_empty or false %}
 {% set LIMIT = 5 %}
 {% with items = items or h.get_facet_items_dict(name, limit=50) %}
+{% if not hide_section and items|length >= 1 %}
   {% if items or not hide_empty %}
     {% if within_tertiary %}
       {% set nav_class = 'nav nav-pills nav-stacked' %}
       {% set nav_item_class = ' ' %}
       {% set wrapper_class = 'nav-facet nav-facet-tertiary' %}
     {% endif %}
-    {% if items|length>1 %}
+    {% if items %}
     <section class="{{ wrapper_class or 'module module-narrow module-shallow' }}">
 
     <h2 class="module-heading">
@@ -102,5 +106,6 @@ within_tertiary
     </section>
       {% else %}
         <p class="module-content empty">{{ _('There are no {facet_type} that match this search').format(facet_type=title) }}</p>
-  {% endif %}
+        {% endif %}
+{% endif %}
 {% endwith %}

@@ -9,6 +9,7 @@
     {% endif %}
 {% endif %}
 
+
 {# fix for organization and group title non translation in sidebar #}
 {% do h.get_translated_dataset_groups([c.pkg_dict]) %}
 
@@ -33,17 +34,14 @@
   {% endif %}
 {% endblock %}
 
-{% block content_primary_nav %}
-  {{ h.build_nav_icon('dataset_read', _('Dataset'), id=pkg.name) }}
-  {{ h.build_nav_icon('dataset_groups', _('Topics'), id=pkg.name) }}
-  {{ h.build_nav_icon('dataset_activity', _('Activity Stream'), id=pkg.name) }}
-  {{ h.build_nav_icon('related_list', _('Related'), id=pkg.name) }}
-{% endblock %}
-
 {% block page_heading %}
 {{ super() }}
 {% endblock %}
 
+{% block content_action %}
+    
+    {{ super() }}
+{% endblock %}
 
 {% block package_notes %}
     {% block package_dates %}
@@ -73,10 +71,10 @@
  {% block secondary_content %}
     {% if pkg.organization %}
     {% block package_organization %}
-        {% snippet "snippets/organization.html", organization=org , has_context_title=true  %}
+        {% snippet "snippets/organization.html", organization=org, pkg=pkg, has_context_title=true  %}
     {% endblock %}
-    {% endif %}
-
+    {% endif %}   
+    
     {% if pkg.groups %}
     {% block package_group %}
         {% snippet "snippets/group.html", group=pkg.groups %}
@@ -104,4 +102,7 @@
 
 {% endblock %}
 
-
+{% block scripts %}
+{{ super() }}
+{% resource 'ckanext-publicamundi-geodata-theme/contact' %}
+{% endblock %}
