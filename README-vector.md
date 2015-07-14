@@ -42,6 +42,8 @@ Configuration
 
         ckanext.publicamundi.vectorstorer.temp_dir = %(cache_dir)s/vectorstorer
         ckanext.publicamundi.vectorstorer.gdal_folder = (e.g. /usr/lib/python2.7/dist-packages)
+Geoserver Configuration
+
         ckanext.publicamundi.vectorstorer.geoserver.url = (e.g. http://ckan_services_server/geoserver)
         ckanext.publicamundi.vectorstorer.geoserver.workspace = (e.g. CKAN)
         ckanext.publicamundi.vectorstorer.geoserver.username = (e.g. admin)
@@ -49,7 +51,19 @@ Configuration
         ckanext.publicamundi.vectorstorer.geoserver.datastore = (e.g. ckan_datastore_default)
         ckanext.publicamundi.vectorstorer.geoserver.reload_url = (optional e.g. http://localhost:5005/reload)
 
-  Geoserver workspace and datastore have to be created in advance. The datastore must be the same as the CKAN datastore database.
+Geoserver workspace and datastore have to be created in advance. The datastore must be the same as the CKAN datastore database.
+
+Mapserver Configuration
+
+        ckanext.publicamundi.vectorstorer.mapserver.url = (e.g. http://ckan_services_server/cgi-bin/mapserv)
+        ckanext.publicamundi.vectorstorer.mapserver.mapfile_folder = (e.g. /var/www/mapserv/mapfiles)
+        ckanext.publicamundi.vectorstorer.mapserver.templates_folder = (e.g. /var/www/mapserv/templates)
+    
+If both mapserver and geoserver are configured in ckan config, default publishing server has to be set:
+
+        ckanext.publicamundi.vectorstorer.default_publishing_server= (e.g. mapserver)
+    
+If not set, geoserver will be used as the default publishing server.
 
 **3.  Prepare Datastore**
 
