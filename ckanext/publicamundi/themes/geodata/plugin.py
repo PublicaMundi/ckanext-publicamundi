@@ -7,7 +7,7 @@ from pylons import request, config
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 import ckan.lib.datapreview as datapreview
-from ckan import model 
+from ckan import model
 from ckan.lib import helpers, munge
 from ckan.lib.base import c
 from ckan.lib.helpers import render_datetime, resource_preview, url_for_static
@@ -62,6 +62,16 @@ def get_maps_url(package_id=None, resource_id=None):
             return('{0}?locale={1}'.format(_maps_url, locale))
     else:
         return '/'
+
+def redirect_wp(page):
+    locale = helpers.lang()
+    if page:
+        if locale == 'el':
+            return('/content/{0}'.format(page))
+        else:
+            return('/content/{0}-{1}'.format(page, locale))
+    else:
+        return('/content/')
 
 def get_news_url():
     locale = helpers.lang()
@@ -209,7 +219,7 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
             background(),
             text(
                 fonts = [
-                    'public/fonts/AC-Muli/AC-Muli.ttf'
+                    '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf',
                     ],
                 drawings=[
                     warp(0.5),
@@ -220,10 +230,10 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
             noise(),
             smooth()
         ])
-        image = captcha_image(list('lalala'))
+        self.captcha_string = list(random.sample(string.uppercase +string.digits, 4))
+        image = captcha_image(self.captcha_string)
 
-        image.save('/tmp/captcha.jpg', 'JPEG', quality=75)
-
+        #image.save('/tmp/captcha.jpg', 'JPEG', quality=75)
 
     # ITemplateHelpers    
 
@@ -234,6 +244,7 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
             'friendly_date': friendly_date,
             'friendly_name': friendly_name,
             'feedback_form': feedback_form,
+            'redirect_wp': redirect_wp,
             'get_news_url': get_news_url,
             'get_maps_url': get_maps_url,
             'preview_resource_or_ingested': preview_resource_or_ingested,
@@ -270,7 +281,7 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
 
     def before_map(self, mapper):
         mapper.connect('applications', '/applications', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='applications')
-        mapper.connect('epikoinwnia', '/epikoinwnia', controller= 'ckanext.publicamundi.themes.geodata.controllers.contact:Controller', action='send_email')
+        mapper.connect('send_email', '/send_email', controller= 'ckanext.publicamundi.themes.geodata.controllers.contact:Controller', action='send_email')
         #mapper.connect('maps', '/maps', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='redirect_maps' )
         #mapper.redirect('maps', 'http://http://83.212.118.10:5000/maps')
         #mapper.connect('maps', '/maps')
@@ -281,14 +292,14 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     # IPackageController
     def before_view(self, pkg_dict):
         list_menu_items()
-        self.init_contact_captcha()
+        #self.init_contact_captcha()
         return pkg_dict
 
     # IPackageController 
     # this has been moved here from ckanext/multilingual MultilingualDataset
     def after_search(self, search_results, search_params):
 
-        # Translate the unselected search facets.
+        # Translte the unselected search facets.
         facets = search_results.get('search_facets')
         if not facets:
             return search_results

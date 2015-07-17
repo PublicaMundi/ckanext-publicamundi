@@ -1067,6 +1067,9 @@ p a{
 .social a [class^="icon-"] {
     font-size: 22px;
 }
+.developers ul li{
+    padding: 5px;
+}
 .dataset-map-expanded #dataset-map{
     top: -396px;
     left:0;

@@ -1,4 +1,4 @@
-<form class="modal no-fade" id="contact-form-modal" tabindex="-1" aria-hidden="true" method="post" data-module="basic-form contact-form-send" > 
+<form class="modal hide no-fade" id="contact-form-modal" tabindex="-1" aria-hidden="true" method="post" data-module="basic-form contact-form-send" > 
     <div class="modal-header">
         <a class="close" data-dismiss="modal">&times;</a>
         <h3>{{_('Contact')}}: {{ pkg.title }}</h3>
@@ -12,7 +12,7 @@
             <span><i class="icon-ok"></i>  {{ _('Email sent successfully. Thank you!') }}</span>
         </div>
         <div id="contact-form-modal-failure" class="hidden">
-            <span><i class="icon-remove"></i>  {{ _('Unfortunately your email has not been sent. We are working on it!') }}</span>
+            <span><i class="icon-remove"></i>  {{ _('Unfortunately your email has not been sent.') }}</span>
         </div>
 
         <div id="contact-form-modal-items" class="control-group widget field-widget">
@@ -48,8 +48,8 @@
             </div>
             <br>
 
-            <div class="controls">
-                <img id="contact-captcha-img" name="captcha-img" src="/tmp/captcha.jpg"></img>
+            <!-- <div class="controls">
+                <img id="contact-captcha-img" name="captcha-img" src="/images/captcha.jpg"></img>
             </div>
             <br>
 
@@ -60,7 +60,7 @@
                 <input id="contact-captcha-txt" name="captcha-txt" class="span4" required></input>
             </div>
             <br>
-
+            -->
         </div>
     </div>
     

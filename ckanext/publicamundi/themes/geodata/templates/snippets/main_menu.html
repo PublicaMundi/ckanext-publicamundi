@@ -11,13 +11,13 @@
 <a href="{{ h.get_maps_url() }}">{{_('Maps')}}</a>
 </li>
 <li>
-<a href="{{ h.url_for(controller='ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='applications')}}">{{_('Apps')}}</a>
+<a href="{{ h.redirect_wp('applications') }}">{{_('Apps')}}</a>
 </li>
 <li>
-<a href="{{ h.get_news_url() }}">{{_('News')}}</a>
+<a href="{{ h.redirect_wp('news') }}">{{_('News')}}</a>
 </li>
 <li>
-    <a href="{{ h.url_for(controller='home', action='about')}}">{{_('About')}}</a>
+    <a href="{{ h.redirect_wp('about') }}">{{_('About')}}</a>
 </li>
 
 

@@ -15,20 +15,20 @@ class Controller(BaseController):
         pkg_name = request.params.get("pkg_name")
         text = request.params.get("message")
         antispam = request.params.get("antispam")
+        captcha = request.params.get("captcha")
 
         assert not antispam
 
         # Find a better way to do this
-        body = "Name: "
+        body = u"Name: "
         body += sender_name
-        body += "\nEmail: "
+        body += u"\nEmail: "
         body += sender_email
-        body += "\nMessage: "
+        body += u"\nMessage: "
         body += text
 
         package = toolkit.get_action('package_show')({}, data_dict={'id':pkg_name})
-
-        subject = 'Regarding: {0}'.format(package.get('title'))
+        subject = u'Regarding: {0}'.format(package.get('title'))
 
         contact_point = get_contact_point(package)
 
@@ -41,7 +41,7 @@ class Controller(BaseController):
         import ckan.lib.mailer
 
         try:
-           ckan.lib.mailer.mail_recipient(contact_point_name, cc_email,subject, body)
+           ckan.lib.mailer.mail_recipient(contact_point_name, cc_email, subject, body)
         except ckan.lib.mailer.MailerException:
             raise
 

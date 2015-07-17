@@ -19,7 +19,7 @@ ckan.module('contact-form-send', function ($, _) {
             },
             _onSubmit: function(e){
                 e.preventDefault();
-                var url = '/epikoinwnia';
+                var url = '/send_email';
                 var data = {
                     'name': $("#contact-form-modal #contact-name").val(),
                     'email': $("#contact-form-modal #contact-email").val(), 
@@ -27,6 +27,7 @@ ckan.module('contact-form-send', function ($, _) {
                     'pkg_name': $("#contact-form-modal #contact-pkg_name").val(), 
                     'message': $("#contact-form-modal #contact-msg").val(), 
                     'antispam': $("#contact-form-modal #contact-antispam").val(), 
+                    'captcha': $("#contact-form-modal #contact-captcha-txt").val(), 
                 };
                 $.ajax({
                     url: url,
