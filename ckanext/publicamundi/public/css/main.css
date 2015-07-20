@@ -345,6 +345,7 @@ h1 > .label.package-state {
  */
 .package-rating{
     float: right;
+    cursor: default;
 }
 .package-rating i{
     color: #4E59A4;
