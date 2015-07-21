@@ -1,4 +1,4 @@
-{%ckan_extends %}
+{% ckan_extends %}
 
 {% set pkg = c.pkg_dict %}
 
@@ -8,6 +8,7 @@
         {% do pkg.update(organization = org) %} 
     {% endif %}
 {% endif %}
+
 
 {# fix for organization and group title non translation in sidebar #}
 {% do h.get_translated_dataset_groups([c.pkg_dict]) %}
@@ -32,10 +33,15 @@
     <li class="active"><a href="">{{ _('Create Dataset') }}</a></li>
   {% endif %}
 {% endblock %}
+
 {% block page_heading %}
 {{ super() }}
 {% endblock %}
 
+{% block content_action %}
+    
+    {{ super() }}
+{% endblock %}
 
 {% block package_notes %}
     {% block package_dates %}
@@ -65,10 +71,10 @@
  {% block secondary_content %}
     {% if pkg.organization %}
     {% block package_organization %}
-        {% snippet "snippets/organization.html", organization=org , has_context_title=true  %}
+        {% snippet "snippets/organization.html", organization=org, pkg=pkg, has_context_title=true  %}
     {% endblock %}
-    {% endif %}
-
+    {% endif %}   
+    
     {% if pkg.groups %}
     {% block package_group %}
         {% snippet "snippets/group.html", group=pkg.groups %}
@@ -90,10 +96,17 @@
         {% snippet "snippets/license.html", pkg_dict=pkg %}
     {% endblock %}
 
+    {% block package_developers %}
+        {% snippet "snippets/developers.html", pkg_dict=pkg %}
+    {% endblock %} 
+
     {% block package_social %}
         {% snippet "snippets/social.html" %}
     {% endblock %} 
 
 {% endblock %}
 
-
+{% block scripts %}
+{{ super() }}
+{% resource 'ckanext-publicamundi-geodata-theme/contact' %}
+{% endblock %}

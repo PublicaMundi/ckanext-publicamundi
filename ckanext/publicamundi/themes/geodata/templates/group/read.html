@@ -1,11 +1,5 @@
 {% ckan_extends %}
 
-{% block breadcrumb_content %}
-  <li>{% link_for _('Topics'), controller='group', action='index' %}</li>
-  <li class="active">{% link_for c.group_dict.display_name|truncate(35), controller='group', action='read', id=c.group_dict.name %}</li>
-{% endblock %}
-
-
 {% block primary_content_inner %}
 {% block groups_search_form %}
     <div class="search-medium">
@@ -18,6 +12,19 @@
   {% endblock %}
 {% endblock %}
 
+{% block secondary_content %}
+
+  {% snippet "group/snippets/info.html", group=c.group_dict, show_nums=true %}
+{% for facet in c.facet_titles %}
+  {% if facet == 'groups' %}
+    {{ h.snippet('snippets/facet_list.html', title=c.facet_titles[facet], name=facet, extras={'id':c.group_dict.id}, hide_section=true) }}
+  {% else %}
+    {{ h.snippet('snippets/facet_list.html', title=c.facet_titles[facet], name=facet, extras={'id':c.group_dict.id}) }}
+  {% endif %}
+        
+
+  {% endfor %}
+{% endblock %}
 
 {% block scripts %}
 {{ super() }}

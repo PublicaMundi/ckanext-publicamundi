@@ -1,0 +1,10 @@
+{% set current_url = h.full_current_url() %}
+<section class="developers module module-narrow module-shallow">
+<h2 class="module-heading">{{ _('Developers') }}</h2>
+<div class="module-content">
+  <ul class="unstyled">
+      <li><a href="/api/3/action/package_show?id={{pkg_dict.name}}" target="_blank">package_show?id={{ pkg_dict.name }}</a></li>
+  </ul>
+  <a href="{{ h.redirect_wp('about')}}">{{ _('More information') }}</a>
+</div>
+</section>
