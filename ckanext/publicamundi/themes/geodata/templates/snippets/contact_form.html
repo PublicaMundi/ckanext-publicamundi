@@ -1,7 +1,7 @@
 <form class="modal hide no-fade" id="contact-form-modal" tabindex="-1" aria-hidden="true" method="post" data-module="basic-form contact-form-send" > 
     <div class="modal-header">
         <a class="close" data-dismiss="modal">&times;</a>
-        <h3>{{_('Contact')}}: {{ pkg.title }}</h3>
+        <h3>{% trans %}<span class='contact-term'>Contact</span>{% endtrans %}: {{ pkg.title }}</h3>
     </div>
     
     <div class="modal-body form-horizontal">
@@ -12,7 +12,7 @@
             <span><i class="icon-ok"></i>  {{ _('Email sent successfully. Thank you!') }}</span>
         </div>
         <div id="contact-form-modal-failure" class="hidden">
-            <span><i class="icon-remove"></i>  {{ _('Unfortunately your email has not been sent.') }}</span>
+            <span><i class="icon-remove"></i>  {{ _('Unfortunately your email has not been sent. You can directly contact info@geodata.gov.gr') }}</span>
         </div>
 
         <div id="contact-form-modal-items" class="control-group widget field-widget">

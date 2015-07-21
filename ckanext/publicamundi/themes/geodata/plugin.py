@@ -280,6 +280,8 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     # IRoutes
 
     def before_map(self, mapper):
+        mapper.connect('dataset_apis', '/dataset/developers/{id}', controller= 'ckanext.publicamundi.themes.geodata.controllers.package:PackageController', action='package_apis')
+        #mapper.connect('preview_openlayers', '/preview_openlayers/{id}/{resource_id}', controller= 'ckanext.publicamundi.themes.geodata.controllers.package:PackageController', action='preview_openlayers')
         mapper.connect('applications', '/applications', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='applications')
         mapper.connect('send_email', '/send_email', controller= 'ckanext.publicamundi.themes.geodata.controllers.contact:Controller', action='send_email')
         #mapper.connect('maps', '/maps', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='redirect_maps' )

@@ -15,6 +15,7 @@ body {
     border: 4px #4E59A4 solid;
     font-family: 'ACMuliLight', Helvetica, Arial, sans-serif;
     font-weight: 500;
+    min-width:1000px;
 }
 a, b { 
     font-family: 'ACMuli', Helvetica, Arial, sans-serif;
@@ -1070,6 +1071,20 @@ p a{
 .developers ul li{
     padding: 5px;
 }
+#accordion-dev .accordion-group{
+    margin: 5px 0;
+}
+#accordion-dev .accordion-heading a{
+    padding: 13px;
+    font-size: 16px;
+}
+.developers-icon{
+    font-weight: bold;
+    font-size: 17px;
+}
+.social-icon{
+    font-size: 17px;
+}
 .dataset-map-expanded #dataset-map{
     top: -396px;
     left:0;
@@ -1318,9 +1333,15 @@ a.tag:hover{
 }
 .download-links .btn-group{
     float:right;
+    margin-right:1px;
+}
+.download-links .btn-group .btn{
+
+    max-width: 130px;
 }
 .metadata-label{
     display: block;
+    max-width: 120px;
     padding: 8px 5px 6px 5px;
     margin-right: 8px;
     width: 7em;
@@ -1329,11 +1350,8 @@ a.tag:hover{
     font-weight: bold;
     font-size: 14px;
     letter-spacing: 0.03em;
-    //color: #4E59A4;
     color: #666666;
-    //color: #fff;
     background-color: #ECECEC;
-    //border-color: #4E59A4;
     border-color: #ECECEC;
 }
 .metadata-label > i { 
@@ -1346,6 +1364,9 @@ a.tag:hover{
 }
 
 /* Resources */
+.resource-list .btn{
+    max-width: 130px;
+}
 .resources {
     margin-bottom: 20px;
 }

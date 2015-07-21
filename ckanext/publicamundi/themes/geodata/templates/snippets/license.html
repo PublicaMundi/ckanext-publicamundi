@@ -1,7 +1,9 @@
 {% if pkg_dict.license_id %}
   {% if not text_only %}
     <section class="module module-narrow module-shallow license">
-    <h2 class="module-heading">{{ _('License') }}</h2>
+
+    <h2 class="module-heading"><img class="facet-icon" src="{{ h.url_for_static('/images/icons/various/license.svg') }}"></img>
+{{ _('License') }}</h2>
     {# <i class="icon-medium icon-lock"></i> #}
       <p class="module-content">
   {% endif %}
