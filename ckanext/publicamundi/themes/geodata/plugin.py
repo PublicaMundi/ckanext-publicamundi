@@ -29,6 +29,7 @@ def friendly_date(date_str):
 _feedback_form = None
 _maps_url = None
 _news_url = None
+_ratings_enabled = None
 
 def feedback_form():
     return _feedback_form
@@ -60,6 +61,9 @@ def friendly_name(name):
         friendly_name = name
 
     return friendly_name
+
+def package_rating_enabled():
+    return _ratings_enabled
 
 #_previewable_formats = ['wms', 'wfs']
 #def get_previewable_formats():
@@ -134,6 +138,7 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
             'feedback_form': feedback_form,
             'get_news_url': get_news_url,
             'get_maps_url': get_maps_url,
+            'package_rating_enabled': package_rating_enabled,
             'preview_resource_or_ingested': preview_resource_or_ingested,
             'can_preview_resource_or_ingested': can_preview_resource_or_ingested,
         }
@@ -153,12 +158,12 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     def configure(self, config):
         '''Pass configuration to plugins and extensions'''
 
-        global _feedback_form, _news_url, _maps_url
+        global _feedback_form, _news_url, _maps_url, _ratings_enabled
 
         _feedback_form = config.get('ckanext.publicamundi.themes.geodata.feedback_form')
         _maps_url = config.get('ckanext.publicamundi.themes.geodata.maps_url')
         _news_url = config.get('ckanext.publicamundi.themes.geodata.news_url')
-
+        _ratings_enabled = config.get('ckanext.publicamundi.package_rating', False)
         return
 
     # IRoutes
