@@ -13,11 +13,10 @@
 <div class="gap"></div>
 
     <div class=accordion" id="accordion-dev">
-        {% snippet 'package/snippets/developers/ckan_metadata_api.html', pkg=pkg %}
-        {% snippet 'package/snippets/developers/ckan_data_api.html', pkg=pkg %}
-        {% snippet 'package/snippets/developers/publica_data_api.html', pkg=pkg %}
-        {% snippet 'package/snippets/developers/publica_mapping_api.html', pkg=pkg %}
-        {% snippet 'package/snippets/developers/publica_csw_api.html', pkg=pkg %}
+        {% snippet 'package/snippets/developers/metadata_api.html', pkg=pkg %}
+        {% snippet 'package/snippets/developers/csw_api.html', pkg=pkg %}
+        {% snippet 'package/snippets/developers/data_api.html', pkg=pkg %}
+        {% snippet 'package/snippets/developers/mapping_api.html', pkg=pkg %}
     </div>
 {% set apps_link = h.redirect_wp('applications') %}
 <h4> {% trans %}For more information on accessing the APIs please refer to the <a href="{{apps_link}}">applications</a> section{% endtrans %}</h4>

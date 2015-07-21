@@ -8,7 +8,7 @@
       
     <div class="accordion-group">
       <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-dev" href="#collapse-querying-dapi">{{ _('CKAN Data API') }} &raquo;</a>
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-dev" href="#collapse-querying-dapi">{{ _('Data API') }} &raquo;</a>
       </div>
       <div id="collapse-querying-dapi" class="collapse accordion-body">
           <div class="accordion-inner">
@@ -29,6 +29,10 @@
           <code><a href="{{ datastore_root_url + '/datastore_search_sql?sql=SELECT * from "' + res.id + '" WHERE title LIKE \'public\'' }}"
                   target="_blank">{{ datastore_root_url + '/datastore_search_sql?sql=SELECT * from "' + res.id + '" WHERE title LIKE \'public\'' }}</a></code>
           </p>
+          <strong>{{ _('Query example in javascript (using the PublicaMundi API)') }}</strong>
+            {% snippet 'package/snippets/developers/data_api_js.html', res=res %}
+
+        
         {% else %}
             <strong>{{ _('Dataset contains no datastore resources') }}</strong>
         {% endif %}
