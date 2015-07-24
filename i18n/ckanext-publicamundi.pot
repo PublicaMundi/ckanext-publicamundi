@@ -1558,6 +1558,13 @@ msgid ""
 "search for them by name, and visit their published datasets "
 msgstr ""
 
+#: ckanext/publicamundi/themes/geodata/templates/package/developers.html:22
+#, python-format
+msgid ""
+"For more information on accessing the APIs please refer to the <a "
+"href=\"%(apps_link)s\">applications</a> section"
+msgstr ""
+
 #: ckanext/publicamundi/themes/geodata/templates/package/read.html:16
 msgid "Publication:"
 msgstr ""
@@ -1698,6 +1705,54 @@ msgstr ""
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:48
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:50
 msgid "Additional info"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/csw_api.html:7
+msgid "Get CSW Record"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/data_api.html:16
+msgid "Query example (first 5 results)"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/data_api.html:21
+msgid "Query example (results containing 'public')"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/data_api.html:27
+msgid "Query example (via SQL statement)"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/data_api.html:32
+msgid "Query example in javascript (using the PublicaMundi API)"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/data_api.html:35
+msgid "Dataset contains no datastore resources"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/data_api.html:37
+msgid ""
+"'You can find detailed Data API demos <a href=\"/maps/demo/data-"
+"api.html\">here</a>"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/mapping_api.html:24
+msgid "The dataset contains no suitable data to use with the Mapping API"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/mapping_api.html:26
+msgid ""
+"You can find detailed Mapping API demos <a href=\"/mapping-"
+"api\">here</a>"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/metadata_api.html:5
+msgid "Metadata API"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/metadata_api.html:10
+msgid "Package show (dataset metadata)"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/facet_list.html:64

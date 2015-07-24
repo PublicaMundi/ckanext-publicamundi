@@ -30,21 +30,22 @@
                   target="_blank">{{ datastore_root_url + '/datastore_search_sql?sql=SELECT * from "' + res.id + '" WHERE title LIKE \'public\'' }}</a></code>
           </p>
           <strong>{{ _('Query example in javascript (using the PublicaMundi API)') }}</strong>
-            {% snippet 'package/snippets/developers/data_api_js.html', res=res %}
-
-        
+          {% snippet 'package/snippets/developers/data_api_js.html', res=res %}
         {% else %}
-            <strong>{{ _('Dataset contains no datastore resources') }}</strong>
-        {% endif %}
+        <strong>{{ _('Dataset contains no datastore resources') }}</strong><br><br>
+            {% endif %}
+          <strong>{%trans%}'You can find detailed Data API demos <a href="/maps/demo/data-api.html" target="_blank">here</a>{%endtrans%}</strong>
         </div>
-    <br>
+
+        <!-- {#<br>
         <p><strong>{{ _('Access resource data via a web API with powerful query support') }}</strong>.
             {% trans %}
             Further information in the <a
             href="http://docs.ckan.org/en/latest/datastore.html" target="_blank">main
             CKAN Data API and DataStore documentation</a>.</p>
             {% endtrans %}
-
+            #}
+            -->
 
             </div>
 </div>

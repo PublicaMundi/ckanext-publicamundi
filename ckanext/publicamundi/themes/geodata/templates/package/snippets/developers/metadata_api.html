@@ -1,4 +1,4 @@
-{% set api_root_url = '/api/3/action/'%}
+{% set api_root_url = '/api/3/action'%}
 
 <div class="accordion-group">
     <div class="accordion-heading">
@@ -7,16 +7,17 @@
     <div id="collapse-querying-mdapi" class="collapse accordion-body">
         <div class="accordion-inner">
 
-        <strong>{{ _('Package show (all dataset metadata)') }}</strong>
+        <strong>{{ _('Package show') }}</strong>
         <p>
         <code><a href="{{ api_root_url }}/package_show?id={{pkg.name}}" target="_blank">{{ api_root_url }}/package_show?id={{pkg.name}}</a></code>
         </p>
 
         </div>
-
+<!--
+{#
 <br>
-<span>
-    {% set api_link = h.link_to(_('here'), h.url_for(controller='api', action='get_api', ver=3)) %}
+ <span>
+     {% set api_link = h.link_to(_('here'), h.url_for(controller='api', action='get_api', ver=3)) %}
     {% set api_doc_link = h.link_to(_('here'), 'http://docs.ckan.org/en/{0}/api.html'.format(g.ckan_doc_version)) %}
     {% if g.dumps_url -%}
         {% set dump_link = h.link_to(_('full {format} dump').format(format=g.dumps_format), g.dumps_url) %}
@@ -29,6 +30,7 @@
         {% endtrans %}
     {%- endif %}
 </span>    
-
+#}
+-->
 </div>
 </div>

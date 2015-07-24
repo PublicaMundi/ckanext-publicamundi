@@ -4,12 +4,16 @@
       </div>
       <div id="collapse-cswapi" class="accordion-body collapse">
           <div class="accordion-inner">
-            
-            <strong>{{ _('CSW server capabilities') }}</strong>
+            <strong>{{ _('Get CSW Record') }}</strong>
+          <p>
+          <code><a href="/csw?service=CSW&version=2.0.2&request=GetRecordById&id={{pkg.id}}" target="_blank">/csw?service=CSW&version=2.0.2&request=GetRecordById&id={{pkg.id}}</a></code>
+          </p>
+
+          <!-- <strong>{# {{ _('CSW server capabilities') }}#}</strong>
           <p>
             <code><a href="/csw?service=CSW&version=2.0.2&request=GetCapabilities" target="_blank">/csw?service=CSW&version=2.0.2&request=GetCapabilities</a></code>
-          </p>
-          </div>
+            </p> -->
+      </div>
       </div>
     </div>
 
