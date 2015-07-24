@@ -66,12 +66,10 @@ class Controller(BaseController):
 
         cc_email = config.get("email_to")
 
-        headers = {'cc': 'smanousopoulos@gmail.com'}
-        #headers = {'cc': cc_email}
+        headers = {'cc': cc_email}
 
         try:
-            #mailer.mail_recipient(contact_point_name, cc_email, subject, body, headers=headers)
-            mailer.mail_recipient(contact_point_name, 'steliosman@gmail.com', subject, body, headers=headers)
+            mailer.mail_recipient(contact_point_name, contact_point_email, subject, body, headers=headers)
             return json.dumps({'success': True})
 
         except mailer.MailerException:
