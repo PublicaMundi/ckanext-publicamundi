@@ -11,9 +11,9 @@ import ckan.lib.mailer as mailer
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 
-_ = toolkit._
-
 from ckanext.publicamundi.themes.geodata.plugin import get_contact_point
+
+_ = toolkit._
 
 class Controller(BaseController):
 
