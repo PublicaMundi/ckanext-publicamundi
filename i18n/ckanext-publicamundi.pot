@@ -1306,6 +1306,26 @@ msgstr ""
 msgid "Ingest Resource"
 msgstr ""
 
+#: ckanext/publicamundi/themes/geodata/controllers/contact.py:43
+msgid "Name: "
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/controllers/contact.py:46
+msgid "Email: "
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/controllers/contact.py:49
+msgid "Message: "
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/controllers/contact.py:60
+msgid "Regarding: {0}"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/controllers/contact.py:64
+msgid "Sir/Madam"
+msgstr ""
+
 #: ckanext/publicamundi/themes/geodata/templates/footer.html:12
 #: ckanext/publicamundi/themes/geodata/templates/home/snippets/search.html:3
 msgid "Search Datasets"
@@ -1623,7 +1643,23 @@ msgid "Email sent successfully. Thank you!"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/contact_form.html:15
-msgid "Unfortunately your email has not been sent. You can directly contact info@geodata.gov.gr"
+msgid ""
+"Unfortunately your email has not been sent due to technical problems. You can"
+" directly contact info@geodata.gov.gr"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/contact_form.html:23
+#: ckanext/publicamundi/themes/geodata/templates/snippets/contact_form.html:47
+#: ckanext/publicamundi/themes/geodata/templates/snippets/contact_form.html:61
+msgid "Please fill out this field"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/contact_form.html:31
+msgid "Please enter a correct email address"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/contact_form.html:57
+msgid "Verification"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/contact_form.html:19
@@ -1642,12 +1678,20 @@ msgstr ""
 msgid "Captcha"
 msgstr ""
 
+#: ckanext/publicamundi/themes/geodata/templates/snippets/contact_form.html:64
+msgid "The typed value does not match the image. Please try again"
+msgstr ""
+
 #: ckanext/publicamundi/themes/geodata/templates/snippets/contact_form.html:69
 msgid "Send"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/contact_form.html:70
 msgid "Done"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/contact_form.html:72
+msgid "Reset"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:44

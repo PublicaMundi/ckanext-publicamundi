@@ -281,9 +281,11 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
 
     def before_map(self, mapper):
         mapper.connect('dataset_apis', '/dataset/developers/{id}', controller= 'ckanext.publicamundi.themes.geodata.controllers.package:PackageController', action='package_apis')
+        mapper.connect('dataset_contact_form', '/dataset/contact/{id}', controller= 'ckanext.publicamundi.themes.geodata.controllers.contact:Controller', action='contact_form')
         #mapper.connect('preview_openlayers', '/preview_openlayers/{id}/{resource_id}', controller= 'ckanext.publicamundi.themes.geodata.controllers.package:PackageController', action='preview_openlayers')
         mapper.connect('applications', '/applications', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='applications')
-        mapper.connect('send_email', '/send_email', controller= 'ckanext.publicamundi.themes.geodata.controllers.contact:Controller', action='send_email')
+        mapper.connect('send_email', '/publicamundi/util/send_email', controller= 'ckanext.publicamundi.themes.geodata.controllers.contact:Controller', action='send_email')
+        mapper.connect('generate_captcha', '/publicamundi/util/generate_captcha', controller= 'ckanext.publicamundi.themes.geodata.controllers.contact:Controller', action='generate_captcha')
         #mapper.connect('maps', '/maps', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='redirect_maps' )
         #mapper.redirect('maps', 'http://http://83.212.118.10:5000/maps')
         #mapper.connect('maps', '/maps')
