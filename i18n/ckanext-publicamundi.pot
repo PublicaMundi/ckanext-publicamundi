@@ -254,6 +254,42 @@ msgstr ""
 msgid "Layer List"
 msgstr ""
 
+#: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/multilayer_format.html:16
+#: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/singlelayer_format.html:6
+#: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/singlelayer_format.html:20
+msgid "Layer Name"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/multilayer_format.html:20
+msgid "Layer Projection"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/multilayer_format.html:27
+#: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/singlelayer_format.html:31
+msgid "Layer Encoding"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/singlelayer_format.html:5
+msgid "GDAL Driver"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/singlelayer_format.html:7
+msgid "Layer Geometry"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/singlelayer_format.html:9
+#: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/singlelayer_format.html:11
+msgid "Layer Srs"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/singlelayer_format.html:9
+msgid "SRS not found"
+msgstr ""
+
+#: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/singlelayer_format.html:24
+msgid "Projection"
+msgstr ""
+
 #: ckanext/publicamundi/templates/ajax_snippets/draw-bbox-dialog.html:10
 #: ckanext/publicamundi/templates/snippets/dialogs/draw-bbox.html:10
 msgid "Draw a Bounding Box"
@@ -1711,16 +1747,8 @@ msgstr ""
 msgid "Get CSW Record"
 msgstr ""
 
-#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/data_api.html:16
-msgid "Query example (first 5 results)"
-msgstr ""
-
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/data_api.html:21
 msgid "Query example (results containing 'public')"
-msgstr ""
-
-#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/data_api.html:27
-msgid "Query example (via SQL statement)"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/data_api.html:32
