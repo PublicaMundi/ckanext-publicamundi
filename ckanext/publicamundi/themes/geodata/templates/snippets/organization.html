@@ -30,7 +30,7 @@ Example:
           </a>
         </div>
     {% endblock %}
-      <h1 class="heading">{{ organization.title or organization.name }}</h1>
+    <h1 class="heading">{{ organization.title or organization.name }}</h1>
       {# {% if organization.description %}
         <p>
           {{ h.markdown_extract(organization.description, 180) }}
@@ -55,7 +55,15 @@ Example:
         </div>
       {% endif %}
       #}
+        {% if pkg %}
+        {% block package_contact %}
+            {% snippet "snippets/contact.html", pkg=pkg %}
+        {% endblock %}
+        {% endif %}
+
       {% endif %}
-    </section>
+        
+      </section>
+    
   </div>
 {% endwith %}

@@ -36,9 +36,14 @@ within_tertiary
   Boolean for when a facet list should appear in the the right column of the
   page and not the left column.
 
+hide_section 
+  Parameter to hide organization/group facet section when only one item is present
 #}
+
 {% set hide_empty = hide_empty or false %}
+{% set LIMIT = 5 %}
 {% with items = items or h.get_facet_items_dict(name, limit=50) %}
+{% if not hide_section and items|length >= 1 %}
   {% if items or not hide_empty %}
     {% if within_tertiary %}
       {% set nav_class = 'nav nav-pills nav-stacked' %}
@@ -67,7 +72,14 @@ within_tertiary
                     'license_id': _('Licenses'), } %}
 
                     {% set title = facet_titles.get(name)|capitalize %}
-        {{ title }} <br> <div class="sorting"><a href="#" class="sort-name">{{_('A...Z ')}}</a> <a href="#" class="sort-count down">{{_('1...9 ')}}</a> </div>
+                    {{ title }} <br> 
+                    <div class="sorting">
+                        <a href="#" class="sort-name">{{_('A...Z ')}} 
+                            <i class="sort-name-icon"></i>
+                        </a> 
+                        <a href="#" class="sort-count">{{_('1...9 ')}} <i class="sort-count-icon icon-chevron-down"></i>
+                        </a> 
+                    </div>
       </h2>
         <nav>
         <ul id={{ name }}  title={{title}} class="{{ nav_class or 'unstyled nav nav-simple nav-facet' }} count_desc">
@@ -83,21 +95,17 @@ within_tertiary
                 </li>
             {% endfor %}
           </ul>
-        </nav>
+          </nav>
+        {% if items|length >= LIMIT %}
         <p class="module-footer">
-        {#  {% if h.get_param_int('_%s_limit' % name) %}
-          <a href="{{ h.remove_url_param('_%s_limit' % name, replace=0, extras=extras, alternative_url=alternative_url) }}" class="read-more">{{ _('Show More {facet_type}').format(facet_type=title) }}</a>
-          
-            {% else %} 
-           <a href="{{ h.remove_url_param('_%s_limit' % name, extras=extras, alternative_url=alternative_url) }}" class="read-more">{{ _('Show Only Popular {facet_type}').format(facet_type=title) }}</a> 
-           {% endif %} #}
-
             <a href="#" class="read-more">{{ _('Show More {facet_type}').format(facet_type=title) }}</a> 
             <a href="#" class="read-less hidden">{{ _('Show Only Popular {facet_type}').format(facet_type=title) }}</a> 
-        </p>
+            </p>
+        {% endif %}
         {% endif %}
     </section>
       {% else %}
         <p class="module-content empty">{{ _('There are no {facet_type} that match this search').format(facet_type=title) }}</p>
-  {% endif %}
+        {% endif %}
+{% endif %}
 {% endwith %}
