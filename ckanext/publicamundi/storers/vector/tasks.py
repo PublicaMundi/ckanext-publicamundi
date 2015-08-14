@@ -411,7 +411,7 @@ def _ingest_vector(
         
         publishing_server, publishing_layer = _publish_layer(
             context, geoserver_context, layer_name, created_db_table_resource, srs_wkt)
-        logger.info('Published layer as %s' % (publishing_layer))
+        logger.info('Published layer %s under %s' % (publishing_layer, publishing_server))
         
         _add_wms_resource(
             context,
@@ -500,29 +500,34 @@ def _is_shapefile(res_folder_path):
         return (False, None, False)
 
 def _publish_layer(context, geoserver_context, layer_name, resource, srs_wkt):
+    '''Publish an existing PostGis layer (previously ingested as a table resource) 
+    to our Geoserver backend.
+    '''
     
-    geoserver_url = geoserver_context['url']
-    geoserver_workspace = geoserver_context['workspace']
-    geoserver_username = geoserver_context['username']
-    geoserver_password = geoserver_context['password']
-    geoserver_datastore = geoserver_context['datastore']
+    api_url = geoserver_context['api_url']
+    public_url = geoserver_context['url']
+    workspace = geoserver_context['workspace']
+    username = geoserver_context['username']
+    password = geoserver_context['password']
+    datastore = geoserver_context['datastore']
     
-    url = geoserver_url + '/rest/workspaces/' + geoserver_workspace + \
-        '/datastores/' + geoserver_datastore + '/featuretypes'
-    
-    req = urllib2.Request(url)
+    req = urllib2.Request(
+        api_url + '/rest' + 
+        '/workspaces/' + workspace + 
+        '/datastores/' + datastore + 
+        '/featuretypes')
     req.add_header('Content-type', 'text/xml')
     req.add_data(
         '''<featureType>
-            <name>%s</name>
-            <title>%s</title>
-            <abstract>%s</abstract>
-            <nativeCRS>%s</nativeCRS>
-           </featureType>'''
-        % (resource['id'], layer_name, resource['description'], srs_wkt))
+             <name>%s</name>
+             <title>%s</title>
+             <abstract>%s</abstract>
+             <nativeCRS>%s</nativeCRS>
+           </featureType>
+        ''' % (resource['id'], layer_name, resource['description'], srs_wkt))
     req.add_header('Authorization', 'Basic ' + (
-        (geoserver_username + ':' + geoserver_password).encode('base64').rstrip()))
-    
+        (username + ':' + password).encode('base64').rstrip()))
+
     try:
         res = urllib2.urlopen(req)
     except urllib2.HTTPError as ex:
@@ -533,10 +538,8 @@ def _publish_layer(context, geoserver_context, layer_name, resource, srs_wkt):
         raise CannotPublishLayer(
             'Failed to publish layer %r: %s: %s' % (layer_name, ex, detail))
 
-    publishing_server = geoserver_url
-    layer_name = geoserver_workspace + ':' + resource['id']
-    
-    return (publishing_server, layer_name)
+    layer_name = workspace + ':' + resource['id']
+    return (public_url, layer_name)
 
 def _invoke_api_resource_action(context, resource, action):
     api_key = context['user_api_key']
@@ -655,16 +658,22 @@ def _delete_from_datastore(resource_id, db_conn_params, context, logger):
             % (resource_id, ex))
 
 def _unpublish_from_geoserver(resource, geoserver_context, logger):
+    '''Contact Geoserver and unpublish a layer previously created as an 
+    ingested resource.
+    '''
+
     from geoserver.catalog import Catalog, FailedRequestError
+    
     layer_name = None
     if resource['format'] == WMSResource.FORMAT:
         layer_name = resource['wms_layer']
     else:
         layer_name = resource['wfs_layer']
+    
     try:
-        geoserver_url = geoserver_context['url']
+        api_url = geoserver_context['api_url']
         cat = Catalog(
-            geoserver_url.rstrip('/') + '/rest',
+            api_url + '/rest',
             username=geoserver_context['username'],
             password=geoserver_context['password'])
         layer = cat.get_layer(resource['parent_resource_id'].lower())
@@ -673,8 +682,7 @@ def _unpublish_from_geoserver(resource, geoserver_context, logger):
         logger.info('Unpublished layer %s from Geoserver'
             % (layer_name))
     except AttributeError as ex:
-        logger.error('Failed to unpublish layer %s: %s'
-            % (layer_name, ex))
+        logger.error('Failed to unpublish layer %s: %s' % (layer_name, ex))
     except FailedRequestError as ex:
-         logger.error('Failed to unpublish layer %s: %s'
-            % (layer_name, ex))
+         logger.error('Failed to unpublish layer %s: %s' % (layer_name, ex))
+

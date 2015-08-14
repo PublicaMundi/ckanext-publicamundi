@@ -29,17 +29,15 @@ class WMSResource:
         self._layer_name = layer_name
         self._name = resource_name + self.name_suffix
         self._description = "A WMS layer resource generated from " + resource_name
-        base_url = urlparse(wms_server)
-
-        self._url = urljoin(base_url.netloc, self._get_capabilities_url)
         self._parent_resource_id = parent_resource_id
         self._wms_server = wms_server
         self._wms_layer = wms_layer
+        self._url = wms_server + '/ows/wms13' + self._get_capabilities_url
 
     def as_dict(self):
         resource = {
             "package_id": unicode(self._package_id),
-            "url": self._wms_server + self._get_capabilities_url,
+            "url": self._url,
             "format": self.FORMAT,
             "parent_resource_id": self._parent_resource_id,
             'rasterstorer_resource': self._rasterstorer_resource,
@@ -79,22 +77,20 @@ class WCSResource:
         self._layer_name = layer_name
         self._name = resource_name + self.name_suffix
         self._description = "A WCS resource generated from " + resource_name
-        base_url = urlparse(wcs_server)
-
-        self._url = urljoin(base_url.netloc, self._get_capabilities_url)
         self._parent_resource_id = parent_resource_id
-        self._wms_server = wcs_server
-        self._wms_layer = wcs_coverage
+        self._wcs_server = wcs_server
+        self._wcs_coverage = wcs_coverage
+        self._url = wcs_server + '/ows' + self._get_capabilities_url
 
     def as_dict(self):
         resource = {
             "package_id": unicode(self._package_id),
-            "url": self._wms_server + self._get_capabilities_url,
+            "url": self._url,
             "format": self.FORMAT,
             "parent_resource_id": self._parent_resource_id,
             'rasterstorer_resource': self._rasterstorer_resource,
-            "wcs_server": self._wms_server,
-            "wcs_coverage": self._wms_layer,
+            "wcs_server": self._wcs_server,
+            "wcs_coverage": self._wcs_coverage,
             "name": self._name,
             "description": self._description
         }
