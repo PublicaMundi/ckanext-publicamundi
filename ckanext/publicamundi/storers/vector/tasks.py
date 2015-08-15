@@ -401,7 +401,7 @@ def _ingest_vector(
             geom_name,
             layer_name)
         layer = _vector.get_layer(layer_idx)
-        
+
         _vector.handle_layer(
             layer,
             geom_name,
@@ -510,21 +510,23 @@ def _publish_layer(context, geoserver_context, layer_name, resource, srs_wkt):
     username = geoserver_context['username']
     password = geoserver_context['password']
     datastore = geoserver_context['datastore']
-    
+   
+    req_body = u'''
+    <featureType>
+        <name>%s</name>
+        <title>%s</title>
+        <abstract>%s</abstract>
+        <nativeCRS>%s</nativeCRS>
+    </featureType>
+    ''' % (resource['id'], layer_name, resource['description'], srs_wkt)
+
     req = urllib2.Request(
         api_url + '/rest' + 
         '/workspaces/' + workspace + 
         '/datastores/' + datastore + 
         '/featuretypes')
-    req.add_header('Content-type', 'text/xml')
-    req.add_data(
-        '''<featureType>
-             <name>%s</name>
-             <title>%s</title>
-             <abstract>%s</abstract>
-             <nativeCRS>%s</nativeCRS>
-           </featureType>
-        ''' % (resource['id'], layer_name, resource['description'], srs_wkt))
+    req.add_header('Content-Type', 'text/xml')
+    req.add_data(req_body.encode('utf-8'))
     req.add_header('Authorization', 'Basic ' + (
         (username + ':' + password).encode('base64').rstrip()))
 
