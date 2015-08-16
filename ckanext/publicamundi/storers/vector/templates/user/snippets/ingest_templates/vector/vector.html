@@ -3,7 +3,7 @@
 {% set resource_id = c.resource_id %}
 {% set task_result = c.task_result %}
 {% set gdal_driver = task_result.gdal_driver %}
-{% set layers = task_result.layers %} 
+{% set layers = c.layers %} 
 {% set ingest_base_url= h.url_for('vector_ingest',resource_id =resource_id)%}
 
  
@@ -16,15 +16,10 @@
     {% else %}
 	{% snippet 'user/snippets/ingest_templates/vector/multilayer_format.html', task_result=task_result%}
     
-    {#{% elif gdal_driver=="" %}
-    
-    {% elif gdal_driver=="" %}
-    
-    {% elif gdal_driver=="" %} #}
-    
     {% endif %}
-    </br>
-    <button class="btn" id="ingest_button"> {{ _('Ingest') }}</button>
+    
+    <br/>
+    <button class="btn btn-primary" id="ingest_button">{{ _('Ingest') }}</button>
 </div>
   
 {% resource 'ckanext-publicamundi-vector/vector_ingest'%}
