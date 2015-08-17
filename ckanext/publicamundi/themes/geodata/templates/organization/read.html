@@ -6,15 +6,22 @@
 {% endblock %}
 
 {% block primary_content_inner %}
-{% block groups_search_form %}
+
+    {% block groups_search_form %}
     <div class="search-medium">
-        {{ super() }}
+       {{ super() }}
     </div>
-      <div class="gap"></div>
-         {% endblock %}
-  {% block packages_list %}
-  {{ super() }}
-  {% endblock %}
+    <div class="gap"></div>
+    {% endblock %}
+  
+    {% block packages_list %}
+    {{ super() }}
+    {% endblock %}
+
+    {% block page_pagination %}
+    {{ super() }}
+    {% endblock %}
+
 {% endblock %}
 
 {% block organization_facets %}
