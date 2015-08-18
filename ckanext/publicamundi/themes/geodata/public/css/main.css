@@ -1695,9 +1695,9 @@ a.tag:hover{
     //border: 3px #4E59A4 solid;
 }
 /* Preview */
-.ckanext-datapreview iframe{
+iframe{
     //border: 4px #4E59A4 solid;
-    //height: 450px !important;
+    min-height: 450px;
 }
 /* New package */
 .stages li button.highlight {

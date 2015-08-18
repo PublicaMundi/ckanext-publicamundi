@@ -71,7 +71,11 @@
         {% else %}
         <i>{{ _('No description') }}</i>
         {% endif %}
-    </p>
+        </p>
+
+    {% block resource_languages %}
+    {% endblock %}
+
     {% endblock %} {# resource_item_description #}
 
 
