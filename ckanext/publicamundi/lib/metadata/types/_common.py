@@ -101,8 +101,6 @@ class TemporalExtent(Object):
 class TemporalExtentFormatter(ObjectFormatter):
 
     def _format(self, obj, opts):
-        # Fixme
-        _ = lambda s: s
         s = _('From %(start)s To %(end)s') % dict(start=obj.start, end=obj.end)
         return u'<%s>' % s if opts.get('quote') else s
 

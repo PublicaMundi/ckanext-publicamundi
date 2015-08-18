@@ -1,5 +1,5 @@
 <span class="{{ classes|join(' ') }}">
-    {#- Todo Format dates with respect to lacale -#}
+    {#- Todo Format dates with respect to locale -#}
     {% if obj.start and obj.end -%}
     {{- _('From %(start)s to %(end)s')|format(start=obj.start, end=obj.end) -}}
     {% elif obj.start -%}

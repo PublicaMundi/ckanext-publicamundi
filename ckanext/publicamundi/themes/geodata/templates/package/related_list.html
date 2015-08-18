@@ -1,41 +1,46 @@
 {% ckan_extends %}
 
- {% block secondary_content %}
-{# {% block secondary_help_content %}{% endblock %} #}
-
-{#  {% block package_info %}
-    {% snippet 'package/snippets/info.html', pkg=pkg %}
-    {% endblock %} #}
-        {% if pkg.organization %}
-  {% block package_organization %}
+{% set pkg = c.pkg_dict %}
+{% if pkg %} 
+    {% if pkg.organization %}
+        {% set org = h.get_organization(pkg.organization.name) %}
+        {% do pkg.update(organization = org) %} 
+    {% endif %}
+{% endif %}
+{# fix for organization and group title non translation in sidebar #}
+{% do h.get_translated_dataset_groups([c.pkg_dict]) %}
+{% block secondary_content %}
+    {% if pkg.organization %}
+    {% block package_organization %}
+      {% set org = h.get_organization(pkg.organization.name) %}
       {% snippet "snippets/organization.html", organization=pkg.organization , has_context_title=true  %}
-      {% endblock %}
-      {% endif %}
+    {% endblock %}
+    {% endif %}
 
-      {% if pkg.groups %}
+    {% if pkg.groups %}
     {% block package_group %}
-    {% snippet "snippets/group.html", group=pkg.groups %}
+        {% snippet "snippets/group.html", group=pkg.groups %}
     {% endblock %}
     {% endif %}
 
     {% if pkg.tags %}
-  {% block package_side_tags %}
-    {% snippet "package/snippets/tags.html", tags=pkg.tags %}
+    {% block package_side_tags %}
+        {% snippet "package/snippets/tags.html", tags=pkg.tags %}
     {% endblock %}
     {% endif %}
 
 
-  {% block package_license %}
-{% snippet "snippets/license.html", pkg_dict=pkg %}
-{% endblock %}
-{% if pkg.spatial %}
-  {% snippet "spatial/snippets/dataset_map_sidebar.html", extent=pkg.spatial %}
-  {% endif %}
+    {% block package_license %}
+        {% snippet "snippets/license.html", pkg_dict=pkg %}
+    {% endblock %}
+    
+    {% if pkg.spatial %}
+        {% snippet "spatial/snippets/dataset_map_sidebar.html", extent=pkg.spatial %}
+    {% endif %}
 
-{% block package_social %}
-{% snippet "snippets/social.html" %}
-{% endblock %} 
-
+    {% block package_social %}
+        {% snippet "snippets/social.html" %}
+    {% endblock %} 
 {% endblock %}
 
 {% block primary_content_inner %}

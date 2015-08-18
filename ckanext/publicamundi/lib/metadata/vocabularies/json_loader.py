@@ -11,7 +11,7 @@ def _munge(name):
     '''
 
     re_bad = re.compile('[\(\),]+')
-    re_delim = re.compile('[ \t_-]+')
+    re_delim = re.compile('[ \/\t_-]+')
     
     name = str(name)
     name = name.lower()

@@ -126,7 +126,7 @@ class IInspireMetadata(IBaseMetadata):
             max_length = 20,
             value_type = zope.schema.Object(IFreeKeyword,
                 title = u'Free Keyword'))
-    #free_keywords.setTaggedValue('format:markup', { 'descend-if-dictized': False })
+    free_keywords.setTaggedValue('format:markup', { 'descend-if-dictized': False })
 
     # Geographic
 
@@ -207,6 +207,7 @@ class IInspireMetadata(IBaseMetadata):
         title = u'Coordinate Reference System',
         description = u'Coordinate Reference System',
         required = False)
+    reference_system.setTaggedValue('format:markup', { 'descend-if-dictized': False })
     
     # Conformity
 

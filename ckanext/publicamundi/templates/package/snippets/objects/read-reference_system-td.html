@@ -1,0 +1,6 @@
+{% set code_field = obj.get_field('code') -%}
+{% set code_uri = code_field.context.value -%}
+{% set code_name = code_field.vocabulary.by_value.get(code_uri).token -%}
+<span class="{{ classes|join(' ') }}">
+{{ code_name|safe }} <code>{{ code_uri|urlize }}</code>
+</span>

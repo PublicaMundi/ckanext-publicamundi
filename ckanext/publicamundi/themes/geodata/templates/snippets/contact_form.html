@@ -1,0 +1,72 @@
+<form class="modal hide no-fade" id="contact-form-modal" tabindex="-1" aria-hidden="true" method="post" data-module="basic-form contact-form-send" > 
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">&times;</a>
+        <h3>{{_('Contact')}}: {{ pkg.title }}</h3>
+    </div>
+    
+    <div class="modal-body form-horizontal">
+        <div id="contact-form-modal-loading" class="hidden">
+            <span><div class="ajax-loader"></div>  {{ _('Sending...') }}</span>
+        </div>
+        <div id="contact-form-modal-success" class="hidden">
+            <span><i class="icon-ok"></i>  {{ _('Email sent successfully. Thank you!') }}</span>
+        </div>
+        <div id="contact-form-modal-failure" class="hidden">
+            <span><i class="icon-remove"></i>  {{ _('Unfortunately your email has not been sent.') }}</span>
+        </div>
+
+        <div id="contact-form-modal-items" class="control-group widget field-widget">
+            <label class="control-label" for="contact-name">{{ _('Your name') }}
+                <span title="Requred field" class="control-required">*</span>
+            </label>
+            <div class="controls">
+                <input type="text" name="name" class="span4" id="contact-name" required></input>
+            </div>
+            <br>
+
+            <label class="control-label" for="contact-email">{{ _('Your email') }}
+                <span title="Requred field" class="control-required">*</span>
+            </label>
+            <div class="controls">
+                <input type="email" name="email" class="span4" id="contact-email" required></input>
+            </div>
+            <br>
+            
+            <div class="controls">
+                <input type="hidden" name="subject" id="contact-pkg_name" value="{{ pkg.id }}"></input>
+            </div>
+            
+            <div class="controls hidden">
+                <input type="text" name="url" id="contact-antispam" value=""></input>
+            </div>
+
+            <label class="control-label" for="contact-msg">{{ _('Your message') }}
+                <span title="Requred field" class="control-required">*</span>
+            </label>
+            <div class="controls">
+                <textarea id="contact-msg" name="body" class="span4" rows="5" required></textarea>
+            </div>
+            <br>
+
+            <!-- <div class="controls">
+                <img id="contact-captcha-img" name="captcha-img" src="/images/captcha.jpg"></img>
+            </div>
+            <br>
+
+            <label class="control-label" for="contact-captcha">{{ _('Captcha') }}
+                <span title="Requred field" class="control-required">*</span>
+            </label>
+            <div class="controls">
+                <input id="contact-captcha-txt" name="captcha-txt" class="span4" required></input>
+            </div>
+            <br>
+            -->
+        </div>
+    </div>
+    
+    <div class="modal-footer">
+    <button class="btn btn-cancel" data-dismiss="modal">{{_('Cancel')}}</button>
+    <button type="submit" class="btn btn-primary" id="contact-form-modal-send" name="send" value="Submit" >{{_('Send')}}</button>
+    <button class="btn btn-primary hidden" id="contact-form-modal-ok" data-dismiss="modal">{{_('Done')}}</button>
+    </div>
+</form>

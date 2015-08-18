@@ -5,39 +5,33 @@
     Number of Layers: {{layers|length}}</br>
 </div>
 <div class="layerlist ">
-    <label>{{ _('Layer List')}}</label> 
-    
+    <label>{{ _('Layer List')}}</label>     
     {% for layer in layers %}
-          <div style="border: 1px solid rgba(0, 0, 0, 0.23); border-radius: 4px; padding: 5px; margin-top: 5px;">
+        <div style="border: 1px solid rgba(0, 0, 0, 0.23); border-radius: 4px; padding: 5px; margin-top: 5px;">
 
-            <input type="checkbox" id="checkbox_{{layer.idx}}" style="float: left; margin-right: 20px;" name="checkbox_layer"  checked>
-                <div id="divproj" class="form-select " style="float: left;">
+            <input type="checkbox" id="checkbox_{{layer.idx}}" style="float: left; margin-right: 20px;" name="checkbox_layer"  checked />
+            
+            <div id="divproj" class="form-select " style="float: left;">
                 
                 <label style="float:left;">{{ _('Layer Name')}}</label> 
                 
-                <input  id="layer_name_{{layer.idx}}" type="text" name="layer_name_input"  value="{{layer.layer_name}}">
+                <input  id="layer_name_{{layer.idx}}" type="text" name="layer_name_input"  value="{{layer.layer_name}}" />
                 </br>
                <label style="float:left;">{{ _('Layer Projection')}}</label> 
                 {% if layer.layer_srs==-1 %}
                 <input  id="layer_srs_{{layer.idx}}" type="text" name="srs_input">
                 {% else %}
-                <input  id="layer_srs_{{layer.idx}}" type="text" name="srs_input" value="{{layer.layer_srs}}">
+                <input  id="layer_srs_{{layer.idx}}" type="text" name="srs_input" value="{{layer.layer_srs}}" />
                 {% endif %}
                 </br>
                <label style="float:left;">{{ _('Layer Encoding')}}</label> 
                 
-                <input  id="layer_encoding_{{layer.idx}}" type="text" name="layer_encoding_input">
+                <input  id="layer_encoding_{{layer.idx}}" type="text" name="layer_encoding_input" value="utf-8" />
                 </br>
-                </div>
-
-
-                <div id="proj-error" class="projection-error" style="clear: both;"></div>
-
-
             </div>
+            <div id="proj-error" class="projection-error" style="clear: both;"></div>
+        </div>
     {% endfor %}
- 
-
 </div>
   
  

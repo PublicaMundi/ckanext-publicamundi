@@ -1,5 +1,6 @@
 import os
 import re
+import json
 import uuid
 import datetime
 import zope.interface
@@ -9,6 +10,7 @@ from lxml import etree
 from owslib.iso import MD_Metadata
 
 from ckan.plugins.toolkit import toolkit
+from ckan.lib.base import model
 
 from ckanext.publicamundi import reference_data
 from ckanext.publicamundi.lib.metadata.base import Object, object_null_adapter
@@ -111,7 +113,7 @@ class InspireMetadata(BaseMetadata):
 
         data['notes'] = self.abstract
         
-        # Todo version
+        # version: Todo
         
         # tags: Collect free keywords and thesauri terms (see #135)
 
@@ -127,6 +129,34 @@ class InspireMetadata(BaseMetadata):
         if tags:
             data['tags'] = tags
 
+        # spatial: Form a geoJSON polygon from the bounding-box
+        
+        if self.bounding_box:
+            bbox = self.bounding_box[0]
+            wblng, eblng, sblat, nblat = bbox.wblng, bbox.eblng, bbox.sblat, bbox.nblat
+            bbox_as_geojson = { 
+                'type': 'Polygon', 
+                'coordinates': [[
+                    [wblng, sblat], [wblng, nblat],
+                    [eblng, nblat], [eblng, sblat],
+                    [wblng, sblat],
+                ]]
+            }
+            data['spatial'] = json.dumps(bbox_as_geojson)
+     
+        # license: Match access-constraints to a license
+        
+        if self.access_constraints:
+            license_options = model.Package.get_license_options()
+            # Try an exact match to the license title
+            try:
+                iy = [y[0] for y in license_options].index(self.access_constraints[0])
+            except ValueError:
+                data['license_id'] = u'CC-BY-3.0'
+            else:
+                data['license_id'] = license_options[iy][1]
+        
+        # Done!
         return data
 
 # XML serialization

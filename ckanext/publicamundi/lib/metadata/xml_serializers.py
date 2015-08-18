@@ -158,7 +158,8 @@ class BaseSerializer(object):
         return s
 
     def loads(self, s):
-        e = etree.fromstring(s)
+        xml_parser = etree.XMLParser(resolve_entities=False)
+        e = etree.fromstring(s, xml_parser)
         o = self.from_xml(e)
         return o
     

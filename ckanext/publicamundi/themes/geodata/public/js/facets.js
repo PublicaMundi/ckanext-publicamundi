@@ -86,10 +86,11 @@ function handleFacets() {
         e.preventDefault();
         //$(this).text("1 -> 9");
         //$(this).parent().find('.sort-name').text("A    Z");
-        $(this).addClass("up");
-        $(this).removeClass("down");
-        $(this).parent().find('.sort-name').removeClass("down");
-        $(this).parent().find('.sort-name').removeClass("up");
+        $(this).find(".sort-count-icon").addClass("icon-chevron-up");
+        $(this).find(".sort-count-icon").removeClass("icon-chevron-down");
+        $(this).parent().find('.sort-name-icon').removeClass("icon-chevron-down");
+        $(this).parent().find('.sort-name-icon').removeClass("icon-chevron-up");
+        //$(this).parent().find('.sort-name-icon').addClass("icon-minus");
         var ul = $(this).parent().parent().parent().find('.nav-facet');
         var list = ul.find('li');
 
@@ -122,10 +123,11 @@ function handleFacets() {
 
         //$(this).text("1 <- 9");
         //$(this).parent().find('.sort-name').text("A    Z");
-        $(this).addClass("down");
-        $(this).removeClass("up");
-        $(this).parent().find('.sort-name').removeClass("down");
-        $(this).parent().find('.sort-name').removeClass("up");
+        $(this).find(".sort-count-icon").addClass("icon-chevron-down");
+        $(this).find(".sort-count-icon").removeClass("icon-chevron-up");
+        $(this).parent().find('.sort-name-icon').removeClass("icon-chevron-down");
+        $(this).parent().find('.sort-name-icon').removeClass("icon-chevron-up");
+        //$(this).parent().find('.sort-name-icon').addClass("icon-minus");
         e.preventDefault();
         var ul = $(this).parent().parent().parent().find('.nav-facet');
         var list = ul.find('li');
@@ -151,23 +153,28 @@ function handleFacets() {
         }
 
         $(this).one('click', sort_count_up);
-    };
-    
-    
-            
+    }; 
+          
+    //remove greek accented characters
+    function remove_accented(str) {
+            return str.replace('Ά', 'Α').replace('Έ', 'Ε').replace('Ή', 'Η').replace('Ί', 'Ι').replace('Ό', 'Ο').replace('Ύ', 'Υ').replace('Ώ', 'Ω');
+        }
+
     // Sort alphabetically ascending/descending handling
     function sort_name_up(e) {
+        
         //ascending alphabetical sort
         function asc_alpha_sort(a, b) {
-            return ($(b).text().toUpperCase()) < ($(a).text().toUpperCase())? 1 : -1;
+            return (remove_accented($(b).text().toUpperCase())) < (remove_accented($(a).text().toUpperCase()))? 1 : -1;
         };
 
         //$(this).text("A -> Z");
         //$(this).parent().find('.sort-count').text("1    9");
-        $(this).addClass("down");
-        $(this).removeClass("up");
-        $(this).parent().find('.sort-count').removeClass("down");
-        $(this).parent().find('.sort-count').removeClass("up");
+        $(this).find(".sort-name-icon").addClass("icon-chevron-down");
+        $(this).find(".sort-name-icon").removeClass("icon-chevron-up");
+        $(this).parent().find('.sort-count-icon').removeClass("icon-chevron-down");
+        $(this).parent().find('.sort-count-icon').removeClass("icon-chevron-up");
+        //$(this).parent().find('.sort-count-icon').addClass("icon-minus");
         e.preventDefault();
         var ul = $(this).parent().parent().parent().find('.nav-facet');
         var list = ul.find('li');
@@ -194,17 +201,19 @@ function handleFacets() {
         $(this).one('click', sort_name_down);
     };
     function sort_name_down(e) {
+        
         //descending alphabetical sort
         function desc_alpha_sort(a, b) {
-            return ($(b).text().toUpperCase()) > ($(a).text().toUpperCase())? 1 : -1;
+            return (remove_accented($(b).text().toUpperCase())) > (remove_accented($(a).text().toUpperCase()))? 1 : -1;
         };
 
         //$(this).text("A <- Z");
         //$(this).parent().find('.sort-count').text("1    9");
-        $(this).addClass("up");
-        $(this).removeClass("down");
-        $(this).parent().find('.sort-count').removeClass("down");
-        $(this).parent().find('.sort-count').removeClass("up");
+        $(this).find(".sort-name-icon").addClass("icon-chevron-up");
+        $(this).find(".sort-name-icon").removeClass("icon-chevron-down");
+        $(this).parent().find('.sort-count-icon').removeClass("icon-chevron-down");
+        $(this).parent().find('.sort-count-icon').removeClass("icon-chevron-up");
+        //$(this).parent().find('.sort-count-icon').addClass("icon-minus");
         e.preventDefault();
         var ul = $(this).parent().parent().parent().find('.nav-facet');
         var list = ul.find('li');

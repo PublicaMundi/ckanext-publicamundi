@@ -19,18 +19,18 @@
     
     <label>{{ _('Layer Name')}}</label> 
     
-    <input  id="layer_name_{{layer.idx}}" type="text" name="layer_name_input"  value="{{layer.layer_name}}">
+    <input  id="layer_name_{{layer.idx}}" type="text" name="layer_name_input"  value="{{layer.layer_name}}" />
     </br>
     <label>{{ _('Projection')}}</label> 
     {% if layer.layer_srs==-1 %}
     <input  id="layer_srs_{{layer.idx}}" type="text" name="srs_input">
     {% else %}
-    <input  id="layer_srs_{{layer.idx}}" type="text" name="srs_input" value="{{layer.layer_srs}}">
+    <input  id="layer_srs_{{layer.idx}}" type="text" name="srs_input" value="{{layer.layer_srs}}" />
     {% endif %}
      
     <label>{{ _('Layer Encoding')}}</label> 
     
-    <input  id="layer_encoding_{{layer.idx}}" type="text" name="layer_encoding_input">
+    <input  id="layer_encoding_{{layer.idx}}" type="text" name="layer_encoding_input" value="utf-8"/>
     </br>
     </div>
 
