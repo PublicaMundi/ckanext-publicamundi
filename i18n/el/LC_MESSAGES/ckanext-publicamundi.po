@@ -1191,6 +1191,10 @@ msgstr "Μέλη"
 msgid "Private"
 msgstr "Ιδιωτικό"
 
+#: ckanext/publicamundi/templates/snippets/rating.html:21
+msgid "votes"
+msgstr "ψήφοι"
+
 #: ckanext/publicamundi/templates/snippets/search_form.html:18
 #: ckanext/publicamundi/themes/geodata/templates/snippets/search_form.html:60
 #: ckanext/publicamundi/themes/geodata/templates/snippets/search_form_top.html:65

@@ -105,5 +105,4 @@ function init() {
           //  $(this).addClass('breadcrumb-hide-text');
         //});
 
-
 }

@@ -3,6 +3,8 @@ import datetime
 import urlparse
 import urllib
 
+from pylons import config
+
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 from ckanext.publicamundi.lib import resource_ingestion
