@@ -83,7 +83,7 @@ function init() {
             //addClass('breadcrumb-hide-text');
         });
     });
-    
+
     toolbar.on('mouseleave', function(){
         bread_items.each(function(idx) {
             //console.log($(this).context.innerText);

@@ -285,7 +285,7 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
         _feedback_form = config.get('ckanext.publicamundi.themes.geodata.feedback_form')
         _maps_url = config.get('ckanext.publicamundi.themes.geodata.maps_url')
         _news_url = config.get('ckanext.publicamundi.themes.geodata.news_url')
-        _ratings_enabled = config.get('ckanext.publicamundi.package_rating', False)
+        _ratings_enabled = toolkit.asbool(config.get('ckanext.publicamundi.package_rating', False))
         return
 
     # IRoutes
