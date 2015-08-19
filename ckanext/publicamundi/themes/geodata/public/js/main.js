@@ -63,8 +63,8 @@ function init() {
     console.log(os);
     if (os.indexOf('Linux') == 0){
             $("body").css({'font-family': 'sans-serif'});
-
             $("a, b, textarea, input, heading, h1, h2, h3, h4, h5, h6").css({'font-family': 'sans-serif'});
+            $("[class^='icon-']").css({'font-family': 'FontAwesome'});
         }
 
     //Breadcrumbs auto hide all but last element
