@@ -63,12 +63,14 @@ function init() {
     console.log(os);
     if (os.indexOf('Linux') == 0){
             $("body").css({'font-family': 'sans-serif'});
-
+            
             $("a, b, textarea, input, heading, h1, h2, h3, h4, h5, h6").css({'font-family': 'sans-serif'});
+            $("[class^='icon-']").css({'font-family': 'FontAwesome'});
+
         }
 
     //Breadcrumbs auto hide all but last element
-        brd_items = $('.breadcrumb li:first').next().nextAll();
+        var brd_items = $('.breadcrumb li:first').next().nextAll();
         brd_items = brd_items.not(':last');
 
         brd_items.each(function(idx) {
@@ -77,8 +79,8 @@ function init() {
             $(this).addClass('breadcrumb-hide-text');
         });
        
-        tlbar = $('.toolbar');
-        brdcrmb = $('.breadcrumb');
+        var tlbar = $('.toolbar');
+        var brdcrmb = $('.breadcrumb');
         tlbar.on('mouseenter', function(){
             brd_items.each(function(idx) {
             //console.log($(this).context.innerText);
@@ -104,5 +106,6 @@ function init() {
         //brd_items.on('mouseleave', function(){
           //  $(this).addClass('breadcrumb-hide-text');
         //});
+
 
 }
