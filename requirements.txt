@@ -15,7 +15,5 @@ pytz
 isodate
 dictdiffer
 pytidylib
-pillow
-wheezy.captcha
 -e git+https://github.com/PublicaMundi/owslib.git@dev.publicamundi.eu#egg=owslib
 -e git+https://github.com/PublicaMundi/pycsw.git@dev.publicamundi.eu#egg=pycsw
