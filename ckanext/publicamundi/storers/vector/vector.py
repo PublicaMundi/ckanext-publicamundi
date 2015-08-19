@@ -163,10 +163,8 @@ class Vector:
             for y in range(feat.GetFieldCount()):
                 if not feat.GetField(y) is None:
                     if layer.GetLayerDefn().GetFieldDefn(y).GetType() in (4, 9, 10, 11):
-                        field_value = str(
-                            feat.GetField(y).decode(
-                                layer_encoding,
-                                'replace').encode('utf8'))
+                        field_value = feat.GetField(y).decode(
+                            layer_encoding, 'replace').encode('utf8')
                         feature_fields += psycopg2.extensions.adapt(
                             field_value).getquoted().decode('utf-8') + ','
                     else:

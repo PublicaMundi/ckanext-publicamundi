@@ -89,6 +89,10 @@ def _make_geoserver_context():
     return {
         'url':
             config['ckanext.publicamundi.vectorstorer.geoserver.url'].rstrip('/'),
+        'api_url':
+            config['ckanext.publicamundi.vectorstorer.geoserver.api_url'].rstrip('/'),
+        'reload_url':
+            config.get('ckanext.publicamundi.vectorstorer.geoserver.reload_url'),
         'workspace':
             config['ckanext.publicamundi.vectorstorer.geoserver.workspace'],
         'username':
@@ -97,8 +101,6 @@ def _make_geoserver_context():
             config['ckanext.publicamundi.vectorstorer.geoserver.password'],
         'datastore':
             config['ckanext.publicamundi.vectorstorer.geoserver.datastore'],
-        'reload_url':
-            config.get('ckanext.publicamundi.vectorstorer.geoserver.reload_url'),
     }
 
 def create_ingest_resource(resource, layer_params):
