@@ -1,7 +1,7 @@
 ckan.module('download_options_dialog', function ($, _) {
       return {
           options: {
-                BASE_URL: 'http://labs.geodata.gov.gr/',
+                BASE_URL: '/',
                 type: null,
                 format: null,
                 srs: null,
@@ -108,8 +108,6 @@ ckan.module('download_options_dialog', function ($, _) {
                 var url = this.options.BASE_URL+'rasdaman/ows/?service='+service+'&version='+version+'&request='+request+'&query='+query;
                 console.log(url); 
                 return url;
-
-                //var request = 'http://labs.geodata.gov.gr/rasdaman/ows/?service=WCS&version=2.0.1&request=ProcessCoverages&query=for c in (coverage_id) return encode(c, "format")'
 
             },
             _onGetVectorUrl: function(){

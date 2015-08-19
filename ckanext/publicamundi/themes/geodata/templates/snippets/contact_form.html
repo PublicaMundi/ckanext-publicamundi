@@ -1,7 +1,7 @@
-<form class="modal hide no-fade" id="contact-form-modal" tabindex="-1" aria-hidden="true" method="post" data-module="basic-form contact-form-send" > 
+ <form class="modal hide no-fade" id="contact-form-modal" tabindex="-1" aria-hidden="true" method="post" data-module="basic-form contact-form-send" data-toggle="validation">
     <div class="modal-header">
         <a class="close" data-dismiss="modal">&times;</a>
-        <h3>{{_('Contact')}}: {{ pkg.title }}</h3>
+        <h3><i class="icon-envelope"></i> {% trans %}<span class='contact-term'>Contact</span>{% endtrans %}: {{pkg.title}}</h3>
     </div>
     
     <div class="modal-body form-horizontal">
@@ -12,15 +12,15 @@
             <span><i class="icon-ok"></i>  {{ _('Email sent successfully. Thank you!') }}</span>
         </div>
         <div id="contact-form-modal-failure" class="hidden">
-            <span><i class="icon-remove"></i>  {{ _('Unfortunately your email has not been sent.') }}</span>
+            <span><i class="icon-remove"></i>  {{ _('Unfortunately your email has not been sent due to technical problems. You can directly contact info@geodata.gov.gr') }}</span>
         </div>
-
+        
         <div id="contact-form-modal-items" class="control-group widget field-widget">
             <label class="control-label" for="contact-name">{{ _('Your name') }}
                 <span title="Requred field" class="control-required">*</span>
             </label>
             <div class="controls">
-                <input type="text" name="name" class="span4" id="contact-name" required></input>
+                <input type="text" name="name" class="span4" id="contact-name" required oninvalid="setCustomValidity('{% trans %}Please fill out this field{% endtrans %}')" onchange="try{setCustomValidity('')}catch(e){}"></input>
             </div>
             <br>
 
@@ -28,12 +28,12 @@
                 <span title="Requred field" class="control-required">*</span>
             </label>
             <div class="controls">
-                <input type="email" name="email" class="span4" id="contact-email" required></input>
+                <input type="email" name="email" class="span4" id="contact-email"  required oninvalid="setCustomValidity('{% trans %}Please enter a correct email address{% endtrans %}')" onchange="try{setCustomValidity('')}catch(e){}"></input>
             </div>
             <br>
             
-            <div class="controls">
-                <input type="hidden" name="subject" id="contact-pkg_name" value="{{ pkg.id }}"></input>
+            <div class="controls hidden">
+                <input type="hidden" name="pkg-name" id="contact-pkg_name" value="{{ pkg.id }}"></input>
             </div>
             
             <div class="controls hidden">
@@ -44,29 +44,36 @@
                 <span title="Requred field" class="control-required">*</span>
             </label>
             <div class="controls">
-                <textarea id="contact-msg" name="body" class="span4" rows="5" required></textarea>
+                <textarea id="contact-msg" name="body" class="span4" rows="5" required oninvalid="setCustomValidity('{% trans %}Please fill out this field{% endtrans %}')" onchange="try{setCustomValidity('')}catch(e){}"></textarea>
+
             </div>
             <br>
 
-            <!-- <div class="controls">
-                <img id="contact-captcha-img" name="captcha-img" src="/images/captcha.jpg"></img>
+              <div class="controls">
+                  <img id="contact-captcha-img" name="captcha-img" src=""></img>
             </div>
             <br>
-
-            <label class="control-label" for="contact-captcha">{{ _('Captcha') }}
+            
+            <label class="control-label" for="contact-captcha-txt">{{ _('Verification') }}
                 <span title="Requred field" class="control-required">*</span>
             </label>
             <div class="controls">
-                <input id="contact-captcha-txt" name="captcha-txt" class="span4" required></input>
+                <input id="contact-captcha-txt" name="captcha-txt" class="span4" required oninvalid="setCustomValidity('{% trans %}Please fill out this field{% endtrans %}')" onchange="try{setCustomValidity('')}catch(e){}"></input>
             </div>
             <br>
-            -->
+            <div id="contact-form-modal-wrong-captcha" class="hidden">
+                <span><i class="icon-remove"></i>  {{ _('The typed value does not match the image. Please try again') }}</span>
+            <br>
+            </div>
+
         </div>
     </div>
     
     <div class="modal-footer">
-    <button class="btn btn-cancel" data-dismiss="modal">{{_('Cancel')}}</button>
+    <button class="pull-left btn btn-primary" id="contact-form-modal-reload" value="Reload" >{{_('Reset')}}</button>
+    <button class="btn btn-cancel" id="contact-form-modal-cancel" data-dismiss="modal">{{_('Cancel')}}</button>
     <button type="submit" class="btn btn-primary" id="contact-form-modal-send" name="send" value="Submit" >{{_('Send')}}</button>
     <button class="btn btn-primary hidden" id="contact-form-modal-ok" data-dismiss="modal">{{_('Done')}}</button>
     </div>
 </form>
+

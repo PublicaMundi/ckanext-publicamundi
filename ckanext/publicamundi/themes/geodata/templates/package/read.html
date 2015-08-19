@@ -96,17 +96,12 @@
         {% snippet "snippets/license.html", pkg_dict=pkg %}
     {% endblock %}
 
-    {% block package_developers %}
+    {# {% block package_developers %}
         {% snippet "snippets/developers.html", pkg_dict=pkg %}
     {% endblock %} 
-
+    #}
     {% block package_social %}
         {% snippet "snippets/social.html" %}
     {% endblock %} 
 
-{% endblock %}
-
-{% block scripts %}
-{{ super() }}
-{% resource 'ckanext-publicamundi-geodata-theme/contact' %}
 {% endblock %}
