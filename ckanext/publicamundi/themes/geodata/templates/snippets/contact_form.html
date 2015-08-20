@@ -58,11 +58,11 @@
                 <span title="Requred field" class="control-required">*</span>
             </label>
             <div class="controls">
-                <input id="contact-captcha-txt" name="captcha-txt" class="span4" required oninvalid="setCustomValidity('{% trans %}Please fill out this field{% endtrans %}')" onchange="try{setCustomValidity('')}catch(e){}"></input>
+                <input type="text" id="contact-captcha-txt" name="captcha-txt" class="span2" required oninvalid="setCustomValidity('{% trans %}Please fill out this field{% endtrans %}')" onchange="try{setCustomValidity('')}catch(e){}"></input>
             </div>
             <br>
             <div id="contact-form-modal-wrong-captcha" class="hidden">
-                <span><i class="icon-remove"></i>  {{ _('The typed value does not match the image. Please try again') }}</span>
+                <span><i class="icon-remove"></i>  {{ _('The text does not match the image. Please, try again') }}</span>
             <br>
             </div>
 

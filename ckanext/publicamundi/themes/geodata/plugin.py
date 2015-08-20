@@ -36,15 +36,22 @@ def friendly_date(date_str):
     return render_datetime(date_str, '%d, %B, %Y')
 
 def get_contact_point(pkg):
+    
+    # If there, INSPIRE metadata take precedence
+    
     if pkg.get('dataset_type') == 'inspire':
-        return {'name': pkg.get('inspire.contact.0.organization', None),
-                'email': pkg.get('inspire.contact.0.email', None)
-                }
-        #return pkg.get('inspire.contact.0.email')
-    else:
-        return {'name': pkg.get('maintainer'),
-                'email': pkg.get('maintainer_email')
-                }
+        name = pkg.get('inspire.contact.0.organization', '').decode('unicode-escape')
+        email = pkg.get('inspire.contact.0.email')
+    
+    # If not there, use maintainer or organization info
+    
+    if not name:
+        name = pkg.get('maintainer') or pkg['organization']['title']
+    
+    if not email:
+        email = pkg.get('maintainer_email') or config.get('email_to')
+     
+    return dict(name=name, email=email)
 
 _feedback_form = None
 _maps_url = None

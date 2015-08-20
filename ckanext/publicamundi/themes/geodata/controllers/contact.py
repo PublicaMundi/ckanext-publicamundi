@@ -1,6 +1,7 @@
 import base64
 import StringIO
 import json
+from urlparse import urlparse
 
 import pylons.config as config
 from pylons import request, session
@@ -21,60 +22,56 @@ class Controller(BaseController):
         sender_name = request.params.get("name")
         sender_email = request.params.get("email")
         pkg_name = request.params.get("pkg_name")
-        text = request.params.get("message")
+        message = request.params.get("message")
         antispam = request.params.get("antispam")
         captcha = request.params.get("captcha")
 
-        # assert request has been made with necessary post data
+        # Assert request has been made with necessary post data
+        
         assert captcha
         assert not antispam
         assert sender_name
         assert sender_email
         assert pkg_name
-        assert text
+        assert message
 
         captcha_key = session.get('contact_form_captcha_key', None)
-
         if not captcha == captcha_key:
-            return json.dumps({'success': False,
-                                'error': 'wrong-captcha'})
-
-        # Find a better way to do this
-        body = _("Name: ")
-        body += sender_name
-        body += "\n"
-        body += _("Email: ")
-        body += sender_email
-        body += "\n"
-        body += _("Message: ")
-        body += text
-
+            return json.dumps({'success': False, 'error': 'wrong-captcha'})
+        
         context = {
             'for_view': True,
             'user': c.user or c.author,
             'model': model,
             'session': model.Session,
             'api_version': 3
-            }
-        package = toolkit.get_action('package_show')(context, data_dict={'id':pkg_name})
-        subject = _('Regarding: {0}').format(package.get('title'))
-
+        }
+        host = urlparse(config.get('ckan.site_url')).netloc
+        package = toolkit.get_action('package_show')(context, data_dict={'id': pkg_name})
+        subject = _('Contact: {0}').format(package.get('title'))
         contact_point = get_contact_point(package)
-        #contact_point_name = contact_point.get('name')
-        contact_point_name = _('Sir/Madam')
-        contact_point_email = contact_point.get('email')
-
-        cc_email = config.get("email_to")
-
-        headers = {'cc': cc_email}
-
+        
+        body = toolkit.render_text('snippets/contact_message.txt', extra_vars={
+            'subject': subject,
+            'sender_name': sender_name,
+            'sender_email': sender_email,
+            'message': message,
+            'pkg': package,
+            'host': str(host),
+        })
+        headers = {
+            'Cc': config.get("email_to"),
+        }
         try:
-            mailer.mail_recipient(contact_point_name, contact_point_email, subject, body, headers=headers)
+            mailer.mail_recipient(
+                _('sir/madam'), #contact_point.get('name'), 
+                contact_point.get('email'), 
+                subject, 
+                body, 
+                headers=headers)
             return json.dumps({'success': True})
-
         except mailer.MailerException:
-            #return json.dumps({'success': False,
-            #                   'error': 'mail-not-sent'})
+            #return json.dumps({'success': False, 'error': 'mail-not-sent'})
             raise
 
     def generate_captcha(self):
@@ -111,7 +108,7 @@ class Controller(BaseController):
             noise(),
             smooth()
         ])
-        captcha_string = list(random.sample(string.uppercase +string.digits, 4))
+        captcha_string = list(random.sample(string.uppercase + string.digits, 4))
         session['contact_form_captcha_key'] = ''.join(captcha_string)
         session.save()
 
