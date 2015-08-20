@@ -90,7 +90,7 @@ function init() {
             //$(this).context.innerText = "...";
             $(this).addClass('breadcrumb-hide-text');
             //addClass('breadcrumb-hide-text');
-            });
+        });
     });
     
     //bread_items.on('mouseenter', function(){
