@@ -9,9 +9,7 @@ jQuery(document).ready(function ($) {
     init();
 });
 
-
 function init() {
-    
 
     var obj = $('.nav-pills > li > a[href$="/group"]');
     
@@ -62,48 +60,43 @@ function init() {
     var os = navigator.platform;
     console.log(os);
     if (os.indexOf('Linux') == 0){
-            $("body").css({'font-family': 'sans-serif'});
-
-            $("a, b, textarea, input, heading, h1, h2, h3, h4, h5, h6").css({'font-family': 'sans-serif'});
-        }
+        $("body").css({'font-family': 'sans-serif'});
+        $("a, b, textarea, input, heading, h1, h2, h3, h4, h5, h6").css({'font-family': 'sans-serif'});
+    }
 
     //Breadcrumbs auto hide all but last element
-        var brd_items = $('.breadcrumb li:first').next().nextAll();
-        brd_items = brd_items.not(':last');
+    var bread_items = $('.breadcrumb li:first').next().nextAll();
+    bread_items = bread_items.not(':last');
 
-        brd_items.each(function(idx) {
-            //console.log($(this).context.innerText);
-            //$(this).context.innerText = "...";
-            $(this).addClass('breadcrumb-hide-text');
-        });
+    bread_items.each(function(idx) {
+        //console.log($(this).context.innerText);
+        //$(this).context.innerText = "...";
+        $(this).addClass('breadcrumb-hide-text');
+    });
        
-        var tlbar = $('.toolbar');
-        var brdcrmb = $('.breadcrumb');
-        tlbar.on('mouseenter', function(){
-            brd_items.each(function(idx) {
+    var toolbar = $('.toolbar');
+    toolbar.on('mouseenter', function(){
+        bread_items.each(function(idx) {
             //console.log($(this).context.innerText);
             //$(this).context.innerText = "...";
             $(this).removeClass('breadcrumb-hide-text');
-                //addClass('breadcrumb-hide-text');
-            });
-
-
+            //addClass('breadcrumb-hide-text');
         });
-        tlbar.on('mouseleave', function(){
-            brd_items.each(function(idx) {
+    });
+
+    toolbar.on('mouseleave', function(){
+        bread_items.each(function(idx) {
             //console.log($(this).context.innerText);
             //$(this).context.innerText = "...";
             $(this).addClass('breadcrumb-hide-text');
-                //addClass('breadcrumb-hide-text');
-            });
-
+            //addClass('breadcrumb-hide-text');
         });
-        //brd_items.on('mouseenter', function(){
-           // $(this).removeClass('breadcrumb-hide-text');
-        //});
-        //brd_items.on('mouseleave', function(){
-          //  $(this).addClass('breadcrumb-hide-text');
-        //});
-
-
+    });
+    
+    //bread_items.on('mouseenter', function(){
+        //$(this).removeClass('breadcrumb-hide-text');
+    //});
+    //bread_items.on('mouseleave', function(){
+        //$(this).addClass('breadcrumb-hide-text');
+    //});
 }
