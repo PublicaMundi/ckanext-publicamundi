@@ -75,9 +75,9 @@ def redirect_wp(page):
     locale = helpers.lang()
     if page:
         if locale == 'el':
-            return('/content/{0}'.format(page))
+            return('/content/{0}/'.format(page))
         else:
-            return('/content/{0}-{1}'.format(page, locale))
+            return('/content/{0}-{1}/'.format(page, locale))
     else:
         return('/content/')
 
