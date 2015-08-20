@@ -61,9 +61,7 @@ function init() {
     var os = navigator.platform;
     console.log('Detected platform: ' + os);
     if (os.indexOf('Linux') == 0) {
-        $("body").css({'font-family': 'sans-serif'});
-        $("a, b, textarea, input, heading, h1, h2, h3, h4, h5, h6").css({'font-family': 'sans-serif'});
-        $("[class^='icon-']").css({'font-family': 'FontAwesome'});
+        $('head').append('<link rel="stylesheet" href="../css/linux-override.css" type="text/css" />');
     }
 
     //Breadcrumbs auto hide all but last element
