@@ -206,43 +206,7 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IRoutes, inherit=True)
     plugins.implements(plugins.IPackageController, inherit=True)
 
-    def init_contact_captcha(self):
-
-        from wheezy.captcha.image import captcha
-        from wheezy.captcha.image import background
-        from wheezy.captcha.image import curve
-        from wheezy.captcha.image import noise
-        from wheezy.captcha.image import smooth
-        from wheezy.captcha.image import text
-
-        from wheezy.captcha.image import offset
-        from wheezy.captcha.image import rotate
-        from wheezy.captcha.image import warp
-
-        import random
-        import string
-
-        captcha_image = captcha(drawings=[
-            background(),
-            text(
-                fonts = [
-                    '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf',
-                    ],
-                drawings=[
-                    warp(0.5),
-                    rotate(),
-                    offset()
-                ]),
-            curve(),
-            noise(),
-            smooth()
-        ])
-        self.captcha_string = list(random.sample(string.uppercase +string.digits, 4))
-        image = captcha_image(self.captcha_string)
-
-        #image.save('/tmp/captcha.jpg', 'JPEG', quality=75)
-
-    # ITemplateHelpers    
+     # ITemplateHelpers    
 
     def get_helpers(self):
         return {
@@ -303,7 +267,6 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     # IPackageController
     def before_view(self, pkg_dict):
         list_menu_items()
-        #self.init_contact_captcha()
         return pkg_dict
 
     # IPackageController 
