@@ -59,12 +59,16 @@ class Controller(BaseController):
             'pkg': package,
             'host': str(host),
         })
-        headers = {
-            'Cc': config.get("email_to"),
-        }
+        cc_email = config.get("email_to")
+        headers = {}
+        if cc_email and (not cc_email == contact_point.get('email')):
+            headers.update({
+            'Cc': cc_email,
+            })
         try:
             mailer.mail_recipient(
-                _('sir/madam'), #contact_point.get('name'), 
+                #_('sir/madam'), 
+                contact_point.get('name'), 
                 contact_point.get('email'), 
                 subject, 
                 body, 
@@ -92,7 +96,7 @@ class Controller(BaseController):
         def _file_to_base64(stream):
 
             image_data = base64.b64encode(stream)
-            return 'data:image/{0};base64,{1}'.format(''.join(captcha_string), image_data)
+            return 'data:image/{0};base64,{1}'.format('captcha_image', image_data)
 
         captcha_image = captcha(drawings=[
             text(
@@ -107,8 +111,12 @@ class Controller(BaseController):
             curve(),
             noise(),
             smooth()
-        ])
-        captcha_string = list(random.sample(string.uppercase + string.digits, 4))
+        ], width=300)
+        allowed_chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+        captcha_string = ''
+        for i in range(0, 5):
+            captcha_string += random.choice(allowed_chars)
+        #captcha_string = list(random.sample(string.uppercase + string.digits, 4))
         session['contact_form_captcha_key'] = ''.join(captcha_string)
         session.save()
 

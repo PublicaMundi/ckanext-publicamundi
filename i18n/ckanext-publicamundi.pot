@@ -749,6 +749,7 @@ msgid "URL"
 msgstr ""
 
 #: ckanext/publicamundi/templates/package/snippets/resource_form.html:33
+#: ckanext/publicamundi/themes/geodata/templates/snippets/contact_message.txt:1
 msgid "Name"
 msgstr ""
 
@@ -1342,26 +1343,6 @@ msgstr ""
 msgid "Ingest Resource"
 msgstr ""
 
-#: ckanext/publicamundi/themes/geodata/controllers/contact.py:43
-msgid "Name: "
-msgstr ""
-
-#: ckanext/publicamundi/themes/geodata/controllers/contact.py:46
-msgid "Email: "
-msgstr ""
-
-#: ckanext/publicamundi/themes/geodata/controllers/contact.py:49
-msgid "Message: "
-msgstr ""
-
-#: ckanext/publicamundi/themes/geodata/controllers/contact.py:60
-msgid "Regarding: {0}"
-msgstr ""
-
-#: ckanext/publicamundi/themes/geodata/controllers/contact.py:64
-msgid "Sir/Madam"
-msgstr ""
-
 #: ckanext/publicamundi/themes/geodata/templates/footer.html:12
 #: ckanext/publicamundi/themes/geodata/templates/home/snippets/search.html:3
 msgid "Search Datasets"
@@ -1614,6 +1595,10 @@ msgstr ""
 msgid "Last revision:"
 msgstr ""
 
+#: ckanext/publicamundi/themes/geodata/templates/snippets/contact_message.txt:7
+msgid "Dataset"
+msgstr ""
+
 #: ckanext/publicamundi/themes/geodata/templates/package/search.html:16
 msgid "Mapping API"
 msgstr ""
@@ -1672,7 +1657,6 @@ msgstr ""
 msgid "Add data"
 msgstr ""
 
-#: ckanext/publicamundi/themes/geodata/templates/snippets/contact.html:3
 #: ckanext/publicamundi/themes/geodata/templates/snippets/contact_form.html:4
 msgid "<span class='contact-term'>Contact</span>"
 msgstr ""
@@ -1735,6 +1719,10 @@ msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/contact_form.html:72
 msgid "Reset"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/contact_message.txt:5
+msgid "Subject"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:44
