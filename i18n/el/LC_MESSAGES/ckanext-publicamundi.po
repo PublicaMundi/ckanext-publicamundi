@@ -762,6 +762,7 @@ msgid "URL"
 msgstr "URL"
 
 #: ckanext/publicamundi/templates/package/snippets/resource_form.html:33
+#: ckanext/publicamundi/themes/geodata/templates/snippets/contact_message.txt:1
 msgid "Name"
 msgstr "Όνομα"
 
@@ -1663,6 +1664,10 @@ msgstr "Ποτέ"
 msgid "Last revision:"
 msgstr "Τελευταία αναθεώρηση"
 
+#: ckanext/publicamundi/themes/geodata/templates/snippets/contact_message.txt:7
+msgid "Dataset"
+msgstr "Σύνολο δεδομένων"
+
 #: ckanext/publicamundi/themes/geodata/templates/package/search.html:16
 msgid "Mapping API"
 msgstr "Χαρτογραφικό API"
@@ -1724,6 +1729,7 @@ msgstr "Δημιουργία δεδομένων"
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:38
 msgid "Add data"
 msgstr "Προσθήκη δεδομένων"
+
 
 #: ckanext/publicamundi/themes/geodata/templates/snippets/contact.html:3
 #: ckanext/publicamundi/themes/geodata/templates/snippets/contact_form.html:4
@@ -1790,6 +1796,10 @@ msgstr "Τέλος"
 #: ckanext/publicamundi/themes/geodata/templates/snippets/contact_form.html:72
 msgid "Reset"
 msgstr "Επαναφορά"
+
+#: ckanext/publicamundi/themes/geodata/templates/snippets/contact_message.txt:5
+msgid "Subject"
+msgstr "Θέμα"
 
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:44
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:48
