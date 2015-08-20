@@ -1,0 +1,14 @@
+
+${_('Name')}:
+    ${sender_name}
+
+${_('Email')}: 
+    ${sender_email}
+
+${_('Subject')}:
+    ${pkg.title} 
+    
+${_('Dataset')}:
+    ${h.url_for(controller='package', action='read', id=pkg.name, qualified=True, host=host)} 
+
+${message}

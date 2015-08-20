@@ -15,6 +15,7 @@ body {
     border: 4px #4E59A4 solid;
     font-family: 'ACMuliLight', Helvetica, Arial, sans-serif;
     font-weight: 500;
+    min-width:1000px;
 }
 a, b { 
     font-family: 'ACMuli', Helvetica, Arial, sans-serif;
@@ -87,7 +88,7 @@ p a{
     text-align: left;
     color: #4E59A4;
     line-height: 30px;
-    padding: 0 7px 0 7px;
+    padding: 0 6px 0 6px;
     font-weight: normal;
 }
 
@@ -290,7 +291,7 @@ p a{
 .nav-pills > li > a {
     margin-top: 0;
     margin-bottom: 0;
-    padding: 10px 10px 10px 10px;
+    padding: 10px 7px;
     margin-right: 0;
     border-radius: 0;
     border-right: 1px #7C7C7F solid;
@@ -1070,6 +1071,20 @@ p a{
 .developers ul li{
     padding: 5px;
 }
+#accordion-dev .accordion-group{
+    margin: 5px 0;
+}
+#accordion-dev .accordion-heading a{
+    padding: 13px;
+    font-size: 16px;
+}
+.developers-icon{
+    font-weight: bold;
+    font-size: 17px;
+}
+.social-icon{
+    font-size: 17px;
+}
 .dataset-map-expanded #dataset-map{
     top: -396px;
     left:0;
@@ -1192,7 +1207,7 @@ a.tag:hover{
 }
 
 .site-footer{
-    background-color: #ECECEC;
+    background: #ECECEC;
     color: #6B75B3;
 }
 .site-footer a, .site-footer label{
@@ -1332,9 +1347,15 @@ a.tag:hover{
 }
 .download-links .btn-group{
     float:right;
+    margin-right:1px;
+}
+.download-links .btn-group .btn{
+
+    max-width: 130px;
 }
 .metadata-label{
     display: block;
+    max-width: 120px;
     padding: 8px 5px 6px 5px;
     margin-right: 8px;
     width: 7em;
@@ -1343,11 +1364,8 @@ a.tag:hover{
     font-weight: bold;
     font-size: 14px;
     letter-spacing: 0.03em;
-    //color: #4E59A4;
     color: #666666;
-    //color: #fff;
     background-color: #ECECEC;
-    //border-color: #4E59A4;
     border-color: #ECECEC;
 }
 .metadata-label > i { 
@@ -1360,6 +1378,9 @@ a.tag:hover{
 }
 
 /* Resources */
+.resource-list .btn{
+    max-width: 130px;
+}
 .resources {
     margin-bottom: 20px;
 }
@@ -1688,9 +1709,9 @@ a.tag:hover{
     //border: 3px #4E59A4 solid;
 }
 /* Preview */
-.ckanext-datapreview iframe{
+iframe{
     //border: 4px #4E59A4 solid;
-    //height: 450px !important;
+    min-height: 450px;
 }
 /* New package */
 .stages li button.highlight {

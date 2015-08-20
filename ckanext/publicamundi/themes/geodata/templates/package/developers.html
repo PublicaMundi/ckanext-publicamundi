@@ -1,4 +1,5 @@
-{% ckan_extends %}
+{% extends "package/read_base.html" %}
+    {% snippet 'package/snippets/mapping_api_view.html', pkg=pkg, res={} %}
 
 {% set pkg = c.pkg_dict %}
 {% if pkg %} 
@@ -7,13 +8,24 @@
         {% do pkg.update(organization = org) %} 
     {% endif %}
 {% endif %}
-{# fix for organization and group title non translation in sidebar #}
-{% do h.get_translated_dataset_groups([c.pkg_dict]) %}
+
+{% block primary_content_inner %}
+<div class="gap"></div>
+
+    <div class=accordion" id="accordion-dev">
+        {% snippet 'package/snippets/developers/metadata_api.html', pkg=pkg %}
+        {% snippet 'package/snippets/developers/csw_api.html', pkg=pkg %}
+        {% snippet 'package/snippets/developers/data_api.html', pkg=pkg %}
+        {% snippet 'package/snippets/developers/mapping_api.html', pkg=pkg %}
+    </div>
+{% set apps_link = h.redirect_wp('applications') %}
+<h4> {% trans %}For more information on accessing the APIs please refer to the <a href="{{apps_link}}">applications</a> section{% endtrans %}</h4>
+{% endblock %}
+
 
 {% block secondary_content %}
     {% if pkg.organization %}
     {% block package_organization %}
-      {% set org = h.get_organization(pkg.organization.name) %}
       {% snippet "snippets/organization.html", pkg=pkg, organization=pkg.organization , has_context_title=true  %}
     {% endblock %}
     {% endif %}
@@ -42,10 +54,5 @@
     {% block package_social %}
         {% snippet "snippets/social.html" %}
     {% endblock %} 
-{% endblock %}
-
-{% block primary_content_inner %}
-<div class="gap"></div>
-{{super()}}
 {% endblock %}
 

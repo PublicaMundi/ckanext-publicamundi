@@ -99,5 +99,4 @@ function init() {
     //bread_items.on('mouseleave', function(){
         //$(this).addClass('breadcrumb-hide-text');
     //});
-
 }
