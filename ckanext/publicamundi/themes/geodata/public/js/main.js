@@ -56,12 +56,14 @@ function init() {
         //$(this).parent().find('.btn:first').removeClass('btn-hover');
     });
 
-    // Detect OS for switching linux font
+    // Detect OS for applying OS-specific styles
+    
     var os = navigator.platform;
-    console.log(os);
-    if (os.indexOf('Linux') == 0){
+    console.log('Detected platform: ' + os);
+    if (os.indexOf('Linux') == 0) {
         $("body").css({'font-family': 'sans-serif'});
         $("a, b, textarea, input, heading, h1, h2, h3, h4, h5, h6").css({'font-family': 'sans-serif'});
+        $("[class^='icon-']").css({'font-family': 'FontAwesome'});
     }
 
     //Breadcrumbs auto hide all but last element
