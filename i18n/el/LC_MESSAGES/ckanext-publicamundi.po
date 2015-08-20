@@ -244,6 +244,7 @@ msgid "Resource Information"
 msgstr "Πληροφορίες σχετικά με τον πόρο"
 
 #: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/shapefile.html:9
+#: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/singlelayer_format.html:9
 msgid "SRS not found"
 msgstr "Δεν βρέθηκε Χωρικό Σύστημα Αναφοράς"
 
@@ -283,9 +284,6 @@ msgstr ""
 msgid "Layer Srs"
 msgstr ""
 
-#: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/singlelayer_format.html:9
-msgid "SRS not found"
-msgstr ""
 
 #: ckanext/publicamundi/storers/vector/templates/user/snippets/ingest_templates/vector/singlelayer_format.html:24
 msgid "Projection"
