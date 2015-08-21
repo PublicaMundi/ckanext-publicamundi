@@ -2,13 +2,13 @@
 
 <div class="info ">
     <label>{{ _('Resource Information')}}</label> 
-    GDAL Driver : {{task_result.gdal_driver}}</br>
-    Layer Name : {{layer.layer_name}}</br>
-    Layer Geometry : {{layer.layer_geometry}}</br>
+    {{ _('GDAL Driver')}} : {{task_result.gdal_driver}}</br>
+    {{_('Layer Name')}} : {{layer.layer_name}}</br>
+    {{_('Layer Geometry')}} : {{layer.layer_geometry}}</br>
     {% if layer.layer_srs==-1 %}
-      Layer Srs : {{ _('SRS not found')}}</br>
+    {{_('Layer Srs')}} : {{ _('SRS not found')}}</br>
     {% else %}
-      Layer Srs : {{layer.layer_srs}}</br>
+    {{_('Layer Srs')}} : {{layer.layer_srs}}</br>
     {% endif %}
 </div>
 </br>

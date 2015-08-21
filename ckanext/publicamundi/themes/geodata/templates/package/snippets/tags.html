@@ -1,5 +1,7 @@
 <section class="module module-narrow module-shallow tags">
-<h2 class="module-heading"> {{ _('Tags') }}</h2>
+
+<h2 class="module-heading"><img class="facet-icon" src="{{ h.url_for_static('/images/icons/various/tags.svg') }}"></img>
+{{ _('Tags') }}</h2>
 {# <i class="icon-medium icon-lock"></i> #}
 {% if tags %}
   <section class="tags">

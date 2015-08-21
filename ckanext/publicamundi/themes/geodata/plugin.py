@@ -36,15 +36,22 @@ def friendly_date(date_str):
     return render_datetime(date_str, '%d, %B, %Y')
 
 def get_contact_point(pkg):
+    
+    # If there, INSPIRE metadata take precedence
+    
     if pkg.get('dataset_type') == 'inspire':
-        return {'name': pkg.get('inspire.contact.0.organization', None),
-                'email': pkg.get('inspire.contact.0.email', None)
-                }
-        #return pkg.get('inspire.contact.0.email')
-    else:
-        return {'name': pkg.get('maintainer'),
-                'email': pkg.get('maintainer_email')
-                }
+        name = pkg.get('inspire.contact.0.organization', '').decode('unicode-escape')
+        email = pkg.get('inspire.contact.0.email')
+    
+    # If not there, use maintainer or organization info
+    
+    if not name:
+        name = pkg.get('maintainer') or pkg['organization']['title']
+    
+    if not email:
+        email = pkg.get('maintainer_email') or config.get('email_to')
+     
+    return dict(name=name, email=email)
 
 _feedback_form = None
 _maps_url = None
@@ -68,9 +75,9 @@ def redirect_wp(page):
     locale = helpers.lang()
     if page:
         if locale == 'el':
-            return('/content/{0}'.format(page))
+            return('/content/{0}/'.format(page))
         else:
-            return('/content/{0}-{1}'.format(page, locale))
+            return('/content/{0}-{1}/'.format(page, locale))
     else:
         return('/content/')
 
@@ -208,43 +215,7 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IRoutes, inherit=True)
     plugins.implements(plugins.IPackageController, inherit=True)
 
-    def init_contact_captcha(self):
-
-        from wheezy.captcha.image import captcha
-        from wheezy.captcha.image import background
-        from wheezy.captcha.image import curve
-        from wheezy.captcha.image import noise
-        from wheezy.captcha.image import smooth
-        from wheezy.captcha.image import text
-
-        from wheezy.captcha.image import offset
-        from wheezy.captcha.image import rotate
-        from wheezy.captcha.image import warp
-
-        import random
-        import string
-
-        captcha_image = captcha(drawings=[
-            background(),
-            text(
-                fonts = [
-                    '/usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf',
-                    ],
-                drawings=[
-                    warp(0.5),
-                    rotate(),
-                    offset()
-                ]),
-            curve(),
-            noise(),
-            smooth()
-        ])
-        self.captcha_string = list(random.sample(string.uppercase +string.digits, 4))
-        image = captcha_image(self.captcha_string)
-
-        #image.save('/tmp/captcha.jpg', 'JPEG', quality=75)
-
-    # ITemplateHelpers    
+     # ITemplateHelpers    
 
     def get_helpers(self):
         return {
@@ -291,8 +262,12 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     # IRoutes
 
     def before_map(self, mapper):
+        mapper.connect('dataset_apis', '/dataset/developers/{id}', controller= 'ckanext.publicamundi.themes.geodata.controllers.package:PackageController', action='package_apis')
+        mapper.connect('dataset_contact_form', '/dataset/contact/{id}', controller= 'ckanext.publicamundi.themes.geodata.controllers.contact:Controller', action='contact_form')
+        #mapper.connect('preview_openlayers', '/preview_openlayers/{id}/{resource_id}', controller= 'ckanext.publicamundi.themes.geodata.controllers.package:PackageController', action='preview_openlayers')
         mapper.connect('applications', '/applications', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='applications')
-        mapper.connect('send_email', '/send_email', controller= 'ckanext.publicamundi.themes.geodata.controllers.contact:Controller', action='send_email')
+        mapper.connect('send_email', '/publicamundi/util/send_email', controller= 'ckanext.publicamundi.themes.geodata.controllers.contact:Controller', action='send_email')
+        mapper.connect('generate_captcha', '/publicamundi/util/generate_captcha', controller= 'ckanext.publicamundi.themes.geodata.controllers.contact:Controller', action='generate_captcha')
         #mapper.connect('maps', '/maps', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='redirect_maps' )
         #mapper.redirect('maps', 'http://http://83.212.118.10:5000/maps')
         #mapper.connect('maps', '/maps')
@@ -303,7 +278,6 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     # IPackageController
     def before_view(self, pkg_dict):
         list_menu_items()
-        #self.init_contact_captcha()
         return pkg_dict
 
     # IPackageController 
