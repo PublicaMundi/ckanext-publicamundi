@@ -53,12 +53,17 @@ def get_contact_point(pkg):
      
     return dict(name=name, email=email)
 
-_feedback_form = None
+_feedback_form_en = None
+_feedback_form_el = None
 _maps_url = None
 _news_url = None
 
 def feedback_form():
-    return _feedback_form
+    locale = helpers.lang()
+    if locale == 'el':
+        return _feedback_form_el
+    else:
+        return _feedback_form_en
 
 def get_maps_url(package_id=None, resource_id=None):
     locale = helpers.lang()
@@ -97,6 +102,11 @@ def friendly_name(name):
         friendly_name = name
 
     return friendly_name
+
+#_previewable_formats = ['wms', 'wfs']
+#def get_previewable_formats():
+#    return _previewable_formats
+
 
 # Returns the most suitable preview by checking whether ingested resources provide a better preview visualization
 def preview_resource_or_ingested(pkg, res):
@@ -222,8 +232,6 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
             'can_preview_resource_or_ingested': can_preview_resource_or_ingested,
             'get_translated_dataset_groups' : get_translated_dataset_groups,
             'get_term_translation': get_term_translation,
-           # 'create_rating': create_rating,
-           # 'get_rating': get_rating,
         }
     
     # IConfigurer
@@ -241,9 +249,10 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     def configure(self, config):
         '''Pass configuration to plugins and extensions'''
 
-        global _feedback_form, _news_url, _maps_url
+        global _feedback_form_en, _feedback_form_el, _news_url, _maps_url
 
-        _feedback_form = config.get('ckanext.publicamundi.themes.geodata.feedback_form')
+        _feedback_form_en = config.get('ckanext.publicamundi.themes.geodata.feedback_form_en')
+        _feedback_form_el = config.get('ckanext.publicamundi.themes.geodata.feedback_form_el')
         _maps_url = config.get('ckanext.publicamundi.themes.geodata.maps_url')
         _news_url = config.get('ckanext.publicamundi.themes.geodata.news_url')
         return

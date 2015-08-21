@@ -68,9 +68,9 @@ ckan.module('contact-form-send', function ($, _) {
                 $('#contact-form-modal-cancel').addClass('hidden');
             },
             _onSuccess: function(data) {
-                console.log(data);
+                //console.log(data);
                 var response = JSON.parse(data);
-                console.log(response.success);
+                //console.log(response.success);
                 
                 // Mail sent
                 if (response.success){
