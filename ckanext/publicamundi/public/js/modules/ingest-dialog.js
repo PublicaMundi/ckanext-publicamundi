@@ -11,7 +11,7 @@ this.ckan.module('ingest-dialog', function (jQuery, _) {
 
     
     initialize: function () {
-      console.log(this.options.template);
+      //console.log(this.options.template);
       jQuery.proxyAll(this, /_on/);
 
       this.el.on('click', this._onClick);
