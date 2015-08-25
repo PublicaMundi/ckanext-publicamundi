@@ -58,6 +58,9 @@ header > h6.inline {
     margin-left: 2px;
 }
 
+.btn-right-fix{
+    margin-left: -5px;
+}
 .dropdown-menu li > a > p {
     margin: 2px 0px;
 }
