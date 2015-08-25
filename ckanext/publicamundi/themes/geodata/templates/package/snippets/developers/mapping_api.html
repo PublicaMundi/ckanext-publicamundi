@@ -1,14 +1,10 @@
 {% set res = {} %}
-{% set format = '' %}
 {% for resource in pkg.resources %}
-    {% if resource.format == 'wms' %}
+    {% if resource.format == 'wms' and (resource.vectorstorer_resource or resource.rasterstorer_resource) %}
         {% do res.update(resource) %}
-        {% do format.update('wms') %}
-    {% elif resource.format == 'wfs' %}
+    {% elif resource.format == 'wfs' and (resource.vectorstorer_resource) %}
         {% do res.update(resource) %}
-        {% do format.update('wfs') %}
     {% endif %}
-
 {% endfor %}
 
 <div class="accordion-group">
@@ -18,7 +14,7 @@
     <div id="collapse-js" class="accordion-body collapse">
         <div class="accordion-inner">
             {% if res %}
-            {% snippet 'package/snippets/developers/mapping_api_js.html', res=res, format=format %}
+            {% snippet 'package/snippets/developers/mapping_api_js.html', res=res %}
 
             {% else %}
             <strong>{{ _('The dataset contains no suitable data to use with the Mapping API')}}</strong><br><br>
