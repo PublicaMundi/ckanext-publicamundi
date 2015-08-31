@@ -61,7 +61,7 @@ function init() {
     var os = navigator.platform;
     console.log('Detected platform: ' + os);
     if (os.indexOf('Linux') == 0) {
-        $('head').append('<link rel="stylesheet" href="../css/linux-override.css" type="text/css" />');
+        $('head').append('<link rel="stylesheet" href="/css/linux-override.css" type="text/css" />');
     }
 
     //Breadcrumbs auto hide all but last element
