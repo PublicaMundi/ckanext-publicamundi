@@ -22,9 +22,9 @@
         layer = map.createLayer({
             title: '{{res.name}}',
             name: '{{res.name}}',
-            type: PublicaMundi.LayerType.{{format|upper}},
-            url: 'http://geodata.gov.gr/geoserver/{{format}}',
-            params: { 'layers' : 'publicamundi:{{res.id}}', 
+            type: PublicaMundi.LayerType.{{res.format|upper}},
+            url: 'http://geodata.gov.gr/geoserver/{{res.format}}',
+            params: { 'layers' : 'geodata.gov.gr:{{res.id}}', 
                   }
             });
         });

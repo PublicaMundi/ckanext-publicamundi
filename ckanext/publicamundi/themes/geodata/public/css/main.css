@@ -1610,10 +1610,6 @@ a.tag:hover{
 .controls input[type="button" i]{
     cursor: pointer !important;
 }
-.btn-right-fix{
-    float:right;
-    margin-left: -1px;
-}
 /* Accordion */
 .accordion{
     margin-top:30px;

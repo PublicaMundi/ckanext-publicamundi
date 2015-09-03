@@ -1,10 +1,11 @@
-   {% set res = {} %}
-   {% set datastore_root_url = '/api/3/action' %} 
-    {% for resource in pkg.resources %}
-            {% if resource.datastore_active %}
-                {% do res.update(resource) %}
-            {% endif %}
-       {% endfor %}
+{% set res = {} %}
+
+{% set datastore_root_url = '/api/3/action' %} 
+{% for resource in pkg.resources %}
+    {% if (resource.format == 'csv' or resource.format == 'xls') and resource.datastore_active %}
+        {% do res.update(resource) %}
+    {% endif %}
+{% endfor %}
       
     <div class="accordion-group">
       <div class="accordion-heading">
