@@ -59,12 +59,14 @@ class Controller(BaseController):
             'pkg': package,
             'host': str(host),
         })
-        cc_email = config.get("email_to")
         headers = {}
+        
+        cc_email = config.get('contact_to') or config.get("email_to")
         if cc_email and (not cc_email == contact_point.get('email')):
             headers.update({
-            'Cc': cc_email,
+                'Cc': cc_email,
             })
+        
         try:
             mailer.mail_recipient(
                 #_('sir/madam'), 

@@ -34,8 +34,9 @@
           {% snippet 'package/snippets/developers/data_api_js.html', res=res %}
         {% else %}
         <strong>{{ _('Dataset contains no datastore resources') }}</strong><br><br>
-            {% endif %}
-          <strong>{%trans%}'You can find detailed Data API demos <a href="/maps/demo/data-api.html" target="_blank">here</a>{%endtrans%}</strong>
+        {% endif %}
+            {% set data_api_link = h.redirect_wp('applications/data-api') %}
+                <strong>{%trans%}'You can find detailed Data API demos <a href="{{data_api_link }}" target="_blank">here</a>{%endtrans%}
         </div>
 
         <!-- {#<br>

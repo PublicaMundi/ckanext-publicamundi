@@ -79,19 +79,13 @@ def get_maps_url(package_id=None, resource_id=None):
 def redirect_wp(page):
     locale = helpers.lang()
     if page:
-        if locale == 'el':
-            return('/content/{0}/'.format(page))
-        else:
-            return('/content/{0}-{1}/'.format(page, locale))
+        # check if page includes a subpage
+        splitted = page.split('/')
+        if not locale == 'el':
+            splitted[0] = '{0}-{1}'.format(splitted[0], locale)
+        return('/content/{0}/'.format('/'.join(splitted)))
     else:
         return('/content/')
-
-def get_news_url():
-    locale = helpers.lang()
-    if _news_url:
-        return(_news_url+'?lang={0}'.format(locale))
-    else:
-        return '/'
 
 def friendly_name(name):
     max_chars = 15
@@ -225,7 +219,6 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
             'friendly_name': friendly_name,
             'feedback_form': feedback_form,
             'redirect_wp': redirect_wp,
-            'get_news_url': get_news_url,
             'get_maps_url': get_maps_url,
             'package_rating_enabled': package_rating_enabled,
             'preview_resource_or_ingested': preview_resource_or_ingested,
@@ -249,12 +242,11 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     def configure(self, config):
         '''Pass configuration to plugins and extensions'''
 
-        global _feedback_form_en, _feedback_form_el, _news_url, _maps_url
+        global _feedback_form_en, _feedback_form_el, _maps_url
 
         _feedback_form_en = config.get('ckanext.publicamundi.themes.geodata.feedback_form_en')
         _feedback_form_el = config.get('ckanext.publicamundi.themes.geodata.feedback_form_el')
         _maps_url = config.get('ckanext.publicamundi.themes.geodata.maps_url')
-        _news_url = config.get('ckanext.publicamundi.themes.geodata.news_url')
         _ratings_enabled = toolkit.asbool(config.get('ckanext.publicamundi.package_rating', False))
         return
 
