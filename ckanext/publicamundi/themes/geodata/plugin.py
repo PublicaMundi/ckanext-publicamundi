@@ -77,10 +77,11 @@ def get_maps_url(package_id=None, resource_id=None):
 def redirect_wp(page):
     locale = helpers.lang()
     if page:
-        if locale == 'el':
-            return('/content/{0}/'.format(page))
-        else:
-            return('/content/{0}-{1}/'.format(page, locale))
+        # check if page includes a subpage
+        splitted = page.split('/')
+        if not locale == 'el':
+            splitted[0] = '{0}-{1}'.format(splitted[0], locale)
+        return('/content/{0}/'.format('/'.join(splitted)))
     else:
         return('/content/')
 
