@@ -15,17 +15,15 @@
     var map, popup, layer;
 
     PublicaMundi.ready(function () {
-        
         map = PublicaMundi.map(options);
         map.setLayerControl();
-        
         layer = map.createLayer({
             title: '{{res.name}}',
             name: '{{res.name}}',
             type: PublicaMundi.LayerType.{{res.format|upper}},
-            url: 'http://geodata.gov.gr/geoserver/{{res.format}}',
-            params: { 'layers' : 'geodata.gov.gr:{{res.id}}', 
-                  }
+            url: '{% if res.format == 'wfs' %}{{res.wfs_server}}{% elif res.format == 'wms' %}{{res.wms_server}}{% endif %}',
+            params: { 'layers' : '{% if res.format == 'wfs' %}{{res.wfs_layer}}{% elif res.format == 'wms' %}{{res.wms_layer}}{% endif %}', 
+                }
             });
         });
 </code></pre>
