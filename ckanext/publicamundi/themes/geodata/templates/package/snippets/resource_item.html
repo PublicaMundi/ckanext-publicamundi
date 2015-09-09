@@ -24,7 +24,7 @@
     {% for raster_res in raster_resources %}
         {% if raster_res.format == 'wms' %}
         <div class="action-button"><a class="btn" href={{ h.get_maps_url(package_id=pkg.id, resource_id=raster_res.id)}} >
-                    <i class="icon-medium icon-globe"></i>{{ _(' Map')}}
+                    <i class="icon-medium icon-globe"></i> {{ _('Map')}}
                 </a>
         </div>
         {% endif %}
@@ -33,7 +33,7 @@
     {% for vector_res in  vector_resources %}
         {% if vector_res.format == 'wms' %}
         <div class="action-button"><a class="btn" href={{ h.get_maps_url(package_id=pkg.id, resource_id=vector_res.id)}} >
-                    <i class="icon-medium icon-globe"></i>{{ _(' Map')}}
+                    <i class="icon-medium icon-globe"></i> {{ _('Map')}}
                 </a>
         </div>
         {% endif %}
