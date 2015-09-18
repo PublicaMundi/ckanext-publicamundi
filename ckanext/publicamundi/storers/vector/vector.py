@@ -170,7 +170,7 @@ class Vector:
                 if not feat.GetField(y) is None:
                     if layer.GetLayerDefn().GetFieldDefn(y).GetType() in (4, 9, 10, 11):
                         try:
-                            field_value =  feat.GetField(y).encode( 'utf8','replace' )
+                            field_value =  feat.GetField(y).decode('utf_8').encode(self.encoding,'replace' )
                         except UnicodeDecodeError:
                             field_value = 'NULL'
                         feature_fields += psycopg2.extensions.adapt(
@@ -187,7 +187,7 @@ class Vector:
                     layer_geom_name)
             self._db.insert_to_table(
                 table_name,
-                feature_fields,
+                feature_fields.decode(self.encoding),
                 feat.GetGeometryRef(),
                 convert_to_multi,
                 srs)

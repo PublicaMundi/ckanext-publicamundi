@@ -1,6 +1,3 @@
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
 import psycopg2
 import urlparse
 
@@ -18,7 +15,7 @@ class DB:
             user=user,
             password=password,
             host=hostname)
-        
+        self.conn.set_client_encoding('utf_8')
         self.cursor = self.conn.cursor()
 
     def check_if_table_exists(self, table_name):
