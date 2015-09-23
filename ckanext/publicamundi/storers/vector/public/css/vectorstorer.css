@@ -26,3 +26,7 @@
 .csv_formats{ 
     margin-left: 15px;
 }
+.invalidInput{
+    background-color: red !important;
+    /*margin-right:20px;*/
+}
