@@ -1,0 +1,125 @@
+{% extends "user/dashboard.html" %}
+{% set sysadmin = c.is_sysadmin %}
+
+{% block styles %}
+{{ super() }}
+<link href="../js/fancytree/skin-win8/ui.fancytree.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block primary_content_inner %}
+
+{# {% set resources = [{'id':123, 'title':'Blabla', 'package':'PACKAGE','organization':'ACME'}, {'id':456, 'title': 'Bloblo'}]%} #}
+{% set resources = c.resources %}
+{% if sysadmin %}
+
+<div id="map-admin">
+    <div id="map-admin-left">
+        <div id="map-admin-table">
+            <h2>{{_('Available layers')}}</h2>
+            <hr>
+            {% snippet 'snippets/maps_admin_list.html', resources=resources %}                            
+    
+    <!-- <table id="map-admin-table" border="1">
+        <thead>
+            <td class="head-layer">{{_('Layer')}}</td>
+            <td class="head-layer">{{_('Package')}}</td>
+            <td class="head-layer">{{_('Organization')}}</td>
+        </thead>
+        <tbody>
+        <tr class="layer" key="123" title="Layer 1">
+            <td>Layer1</td>
+            <td>Package1</td>
+        </tr>
+        <tr class="layer" key="456" title="Layer 2">
+            <td>Layer2</td>
+        </tr>
+        <tr class="layer" key="111" title="Layer 3">
+            <td>Layer3</td>
+            <td>Layer3</td>
+        </tr>
+        <tr class="layer" key="222" title="Layer X">
+            <td>LayerX</td>
+        </tr>
+        <tr class="layer" key="333" title="Layer X">
+            <td>LayerX</td>
+        </tr>
+            <tr class="layer" key="444" title="Layer X">
+            <td>LayerX</td>
+        </tr>
+       <tr class="layer" key="555" title="Layer X">
+            <td>LayerX</td>
+        </tr>
+       <tr class="layer" key="666" title="Layer X">
+            <td>LayerX</td>
+        </tr>
+       <tr class="layer" key="777" title="Layer X">
+            <td>LayerX</td>
+        </tr>
+       <tr class="layer" key="888"  title="Layer X">
+            <td>LayerX</td>
+        </tr>
+        </tbody>
+
+    </table>
+    -->
+    </div>
+</div>
+
+<div id="map-admin-right">
+    <div class="map-options-tree">
+    <h2>{{_('Visible layers')}}</h2>
+    <hr>
+        <button class="btn" id="add-parent-node">{{ _('Add node')}}</button>
+        <button class="btn" id="add-child-node">{{ _('Add child')}}</button>
+        <!-- <button class="btn" id="rename-node">{{ _('Rename')}}</button> -->
+        <button class="btn" id="delete-node">{{ _('Delete')}}</button>
+        <br> 
+        <table id="tree">
+                <thead>
+        <tr> <th></th> <th></th> <th></th> </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        </table>
+    </div>
+
+
+    <div class="map-options-bar">
+        <div class="map-options-name">
+           <form id="map-name-translation">
+               <label>en</label><input id="map-name-translation-en" type="text" name="name-en" ></input>
+                <label>el</label><input id="map-name-translation-el" type="text" name="name-el"></input>
+            <input class="pull-right" type="submit" value="{{ _('OK')}}"></input>
+           </form> 
+        </div>
+        <div class="map-options-fields">
+            <form id="map-fields-form">
+           <table border="0" id="map-fields-table">
+            <thead>
+                <td></td>
+            </thead>
+            <tbody>
+                <tr id="map-options-default">
+            </tr>
+            <tr id="map-options-activate">
+            </tr>
+            <tr id="map-options-export">
+            </tr>
+            </tbody>
+        </table> 
+        <input class="pull-right" type="submit" value="{{ _('OK')}}"></input>
+    </form>
+        </div>
+        <div class="map-options-save">
+            <div class="ajax-loader" style="display:none"></div>
+            <button class="pull-right btn btn-primary" id="save-tree">{{ _('Save')}}</button>
+        </div>
+    </div>
+</div>
+
+</div>
+{% resource 'ckanext-publicamundi-geodata-theme/maps-admin' %}
+{% else %}
+    {{ _('Not authorized to see this page') }} 
+{% endif %}
+{% endblock %}

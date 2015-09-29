@@ -1434,6 +1434,56 @@ a.tag:hover{
 .additional-info h3{
     margin-top:6px;
 }
+/* Map admin page */
+#map-admin{
+    margin: 10px 0;
+    display: flex;
+    border: 2px #4E59A4 solid;
+}
+#map-admin-left{
+    flex: 1;
+}
+
+#map-admin-right{
+    flex: 1;
+    border-left: 2px #4E59A4 solid;
+}
+
+#map-admin-table{
+    padding: 10px;
+}
+#tree{
+    margin-top: 20px;
+}
+
+.map-options-bar{
+    border-top: 2px #4E59A4 solid;
+    margin-top: 100px;
+    padding: 10px;
+}
+.map-options-name{
+    margin-top: 20px;
+}
+.map-options-tree{
+    padding-top: 10px;
+    padding-left: 10px;
+}
+
+#map-name-translation label, #map-name-translation input{
+    display: inline;
+    margin-right: 10px;
+}
+
+#map-name-translation input[type="text"]{
+    width: 30%;
+}
+#map-admin-table .layer{
+    cursor: move;
+}
+
+.map-admin-table .alt{
+    background: 'ccc';
+}
 /* Search page */
 
 .search-form .filter-list{

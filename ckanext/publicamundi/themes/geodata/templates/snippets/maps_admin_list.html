@@ -1,0 +1,7 @@
+{% if resources %}
+  <ul class="dataset-list unstyled">
+    {% for resource in resources %}
+      {% snippet 'snippets/maps_admin_item.html', resource=resource %}
+    {% endfor %}
+  </ul>
+{% endif %}

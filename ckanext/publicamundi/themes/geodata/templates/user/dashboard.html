@@ -23,6 +23,10 @@
     {{ h.build_nav_icon('user_dashboard_organizations', _('My Organizations')) }}
     {{ h.build_nav_icon('user_dashboard_groups', _('My Topics')) }}
     {{ h.build_nav_icon('user_dashboard', _('News feed')) }}
+    
+    {% if c.is_sysadmin %} 
+        {{ h.build_nav_icon('user_dashboard_maps', _('Configure Maps'), icon='globe') }}
+    {% endif %}
 {% endblock %}
 
     </ul>

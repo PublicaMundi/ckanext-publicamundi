@@ -1,0 +1,16 @@
+{% set visible = resource.visible or False %}
+{# field_num="3" field_names='{"root":["fielda", "fieldb", "fieldc"]}' field_default="fieldb" field_active='{"root":["fielda"]}' field_export='{"root":["fielda"]}' #}
+{# fields='{"fields":[{"name":"fielda", "title":"Field A", "default":true, "active":true, "export":false}, {"name":"fieldb", "title":"Field B", "active":true, "export":true}]}' #}
+
+<li class="dataset-item layer" id="{{resource.id}}" name_en="{{resource.name_en}}" name_el="{{resource.name_el}}"  visible="{{visible}}" >
+  {% block package_item_content %}
+  <div class="dataset-content">
+
+      <h4 class="dataset-heading">{{ resource.name_en }}</h4> {# {% if package %}{{package}}{% endif %} 
+       {% if organization %}{{ organization }}{% endif %} 
+      {% if notes %}
+        <div> {{ notes }} </div>
+        {% endif %} #}
+  </div>
+    {% endblock %}
+</li>
