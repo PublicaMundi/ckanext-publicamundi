@@ -14,7 +14,7 @@ from celery.task.http import HttpDispatchTask
 from ckan.lib.celery_app import celery as celery_app
 
 import ckanext.publicamundi.storers.vector as vectorstorer
-from ckanext.publicamundi.storers.vector import vector, mapserver_utils
+from ckanext.publicamundi.storers.vector import vector
 from ckanext.publicamundi.storers.vector.resources import(
     WMSResource, DBTableResource, WFSResource)
 from ckanext.publicamundi.storers.vector.db_helpers import DB
@@ -174,6 +174,8 @@ def _ingest_resource(
 
     db_conn_params = context['db_params']
     layer_params = context['layer_params']['layers']
+    
+    logger = context['logger']
 
     if gdal_driver:
         
@@ -572,7 +574,7 @@ def _publish_layer_to_mapserver(
         layer,
         geom_name):
 
-    mapscript = vectorstorer.mapscript
+    from ckanext.publicamundi.storers.vector import mapserver_utils
 
     srs_wkt = spatial_ref.ExportToWkt()
     package_id = context['package_id']
@@ -796,6 +798,9 @@ def _unpublish_from_geoserver(resource, geoserver_context, logger):
          logger.error('Failed to unpublish layer %s: %s' % (layer_name, ex))
 
 def _unpublish_from_mapserver(resource, context, mapserver_context, logger):
+
+    from ckanext.publicamundi.storers.vector import mapserver_utils
+    
     layer_name = None
     if resource['format'] == WMSResource.FORMAT:
         layer_name = resource['wms_layer']

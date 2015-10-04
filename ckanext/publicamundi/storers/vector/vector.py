@@ -170,7 +170,7 @@ class Vector:
                 if not feat.GetField(y) is None:
                     if layer.GetLayerDefn().GetFieldDefn(y).GetType() in (4, 9, 10, 11):
                         try:
-                            field_value =  feat.GetField(y).decode('utf_8').encode(self.encoding,'replace' )
+                            field_value =  feat.GetField(y).decode('utf_8').encode(self.encoding)
                         except UnicodeDecodeError:
                             field_value = 'NULL'
                         feature_fields += psycopg2.extensions.adapt(

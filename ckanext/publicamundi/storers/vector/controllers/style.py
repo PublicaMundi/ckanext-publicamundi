@@ -1,9 +1,6 @@
 import os
 from xml.dom import minidom
 from pylons import config
-from geoserver.catalog import Catalog
-from geoserver.catalog import UploadError
-import mapscript
 
 from ckan.lib.base import(
     BaseController, c, request, session, render, config, abort)
@@ -76,6 +73,8 @@ class StyleController(BaseController):
         ''' Updates the SLD file of a WMS Layer in Geoserver.
         Throws Validation Errors if the SLD is not valid.'''
 
+        from geoserver.catalog import UploadError
+        
         sld_body = request.POST['sld_body']
         cat = self._get_geoserver_catalog()
         try:
@@ -147,6 +146,7 @@ class StyleController(BaseController):
     def _get_geoserver_catalog(self):
         '''Get a configured geoserver.catalog.Catalog client instance.
         '''
+        from geoserver.catalog import Catalog
 
         geoserver_url = config['ckanext.publicamundi.vectorstorer.geoserver.url']
         username = config['ckanext.publicamundi.vectorstorer.geoserver.username']
@@ -158,6 +158,8 @@ class StyleController(BaseController):
     def _get_mapfile_layer(self, dataset_name):
         '''Get the layer from the mapfile related to the dataset.
         '''
+        import mapscript
+
         mapfile_folder = config['ckanext.publicamundi.vectorstorer.mapserver.mapfile_folder']
 
         abs_mapfile_path = os.path.join(mapfile_folder, dataset_name + '.map')

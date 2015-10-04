@@ -37,8 +37,6 @@ ogr = None
 
 osr = None
 
-mapscript = None
-
 def setup(gdal_folder, temp_folder):
     '''The module needs to be explicitly setup (before being used) when certain 
     config parameters are available.
@@ -60,12 +58,11 @@ def setup(gdal_folder, temp_folder):
         sys.path.append(gdal_folder)
 
     # Import and configure osgeo library
-    import mapscript as _mapscript
     from osgeo import gdal as _gdal, ogr as _ogr, osr as _osr
     
-    global gdal, ogr, osr, mapscript
+    global gdal, ogr, osr
     
-    gdal, ogr, osr, mapscript = _gdal, _ogr, _osr, _mapscript
+    gdal, ogr, osr = _gdal, _ogr, _osr
    
     osr.UseExceptions()
     ogr.UseExceptions()

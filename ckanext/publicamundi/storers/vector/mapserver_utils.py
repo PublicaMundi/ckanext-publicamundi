@@ -4,18 +4,19 @@ import urlparse
 MAP_PROJECTION = 4326
 OWS_SRS_LIST = [4326, 3857, 900913]
 
-mapscript = None
 ogr = None
 osr = None
 
 class MapServerUtils:
 
     def __init__(self, vectorstorer):
-
-        global mapscript
-        mapscript = vectorstorer.mapscript
+        
+        import mapscript
+        self.mapscript = mapscript
+        
         global ogr
         ogr = vectorstorer.ogr
+        
         global osr
         osr = vectorstorer.osr
 
@@ -23,10 +24,10 @@ class MapServerUtils:
         map = mapscript.mapObj(mapfile_path)
         return map
 
-    def create_mapfile_obj(self,mapfile_folder, mapserver_url, pkg_name):
+    def create_mapfile_obj(self, mapfile_folder, mapserver_url, pkg_name):
         '''Creates a new mapfile. The new mapfile has the name of the package
         it was created from.'''
-        map = mapscript.mapObj()
+        map = self.mapscript.mapObj()
 
         # Set Map projection
         map.setProjection("init=epsg:%d" %(MAP_PROJECTION))
@@ -68,7 +69,7 @@ class MapServerUtils:
                      db_params):
         ''' Creates a (postgis) layer object by the given params.'''
 
-        new_layer = mapscript.layerObj()
+        new_layer = self.mapscript.layerObj()
 
         # Set layer name and title
         new_layer.name = "ckan_" + resource_id
@@ -76,18 +77,18 @@ class MapServerUtils:
 
         # Set layer connection and data query
         new_layer.connection = self._get_db_connection_string(db_params)
-        new_layer.setConnectionType(mapscript.MS_POSTGIS,None)
+        new_layer.setConnectionType(self.mapscript.MS_POSTGIS,None)
         new_layer.data='the_geom from "%s" USING srid=%d USING unique _id' %( resource_id, srs)
 
         # Set layer type (Point, Polygon, etc)
         if geom_name in ["POLYGON","MULTIPOLYGON"]:
-            new_layer.type=mapscript.MS_LAYER_POLYGON
+            new_layer.type = self.mapscript.MS_LAYER_POLYGON
         elif geom_name in ["POINT","MULTIPOINT"]:
-            new_layer.type=mapscript.MS_LAYER_POINT
+            new_layer.type = self.mapscript.MS_LAYER_POINT
         elif geom_name in ["LINESTRING","MULTILINESTRING"]:
-            new_layer.type=mapscript.MS_LAYER_LINE
+            new_layer.type = self.mapscript.MS_LAYER_LINE
         else:
-            new_layer.type=mapscript.MS_SHAPE_NULL
+            new_layer.type = self.mapscript.MS_SHAPE_NULL
 
         #Set layer extend and projection
         layer_extent= layer.GetExtent()
@@ -103,10 +104,10 @@ class MapServerUtils:
         new_layer.metadata.set('ows_srs', str(srs))
 
         # Set layer status enabled
-        new_layer.status = mapscript.MS_ON
+        new_layer.status = self.mapscript.MS_ON
 
         # Set a default style for layers based on geom_name
-        classobj = mapscript.classObj()
+        classobj = self.mapscript.classObj()
         classobj.name="%s default style" %(new_layer.type)
 
         # Add class and style(s) to layer
@@ -124,7 +125,7 @@ class MapServerUtils:
 
     def create_mapscript_rect_obj(self, minx, miny, maxx, maxy):
         '''Returns a mapscript rectangle object.'''
-        r_obj = mapscript.rectObj(
+        r_obj = self.mapscript.rectObj(
                     float(minx),float( miny),float( maxx),float( maxy))
         return r_obj
 
@@ -142,14 +143,16 @@ class MapServerUtils:
     def _create_symbolset(self, symbolset_path):
         '''Creates a symbolset (containing the square symbol)
         and saves it as symbols.sym'''
+        mapscript = self.mapscript
+        
         symbolset = mapscript.symbolSetObj()
         new_symbol = mapscript.symbolObj('square')
         line = mapscript.lineObj()
-        line.add( mapscript.pointObj(0.0, 4.0))
-        line.add( mapscript.pointObj(4.0, 4.0))
-        line.add( mapscript.pointObj(4.0, 0.0))
-        line.add( mapscript.pointObj(0.0, 0.0))
-        line.add( mapscript.pointObj(0.0, 4.0))
+        line.add(mapscript.pointObj(0.0, 4.0))
+        line.add(mapscript.pointObj(4.0, 4.0))
+        line.add(mapscript.pointObj(4.0, 0.0))
+        line.add(mapscript.pointObj(0.0, 0.0))
+        line.add(mapscript.pointObj(0.0, 4.0))
 
         new_symbol.setPoints(line)
         new_symbol.filled = True
@@ -159,6 +162,7 @@ class MapServerUtils:
     def _get_default_mapserver_style(self, map, new_layer):
         ''' Returns an array of styles based on the geomerty
         type of the created layer'''
+        mapscript = self.mapscript
 
         styleobj_array = []
 
