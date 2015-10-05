@@ -64,6 +64,7 @@ def setup(gdal_folder, temp_folder):
     
     gdal, ogr, osr = _gdal, _ogr, _osr
    
+    gdal.UseExceptions()
     osr.UseExceptions()
     ogr.UseExceptions()
 

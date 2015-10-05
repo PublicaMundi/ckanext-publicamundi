@@ -28,13 +28,13 @@
                     <label class="control-label">{{ _('Layer Projection')}}<span class="control-required" title="{{_(' This field is required')}}">*</span></label>
                     
                     <div class="controls" data-module="projection-autocomplete" data-module-search_epsg_url="{{search_epsg_url}}" data-module-layer_idx="{{layer.idx}}">
-                        <input id="layer_srs_{{layer.idx}}" layer_id={{layer.idx}} type="text" name="projection" {% if layer.layer_srs!=-1 %}value="{{layer.layer_srs}}" {% endif%}>
+                        <input id="layer_srs_{{layer.idx}}" layer_id={{layer.idx}} type="text" name="projection" {% if layer.layer_srs!=-1 %}value="{{layer.layer_srs}}" {% else %}value="4326" {% endif%}>
                     </div>
                     <label class="control-label">{{ _('Layer Encoding')}}<span class="control-required" title="{{_(' This field is required')}}">*</span></label>
                     
                     <div class="controls" data-module="encoding-autocomplete" data-module-search_encoding_url={{search_encoding_url}} 
                         data-module-layer_idx="{{layer.idx}}">
-                       <input id="layer_encoding_{{layer.idx}}" layer_id={{layer.idx}} type="text" name="encoding">
+                       <input id="layer_encoding_{{layer.idx}}" layer_id={{layer.idx}} type="text" name="encoding" value="utf_8">
                     </div>
                 </div>
                 <div class="" style="float:right;">

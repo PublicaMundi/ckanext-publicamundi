@@ -113,12 +113,14 @@ def _identify_resource(resource, user_api_key, resource_tmp_folder, filename):
 @celery_app.task(name='vectorstorer.upload')
 def vectorstorer_upload(resource_dict, context, mapservers_context):
     setup_vectorstorer_in_task_context(context)
-    
+   
     db_conn_params = context['db_params']
     api_key = context['user_api_key']
     resource_id = resource_dict['id']
     
     logger = vectorstorer_upload.get_logger()
+    
+    logger.info('Backend context: %r', mapservers_context)
     
     # Download
 
@@ -184,17 +186,24 @@ def _ingest_resource(
         else:
             _encoding = 'utf-8'
 
+        logger.info('Using encoding `%s` for input file', _encoding)
+        
         _vector = vector.Vector(
             gdal_driver,
             vector_file_path,
             _encoding,
             db_conn_params)
+        logger.info('Read vector resource using GDAL');
+
         layer_count = _vector.get_layer_count()
+        logger.info('Found %d vector layers to ingest' % (layer_count))
+
         for layer_idx in range(0, layer_count):
             if layer_params[layer_idx]['is_selected']:
                 layer_name = layer_params[layer_idx]['name']
                 srs = layer_params[layer_idx]['srs']
                 encoding = layer_params[layer_idx]['encoding']
+                logger.info('Trying to ingest selected vector layer `%s` (at epsg:%s)', layer_name, srs)
                 _ingest_vector(
                     _vector,
                     layer_idx,
@@ -418,6 +427,9 @@ def _ingest_vector(
         publishing_server = mapservers_context['default_publishing_server']
         publishing_server_url = None
         publishing_layer = None
+        
+        logger.info('About to publish %s layer `%s` (originally named as `%s`) at %s backend', 
+            geom_name, layer_name, layer.GetName(), publishing_server)
 
         # Publish to Geoserver or Mapserver (Based on configuration)
         if publishing_server == 'geoserver':
@@ -430,7 +442,8 @@ def _ingest_vector(
                 created_db_table_resource,spatial_ref, srs, layer, geom_name)
             mapping_server = "mapserver"
 
-        logger.info('Published layer %s under %s' % (publishing_layer, publishing_server_url))
+        logger.info('Published layer `%s` under %s backend: %s' % (
+            publishing_layer, publishing_server, publishing_server_url))
 
         _add_wms_resource(
             context,
@@ -684,6 +697,7 @@ def vectorstorer_delete(resource_dict, context, mapservers_context):
     context['logger'] = logger
 
     resources_to_delete = context['resource_list_to_delete']   
+    publishing_server = mapservers_context['default_publishing_server']
 
     # If resource dict is None a parent vector resource
     # has been deleted. So we skip the next checks
@@ -700,16 +714,13 @@ def vectorstorer_delete(resource_dict, context, mapservers_context):
                     logger)
             elif resource_dict['format'] in [
                 WMSResource.FORMAT, WFSResource.FORMAT]:
-                # A WMS or WFS resource was deleted, so unpublish it
-                # from backend
-                if (utils.get_publishing_server(resource_dict, mapservers_context) ==
-                    utils.PUBLISHED_AT_GEOSERVER):
+                # A WMS or WFS resource was deleted, so unpublish it from backend
+                if publishing_server == 'geoserver':
                     _unpublish_from_geoserver(
                         resource_dict,
                         mapservers_context['geoserver_context'],
                         logger)
-                elif (utils.get_publishing_server(resource_dict, mapservers_context) ==
-                    utils.PUBLISHED_AT_MAPSERVER):
+                elif publishing_server == 'mapserver':
                     _unpublish_from_mapserver(
                         resource_dict,
                         context,
@@ -733,14 +744,12 @@ def vectorstorer_delete(resource_dict, context, mapservers_context):
                 WMSResource.FORMAT, WFSResource.FORMAT]:
                 # A WMS or WFS resource will be deleted, so unpublish it
                 # from backend
-                if (utils.get_publishing_server(resource, mapservers_context) ==
-                    utils.PUBLISHED_AT_GEOSERVER):
+                if publishing_server == 'geoserver':
                     _unpublish_from_geoserver(
                         resource,
                         mapservers_context['geoserver_context'],
                         logger)
-                elif (utils.get_publishing_server(resource, mapservers_context) ==
-                    utils.PUBLISHED_AT_MAPSERVER):
+                elif publishing_server == 'mapserver':
                     _unpublish_from_mapserver(
                         resource,
                         context,

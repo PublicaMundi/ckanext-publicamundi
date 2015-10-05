@@ -115,7 +115,6 @@ def _make_mapserver_context():
             config['ckanext.publicamundi.vectorstorer.mapserver.mapfile_folder'],
         'templates_folder':
             config['ckanext.publicamundi.vectorstorer.mapserver.templates_folder'],
-        
     }
 
 def _make_mapservers_context():
@@ -128,13 +127,15 @@ def _make_mapservers_context():
         _geoserver_context = _make_geoserver_context()
     except KeyError:
         log.info('Geoserver is not (properly) configured in ckan config')
-        pass
+    else:
+        _default_publishing_server = 'geoserver'
     
     try:
         _mapserver_context = _make_mapserver_context()
     except KeyError:
         log.info('Mapserver is not (properly) configured in ckan config')
-        pass
+    else:
+        _default_publishing_server = 'mapserver'
 
     # If both mapserver and geoserver are found in ckan configuration check
     # for default_publishing_server vectorstorer configuration. The value of
