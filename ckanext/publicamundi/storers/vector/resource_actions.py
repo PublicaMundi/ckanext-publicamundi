@@ -117,23 +117,24 @@ def _make_mapserver_context():
             config['ckanext.publicamundi.vectorstorer.mapserver.templates_folder'],
     }
 
-def _make_mapservers_context():
-    ''' Creates a superset of mapserver and geoserver context'''
+def _make_backend_context():
+    '''Create context for known publishing backends'''
 
     _geoserver_context = None
     _mapserver_context = None
     _default_publishing_server = None
+    
     try:
         _geoserver_context = _make_geoserver_context()
     except KeyError:
-        log.info('Geoserver is not (properly) configured in ckan config')
+        log.warn('Backend `geoserver` is not (properly) configured')
     else:
         _default_publishing_server = 'geoserver'
     
     try:
         _mapserver_context = _make_mapserver_context()
     except KeyError:
-        log.info('Mapserver is not (properly) configured in ckan config')
+        log.warn('Backend `mapserver` is not (properly) configured')
     else:
         _default_publishing_server = 'mapserver'
 
@@ -146,13 +147,11 @@ def _make_mapservers_context():
         try:
             _default_publishing_server = config['ckanext.publicamundi.vectorstorer.default_publishing_server']
         except KeyError:
-            log.info('''default_publishing_server vectorstorer config option
-                was not found in ckan config. Using Geoserver as publishing
-                server.''')
+            log.info('No default_publishing_server was specified, using `geoserver` as backend')
             _default_publishing_server = 'geoserver'
             pass
     
-    return{
+    return {
         'geoserver_context': _geoserver_context,
         'mapserver_context': _mapserver_context,
         'default_publishing_server': _default_publishing_server,
@@ -166,12 +165,12 @@ def create_ingest_resource(resource, layer_params):
         'db_params': config['ckan.datastore.write_url'],
         'layer_params': layer_params
     })
-    mapservers_context = _make_mapservers_context()
+    backend_context = _make_backend_context()
     resource_dict = resource_dictize(resource, {'model': model})
     task_id = make_uuid()
     celery.send_task(
         'vectorstorer.upload',
-        args=[resource_dict, context, mapservers_context],
+        args=[resource_dict, context, backend_context],
         task_id=task_id)
 
     res_ingest = model.Session.query(ResourceIngest).filter(
@@ -189,12 +188,12 @@ def update_ingest_resource(resource):
         'package_id': package_id,
         'db_params': config['ckan.datastore.write_url'],
     })
-    mapservers_context = _make_mapservers_context()
+    backend_context = _make_backend_context()
     resource_dict = resource_dictize(resource, {'model': model})
     task_id = make_uuid()
     celery.send_task(
         'vectorstorer.update',
-        args=[resource_dict, context, mapservers_context],
+        args=[resource_dict, context, backend_context],
         task_id=task_id)
 
 def delete_ingest_resource(resource_dict):
@@ -261,11 +260,11 @@ def delete_ingest_resource(resource_dict):
             'db_params': config['ckan.datastore.write_url'],
             'package_id': resource_dict['package_id']
         })
-        mapservers_context = _make_mapservers_context()
+        backend_context = _make_backend_context()
         task_id = make_uuid()
         celery.send_task(
             'vectorstorer.delete',
-            args=[resource, context, mapservers_context],
+            args=[resource, context, backend_context],
             task_id=task_id)
 
 def _get_resource_list_for_deletion(

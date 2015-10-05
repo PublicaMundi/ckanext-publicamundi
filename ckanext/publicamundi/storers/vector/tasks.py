@@ -111,7 +111,7 @@ def _identify_resource(resource, user_api_key, resource_tmp_folder, filename):
     return result
 
 @celery_app.task(name='vectorstorer.upload')
-def vectorstorer_upload(resource_dict, context, mapservers_context):
+def vectorstorer_upload(resource_dict, context, backend_context):
     setup_vectorstorer_in_task_context(context)
    
     db_conn_params = context['db_params']
@@ -138,7 +138,7 @@ def vectorstorer_upload(resource_dict, context, mapservers_context):
         _ingest_resource(
             resource_dict,
             context1,
-            mapservers_context,
+            backend_context,
             tmp_folder,
             filename)
         logger.info('Ingested resource %s' % (resource_id))
@@ -152,7 +152,7 @@ def vectorstorer_upload(resource_dict, context, mapservers_context):
     # Reload configuration at backend 
     
     try:
-        _reload_geoserver_config(context1, mapservers_context['geoserver_context'])
+        _reload_geoserver_config(context1, backend_context['geoserver_context'])
     except Exception as ex:
         logger.warning('Failed to reload backend configuration: %s' % (ex))
 
@@ -161,7 +161,7 @@ def vectorstorer_upload(resource_dict, context, mapservers_context):
 def _ingest_resource(
         resource,
         context,
-        mapservers_context,
+        backend_context,
         resource_tmp_folder,
         filename):
     
@@ -208,7 +208,7 @@ def _ingest_resource(
                     layer_name,
                     resource,
                     context,
-                    mapservers_context,
+                    backend_context,
                     srs,
                     encoding)
 
@@ -389,7 +389,7 @@ def _ingest_vector(
         layer_name,
         resource,
         context,
-        mapservers_context,
+        backend_context,
         srs,
         encoding):
     
@@ -422,7 +422,7 @@ def _ingest_vector(
             srs,
             encoding)
 
-        publishing_server = mapservers_context['default_publishing_server']
+        publishing_server = backend_context['default_publishing_server']
         publishing_server_url = None
         publishing_layer = None
         
@@ -432,11 +432,11 @@ def _ingest_vector(
         # Publish to Geoserver or Mapserver (Based on configuration)
         if publishing_server == 'geoserver':
             publishing_server_url, publishing_layer = _publish_layer_to_geoserver(
-                mapservers_context['geoserver_context'], layer_name,
+                backend_context['geoserver_context'], layer_name,
                 created_db_table_resource, spatial_ref)
         elif publishing_server == 'mapserver':
             publishing_server_url, publishing_layer = _publish_layer_to_mapserver(
-                context, mapservers_context['mapserver_context'], layer_name,
+                context, backend_context['mapserver_context'], layer_name,
                 created_db_table_resource,spatial_ref, srs, layer, geom_name)
             mapping_server = "mapserver"
 
@@ -642,8 +642,6 @@ def _publish_layer_to_mapserver(
 
     return mapserver_url, mapserver_layer_name
 
-
-
 def _invoke_api_resource_action(context, resource, action):
     api_key = context['user_api_key']
     site_url = context['site_url']
@@ -664,7 +662,7 @@ def _update_resource_metadata(context, resource):
     urllib2.urlopen(request, data_string)
 
 @celery_app.task(name='vectorstorer.update')
-def vectorstorer_update(resource_dict, context, mapservers_context): 
+def vectorstorer_update(resource_dict, context, backend_context): 
     setup_vectorstorer_in_task_context(context)
 
     db_conn_params = context['db_params']
@@ -683,10 +681,10 @@ def vectorstorer_update(resource_dict, context, mapservers_context):
                 print e.reason
 
     # Fixme: Wrap in an try block as inside vectorstorer.upload
-    _ingest_resource(resource_dict, context, mapservers_context)
+    _ingest_resource(resource_dict, context, backend_context)
 
 @celery_app.task(name='vectorstorer.delete')
-def vectorstorer_delete(resource_dict, context, mapservers_context): 
+def vectorstorer_delete(resource_dict, context, backend_context): 
     setup_vectorstorer_in_task_context(context)
 
     db_conn_params = context['db_params']
@@ -695,7 +693,7 @@ def vectorstorer_delete(resource_dict, context, mapservers_context):
     context['logger'] = logger
 
     resources_to_delete = context['resource_list_to_delete']   
-    publishing_server = mapservers_context['default_publishing_server']
+    publishing_server = backend_context['default_publishing_server']
 
     # If resource dict is None a parent vector resource
     # has been deleted. So we skip the next checks
@@ -716,13 +714,13 @@ def vectorstorer_delete(resource_dict, context, mapservers_context):
                 if publishing_server == 'geoserver':
                     _unpublish_from_geoserver(
                         resource_dict,
-                        mapservers_context['geoserver_context'],
+                        backend_context['geoserver_context'],
                         logger)
                 elif publishing_server == 'mapserver':
                     _unpublish_from_mapserver(
                         resource_dict,
                         context,
-                        mapservers_context['mapserver_context'],
+                        backend_context['mapserver_context'],
                         logger)
     
     # Delete the resources that are in the list. For example
@@ -745,13 +743,13 @@ def vectorstorer_delete(resource_dict, context, mapservers_context):
                 if publishing_server == 'geoserver':
                     _unpublish_from_geoserver(
                         resource,
-                        mapservers_context['geoserver_context'],
+                        backend_context['geoserver_context'],
                         logger)
                 elif publishing_server == 'mapserver':
                     _unpublish_from_mapserver(
                         resource,
                         context,
-                        mapservers_context['mapserver_context'],
+                        backend_context['mapserver_context'],
                         logger)
 
     # After doing unpublish and delete operations for child resources
@@ -805,7 +803,7 @@ def _unpublish_from_geoserver(resource, geoserver_context, logger):
          logger.error('Failed to unpublish layer %s: %s' % (layer_name, ex))
 
 def _unpublish_from_mapserver(resource, context, mapserver_context, logger):
-
+    
     from ckanext.publicamundi.storers.vector import mapserver_utils
     
     layer_name = None
