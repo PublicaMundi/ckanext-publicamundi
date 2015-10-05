@@ -23,20 +23,31 @@ Install GDAL libraries and Python bindings (at system-level):
 
 **2.  Install plugin's requirements**
 
-    pip install -r vector-requirements.txt
+    pip install -r vectorstorer-requirements.txt
+
+**2.1.  Install backend-specific requirements**
+
+Depending on the publishing backend you choose (i.e. `geoserver` or `mapserver`), a set of additional
+requirements must be met. So, according to your choice, run:
+
+    pip install -r vectorstorer-geoserver-requirements.txt
+
+or 
+
+    pip install -r vectorstorer-mapserver-requirements.txt
 
 
 Configuration
 -------------
 
-**1.  Enable Vector Storer**
+**1.  Enable**
 
   This plugin requires `publicamundi_dataset` to be also enabled. To enable the plugin add this under `ckan.plugins` in the configuration file:
  
         ckan.plugins = ... publicamundi_dataset publicamundi_vector ...
 
     
-**2.  Configure Plugin**
+**2.  Configure**
 
   The following should be set in the CKAN config:
 
