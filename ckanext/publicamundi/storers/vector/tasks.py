@@ -120,8 +120,6 @@ def vectorstorer_upload(resource_dict, context, mapservers_context):
     
     logger = vectorstorer_upload.get_logger()
     
-    logger.info('Backend context: %r', mapservers_context)
-    
     # Download
 
     tmp_folder, filename = _download_resource(resource_dict, api_key)

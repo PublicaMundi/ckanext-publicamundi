@@ -165,11 +165,11 @@ encodings = [
             'aliases' : '950, ms950'
         }, {
             'languages' : 'Japanese',
-            'codec' : 'euc_jis_2004',
+            'codec' : 'euc-jis-2004',
             'aliases' : 'jisx0213, eucjis2004'
         }, {
             'languages' : 'Japanese',
-            'codec' : 'euc_jisx0213',
+            'codec' : 'euc-jisx0213',
             'aliases' : 'eucjisx0213'
         }, {
             'languages' : 'Japanese',
@@ -213,11 +213,11 @@ encodings = [
             'aliases' : 'iso2022jp-2004, iso-2022-jp-2004'
         }, {
             'languages' : 'Japanese',
-            'codec' : 'iso2022_jp_3',
+            'codec' : 'iso2022jp-3',
             'aliases' : 'iso2022jp-3, iso-2022-jp-3'
         }, {
             'languages' : 'Japanese',
-            'codec' : 'iso2022_jp_ext',
+            'codec' : 'iso2022jp-ext',
             'aliases' : 'iso2022jp-ext, iso-2022-jp-ext'
         }, {
             'languages' : 'Korean',
@@ -225,27 +225,27 @@ encodings = [
             'aliases' : 'csiso2022kr, iso2022kr, iso-2022-kr'
         }, {
             'languages' : 'Nordic languages',
-            'codec' : 'iso8859_10',
+            'codec' : 'iso8859-10',
             'aliases' : 'iso-8859-10, latin6, L6'
         }, {
             'languages' : 'Baltic languages',
-            'codec' : 'iso8859_13',
+            'codec' : 'iso8859-13',
             'aliases' : 'iso-8859-13, latin7, L7'
         }, {
             'languages' : 'Celtic languages',
-            'codec' : 'iso8859_14',
+            'codec' : 'iso8859-14',
             'aliases' : 'iso-8859-14, latin8, L8'
         }, {
             'languages' : 'Western Europe',
-            'codec' : 'iso8859_15',
+            'codec' : 'iso8859-15',
             'aliases' : 'iso-8859-15, latin9, L9'
         }, {
             'languages' : 'South-Eastern Europe',
-            'codec' : 'iso8859_16',
+            'codec' : 'iso8859-16',
             'aliases' : 'iso-8859-16, latin10, L10'
         }, {
             'languages' : 'Central and Eastern Europe',
-            'codec' : 'iso8859_2',
+            'codec' : 'iso8859-2',
             'aliases' : 'iso-8859-2, latin2, L2'
         }, {
             'languages' : 'Esperanto, Maltese',
@@ -253,27 +253,27 @@ encodings = [
             'aliases' : 'iso-8859-3, latin3, L3'
         }, {
             'languages' : 'Baltic languages',
-            'codec' : 'iso8859_4',
+            'codec' : 'iso8859-4',
             'aliases' : 'iso-8859-4, latin4, L4'
         }, {
             'languages' : 'Bulgarian, Byelorussian, Macedonian, Russian, Serbian',
-            'codec' : 'iso8859_5',
+            'codec' : 'iso8859-5',
             'aliases' : 'iso-8859-5, cyrillic'
         }, {
             'languages' : 'Arabic',
-            'codec' : 'iso8859_6',
+            'codec' : 'iso8859-6',
             'aliases' : 'iso-8859-6, arabic'
         }, {
             'languages' : 'Greek',
-            'codec' : 'iso8859_7',
+            'codec' : 'iso8859-7',
             'aliases' : 'iso-8859-7, greek, greek8'
         }, {
             'languages' : 'Hebrew',
-            'codec' : 'iso8859_8',
+            'codec' : 'iso8859-8',
             'aliases' : 'iso-8859-8, hebrew'
         }, {
             'languages' : 'Turkish',
-            'codec' : 'iso8859_9',
+            'codec' : 'iso8859-9',
             'aliases' : 'iso-8859-9, latin5, L5'
         }, {
             'languages' : 'Korean',
@@ -321,51 +321,51 @@ encodings = [
             'aliases' : 'csptcp154, pt154, cp154, cyrillic-asian'
         }, {
             'languages' : 'Japanese',
-            'codec' : 'shift_jis',
+            'codec' : 'shift-jis',
             'aliases' : 'csshiftjis, shiftjis, sjis, s_jis'
         }, {
             'languages' : 'Japanese',
-            'codec' : 'shift_jis_2004',
-            'aliases' : 'shiftjis2004, sjis_2004, sjis2004'
+            'codec' : 'shift-jis-2004',
+            'aliases' : 'shiftjis2004, sjis-2004, sjis2004'
         }, {
             'languages' : 'Japanese',
-            'codec' : 'shift_jisx0213',
-            'aliases' : 'shiftjisx0213, sjisx0213, s_jisx0213'
+            'codec' : 'shift-jisx0213',
+            'aliases' : 'shiftjisx0213, sjisx0213, s-jisx0213'
         }, {
             'languages' : 'all languages',
-            'codec' : 'utf_16',
+            'codec' : 'utf-16',
             'aliases' : 'U16, utf16'
         }, {
             'languages' : 'all languages (BMP only)',
-            'codec' : 'utf_16_be',
+            'codec' : 'utf-16be',
             'aliases' : 'UTF-16BE'
         }, {
             'languages' : 'all languages (BMP only)',
-            'codec' : 'utf_16_le',
+            'codec' : 'utf_16le',
             'aliases' : 'UTF-16LE'
         }, {
             'languages' : 'all languages',
-            'codec' : 'utf_32',
+            'codec' : 'utf-32',
             'aliases' : 'U32, utf32'
         }, {
             'languages' : 'all languages',
-            'codec' : 'utf_32_be',
+            'codec' : 'utf-32be',
             'aliases' : 'UTF-32BE'
         }, {
             'languages' : 'all languages',
-            'codec' : 'utf_32_le',
+            'codec' : 'utf-32le',
             'aliases' : 'UTF-32LE'
         }, {
             'languages' : 'all languages',
-            'codec' : 'utf_7',
+            'codec' : 'utf-7',
             'aliases' : 'U7, unicode-1-1-utf-7'
         }, {
             'languages' : 'all languages',
-            'codec' : 'utf_8',
+            'codec' : 'utf-8',
             'aliases' : 'U8, UTF, utf8'
         }, {
             'languages' : 'all languages',
-            'codec' : 'utf_8_sig',
+            'codec' : 'utf-8-sig',
             'aliases' : ''
         }
     ]
