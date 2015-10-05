@@ -2,13 +2,8 @@
 
 {# Note: The parent template has aliased c.pkg_dict as pkg #}
 
-{% block package_description %}
-  {{ super() }}
-{% endblock %}
-
 {% block page_heading %}
   {{ pkg.title or pkg.name }}
-
   {% if pkg.get('state', '').startswith('draft') %}
   <span class="label package-state label-info state-draft">{{ _('Draft') }}</span>
   {% elif pkg.get('state', '').startswith('deleted') %}
@@ -16,6 +11,7 @@
   {% elif pkg.get('state', '').startswith('invalid') %}
   <span class="label package-state label-important state-invalid">{{ _('Invalid') }}</span>
   {% endif %} {# state #}
+    
 {% endblock %}
 
 {% block package_notes %}

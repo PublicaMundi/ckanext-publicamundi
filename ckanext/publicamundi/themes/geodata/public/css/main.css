@@ -1275,6 +1275,20 @@ a.tag:hover{
 .resource-info{
     max-width: 300px;
 }
+
+/*
+ * Package rating
+ */
+.package-rating{
+    float: right;
+    cursor: default;
+}
+.package-rating i{
+    color: #4E59A4;
+}
+.rating-count{
+    text-align: center;
+}
 .package-rating a:hover, .package-rating a:focus{
     text-decoration: none;
 }
