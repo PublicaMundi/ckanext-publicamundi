@@ -15,11 +15,11 @@ from ckanext.publicamundi.storers.vector.lib.template_helpers import (
     get_wfs_output_formats, url_for_wfs_feature_layer, get_table_resource)
 
 log = logging.getLogger(__name__)
-vector_child_formars = [
+
+vector_child_formats = [
     DBTableResource.FORMAT,
     WMSResource.FORMAT,
     WFSResource.FORMAT]
-
 
 class VectorStorer(p.SingletonPlugin):
 
@@ -196,7 +196,7 @@ class VectorStorer(p.SingletonPlugin):
                         # so we also delete the ingestion produced resources
                         resource_actions.delete_ingest_resource(entity.as_dict())
                         
-                    elif entity.format.lower() in vector_child_formars:
+                    elif entity.format.lower() in vector_child_formats:
                         # A child vector resource has recieved a 'deleted' notification
                         # so we also delete all other resources associated to the deleted
                         resource_actions.delete_ingest_resource(entity.as_dict())
@@ -207,7 +207,7 @@ class VectorStorer(p.SingletonPlugin):
                     # to check if this can be updated 
 
                     #old_resource = self._get_resource_before_commit(entity.id)
-                    #if old_resource.format.lower() in vector_child_formars:
+                    #if old_resource.format.lower() in vector_child_formats:
                         #log.info('Notified on metadata update of %s vector resource %r' % (
                             #old_resource.format, old_resource.id ))
                         ## A vector child resource (e.g WMS) has recieved an update

@@ -15,7 +15,7 @@ from ckanext.publicamundi.model.resource_ingest import (
 from ckanext.publicamundi.storers.vector.resources import (
     DBTableResource, WMSResource, WFSResource)
 
-vector_child_formars = [
+vector_child_formats = [
     DBTableResource.FORMAT,
     WMSResource.FORMAT,
     WFSResource.FORMAT]
@@ -210,7 +210,7 @@ def delete_ingest_resource(resource_dict):
         action_context, {'id': resource_dict['package_id']})
     package_resources = current_package['resources']
     
-    if resource_dict['format'] in vector_child_formars:
+    if resource_dict['format'] in vector_child_formats:
         # Handles wms, wfs and data_table resources that have been deleted
 
         parent_resource = _get_parent_resource(resource_dict, package_resources)
