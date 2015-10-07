@@ -33,6 +33,7 @@ class Vector:
         self.gdal_driver = gdal_driver
         self.encoding = encoding
         self.db_conn_params = db_conn_params
+        
         if gdal_driver == SHAPEFILE:
             # Set the SHAPE_ENCODING gdal option in order to read the
             # dbf file (for shapefiles) with the right encoding
@@ -169,12 +170,7 @@ class Vector:
             for y in range(feat.GetFieldCount()):
                 if not feat.GetField(y) is None:
                     if layer.GetLayerDefn().GetFieldDefn(y).GetType() in (4, 9, 10, 11):
-                        try:
-                            field_value =  feat.GetField(y).decode('utf_8').encode(self.encoding)
-                        except UnicodeDecodeError:
-                            field_value = 'NULL'
-                        feature_fields += psycopg2.extensions.adapt(
-                            field_value).getquoted() + ','
+                        feature_fields += psycopg2.extensions.adapt(feat.GetField(y)).getquoted() + ','
                     else:
                         feature_fields += str(feat.GetField(y)) + ','
                 else:
@@ -187,7 +183,7 @@ class Vector:
                     layer_geom_name)
             self._db.insert_to_table(
                 table_name,
-                feature_fields.decode(self.encoding),
+                feature_fields.decode('utf-8'),
                 feat.GetGeometryRef(),
                 convert_to_multi,
                 srs)

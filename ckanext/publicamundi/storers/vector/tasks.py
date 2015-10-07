@@ -701,16 +701,14 @@ def vectorstorer_delete(resource_dict, context, backend_context):
         # A vector child resource has been deleted
         if 'format' in resource_dict:
             if resource_dict['format'] == DBTableResource.FORMAT:
-                # A DBTable resource was deleted, so delete the table
-                # from the database
+                # A table resource was deleted, so delete the table from database
                 _delete_from_datastore(
                     resource_dict['id'],
                     db_conn_params,
                     context,
                     logger)
-            elif resource_dict['format'] in [
-                WMSResource.FORMAT, WFSResource.FORMAT]:
-                # A WMS or WFS resource was deleted, so unpublish it from backend
+            elif resource_dict['format'] in [WMSResource.FORMAT, WFSResource.FORMAT]:
+                # A WMS or WFS resource was deleted, so unpublish it backend
                 if publishing_server == 'geoserver':
                     _unpublish_from_geoserver(
                         resource_dict,
