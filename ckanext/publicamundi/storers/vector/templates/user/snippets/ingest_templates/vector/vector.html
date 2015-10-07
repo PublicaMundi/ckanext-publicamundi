@@ -3,7 +3,7 @@
 {% set resource_id = c.resource_id %}
 {% set task_result = c.task_result %}
 {% set gdal_driver = task_result.gdal_driver %}
-{% set layers = task_result.layers %} 
+{% set layers = c.layers %} 
 {% set ingest_base_url= h.url_for('vector_ingest',resource_id =resource_id)%}
 {% set validation_url= h.url_for('validation_check')%}
 
