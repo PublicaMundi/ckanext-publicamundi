@@ -307,7 +307,7 @@ def _reload_geoserver_config(context, geoserver_context):
     if reload_url.startswith('http://'):
         # Fire this task in a synchronous manner
         r = HttpDispatchTask.delay(url=reload_url, method='GET')
-        r.get(timeout=15)
+        r.get(timeout=30)
     
     return
 
