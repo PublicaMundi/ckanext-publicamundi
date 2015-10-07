@@ -1,25 +1,23 @@
-{% extends "style/main.html" %}
+{% extends "base.html" %}
+{% block styles %}
 
-{% block sld_actions %}
-    <h3>Edit current Style</h3>
+{% endblock %}
+{% block page %}
 
     {% if c.error %}
-	
     <div class="error-explanation alert alert-error ">
-	    <p>There was an error while uploading this SLD :</p>
-	    <ul>
+            <p>There was an error while uploading this SLD :</p>
+            <ul>
+                <li data-field-label="Name">{{c.error}}</li>
+            </ul>
+        </div>
         
-		<li data-field-label="Name">{{c.error}}</li>
-        
-	    </ul>
-	</div>
-	
     {% endif %}
     
     {% if c.success %}
-	<div class="alert in alert-success">
-	    <strong>SLD file was successfully uploaded.</strong>
-	</div>
+        <div class="alert in alert-success">
+            <strong>SLD file was successfully uploaded.</strong>
+        </div>
     {% endif %}
     
     {% if c.sld_body %}

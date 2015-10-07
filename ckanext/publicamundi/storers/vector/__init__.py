@@ -58,13 +58,13 @@ def setup(gdal_folder, temp_folder):
         sys.path.append(gdal_folder)
 
     # Import and configure osgeo library
-
     from osgeo import gdal as _gdal, ogr as _ogr, osr as _osr
     
     global gdal, ogr, osr
     
     gdal, ogr, osr = _gdal, _ogr, _osr
    
+    gdal.UseExceptions()
     osr.UseExceptions()
     ogr.UseExceptions()
 

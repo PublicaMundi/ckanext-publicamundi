@@ -1,40 +1,51 @@
+{% set search_encoding_url= h.url_for('search_encoding')%}
+{% set search_epsg_url= h.url_for('search_epsg')%}
+
 {% set layers = task_result.layers %}
 <div class="info ">
     <label>{{ _('Resource Information')}}</label> 
     GDAL Driver : {{task_result.gdal_driver}}</br>
     Number of Layers: {{layers|length}}</br>
 </div>
-<div class="layerlist ">
-    <label>{{ _('Layer List')}}</label>     
+<div class="accordion">
+    <label>{{ _('Layer List')}}</label>
+  
     {% for layer in layers %}
-        <div style="border: 1px solid rgba(0, 0, 0, 0.23); border-radius: 4px; padding: 5px; margin-top: 5px;">
-
-            <input type="checkbox" id="checkbox_{{layer.idx}}" style="float: left; margin-right: 20px;" name="checkbox_layer"  checked />
-            
-            <div id="divproj" class="form-select " style="float: left;">
-                
-                <label style="float:left;">{{ _('Layer Name')}}</label> 
-                
-                <input  id="layer_name_{{layer.idx}}" type="text" name="layer_name_input"  value="{{layer.layer_name}}" />
-                </br>
-               <label style="float:left;">{{ _('Layer Projection')}}</label> 
-                {% if layer.layer_srs==-1 %}
-                <input  id="layer_srs_{{layer.idx}}" type="text" name="srs_input">
-                {% else %}
-                <input  id="layer_srs_{{layer.idx}}" type="text" name="srs_input" value="{{layer.layer_srs}}" />
-                {% endif %}
-                </br>
-               <label style="float:left;">{{ _('Layer Encoding')}}</label> 
-                
-                <input  id="layer_encoding_{{layer.idx}}" type="text" name="layer_encoding_input" value="utf-8" />
-                </br>
-            </div>
-            <div id="proj-error" class="projection-error" style="clear: both;"></div>
+    {% with group_id =  layer.layer_name %}
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#{{ id }}" href="#{{ group_id }}"
+                >{{layer.layer_name}}</a>
+             
         </div>
+        <div id="{{ group_id }}" class="accordion-body collapse ">
+            <div class="accordion-inner">
+                <div id="layer_info_parent_{{layer.idx}}" class="control-group widget field-widget field-edit-widget" style="float: left;">
+                    <label class="control-label">{{ _('Layer Name')}}<span class="control-required" title="{{_(' This field is required')}}">*</span></label>
+                    <div class="controls">
+                        <input  id="layer_name_{{layer.idx}}" layer_id={{layer.idx}} type="text" name="layer_name_input" value="{{layer.layer_name}}">
+                    </div>
+                    <label class="control-label">{{ _('Layer Projection')}}<span class="control-required" title="{{_(' This field is required')}}">*</span></label>
+                    
+                    <div class="controls" data-module="projection-autocomplete" data-module-search_epsg_url="{{search_epsg_url}}" data-module-layer_idx="{{layer.idx}}">
+                        <input id="layer_srs_{{layer.idx}}" layer_id={{layer.idx}} type="text" name="projection" {% if layer.layer_srs!=-1 %}value="{{layer.layer_srs}}" {% else %}value="4326" {% endif%}>
+                    </div>
+                    <label class="control-label">{{ _('Layer Encoding')}}<span class="control-required" title="{{_(' This field is required')}}">*</span></label>
+                    
+                    <div class="controls" data-module="encoding-autocomplete" data-module-search_encoding_url={{search_encoding_url}} 
+                        data-module-layer_idx="{{layer.idx}}">
+                       <input id="layer_encoding_{{layer.idx}}" layer_id={{layer.idx}} type="text" name="encoding" value="utf-8">
+                    </div>
+                </div>
+                <div class="" style="float:right;">
+                <label class="checkbox">{{ _('Ingest Layer')}}
+                    <input id= "checkbox_{{layer.idx}}" parent="#layer_info_parent_{{layer.idx}}" type="checkbox" checked >
+                 </label>
+                </div>          
+            </div>
+            
+        </div>
+    </div>
+    {% endwith %} 
     {% endfor %}
 </div>
-  
- 
- 
- 
- 

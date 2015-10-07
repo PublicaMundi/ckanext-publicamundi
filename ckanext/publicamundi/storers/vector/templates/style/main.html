@@ -1,59 +1,26 @@
-{% extends "package/resource_read.html" %}
-
+{% extends "style/base.html" %}
 {% set res = c.resource %}
-{% set style_controller = 'ckanext.vectorstorer.controllers.style:StyleController' %}
+{% set pkg = c.pkg %}
 
-{% block breadcrumb_content %}
-{% if pkg %}
-    {% set dataset = pkg.title or pkg.name %}
-    {% if pkg.organization %}
-      {% set organization = pkg.organization.title or pkg.organization.name %}
-      <li>{% link_for _('Organizations'), controller='organization', action='index' %}</li>
-      <li>{% link_for organization|truncate(30), controller='organization', action='read', id=pkg.organization.name %}</li>
-    {% else %}
-      <li>{% link_for _('Datasets'), controller='package', action='search' %}</li>
-    {% endif %}
-    <li{{ self.breadcrumb_content_selected() }}>{% link_for dataset|truncate(30), controller='package', action='read', id=pkg.name %}</li>
-     <li class="active"> <a href="{{ h.url_for(controller='package', action='resource_read',id=c.pkg.id,resource_id=c.resource.id) }}" >{{res.name}}</li>
-  {% else %}
-    <li>{% link_for _('Datasets'), controller='package', action='search' %}</li>
-    <li class="active"><a href="">{{ _('Create Dataset') }}</a></li>
-  {% endif %}
-       
+{% set edit_current_url = h.url_for('edit_current_sld', id=pkg.name, resource_id=res.id) %} 
+
+{% block style_content %}
+
+ <div data-module="style-editor" data-module-edit_current_url="{{edit_current_url}}">
+   {{self.style_nav_tabs()}}
+   <div id="style-content"></div>
+ </div>
+ 
+ {% resource 'ckanext-publicamundi-vector/style_editor' %}
 {% endblock %}
 
-{% block secondary_content %}
-  <h2 class="module-heading"><i class="icon-medium icon-magic"></i> Styling</h2>
-  <ul class="nav nav-simple">
-      <li class="nav-item">
-	  <a href="{{ h.url_for('edit_current_sld', action='edit_current_sld',id=c.pkg.id,resource_id=c.resource.id,operation='show') }}">
-	    <span>Edit current Style</span>
-          </a>
-     
-      </li>
-      <li class="nav-item">
-	  <a href="{{ h.url_for('upload_sld', action='upload_sld',id=c.pkg.id,resource_id=c.resource.id,operation='show') }}">
-             <span>Upload a SLD file</span>
-          </a>
-      </li>
-       <li class="nav-item">
-	  <a href="{{ h.url_for(controller='package', action='resource_read',id=c.pkg.id,resource_id=c.resource.id) }}" >
-             <span>Back to Resource Preview</span>
-          </a>
-      </li>
-  </ul>
-  
+{% block style_nav_tabs %}
+ <ul class="nav nav-tabs">
+   <li id="edit-current-style-tab">
+     <a href="javascript:;" id="edit-current-style"> <i class="icon-list"></i>{{_('Edit Current Style')}}</a>
+   </li>
+  <!-- <li id="upload-sld-file-tab">
+     <a href="javascript:;" id="upload-sld-file"> <i class="icon-list"></i>{{_('Upload SLD')}}</a>-->
+   </li>
+ </ul>
 {% endblock %}
-
-{% block primary_content %}
-
-
-  {% block sld_actions %} 
- 
-   {% endblock %}
-  
-{% endblock %}
-
-  
- 
- 

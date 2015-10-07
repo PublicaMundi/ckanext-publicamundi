@@ -1,10 +1,11 @@
-{% set style_controller = 'ckanext.vectorstorer.controllers.style:StyleController' %}
+{% set post_sld_url = h.url_for('upload_edited_sld',id=id,resource_id=resource_id) %}
+
 {% block sld_editor %}
 
-    <form data-module="sld_editor" action="{{ h.url_for(action, action=action,id=id,resource_id=resource_id,operation='submit') }}" method="post" id="sld_form">
-	<textarea  name="sld_body" id="sld_body">{{sld_body}}</textarea>
-	<p>
-	<input type="submit" value="Change Style">
-    </form>
-    
+    <div data-module="sld_editor" data-module-post_sld_url="{{post_sld_url}}">
+        <textarea  id="sld_body">{{sld_body}}</textarea>
+        <br>
+        <button class="btn btn-success" id="submit_style">Change Style</button>
+    </div>
+    {% resource 'ckanext-publicamundi-vector/sld_editor' %}
 {% endblock %}
