@@ -3,7 +3,7 @@
 
 {% block styles %}
 {{ super() }}
-<link href="../js/fancytree/skin-win8/ui.fancytree.css" rel="stylesheet" type="text/css">
+<link href="/css/ui.fancytree.min.css" rel="stylesheet" type="text/css" />
 {% endblock %}
 
 {% block primary_content_inner %}
@@ -17,51 +17,37 @@
         <div id="map-admin-table">
             <h2>{{_('Available layers')}}</h2>
             <hr>
-            {% snippet 'snippets/maps_admin_list.html', resources=resources %}                            
-    
-    <!-- <table id="map-admin-table" border="1">
-        <thead>
-            <td class="head-layer">{{_('Layer')}}</td>
-            <td class="head-layer">{{_('Package')}}</td>
-            <td class="head-layer">{{_('Organization')}}</td>
-        </thead>
-        <tbody>
-        <tr class="layer" key="123" title="Layer 1">
-            <td>Layer1</td>
-            <td>Package1</td>
-        </tr>
-        <tr class="layer" key="456" title="Layer 2">
-            <td>Layer2</td>
-        </tr>
-        <tr class="layer" key="111" title="Layer 3">
-            <td>Layer3</td>
-            <td>Layer3</td>
-        </tr>
-        <tr class="layer" key="222" title="Layer X">
-            <td>LayerX</td>
-        </tr>
-        <tr class="layer" key="333" title="Layer X">
-            <td>LayerX</td>
-        </tr>
-            <tr class="layer" key="444" title="Layer X">
-            <td>LayerX</td>
-        </tr>
-       <tr class="layer" key="555" title="Layer X">
-            <td>LayerX</td>
-        </tr>
-       <tr class="layer" key="666" title="Layer X">
-            <td>LayerX</td>
-        </tr>
-       <tr class="layer" key="777" title="Layer X">
-            <td>LayerX</td>
-        </tr>
-       <tr class="layer" key="888"  title="Layer X">
-            <td>LayerX</td>
-        </tr>
-        </tbody>
 
-    </table>
-    -->
+            <div id="map-filter-layers" class="btn-group">
+            <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="icon-filter"></i>
+                <span class="facet">{{_('Status')}}</span>
+                <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                    <li>
+                    <a id="map-filter-layers-all" href="#"> {% trans %}<span class="new-resources"></span>All{% endtrans %}</a>
+                    </li>
+                    
+                    <li>
+                    <a id="map-filter-layers-new" href="#"> {% trans %}<span class="new-resources"></span>New{% endtrans %}</a>
+                    </li>
+                   
+                    <li>
+                    <a id="map-filter-layers-inactive" href="#"> {% trans %}<span class="ignored-resources"></span>Ignored{% endtrans %}</a>
+                    </li>
+
+                </ul>
+                
+                
+            </div>
+            
+            <div id="map-filter-layers-status" class="filter-list">
+                <span class="filtered pill label"> {{_('All')}}</span>
+                </div>
+
+                
+                {% snippet 'snippets/maps_admin_list.html', resources=resources %}   
     </div>
 </div>
 
@@ -70,50 +56,79 @@
     <h2>{{_('Visible layers')}}</h2>
     <hr>
         <button class="btn" id="add-parent-node">{{ _('Add node')}}</button>
-        <button class="btn" id="add-child-node">{{ _('Add child')}}</button>
+        <button class="btn" id="add-child-node">{{ _('Add subnode')}}</button>
         <!-- <button class="btn" id="rename-node">{{ _('Rename')}}</button> -->
         <button class="btn" id="delete-node">{{ _('Delete')}}</button>
+        <button class="pull-right btn btn-primary" id="save-tree">{{ _('Save')}}</button>
+        <div class="map-options-save">
+            <div id="map-loader-primary" class="ajax-loader" style="display:none;float: right"></div>
+        </div>
+
         <br> 
+        <div class="tree">
         <table id="tree">
                 <thead>
-        <tr> <th></th> <th></th> <th></th> </tr>
+        <tr> <th></th> </tr>
         </thead>
         <tbody>
         </tbody>
-        </table>
+    </table>
+    </div>
     </div>
 
 
-    <div class="map-options-bar">
+    <div id="map-options-bar" class="map-options-bar" hidden>
+        <h3>{{_('Selected layer/node options')}}</h3>
+        <hr>
+        <div id="map-loader-secondary" class="ajax-loader" style="display:none; float:right"></div>
+
+    <div class="map-options-metadata">
+        <h4>{{_('Metadata')}}</h4> 
+        <div id="map-options-package">
+            <span><strong>{{_('Package')}}:</strong></span>   <span id="map-options-package-title"></span>
+        </div>
+        <div id="map-options-resource">
+            <span><strong>{{_('Resource')}}:</strong></span>   <span id="map-options-resource-title"></span>
+        </div>
+
+        <div id="map-options-organization">
+            <span><strong>{{_('Organization')}}:</strong></span>   <span id="map-options-organization-title"></span>
+        </div>
+    </div>
+
         <div class="map-options-name">
+            <h4>{{_('Captions')}}</h4>
            <form id="map-name-translation">
                <label>en</label><input id="map-name-translation-en" type="text" name="name-en" ></input>
                 <label>el</label><input id="map-name-translation-el" type="text" name="name-el"></input>
-            <input class="pull-right" type="submit" value="{{ _('OK')}}"></input>
+            <input class="hidden pull-right" type="submit" value="{{ _('OK')}}"></input>
            </form> 
         </div>
         <div class="map-options-fields">
+            <h4>{{_('Fields')}}</h4>
+            <span></span>
+            <div id="map-options-fields-template">
+                <label>{{_('Template')}}</label><input id="map-options-fields-template-input" type="text" name="fields-template" ></input>
+            </div>
             <form id="map-fields-form">
-           <table border="0" id="map-fields-table">
+                <table border="0" cellpadding="1" cellspacing="1" id="map-fields-table">
             <thead>
                 <td></td>
             </thead>
             <tbody>
-                <tr id="map-options-default">
-            </tr>
+              <!--  <tr id="map-options-default">
+              </tr>
+              -->
             <tr id="map-options-activate">
             </tr>
             <tr id="map-options-export">
             </tr>
             </tbody>
         </table> 
-        <input class="pull-right" type="submit" value="{{ _('OK')}}"></input>
+        <input class="hidden pull-right" type="submit" value="{{ _('OK')}}"></input>
     </form>
         </div>
-        <div class="map-options-save">
-            <div class="ajax-loader" style="display:none"></div>
-            <button class="pull-right btn btn-primary" id="save-tree">{{ _('Save')}}</button>
-        </div>
+
     </div>
 </div>
 

@@ -1442,18 +1442,106 @@ a.tag:hover{
 }
 #map-admin-left{
     flex: 1;
+    //max-height: 100vh;
+    //overflow: scroll;
 }
 
 #map-admin-right{
     flex: 1;
+    //max-height: 100vh;
+    //overflow: scroll;
     border-left: 2px #4E59A4 solid;
 }
-
+.ui-draggable-dragging{
+    //border: 1px #666 dotted;
+    width: 120px;
+    max-height: 10px;
+    overflow: hidden;
+}
 #map-admin-table{
     padding: 10px;
 }
-#tree{
+#map-admin form{
+    margin: 0;
+}
+.tree{
     margin-top: 20px;
+    margin-right: 20px;
+}
+#tree{
+    width: 100%;
+    margin-bottom: 20px;
+}
+/*
+ * #tree .fancytree-folder .fancytree-expander{
+    background: red;
+}
+
+#tree .fancytree-folder .fancytree-icon{
+
+background: blue;
+}
+
+#tree .fancytree-ico-c .fancytree-icon{
+background: green;
+}
+*/
+#map-fields-table{
+}
+#map-fields-table td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 5px;               
+}
+#map-fields-table input[type='checkbox'], #map-fields-table input[type='radio']{ 
+    top:0;
+}
+#map-fields-table tr {
+    height: 25px;   
+}
+
+#map-filter-layers{
+}
+#map-filter-layers-status{
+    margin: 7px 10px;
+    width: auto;
+    display: inline-block;
+}
+
+#map-layers-titles{
+    width: 100%;
+    margin: 5px 0;
+}
+
+#map-layers-titles span{
+    font-weight: bold;
+    font-size: 18px;
+}
+#map-layers{
+    margin: 20px -10px 0 -10px;
+}
+#map-layers h5{
+    margin:0;
+}
+.map-dataset-content-ul{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: table;
+    table-layout: fixed;
+    overflow: hidden;
+}
+.map-dataset-content-ul li{
+    width: 115px;
+    display: table-cell;
+    text-align: center;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+.map-dataset-content-ul li:last-child{
+    display: table-cell;
+    text-align: center;
+    width: 85px;
 }
 
 .map-options-bar{
@@ -1461,15 +1549,24 @@ a.tag:hover{
     margin-top: 100px;
     padding: 10px;
 }
+.map-options-save{
+    margin-top:20px;
+}
 .map-options-name{
-    margin-top: 20px;
+    //margin: 2px 0;
+    margin-bottom: 10px;
 }
 .map-options-tree{
     padding-top: 10px;
     padding-left: 10px;
 }
-
-#map-name-translation label, #map-name-translation input{
+.map-options-fields{
+    max-width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    margin-bottom: 10px;
+}
+#map-admin label, #map-admin input{
     display: inline;
     margin-right: 10px;
 }
@@ -1483,6 +1580,10 @@ a.tag:hover{
 
 .map-admin-table .alt{
     background: 'ccc';
+}
+#save-tree{
+    margin-bottom:15px;
+    margin-right:10px;
 }
 /* Search page */
 

@@ -8,6 +8,7 @@ import csv
 import argparse
 import urlparse
 import requests
+import pprint
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Boolean
 from sqlalchemy.types import Text, BigInteger
 from sqlalchemy.schema import ForeignKey
@@ -23,6 +24,7 @@ from ckanext.publicamundi.model import Base
 from geoalchemy import GeometryColumn, Geometry, WKTSpatialElement
 from shapely.geometry import shape
 
+# Declare data model
 class Organization(object):
     pass
 class Group(object):
@@ -41,13 +43,11 @@ class Field(object):
     pass
 
 class MapsRecords(object):
-    # Declare data model
-        
+
     def __init__(self):
         self.engine = None
         self.metadata = None
         self.session = None
-        #self._cleanup()
 
         self._initialize_session()
         self._initialize_model()
@@ -157,32 +157,163 @@ class MapsRecords(object):
                 print 'TRYING TO MAP AGAIN'
                 print ex
 
-    def get_resources(self, sorting=None, filters=None):
-        res = self._get_all_records(Resource)
-        resources = []
-        for it in res:
-            resources.append(self._as_dict(it))
+    def get_all_records(self, Table):
+        db_entries = self.session.query(Table).all()
+        records = []
+        for db_entry in db_entries:
+           records.append(self._as_dict(db_entry))
+        return records
 
-        return resources
+    def get_record_by_id(self, Table, id):
+        db_entry = self.session.query(Table).get(id)
+        return self._as_dict(db_entry)
 
-    def get_resource_fields(self, resource_id):
-        #res = self._get_all_records(Resource)
-        #res = self.session.query(Resource).filter(Resource.id == resource_id).join(Resource.queryable).first()
-        res = self.session.query(Field).join(Queryable).filter(Queryable.resource == resource_id).all()
-        if not res:
-            return {}
+    def insert_records(self, records, Table):
+        try:
+            for rec in records:
+                db_entry = Table()
+                db_entry = self._update_object_with_dict(db_entry, rec)
+                self.session.add(db_entry)
+            self.session.commit()
+        except Exception as ex:
+            print 'exception'
+            print ex
+            self.session.rollback()
+
+        return records
+
+    def update_records(self, records, Table):
+        try:
+            for rec in records:
+                db_entry = self.session.query(Table).get(rec.get("id"))
+                db_entry = self._update_object_with_dict(db_entry, rec)
+
+            self.session.commit()
+        except Exception as ex:
+            print 'exception'
+            print ex
+            self.session.rollback()
+
+        return records
+
+    def upsert_records(self, records, Table):
+        try:
+            for rec in records:
+                db_entry = self.session.query(Table).get(rec.get("id"))
+                if db_entry:
+                    db_entry = self._update_object_with_dict(db_entry, rec)
+                else:
+                    db_entry = Table()
+                    db_entry = self._update_object_with_dict(db_entry, rec)
+                    self.session.add(db_entry)
+            self.session.commit()
+        except Exception as ex:
+            print 'exception'
+            print ex
+            self.session.rollback()
+
+        return records
+
+    def delete_records(self, records, Table):
+        try:
+            for rec in records:
+                db_entry = self.session.query(Table).get(rec.get("id"))
+                if db_entry:
+                    self.session.delete(db_entry)
+            self.session.commit()
+        except Exception as ex:
+            print 'exception'
+            print ex
+            self.session.rollback()
+
+    def delete_all_records(self, Table):
+        try:
+            db_entries = self.session.query(Table).all()
+            for db_entry in db_entries:
+                self.session.delete(db_entry)
+            self.session.commit()
+        except Exception as ex:
+            print 'exception'
+            print ex
+            self.session.rollback()
+
+    def get_resources(self):
+        res = self.session.query(Resource).all()
+        return self._list_objects_to_dict(res)
+
+    def get_resources_with_packages_organizations(self):
+        res = self.session.query(Resource, Package, Organization).filter(Resource.package == Package.id).filter(Package.organization == Organization.id).order_by(Organization.title_el.asc()).order_by(Package.title_el.asc()).all()
+        return self._pkg_org_tuples_to_dict(res)
+
+    def get_resource_by_id(self, id):
+        return self.get_record_by_id(Resource, id)
+
+    def insert_resources(self, resources):
+        return self.insert_records(resources, Resource)
+
+    def update_resources(self, resources):
+        return self.update_records(resources, Resource)
+
+    def upsert_resources(self, resources):
+        return self.upsert_records(resources, Resource)
+
+    def get_resource_queryable(self, resource_id):
+        res = self.session.query(Queryable).filter(Queryable.resource == resource_id).all()
+        queryable = self._list_objects_to_dict(res)
+        for q in queryable:
+            q.update({'fields':\
+                    sorted(self._list_objects_to_dict(q.get('fields')), \
+                    key=lambda k: k['id'])\
+                    })
+        if queryable:
+            return queryable[0]
         else:
-            fields = []
-            
-            for it in res:
-                print it
-                fields.append(self._as_dict(it))
+            return None
 
-            return fields
+    def update_resource_fields(self, fields):
+        return self.update_records(fields, Field)
 
-    
+    def upsert_resource_fields(self, fields):
+        return self.upsert_records(fields, Field)
+
+    def update_resource_queryable(self, queryable):
+        return self.update_records(queryable, Queryable)
+
+    def upsert_resource_queryable(self, queryable):
+        return self.upsert_records(queryable, Queryable)
+
+    def get_tree_nodes(self):
+        return self.get_all_records(TreeNode)
+
+    def delete_tree_nodes(self, tree_nodes):
+        return self.delete_records(tree_nodes, TreeNode)
+
+    def delete_all_tree_nodes(self):
+        return self.delete_all_records(TreeNode)
+
+    def insert_tree_nodes(self, tree_nodes):
+        return self.insert_records(tree_nodes, TreeNode)
+
+    def update_tree_nodes(self, tree_nodes):
+        return self.update_records(tree_nodes, TreeNode)
+
+    def upsert_tree_nodes(self, tree_nodes):
+        return self.upsert_records(tree_nodes, TreeNode)
+
+    # Helpers
+    def _cleanup(self):
+        try:
+            if self.session:
+                self.session.close()
+        except:
+            pass
+   
     def _as_dict(self, row):
         return self._filter_dict(row.__dict__)
+    
+    def _update_object_with_dict(self, obj, dct):
+        for key, value in dct.iteritems():
+            setattr(obj, key, value)
 
     def _filter_dict(self, dict):
         d = {}
@@ -193,93 +324,27 @@ class MapsRecords(object):
                 #del dict[k]
                 d[k] = v
         return d
+         
+    def _list_objects_to_dict(self, obj_list):
+        res_list = []
+        for obj in obj_list:
+            res_list.append(self._as_dict(obj))
+        return res_list
 
-    def _commit(self):
-        try:
-            print 'committing'
-            self.session.commit()
-        except Exception as ex:
-            print 'exception'
-            print ex
-            self.session.rollback()
+    def _pkg_org_tuples_to_dict(self, obj_list):
+        res_list = []
+        for obj in obj_list:
+            res = obj[0]
+            pkg = obj[1]
+            org = obj[2]
 
-    def _get_all_records(self, Table):
-        return self.session.query(Table).all()
-
-    def _update_object_with_dict(self, db_entry, rec):
-        for reck, recv in rec.iteritems():
-            setattr(db_entry, reck, recv)
-        return db_entry
-
-    def update_resources(self, resources):
-        # have to handle 
-        # 1. if in resources and not in db -> INSERT
-        # 2. if in db and not in resources -> UPDATE (visible: False)
-        # 3. if in db and in resources -> UPDATE (all values in dict)
-
-        db_entries = self._get_all_records(Resource)
-
-        # start by making all Resource objects invisible
-        for db_entry in db_entries:
-            db_entry.visible = False
-
-        for res in resources:
-            found = False
-            for db_entry in db_entries:
-                if db_entry.id == res.get("id"):
-                    # found, so update (#3)
-                    found = True
-                    db_entry = self._update_object_with_dict(db_entry, res)
-            if not found:
-                # not found, so insert (#1)
-                db_entry = Resource()
-                db_entry = self._update_object_with_dict(db_entry, res)
-                self.session.add(db_entry)
-
-        self._commit()
-
-    def update_tree_nodes(self, tree_nodes):
-        # have to handle 
-        # 1. if in tree_nodes and not in db -> INSERT
-        # 2. if in db and not in tree_nodes -> DELETE
-        print 'UPDATING TREENODES'
-        print tree_nodes
-    
-        db_entries = self._get_all_records(TreeNode)
-
-        # start by removing all TreeNodes (#2)
-        # TODO: can i avoid this commit?
-        print 'deleting previous tnodes'
-        for db_entry in db_entries:
-            print db_entry.id
-            self.session.delete(db_entry)
-        self._commit()
-
-        print 'adding new tnodes'
-        for node in tree_nodes:
-            print node
-            # not found, so insert (#1)
-            db_entry = TreeNode()
-            db_entry = self._update_object_with_dict(db_entry, node)
-            self.session.add(db_entry)
-
-        self._commit()
-
-    def update_resource_fields(self, fields):
-        # have to handle 
-        # 1. just update field with new values (if not in db return)
-        print 'UPDATING FIELDS'
-
-        for field in fields:
-            db_entry = self.session.query(Field).get(field.get("id"))
-            db_entry = self._update_object_with_dict(db_entry, field)
-
-        self._commit()
-
-    def _cleanup(self):
-        try:
-            if self.session:
-                self.session.close()
-        except:
-            pass
-
+            out_dict = self._as_dict(res)
+            out_dict.update({"package_name": pkg.name,
+                        "organization_name": org.name,
+                        "package_title_el": pkg.title_el,
+                        "package_title_en": pkg.title_en,
+                        "organization_title_el": org.title_el,
+                        "organization_title_en": org.title_en,
+                        })
+            res_list.append(out_dict)
+        return res_list

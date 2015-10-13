@@ -19,39 +19,18 @@ FILE_PATH = '/var/local/ckan/default/ofs/storage/mapconfig.json'
 class Controller(BaseController):
     def __init__(self):
         self.mapsdb = get_maps_db()
-        print self.mapsdb
-        #mapsdb.MapsRecords()
 
     def show_dashboard_maps(self):
         user_dict = self._check_access()
-        #self._init_db()
-        resources = self._fetch_resources()
+        resources = self.mapsdb.get_resources_with_packages_organizations()
         self._setup_template_variables(user_dict, resources)
+
         return render('user/dashboard_maps.html')
-
-    #def _init_db(self):
-    #    if not self.mapsdb:
-    #        self.mapsdb = db.MapsRecords()
-
-    def _fetch_resources(self):
-        #if not self.maprecords:
-        #    self._init_db()
-        resources = self.mapsdb.get_resources()
-        return resources
-
-    def _update_resources(self, resources):
-        #if not self.maprecords:
-        #    self._init_db()
-        return self.mapsdb.update_resources(resources)
-
-    def _update_tree_nodes(self, nodes):
-        #if not self.maprecords:
-        #    self._init_db()
-        return self.mapsdb.update_tree_nodes(nodes)
 
     def get_maps_configuration(self):
         user_dict = self._check_access()
-        #self._init_db()
+
+        # try to load json config file from previous session
         if os.path.exists(FILE_PATH):
             with open(FILE_PATH, 'r') as json_data_file:
                 data = json_data_file.read()
@@ -61,104 +40,93 @@ class Controller(BaseController):
 
     def save_maps_configuration(self):
         user_dict = self._check_access()
-        #self._init_db()
+
+        # read request parameters
+        config = request.params.get("config")
+
+        resources = request.params.get("resources")
+        if not resources:
+            resources = {}
+        resources = json.loads(resources)
+
+        tree_nodes = request.params.get("tree_nodes")
+        if not tree_nodes:
+            tree_nodes = {}
+        tree_nodes = json.loads(tree_nodes)
+
+        resources_fields = request.params.get("resources_fields")
+        if not resources_fields:
+            resources_fields = {}
+        resources_fields = json.loads(resources_fields)
+
+        resources_queryable = request.params.get("resources_queryable")
+        if not resources_queryable:
+            resources_queryable = {}
+        resources_queryable = json.loads(resources_queryable)
+
         # save json config file for internal use
-        config = request.params.get("json")
         if config:
             with open(FILE_PATH, 'w') as json_data_file:
                     json_data_file.write(config.encode('utf-8'))
 
-            # and update db
+        # transform dicts to lists
+        res_list = []
+        for resk, resv in resources.iteritems():
+            d = resv.copy()
+            d.update({"id":resk})
+            if d.get("node"):
+                del d["node"]
+            res_list.append(d)
 
-            nodes = []
-            resources = []
-            def iter_tree(tree):
-                """ Traverse tree depth-first and fill nodes, resources lists"""
-                if not tree:
-                    return
-                data = tree.get("data")
-                if data:
-                    if data.get("node"):
-                        nodes.append({"id": data.get("id"),
-                                    "parent": data.get("parent"),
-                                    "caption_en": data.get("name_en"),
-                                    "caption_el": data.get("name_el"),
-                                    "visible": data.get("visible"),
-                                    })
-                    else:
-                        resources.append({"id": data.get("id"),
-                                    "name_en": data.get("name_en"),
-                                    "name_el": data.get("name_el"),
-                                    "visible": data.get("visible"),
-                                    "tree_node_caption_el": data.get("name_el"),
-                                    "tree_node_caption_en": data.get("name_en"),
-                                    "tree_node_id": data.get("tree_node_id"),
-                                    "tree_node_index": data.get("tree_node_index"),
-                                    })
-                children = tree.get("children")
-                if not children:
-                    return
-                for child in children:
-                    iter_tree(child)
+        node_list = []
+        del_node_list = []
+        for item in sorted(tree_nodes.items(), key=lambda x: x[1]):
+            nodek = item[0]
+            nodev = item[1]
+            d = nodev.copy()
+            d.update({"id":nodek})
+            if d.get("node"):
+                del d["node"]
+            if d.get("visible") == False:
+                del_node_list.append({"id":nodek})
+            else:
+                node_list.append(d)
 
-            print 'tree'
-            tree = json.loads(config).get("config")
-            iter_tree(tree)
-            print 'nodes'
-            print nodes
-            print 'resources'
-            print resources
+        res_fields_list = []
+        for resfk, resfv in resources_fields.iteritems():
+            res_fields_list = res_fields_list + resfv
 
-            self._update_tree_nodes(nodes)
-            self._update_resources(resources)
- 
-    def get_resource_fields(self):
+        res_quer_list = []
+        for resqk, resqv in resources_queryable.iteritems():
+            d = resqv.copy()
+            d.update({"id":resqk})
+            res_quer_list.append(d)
+
+        # perform db tables deletes/updates/inserts
+        self.mapsdb.delete_tree_nodes(del_node_list)
+        self.mapsdb.upsert_tree_nodes(node_list)
+
+        self.mapsdb.update_resources(res_list)
+        self.mapsdb.update_resource_fields(res_fields_list)
+        self.mapsdb.upsert_resource_queryable(res_quer_list)
+
+        return
+
+    def get_resource_queryable(self):
         user_dict = self._check_access()
 
         resource_id = request.params.get("id")
-        print 'res id'
-        print resource_id
 
         if not resource_id:
             return
 
-        fields = self.mapsdb.get_resource_fields(resource_id)
-        print 'fields'
-        print fields
-        return json.dumps({'fields':fields})
-        #return {'fields': json.dumps(fields)}
-
-    def update_resource_fields(self):
-        user_dict = self._check_access()
-
-        fields = request.params.get("json")
-        print 'fields to update'
-        print fields
-        print type(fields)
-        fields = json.loads(fields).get("fields")
-        print fields
-        #fields = None
-        #try:
-        #    fields = json.loads(fields)
-        #except:
-        #    return
-        print 'after'
-        print fields
-
-        if not fields:
+        queryable = self.mapsdb.get_resource_queryable(resource_id)
+        if not queryable:
             return
 
-        self.mapsdb.update_resource_fields(fields)
-        return
-        #fields = self.mapsdb.get_resource_fields(resource_id)
-        #print 'fields'
-        #print fields
-        #return json.dumps({'fields':fields})
-     
-    def get_tree(tree):
-        if not tree.get("children"):
-            return {}
-        asd
+        fields = queryable.get('fields')
+
+        return json.dumps({'fields':fields, 'queryable':queryable})
 
     def _check_access(self):
         context, data_dict = self._get_context()

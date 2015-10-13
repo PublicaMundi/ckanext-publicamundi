@@ -1,16 +1,27 @@
-{% set visible = resource.visible or False %}
-{# field_num="3" field_names='{"root":["fielda", "fieldb", "fieldc"]}' field_default="fieldb" field_active='{"root":["fielda"]}' field_export='{"root":["fielda"]}' #}
-{# fields='{"fields":[{"name":"fielda", "title":"Field A", "default":true, "active":true, "export":false}, {"name":"fieldb", "title":"Field B", "active":true, "export":true}]}' #}
-
-<li class="dataset-item layer" id="{{resource.id}}" name_en="{{resource.name_en}}" name_el="{{resource.name_el}}"  visible="{{visible}}" >
+{% if h.lang() == 'el' %} 
+    {% set package_title = resource.package_title_el %} 
+    {% set organization_title = resource.organization_title_el %}
+    {% set res_name = resource.name_el %}
+{% else %} 
+    {% set package_title = resource.package_title_en %}
+    {% set organization_title = resource.organization_title_en %}
+    {% set res_name = resource.name_en %}
+{% endif %}
+<li class="dataset-item layer" data-id="{{resource.id}}" data-res-name="{{res_name}}" data-tree_node_caption_en="{{resource.tree_node_caption_en}}" data-tree_node_caption_el="{{resource.tree_node_caption_el}}" data-visible="{{resource.visible}}" data-package_title ="{{package_title}}" data-organization_title="{{organization_title}}"  {% if resource.visible %}hidden{% endif %}>
+ 
   {% block package_item_content %}
   <div class="dataset-content">
-
-      <h4 class="dataset-heading">{{ resource.name_en }}</h4> {# {% if package %}{{package}}{% endif %} 
-       {% if organization %}{{ organization }}{% endif %} 
-      {% if notes %}
-        <div> {{ notes }} </div>
-        {% endif %} #}
+      <ul class="map-dataset-content-ul">
+          <li>
+          {% if resource.package_name %} {% if h.lang() == 'el' %} {{ resource.package_title_el }} {% else %} {{ resource.package_title_en }} {% endif %} {% endif %} 
+          </li>
+          <li>{{ resource.name_en }}</li>
+    
+        <li>{% if resource.organization_name %} {% if h.lang() == 'el' %} {{ resource.organization_title_el }} {% else %} {{ resource.organization_title_en }}{% endif %}{% endif %}
+        </li>
+        <li> <input type="checkbox" name="layer-inactive" value="{{resource.name_en}}" {% if resource.visible == False %}checked {% endif %}>
+        </li>
+    </ul>
   </div>
-    {% endblock %}
+  {% endblock %}
 </li>
