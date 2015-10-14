@@ -1455,7 +1455,7 @@ a.tag:hover{
 .ui-draggable-dragging{
     //border: 1px #666 dotted;
     width: 120px;
-    max-height: 10px;
+    //max-height: 10px;
     overflow: hidden;
 }
 #map-admin-table{

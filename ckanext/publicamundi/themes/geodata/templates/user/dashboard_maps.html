@@ -26,7 +26,7 @@
                 </a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
                     <li>
-                    <a id="map-filter-layers-all" href="#"> {% trans %}<span class="new-resources"></span>All{% endtrans %}</a>
+                    <a id="map-filter-layers-all" href="#"> {% trans %}<span class="all-resources"></span>All{% endtrans %}</a>
                     </li>
                     
                     <li>
@@ -36,14 +36,14 @@
                     <li>
                     <a id="map-filter-layers-inactive" href="#"> {% trans %}<span class="ignored-resources"></span>Ignored{% endtrans %}</a>
                     </li>
-
                 </ul>
-                
                 
             </div>
             
             <div id="map-filter-layers-status" class="filter-list">
-                <span class="filtered pill label"> {{_('All')}}</span>
+                <span class="filtered pill label" id="map-filter-layers-status-all"> {% trans %}<span class="all-resources"></span>All{% endtrans %}</span>
+                <span hidden class="filtered pill label" id="map-filter-layers-status-new"> {% trans %}<span class="new-resources"></span>New{% endtrans %}</span>
+                <span hidden class="filtered pill label" id="map-filter-layers-status-ignored"> {% trans %}<span class="ignored-resources"></span>Ignored{% endtrans %}</span>
                 </div>
 
                 
@@ -108,20 +108,23 @@
             <h4>{{_('Fields')}}</h4>
             <span></span>
             <div id="map-options-fields-template">
-                <label>{{_('Template')}}</label><input id="map-options-fields-template-input" type="text" name="fields-template" ></input>
+                <label>{{_('Template')}}</label><textarea id="map-options-fields-template-input" type="text" name="fields-template" ></textarea>
             </div>
-            <form id="map-fields-form">
+            <form id="map-fields-form" hidden>
                 <table border="0" cellpadding="1" cellspacing="1" id="map-fields-table">
             <thead>
                 <td></td>
             </thead>
             <tbody>
+                <tr>
               <!--  <tr id="map-options-default">
               </tr>
               -->
             <tr id="map-options-activate">
+                <td>{{_('active')}}</td>
             </tr>
             <tr id="map-options-export">
+                <td>{{_('export')}}</td>
             </tr>
             </tbody>
         </table> 

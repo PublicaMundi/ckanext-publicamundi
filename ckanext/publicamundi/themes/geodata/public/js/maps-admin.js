@@ -74,21 +74,30 @@ jQuery(document).ready(function ($, _) {
             // listeners for status
             $('#map-filter-layers-all').on('click', function(e){
                 e.preventDefault();
-                $('#map-filter-layers-status .label').text('All');
+                //$('#map-filter-layers-status .label').text('All');
+                $('#map-filter-layers-status-ignored').hide();
+                $('#map-filter-layers-status-all').show();
+                $('#map-filter-layers-status-new').hide();
                 status_filter = 'all';
                 updateTable(SOURCE);
             });
 
             $('#map-filter-layers-new').on('click', function(e){
                 e.preventDefault();
-                $('#map-filter-layers-status .label').text('New');
+                //$('#map-filter-layers-status .label').text('New');
+                $('#map-filter-layers-status-ignored').hide();
+                $('#map-filter-layers-status-all').hide();
+                $('#map-filter-layers-status-new').show();
                 status_filter = 'new';
                 updateTable(SOURCE);
             });
 
             $('#map-filter-layers-inactive').on('click', function(e){
                 e.preventDefault();
-                $('#map-filter-layers-status .label').text('Ignored');
+                //$('#map-filter-layers-status .label').text('Ignored');
+                $('#map-filter-layers-status-ignored').show();
+                $('#map-filter-layers-status-all').hide();
+                $('#map-filter-layers-status-new').hide();
                 status_filter = 'inactive'; 
                 updateTable(SOURCE);
             });
@@ -592,9 +601,11 @@ jQuery(document).ready(function ($, _) {
         if (fields && fields.length){
                 
             $(".map-options-fields span").text("");
-            $('<td>default</td>').appendTo('#map-options-default');
-            $('<td>active</td>').appendTo('#map-options-activate');
-            $('<td>export</td>').appendTo('#map-options-export');
+            $('#map-fields-form').show();
+            //$('<td>default</td>').appendTo('#map-options-default');
+           
+            //$('<td>active</td>').appendTo('#map-options-activate');
+            //$('<td>export</td>').appendTo('#map-options-export');
             
             for (var idx in fields){
                 var field = fields[idx];
@@ -717,6 +728,8 @@ jQuery(document).ready(function ($, _) {
 
                 $('.map-options-bar').show();
                 $('#map-options-fields-template').hide();
+                $('#map-fields-template').hide();
+                $('#map-fields-form').hide();
                                 
                if (active.data.node){ 
                     $('.map-options-metadata').hide();
@@ -748,9 +761,11 @@ jQuery(document).ready(function ($, _) {
                     
                }
                 $('#map-fields-table thead').empty();
-                $('#map-options-default').empty();
-                $('#map-options-activate').empty();
-                $('#map-options-export').empty();
+                //$('#map-options-default').empty();
+                
+                $('#map-options-activate td:not(:first)').remove();
+                $('#map-options-export td:not(:first)').remove();
+                
                 $('<td></td>').appendTo('#map-fields-table thead');
 
                 $('#map-options-fields-template-input').val('');
