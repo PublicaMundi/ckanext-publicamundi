@@ -258,6 +258,11 @@ jQuery(document).ready(function ($, _) {
 
 
             $('#save-tree').on('click', function(e){
+                
+                console.log("RESOURCES");
+                console.log(resources);
+                console.log("TREE_NODS");
+                console.log(tree_nodes);
                 console.log("RES QUER");
                console.log(resources_queryable);
               console.log("RES FIELDS");

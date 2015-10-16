@@ -76,7 +76,7 @@ class MapsRecords(object):
 
             self.packages = Table('package',
                              self.metadata,
-                             #Column('the_geom', Geometry(4326)),
+                             Column('the_geom', Geometry(4326)),
                              Column('organization', Text, ForeignKey('organization.id')),
                              autoload=True,
                              autoload_with=self.engine)
@@ -115,7 +115,6 @@ class MapsRecords(object):
                            autoload_with=self.engine)
             
             # Do the mappings only once
-            # Why does it map class with two classes? (causes exception)
             try:
                 mapper(Organization, self.organizations)
                 mapper(Group, self.groups)
@@ -137,7 +136,7 @@ class MapsRecords(object):
                     # relation. Moreover, since this is a self-referencing relation, join_depth parameter must be also set in order to avoid
                     # querying the database for the parent of each group.
                     'parentRef': relation(TreeNode, uselist=False, remote_side=[self.tree_nodes.c.id], lazy=False, join_depth=1)
-                    })
+                })
                 
                 mapper(Resource, self.resources, properties = {
                     # M:1 relation
@@ -154,11 +153,14 @@ class MapsRecords(object):
                     'fields': relation(Field, lazy=False, backref='queryableRef', cascade="all, delete, delete-orphan")
                     })
             except Exception as ex:
-                print 'TRYING TO MAP AGAIN'
+                print 'couldn\' map tables to classes'
                 print ex
 
     def get_all_records(self, Table):
+        print 'all records'
+        print Table
         db_entries = self.session.query(Table).all()
+        print db_entries
         records = []
         for db_entry in db_entries:
            records.append(self._as_dict(db_entry))
@@ -198,14 +200,22 @@ class MapsRecords(object):
 
     def upsert_records(self, records, Table):
         try:
+            print 'records'
+            print self.tree_nodes
+            print self.session.query(TreeNode).all()
             for rec in records:
+                print rec
+                print rec.get("id")
+                print Table
                 db_entry = self.session.query(Table).get(rec.get("id"))
+                print db_entry
                 if db_entry:
                     db_entry = self._update_object_with_dict(db_entry, rec)
                 else:
                     db_entry = Table()
                     db_entry = self._update_object_with_dict(db_entry, rec)
                     self.session.add(db_entry)
+            print 'before commit'
             self.session.commit()
         except Exception as ex:
             print 'exception'
@@ -298,6 +308,9 @@ class MapsRecords(object):
         return self.update_records(tree_nodes, TreeNode)
 
     def upsert_tree_nodes(self, tree_nodes):
+        print 'TreeNode'
+        print TreeNode
+        print tree_nodes
         return self.upsert_records(tree_nodes, TreeNode)
 
     # Helpers
@@ -314,6 +327,7 @@ class MapsRecords(object):
     def _update_object_with_dict(self, obj, dct):
         for key, value in dct.iteritems():
             setattr(obj, key, value)
+        return obj
 
     def _filter_dict(self, dict):
         d = {}

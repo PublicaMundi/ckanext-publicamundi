@@ -1462,7 +1462,7 @@ a.tag:hover{
     padding: 10px;
 }
 #map-admin form{
-    margin: 0;
+    margin: 10px 0;
 }
 .tree{
     margin-top: 20px;
@@ -1561,7 +1561,7 @@ background: green;
     padding-left: 10px;
 }
 .map-options-fields{
-    max-width: 100%;
+    max-width: 470px;
     overflow-x: scroll;
     overflow-y: hidden;
     margin-bottom: 10px;
@@ -1577,7 +1577,16 @@ background: green;
 #map-admin-table .layer{
     cursor: move;
 }
-
+#map-admin-table .dataset-list{
+    max-height: 458px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+#map-admin-right{
+    max-height: 660px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
 .map-admin-table .alt{
     background: 'ccc';
 }
