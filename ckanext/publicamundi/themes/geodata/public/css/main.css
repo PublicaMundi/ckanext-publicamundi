@@ -1540,6 +1540,10 @@ a.tag:hover{
     margin-top: 10px;
     padding: 10px;
 }
+.map-options-bar-content{
+    max-height: 420px;
+    overflow-y: auto;
+}
 .map-options-save{
     margin-top:20px;
 }
@@ -1571,7 +1575,7 @@ a.tag:hover{
     cursor: move;
 }
 #map-admin-table .dataset-list{
-    max-height: 458px;
+    max-height: 708px;
     overflow-x: hidden;
     overflow-y: auto;
 }
