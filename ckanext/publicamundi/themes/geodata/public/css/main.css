@@ -1465,27 +1465,18 @@ a.tag:hover{
     margin: 10px 0;
 }
 .tree{
-    margin-top: 20px;
+    max-height: 250px;
+    width: 420px;
+    overflow-x:hidden;
+    overflow-y: auto;
+
     margin-right: 20px;
 }
 #tree{
-    width: 100%;
     margin-bottom: 20px;
-}
-/*
- * #tree .fancytree-folder .fancytree-expander{
-    background: red;
+    width: 100%;
 }
 
-#tree .fancytree-folder .fancytree-icon{
-
-background: blue;
-}
-
-#tree .fancytree-ico-c .fancytree-icon{
-background: green;
-}
-*/
 #map-fields-table{
 }
 #map-fields-table td {
@@ -1546,7 +1537,7 @@ background: green;
 
 .map-options-bar{
     border-top: 2px #4E59A4 solid;
-    margin-top: 100px;
+    margin-top: 10px;
     padding: 10px;
 }
 .map-options-save{
@@ -1561,10 +1552,12 @@ background: green;
     padding-left: 10px;
 }
 .map-options-fields{
+        margin-bottom: 10px;
+}
+#map-fields-form{
     max-width: 470px;
     overflow-x: scroll;
     overflow-y: hidden;
-    margin-bottom: 10px;
 }
 #map-admin label, #map-admin input{
     display: inline;
@@ -1579,11 +1572,6 @@ background: green;
 }
 #map-admin-table .dataset-list{
     max-height: 458px;
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-#map-admin-right{
-    max-height: 660px;
     overflow-x: hidden;
     overflow-y: auto;
 }

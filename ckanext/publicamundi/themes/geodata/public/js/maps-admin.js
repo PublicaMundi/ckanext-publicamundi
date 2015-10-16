@@ -606,7 +606,7 @@ jQuery(document).ready(function ($, _) {
         if (fields && fields.length){
                 
             $(".map-options-fields span").text("");
-            $('#map-fields-form').show();
+            $('.map-options-fields').show();
             //$('<td>default</td>').appendTo('#map-options-default');
            
             //$('<td>active</td>').appendTo('#map-options-activate');
@@ -669,7 +669,7 @@ jQuery(document).ready(function ($, _) {
             });
             */
 
-            $('#map-options-fields-template-input').on('input',function(e){
+            $('#map-options-template-input').on('input',function(e){
             
                 //active.setTitle($('#map-name-translation-en').val());
                 var title = active.title;
@@ -732,18 +732,13 @@ jQuery(document).ready(function ($, _) {
             active = data.node;
 
                 $('.map-options-bar').show();
-                $('#map-options-fields-template').hide();
+                $('#map-options-template').hide();
                 $('#map-fields-template').hide();
-                $('#map-fields-form').hide();
+                $('.map-options-fields').hide();
+                $('.map-options-metadata').hide();
                                 
-               if (active.data.node){ 
-                    $('.map-options-metadata').hide();
-                    $('.map-options-fields').hide();
-
-               }
-               else{
+               if (!active.data.node){ 
                     $('.map-options-metadata').show();
-                    $('.map-options-fields').show();
               
                     if (active.data.package_title){ 
                         $('#map-options-package-title').html(active.data.package_title);
@@ -776,6 +771,7 @@ jQuery(document).ready(function ($, _) {
                 $('#map-options-fields-template-input').val('');
                 $('#map-name-translation-en').val('');
                 $('#map-name-translation-el').val('');
+                
                 // Node
                 if (data.node.data.node){
                         $('#map-name-translation-en').val(data.node.data.caption_en);
@@ -820,8 +816,9 @@ jQuery(document).ready(function ($, _) {
                                     active.data.queryable_id = queryable.id;
                                     template = queryable['template'];
                                     
-                                    $('#map-options-fields-template').show();
-                                    $('#map-options-fields-template-input').val(template);
+                                    $('.map-options-fields').show();
+                                    $('#map-options-template').show();
+                                    $('#map-options-template-input').val(template);
                                 }
                                 catch(err){
                                     active_fields = null;

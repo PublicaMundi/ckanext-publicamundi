@@ -63,8 +63,6 @@
         <div class="map-options-save">
             <div id="map-loader-primary" class="ajax-loader" style="display:none;float: right"></div>
         </div>
-
-        <br> 
         <div class="tree">
         <table id="tree">
                 <thead>
@@ -104,13 +102,14 @@
             <input class="hidden pull-right" type="submit" value="{{ _('OK')}}"></input>
            </form> 
         </div>
-        <div class="map-options-fields">
-            <span></span>
-            <div id="map-options-fields-template">
-                <label>{{_('Template')}}</label><textarea id="map-options-fields-template-input" type="text" name="fields-template" ></textarea>
+            <div id="map-options-template">
+                <label>{{_('Template')}}</label><textarea id="map-options-template-input" type="text" name="fields-template" ></textarea>
             </div>
+            
+            <div class="map-options-fields" hidden>
+            <span></span>
             <h4>{{_('Fields')}}</h4>
-            <form id="map-fields-form" hidden>
+            <form id="map-fields-form">
                 <table border="0" cellpadding="1" cellspacing="1" id="map-fields-table">
             <thead>
                 <td></td>
