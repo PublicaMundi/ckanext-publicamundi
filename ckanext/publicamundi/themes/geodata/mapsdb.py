@@ -1,28 +1,14 @@
 #!/usr/bin/python
 
-import sys
-import os
-import json
-import geojson
-import csv
-import argparse
-import urlparse
-import requests
-import pprint
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Boolean
 from sqlalchemy.types import Text, BigInteger
 from sqlalchemy.schema import ForeignKey
 from sqlalchemy.sql import delete
 from sqlalchemy.orm import sessionmaker, mapper, relation
-from sqlalchemy.orm.properties import ColumnProperty
-from sqlalchemy.ext.declarative import declarative_base
 
 from pylons import config
 
-from ckanext.publicamundi.model import Base
-
-from geoalchemy import GeometryColumn, Geometry, WKTSpatialElement
-from shapely.geometry import shape
+from geoalchemy import Geometry
 
 # Declare data model
 class Organization(object):

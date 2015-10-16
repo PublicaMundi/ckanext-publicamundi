@@ -12,7 +12,7 @@ from ckan.lib import helpers, munge
 from ckan.lib.base import c
 from ckan.lib.helpers import render_datetime, resource_preview, url_for_static
 
-import ckanext.publicamundi.themes.geodata.mapsdb as db
+import ckanext.publicamundi.themes.geodata.mapsdb as mapsdb
 import ckanext.publicamundi.lib.template_helpers as ext_template_helpers
 
 def most_recent_datasets(limit=10):
@@ -253,7 +253,7 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
         _maps_url = config.get('ckanext.publicamundi.themes.geodata.maps_url')
         
         # Initialize maps db
-        _maps_db = db.MapsRecords()
+        _maps_db = mapsdb.MapsRecords()
         #self.mapsdb = db.MapsRecords()
         #self.mapsdb._initialize_session()
         #self.mapsdb._initialize_model()

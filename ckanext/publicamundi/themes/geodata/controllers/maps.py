@@ -4,11 +4,9 @@ import os.path
 from ckan.lib.base import (
     c, BaseController, render, request, abort, redirect)
 import ckan.plugins.toolkit as toolkit
-
 import ckan.new_authz as new_authz
+
 from ckanext.publicamundi.themes.geodata.plugin import get_maps_db
-#import ckanext.publicamundi.themes.geodata.mapsdb as mapsdb
-#from ckanext.publicamundi.themes.geodata.plugins import get_maps_records
 
 _ = toolkit._
 NotFound = toolkit.ObjectNotFound
