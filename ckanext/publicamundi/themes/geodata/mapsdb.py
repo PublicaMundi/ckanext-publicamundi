@@ -53,7 +53,7 @@ class MapsRecords(object):
         self._initialize_model()
 
     def _initialize_session(self):
-        engine = config.get('ckanext.publicamundi.maps_db')
+        engine = config.get('ckanext.publicamundi.mapsclient_db')
         self.engine = create_engine(engine)
         session_factory = sessionmaker(bind=self.engine)
 
