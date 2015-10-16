@@ -1434,6 +1434,158 @@ a.tag:hover{
 .additional-info h3{
     margin-top:6px;
 }
+/* Map admin page */
+#map-admin{
+    margin: 10px 0;
+    display: flex;
+    border: 2px #4E59A4 solid;
+}
+#map-admin-left{
+    flex: 1;
+    //max-height: 100vh;
+    //overflow: scroll;
+}
+
+#map-admin-right{
+    flex: 1;
+    //max-height: 100vh;
+    //overflow: scroll;
+    border-left: 2px #4E59A4 solid;
+}
+.ui-draggable-dragging{
+    //border: 1px #666 dotted;
+    width: 120px;
+    //max-height: 10px;
+    overflow: hidden;
+}
+#map-admin-table{
+    padding: 10px;
+}
+#map-admin form{
+    margin: 10px 0;
+}
+.tree{
+    max-height: 250px;
+    width: 420px;
+    overflow-x:hidden;
+    overflow-y: auto;
+
+    margin-right: 20px;
+}
+#tree{
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+#map-fields-table{
+}
+#map-fields-table td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 5px;               
+}
+#map-fields-table input[type='checkbox'], #map-fields-table input[type='radio']{ 
+    top:0;
+}
+#map-fields-table tr {
+    height: 25px;   
+}
+
+#map-filter-layers{
+}
+#map-filter-layers-status{
+    margin: 7px 10px;
+    width: auto;
+    display: inline-block;
+}
+
+#map-layers-titles{
+    width: 100%;
+    margin: 5px 0;
+}
+
+#map-layers-titles span{
+    font-weight: bold;
+    font-size: 18px;
+}
+#map-layers{
+    margin: 20px -10px 0 -10px;
+}
+#map-layers h5{
+    margin:0;
+}
+.map-dataset-content-ul{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: table;
+    table-layout: fixed;
+    overflow: hidden;
+}
+.map-dataset-content-ul li{
+    width: 115px;
+    display: table-cell;
+    text-align: center;
+    overflow: hidden;
+    word-wrap: break-word;
+}
+.map-dataset-content-ul li:last-child{
+    display: table-cell;
+    text-align: center;
+    width: 85px;
+}
+
+.map-options-bar{
+    border-top: 2px #4E59A4 solid;
+    margin-top: 10px;
+    padding: 10px;
+}
+.map-options-bar-content{
+    max-height: 420px;
+    overflow-y: auto;
+}
+.map-options-save{
+    margin-top:20px;
+}
+.map-options-name{
+    //margin: 2px 0;
+    margin-bottom: 10px;
+}
+.map-options-tree{
+    padding-top: 10px;
+    padding-left: 10px;
+}
+.map-options-fields{
+        margin-bottom: 10px;
+}
+#map-fields-form{
+    max-width: 470px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+#map-admin label, #map-admin input{
+    display: inline;
+    margin-right: 10px;
+}
+
+#map-name-translation input[type="text"]{
+    width: 30%;
+}
+#map-admin-table .layer{
+    cursor: move;
+}
+#map-admin-table .dataset-list{
+    max-height: 708px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.map-admin-table .alt{
+    background: 'ccc';
+}
+#save-tree{
+    margin-bottom:15px;
+    margin-right:10px;
+}
 /* Search page */
 
 .search-form .filter-list{

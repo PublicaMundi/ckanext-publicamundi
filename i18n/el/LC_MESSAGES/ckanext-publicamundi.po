@@ -1986,6 +1986,66 @@ msgstr "Μοιραστείτε"
 msgid "My Topics"
 msgstr "Οι θεματικές μου"
 
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:18
+msgid "Available layers"
+msgstr "Διαθέσιμα θεματικά επίπεδα"
+
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:29
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:44
+msgid "<span class=\"all-resources\"></span>All"
+msgstr "Όλα"
+
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:33
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:45
+msgid "<span class=\"new-resources\"></span>New"
+msgstr "Καινούρια"
+
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:37
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:46
+msgid "<span class=\"ignored-resources\"></span>Ignored"
+msgstr "Παραβλεπόμενα"
+
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:56
+msgid "Visible layers"
+msgstr "Ορατά θεματικά επίπεδα"
+
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:58
+msgid "Add node"
+msgstr "Κόμβος"
+
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:59
+msgid "Add subnode"
+msgstr "Υποκόμβος"
+
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:62
+msgid "Save"
+msgstr "Αποθήκευση"
+
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:81
+msgid "Selected layer/node options"
+msgstr "Επιλογές ενεργού θεματικού επιπέδου/κόμβου"
+
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:100
+msgid "Captions"
+msgstr "Φιλικά ονόματα"
+
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:108
+msgid "Fields"
+msgstr "Πεδία"
+
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:111
+msgid "Template"
+msgstr "Πρότυπο"
+
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:124
+msgid "active"
+msgstr "ενεργό"
+
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:127
+msgid "export"
+msgstr "εξαγωγή"
+
+#: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:108
 #: ckanext/publicamundi/themes/geodata/templates/spatial/snippets/spatial_query.html:18
 msgid "Clear"
 msgstr "Εκκαθάριση"

@@ -1,0 +1,141 @@
+{% extends "user/dashboard.html" %}
+{% set sysadmin = c.is_sysadmin %}
+
+{% block styles %}
+{{ super() }}
+<link href="/css/ui.fancytree.min.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block primary_content_inner %}
+
+{# {% set resources = [{'id':123, 'title':'Blabla', 'package':'PACKAGE','organization':'ACME'}, {'id':456, 'title': 'Bloblo'}]%} #}
+{% set resources = c.resources %}
+{% if sysadmin %}
+
+<div id="map-admin">
+    <div id="map-admin-left">
+        <div id="map-admin-table">
+            <h2>{{_('Available layers')}}</h2>
+            <hr>
+
+            <div id="map-filter-layers" class="btn-group">
+            <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="icon-filter"></i>
+                <span class="facet">{{_('Status')}}</span>
+                <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+                    <li>
+                    <a id="map-filter-layers-all" href="#"> {% trans %}<span class="all-resources"></span>All{% endtrans %}</a>
+                    </li>
+                    
+                    <li>
+                    <a id="map-filter-layers-new" href="#"> {% trans %}<span class="new-resources"></span>New{% endtrans %}</a>
+                    </li>
+                   
+                    <li>
+                    <a id="map-filter-layers-inactive" href="#"> {% trans %}<span class="ignored-resources"></span>Ignored{% endtrans %}</a>
+                    </li>
+                </ul>
+                
+            </div>
+            
+            <div id="map-filter-layers-status" class="filter-list">
+                <span class="filtered pill label" id="map-filter-layers-status-all"> {% trans %}<span class="all-resources"></span>All{% endtrans %}</span>
+                <span hidden class="filtered pill label" id="map-filter-layers-status-new"> {% trans %}<span class="new-resources"></span>New{% endtrans %}</span>
+                <span hidden class="filtered pill label" id="map-filter-layers-status-ignored"> {% trans %}<span class="ignored-resources"></span>Ignored{% endtrans %}</span>
+                </div>
+
+                
+                {% snippet 'snippets/maps_admin_list.html', resources=resources %}   
+    </div>
+</div>
+
+<div id="map-admin-right">
+    <div class="map-options-tree">
+    <h2>{{_('Visible layers')}}</h2>
+    <hr>
+        <button class="btn" id="add-parent-node">{{ _('Add node')}}</button>
+        <button class="btn" id="add-child-node">{{ _('Add subnode')}}</button>
+        <!-- <button class="btn" id="rename-node">{{ _('Rename')}}</button> -->
+        <button class="btn" id="delete-node">{{ _('Delete')}}</button>
+        <button class="pull-right btn btn-primary" id="save-tree">{{ _('Save')}}</button>
+        <div class="map-options-save">
+            <div id="map-loader-primary" class="ajax-loader" style="display:none;float: right"></div>
+        </div>
+        <div class="tree">
+        <table id="tree">
+                <thead>
+        <tr> <th></th> </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    </div>
+    </div>
+
+
+    <div id="map-options-bar" class="map-options-bar" hidden>
+        <h3>{{_('Selected layer/node options')}}</h3>
+        <hr>
+        <div id="map-loader-secondary" class="ajax-loader" style="display:none; float:right"></div>
+    <div class="map-options-bar-content">
+    <div class="map-options-metadata">
+        <h4>{{_('Metadata')}}</h4> 
+        <div id="map-options-package">
+            <span><strong>{{_('Package')}}:</strong></span>   <span id="map-options-package-title"></span>
+        </div>
+        <div id="map-options-resource">
+            <span><strong>{{_('Resource')}}:</strong></span>   <span id="map-options-resource-title"></span>
+        </div>
+
+        <div id="map-options-organization">
+            <span><strong>{{_('Organization')}}:</strong></span>   <span id="map-options-organization-title"></span>
+        </div>
+    </div>
+
+        <div class="map-options-name">
+            <h4>{{_('Captions')}}</h4>
+           <form id="map-name-translation">
+               <label>en</label><input id="map-name-translation-en" type="text" name="name-en" ></input>
+                <label>el</label><input id="map-name-translation-el" type="text" name="name-el"></input>
+            <input class="hidden pull-right" type="submit" value="{{ _('OK')}}"></input>
+           </form> 
+        </div>
+            <div id="map-options-template">
+                <label>{{_('Template')}}</label><textarea rows="2" cols="100" id="map-options-template-input" type="text" name="fields-template" ></textarea>
+            </div>
+            
+            <div class="map-options-fields" hidden>
+            <span></span>
+            <h4>{{_('Fields')}}</h4>
+            <form id="map-fields-form">
+                <table border="0" cellpadding="1" cellspacing="1" id="map-fields-table">
+            <thead>
+                <td></td>
+            </thead>
+            <tbody>
+              <!--  <tr id="map-options-default">
+              </tr>
+              -->
+            <tr id="map-options-activate">
+                <td>{{_('active')}}</td>
+            </tr>
+            <tr id="map-options-export">
+                <td>{{_('export')}}</td>
+            </tr>
+            </tbody>
+        </table> 
+        <input class="hidden pull-right" type="submit" value="{{ _('OK')}}"></input>
+    </form>
+        </div>
+    </div>
+    </div>
+</div>
+
+</div>
+{% resource 'ckanext-publicamundi-geodata-theme/maps-admin' %}
+{% else %}
+    {{ _('Not authorized to see this page') }} 
+{% endif %}
+{% endblock %}
