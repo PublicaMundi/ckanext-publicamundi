@@ -16,9 +16,7 @@ NotAuthorized = toolkit.NotAuthorized
 class Controller(BaseController):
     def __init__(self):
         self.mapsdb = get_maps_db()
-        #self.resources = None
         self.resources = self.mapsdb.get_resources_with_packages_organizations()
-        self.tree_nodes = self.mapsdb.get_tree_nodes()
 
     def show_dashboard_maps(self):
         user_dict = self._check_access()
@@ -83,7 +81,8 @@ class Controller(BaseController):
                 "title": "root"
                 }
 
-        for node in self.tree_nodes:
+        tree_nodes = self.mapsdb.get_tree_nodes()
+        for node in tree_nodes:
             print 'NODE'
             print node
             print 'SOURCE'
@@ -106,11 +105,13 @@ class Controller(BaseController):
                 xnode = find_tree_node_by_key(source, res.get("tree_node_id"))
                 if xnode:
                     xnode.get("children").append(new_tree_resource(xnode, res))
+                    # sort to display correct index order
                     xnode.update({"children": sorted(xnode.get("children"), key=get_index)})
 
                 else:
-                    print 'oops something went wrong, tree node not found for visible layer'
-        next_tree_node_id = self.tree_nodes[-1].get("id")+1
+                    raise 'oops something went wrong, tree node not found for visible layer'
+
+        next_tree_node_id = tree_nodes[-1].get("id")+1
 
         return json.dumps({'source': source, 'tree_node_id': next_tree_node_id})
 
