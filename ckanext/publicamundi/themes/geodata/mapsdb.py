@@ -62,7 +62,7 @@ class MapsRecords(object):
 
             self.packages = Table('package',
                              self.metadata,
-                             Column('the_geom', Geometry(4326)),
+                             #Column('the_geom', Geometry(4326)),
                              Column('organization', Text, ForeignKey('organization.id')),
                              autoload=True,
                              autoload_with=self.engine)
@@ -268,7 +268,13 @@ class MapsRecords(object):
         return self.upsert_records(queryable, Queryable)
 
     def get_tree_nodes(self):
-        return self.get_all_records(TreeNode)
+        #return self.get_all_records(TreeNode)
+        db_entries = self.session.query(TreeNode).order_by(TreeNode.id.asc()).all()
+        records = []
+        for db_entry in db_entries:
+           records.append(self._as_dict(db_entry))
+        return records
+
 
     def delete_tree_nodes(self, tree_nodes):
         return self.delete_records(tree_nodes, TreeNode)

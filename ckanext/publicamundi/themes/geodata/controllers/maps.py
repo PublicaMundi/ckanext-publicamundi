@@ -12,35 +12,112 @@ _ = toolkit._
 NotFound = toolkit.ObjectNotFound
 NotAuthorized = toolkit.NotAuthorized
 
-FILE_PATH = '/var/local/ckan/default/ofs/storage/mapconfig.json'
 
 class Controller(BaseController):
     def __init__(self):
         self.mapsdb = get_maps_db()
+        #self.resources = None
+        self.resources = self.mapsdb.get_resources_with_packages_organizations()
+        self.tree_nodes = self.mapsdb.get_tree_nodes()
 
     def show_dashboard_maps(self):
         user_dict = self._check_access()
-        resources = self.mapsdb.get_resources_with_packages_organizations()
-        self._setup_template_variables(user_dict, resources)
-
+        self._setup_template_variables(user_dict)
         return render('user/dashboard_maps.html')
 
     def get_maps_configuration(self):
+        def new_tree_node(tree_pos, node):
+            if node.get("parentRef"):
+                del node["parentRef"]
+            node["node"] = True
+            return {
+                "children": [],
+                "parent": tree_pos.get("key"),
+                "key": node.get("id"),
+                "title": node.get("caption_en"),
+                "expanded" :True,
+                "folder": True,
+                "data": node
+                }
+
+        def new_tree_resource(tree_pos, res):
+            if res.get("packageRef"):
+                del res["packageRef"]
+            if res.get("queryableRef"):
+                del res["queryableRef"]
+            if res.get("treeNodeRef"):
+                del res["treeNodeRef"]
+
+            res["node"] = False
+            return {
+                "children": [],
+                "parent": tree_pos.get("key"),
+                "key": res.get("id"),
+                "title": res.get("tree_node_caption_en"),
+                "folder": False,
+                "data": res
+                }
+
+        def find_tree_node_by_key(tree, key):
+            if tree.get("key") == key:
+                return tree
+            elif not tree.get("children"):
+                return None
+            else:
+                for child in tree.get("children"):
+                    if find_tree_node_by_key(child, key):
+                        return find_tree_node_by_key(child, key)
+        def get_index(item):
+            if item.get("data"):
+                if item.get("data").get("index"):
+                    return item.get("data").get("index")
+                elif item.get("data").get("tree_node_index"):
+                    return item.get("data").get("tree_node_index")
+
         user_dict = self._check_access()
 
-        # try to load json config file from previous session
-        if os.path.exists(FILE_PATH):
-            with open(FILE_PATH, 'r') as json_data_file:
-                data = json_data_file.read()
-                return data
-        else:
-            return '[]'
+        source = {
+                "children": [],
+                "expanded": True,
+                "key": "root",
+                "title": "root"
+                }
+
+        for node in self.tree_nodes:
+            print 'NODE'
+            print node
+            print 'SOURCE'
+            print source
+            if node.get("parent") == None:
+                source.get("children").append(new_tree_node(source, node))
+                #source.update({"children": sorted(source.get("children"), key=get_index)})
+            else:
+                xnode = find_tree_node_by_key(source, node.get("parent"))
+                print 'xnode'
+                print xnode
+                if xnode:
+                    xnode.get("children").append(new_tree_node(xnode, node))
+                    #xnode.update({"children": sorted(xnode.get("children"), key=get_index)})
+                else:
+                    raise 'oops something went wrong, tree node not found for visible node'
+
+        for res in self.resources:
+            if res.get("visible") == True:
+                xnode = find_tree_node_by_key(source, res.get("tree_node_id"))
+                if xnode:
+                    xnode.get("children").append(new_tree_resource(xnode, res))
+                    xnode.update({"children": sorted(xnode.get("children"), key=get_index)})
+
+                else:
+                    print 'oops something went wrong, tree node not found for visible layer'
+        next_tree_node_id = self.tree_nodes[-1].get("id")+1
+
+        return json.dumps({'source': source, 'tree_node_id': next_tree_node_id})
 
     def save_maps_configuration(self):
         user_dict = self._check_access()
 
         # read request parameters
-        config = request.params.get("config")
 
         resources = request.params.get("resources")
         if not resources:
@@ -61,11 +138,6 @@ class Controller(BaseController):
         if not resources_queryable:
             resources_queryable = {}
         resources_queryable = json.loads(resources_queryable)
-
-        # save json config file for internal use
-        if config:
-            with open(FILE_PATH, 'w') as json_data_file:
-                    json_data_file.write(config.encode('utf-8'))
 
         # transform dicts to lists
         res_list = []
@@ -145,9 +217,9 @@ class Controller(BaseController):
         data_dict = {'user_obj': c.userobj}
         return context, data_dict
 
-    def _setup_template_variables(self, user_dict, resources):
+    def _setup_template_variables(self, user_dict):
 
         c.is_sysadmin = new_authz.is_sysadmin(c.user)
         c.user_dict = user_dict
         c.is_myself = user_dict['name'] == c.user
-        c.resources = resources
+        c.resources = self.resources

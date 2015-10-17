@@ -44,7 +44,10 @@ jQuery(document).ready(function ($, _) {
             success: function(res) {
                 try {
                     res = JSON.parse(res);
-                    SOURCE = res.config || {};
+                    //SOURCE = res.config || {};
+                    SOURCE = res.source || [];
+                    console.log('SOURCE');
+                    console.log(SOURCE);
                 }
                 catch(err) {
                     console.log('error parsing json');
@@ -60,6 +63,8 @@ jQuery(document).ready(function ($, _) {
             }
             
             table = initTable(SOURCE);
+            console.log("SOURCE");
+            console.log(SOURCE);
             //updateTable(SOURCE);
             tree = initTree();
             root = tree.fancytree("getRootNode");
@@ -139,7 +144,7 @@ jQuery(document).ready(function ($, _) {
                     active.setActive(false);
                     //active.setSelected(false);
                     //active = null;
-                    $('.map-options-bar').hide();
+                    $('.map-options-bar-content').hide();
                 }
             }
             });
@@ -310,13 +315,14 @@ jQuery(document).ready(function ($, _) {
                     });
 
                     //dirty_tree = false;
-                    var d = tree.fancytree("getTree").toDict(true);
-                    var dict = { tree_node_id: tree_node_id, config: d};
+                    //var d = tree.fancytree("getTree").toDict(true);
+                    //var dict = { tree_node_id: tree_node_id, config: d};
                     $.ajax({
                         url: '/publicamundi/util/save_maps_configuration',
                         type: 'POST',
                         //data: {dirty:JSON.stringify({bool:dirty_tree}), resources:JSON.stringify({resources:resources}), json: JSON.stringify(dict)},
-                        data: {resources:JSON.stringify(resources), tree_nodes: JSON.stringify(tree_nodes), resources_fields:JSON.stringify(resources_fields), resources_queryable: JSON.stringify(resources_queryable), config: JSON.stringify(dict)},
+                        //data: {resources:JSON.stringify(resources), tree_nodes: JSON.stringify(tree_nodes), resources_fields:JSON.stringify(resources_fields), resources_queryable: JSON.stringify(resources_queryable), config: JSON.stringify(dict)},
+                        data: {resources:JSON.stringify(resources), tree_nodes: JSON.stringify(tree_nodes), resources_fields:JSON.stringify(resources_fields), resources_queryable: JSON.stringify(resources_queryable)},
                         beforeSend: loadStart,
                         complete: loadEnd,
                         success: function(res) {
@@ -406,7 +412,7 @@ jQuery(document).ready(function ($, _) {
             title = dict.tree_node_caption_en;
         }
         var added = parent.addChildren({
-            title: title,
+            title: String(title),
             key: dict.id,
             folder: false,
             data: dict,
@@ -731,7 +737,7 @@ jQuery(document).ready(function ($, _) {
 
             active = data.node;
 
-                $('.map-options-bar').show();
+                $('.map-options-bar-content').show();
                 $('#map-options-template').hide();
                 $('#map-fields-template').hide();
                 $('.map-options-fields').hide();
@@ -889,6 +895,9 @@ jQuery(document).ready(function ($, _) {
             var source = data.otherNode;
             // handle moving nodes/resources
             // update data fields when moving nodes/resources around
+            console.log('src target');
+            console.log(source);
+            console.log(target);
             if (target.data.node === true){
                 // target is node
                 if (source.data.node === true){
