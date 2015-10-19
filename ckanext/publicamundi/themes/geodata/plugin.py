@@ -12,6 +12,7 @@ from ckan.lib import helpers, munge
 from ckan.lib.base import c
 from ckan.lib.helpers import render_datetime, resource_preview, url_for_static
 
+import ckanext.publicamundi.themes.geodata.mapsdb as mapsdb
 import ckanext.publicamundi.lib.template_helpers as ext_template_helpers
 
 def most_recent_datasets(limit=10):
@@ -55,9 +56,13 @@ def get_contact_point(pkg):
 
 _feedback_form_en = None
 _feedback_form_el = None
-_maps_url = None
 _news_url = None
 _ratings_enabled = None
+_maps_url = None
+_maps_db = None
+
+def get_maps_db():
+    return _maps_db
 
 def feedback_form():
     locale = helpers.lang()
@@ -228,7 +233,7 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
         }
     
     # IConfigurer
-    
+
     def update_config(self, config):
 
         # Add this plugin's templates dir to CKAN's extra_template_paths, so
@@ -242,12 +247,17 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
     def configure(self, config):
         '''Pass configuration to plugins and extensions'''
 
-        global _feedback_form_en, _feedback_form_el, _maps_url
+        global _feedback_form_en, _feedback_form_el, _maps_url, _maps_db
 
+        _ratings_enabled = toolkit.asbool(config.get('ckanext.publicamundi.package_rating', False))
         _feedback_form_en = config.get('ckanext.publicamundi.themes.geodata.feedback_form_en')
         _feedback_form_el = config.get('ckanext.publicamundi.themes.geodata.feedback_form_el')
         _maps_url = config.get('ckanext.publicamundi.themes.geodata.maps_url')
-        _ratings_enabled = toolkit.asbool(config.get('ckanext.publicamundi.package_rating', False))
+        # Initialize maps db
+        _maps_db = mapsdb.MapsRecords()
+        #self.mapsdb = db.MapsRecords()
+        #self.mapsdb._initialize_session()
+        #self.mapsdb._initialize_model()
         return
 
     # IRoutes
@@ -256,9 +266,16 @@ class GeodataThemePlugin(plugins.SingletonPlugin):
         mapper.connect('dataset_apis', '/dataset/developers/{id}', controller= 'ckanext.publicamundi.themes.geodata.controllers.package:PackageController', action='package_apis')
         mapper.connect('dataset_contact_form', '/dataset/contact/{id}', controller= 'ckanext.publicamundi.themes.geodata.controllers.contact:Controller', action='contact_form')
         #mapper.connect('preview_openlayers', '/preview_openlayers/{id}/{resource_id}', controller= 'ckanext.publicamundi.themes.geodata.controllers.package:PackageController', action='preview_openlayers')
-        mapper.connect('applications', '/applications', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='applications')
+        mapper.connect('user_dashboard_maps', '/dashboard/maps', controller= 'ckanext.publicamundi.themes.geodata.controllers.maps:Controller', action='show_dashboard_maps')
         mapper.connect('send_email', '/publicamundi/util/send_email', controller= 'ckanext.publicamundi.themes.geodata.controllers.contact:Controller', action='send_email')
         mapper.connect('generate_captcha', '/publicamundi/util/generate_captcha', controller= 'ckanext.publicamundi.themes.geodata.controllers.contact:Controller', action='generate_captcha')
+        mapper.connect('applications', '/applications', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='applications')
+        mapper.connect('get-maps-configuration', '/publicamundi/util/get_maps_configuration', controller= 'ckanext.publicamundi.themes.geodata.controllers.maps:Controller', action='get_maps_configuration')
+        mapper.connect('save-maps-configuration', '/publicamundi/util/save_maps_configuration', controller= 'ckanext.publicamundi.themes.geodata.controllers.maps:Controller', action='save_maps_configuration')
+        #mapper.connect('get-resource-fields', '/publicamundi/util/get_resource_fields', controller= 'ckanext.publicamundi.themes.geodata.controllers.maps:Controller', action='get_resource_fields')
+        mapper.connect('get-resource-queryable', '/publicamundi/util/get_resource_queryable', controller= 'ckanext.publicamundi.themes.geodata.controllers.maps:Controller', action='get_resource_queryable')
+        #mapper.connect('update-resource-fields', '/publicamundi/util/update_resource_fields', controller= 'ckanext.publicamundi.themes.geodata.controllers.maps:Controller', action='update_resource_fields')
+        #mapper.connect('update-resources', '/publicamundi/util/update_resources', controller= 'ckanext.publicamundi.themes.geodata.controllers.maps:Controller', action='update_resources')
         #mapper.connect('maps', '/maps', controller= 'ckanext.publicamundi.themes.geodata.controllers.static:Controller', action='redirect_maps' )
         #mapper.redirect('maps', 'http://http://83.212.118.10:5000/maps')
         #mapper.connect('maps', '/maps')

@@ -1,0 +1,17 @@
+{% if resources %}
+<div id="map-layers">
+    <form id="map-admin-layers-inactive">
+      <ul class="map-dataset-content-ul">
+          <li><h4> {{_('Package')}}</h4></li>
+          <li> <h4>{{_('Resource')}}</h4></li>
+      <li><h4> {{_('Organization')}}</h4></li>
+  <li><h4> {{_('Ignore')}}</h4></li>
+    </ul>
+    <ul class="dataset-list unstyled">
+    {% for resource in resources %}
+      {% snippet 'snippets/maps_admin_item.html', resource=resource %}
+      {% endfor %}
+  </ul>
+  </form>
+  </div>
+{% endif %}
