@@ -111,7 +111,10 @@ class Controller(BaseController):
                 else:
                     raise 'oops something went wrong, tree node not found for visible layer'
 
-        next_tree_node_id = tree_nodes[-1].get("id")+1
+        if tree_nodes:
+            next_tree_node_id = tree_nodes[-1].get("id")+1
+        else:
+            next_tree_node_id = 0
 
         return json.dumps({'source': source, 'tree_node_id': next_tree_node_id})
 
