@@ -46,8 +46,8 @@ jQuery(document).ready(function ($, _) {
                     res = JSON.parse(res);
                     //SOURCE = res.config || {};
                     SOURCE = res.source || [];
-                    console.log('SOURCE');
-                    console.log(SOURCE);
+                    //console.log('SOURCE');
+                    //console.log(SOURCE);
                 }
                 catch(err) {
                     console.log('error parsing json');
@@ -63,8 +63,8 @@ jQuery(document).ready(function ($, _) {
             }
             
             table = initTable(SOURCE);
-            console.log("SOURCE");
-            console.log(SOURCE);
+            //console.log("SOURCE");
+            //console.log(SOURCE);
             //updateTable(SOURCE);
             tree = initTree();
             root = tree.fancytree("getRootNode");
@@ -895,9 +895,9 @@ jQuery(document).ready(function ($, _) {
             var source = data.otherNode;
             // handle moving nodes/resources
             // update data fields when moving nodes/resources around
-            console.log('src target');
-            console.log(source);
-            console.log(target);
+            //console.log('src target');
+            //console.log(source);
+            //console.log(target);
             if (target.data.node === true){
                 // target is node
                 if (source.data.node === true){

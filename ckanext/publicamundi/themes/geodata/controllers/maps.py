@@ -83,17 +83,11 @@ class Controller(BaseController):
 
         tree_nodes = self.mapsdb.get_tree_nodes()
         for node in tree_nodes:
-            print 'NODE'
-            print node
-            print 'SOURCE'
-            print source
             if node.get("parent") == None:
                 source.get("children").append(new_tree_node(source, node))
                 #source.update({"children": sorted(source.get("children"), key=get_index)})
             else:
                 xnode = find_tree_node_by_key(source, node.get("parent"))
-                print 'xnode'
-                print xnode
                 if xnode:
                     xnode.get("children").append(new_tree_node(xnode, node))
                     #xnode.update({"children": sorted(xnode.get("children"), key=get_index)})
