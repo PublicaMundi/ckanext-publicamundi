@@ -62,7 +62,7 @@ class MapsRecords(object):
 
             self.packages = Table('package',
                              self.metadata,
-                             #Column('the_geom', Geometry(4326)),
+                             Column('the_geom', Geometry(4326)),
                              Column('organization', Text, ForeignKey('organization.id')),
                              autoload=True,
                              autoload_with=self.engine)
