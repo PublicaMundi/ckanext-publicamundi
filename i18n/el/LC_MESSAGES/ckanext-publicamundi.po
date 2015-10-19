@@ -1992,8 +1992,8 @@ msgstr "Διαθέσιμα θεματικά επίπεδα"
 
 #: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:29
 #: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:44
-msgid "<span class=\"all-resources\"></span>All"
-msgstr "Όλα"
+msgid "<span class=\"all-resources\"></span>All available"
+msgstr "Διαθέσιμα"
 
 #: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:33
 #: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:45

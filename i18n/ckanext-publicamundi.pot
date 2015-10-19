@@ -1916,7 +1916,7 @@ msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:29
 #: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:44
-msgid "<span class=\"all-resources\"></span>All"
+msgid "<span class=\"all-resources\"></span>All available"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:33
@@ -1930,7 +1930,7 @@ msgid "<span class=\"ignored-resources\"></span>Ignored"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:46
-msgid "All"
+msgid "All visible"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:56
