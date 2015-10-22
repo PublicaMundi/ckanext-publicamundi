@@ -11,7 +11,9 @@ Example:
 
     #}
   <section class="module module-narrow module-shallow group">
-  <h2 class="module-heading"> {{ _('Topics') }}</h2>
+
+  <h2 class="module-heading"><img class="facet-icon" src="{{ h.url_for_static('/images/icons/various/topics.svg') }}"></img>
+{{ _('Topics') }}</h2>
   {# <i class="icon-medium icon-lock"></i> #}
     {% if not group %}
     <section class="module-content"></section>

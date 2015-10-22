@@ -3,31 +3,30 @@
 {% set resource_id = c.resource_id %}
 {% set task_result = c.task_result %}
 {% set gdal_driver = task_result.gdal_driver %}
-{% set layers = task_result.layers %} 
+{% set layers = c.layers %} 
 {% set ingest_base_url= h.url_for('vector_ingest',resource_id =resource_id)%}
+{% set validation_url= h.url_for('validation_check')%}
 
  
 {% block ingest_content %}
-<div data-module="vector-ingest" data-module-ingest_base_url="{{ingest_base_url}}" data-module-gdal_driver="{{gdal_driver}}" data-module-layers="{{h.dump_json(layers)}}">
-	    
-    {% if gdal_driver=="ESRI Shapefile" %}
-	{% snippet 'user/snippets/ingest_templates/vector/singlelayer_format.html', task_result=task_result%}
-    
-    {% else %}
-	{% snippet 'user/snippets/ingest_templates/vector/multilayer_format.html', task_result=task_result%}
-    
-    {#{% elif gdal_driver=="" %}
-    
-    {% elif gdal_driver=="" %}
-    
-    {% elif gdal_driver=="" %} #}
-    
-    {% endif %}
-    </br>
-    <button class="btn" id="ingest_button"> {{ _('Ingest') }}</button>
-</div>
-  
-{% resource 'ckanext-publicamundi-vector/vector_ingest'%}
+
+<form id="ingest-form" data-module="vector-ingest" data-module-ingest_base_url="{{ingest_base_url}}" data-module-validation_url="{{validation_url}}" 
+      data-module-gdal_driver="{{gdal_driver}}" data-module-layers="{{h.dump_json(layers)}}">
+
+        {% if layers|length==1 %}
+        {% snippet 'user/snippets/ingest_templates/vector/singlelayer_format.html', task_result=task_result%}
+        {% else %}
+        {% snippet 'user/snippets/ingest_templates/vector/multilayer_format.html', task_result=task_result%}
+        {% endif %}
+        </br>
+
+        <button class="btn btn-success" id="ingest_button"> {{ _('Ingest') }} </button>
+</form>
+
+ 
+{% resource 'ckanext-publicamundi-vector/vector_ingest' %}
+{% resource 'ckanext-publicamundi-vector/encoding_autocomplete' %}
+{% resource 'ckanext-publicamundi-vector/projection_autocomplete' %}
 {% endblock %}
 
   

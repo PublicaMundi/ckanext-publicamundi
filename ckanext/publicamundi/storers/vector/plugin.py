@@ -15,11 +15,11 @@ from ckanext.publicamundi.storers.vector.lib.template_helpers import (
     get_wfs_output_formats, url_for_wfs_feature_layer, get_table_resource)
 
 log = logging.getLogger(__name__)
-vector_child_formars = [
+
+vector_child_formats = [
     DBTableResource.FORMAT,
     WMSResource.FORMAT,
     WFSResource.FORMAT]
-
 
 class VectorStorer(p.SingletonPlugin):
 
@@ -40,20 +40,24 @@ class VectorStorer(p.SingletonPlugin):
         vectorController = (controllers_base + "vector:VectorController")
 
         map.connect(
-            'edit_current_sld',
-            '/dataset/{id}/resource/{resource_id}/edit_style/{operation}',
+            'render_style_popup',
+            '/dataset/{id}/resource/{resource_id}/style',
             controller=styleController,
-            action='edit_current_sld', id='{id}', resource_id='{resource_id}',
-            operation='{operation}')
-
+            action='render_style_popup', id='id',
+            resource_id='{resource_id}', template='{template}')
+        
         map.connect(
-            'upload_sld',
-            '/dataset/{id}/resource/{resource_id}/upload_sld/{operation}',
+            'edit_current_sld',
+            '/dataset/{id}/resource/{resource_id}/style/edit_current_sld',
             controller=styleController,
-            action='upload_sld',
-            id='{id}',
-            resource_id='{resource_id}',
-            operation='{operation}')
+            action='edit_current_sld', id='{id}', resource_id='{resource_id}')
+        
+        map.connect(
+            'upload_edited_sld',
+            '/dataset/{id}/resource/{resource_id}/style/upload_edited_sld',
+            controller=styleController,
+            action='upload_edited_sld',
+            id='{id}', resource_id='{resource_id}')
 
         map.connect(
             'vector_export',
@@ -69,6 +73,18 @@ class VectorStorer(p.SingletonPlugin):
             '/api/publicamundi/search_epsg',
             controller=vectorController,
             action='search_epsg')
+        
+        map.connect(
+            'search_encoding',
+            '/api/publicamundi/search_encoding',
+            controller=vectorController,
+            action='search_encoding')
+        
+        map.connect(
+            'validation_check',
+            '/api/publicamundi/vector/validation_check',
+            controller=vectorController,
+            action='validation_check')
 
         map.connect(
             'vector_ingest',
@@ -76,6 +92,8 @@ class VectorStorer(p.SingletonPlugin):
             controller=vectorController,
             action='ingest',
             resource_id='{resource_id}')
+        
+        
 
         return map
 
@@ -178,7 +196,7 @@ class VectorStorer(p.SingletonPlugin):
                         # so we also delete the ingestion produced resources
                         resource_actions.delete_ingest_resource(entity.as_dict())
                         
-                    elif entity.format.lower() in vector_child_formars:
+                    elif entity.format.lower() in vector_child_formats:
                         # A child vector resource has recieved a 'deleted' notification
                         # so we also delete all other resources associated to the deleted
                         resource_actions.delete_ingest_resource(entity.as_dict())
@@ -189,7 +207,7 @@ class VectorStorer(p.SingletonPlugin):
                     # to check if this can be updated 
 
                     #old_resource = self._get_resource_before_commit(entity.id)
-                    #if old_resource.format.lower() in vector_child_formars:
+                    #if old_resource.format.lower() in vector_child_formats:
                         #log.info('Notified on metadata update of %s vector resource %r' % (
                             #old_resource.format, old_resource.id ))
                         ## A vector child resource (e.g WMS) has recieved an update

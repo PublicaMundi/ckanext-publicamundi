@@ -48,6 +48,7 @@ def _make_default_context():
         'user_api_key': user['apikey'],
         # Configuration needed to setup raster storer
         'temp_folder': config.get('ckanext.publicamundi.rasterstorer.temp_dir', ""),
+        'url': config.get("ckanext.publicamundi.rasterstorer.url", ""),
         'wms_base_url': config.get("ckanext.publicamundi.rasterstorer.wms_base_url", ""),
         'wcst_base_url': config.get("ckanext.publicamundi.rasterstorer.wcst_base_url", ""),
         'gdal_folder': config.get("ckanext.publicamundi.rasterstorer.gdal_folder", "")

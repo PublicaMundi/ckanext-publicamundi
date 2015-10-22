@@ -14,9 +14,14 @@ Example:
 
 #}
 
+
 {% with truncate=truncate or 0, url=h.url_for(controller='organization', action='read', id=organization.name) %}
-  <div class="module module-narrow module-shallow context-info">
-      <h2 class="module-heading"> {{ _('Organization') }}</h2>
+<div class="module module-narrow module-shallow context-info">
+    {% if has_context_title %}
+ 
+        <h2 class="module-heading"><img class="facet-icon" src="{{ h.url_for_static('/images/icons/various/organizations.svg') }}"></img>
+{{ _('Organization') }}</h2>
+    {% endif %}
       <!--<i class="icon-building"></i> -->
     <section class="module-content">
     {% if organization %}
@@ -26,9 +31,8 @@ Example:
                 <img src="{{ organization.image_display_url or h.url_for_static('/base/images/placeholder-organization.png')}}" width="200" alt="{{ organization.name }}" />
           </a>
         </div>
-
     {% endblock %}
-      <h1 class="heading">{{ organization.title or organization.name }}</h1>
+    <h1 class="heading">{{ organization.title or organization.name }}</h1>
       {# {% if organization.description %}
         <p>
           {{ h.markdown_extract(organization.description, 180) }}
@@ -53,7 +57,15 @@ Example:
         </div>
       {% endif %}
       #}
+        {% if pkg %}
+        {% block package_contact %}
+            {% snippet "snippets/contact.html", pkg=pkg %}
+        {% endblock %}
+        {% endif %}
+
       {% endif %}
-    </section>
+        
+      </section>
+    
   </div>
 {% endwith %}

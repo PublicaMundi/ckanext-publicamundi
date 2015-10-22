@@ -1,0 +1,12 @@
+{% set current_url = h.full_current_url() %}
+<section class="developers module module-narrow module-shallow">
+<h2 class="module-heading"><i class="icon-code developers-icon"></i> {{ _('Developers') }}</h2>
+<div class="module-content">
+  <ul class="unstyled">
+      <li><a href="/api/3/action/package_show?id={{pkg_dict.id}}" target="_blank">{{ _('Package in JSON format')}}</a></li>
+  </ul>
+  <br/ >
+  <a href="{{ h.url_for('dataset_apis', id=pkg_dict.name)}}">{{ _('More information') }}</a>
+
+</div>
+</section>

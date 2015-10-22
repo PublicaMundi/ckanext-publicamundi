@@ -1,0 +1,12 @@
+{% ckan_extends %}
+
+{% block content_primary_nav %}
+  {{ h.build_nav_icon('group_read', _('Datasets'), id=c.group_dict.name) }}
+  {{ h.build_nav_icon('group_activity', _('Activity Stream'), id=c.group_dict.name, offset=0) }}
+  {{ h.build_nav_icon('group_about', _('About'), id=c.group_dict.name) }}
+{% endblock %}
+
+{% block breadcrumb_content %}
+  <li>{% link_for _('Topics'), controller='group', action='index' %}</li>
+  <li class="active">{% link_for c.group_dict.display_name|truncate(35), controller='group', action='read', id=c.group_dict.name %}</li>
+{% endblock %}

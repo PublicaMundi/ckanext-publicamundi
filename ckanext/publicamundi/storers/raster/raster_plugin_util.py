@@ -28,6 +28,7 @@ class RasterUtil:
     def __init__(self, context, logger):
         self.log = logger
         self.path_to_public_folder = context['temp_folder'].strip(' \t\n\r')
+        self.url = context['url'].strip(' \t\n\r')
         self.wcst_url = context['wcst_base_url'].strip(' \t\n\r')
         self.wms_url = context['wms_base_url'].strip(' \t\n\r')
         self.resource_dict = context['resource_dict']
@@ -266,7 +267,7 @@ class RasterUtil:
             self.coverage_id,
             self.resource_dict['description'],
             self.resource_dict['id'],
-            self.wms_url,
+            self.url,
             self.coverage_id,
             self.resource_dict['name'])
         created_wms_resource = self.invoke_api_resource_action(wms_resource.as_dict(), 'resource_create')
@@ -280,7 +281,7 @@ class RasterUtil:
             self.coverage_id,
             self.resource_dict['description'],
             self.resource_dict['id'],
-            self.wcst_url,
+            self.url,
             self.coverage_id,
             self.resource_dict['name'])
         created_wcs_resource = self.invoke_api_resource_action(wms_resource.as_dict(), 'resource_create')

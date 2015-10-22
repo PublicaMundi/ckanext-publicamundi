@@ -9,9 +9,7 @@ jQuery(document).ready(function ($) {
     init();
 });
 
-
 function init() {
-    
 
     var obj = $('.nav-pills > li > a[href$="/group"]');
     
@@ -58,63 +56,47 @@ function init() {
         //$(this).parent().find('.btn:first').removeClass('btn-hover');
     });
 
-    // Detect OS for switching linux font
+    // Detect OS for applying OS-specific styles
+    
     var os = navigator.platform;
-    console.log(os);
-    if (os.indexOf('Linux') == 0){
-            $("body").css({'font-family': 'sans-serif'});
-        }
+    console.log('Detected platform: ' + os);
+    if (os.indexOf('Linux') == 0) {
+        $('head').append('<link rel="stylesheet" href="/css/linux-override.css" type="text/css" />');
+    }
 
     //Breadcrumbs auto hide all but last element
-        brd_items = $('.breadcrumb li:first').next().nextAll();
-        brd_items = brd_items.not(':last');
+    var bread_items = $('.breadcrumb li:first').next().nextAll();
+    bread_items = bread_items.not(':last');
 
-        brd_items.each(function(idx) {
-            //console.log($(this).context.innerText);
-            //$(this).context.innerText = "...";
-            $(this).addClass('breadcrumb-hide-text');
-        });
+    bread_items.each(function(idx) {
+        //console.log($(this).context.innerText);
+        //$(this).context.innerText = "...";
+        $(this).addClass('breadcrumb-hide-text');
+    });
        
-        tlbar = $('.toolbar');
-        brdcrmb = $('.breadcrumb');
-        tlbar.on('mouseenter', function(){
-            brd_items.each(function(idx) {
+    var toolbar = $('.toolbar');
+    toolbar.on('mouseenter', function(){
+        bread_items.each(function(idx) {
             //console.log($(this).context.innerText);
             //$(this).context.innerText = "...";
             $(this).removeClass('breadcrumb-hide-text');
-                //addClass('breadcrumb-hide-text');
-            });
-
-
+            //addClass('breadcrumb-hide-text');
         });
-        
-        tlbar.on('mouseleave', function(){
-            brd_items.each(function(idx) {
+    });
+
+    toolbar.on('mouseleave', function(){
+        bread_items.each(function(idx) {
             //console.log($(this).context.innerText);
             //$(this).context.innerText = "...";
             $(this).addClass('breadcrumb-hide-text');
-                //addClass('breadcrumb-hide-text');
-            });
-
+            //addClass('breadcrumb-hide-text');
         });
-        //brd_items.on('mouseenter', function(){
-           // $(this).removeClass('breadcrumb-hide-text');
-        //});
-        //brd_items.on('mouseleave', function(){
-          //  $(this).addClass('breadcrumb-hide-text');
-        //});
-
-        //Hide promotebox when dismiss clicked and remember with cookie
-        var dismiss = $('.btn-dismiss');
-        var pbox = $('.promotebox');
-        if ($.cookie("dismiss-promotebox") != 1 ){
-            pbox.addClass('shown');
-        }
-            dismiss.on('click', function(){ 
-                $.cookie("dismiss-promotebox", 1, {expires:10});
-                pbox.removeClass('shown');
-                pbox.addClass('hidden');
-            });
-
-
+    });
+    
+    //bread_items.on('mouseenter', function(){
+        //$(this).removeClass('breadcrumb-hide-text');
+    //});
+    //bread_items.on('mouseleave', function(){
+        //$(this).addClass('breadcrumb-hide-text');
+    //});
 }

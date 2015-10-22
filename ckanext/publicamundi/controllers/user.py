@@ -135,7 +135,7 @@ class UserController(BaseController):
             url=pager_url,
             items_per_page=_resources_page_items
         )
-    # Fixme: Maybe reject should be renamed (throughout this project) to ignore,
+    # Fixme: Maybe "reject" should be renamed (across the whole project) to "ignore",
     # because in fact the original resource never gets actually rejected.
 
     def reject_resource(self, resource_id, parent):
@@ -178,8 +178,11 @@ class UserController(BaseController):
         c.task_result = resource_ingestion.get_result(resource_id)['result']
         res_identify_obj = model.Session.query(ResourceIngest).filter(
             ResourceIngest.resource_id == resource_id).first()
-
-        if res_identify_obj.storer_type == ResourceStorerType.VECTOR: # Fixme: adapt
+        
+        # Fixme adapt
+        if res_identify_obj.storer_type == ResourceStorerType.VECTOR:
+            c.layers = [{k: layer[k] for k in layer if k != 'sample_data'} 
+                for layer in c.task_result['layers']]
             return render('user/snippets/ingest_templates/vector/vector.html')
         elif res_identify_obj.storer_type == ResourceStorerType.RASTER:
             return render('user/snippets/ingest_templates/raster/raster.html')

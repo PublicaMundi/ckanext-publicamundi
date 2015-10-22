@@ -1,0 +1,30 @@
+<pre><code>PublicaMundi.noConflict();
+    var options = {
+        target: 'map',
+        center: [2548716, 4743375],
+        zoom: 6,
+        minZoom: 2,
+        maxZoom: 18,
+        layers: [
+        {
+            title: 'Open Street Maps',
+            type: PublicaMundi.LayerType.TILE,
+            url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+        }]};
+
+    var map, popup, layer;
+
+    PublicaMundi.ready(function () {
+        map = PublicaMundi.map(options);
+        map.setLayerControl();
+        layer = map.createLayer({
+            title: '{{res.name}}',
+            name: '{{res.name}}',
+            type: PublicaMundi.LayerType.{{res.format|upper}},
+            url: '{% if res.format == 'wfs' %}{{res.wfs_server}}{% elif res.format == 'wms' %}{{res.wms_server}}{% endif %}',
+            params: { 'layers' : '{% if res.format == 'wfs' %}{{res.wfs_layer}}{% elif res.format == 'wms' %}{{res.wms_layer}}{% endif %}', 
+                }
+            });
+        });
+</code></pre>
+

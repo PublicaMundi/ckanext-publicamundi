@@ -3,13 +3,28 @@
 {% set raster_resources = h.get_ingested_raster(pkg,res) %}
 {% set vector_resources = h.get_ingested_vector(pkg,res) %}
 
+{% block resource_item_title %}
+    <a class="heading inline" href="{{ url }}" title="{{ res.name or res.description }}">
+        {% if h.can_preview_resource_or_ingested(pkg, res) %}
+            <i class="icon-eye-open"></i>
+            {% else %}
+            <i class="icon-info-sign"></i>
+            {% endif %}
+        {{ h.resource_display_name(res)|truncate(50) }} 
+        <span class="format-label" 
+            property="dc:format" data-format="{{ res.format.lower() or 'data' }}">{{ res.format }}</span>
+        {{ h.popular('views', res.tracking_summary.total, min=10) }}
+    </a>
+{% endblock %} {# resource_item_title #}
+
+
 {% block resource_item_file %}
 {{ super() }}
 
     {% for raster_res in raster_resources %}
         {% if raster_res.format == 'wms' %}
         <div class="action-button"><a class="btn" href={{ h.get_maps_url(package_id=pkg.id, resource_id=raster_res.id)}} >
-                    <i class="icon-medium icon-globe"></i>{{ _(' Map')}}
+                    <i class="icon-medium icon-globe"></i> {{ _('Map')}}
                 </a>
         </div>
         {% endif %}
@@ -18,20 +33,22 @@
     {% for vector_res in  vector_resources %}
         {% if vector_res.format == 'wms' %}
         <div class="action-button"><a class="btn" href={{ h.get_maps_url(package_id=pkg.id, resource_id=vector_res.id)}} >
-                    <i class="icon-medium icon-globe"></i>{{ _(' Map')}}
+                    <i class="icon-medium icon-globe"></i> {{ _('Map')}}
                 </a>
         </div>
         {% endif %}
         
         {% if vector_res.format == 'wfs' %}
-        {% with tab_res = h.vectorstorer_table_resource(pkg, vector_res) %}
-        {% if tab_res %}
-        <div class="action-button">  
-            <a class="btn" href="{{ h.url_for(controller='package', action='resource_read', id=pkg.name, resource_id=tab_res.id) }}">
-                <i class="icon-table"></i> {{ _('Table') }}</a>
-        </div>
+        {% if h.check_access('sysadmin') %}
+            {% with tab_res = h.vectorstorer_table_resource(pkg, vector_res) %}
+            {% if tab_res %}
+            <div class="action-button">  
+                <a class="btn" href="{{ h.url_for(controller='package', action='resource_read', id=pkg.name, resource_id=tab_res.id) }}">
+                    <i class="icon-table"></i> {{ _('Table') }}</a>
+            </div>
+            {% endif %}
+            {% endwith %}
         {% endif %}
-        {% endwith %}
         {% endif %}
     {% endfor %}
 

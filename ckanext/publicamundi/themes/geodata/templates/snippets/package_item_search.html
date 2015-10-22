@@ -17,24 +17,15 @@ Example:
 {% set truncate_title = truncate_title or 80 %}
 {% set title = package.title or package.name %}
 {% set notes = h.markdown_extract(package.notes, extract_length=truncate) %}
-{% if package.organization %}
-{% set organization = package.organization.title %}
-{% else %}
-{% set organization = "" %}
-{% endif %}
-{% if package.groups %}
-{% set groups = package.groups %}
-{% else %}
-{% set groups = "" %}
-{% endif %}
 {% set modified = package.metadata_modified %}
+
 <li class="{{ item_class or "dataset-item" }}">
   {% block package_item_content %}
   <div class="dataset-content">
       <div class="dataset-preheading">
-          {% if groups %}
-          {% set group = groups[0] %}
-          <div>{{ h.friendly_date(modified|urlize)}} @ <span> <a href=/group/{{group.name}}> {{group.title|urlize }}</span></div> </a>
+          {% if package.groups %}
+          {% set group = package.groups[0] %}
+          <div>{{ h.friendly_date(modified|urlize)}} @ <span> <a href={{ h.url_for(controller='group', action='read', id= group.name) }}> {{group.title|urlize }}</span></div> </a>
           {% else %}
           <div>{{ h.friendly_date(modified|urlize)}} </div>
           {% endif %}
@@ -63,9 +54,9 @@ Example:
   <div> {{ notes |urlize }} </div>
   {% endif %}
 
-      {% if organization %}
+      {% if package.organization %}
       <div class="dataset-postheading">
-          <a href=/organization/{{ package.organization.name}}> {{ organization|urlize }}</a>
+          <a href={{ h.url_for(controller='organization', action='read', id= package.organization.name)}} > {{ package.organization.title|urlize }}</a>
       </div>
       {% endif %}
   </div>

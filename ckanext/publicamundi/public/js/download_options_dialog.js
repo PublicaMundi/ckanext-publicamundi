@@ -1,7 +1,7 @@
 ckan.module('download_options_dialog', function ($, _) {
       return {
           options: {
-                BASE_URL: 'http://labs.geodata.gov.gr/',
+                BASE_URL: '/',
                 type: null,
                 format: null,
                 srs: null,
@@ -24,20 +24,20 @@ ckan.module('download_options_dialog', function ($, _) {
                 this.elements.srs_type = this.elements.active_modal.find('[name="srs_type"]');
                 this.elements.download_btn = this.elements.active_modal.find('[name="download"]');
                 
-                console.log('elements=');
-                console.log(this.elements.format_type);
-                console.log(this.elements.srs_type);
-                console.log(this.elements.download_btn);
+                //console.log('elements=');
+                //console.log(this.elements.format_type);
+                //console.log(this.elements.srs_type);
+                //console.log(this.elements.download_btn);
                 
                 var selected = this.elements.format_type.find('option:selected');
                 this.options.format = selected.val();
                 this.options.srs = this.elements.srs_type.val();
                 this.options.type = selected.data('resource-type');
                 
-                console.log('options=');
-                console.log(this.options.format);
-                console.log(this.options.srs);
-                console.log(this.options.type);
+                //console.log('options=');
+                //console.log(this.options.format);
+                //console.log(this.options.srs);
+                //console.log(this.options.type);
 
                 this.elements.format_type.on('change', this._onTypeSelect);
                 this.elements.srs_type.on('change', this._onSrsSelect);
@@ -50,10 +50,10 @@ ckan.module('download_options_dialog', function ($, _) {
                 var selected = this.elements.format_type.find('option:selected');
                 this.options.format = this.elements.format_type.val();
                 this.options.type = selected.data('resource-type');
-                console.log('options=');
-                console.log(this.options.format);
-                console.log(this.options.srs);
-                console.log(this.options.type);
+                //console.log('options=');
+                //console.log(this.options.format);
+                //console.log(this.options.srs);
+                //console.log(this.options.type);
 
                 this._onUpdateDownloadButton();
 
@@ -62,10 +62,10 @@ ckan.module('download_options_dialog', function ($, _) {
                 this.options.srs = this.elements.srs_type.val();
                 this._onUpdateDownloadButton();
 
-                console.log('options=');
-                console.log(this.options.format);
-                console.log(this.options.srs);
-                console.log(this.options.type);
+                //console.log('options=');
+                //console.log(this.options.format);
+                //console.log(this.options.srs);
+                //console.log(this.options.type);
 
 
             },
@@ -108,8 +108,6 @@ ckan.module('download_options_dialog', function ($, _) {
                 var url = this.options.BASE_URL+'rasdaman/ows/?service='+service+'&version='+version+'&request='+request+'&query='+query;
                 console.log(url); 
                 return url;
-
-                //var request = 'http://labs.geodata.gov.gr/rasdaman/ows/?service=WCS&version=2.0.1&request=ProcessCoverages&query=for c in (coverage_id) return encode(c, "format")'
 
             },
             _onGetVectorUrl: function(){

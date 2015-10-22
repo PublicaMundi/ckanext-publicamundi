@@ -1,0 +1,54 @@
+{% set res = {} %}
+
+{% set datastore_root_url = '/api/3/action' %} 
+{% for resource in pkg.resources %}
+    {% if (resource.format == 'csv' or resource.format == 'xls') and resource.datastore_active %}
+        {% do res.update(resource) %}
+    {% endif %}
+{% endfor %}
+      
+    <div class="accordion-group">
+      <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-dev" href="#collapse-querying-dapi">{{ _('Data API') }} &raquo;</a>
+      </div>
+      <div id="collapse-querying-dapi" class="collapse accordion-body">
+          <div class="accordion-inner">
+        {% if res %}
+          <strong>{{ _('Query example (first 5 results)') }}</strong>
+          <p>
+          <code><a href="{{ datastore_root_url }}/datastore_search?resource_id={{res.id}}&limit=5" target="_blank">{{ datastore_root_url }}/datastore_search?resource_id={{res.id}}&limit=5</a></code>
+          </p>
+
+          <strong>{{ _('Query example (results containing \'public\')') }}</strong>
+          <p>
+          <code><a href="{{ datastore_root_url }}/datastore_search?resource_id={{res.id}}&q=public"
+              target="_blank">{{ datastore_root_url }}/datastore_search?resource_id={{res.id}}&q=public</a></code>
+          </p>
+
+          <strong>{{ _('Query example (via SQL statement)') }}</strong>
+          <p>
+          <code><a href="{{ datastore_root_url + '/datastore_search_sql?sql=SELECT * from "' + res.id + '" WHERE title LIKE \'public\'' }}"
+                  target="_blank">{{ datastore_root_url + '/datastore_search_sql?sql=SELECT * from "' + res.id + '" WHERE title LIKE \'public\'' }}</a></code>
+          </p>
+          <strong>{{ _('Query example in javascript (using the PublicaMundi API)') }}</strong>
+          {% snippet 'package/snippets/developers/data_api_js.html', res=res %}
+        {% else %}
+        <strong>{{ _('Dataset contains no datastore resources') }}</strong><br><br>
+        {% endif %}
+            {% set data_api_link = h.redirect_wp('applications/data-api') %}
+                <strong>{%trans%}'You can find detailed Data API demos <a href="{{data_api_link }}" target="_blank">here</a>{%endtrans%}
+        </div>
+
+        <!-- {#<br>
+        <p><strong>{{ _('Access resource data via a web API with powerful query support') }}</strong>.
+            {% trans %}
+            Further information in the <a
+            href="http://docs.ckan.org/en/latest/datastore.html" target="_blank">main
+            CKAN Data API and DataStore documentation</a>.</p>
+            {% endtrans %}
+            #}
+            -->
+
+            </div>
+</div>
+
