@@ -1,41 +1,62 @@
 {% extends "page.html" %}
 {% block main_content %}
-   <div id="servcies-access-graph-container">
-      <h1> Services access statistics </h1>
-      <div id="services-access-graph" class="amcharts-graph">
+
+<h1>Analytics by application</h1>
+<div id="rasdaman-access-graph-container">
+    <h2> rasdaman access statistics </h2>
+
+    <div id="rasdaman-access-graph" class="amcharts-graph">
         <img src="/loading.gif"/>
-      </div>
-   </div>
-   <div id="rasdaman-access-graph-container">
-      <h1> rasdaman access statistics </h1>
-      <div id="rasdaman-access-graph" class="amcharts-graph">
+    </div>
+
+    <div id="rasdaman-actions">
+        <button id="worker-process" class="btn">Self-adjust Worker Processes</button>
+    </div>
+</div>
+<div id="geoserver-access-graph-container">
+    <h2> Geoserver access statistics </h2>
+
+    <div id="geoserver-access-graph" class="amcharts-graph">
         <img src="/loading.gif"/>
-      </div>
-   </div>
-   <div id="geoserver-access-graph-container">
-      <h1> Geoserver access statistics </h1>
-      <div id="geoserver-access-graph" class="amcharts-graph">
+    </div>
+</div>
+
+<h1>Analytics by Service</h1>
+<div id="servcies-access-graph-container">
+    <h2> Services access statistics </h2>
+
+    <div id="services-access-graph" class="amcharts-graph">
         <img src="/loading.gif"/>
-      </div>
-   </div> 
-   <div id="bounding-boxes-map-container">
-      <h1> Most requested areas </h1>	
-      <div id="bounding-boxes-map" class="bboxes-map">
-      </div>
-   </div>    
-   <div id="coverage-access-table-container">
-      <h1> Most requested coverages / layers </h1>
-      <div id="coverage-access-table">
+    </div>
+    <div>
+        <button id="service-cache" class="btn">Self-adjust service cache</button>
+    </div>
+</div>
+
+<h1>Analytics by datasets</h1>
+<div id="bounding-boxes-map-container">
+    <h2> Most requested areas </h2>
+
+    <div id="bounding-boxes-map" class="bboxes-map">
+    </div>
+</div>
+<div id="coverage-access-table-container">
+    <h2> Most requested coverages / layers </h2>
+
+    <div id="coverage-access-table">
         <img src="/loading.gif"/>
-      </div>
-      <div id="coverage-access-graph" class="amcharts-graph">
+    </div>
+    <div>
+        <button id="tiling-action" class="btn">Self-adjust Tiling</button>
+    </div>
+    <div id="coverage-access-graph" class="amcharts-graph">
         <img src="/loading.gif"/>
-      </div>
-      <div id="coverage-band-access-graph" class="amcharts-graph">
+    </div>
+    <div id="coverage-band-access-graph" class="amcharts-graph">
         <img src="/loading.gif"/>
-      </div>
-   </div>   
-   {% resource 'ckanext-publicamundi-analytics/styles' %}
-   {% resource 'ckanext-publicamundi-analytics/libs' %}
-   {% resource 'ckanext-publicamundi-analytics/src'  %}
+    </div>
+</div>
+{% resource 'ckanext-publicamundi-analytics/styles' %}
+{% resource 'ckanext-publicamundi-analytics/libs' %}
+{% resource 'ckanext-publicamundi-analytics/src'  %}
 {% endblock  %}

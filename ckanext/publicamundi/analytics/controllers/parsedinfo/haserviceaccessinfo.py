@@ -36,12 +36,12 @@ class HAServiceAccessInfo:
         Handles the way the object is printed. The current format is json.
         """
         output = "{"
-        output += self.date_key + ":\"" + self.date.strftime(ConfigManager.export_date_format) + "\","
-        output += self.rasdaman_key + ":" + str(self.rasdaman) + ","
-        output += self.rasdaman_wcs_key + ":" + str(self.rasdaman_wcs) + ","
-        output += self.rasdaman_wcps_key + ":" + str(self.rasdaman_wcps) + ","
-        output += self.rasdaman_wms_key + ":" + str(self.rasdaman_wms) + ","
-        output += self.geoserver_key + ":" + str(self.geoserver)
+        output += '"' + self.date_key + '"' + ":\"" + self.date.strftime(ConfigManager.export_date_format) + "\","
+        output += '"' + self.rasdaman_key + '"' + ":" + str(self.rasdaman) + ","
+        output += '"' + self.rasdaman_wcs_key + '"' + ":" + str(self.rasdaman_wcs) + ","
+        output += '"' + self.rasdaman_wcps_key + '"' + ":" + str(self.rasdaman_wcps) + ","
+        output += '"' + self.rasdaman_wms_key + '"' + ":" + str(self.rasdaman_wms) + ","
+        output += '"' + self.geoserver_key + '"' + ":" + str(self.geoserver)
         output += "}"
         return output
 

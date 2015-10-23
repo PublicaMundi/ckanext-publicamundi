@@ -47,13 +47,20 @@ class AnalyticsPlugin(p.SingletonPlugin):
         map.connect("parse-bands-access-count", "/api/analytics/parse/bands/{coverage_name}",
                     controller=haparser_controller,
                     action='parse_band_access_count', coverage_name='{coverage_name}')
+        map.connect("analytics-api-adjust-workers", "/api/analytics/adjust/workers/{number}",
+                    controller=analytics_controller, action='adjust_workers', number='{number}')
+        map.connect("analytics-api-adjust-tiling", "/api/analytics/adjust/tiling",
+                    controller=analytics_controller, action='adjust_tiling')
+        map.connect("analytics-api-adjust-cache", "/api/analytics/adjust/cache/{wcs}/{wms}",
+                    controller=analytics_controller, action='adjust_cache', wcs='{wcs}', wms='{wms}')
+        map.connect("analytics-api-adjust-pyramids", "/api/analytics/adjust/pyramids/{layer}",
+                    controller=analytics_controller, action='adjust_pyramids', layer='{layer}')
         map.connect("analytics", "/analytics", controller=analytics_controller, action='analytics')
         return map
 
     # IConfigurer
 
     def update_config(self, config):
-
         # Configure static resources
         p.toolkit.add_public_directory(config, 'public')
         p.toolkit.add_template_directory(config, 'templates')

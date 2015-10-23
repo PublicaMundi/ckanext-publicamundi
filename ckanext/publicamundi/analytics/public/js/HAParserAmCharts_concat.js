@@ -7,7 +7,7 @@ FlancheJs.defineClass("Analytics.widgets.util.LineGraph", {
     /**
      * Class constructor.
      * @param title the title of the graph
-     * @param valueField the name of the field in the dataSource which contains the grpah data.
+     * @param valueField the name of the field in the dataSource which contains the graph data.
      */
     init: function(title, valueField){
         this.setTitle(title);
@@ -252,6 +252,7 @@ FlancheJs.defineClass("Analytics.widgets.CoverageAccess", {
         //set defaults
         this.setButtonDateGraphClass("coverage-access-date-graph-button");
         this.setButtonBandGraphClass("coverage-access-band-graph-button");
+        this.setButtonPyramidsGraphClass("coverage-pyramids-button");
     },
 
     properties: {
@@ -262,7 +263,8 @@ FlancheJs.defineClass("Analytics.widgets.CoverageAccess", {
         accessCountKey: "",
         dataSource: [],
         buttonDateGraphClass: "coverage-access-date-graph-button",
-        buttonBandGraphClass: "coverage-access-band-graph-button"
+        buttonBandGraphClass: "coverage-access-band-graph-button",
+        buttonPyramidsGraphClass: "coverage-pyramids-button"
     },
 
     methods: {
@@ -281,6 +283,7 @@ FlancheJs.defineClass("Analytics.widgets.CoverageAccess", {
         row: '<tr><td>$name$</td><td>$count$</td><td>' +
                 '<button data-coverageId="$name$" title="View access count by date" type="button" class="$btn-date-class$ btn btn-default btn-lg"> <span class="icon icon-calendar" aria-hidden="true"></span></button>' +
                 '<button data-coverageId="$name$" title="View access count by band" type="button" class="$btn-band-class$ btn btn-default btn-lg"> <span class="icon icon-align-left rotate-90" aria-hidden="true"></span></button>' +
+                '<button data-coverageId="$name$" title="Generate pyramids" type="button" class="$btn-band-class$ btn btn-default btn-lg"> <span class="icon icon-adjust rotate-90" aria-hidden="true"></span></button>' +
              '</td></tr>',
         template: "<table class='table table-striped'> <thead>$head$</thead><tbody>$rows$</tbody> </table>",
         makeTableHtml: function () {

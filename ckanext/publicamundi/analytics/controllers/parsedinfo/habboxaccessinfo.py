@@ -21,9 +21,9 @@ class HABboxAccessInfo:
         Handles the way the object is printed. The current format is json.
         """
         output = "{"
-        output += self.bbox_key + ":" + self.bbox.to_coordinates_str() + ","
-        output += self.access_count_key + ":" + str(self.access_count) + ","
-        output += self.crs_key + ":\"" + self.crs + "\""
+        output += '"' + self.bbox_key + '"' + ":" + self.bbox.to_coordinates_str() + ","
+        output += '"' + self.access_count_key + '"' + ":" + str(self.access_count) + ","
+        output += '"' + self.crs_key + '"' + ":\"" + self.crs + "\""
         output += "}"
         return output
 
