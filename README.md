@@ -18,7 +18,6 @@ Edit your CKAN .ini configuration file (e.g. your `development.ini`) and activat
 plugins as usual. For now, the supported plugins are:
 
  * `publicamundi_dataset`: Provides validation logic, storage logic and ui controls for metadata described in alternative schemata (e.g. INSPIRE).
- * `publicamundi_dataset_with_spatial`: Extends `publicamundi_dataset` by providing a bridge to `spatial_metadata` plugin: recognizes the `spatial` extra field. 
  * `publicamundi_package`: Provides synchronization of package metadata to other databases (e.g. to the integrated CSW service, through pycsw).
  * `publicamundi_vector`: Provide processing and services for vector-based spatial resources. See more at README-vector.md
  * `publicamundi_raster`: Provide processing and services for raster-based spatial resources. See more at README-raster.md 
@@ -40,7 +39,11 @@ The most common settings are:
     
     # Specify a list of formats which should be considered as services (APIs)
     ckanext.publicamundi.api_resource_formats = wms wcs wfs csw
-    
+
+    # Add extra top-level (i.e not contained in schema) metadata fields. This is usually needed to provide 
+    # a bridge to 3rd-party plugins that expect certain fields to be present (e.g. `spatial` from `spatial_metadata`).
+    ckanext.publicamundi.extra_fields = spatial
+
     # Specify a list of pre-existing resource formats to be used as autocomplete suggestions
     ckanext.publicamundi.resource_formats = 
     # raster file formats 

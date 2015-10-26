@@ -49,6 +49,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
     _dataset_types = None
 
+    _extra_fields = None
+    
     ## Define helper methods ## 
 
     @classmethod
@@ -116,6 +118,10 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         type_keys = aslist(config['ckanext.publicamundi.dataset_types'])
         cls._dataset_types = { k: spec
             for k, spec in dataset_types.items() if k in type_keys }
+
+        # Set extra (not included in supported schemata) fields
+
+        cls._extra_fields = aslist(config.get('ckanext.publicamundi.extra_fields', ''))
 
         # Modify the pattern for valid names for {package, groups, organizations}
         
@@ -301,6 +307,11 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             schema['__after'] = []
         schema['__after'].append(postprocess_dataset)
         
+        # Add extra top-level fields (i.e. not under a schema)
+        
+        for field_name in self._extra_fields:
+            schema[field_name] = [ignore_empty, convert_to_extras]
+        
         # Add or replace resource field-level validators/converters
 
         guess_resource_type = ext_validators.guess_resource_type_if_empty
@@ -364,6 +375,13 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             schema['__after'] = []
         schema['__after'].append(postprocess_dataset)
         
+        # Add extra top-level fields (i.e. not under a schema)
+        
+        for field_name in self._extra_fields:
+            schema[field_name] = [convert_from_extras, ignore_missing]
+
+        # Done, return updated schema
+
         return schema
 
     def setup_template_variables(self, context, data_dict):
@@ -857,43 +875,4 @@ class ErrorHandler(p.SingletonPlugin):
             to_addresses=t.to_addresses, 
             from_address=t.from_address,
             prefix=t.subject_prefix)
-
-class SpatialDatasetForm(DatasetForm):
-    '''Extend the dataset-form to recognize and read/write the `spatial` extra field.
-    This extension only serves as a bridge to ckanext-spatial `spatial_metadata` 
-    plugin.
-    
-    Note: 
-    This should be part of a the ordinary `publicamundi_dataset` plugin (when it
-    gets decoupled from schema-handling logic!).
-    '''
-    
-    ## IDatasetForm interface ##
-
-    def create_package_schema(self):
-        schema = super(SpatialDatasetForm, self).create_package_schema()
-        return self.__modify_package_schema(schema)
-
-    def update_package_schema(self):
-        schema = super(SpatialDatasetForm, self).update_package_schema()
-        return self.__modify_package_schema(schema)
-    
-    def show_package_schema(self):
-        schema = super(SpatialDatasetForm, self).show_package_schema()
-        
-        ignore_missing = toolkit.get_validator('ignore_missing')
-        convert_from_extras = toolkit.get_converter('convert_from_extras')
-       
-        schema['spatial'] = [convert_from_extras, ignore_missing]
-
-        return schema
-    
-    def __modify_package_schema(self, schema):
-        
-        ignore_empty = toolkit.get_validator('ignore_empty')
-        convert_to_extras = toolkit.get_converter('convert_to_extras')
-        
-        schema['spatial'] = [ignore_empty, convert_to_extras]
-        
-        return schema
 

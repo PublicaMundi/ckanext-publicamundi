@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '1.3dev'
+version = '1.4dev'
 
 setup(
     name='ckanext-publicamundi',
@@ -29,8 +29,6 @@ setup(
         [ckan.plugins]
 
         publicamundi_dataset = ckanext.publicamundi.plugins:DatasetForm
-
-        publicamundi_dataset_with_spatial = ckanext.publicamundi.plugins:SpatialDatasetForm
         
         publicamundi_package = ckanext.publicamundi.plugins:PackageController
 
