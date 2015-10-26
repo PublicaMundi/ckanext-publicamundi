@@ -24,7 +24,6 @@ asbool = toolkit.asbool
 # Helpers
 #
 
-# Todo Rewrite as BaseMetadata method
 def objectify(factory, data, key_prefix):
     '''Build an object from received converter/validator data. 
     '''
@@ -37,18 +36,19 @@ def objectify(factory, data, key_prefix):
         return k[0].startswith(prefix)
     
     obj = None
-    obj_dict = { k[0]: data[k] for k in data if is_field_key(k) }
+    obj_dict = {k[0]: data[k] for k in data if is_field_key(k)}
     if obj_dict:
-        obj = factory().from_dict(obj_dict, is_flat=True, opts={
+        obj = factory()
+        dictz_opts = {
             'unserialize-keys': True, 
             'key-prefix': key_prefix, 
             'unserialize-values': 'default', 
-        })
+        }
+        obj.from_dict(obj_dict, is_flat=True, opts=dictz_opts)
 
     assert not obj or isinstance(obj, Object)
     return obj
 
-# Todo Rewrite as BaseMetadata method
 def dictize_for_extras(obj, key_prefix):
     '''Dictize an object in proper way so that it's fields can be stored 
     under package_extra KV pairs.
@@ -62,7 +62,7 @@ def dictize_for_extras(obj, key_prefix):
         'key-prefix': key_prefix,
     }
     res = obj.to_dict(flat=True, opts=dictz_opts)
-    res = { k: v for k, v in res.iteritems() if v is not None }
+    res = {k: v for k, v in res.iteritems() if v is not None}
     return res
 
 def must_validate(context, data):
@@ -145,7 +145,8 @@ def postprocess_dataset_for_edit(key, data, errors, context):
     
     # 1. Objectify from flattened fields
     
-    obj = objectify(dt_spec.get('class'), data, key_prefix)
+    obj_factory = dt_spec.get('class')
+    obj = objectify(obj_factory, data, key_prefix)
 
     if not obj:
         # Failed to create one (maybe at resources form (?))

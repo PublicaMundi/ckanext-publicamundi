@@ -12,7 +12,8 @@ class BaseMetadata(Object):
     
     zope.interface.implements(IBaseMetadata)
     
-    def deduce_basic_fields(self):
+    def deduce_fields(self, keys=()):
+        # Todo: Adapt to new key-based contract
         transliterated_title = unidecode(self.title)
         return {
             'title': self.title,
@@ -21,10 +22,10 @@ class BaseMetadata(Object):
 
 # Import types into our namespace
 
-from ckanext.publicamundi.lib.metadata.types._common import *
-from ckanext.publicamundi.lib.metadata.types.thesaurus import Thesaurus, ThesaurusTerms
-from ckanext.publicamundi.lib.metadata.types.ckan_metadata import CkanMetadata
-from ckanext.publicamundi.lib.metadata.types.inspire_metadata import InspireMetadata
-from ckanext.publicamundi.lib.metadata.types.foo import Foo
-from ckanext.publicamundi.lib.metadata.types.baz import Baz
+from ._common import *
+from .thesaurus import Thesaurus, ThesaurusTerms
+from .ckan_metadata import CkanMetadata
+from .inspire_metadata import InspireMetadata
+from .foo import Foo
+from .baz import Baz
 

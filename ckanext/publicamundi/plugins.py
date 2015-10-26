@@ -268,13 +268,13 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         ignore_missing = toolkit.get_validator('ignore_missing')
         ignore_empty = toolkit.get_validator('ignore_empty')
         convert_to_extras = toolkit.get_converter('convert_to_extras')
-        default_initializer = toolkit.get_validator('default')
+        default = toolkit.get_validator('default')
         
         # Add dataset-type, the field that distinguishes metadata formats
 
         is_dataset_type = ext_validators.is_dataset_type
         schema['dataset_type'] = [
-            default_initializer('ckan'), convert_to_extras, is_dataset_type,
+            default('ckan'), convert_to_extras, is_dataset_type,
         ]
        
         # Add package field-level validators/converters
@@ -875,4 +875,51 @@ class ErrorHandler(p.SingletonPlugin):
             to_addresses=t.to_addresses, 
             from_address=t.from_address,
             prefix=t.subject_prefix)
+
+
+class MultilingualDatasetForm(DatasetForm):
+    '''Extend our basic dataset-form functionality to support multilingual datasets.
+    
+    This plugin is part of multilingual support in order to be able to:
+      * tag fields of your schemata as translatable
+      * translate field names (i.e key paths) for a schema
+      * translate vocabularies referenced from a schema
+      * translate user-supplied values for a certain dataset (web-based)
+    
+    '''
+    
+    ## IDatasetForm interface ## 
+
+    def create_package_schema(self):
+        schema = super(MultilingualDatasetForm, self).create_package_schema()
+        return self.__modify_package_schema(schema)
+
+    def update_package_schema(self):
+        schema = super(MultilingualDatasetForm, self).update_package_schema()
+        return self.__modify_package_schema(schema)
+    
+    def show_package_schema(self):
+        schema = super(MultilingualDatasetForm, self).show_package_schema()
+        
+        ignore_missing = toolkit.get_validator('ignore_missing')
+        convert_from_extras = toolkit.get_converter('convert_from_extras')
+        default = toolkit.get_validator('default')
+
+        schema['language'] = [convert_from_extras, default("neutral")]
+        return schema
+    
+    def __modify_package_schema(self, schema):
+        
+        ignore_empty = toolkit.get_validator('ignore_empty')
+        convert_to_extras = toolkit.get_converter('convert_to_extras')
+        
+        schema['language'] = [ignore_empty, convert_to_extras]
+        
+        ## If not given, try to deduce language from schema 
+        #def guess_language(key, data, errors, context):
+        #    raise Exception('MultilingualDatasetForm::__modify_package_schema')
+        #schema['__after'].append(guess_language)
+        
+        return schema
+ 
 

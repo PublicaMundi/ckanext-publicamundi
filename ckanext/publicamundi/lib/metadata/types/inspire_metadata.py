@@ -19,9 +19,9 @@ from ckanext.publicamundi.lib.metadata import vocabularies
 from ckanext.publicamundi.lib.metadata import xml_serializers
 from ckanext.publicamundi.lib.metadata.xml_serializers import object_xml_serialize_adapter
 
-from ckanext.publicamundi.lib.metadata.types import BaseMetadata
-from ckanext.publicamundi.lib.metadata.types.thesaurus import Thesaurus, ThesaurusTerms
-from ckanext.publicamundi.lib.metadata.types._common import *
+from . import BaseMetadata
+from ._common import *
+from .thesaurus import Thesaurus, ThesaurusTerms
 
 _ = toolkit._
 strptime = datetime.datetime.strptime
@@ -93,11 +93,11 @@ class InspireMetadata(BaseMetadata):
     
     responsible_party = list
 
-    def deduce_basic_fields(self):
-        '''Deduce basic (i.e. core CKAN) fields from self.
+    def deduce_fields(self, keys=()):
+        '''Deduce dataset fields from self.
         '''
 
-        data = super(InspireMetadata, self).deduce_basic_fields()
+        data = super(InspireMetadata, self).deduce_fields(keys)
         
         # id (applicable only for imported/harvested)
 
