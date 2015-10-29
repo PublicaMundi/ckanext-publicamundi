@@ -1,4 +1,3 @@
-import os
 import re
 import json
 import uuid
@@ -7,6 +6,8 @@ import zope.interface
 import zope.schema
 from zope.schema.vocabulary import SimpleVocabulary
 from lxml import etree
+
+# Fixme: Replace with native parser
 from owslib.iso import MD_Metadata
 
 from ckan.plugins.toolkit import toolkit
@@ -19,7 +20,8 @@ from ckanext.publicamundi.lib.metadata import vocabularies
 from ckanext.publicamundi.lib.metadata import xml_serializers
 from ckanext.publicamundi.lib.metadata.xml_serializers import object_xml_serialize_adapter
 
-from . import BaseMetadata
+from . import Metadata
+from . import deduce
 from ._common import *
 from .thesaurus import Thesaurus, ThesaurusTerms
 
@@ -55,9 +57,11 @@ class ConformityFactory(object):
         return [Conformity(title=None, degree=None)]
 
 @object_null_adapter()
-class InspireMetadata(BaseMetadata):
+class InspireMetadata(Metadata):
     
     zope.interface.implements(IInspireMetadata)
+
+    ## Factories for fields ##
 
     contact = list
     datestamp = None
@@ -93,71 +97,70 @@ class InspireMetadata(BaseMetadata):
     
     responsible_party = list
 
-    def deduce_fields(self, keys=()):
-        '''Deduce dataset fields from self.
-        '''
-
-        data = super(InspireMetadata, self).deduce_fields(keys)
-        
-        # id (applicable only for imported/harvested)
-
+    ## Deduce methods ## 
+    
+    @deduce('id')
+    def _deduce_id(self):
+        # This is meaningfull only for imported/harvested datasets
         identifier = None
         try:
             identifier = uuid.UUID(self.identifier)
         except:
             pass
         else:
-            data['id'] = str(identifier)
-        
-        # notes
-
-        data['notes'] = self.abstract
-        
-        # version: Todo
-        
-        # tags: Collect free keywords and thesauri terms (see #135)
-
+            identifier = str(identifier)
+        return identifier
+    
+    @deduce('notes')
+    def _deduce_notes(self):
+        return self.abstract
+    
+    @deduce('tags')
+    def _deduce_tags(self):
         tags = []
-
         for kw in self.free_keywords:
             tags.append(dict(name=kw.value, display_name=kw.value))
-        
         for thes_name, thes_terms in self.keywords.items():
             for term in thes_terms.iter_terms():
                 tags.append(dict(name=term.value, display_name=term.title))
+        return tags if len(tags) else None
 
-        if tags:
-            data['tags'] = tags
-
-        # spatial: Form a geoJSON polygon from the bounding-box
-        
-        if self.bounding_box:
-            bbox = self.bounding_box[0]
-            wblng, eblng, sblat, nblat = bbox.wblng, bbox.eblng, bbox.sblat, bbox.nblat
-            bbox_as_geojson = { 
-                'type': 'Polygon', 
-                'coordinates': [[
-                    [wblng, sblat], [wblng, nblat],
-                    [eblng, nblat], [eblng, sblat],
-                    [wblng, sblat],
-                ]]
-            }
-            data['spatial'] = json.dumps(bbox_as_geojson)
-     
-        # license: Match access-constraints to a license
-        
-        if self.access_constraints:
-            license_options = model.Package.get_license_options()
-            # Try an exact match to the license title
-            try:
-                iy = [y[0] for y in license_options].index(self.access_constraints[0])
-            except ValueError:
-                data['license_id'] = u'CC-BY-3.0'
-            else:
-                data['license_id'] = license_options[iy][1]
-        
-        # Done!
-        return data
+    @deduce('spatial')
+    def _deduce_spatial(self):
+        if not self.bounding_box:
+            return None
+        bbox = self.bounding_box[0]    
+        wblng, eblng, sblat, nblat = bbox.wblng, bbox.eblng, bbox.sblat, bbox.nblat
+        bbox_as_geojson = { 
+            'type': 'Polygon', 
+            'coordinates': [[
+                [wblng, sblat], [wblng, nblat],
+                [eblng, nblat], [eblng, sblat],
+                [wblng, sblat],
+            ]]
+        }
+        return json.dumps(bbox_as_geojson)
+    
+    @deduce('license_id')
+    def _deduce_license(self):
+        result = None
+        if not self.access_constraints:
+            return result
+        license_options = model.Package.get_license_options()
+        # Try an exact match to the license title
+        try:
+            iy = [y[0] for y in license_options].index(self.access_constraints[0])
+        except ValueError:
+            result = u'CC-BY-3.0'
+        else:
+            result = license_options[iy][1]
+        return result
+    
+    @deduce("language")
+    def _deduce_language(self):
+        # Convert from ISO 639-2 to an ISO 639-1 language code
+        # Todo
+        return None
 
 # XML serialization
 

@@ -144,7 +144,7 @@ def dataset_import(context, data_dict):
         raise Invalid({'source': _('The given XML file is malformed: %s') % (ex)})
 
     # Prepare package dict
-    
+
     pkg_dict = {'version': '1.0'}
     pkg_dict.update(obj.deduce_fields())
     pkg_dict.update({ 

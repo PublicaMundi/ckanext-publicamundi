@@ -21,7 +21,7 @@ class Baz(object):
 baz_factory = Baz()
 
 @object_null_adapter(name='another-foo')
-class AnotherFoo(types.BaseMetadata):
+class AnotherFoo(types.Metadata):
     
     zope.interface.implements(schemata.IFoo)
     
@@ -117,7 +117,7 @@ def test_from_serialized():
         "thematic_category": u"economy",
         "contact_info.address.address": u'Nowhere Land',
         "contacts.personal.address.address": u"North Pole",
-        "notes": u"Hello World",
+        "description": u"Hello World",
         "wakeup_time": u"08:00:00",
         "created": "1997-09-01T00:00:00",
     }

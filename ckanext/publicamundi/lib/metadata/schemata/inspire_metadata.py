@@ -4,15 +4,15 @@ import zope.schema
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
 from ckanext.publicamundi.lib.metadata import vocabularies
-from ckanext.publicamundi.lib.metadata.schemata import IBaseMetadata
-from ckanext.publicamundi.lib.metadata.schemata._common import *
-from ckanext.publicamundi.lib.metadata.schemata.thesaurus import (
-    IThesaurus, IThesaurusTerms)
+
+from . import IMetadata
+from ._common import *
+from .thesaurus import (IThesaurus, IThesaurusTerms)
 
 keyword_thesaurus_names = filter(
     lambda t: t.startswith('keywords-'), vocabularies.get_names())
 
-class IInspireMetadata(IBaseMetadata):
+class IInspireMetadata(IMetadata):
     
     zope.interface.taggedValue('recurse-on-invariants', True)
 

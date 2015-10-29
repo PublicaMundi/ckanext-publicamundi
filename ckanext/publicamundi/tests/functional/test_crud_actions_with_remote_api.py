@@ -6,7 +6,7 @@ from ConfigParser import ConfigParser
 
 from ckan.logic import ValidationError
 
-config_file = os.environ.get('TEST_INI', 'test-core.ini')
+config_file = os.environ.get('CKAN_TEST_CONFIG', 'test-core.ini')
 assert os.path.exists(config_file), 'The path for a test-*.ini file is needed.'
 
 config_parser = ConfigParser({ 'here': os.path.dirname(config_file) })

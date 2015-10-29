@@ -3,15 +3,19 @@ import zope.interface
 from ckanext.publicamundi.lib.metadata.base import (
     Object, object_null_adapter,
     object_format_adapter, ObjectFormatter)
-from ckanext.publicamundi.lib.metadata.schemata import IFoo
-from ckanext.publicamundi.lib.metadata.types import BaseMetadata
-from ckanext.publicamundi.lib.metadata.types._common import *
 from ckanext.publicamundi.lib.metadata import xml_serializers 
+from ckanext.publicamundi.lib.metadata.schemata import IFoo
+
+from . import Metadata
+from . import deduce
+from ._common import *
 
 @object_null_adapter()
-class Foo(BaseMetadata):
+class Foo(Metadata):
 
     zope.interface.implements(IFoo)
+
+    ## Factories for fields ## 
 
     title = None
     url = None
@@ -23,13 +27,24 @@ class Foo(BaseMetadata):
     geometry = list
     rating = None
     grade = None
-    notes = None
+    description = None
     temporal_extent = None
     reviewed = None
     created = None
     published = None
     password = None
     wakeup_time = None
+
+    ## Deduce methods ##
+
+    @deduce('url', 'id')
+    def _deduce_ids(self): 
+        return dict(url=self.url, id=self.url)
+
+    @deduce('notes')
+    def _deduce_notes(self): 
+        return self.description
+    
 
 @xml_serializers.object_xml_serialize_adapter(IFoo)
 class FooXmlSerializer(xml_serializers.ObjectSerializer):

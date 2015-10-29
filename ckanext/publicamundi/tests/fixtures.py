@@ -88,7 +88,7 @@ foo1 = Foo(
     reviewed = False,
     created = datetime.datetime(2014, 06, 11),
     wakeup_time = datetime.time(8, 0, 0),
-    notes = u'Hello World',
+    description = u'Hello World',
     thematic_category = 'economy',
     temporal_extent = dt1,
     rating = 0,
@@ -101,6 +101,7 @@ foo2 = Foo(
     title = u'Αβαβούα',
     tags = [ u'alpha', u'beta', u'gamma',],
     url = 'ftp://example.com/res/2',
+    description = u'Καλημέρα κόσμος',
     contact_info = ContactInfo(
         email=u'nomad@somewhere.com', 
         address=PostalAddress(address=u'Sahara', postalcode=u'12329')),

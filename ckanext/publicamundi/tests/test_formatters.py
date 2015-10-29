@@ -8,10 +8,13 @@ import zope.schema
 from zope.interface.verify import verifyObject
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
-from ckanext.publicamundi.lib.metadata import (
-    adapter_registry, FieldContext, Object)
-from ckanext.publicamundi.lib.metadata import IFormatter
-from ckanext.publicamundi.lib.metadata import formatters
+from ckan.plugins import toolkit
+
+# Mock translator before importing our modules!
+toolkit._ = lambda s: s
+
+from ckanext.publicamundi.lib.metadata import FieldContext, Object
+from ckanext.publicamundi.lib.metadata import IFormatter, formatters
 from ckanext.publicamundi.lib.metadata.formatters import formatter_for_field
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata import types

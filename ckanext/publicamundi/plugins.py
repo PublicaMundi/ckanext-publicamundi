@@ -473,7 +473,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         # Note If we attempt to pop() flat keys here (e.g. to replace them by a 
         # nested structure), resource forms will clear all extra fields !!
         
-        # Fixme: Move to a BaseMetadata method
+        # Fixme: Move to a Metadata classmethod
         prefix = key_prefix + '.'
         keys = filter(lambda k: k.startswith(prefix), pkg_dict.iterkeys())
         obj_dict = {}

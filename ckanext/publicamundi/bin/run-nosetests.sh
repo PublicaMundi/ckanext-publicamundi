@@ -6,8 +6,12 @@ log_level='INFO'
 
 dry_run=
 
+config=${TEST_INI}
+[ ! -f "${config}" ] && config="${CKAN_PYENV}/src/ckan/test-core.ini"
+echo " * Reading configuration from: ${config}"
+
 debugger=${TEST_DEBUGGER}
-test -z "${debugger}" && debugger="pdb"
+[ -z "${debugger}" ] && debugger="pdb"
 
 [[ ! "${debugger}" =~ (i)?pdb$ ]] && echo "Unknown debugger: ${debugger}" && exit 1 
 
@@ -49,10 +53,9 @@ if test -z "${tests}"; then
     tests="tests" 
 fi
 
-cmd="nosetests -v --ckan --with-pylons=${TEST_INI} ${nose_opts} ${tests}"
 if test -n "${dry_run}"; then
-    echo 'nosetests -v --ckan --with-pylons=${TEST_INI}' ${nose_opts} ${tests}
+    echo "nosetests -v --ckan --with-pylons=${config} ${nose_opts} ${tests}"
 else
     echo " * Running tests on: ${tests}"
-    nosetests -v --ckan --with-pylons=${TEST_INI} ${nose_opts} ${tests}
+    nosetests -v --ckan --with-pylons=${config} ${nose_opts} ${tests}
 fi

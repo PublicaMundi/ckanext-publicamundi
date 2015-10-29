@@ -2,7 +2,11 @@ import zope.interface
 import zope.interface.adapter
 import zope.schema
 
+from ckan.plugins import toolkit 
+
 adapter_registry = zope.interface.adapter.AdapterRegistry()
+
+# Import basic metadata-related functionality
 
 from ckanext.publicamundi.lib.metadata.ibase import (
     ISerializer, 
@@ -43,7 +47,7 @@ from ckanext.publicamundi.lib.metadata.widgets import (
     widget_for_field,
     widget_for_object)
 
-# Aliases for common functions
+# Provide aliases for common functions
 
 formatter_for = formatter_for_object
 

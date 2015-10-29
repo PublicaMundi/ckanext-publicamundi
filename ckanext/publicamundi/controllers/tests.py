@@ -145,7 +145,7 @@ class Controller(BaseController):
             },
             'temporal_extent': { 'title': u'Temporal Extent', },
             'reviewed': { 'title': u'Reviewed', },
-            'notes': { 'description': u'Add a detailed description', },
+            'description': { 'description': u'Add a detailed description', },
             'thematic_category': {},
             'tags': {},
             'created': { 'title': u'Created At', 'placeholder': datetime.datetime.now() },

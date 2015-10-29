@@ -200,6 +200,52 @@ def test_field_accessors_with_ifoo():
         'format-values': 'default'    
     })
 
+
+def _test_deduce_fields(x):
+
+    x = getattr(fixtures, x)
+
+    data = x.deduce_fields()
+    assert data['title']
+    assert data['name']
+
+    data = x.deduce_fields('i-dont-exist')
+    assert not data
+
+    data = x.deduce_fields('i-dont-exist', 'name', 'nothingness')
+    assert set(data) == {'name'}
+
+def _test_deduce_fields_foo(x):
+    
+    _test_deduce_fields(x)
+
+    foo = getattr(fixtures, x)
+
+    data = foo.deduce_fields()
+    expected_keys = ['name', 'title', 'notes', 'id', 'url']
+    assert all((data[k] for k in expected_keys))
+    
+    data = foo.deduce_fields('title')
+    assert set(data) == {'title'}
+    assert data['title'] == foo.title
+    
+    data = foo.deduce_fields('id')
+    assert set(data) == {'id'}
+    assert data['id'] == foo.url
+
+    data = foo.deduce_fields('notes')
+    assert set(data) == {'notes'}
+    assert data['notes'] == foo.description
+
+def test_deduce_fields():
+    
+    pass
+
+def test_deduce_fields_foo():
+    
+    yield _test_deduce_fields_foo, 'foo1' 
+    yield _test_deduce_fields_foo, 'foo2' 
+
 if __name__  == '__main__':
      
     x = fixtures.foo1
@@ -220,4 +266,4 @@ if __name__  == '__main__':
 
     test_field_accessors_with_ifoo()
     
-
+    _test_deduce_fields_foo('foo1')

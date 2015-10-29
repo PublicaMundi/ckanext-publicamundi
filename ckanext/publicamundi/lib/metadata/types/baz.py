@@ -3,9 +3,8 @@ import zope.interface
 from ckanext.publicamundi.lib.metadata.base import Object, object_null_adapter
 from ckanext.publicamundi.lib.metadata.schemata import IBaz
 
-from ckanext.publicamundi.lib.metadata.types import BaseMetadata
-from ckanext.publicamundi.lib.metadata.types import Thesaurus, ThesaurusTerms
-from ckanext.publicamundi.lib.metadata.types._common import *
+from . import Metadata, Thesaurus, ThesaurusTerms
+from ._common import *
 
 thesaurus_gemet_themes = Thesaurus.lookup('keywords-gemet-themes')
 
@@ -18,7 +17,7 @@ class KeywordsFactory(object):
         return ThesaurusTerms(terms=[], thesaurus=self.thesaurus)
 
 @object_null_adapter()
-class Baz(BaseMetadata):
+class Baz(Metadata):
 
     zope.interface.implements(IBaz)
 

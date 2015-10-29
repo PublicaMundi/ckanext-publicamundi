@@ -7,14 +7,7 @@ from ckanext.publicamundi.lib.metadata.ibase import IObject
 
 class IBaseMetadata(IObject):
     
-    zope.interface.taggedValue('recurse-on-invariants', False)
-
-    title = zope.schema.TextLine(
-        title = u'Title',
-        required = True, 
-        min_length = 5)
-    
-    def deduce_fields(keys=()):
+    def deduce_fields(*keys):
         '''Return a dict populated with top-level (not bound to a schema) dataset fields.
         The fields are deduced (if possible) from this object's own fields.
         
@@ -28,6 +21,12 @@ class IBaseMetadata(IObject):
         the keys provided. 
         '''
 
+class IMetadata(IBaseMetadata):
+
+    zope.interface.taggedValue('recurse-on-invariants', False)
+
+    title = zope.schema.TextLine(title=u'Title', required=True, min_length=5)
+   
 # Import actual interfaces into schemata
 
 from ._common import *

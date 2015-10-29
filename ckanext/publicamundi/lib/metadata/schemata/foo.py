@@ -4,10 +4,11 @@ import zope.schema
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
 from ckanext.publicamundi.lib.metadata.ibase import IObject
-from ckanext.publicamundi.lib.metadata.schemata import IBaseMetadata
-from ckanext.publicamundi.lib.metadata.schemata._common import *
 
-class IFoo(IBaseMetadata):
+from . import IMetadata
+from ._common import *
+
+class IFoo(IMetadata):
     zope.interface.taggedValue('recurse-on-invariants', True)
 
     url = zope.schema.URI(
@@ -63,7 +64,7 @@ class IFoo(IBaseMetadata):
         default = False,
         description = u'This foo is reviewed by someone',)
 
-    notes = zope.schema.Text(
+    description = zope.schema.Text(
         required = False,
         title = u'Notes',
         description = u'Add your notes')

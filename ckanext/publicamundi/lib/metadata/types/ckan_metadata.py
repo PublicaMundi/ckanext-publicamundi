@@ -1,12 +1,13 @@
 import zope.interface
 
 from ckanext.publicamundi.lib.metadata.base import Object, object_null_adapter
-from ckanext.publicamundi.lib.metadata.schemata.ckan_metadata import ICkanMetadata
-from ckanext.publicamundi.lib.metadata.types import BaseMetadata
 from ckanext.publicamundi.lib.metadata import xml_serializers 
+from ckanext.publicamundi.lib.metadata.schemata.ckan_metadata import ICkanMetadata
+
+from . import Metadata
 
 @object_null_adapter()
-class CkanMetadata(BaseMetadata):
+class CkanMetadata(Metadata):
     
     zope.interface.implements(ICkanMetadata)
 

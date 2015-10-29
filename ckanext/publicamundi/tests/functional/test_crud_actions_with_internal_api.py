@@ -329,7 +329,7 @@ foo_fixtures = {
                 'rating': 100, # out of range
                 'grade': 8.2,
                 'thematic_category': 'health',
-                'notes': u'Blah Blah',
+                'description': u'Blah Blah',
                 'wakeup_time': '08:35:00',
             },
         },
