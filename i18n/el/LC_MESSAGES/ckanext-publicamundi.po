@@ -1816,6 +1816,16 @@ msgstr "Παράδειγμα ερωτήματος (αποτελέσματα πο
 msgid "Query example in javascript (using the PublicaMundi API)"
 msgstr "Παράδειγμα ερωτήματος σε javascript (μέσω του PublicaMundi API)"
 
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/data_api.html:34
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/data_api.html:37
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/mapping_api.html:18
+msgid "You can copy/paste the snippet below to see it in action"
+msgstr "Μπορείτε να αντιγράψετε/επικολλήσετε το απόκομμα κώδικα που ακολουθεί για να το δείτε στην πράξη"
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/data_api.html:36
+msgid "Query example in JSON (using the PublicaMundi API)"
+msgstr "Παράδειγμα ερωτήματος σε JSON (μέσω του PublicaMundi API)"
+
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/data_api.html:35
 msgid "Dataset contains no datastore resources"
 msgstr "Το συγκεκριμένο σύνολο δεδομένων δεν περιέχει κατάλληλους πόρους για χρήση με το API δεδομένων"
