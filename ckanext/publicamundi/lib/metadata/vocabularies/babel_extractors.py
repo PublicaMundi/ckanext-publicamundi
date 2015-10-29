@@ -4,6 +4,7 @@ import json
 import zope.interface
 import zope.schema
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+from collections import OrderedDict
 
 # Babel string extraction functions
 
@@ -39,35 +40,41 @@ def extract_json(fileobj, keywords, comment_tags, options):
         }
     }
     """
+    line = 0
+    values = json.loads(fileobj.read(), object_pairs_hook=OrderedDict)
 
-    i = 0
-    for k,v in json.loads(fileobj.read()).iteritems():
-        i += 1
-        if isinstance(v, dict):
+    for k, v in values.iteritems():
+        line += 1
+        if isinstance(k, unicode) or isinstance(k, str):
+            line += 1
+            yield(line, 0, str(k), "")
+
+        if isinstance(v, OrderedDict):
             for kk,vv in v.iteritems():
-                i += 1
+                line += 1
 
                 if kk == 'terms':
                     # Case 1 Dictionary with list of values (vocab1)
                     if isinstance(vv, list):
                         for vvv in vv:
-                            i += 1
-                            yield (i, 0, vvv, "")
+                            line += 1
+                            yield (line, 0, str(vvv), "")
 
                     # Case 2 Simple key,value dictionary (vocab2)
-                    elif isinstance(vv, dict):
+                    elif isinstance(vv, OrderedDict):
                         for kkk,vvv in vv.iteritems():
-                            i += 1
-                            yield (i, 0, vv, "")
+                            line += 1
+                            yield (line, 0, str(vvv), "")
 
                 else:
                     # Case 3 Dictionary with metadata and list of values
-                    for kkkk,vvvv in vv.iteritems():
-                        i += 1
+                    for kkk,vvv in vv.iteritems():
+                        line += 1
 
-                        if kkkk == 'terms':
-                            if isinstance(vvvv, list):
-                                for vvvvv in vvvv:
-                                    i += 1
-                                    yield (i, 0, vvvvv, "")
-
+                        if kkk == 'terms':
+                            if isinstance(vvv, list):
+                                for vvvv in vvv:
+                                    line += 1
+                                    yield (line, 0, str(vvvv), "")
+                    line += 1
+                line += 1
