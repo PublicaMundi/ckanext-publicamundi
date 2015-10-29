@@ -8,26 +8,28 @@ from zope.interface.verify import verifyObject
 from ckanext.publicamundi.lib.metadata.ibase import IObject
 from ckanext.publicamundi.lib.metadata import vocabularies
 
+_ = lambda t:t
+
 class IThesaurus(IObject):
 
-    name = zope.schema.NativeString(title=u'Name', required=True)
+    name = zope.schema.NativeString(title=_(u'Name'), required=True)
     
-    title = zope.schema.TextLine(title=u'Title', required=True)
+    title = zope.schema.TextLine(title=_(u'Title'), required=True)
 
-    reference_date = zope.schema.Date(title=u'Date', required=True)
+    reference_date = zope.schema.Date(title=_(u'Date'), required=True)
 
     date_type = zope.schema.Choice(
-        title = u"Date Type",
+        title = _(u'Date Type'),
         vocabulary = vocabularies.get_by_name('date-types').get('vocabulary'),
         required = True)
 
     version = zope.schema.NativeString(
-        title = u'Version',
+        title = _(u'Version'),
         constraint = re.compile('^\d+\.\d+(\.[a-z0-9]+)*$').match,
         required = False)
 
     vocabulary = zope.schema.Object(IVocabularyTokenized, 
-        title = u'Vocabulary',
+        title = _(u'Vocabulary'),
         required = True)
 
     @zope.interface.invariant
@@ -44,12 +46,12 @@ class IThesaurus(IObject):
 class IThesaurusTerms(IObject):
 
     thesaurus = zope.schema.Object(IThesaurus, 
-        title = u'Thesaurus',
+        title = _(u'Thesaurus'),
         required = True)
 
     terms = zope.schema.List(
-        title = u'Terms',
-        value_type = zope.schema.NativeString(title=u'Term'),
+        title = _(u'Terms'),
+        value_type = zope.schema.NativeString(title=_(u'Term')),
         required = True,
         min_length = 1,
         max_length = 8)
