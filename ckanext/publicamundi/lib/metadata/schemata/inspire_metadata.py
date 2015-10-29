@@ -118,7 +118,7 @@ class IInspireMetadata(IBaseMetadata):
         if obj.keywords:
             if not ('keywords-gemet-inspire-themes' in obj.keywords):
                 raise zope.interface.Invalid(
-                    'You need to select at least one keyword from INSPIRE data themes')
+                    _(u'You need to select at least one keyword from INSPIRE data themes'))
 
     free_keywords = zope.schema.List(
             title= _(u'Free Keywords'),
