@@ -37,7 +37,7 @@ class IInspireMetadata(IBaseMetadata):
 
     languagecode = zope.schema.Choice(
         title = _(u'Metadata Language'),
-        vocabulary = vocabularies.get_by_name('languages').get('vocabulary'),
+        vocabulary = vocabularies.get_by_name('languages-iso-639-2').get('vocabulary'),
         description = _(u'This is the language in which the metadata elements are expressed. The value domain of this metadata element is limited to the official languages of the Community expressed in conformity with ISO 639-2.'),
         required = True,
         default = 'eng')
@@ -82,7 +82,7 @@ class IInspireMetadata(IBaseMetadata):
         max_length = 5,
         value_type = zope.schema.Choice(
             title = _(u'Resource Language'),
-            vocabulary = vocabularies.get_by_name('languages').get('vocabulary'),))
+            vocabulary = vocabularies.get_by_name('languages-iso-639-2').get('vocabulary'),))
 
     # Classification 
 

@@ -46,3 +46,7 @@ _update(
     reference_data.get_path('inspire-vocabularies.json'), 
     name_prefix='')
 
+_update(
+    reference_data.get_path('language-codes.json'), 
+    name_prefix='')
+
