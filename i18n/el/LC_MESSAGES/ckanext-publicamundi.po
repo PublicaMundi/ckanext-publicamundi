@@ -1830,22 +1830,25 @@ msgstr "Παράδειγμα ερωτήματος σε JSON (μέσω του Pub
 msgid "Dataset contains no datastore resources"
 msgstr "Το συγκεκριμένο σύνολο δεδομένων δεν περιέχει κατάλληλους πόρους για χρήση με το API δεδομένων"
 
-#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/data_api.html:37
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/data_api.html:44
+#, python-format
 msgid ""
-"'You can find detailed Data API demos <a href=\"/maps/demo/data-"
-"api.html\" target=\"_blank\">here</a>"
-msgstr "Μπορείτε να βρείτε λεπτομερή παραδείγματα σχετικά με το API δεδομένων <a href=\"/maps/demo/data-api.html\" target=\"_blank\">εδώ</a>"
+"You can find detailed Data API demos <a href=\"%(data_api_link)s\" "
+"target=\"_blank\">here</a>"
+msgstr "Μπορείτε να βρείτε λεπτομερή παραδείγματα για το API δεδομένων <a href=\"%(data_api_link)s\" target=\"_blank\">εδώ</a>"
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/mapping_api.html:24
+#, python-format
+msgid ""
+"You can find detailed Mapping API demos <a href=\"%(mapping_api_link)s\" "
+"target=\"_blank\">here</a>"
+msgstr ""
+"Μπορείτε να βρείτε λεπτομερή παραδείγματα για το χαρτογραφικό API <a href=\"%(mapping_api_link)s\" "
+"target=\"_blank\">εδώ</a>"
 
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/mapping_api.html:24
 msgid "The dataset contains no suitable data to use with the Mapping API"
 msgstr "Το συγκεκριμένο σύνολο δεδομένων δεν περιέχει κατάλληλους πόρους για χρήση με το χαρτογραφικό API"
-
-#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/mapping_api.html:26
-msgid ""
-"You can find detailed Mapping API demos <a href=\"/mapping-"
-"api\" target=\"_blank\">here</a>"
-msgstr ""
-"Μπορείτε να βρείτε λεπτομερή παραδείγματα σχετικά με το χαρτογραφικό API <a href=\"/mapping-api\" target=\"_blank\">εδώ</a>"
 
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/metadata_api.html:5
 msgid "Metadata API"
