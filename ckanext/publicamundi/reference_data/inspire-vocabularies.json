@@ -1056,34 +1056,7 @@
             ], 
             "version": "3.0"
         }
-    }, 
-    "Languages": {
-        "terms": {
-            "bul": "Bulgarian", 
-            "ces": "Czech", 
-            "dan": "Danish", 
-            "deu": "German", 
-            "eng": "English", 
-            "est": "Estonian", 
-            "fin": "Finnish", 
-            "fra": "French", 
-            "gle": "Irish", 
-            "gre": "Greek", 
-            "hun": "Hungarian", 
-            "ita": "Italian", 
-            "lav": "Latvian", 
-            "lit": "Lithuanian", 
-            "mlt": "Maltese", 
-            "nld": "Dutch", 
-            "pol": "Polish", 
-            "por": "Portuguese", 
-            "ron": "Romanian", 
-            "slo": "Slovak", 
-            "slv": "Slovenian", 
-            "spa": "Spanish", 
-            "swe": "Swedish"
-        }
-    }, 
+    },
     "Party Roles": {
         "terms": {
             "author": "Author", 

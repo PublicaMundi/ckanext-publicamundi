@@ -47,7 +47,7 @@ def extract_json(fileobj, keywords, comment_tags, options):
         line += 1
         if isinstance(k, unicode) or isinstance(k, str):
             line += 1
-            yield(line, 0, str(k), "")
+            yield(line, 0, unicode(k), "")
 
         if isinstance(v, OrderedDict):
             for kk,vv in v.iteritems():
@@ -58,13 +58,13 @@ def extract_json(fileobj, keywords, comment_tags, options):
                     if isinstance(vv, list):
                         for vvv in vv:
                             line += 1
-                            yield (line, 0, str(vvv), "")
+                            yield (line, 0, unicode(vvv), "")
 
                     # Case 2 Simple key,value dictionary (vocab2)
                     elif isinstance(vv, OrderedDict):
                         for kkk,vvv in vv.iteritems():
                             line += 1
-                            yield (line, 0, str(vvv), "")
+                            yield (line, 0, unicode(vvv), "")
 
                 else:
                     # Case 3 Dictionary with metadata and list of values
@@ -75,6 +75,6 @@ def extract_json(fileobj, keywords, comment_tags, options):
                             if isinstance(vvv, list):
                                 for vvvv in vvv:
                                     line += 1
-                                    yield (line, 0, str(vvvv), "")
+                                    yield (line, 0, unicode(vvvv), "")
                     line += 1
                 line += 1
