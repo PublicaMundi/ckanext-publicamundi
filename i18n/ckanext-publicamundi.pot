@@ -1747,24 +1747,36 @@ msgstr ""
 msgid "Query example in javascript (using the PublicaMundi API)"
 msgstr ""
 
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/data_api.html:34
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/data_api.html:37
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/mapping_api.html:18
+msgid "You can copy/paste the snippet below to see it in action"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/data_api.html:36
+msgid "Query example in JSON (using the PublicaMundi API)"
+msgstr ""
+
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/data_api.html:35
 msgid "Dataset contains no datastore resources"
 msgstr ""
 
-#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/data_api.html:37
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/data_api.html:44
+#, python-format
 msgid ""
-"'You can find detailed Data API demos <a href=\"/maps/demo/data-"
-"api.html\">here</a>"
+"You can find detailed Data API demos <a href=\"%(data_api_link)s\" "
+"target=\"_blank\">here</a>"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/mapping_api.html:24
 msgid "The dataset contains no suitable data to use with the Mapping API"
 msgstr ""
 
-#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/mapping_api.html:26
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/mapping_api.html:24
+#, python-format
 msgid ""
-"You can find detailed Mapping API demos <a href=\"/mapping-"
-"api\">here</a>"
+"You can find detailed Mapping API demos <a href=\"%(mapping_api_link)s\" "
+"target=\"_blank\">here</a>"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/developers/metadata_api.html:5
