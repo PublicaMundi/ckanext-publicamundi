@@ -244,7 +244,7 @@ class TestController(ckan.tests.TestController):
         result_tags = set(map(lambda t: t['name'] ,result['tags']))
         assert tags == result_tags
 
-        result_dict = result[dt_prefix]
+        result_dict = result.get(dt_prefix, {})
         result_obj = obj_factory().from_dict(result_dict, is_flat=False, opts={ 
             'unserialize-values': 'json-s' 
         })

@@ -27,6 +27,7 @@ class TestController(ckan.tests.TestController):
         sample_files = [
             '11786ee2-828a-4513-9117-7d3b1dc93b7b.xml', # Orthophotos - Greece
             '57d0f331-6950-4deb-a2f6-30e560915a2e.xml', # Corine-2000 - Greece
+            'd59c2895-49c0-416f-a77e-122459cc8cac.xml', # Coastline - Greece
         ]
 
         for metadata_file in sample_files:

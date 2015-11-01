@@ -126,7 +126,7 @@ class TestController(BaseTestController):
         res3 = res2s.follow()
         
         form3 = res3.forms['package-form']
-        for k in ['version', 'url', 'author', 'author_email', 'maintainer', 'maintainer_email']:
+        for k in ['version', 'author', 'author_email', 'maintainer', 'maintainer_email']:
             v = pkg_dict.get(k)
             v = v.encode('utf-8') if isinstance(v, unicode) else v
             form3.set(k, v)
@@ -155,7 +155,7 @@ class TestController(BaseTestController):
         assert res_dict['dataset_type'] == dt
         
         for k in (self.basic_fields & set(res_dict.keys())):
-            assert res_dict[k] == pkg_dict[k]
+            assert (not k in pkg_dict) or res_dict[k] == pkg_dict[k]
         
         pkg_dt_dict = dictization.flatten(pkg_dict.get(dt))
         res_dt_dict = dictization.flatten(res_dict.get(dt))
@@ -447,7 +447,6 @@ package_fixtures['hello-inspire-1'] = {
         'maintainer': u'Nowhere Man',
         'author_email': 'lalakis.1999@example.com',
         'maintainer_email': 'nowhere-man@example.com',
-        'url': 'http://example.com/datasets/hello-inspire-1',
         'tags': [
             { 'name': 'hello-world', 'display_name': 'Hello World', }, 
             { 'name': u'test', 'display_name': 'Test' }, 
