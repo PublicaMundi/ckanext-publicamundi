@@ -2,7 +2,7 @@
 
 {% set datastore_root_url = '/api/3/action' %} 
 {% for resource in pkg.resources %}
-    {% if (resource.format == 'csv' or resource.format == 'xls') and resource.datastore_active %}
+ {% if (resource.format == 'data_table') and resource.datastore_active %}
         {% do res.update(resource) %}
     {% endif %}
 {% endfor %}
@@ -31,12 +31,17 @@
                   target="_blank">{{ datastore_root_url + '/datastore_search_sql?sql=SELECT * from "' + res.id + '" WHERE title LIKE \'public\'' }}</a></code>
           </p>
           <strong>{{ _('Query example in javascript (using the PublicaMundi API)') }}</strong>
+          <label>{{_('You can copy/paste the snippet below to see it in action')}}</label>
           {% snippet 'package/snippets/developers/data_api_js.html', res=res %}
+        <strong>{{ _('Query example in JSON (using the PublicaMundi API)') }}</strong>
+          <label>{{_('You can copy/paste the snippet below to see it in action')}}</label>
+          {% snippet 'package/snippets/developers/data_api_json.html', res=res %}
+
         {% else %}
         <strong>{{ _('Dataset contains no datastore resources') }}</strong><br><br>
         {% endif %}
             {% set data_api_link = h.redirect_wp('applications/data-api') %}
-                <strong>{%trans%}'You can find detailed Data API demos <a href="{{data_api_link }}" target="_blank">here</a>{%endtrans%}
+            <strong>{%trans%}You can find detailed Data API demos <a href="{{data_api_link }}" target="_blank">here</a>{%endtrans%}</strong>
         </div>
 
         <!-- {#<br>
