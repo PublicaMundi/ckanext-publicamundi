@@ -17,7 +17,8 @@ Update CKAN configuration
 Edit your CKAN .ini configuration file (e.g. your `development.ini`) and activate the
 plugins as usual. For now, the supported plugins are:
 
- * `publicamundi_dataset`: Provides validation logic, storage logic and ui controls for metadata described in alternative schemata (e.g. INSPIRE).
+ * `publicamundi_dataset`: Provides validation logic, storage logic and ui controls for schema-following metadata (e.g. INSPIRE).
+ * `publicamundi_multilingual_dataset`: Extend `publicamundi_dataset` to support multilingual metadata.
  * `publicamundi_package`: Provides synchronization of package metadata to other databases (e.g. to the integrated CSW service, through pycsw).
  * `publicamundi_vector`: Provide processing and services for vector-based spatial resources. See more at README-vector.md
  * `publicamundi_raster`: Provide processing and services for raster-based spatial resources. See more at README-raster.md 
