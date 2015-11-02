@@ -3,7 +3,7 @@ import zope.interface
 import zope.schema
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
-from ckanext.publicamundi.lib.metadata import vocabularies
+from ckanext.publicamundi.lib import vocabularies
 
 from . import IMetadata
 from ._common import *

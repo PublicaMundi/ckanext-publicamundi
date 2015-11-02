@@ -8,7 +8,7 @@ vocabularies = {}
 
 # Import loader
 
-from ckanext.publicamundi.lib.metadata.vocabularies.json_loader import (
+from .json_loader import (
     make_vocabularies, normalize_keyword, normalize_thesaurus_title)
 
 def _update(data_file, name_prefix='', overwrite=False):

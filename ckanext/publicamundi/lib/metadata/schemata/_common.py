@@ -6,7 +6,7 @@ import zope.schema.vocabulary
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 import z3c.schema.email
 
-from ckanext.publicamundi.lib.metadata import vocabularies
+from ckanext.publicamundi.lib import vocabularies
 from ckanext.publicamundi.lib.metadata.ibase import IObject
 
 _ = lambda t:t

@@ -14,9 +14,10 @@ from ckan.plugins.toolkit import toolkit
 from ckan.lib.base import model
 
 from ckanext.publicamundi import reference_data
+from ckanext.publicamundi.lib import vocabularies
+from ckanext.publicamundi.lib import languages
 from ckanext.publicamundi.lib.metadata.base import Object, object_null_adapter
 from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import IInspireMetadata
-from ckanext.publicamundi.lib.metadata import vocabularies
 from ckanext.publicamundi.lib.metadata import xml_serializers
 from ckanext.publicamundi.lib.metadata.xml_serializers import object_xml_serialize_adapter
 
@@ -159,7 +160,8 @@ class InspireMetadata(Metadata):
     @deduce("language")
     def _deduce_language(self):
         # Convert from ISO 639-2 to an ISO 639-1 language code
-        # Todo
+        if self.languagecode:
+            return languages.get_by_code(self.languagecode).get('alpha2')
         return None
 
 # XML serialization

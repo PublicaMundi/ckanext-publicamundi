@@ -3,7 +3,7 @@ import zope.interface
 import zope.schema
 from zope.schema.vocabulary import SimpleVocabulary
 
-from ckanext.publicamundi.lib.metadata import vocabularies
+from ckanext.publicamundi.lib import vocabularies
 from ckanext.publicamundi.lib.metadata.base import Object, object_null_adapter
 from ckanext.publicamundi.lib.metadata.schemata.thesaurus import (
     IThesaurusTerms, IThesaurus)

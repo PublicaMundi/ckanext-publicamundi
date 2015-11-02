@@ -5,8 +5,8 @@ import zope.schema
 from zope.schema.interfaces import IVocabularyTokenized
 from zope.interface.verify import verifyObject
 
+from ckanext.publicamundi.lib import vocabularies
 from ckanext.publicamundi.lib.metadata.ibase import IObject
-from ckanext.publicamundi.lib.metadata import vocabularies
 
 _ = lambda t:t
 

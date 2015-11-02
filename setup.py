@@ -56,7 +56,7 @@ setup(
 
         [babel.extractors]
         
-        publicamundi_extract_json = ckanext.publicamundi.lib.metadata.vocabularies.babel_extractors:extract_json
+        publicamundi_extract_json = ckanext.publicamundi.lib.vocabularies.babel_extractors:extract_json
         
         [fanstatic.libraries]
         
