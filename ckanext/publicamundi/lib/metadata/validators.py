@@ -134,7 +134,7 @@ def postprocess_dataset_for_edit(key, data, errors, context):
     is_new = not pkg
 
     if is_new and not requested_with_api:
-        return # noop: only core metadata expected
+        return # only core metadata are expected
 
     dt = data[('dataset_type',)]
     dt_spec = dataset_types.get(dt)
@@ -149,8 +149,7 @@ def postprocess_dataset_for_edit(key, data, errors, context):
     obj = objectify(obj_factory, data, key_prefix)
 
     if not obj:
-        # Failed to create one (maybe at resources form (?))
-        return 
+        return # failed to create one (resources form ?)
 
     data[(key_prefix,)] = obj
     
@@ -305,6 +304,22 @@ def get_field_read_processor(field):
         return
 
     return convert
+
+def guess_language(key, data, errors, context):
+    assert key[0] == '__after', (
+        'This converter can only be invoked in the __after stage')
+    
+    extras_list = data[('extras',)]
+    dt = data[('dataset_type',)]
+    key_prefix = dataset_types[dt].get('key_prefix', dt)
+
+    obj = data.get((key_prefix,))
+    if not obj:
+        return # not created yet (at 1st stage ?)
+    lang = obj.deduce_fields('language').get('language') # iso-639-1 code
+    if lang:
+        extras_list.append({ 'key': 'language', 'value': lang })
+    return
 
 #
 # Validators/Converters for resources

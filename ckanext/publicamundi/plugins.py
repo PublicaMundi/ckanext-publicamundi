@@ -876,7 +876,6 @@ class ErrorHandler(p.SingletonPlugin):
             from_address=t.from_address,
             prefix=t.subject_prefix)
 
-
 class MultilingualDatasetForm(DatasetForm):
     '''Extend our basic dataset-form functionality to support multilingual datasets.
     
@@ -914,12 +913,6 @@ class MultilingualDatasetForm(DatasetForm):
         convert_to_extras = toolkit.get_converter('convert_to_extras')
         
         schema['language'] = [ignore_empty, convert_to_extras]
-        
-        ## If not given, try to deduce language from schema 
-        #def guess_language(key, data, errors, context):
-        #    raise Exception('MultilingualDatasetForm::__modify_package_schema')
-        #schema['__after'].append(guess_language)
-        
+        schema['__after'].append(ext_validators.guess_language)
         return schema
  
-
