@@ -33,7 +33,7 @@ class CommandDispatcher(CkanCommand):
         return CommandDispatcher.__usage %(dict(name=name))
 
     @staticmethod
-    def subcommand(name, options=[]):
+    def subcommand(name, options=()):
         '''A parameterized decorator to mark methods of derived classes as subcommands'''
         def decorate(method):
             CommandDispatcher.__specs.update({

@@ -8,7 +8,7 @@ Install
 
     pip install -r requirements.txt
     python setup.py develop
-    paster publicamundi-setup --config /path/to/development.ini
+    paster publicamundi --config /path/to/development.ini setup
 
 
 Update CKAN configuration
@@ -74,5 +74,5 @@ To get help on a particular subcommand (e.g. `widget-info`):
 Uninstall
 ---------
 
-    paster publicamundi-cleanup --config /path/to/development.ini
+    paster publicamundi --config /path/to/development.ini cleanup
 

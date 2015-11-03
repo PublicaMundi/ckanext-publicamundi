@@ -1,6 +1,6 @@
 import sys
 import re
-import os.path
+import os
 import json
 import itertools
 import optparse
@@ -38,34 +38,40 @@ class Command(CommandDispatcher):
     min_args = 0
     
     options_config = {
-        'greet': [
+        'setup': (
+            make_option('-n', '--dry-run', action='store_true', dest='dry_run', default=False),
+        ),
+        'cleanup': (
+            make_option('-n', '--dry-run', action='store_true', dest='dry_run', default=False),
+        ),
+        'greet': (
             make_option('--name', type='string', dest='name'),
             make_option('--num', type='int', dest='num', default=5),
-        ],
-        'test-create-dataset': [
+        ),
+        'test-create-dataset': (
             make_option('--name', type='string', dest='name', default='hello-world'),
             make_option('--owner', type='string', dest='owner_org', default=None),
             make_option('--title', type='string', dest='title', default=u'Hello World'),
             make_option('--description', type='string', dest='description', default=u'Hello _World_'),
             make_option('--id', type='string', dest='identifier', default=None, 
                 help='e.g. 8a728488-4453-4aef-a0f6-98d088294d5f'), 
-        ],
-        'import-dataset': [
+        ),
+        'import-dataset': (
             make_option('--owner', type='string', dest='owner_org', default=None),
             make_option('--dtype', type='string', dest='dtype', default='inspire'),
             make_option('--allow-rename', action='store_true', dest='allow_rename', default=False,
                 help='Rename dataset if a naming conflict occurs'),
             make_option('--force', action='store_true', dest='force', default=False, 
                 help='Create the dataset even if validation fails'),
-        ],
-        'adapter-registry-info': [
+        ),
+        'adapter-registry-info': (
             make_option('--no-fields', action='store_false', dest='show_fields', default=True),
             make_option('--field-cls', type='string', dest='field_cls', 
                 help='Filter results regarding only this field class (e.g. zope.schema.Date)'),
             make_option('--no-objects', action='store_false', dest='show_objects', default=True),
             make_option('--object-cls', type='string', dest='object_cls', 
                 help='Filter results regarding only this object class'),
-        ],
+        ),
     }
     
     def _fake_request_context(self):
@@ -98,16 +104,54 @@ class Command(CommandDispatcher):
 
     # Subcommands
     
-    @subcommand(
-        name='greet', options=options_config['greet'])
+    @subcommand('setup', options=options_config['setup'])
+    def setup_extension(self, opts, *args):    
+        '''Setup publicamundi extension (create tables, populate with initial data).
+        '''
+        
+        import ckan.model.meta as meta
+        import ckanext.publicamundi.model as publicamundi_model
+
+        if opts.dry_run:
+            self.logger.info(' ** DRY-RUN ** ')
+            self.logger.info('Creating tables at %s@%s: \n%s' % (
+                meta.engine.url.database,
+                meta.engine.url.host,
+                ', '.join(publicamundi_model.Base.metadata.tables.keys())))
+        else:
+            publicamundi_model.Base.metadata.create_all(bind=meta.engine)
+            publicamundi_model.post_setup(engine=meta.engine)
+
+        self.logger.info('Setup complete')
+    
+    @subcommand('cleanup', options=options_config['cleanup'])
+    def cleanup_extension(self, opts, *args):    
+        '''Cleanup publicamundi extension.
+        '''
+        
+        import ckan.model.meta as meta
+        import ckanext.publicamundi.model as publicamundi_model
+
+        if opts.dry_run:
+            self.logger.info(' ** DRY-RUN ** ')
+            self.logger.info('Dropping tables at %s@%s: \n%s' % (
+                meta.engine.url.database,
+                meta.engine.url.host,
+                ', '.join(publicamundi_model.Base.metadata.tables.keys())))
+        else:
+            publicamundi_model.pre_cleanup(engine=meta.engine)
+            publicamundi_model.Base.metadata.drop_all(bind=meta.engine)
+
+        self.logger.info('Cleanup complete')
+   
+    @subcommand('greet', options=options_config['greet'])
     def greet(self, opts, *args):
         '''Greet with a helloworld message
         '''
         self.logger.info('Running "greet" with args: %r %r', opts, args)
         print 'Hello %s' %(opts.name)
     
-    @subcommand(
-        name='test-create-dataset', options=options_config['test-create-dataset'])
+    @subcommand('test-create-dataset', options=options_config['test-create-dataset'])
     def test_create_dataset(self, opts, *args):
         '''An example that creates a dataset using the action api.
         '''
@@ -160,8 +204,7 @@ class Command(CommandDispatcher):
         pkg = get_action('package_create')(context, pkg_dict);
         print 'Created dataset with: id=%(id)s name=%(name)s:' %(pkg)
        
-    @subcommand(
-        name='import-dataset', options=options_config['import-dataset'])
+    @subcommand('import-dataset', options=options_config['import-dataset'])
     def import_dataset(self, opts, *args):
         '''Import a dataset from XML metadata
         '''
@@ -199,8 +242,7 @@ class Command(CommandDispatcher):
         self.logger.info('Imported dataset %(id)s (%(name)s)' %(result))
         return
     
-    @subcommand(
-        name='formatter-info', options=options_config['adapter-registry-info'])
+    @subcommand('formatter-info', options=options_config['adapter-registry-info'])
     def print_formatter_info(self, opts, *args):
         '''Print information for registered formatters
         '''
@@ -245,8 +287,7 @@ class Command(CommandDispatcher):
                     for qa, widget_cls in m:
                         print format_result(qa, widget_cls)
 
-    @subcommand(
-        name='widget-info', options=options_config['adapter-registry-info'])
+    @subcommand('widget-info', options=options_config['adapter-registry-info'])
     def print_widget_info(self, opts, *args):
         '''Print information for registered widgets
         '''
@@ -291,104 +332,6 @@ class Command(CommandDispatcher):
                     for qa, widget_cls in m:
                         print format_result(qa, widget_cls)
     
-class Example1(CkanCommand):
-    '''This is an example of a publicamundi-specific paster command:
-
-    >>> paster [PASTER-OPTS] publicamundi-example1 --config=FILE [COMMAND-OPTS]
-    '''
-
-    summary = 'This is an example of a publicamundi-specific paster command'
-    usage = __doc__
-    group_name = 'ckanext-publicamundi'
-    max_args = 10
-    min_args = 0
-
-    def __init__(self, name):
-        CkanCommand.__init__(self, name)
-        # Configure options parser
-        self.parser.add_option('--group', dest='group', help='Specify target group', type=str)
-
-    def command(self):
-        self._load_config()
-        self.log = logging.getLogger(__name__)
-
-        # Create a context for action api calls
-        context = {
-            'model': model,
-            'session': model.Session,
-            'ignore_auth': True,
-            'user': self.site_user.get('name'),
-            'allow_partial_update': True,
-            'api_version': '3' 
-        }
-
-        pkg_dict = {
-            'id': "8a728488-4453-4aef-a0f6-98d088294d5f",
-            'title': u'Hellooooo World',
-            'name': 'hello-world-1',
-            'notes': u'I say _hello_, you say _goodbye_',
-            'license_id': 'cc-zero',
-            'dataset_type': u'ckan',
-            'owner_org': 'acme',
-        }
-
-        pkg = get_action('package_create')(context, pkg_dict);
-        print 'Created dataset id=%(id)s name=%(name)s:' %(pkg_dict)
-
-class Setup(CkanCommand):
-    '''Setup publicamundi extension (create tables, populate with initial data).
-    
-    >>> paster [PASTER-OPTS] publicamundi-setup --config=FILE [COMMAND-OPTS]
-    '''
-
-    summary = 'Setup publicamundi extension'
-    usage = __doc__
-    group_name = 'ckanext-publicamundi'
-    max_args = 10
-    min_args = 0
-
-    def __init__(self, name):
-        CkanCommand.__init__(self, name)
-
-    def command(self):
-        self._load_config()
-        self.log = logging.getLogger(__name__)
-
-        import ckan.model.meta as meta
-        import ckanext.publicamundi.model as publicamundi_model
-
-        publicamundi_model.Base.metadata.create_all(bind=meta.engine)
-        publicamundi_model.post_setup(engine=meta.engine)
-
-        self.log.info('Setup complete')
-
-class Cleanup(CkanCommand):
-    '''Cleanup publicamundi extension.
-
-    >>> paster [PASTER-OPTS] publicamundi-cleanup --config=FILE [COMMAND-OPTS]
-    '''
-
-    summary = 'Cleanup publicamundi extension'
-    usage = __doc__
-    group_name = 'ckanext-publicamundi'
-    max_args = 10
-    min_args = 0
-
-    def __init__(self, name):
-        CkanCommand.__init__(self, name)
-
-    def command(self):
-        self._load_config()
-        self.log = logging.getLogger(__name__)
-
-        import ckan.model.meta as meta
-        import ckanext.publicamundi.model as publicamundi_model
-
-        publicamundi_model.pre_cleanup(engine=meta.engine)
-        publicamundi_model.Base.metadata.drop_all(bind=meta.engine)
-
-        self.log.info('Cleanup complete')
-
 #
 # Helpers
 #
