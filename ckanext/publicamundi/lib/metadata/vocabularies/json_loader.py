@@ -69,17 +69,18 @@ def make_vocabularies(data_file):
         yield (name, desc)
 
     keywords_data = data.get('Keywords')
-    for title in keywords_data.keys():
-        keywords = keywords_data.get(title)
-        keywords_terms = make_vocabulary(keywords.get('terms'))
-        name = normalize_thesaurus_title(title, for_keywords=True)
-        desc = {
-            'name': name,
-            'title': title,
-            'reference_date': datetime.strptime(keywords.get('reference_date'), '%Y-%m-%d').date(),
-            'date_type': keywords.get('date_type'),
-            'version': keywords.get('version').encode('utf-8'),
-            'vocabulary': make_vocabulary(keywords.get('terms'))
-        }
-        yield (name, desc)
+    if keywords_data:
+        for title in keywords_data.keys():
+            keywords = keywords_data.get(title)
+            keywords_terms = make_vocabulary(keywords.get('terms'))
+            name = normalize_thesaurus_title(title, for_keywords=True)
+            desc = {
+                'name': name,
+                'title': title,
+                'reference_date': datetime.strptime(keywords.get('reference_date'), '%Y-%m-%d').date(),
+                'date_type': keywords.get('date_type'),
+                'version': keywords.get('version').encode('utf-8'),
+                'vocabulary': make_vocabulary(keywords.get('terms'))
+            }
+            yield (name, desc)
 
