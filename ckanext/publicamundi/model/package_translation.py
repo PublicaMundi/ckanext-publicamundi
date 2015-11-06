@@ -8,21 +8,20 @@ from ckanext.publicamundi.model import Base
 from ckanext.publicamundi.lib import languages
 
 language_codes = languages.get_all('iso-639-1').keys()
-language_type = types.Enum(*language_codes, name='language_code')
+Language = types.Enum(*language_codes, name='language_code')
 
-state_type = types.Enum('active', 'draft', 'deleted', name='translation_state')
+translation_states = ('active', 'draft', 'deleted')
+TranslationState = types.Enum(*translation_states, name='translation_state')
 
 class PackageTranslation(Base):
-    __tablename__ = 'package_translation'
-
-    tid = Column('tid', types.Integer(), primary_key=True, autoincrement=True)
-    package_id = Column('package_id', types.UnicodeText(), ForeignKey(Package.id), nullable=False)
-    source_language = Column('source_language', language_type)
-    target_language = Column('target_language', language_type, nullable=False)
-    key = Column('key', types.UnicodeText(), nullable=False)
-    value = Column('value', types.UnicodeText())
-    state = Column('state', state_type, default='active')
-    
-    ix1 = Index('ix_package_translation_package_id', 'package_id')
-    uq1 = UniqueConstraint('package_id', 'source_language', 'target_language', 'key')
-    
+    __table__ = Table('package_translation', Base.metadata,
+        Column('tid', types.Integer(), primary_key=True, autoincrement=True),
+        Column('package', types.UnicodeText(), ForeignKey(Package.id, ondelete='cascade'), nullable=False),
+        Column('source_language', Language),
+        Column('target_language', Language, nullable=False),
+        Column('key', types.UnicodeText(), nullable=False),
+        Column('value', types.UnicodeText()),
+        Column('state', TranslationState, default='active'),
+        Index('ix_package_translation_package_key', 'package', 'key'),
+        UniqueConstraint('package', 'source_language', 'target_language', 'key'),
+    )

@@ -10,7 +10,7 @@ from .resource_ingest import ResourceIngest
 from .package_translation import PackageTranslation
 
 def post_setup(engine):
-	csw_post_setup(engine)
+    csw_post_setup(engine)
 
 def pre_cleanup(engine):
-	csw_pre_cleanup(engine)
+    csw_pre_cleanup(engine)

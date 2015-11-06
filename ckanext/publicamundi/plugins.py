@@ -904,7 +904,7 @@ class MultilingualDatasetForm(DatasetForm):
         convert_from_extras = toolkit.get_converter('convert_from_extras')
         default = toolkit.get_validator('default')
 
-        schema['language'] = [convert_from_extras, default("neutral")]
+        schema['language'] = [convert_from_extras, default('')]
         return schema
     
     def __modify_package_schema(self, schema):
@@ -916,3 +916,20 @@ class MultilingualDatasetForm(DatasetForm):
         schema['__after'].append(ext_validators.guess_language)
         return schema
  
+    ## IPackageController interface ##
+
+    def after_update(self, context, pkg_dict):
+        log1.info('Discard translations for modified keys of package %s', pkg_dict['name'])
+        # Todo: Discard translations for modified keys 
+        pass
+
+    def after_show(self, context, pkg_dict):
+        pkg_dict = super(MultilingualDatasetForm, self).after_show(context, pkg_dict)
+        # Todo: Provide a localized view of this dataset
+        return pkg_dict
+
+    def after_delete(self, context, pkg_dict):
+        log1.info('Cleaning up translations for package %s', pkg_dict['id'])
+        # Todo: Cleanup translations
+        pass
+
