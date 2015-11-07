@@ -18,10 +18,10 @@ class PackageTranslation(Base):
         Column('tid', types.Integer(), primary_key=True, autoincrement=True),
         Column('package', types.UnicodeText(), ForeignKey(Package.id, ondelete='cascade'), nullable=False),
         Column('source_language', Language),
-        Column('target_language', Language, nullable=False),
+        Column('language', Language, nullable=False),
         Column('key', types.UnicodeText(), nullable=False),
         Column('value', types.UnicodeText()),
         Column('state', TranslationState, default='active'),
         Index('ix_package_translation_package_key', 'package', 'key'),
-        UniqueConstraint('package', 'source_language', 'target_language', 'key'),
+        UniqueConstraint('package', 'source_language', 'language', 'key'),
     )

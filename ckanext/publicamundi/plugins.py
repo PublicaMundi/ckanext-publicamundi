@@ -451,7 +451,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         is_validated = context.get('validate', True)
         for_view = context.get('for_view', False)
         
-        log1.debug('after_show: Package %s is shown: view=%s validated=%s api=%s', 
+        log1.debug('DatasetForm.after_show: Package %s is shown: view=%s validated=%s api=%s', 
             pkg_dict.get('name'), for_view, is_validated, context.get('api_version'))
         
         if not is_validated:
@@ -906,7 +906,7 @@ class MultilingualDatasetForm(DatasetForm):
 
         schema['language'] = [convert_from_extras, default('')]
         return schema
-    
+
     def __modify_package_schema(self, schema):
         
         ignore_empty = toolkit.get_validator('ignore_empty')
@@ -915,21 +915,25 @@ class MultilingualDatasetForm(DatasetForm):
         schema['language'] = [ignore_empty, convert_to_extras]
         schema['__after'].append(ext_validators.guess_language)
         return schema
- 
+
     ## IPackageController interface ##
 
     def after_update(self, context, pkg_dict):
         log1.info('Discard translations for modified keys of package %s', pkg_dict['name'])
         # Todo: Discard translations for modified keys 
         pass
-
-    def after_show(self, context, pkg_dict):
-        pkg_dict = super(MultilingualDatasetForm, self).after_show(context, pkg_dict)
-        # Todo: Provide a localized view of this dataset
-        return pkg_dict
-
+    
     def after_delete(self, context, pkg_dict):
         log1.info('Cleaning up translations for package %s', pkg_dict['id'])
         # Todo: Cleanup translations
         pass
+
+    def after_show(self, context, pkg_dict):
+        '''Hook into the validated data dict after the package is ready for display.
+        '''
+        pkg_dict = super(MultilingualDatasetForm, self).after_show(context, pkg_dict)
+        if not pkg_dict:
+            return # noop
+        # Todo: Provide a localized view of this dataset
+        return pkg_dict
 
