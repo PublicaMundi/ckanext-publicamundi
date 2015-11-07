@@ -707,8 +707,6 @@ p a{
 .breadcrumb > li {
     text-shadow: none;
     color: #fff;
-    float: left;
-    margin-right: 5px;
 }
 .breadcrumb li:first-child:after{
     content: "";
@@ -725,7 +723,6 @@ p a{
 }
 
 .breadcrumb-hide-text:before{
-    //content:" ... " !important; 
 }
 .breadcrumb-hide-text:after{
     content:"";
@@ -742,9 +739,11 @@ p a{
     margin-bottom: 100px;
 }
 .toolbar .breadcrumb {
-    padding: 12px 0 6px 0;
-    overflow: hidden;
-    line-height: 30px;
+    padding: 8px 0 6px 0;
+    overflow-y: hidden;
+    overflow-x: auto;
+    white-space: nowrap;
+    display: inline;
 }
 .toolbar .sixtypercent .breadcrumb{
     max-width: 61%;
@@ -763,8 +762,7 @@ p a{
     display: block;
     background: #4E59A4;
     margin: 0;
-    min-height: 40px;
-    max-height: 60px;
+    height: 40px;
 }
 .toolbar:hover{
     transition: max-height 4s ease-in-out;
