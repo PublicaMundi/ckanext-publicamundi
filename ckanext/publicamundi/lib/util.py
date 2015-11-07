@@ -1,4 +1,5 @@
 import random
+import uuid
 import string
 import json
 import geojson
@@ -46,6 +47,13 @@ def raise_for_stub_method():
 def quote(s):
     '''A naive routine to enclose a unicode string in double quotes'''
     return u'"' + s.replace('\\', '\\\\').replace('"', '\\"') + u'"'
+
+def check_uuid(s):
+    try:
+        s = str(uuid.UUID(s))
+    except:
+        s = None
+    return s
 
 def find_all_duplicates(l):
     counter = collections.Counter(l)

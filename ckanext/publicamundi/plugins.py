@@ -8,6 +8,7 @@ import urllib
 import geoalchemy
 from itertools import chain, ifilter
 from routes.mapper import SubMapper
+import pylons
 
 import ckan.model as model
 import ckan.plugins as p
@@ -904,7 +905,8 @@ class MultilingualDatasetForm(DatasetForm):
         convert_from_extras = toolkit.get_converter('convert_from_extras')
         default = toolkit.get_validator('default')
 
-        schema['language'] = [convert_from_extras, default('')]
+        schema['language'] = [
+            convert_from_extras, default(pylons.config['ckan.locale_default'])]
         return schema
 
     def __modify_package_schema(self, schema):
@@ -935,5 +937,25 @@ class MultilingualDatasetForm(DatasetForm):
         if not pkg_dict:
             return # noop
         # Todo: Provide a localized view of this dataset
+        
+        from pylons import request
+        from ckanext.publicamundi.lib.i18n.package_translation import PackageTranslator
+        
+        # Example: Translate a given key e.g. inspire.abstract
+        
+        md = pkg_dict['inspire']
+        key = ('inspire', 'abstract')
+        
+        language = request.params.get('lang')
+        if not language:
+            language = pylons.i18n.get_lang()
+            language = language[0] if language else 'en'
+
+        t = PackageTranslator(pkg_dict)
+        if language != t.source_language:
+            abstract_translated = t.get(key, language)
+            if abstract_translated:
+                md.abstract = abstract_translated
+
         return pkg_dict
 
