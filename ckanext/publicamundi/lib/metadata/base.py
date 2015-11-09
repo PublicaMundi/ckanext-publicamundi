@@ -827,7 +827,7 @@ class Object(object):
             assert max_depth > 0
             
             res = {}
-            for k, field in obj.iter_fields(exclude_properties=True):
+            for k, field in obj.iter_fields(exclude_properties=False):
                 f = field.get(obj)
                 res[k] = self._dictize_field(f, field, max_depth -1)
             

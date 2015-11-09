@@ -270,7 +270,7 @@ def _test_dictize_nested(fixture_name, opts):
 
     d = x.to_dict(flat=False, opts=opts)
 
-    assert set(d.keys()) == set(x.get_fields(exclude_properties=1).keys())
+    assert set(d.keys()) == set(x.get_fields(exclude_properties=False).keys())
     
     print
     print ' -- Dictize: nested opts=%r' %(opts)
