@@ -943,19 +943,20 @@ class MultilingualDatasetForm(DatasetForm):
         
         # Example: Translate a given key e.g. inspire.abstract
         
-        md = pkg_dict['inspire']
-        key = ('inspire', 'abstract')
-        
-        language = request.params.get('lang')
+        language = request.params.get('lang')    
         if not language:
             language = pylons.i18n.get_lang()
             language = language[0] if language else 'en'
 
-        t = PackageTranslator(pkg_dict)
-        if language != t.source_language:
-            abstract_translated = t.get(key, language)
-            if abstract_translated:
-                md.abstract = abstract_translated
+        tr = PackageTranslator(pkg_dict)
+        
+        md = pkg_dict.get('foo')
+        if md:
+            key = ('inspire', 'abstract')
+            if language != tr.source_language:
+                abstract_translated = tr.get(key, language)
+                if abstract_translated:
+                    md.abstract = abstract_translated
 
         return pkg_dict
 

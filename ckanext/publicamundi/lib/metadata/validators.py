@@ -5,7 +5,7 @@ import zope.schema.interfaces
 import itertools
 from collections import Counter
 
-from pylons import config
+import pylons
 import ckan.plugins.toolkit as toolkit
 from ckan.lib.navl.dictization_functions import missing, StopOnError, Invalid
 
@@ -316,7 +316,15 @@ def guess_language(key, data, errors, context):
     obj = data.get((key_prefix,))
     if not obj:
         return # not created yet (at 1st stage ?)
-    lang = obj.deduce_fields('language').get('language') # iso-639-1 code
+    
+    # First, try to deduce from metadata
+    lang = obj.deduce_fields('language').get('language')
+    
+    # If not deduced, guess is current request's language
+    if not lang:
+        req_lang = pylons.i18n.get_lang()
+        lang = req_lang[0] if req_lang else 'en'
+    
     if lang:
         extras_list.append({ 'key': 'language', 'value': lang })
     return
@@ -345,7 +353,7 @@ def guess_resource_type_if_empty(key, data, errors, context):
     resource_format = resource_format.encode('ascii').lower()
     
     api_formats = aslist(
-        config.get('ckanext.publicamundi.api_resource_formats'))
+        pylons.config.get('ckanext.publicamundi.api_resource_formats'))
     if resource_format in api_formats:
         value = 'api'
     else:
