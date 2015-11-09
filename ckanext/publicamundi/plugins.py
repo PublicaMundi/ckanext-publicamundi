@@ -439,8 +439,6 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         '''Hook into the validated data dict after the package is ready for display. 
         
         The main tasks here are:
-         * Fix types for serialized dataset_type-related values (converted to unicode,
-           whereas should be str).
          * Convert dataset_type-related parts of pkg_dict to a nested dict or an object.
 
         This hook is for reading purposes only, i.e for template variables, api results, 
@@ -480,7 +478,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         obj_dict = {}
         for k in keys:
             k1 = k[len(prefix):]
-            obj_dict[k1] = pkg_dict[k] = str(pkg_dict[k])
+            obj_dict[k1] = pkg_dict[k]
         if not obj_dict:
             # Noop: No keys associated with a dataset-type
             return
