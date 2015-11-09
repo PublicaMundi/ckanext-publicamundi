@@ -25,14 +25,18 @@ class IMetadata(IBaseMetadata):
 
     zope.interface.taggedValue('recurse-on-invariants', False)
 
-    title = zope.schema.TextLine(title=u'Title', required=True, min_length=5)
+    title = zope.schema.TextLine(
+        title=u'Title', required=True, min_length=5)
    
+    identifier = identifier = zope.schema.NativeStringLine(
+        title=u'Identifier', required=True, min_length=3)
+
 # Import actual interfaces into schemata
 
 from ._common import *
 from .ckan_metadata import ICkanMetadata
 from .thesaurus import IThesaurus, IThesaurusTerms
 from .inspire_metadata import IInspireMetadata
-from .foo import IFoo
-from .baz import IBaz
+from .foo import IFooMetadata
+from .baz import IBazMetadata
 

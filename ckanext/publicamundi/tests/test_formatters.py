@@ -110,7 +110,7 @@ def test_field_float():
 
 def test_field_datetime():
 
-    f = schemata.IFoo.get('created')
+    f = schemata.IFooMetadata.get('created')
     
     v = datetime.datetime.now()
     
@@ -129,7 +129,7 @@ def test_field_datetime():
  
 def test_field_choice():
 
-    f = schemata.IFoo.get('thematic_category')
+    f = schemata.IFooMetadata.get('thematic_category')
     
     v = 'health'
     f.validate(v)
@@ -181,7 +181,7 @@ def test_field_dicts():
    
     # [Dict, *]
     
-    f = schemata.IFoo.get('contacts') 
+    f = schemata.IFooMetadata.get('contacts') 
     v = {
         'personal': fixtures.contact1,
         'office': fixtures.contact2,

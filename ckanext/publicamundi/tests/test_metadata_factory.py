@@ -23,7 +23,7 @@ baz_factory = Baz()
 @object_null_adapter(name='another-foo')
 class AnotherFoo(types.Metadata):
     
-    zope.interface.implements(schemata.IFoo)
+    zope.interface.implements(schemata.IFooMetadata)
     
     title = None
     baz = baz_factory
@@ -37,14 +37,14 @@ class AnotherFoo(types.Metadata):
 
 def test_factories():
 
-    fc1 = get_object_factory(schemata.IFoo)
+    fc1 = get_object_factory(schemata.IFooMetadata)
     o1 = fc1()
-    verifyObject(schemata.IFoo, o1)
-    assert isinstance(o1, types.Foo)
+    verifyObject(schemata.IFooMetadata, o1)
+    assert isinstance(o1, types.FooMetadata)
     
-    fc2 = get_object_factory(schemata.IFoo, name='another-foo')
+    fc2 = get_object_factory(schemata.IFooMetadata, name='another-foo')
     o2 = fc2()
-    verifyObject(schemata.IFoo, o2)
+    verifyObject(schemata.IFooMetadata, o2)
     assert isinstance(o2, AnotherFoo)
     assert (
         o2.baz == u'Baobab' and 
@@ -52,7 +52,7 @@ def test_factories():
         isinstance(o2.contact_info, types.ContactInfo))
     
     try:
-        fc3 = get_object_factory(schemata.IFoo, name='a-non-existing-name')
+        fc3 = get_object_factory(schemata.IFooMetadata, name='a-non-existing-name')
     except (ValueError, LookupError) as ex:
         pass
     else:
@@ -61,9 +61,9 @@ def test_factories():
 def test_tofrom_dicts():
 
     yield _test_tofrom_dicts, 'bbox1', schemata.IGeographicBoundingBox 
-    yield _test_tofrom_dicts, 'foo1', schemata.IFoo
-    yield _test_tofrom_dicts, 'foo2', schemata.IFoo
-    yield _test_tofrom_dicts, 'foo3', schemata.IFoo
+    yield _test_tofrom_dicts, 'foo1', schemata.IFooMetadata
+    yield _test_tofrom_dicts, 'foo2', schemata.IFooMetadata
+    yield _test_tofrom_dicts, 'foo3', schemata.IFooMetadata
 
 def _test_tofrom_dicts(fixture_name, schema):
     
@@ -122,7 +122,7 @@ def test_from_serialized():
         "created": "1997-09-01T00:00:00",
     }
      
-    factory = Object.Factory(schemata.IFoo, opts={
+    factory = Object.Factory(schemata.IFooMetadata, opts={
         'unserialize-keys': True,
         'unserialize-values': True,
     })
@@ -138,7 +138,7 @@ if __name__ == '__main__':
     
     test_factories()
 
-    _test_tofrom_dicts('foo1', schemata.IFoo)
+    _test_tofrom_dicts('foo1', schemata.IFooMetadata)
     
     test_from_serialized()
 

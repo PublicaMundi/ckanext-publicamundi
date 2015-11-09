@@ -38,7 +38,7 @@ poly3 = Polygon(name = u'P3', points=[
 
 # Fixtures x1*: schema validation errors
 
-x11 = Foo(
+x11 = FooMetadata(
     baz = u'Bazzz',
     title = u'Ababoua Ababoua',
     tags = [ u'alpha', u'beta', u'gamma', 42, 'aaa'],
@@ -73,7 +73,7 @@ x14.url = 'ftp://foo.example.com'
 
 # Fixtures x2*: invariant errors
 
-x21 = Foo(
+x21 = FooMetadata(
     baz = u'Bazzz',
     title = u'Ababoua Ababoua',
     tags = [ u'alpha', u'beta', u'gamma', u'alpha'], # duplicate 
@@ -163,10 +163,10 @@ def test_invariants_x22():
     assert len(errs_dict['__after']) >= 2
 
 def test_invariants_x23():
-    IFoo.get('contacts').value_type.required = False
+    IFooMetadata.get('contacts').value_type.required = False
     helpers.assert_faulty_keys(x23,
         expected_keys = set(['contact_info', 'temporal_extent']))
-    IFoo.get('contacts').value_type.required = True # dont affect others
+    IFooMetadata.get('contacts').value_type.required = True # dont affect others
 
 def test_invariants_x24():
     helpers.assert_faulty_keys(x24,

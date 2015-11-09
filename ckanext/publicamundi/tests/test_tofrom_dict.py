@@ -52,7 +52,7 @@ def _test_dictize_update_discard_junk(fixture_name, dtype, changeset):
     key_prefix = 'fooo'
 
     x0 = getattr(fixtures, fixture_name)
-    assert isinstance(x0, types.Foo)
+    assert isinstance(x0, types.FooMetadata)
     d = updates[dtype][changeset]
 
     # Prepend a key-prefix, and then insert some junk items into df

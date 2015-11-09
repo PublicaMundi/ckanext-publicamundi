@@ -68,7 +68,7 @@ spatialres2 = SpatialResolution(denominator=1000)
 
 # Foo
 
-foo1 = Foo(
+foo1 = FooMetadata(
     baz = u'Bazzz',
     title = u'Αβαβούα',
     tags = [ u'alpha', u'beta', u'gamma'],
@@ -96,7 +96,7 @@ foo1 = Foo(
     password = u'secret',
 )
 
-foo2 = Foo(
+foo2 = FooMetadata(
     baz = u'Baobab',
     title = u'Αβαβούα',
     tags = [ u'alpha', u'beta', u'gamma',],
@@ -149,9 +149,9 @@ thesaurus_gemet_themes = Thesaurus.lookup('keywords-gemet-themes')
 
 thesaurus_gemet_inspire_data_themes = Thesaurus.lookup('keywords-gemet-inspire-themes')
 
-# Baz 
+# BazMetadata 
 
-baz1 = Baz(
+baz1 = BazMetadata(
     url = 'http://baz.example.com',
     contacts = [contact1, contact2, contact3],
     keywords = ThesaurusTerms(

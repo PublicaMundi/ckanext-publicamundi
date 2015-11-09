@@ -282,7 +282,7 @@ class Controller(BaseController):
         '''
 
         obj = getattr(fixtures, id)
-        assert isinstance(obj, types.Foo)
+        assert isinstance(obj, types.FooMetadata)
         
         errors = obj.validate(dictize_errors=True)
 
@@ -291,7 +291,7 @@ class Controller(BaseController):
             # Parse request, filter-out empty values
             d = dict(filter(lambda t: t[1], request.params.items()))
             # Create a factory for this 
-            factory = Object.Factory(schemata.IFoo, opts={
+            factory = Object.Factory(schemata.IFooMetadata, opts={
                 'unserialize-keys': True,
                 'unserialize-values': True,
             })
@@ -324,7 +324,7 @@ class Controller(BaseController):
         '''
         
         obj = getattr(fixtures, id)
-        assert isinstance(obj, types.Foo)
+        assert isinstance(obj, types.FooMetadata)
         
         read_action = 'read'
         f = request.params.get('f')

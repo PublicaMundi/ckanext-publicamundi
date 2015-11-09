@@ -8,7 +8,8 @@ from ckanext.publicamundi.lib.metadata.ibase import IObject
 from . import IMetadata
 from ._common import *
 
-class IFoo(IMetadata):
+class IFooMetadata(IMetadata):
+    
     zope.interface.taggedValue('recurse-on-invariants', True)
 
     url = zope.schema.URI(

@@ -58,10 +58,10 @@ xml_serializer_for = xml_serializer_for_object
 # Import common schemata/types
 
 from ckanext.publicamundi.lib.metadata.schemata import (
-    IFoo, IBaz, ICkanMetadata, IInspireMetadata)
+    IFooMetadata, IBazMetadata, ICkanMetadata, IInspireMetadata)
 
 from ckanext.publicamundi.lib.metadata.types import (
-    Foo, Baz, CkanMetadata, InspireMetadata)
+    FooMetadata, BazMetadata, CkanMetadata, InspireMetadata)
 
 # Declare dataset types (i.e. metadata formats).
 
@@ -85,15 +85,15 @@ dataset_types = {
     'foo': {
         'title': 'Foo',
         'description': u'Provide metadata according to an arbitrary "foo" schema',
-        'schema': IFoo,
-        'class': Foo,
+        'schema': IFooMetadata,
+        'class': FooMetadata,
         'key_prefix': 'foo', 
     },
     'baz': { 
         'title': 'Baz',
         'description': u'Provide metadata according to an arbitrary "baz" schema',
-        'schema': IBaz,
-        'class': Baz,
+        'schema': IBazMetadata,
+        'class': BazMetadata,
         'key_prefix': 'baz', 
     },
 }

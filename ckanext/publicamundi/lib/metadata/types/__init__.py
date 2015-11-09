@@ -157,6 +157,6 @@ from ._common import *
 from .thesaurus import Thesaurus, ThesaurusTerms
 from .ckan_metadata import CkanMetadata
 from .inspire_metadata import InspireMetadata
-from .foo import Foo
-from .baz import Baz
+from .foo import FooMetadata
+from .baz import BazMetadata
 

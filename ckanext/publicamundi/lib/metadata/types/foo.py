@@ -4,16 +4,16 @@ from ckanext.publicamundi.lib.metadata.base import (
     Object, object_null_adapter,
     object_format_adapter, ObjectFormatter)
 from ckanext.publicamundi.lib.metadata import xml_serializers 
-from ckanext.publicamundi.lib.metadata.schemata import IFoo
+from ckanext.publicamundi.lib.metadata.schemata import IFooMetadata
 
 from . import Metadata
 from . import deduce
 from ._common import *
 
 @object_null_adapter()
-class Foo(Metadata):
+class FooMetadata(Metadata):
 
-    zope.interface.implements(IFoo)
+    zope.interface.implements(IFooMetadata)
 
     ## Factories for fields ## 
 
@@ -45,11 +45,16 @@ class Foo(Metadata):
     def _deduce_notes(self): 
         return self.description
     
+    ## Properties ##
 
-@xml_serializers.object_xml_serialize_adapter(IFoo)
+    @property
+    def identifier(self):
+        return self.url
+
+@xml_serializers.object_xml_serialize_adapter(IFooMetadata)
 class FooXmlSerializer(xml_serializers.ObjectSerializer):
     pass
 
-@object_format_adapter(IFoo)
+@object_format_adapter(IFooMetadata)
 class FooFormatter(ObjectFormatter):
     pass

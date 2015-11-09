@@ -41,7 +41,7 @@ class DictOfContactsEditWidget(EditFieldWidget, DictFieldWidgetTraits):
     def get_template(self):
         return 'package/snippets/fields/edit-dict-contacts-foo.html'
 
-@object_widget_adapter(schemata.IFoo, qualifiers=['datasetform'], is_fallback=True)
+@object_widget_adapter(schemata.IFooMetadata, qualifiers=['datasetform'], is_fallback=True)
 class FooEditWidget(EditObjectWidget):
     
     def prepare_template_vars(self, name_prefix, data):
@@ -74,7 +74,7 @@ class FooEditWidget(EditObjectWidget):
     def get_template(self):
         return None # use glue template
 
-@object_widget_adapter(schemata.IFoo)
+@object_widget_adapter(schemata.IFooMetadata)
 class FooReadWidget(ReadObjectWidget):
     
     def prepare_template_vars(self, name_prefix, data):

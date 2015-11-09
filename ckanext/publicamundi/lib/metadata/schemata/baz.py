@@ -8,7 +8,7 @@ from ckanext.publicamundi.lib.metadata.schemata import IBaseMetadata
 from ckanext.publicamundi.lib.metadata.schemata._common import *
 from ckanext.publicamundi.lib.metadata.schemata.thesaurus import IThesaurusTerms
 
-class IBaz(IBaseMetadata):
+class IBazMetadata(IBaseMetadata):
     
     zope.interface.taggedValue('recurse-on-invariants', True)
 

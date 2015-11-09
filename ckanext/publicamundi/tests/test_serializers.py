@@ -10,7 +10,6 @@ from datadiff.tools import assert_equal
 from zope.interface.verify import verifyObject
 
 from ckanext.publicamundi.lib.metadata import ISerializer
-from ckanext.publicamundi.lib.metadata.types import Foo
 from ckanext.publicamundi.lib.metadata import serializers
 from ckanext.publicamundi.lib.metadata.serializers import \
     serializer_for_key_tuple, serializer_for_field
