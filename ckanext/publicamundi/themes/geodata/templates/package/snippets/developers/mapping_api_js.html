@@ -1,30 +1,84 @@
-<pre><code>PublicaMundi.noConflict();
+<code>
+<pre>
+&lt;html&gt;
+&lt;head&gt;
+&lt;!-- Necessary scripts --&gt;
+    &lt;script src=&quot;http://labs.geodata.gov.gr/mapping-api/lib/jQuery/jquery-2.1.0.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;http://labs.geodata.gov.gr/mapping-api/lib/bootstrap/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;http://labs.geodata.gov.gr/mapping-api/lib/bootstrap/css/bootstrap.css&quot; /&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;http://labs.geodata.gov.gr/mapping-api/lib/PublicaMundi/build/lib/ol/ol3-layerswitcher.css&quot; /&gt; 
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;http://labs.geodata.gov.gr/mapping-api/lib/PublicaMundi/build/lib/ol/ol.css&quot; /&gt; 
+    &lt;!-- &lt;link rel=&quot;stylesheet&quot; href=&quot;content/css/default.css&quot; /&gt;--&gt;
+&lt;!-- PublicaMundi API script --&gt;
+ &lt;script src=&quot;http://labs.geodata.gov.gr/mapping-api/lib/PublicaMundi/build/publicamundi.js&quot; data-library=&quot;ol&quot;&gt;&lt;/script&gt;  
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;div id=&quot;popup&quot;&gt;&lt;/div&gt;
+    &lt;div id=&quot;map&quot; class=&quot;map&quot;&gt;&lt;/div&gt;
+&lt;/body&gt;
+&lt;script&gt;
+    PublicaMundi.noConflict();
+    
+    //Popup handling with Bootstrap
+    var onFeatureClick = function(features, coordinate) {
+        if (features) {
+            feature = features [0];
+            }
+        if (popup) {
+            map.setOverlayPosition(popup, coordinate);
+            $(document.getElementById('popup')).popover('destroy');
+
+            var text = JSON.stringify(feature);
+            $(document.getElementById('popup')).popover({
+                'placement' : 'top',
+                'animation' : true,
+                'html' : true,
+                'content' : text
+                }).attr('data-original-title');
+
+            $(document.getElementById('popup')).popover('show');
+            }
+        };
+    
+    // Map initialization options
     var options = {
         target: 'map',
-        center: [2548716, 4743375],
+        center: [2548716, 4643375],
         zoom: 6,
-        minZoom: 2,
-        maxZoom: 18,
+        layerControl: true,        
         layers: [
         {
             title: 'Open Street Maps',
             type: PublicaMundi.LayerType.TILE,
             url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-        }]};
-
-    var map, popup, layer;
-
-    PublicaMundi.ready(function () {
-        map = PublicaMundi.map(options);
-        map.setLayerControl();
-        layer = map.createLayer({
+        },
+        {
             title: '{{res.name}}',
             name: '{{res.name}}',
             type: PublicaMundi.LayerType.{{res.format|upper}},
             url: '{% if res.format == 'wfs' %}{{res.wfs_server}}{% elif res.format == 'wms' %}{{res.wms_server}}{% endif %}',
-            params: { 'layers' : '{% if res.format == 'wfs' %}{{res.wfs_layer}}{% elif res.format == 'wms' %}{{res.wms_layer}}{% endif %}', 
-                }
-            });
-        });
-</code></pre>
+            params: { 'layers' : '{% if res.format == 'wfs' %}{{res.wfs_layer}}{% elif res.format == 'wms' %}{{res.wms_layer}}{% endif %}'}, 
+        }
+        ]
+    };
 
+    var map, popup;
+
+    PublicaMundi.ready(function () {
+        
+        //Initialize map with provided options
+        map = PublicaMundi.map(options);
+
+        //Initialize popup handler
+        popup = map.addOverlay(document.getElementById('popup'));
+        
+        $(document.getElementById('map')).click(function() { 
+            $(document.getElementById('popup')).popover('destroy');
+        });
+    
+    });
+&lt;/script&gt;
+&lt;/html&gt;
+</pre>
+</code>

@@ -1,20 +1,21 @@
 {% set res = {} %}
 {% for resource in pkg.resources %}
-    {% if resource.format == 'wms' and (resource.vectorstorer_resource or resource.rasterstorer_resource) %}
+ {% if resource.format == 'wms' and (resource.vectorstorer_resource or resource.rasterstorer_resource) %}
         {% do res.update(resource) %}
-    {% elif resource.format == 'wfs' and (resource.vectorstorer_resource) %}
-        {% do res.update(resource) %}
+    {#  {% elif resource.format == 'wfs' and (resource.vectorstorer_resource) %}
+    {% do res.update(resource) %} #}
     {% endif %}
 {% endfor %}
 
 
 <div class="accordion-group">
     <div class="accordion-heading">
-        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-dev" href="#collapse-js">{{ _('Mapping API') }} &raquo;</a>
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion-dev" href="#collapse-querying-mapi">{{ _('Mapping API') }} &raquo;</a>
     </div>
-    <div id="collapse-js" class="accordion-body collapse">
+    <div id="collapse-querying-mapi" class="accordion-body collapse">
         <div class="accordion-inner">
             {% if res %}
+            <label>{{_('You can copy/paste the snippet below to see it in action')}}</label>
             {% snippet 'package/snippets/developers/mapping_api_js.html', res=res %}
             {% else %}
             <strong>{{ _('The dataset contains no suitable data to use with the Mapping API')}}</strong><br><br>
@@ -23,6 +24,7 @@
             <strong>{%trans%}You can find detailed Mapping API demos <a href="{{mapping_api_link }}" target="_blank">here</a>{%endtrans%}
  
             </strong>
+        </div>
     </div>
 </div>
 
