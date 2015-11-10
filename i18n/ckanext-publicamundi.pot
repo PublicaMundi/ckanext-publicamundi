@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-publicamundi 1.3dev\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-10-30 18:02+0200\n"
+"POT-Creation-Date: 2015-11-10 15:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -5748,7 +5748,7 @@ msgid "Export Resource"
 msgstr ""
 
 #: ckanext/publicamundi/storers/vector/templates/export/export.html:35
-#: ckanext/publicamundi/storers/vector/templates/package/resource_read.html:23
+#: ckanext/publicamundi/storers/vector/templates/package/resource_read.html:24
 msgid "Export"
 msgstr ""
 
@@ -5792,7 +5792,7 @@ msgstr ""
 msgid "Download"
 msgstr ""
 
-#: ckanext/publicamundi/storers/vector/templates/package/resource_read.html:31
+#: ckanext/publicamundi/storers/vector/templates/package/resource_read.html:32
 #: ckanext/publicamundi/storers/vector/templates/style/base.html:4
 msgid "Edit Style"
 msgstr ""
@@ -5962,7 +5962,13 @@ msgid "Manage"
 msgstr ""
 
 #: ckanext/publicamundi/templates/package/resource_read.html:32
-#: ckanext/publicamundi/templates/package/snippets/resource_item.html:54
+#: ckanext/publicamundi/templates/package/snippets/resource_item.html:53
+#: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:19
+#: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:26
+#: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:32
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:64
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:72
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:80
 msgid "Endpoint"
 msgstr ""
 
@@ -7125,15 +7131,15 @@ msgid "Developers"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:14
-#: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:29
-#: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:39
+#: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:48
+#: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:58
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:27
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:36
 msgid "Map"
 msgstr ""
 
-#: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:50
-#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:47
+#: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:69
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:48
 msgid "Table"
 msgstr ""
 
@@ -7161,6 +7167,32 @@ msgstr ""
 msgid ""
 " You can also access this registry using the %(api_link)s (see "
 "%(api_doc_link)s). "
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/endpoint_wfs_dialog.html:7
+msgid "WFS Endpoint"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/endpoint_wfs_dialog.html:11
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/endpoint_wms_dialog.html:18
+msgid "GetCapabilities"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/endpoint_wfs_dialog.html:14
+msgid "GetFeature"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/endpoint_wfs_dialog.html:17
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/endpoint_wms_dialog.html:24
+msgid "Layer name"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/endpoint_wms_dialog.html:14
+msgid "WMS Endpoint"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/endpoint_wms_dialog.html:21
+msgid "GetMap"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/package/snippets/stages.html:25
