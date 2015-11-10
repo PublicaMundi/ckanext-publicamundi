@@ -1,5 +1,6 @@
 {% set layer = res.wfs_layer or '' %}
 {% set getfeature_url = res.wfs_server ~ '?service=WFS&request=GetFeature&version=2.0.0&outputFormat=json&srsName=EPSG:4326&typeNames='~ layer ~'&count=100'  %}
+{% set getcap_url = res.wfs_server ~ '?service=WFS&version=2.0.0&request=GetCapabilities' %}
 
 <div class="modal hide no-fade" id="endpoint_wfs_dialog" tabindex="-1" aria-hidden="true" > 
     <div class="modal-header">
@@ -8,7 +9,7 @@
     </div>
         <div class="modal-body form-horizontal"> 
             <div class="control-group control-select control-format_type">
-                <label><b>{{ _('GetCapabilities') }}</b></label> <a target="_blank" href="{{ res.url }}">{{ res.url }}</a>
+                <label><b>{{ _('GetCapabilities') }}</b></label> <a target="_blank" href="{{ getcap_url }}">{{ getcap_url }}</a>
             </div>
             <div class="control-group control-select control-format_type">
                 <label><b>{{ _('GetFeature') }}</b></label> <a target="_blank" href="{{ getfeature_url }}">{{ getfeature_url }}</a>
