@@ -1,0 +1,21 @@
+{% set layer = res.wfs_layer or '' %}
+{% set getfeature_url = res.wfs_server or '' + '?service=WFS&request=GetFeature&version=2.0.0&outputFormat=json&srsName=EPSG:4326&typeNames='+ layer +'&count=100'  %}
+
+<div class="modal hide no-fade" id="endpoint_wfs_dialog" tabindex="-1" aria-hidden="true" > 
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">&times;</a>
+        <h3>{{_('WFS Endpoint')}}</h3>
+    </div>
+        <div class="modal-body form-horizontal"> 
+            <div class="control-group control-select control-format_type">
+                <label><b>{{ _('GetCapabilities') }}</b></label> <a target="_blank" href="{{ res.url }}">{{ res.url }}</a>
+            </div>
+            <div class="control-group control-select control-format_type">
+                <label><b>{{ _('GetFeature') }}</b></label> <a target="_blank" href="{{ getfeature_url }}">{{ getfeature_url }}</a>
+            </div>
+            <div class="control-group control-select control-format_type">
+                <label><b>{{ _('Layer name') }}</b></label> <span>{{ layer }}</span>
+            </div>
+        </div>
+</div> 
+

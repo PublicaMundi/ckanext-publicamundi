@@ -46,7 +46,6 @@
         {% elif res.resource_type == 'api' %}
             {% block resource_item_service %}
                 {# Placeholder for extra service buttons #} 
-            {% endblock %}
 
             <div class="action-button">            
                 <a href="{{ res.url }}" class="btn resource-url-analytics" target="_blank">
@@ -54,6 +53,7 @@
                                         {{ _('Endpoint') }}
                                     </a>
             </div>
+            {% endblock %}
 
         {% endif %}
                 
