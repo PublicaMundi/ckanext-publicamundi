@@ -11,9 +11,13 @@
       {%- if facets.translated_fields and facets.translated_fields.has_key((field,value)) -%}
       {{ facets.translated_fields[(field,value)] }}
       {%- else -%}
-      {% with it = h.filtered_list(field_search_facets.get('items'), 'name', value, 'eq')|first %}
-      {{ field_label(it) if field_label is callable else it.display_name }}
-      {% endwith %}
+      {% with it = h.filtered_list(field_search_facets.get('items'), 'name', value, 'eq') %}
+      {% if (it| length) %}
+      {{ field_label(it[0]) if field_label is callable else it[0].display_name }}
+      {% else %}
+      {{ value }}
+      {% endif %} {# it| length #}
+      {% endwith %} {# it #}
       {%- endif %} {# facets.translated_fields #}
       <a href="{{ facets.remove_field(field, value) }}" class="remove" title="{{ _('Remove') }}"
         ><i class="icon-remove"></i></a>
