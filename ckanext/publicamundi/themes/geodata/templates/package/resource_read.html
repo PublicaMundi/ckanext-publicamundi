@@ -6,6 +6,14 @@
 {% block resources_list %}
     {% snippet "package/snippets/resources_simplified.html", pkg=pkg, active=res.id %}
 {% endblock %}
+{% block resource_read_url %}
+{{ super() }}
+{% if (res.vectorstorer_resource or res.rasterstorer_resource) and res.format == 'wms' %}
+<p><span class="muted ellipsis">{{ _('Layer Name')}}:</span> {{ res.wms_layer }}</p>
+{% elif (res.vectorstorer_resource and res.format == 'wfs') %}
+<p><span class="muted ellipsis">{{ _('Layer Name')}}:</span> {{ res.wfs_layer }}</p>
+{% endif %}
+{% endblock %}
 
 {% block resource_item_service %}
  {% if (res.vectorstorer_resource or res.rasterstorer_resource) and res.format == 'wms' %}
