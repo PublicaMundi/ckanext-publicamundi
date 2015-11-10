@@ -1930,6 +1930,12 @@ iframe{
     top: 5px;
     left: 5px;
 }
+#endpoint_wms_dialog label, #endpoint_wfs_dialog label{
+    display: inline-block;
+}
+#endpoint_wms_dialog a, #endpoint_wfs_dialog a{
+    word-wrap: break-word;
+}
 /* Members page */
 
 .add-member-or{

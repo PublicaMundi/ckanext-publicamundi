@@ -36,6 +36,7 @@
                     <i class="icon-medium icon-globe"></i> {{ _('Map')}}
                 </a>
         </div>
+
         {% endif %}
         
         {% if vector_res.format == 'wfs' %}
@@ -55,5 +56,30 @@
 {% endblock %}
 
 {% block resource_item_service %}
-{{ super() }}
+
+ {% if (res.vectorstorer_resource or res.rasterstorer_resource) and res.format == 'wms' %}
+    <div class="action-button">            
+            <a class="btn" data-toggle="modal" data-target="#endpoint_wms_dialog" >
+                                <i class="icon-beaker"></i>
+                                    {{ _('Endpoint') }}
+                                </a>
+                            </div>
+{% snippet 'package/snippets/endpoint_wms_dialog.html', pkg=pkg, res=res %}
+{% elif (res.vectorstorer_resource) and res.format == 'wfs' %}
+    <div class="action-button">            
+            <a class="btn" data-toggle="modal" data-target="#endpoint_wfs_dialog" >
+                                <i class="icon-beaker"></i>
+                                    {{ _('Endpoint') }}
+                                </a>
+                            </div>
+{% snippet 'package/snippets/endpoint_wfs_dialog.html', pkg=pkg, res=res %}
+{% else %}
+    <div class="action-button">            
+        <a class="btn" data-toggle="modal" href="{{res.url}}" >
+                                <i class="icon-beaker"></i>
+                                    {{ _('Endpoint') }}
+                                </a>
+                            </div>
+
+{% endif %}
 {% endblock %}
