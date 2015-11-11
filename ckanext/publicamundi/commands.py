@@ -72,6 +72,9 @@ class Command(CommandDispatcher):
             make_option('--object-cls', type='string', dest='object_cls', 
                 help='Filter results regarding only this object class'),
         ),
+        'migrate-package-extra': (
+            make_option('--to-str', action='store_false', dest='to_unicode', default=True),
+        ),
     }
     
     def _fake_request_context(self):
@@ -331,7 +334,58 @@ class Command(CommandDispatcher):
                     print '[' + iface.__name__ + ']'
                     for qa, widget_cls in m:
                         print format_result(qa, widget_cls)
-    
+
+    @subcommand('migrate-package-extra', options=options_config['migrate-package-extra'])
+    def migrate_db_to_unicode(self, opts, *args):
+        '''Migrate package_extra database tables to be used with {unicode/str}-based serializers
+        
+        We cannot use ckan.model as we are not going to create new revisions for
+        objects. So, we use reflected tables (without their vdm supplement).
+        '''
+     
+        import pylons
+        
+        import sqlalchemy
+        from sqlalchemy.engine import reflection
+        from sqlalchemy.ext.declarative import declarative_base
+
+        from ckanext.publicamundi.lib.metadata import dataset_types
+        
+        engine = sqlalchemy.create_engine(pylons.config['sqlalchemy.url'])
+        session_factory = sqlalchemy.orm.sessionmaker(bind=engine)
+        base = declarative_base()
+        refl = reflection.Inspector.from_engine(engine)
+        
+        package_extra_table = sqlalchemy.Table('package_extra', base.metadata)
+        refl.reflecttable(package_extra_table, None)
+        PackageExtra = type('PackageExtra', (base,),
+            dict(__table__=package_extra_table))
+        
+        package_extra_revision_table = sqlalchemy.Table('package_extra_revision', base.metadata)
+        refl.reflecttable(package_extra_revision_table, None)
+        PackageExtraRevision = type('PackageExtraRevision', (base,), 
+            dict(__table__=package_extra_revision_table))
+        
+        convert = None
+        if opts.to_unicode:
+            convert = lambda x: str(x).decode('unicode-escape')
+        else:
+            convert = lambda x: x.encode('unicode-escape') 
+            pass
+
+        session = session_factory()
+        for prefix in (s.get('key-prefix', k) for k, s in dataset_types.items()):
+            for M in (PackageExtra, PackageExtraRevision):
+                q = session.query(M).filter(M.key.like(prefix + '.%'))
+                self.logger.info('About to convert values for %s.* keys in %s' % (prefix, M))
+                i = -1
+                for i, extra in enumerate(q.all()):
+                    extra.value = convert(extra.value)
+                self.logger.info('Converted %d records in %s' % (i + 1, M))
+        self.logger.info('Flushing %d records to database...' % (len(session.dirty)))
+        session.commit()
+        return
+
 #
 # Helpers
 #
