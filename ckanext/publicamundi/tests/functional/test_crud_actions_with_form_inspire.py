@@ -24,7 +24,7 @@ class TestController(BaseTestController):
     basic_fields = set([
         'name', 'title', 'notes', 
         'maintainer', 'maintainer_email', 'author', 'author_email', 
-        'version', 'url', 'license_id',
+        'version', 'license_id',
     ])
  
     request_headers = {}
@@ -46,9 +46,12 @@ class TestController(BaseTestController):
     def teardown_class(cls):
         pass
     
+    # Note: webtest 1.4.3 (pulled from CKAN requirments) will fail to parse a 
+    # form with <select multiple> fields. So, following tests are disabled.
+    
     @nose.tools.nottest
     def test_1_create_package(self):
-        
+            
         yield self._create_package, 'hello-inspire-1'
     
     @nose.tools.nottest
@@ -122,7 +125,7 @@ class TestController(BaseTestController):
         assert res2s.status in [301, 302]
 
         # 3rd stage - core metadata
-
+        
         res3 = res2s.follow()
         
         form3 = res3.forms['package-form']
@@ -132,6 +135,7 @@ class TestController(BaseTestController):
             form3.set(k, v)
 
         # 3rd stage - dataset_type-related metadata
+        
         for t, v in dictization.flatten(pkg_dict.get(dt)).items():
 
             k = '.'.join((key_prefix,) + tuple(map(str,t)))
@@ -434,6 +438,7 @@ resource_fixtures['resource-3'] = {
         'description': u'An example API endpoint',
     },
 }
+
 package_fixtures = {}
 
 package_fixtures['hello-inspire-1'] = {
@@ -442,7 +447,7 @@ package_fixtures['hello-inspire-1'] = {
         'name': 'hello-inspire-1',
         'notes': u'I am the first _Inspire_ dataset!',
         'author': u'Λαλάκης',
-        'license_id': 'gfdl',
+        'license_id': 'CC-BY-3.0',
         'version': '1.0.0',
         'maintainer': u'Nowhere Man',
         'author_email': 'lalakis.1999@example.com',
@@ -454,22 +459,31 @@ package_fixtures['hello-inspire-1'] = {
         ],
         'dataset_type': 'inspire',
         'inspire': {
-         #   'contact': [{
-         #       'organization': u"Org",
-         #       'email':[u"email@asd.gr"],
-         #       'role':"pointofcontact"
-         #       }],
+            'contact': [{
+                "organization": u"Ομάδα geodata.gov.gr",
+                "role": "pointofcontact",
+                "email": "info@geodata.gov.gr"
+            }],
             'datestamp': u'2014-01-01',
             'languagecode': "el",
-         #   'title': u"Title",
-            'identifier': [u"1a2b314df21312a3", u"123sad213531"],
-         #   'abstract': u"This is an abstract description",
-         #   'locator': ["http://publicamundi.eu",
-         #               "http://ipsyp.gr",
-         #               "http://www.example.com"
-         #               ],
-         #   'resource_language': ["el"],
-         #   'topic_category':["biota"],
+            'title': u"A great helloworld dataset",
+            'abstract': u"This is really great",
+            'bounding_box': {
+                "sblat": 33.188516,
+                "wblng": 16.76871,
+                "nblat": 43.339883,
+                "eblng": 30.655429
+            },
+            'locator': [],
+            'resource_language': [],
+            'topic_category':["biota", "economy"],
+            'temporal_extent': {'start': '2012-01-01', 'end': '2013-01-01'},
+            'lineage': u"A lineage description here ...",
+            'access_constraints': [u"A constaint", u"Another strict constraint"],
+            'creation_date': '2012-01-01',
+            'publication_date': '2012-01-30',
+            'revision_date': '2014-01-01',
+            'limitations': [u"Nothin"],
          #   'keywords':[{
          #       'terms':["air", "agriculture", "climate"],
          #       'thesaurus':'TODO'
@@ -478,33 +492,12 @@ package_fixtures['hello-inspire-1'] = {
          #       'terms':["buildings", "addresses"],
          #       'thesaurus': 'TODO'
          #       }],
-         #   'bounding_box':[{
-         #       'nblat':0.0,
-         #       'sblat':0.0,
-         #       'wblng':0.0,
-         #       'eblng':0.0
-         #       }],
-         #   'temporal_extent': { 
-         #       'start': '2012-01-01',
-         #       'end': '2013-01-01',
-         #   },
-         #   'creation_date':'2012,1,1',
-         #   'publication_date':'2012,1,1',
-         #   'revision_date': '2014,1,1',
-         #   'lineage':u"lineaage",
-         #   'denominator':[],
-         #   'spatial_resolution':[{
-         #       'distance':5,
-         #       'uom':u"meters"
-         #       }],
          #   'conformity':[{
          #       'title':u"specifications blabla",
          #       'date':'2014-09-19',
          #       'date_type':"creation",
          #       'degree': "conformant"
          #       }],
-         #   'access_constraints':[u"lalala1", u"lalala2"],
-         #   'limitations':[u"limit1", u"limit2"],
          #   'responsible_party':[{
          #       'organization': u"Org",
          #       'email':[u"email@asd.gr"],
@@ -518,20 +511,16 @@ package_fixtures['hello-inspire-1'] = {
         },
 
     '0..1': {
-        'license_id': 'cc-by',
+        'license_id': 'CC-BY-SA-4.0',
         'version': '1.0.1',
         'inspire': {
-            'languagecode': 'ro'
+            'spatial_resolution': [
+                {
+                    'distance': 5,
+                    'denominator': None,
+                    'uom': "km",
+                }
+            ]
         },
-    },
-    '1..2': {
-        'version': '1.0.2',
-        'foo': {
-            'rating': 7,
-            'temporal_extent': {
-                'start': '2012-09-01',
-                'end': '2013-09-01',
-            }, 
-        }, 
     },
 }

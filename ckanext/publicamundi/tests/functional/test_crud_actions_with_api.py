@@ -59,6 +59,7 @@ class TestController(ckan.tests.TestController):
                 { 'name': 'foo', 'display_name': 'Foo' }, 
             ],
             'dataset_type': 'foo',
+            'foo.description': u'A great foo dataset',
             'foo.baz': u'A second chance',
             'foo.rating': 2,
             'foo.grade': 4.75,
@@ -102,6 +103,7 @@ class TestController(ckan.tests.TestController):
             ],
             'dataset_type': 'foo',
             'foo': {
+                'description': u'Ακομη ενα foo σύνολο δεδομένων!',
                 'baz': u'Baobab',
                 'reviewed': False,
                 'rating': 5,
