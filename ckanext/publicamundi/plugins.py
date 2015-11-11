@@ -454,56 +454,37 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             pkg_dict.get('name'), for_view, is_validated, context.get('api_version'))
         
         if not is_validated:
-            # Noop: the extras are not yet promoted to 1st-level fields
-            return
+            return # noop: extras are not yet promoted to 1st-level fields
 
         # Determine dataset_type-related parameters for this package
         
         dt = pkg_dict.get('dataset_type')
         if not dt:
-            # Noop: cannot recognize dataset-type (pkg_dict has raw extras?)
-            return
+            return # noop: cannot recognize dataset-type (pkg_dict has raw extras?)
 
         dt_spec = self._dataset_types[dt]
         key_prefix = dt_spec.get('key_prefix', dt)
-
-        # Fix types, create flat object dict
+        key_prefix_1 = key_prefix + '.' # actual prefix for keys in pkg_dict
         
         # Note If we attempt to pop() flat keys here (e.g. to replace them by a 
         # nested structure), resource forms will clear all extra fields !!
-        
-        # Fixme: Move to a Metadata classmethod
-        prefix = key_prefix + '.'
-        keys = filter(lambda k: k.startswith(prefix), pkg_dict.iterkeys())
-        obj_dict = {}
-        for k in keys:
-            k1 = k[len(prefix):]
-            obj_dict[k1] = pkg_dict[k]
-        if not obj_dict:
-            # Noop: No keys associated with a dataset-type
-            return
 
         # Objectify 
         
         obj_factory = dt_spec.get('class')
-        obj = obj_factory().from_dict(obj_dict, is_flat=True, opts={
+        obj = obj_factory().from_dict(pkg_dict, is_flat=True, opts={
+            'key-prefix': key_prefix,
             'unserialize-keys': True,
             'unserialize-values': 'default',
         })
-
         pkg_dict[key_prefix] = obj
         
-        # Note We use this bit of hack when package is shown directly from the
-        # action api, normally at /api/action/(package|dataset)_show.
-        req_environ = toolkit.c.environ
-        r = req_environ['pylons.routes_dict'] if req_environ else None
+        # Note Use this bit of hack when package shown directly from action api
+        r = toolkit.c.environ['pylons.routes_dict'] if toolkit.c.environ else None
         if (r and r['controller'] == 'api' and r.get('action') == 'action' and 
-                r.get('logic_function') in (
-                    'package_show', 'package_create', 'package_update',
-                    'dataset_show', 'dataset_create', 'dataset_update',
-                    'user_show')):
+                r.get('logic_function') in DatasetForm.after_show._api_actions):
             # Remove flat field values (won't be needed anymore)
-            for k in keys:
+            for k in (y for y in pkg_dict.keys() if y.startswith(key_prefix_1)):
                 pkg_dict.pop(k)
             # Dictize obj so that json.dumps can handle it
             pkg_dict[key_prefix] = obj.to_dict(flat=False, opts={
@@ -511,7 +492,13 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             })
          
         return pkg_dict
-     
+    
+    after_show._api_actions = {
+        'package_show', 'package_create', 'package_update',
+        'dataset_show', 'dataset_create', 'dataset_update',
+        'user_show'
+    }
+
     def before_search(self, search_params):
         '''Return a modified (or not) version of the query parameters.
         '''
