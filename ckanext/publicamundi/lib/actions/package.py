@@ -62,7 +62,7 @@ def dataset_export(context, data_dict):
     return result
 
 @logic.side_effect_free
-def dcat_export(context, data_dict):
+def dataset_export_dcat(context, data_dict):
     '''Export a dataset to RDF XML using GeoDCAT XSLT.
 
     :param id: the name or id of the dataset to be exported.

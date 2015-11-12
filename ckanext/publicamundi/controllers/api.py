@@ -149,10 +149,10 @@ class Controller(BaseController):
         redirect(exported_url)
         return
  
-    def dcat_export(self, name_or_id):
+    def dataset_export_dcat(self, name_or_id):
         
         context = self._make_context() 
-        result =  _get_action('dcat_export')(context, { 'id': name_or_id })
+        result =  _get_action('dataset_export_dcat')(context, { 'id': name_or_id })
 
         response.headers['Content-Type'] = content_types['xml']
         return [result]

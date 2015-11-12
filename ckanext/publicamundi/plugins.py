@@ -161,8 +161,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
                 action='dataset_export')
 
             m.connect(
-                '/api/publicamundi/dataset/dcat/{name_or_id}',
-                action='dcat_export')
+                '/api/publicamundi/dataset/export_dcat/{name_or_id}',
+                action='dataset_export_dcat')
         
             m.connect(
                 '/api/publicamundi/dataset/import', 
@@ -240,7 +240,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'mimetype_autocomplete': ext_actions.autocomplete.mimetype_autocomplete,
             'dataset_export': ext_actions.package.dataset_export,
             'dataset_import': ext_actions.package.dataset_import,
-            'dcat_export': ext_actions.package.dcat_export,
+            'dataset_export_dcat': ext_actions.package.dataset_export_dcat,
         }
 
     ## IDatasetForm interface ##
@@ -559,7 +559,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
                     'title': 'GeoDCAT',
                     'url': url_for(
                         controller='ckanext.publicamundi.controllers.api:Controller',
-                        action='dcat_export',
+                        action='dataset_export_dcat',
                         name_or_id=pkg_name),
                     'weight': 7,
                     'format': 'xml',
