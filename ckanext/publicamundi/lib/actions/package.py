@@ -86,7 +86,7 @@ def dcat_export(context, data_dict):
 
         tmp_dom = etree.fromstring(tmp_xml)
 
-        xsl_file = reference_data.get_path('xsl/isotc211.org-2005/iso-19139-to-dcat-ap.xsl')
+        xsl_file = reference_data.get_path('xsl/iso-19139-to-dcat-ap.xsl')
         with open(xsl_file, 'r') as fp:
             dcat_xslt = etree.parse(fp)
 
