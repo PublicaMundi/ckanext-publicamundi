@@ -14,6 +14,7 @@ import ckan.plugins.toolkit as toolkit
 from ckan.lib.plugins import lookup_package_plugin
 from ckan.lib.uploader import get_storage_path
 
+from ckanext.publicamundi import reference_data
 from ckanext.publicamundi.cache_manager import get_cache
 from ckanext.publicamundi.lib.actions import (
     NameConflict, IdentifierConflict, Invalid)
