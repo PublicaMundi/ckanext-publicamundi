@@ -85,14 +85,12 @@ def dcat_export(context, data_dict):
         from lxml import etree
 
         tmp_dom = etree.fromstring(tmp_xml)
-
         xsl_file = reference_data.get_path('xsl/iso-19139-to-dcat-ap.xsl')
+
         with open(xsl_file, 'r') as fp:
             dcat_xslt = etree.parse(fp)
-
             dcat_transform = etree.XSLT(dcat_xslt)
-            tmp_newdom = dcat_transform(tmp_dom)
-            result = etree.tostring(tmp_newdom, pretty_print=True)
+            result = dcat_transform(tmp_dom)
 
     return result
 

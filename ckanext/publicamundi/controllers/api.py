@@ -2,6 +2,7 @@ import logging
 import json
 import time
 import datetime
+
 from itertools import ifilter, islice
 from pylons import g, config
 
@@ -151,11 +152,10 @@ class Controller(BaseController):
     def dcat_export(self, name_or_id):
         
         context = self._make_context() 
-        result = _get_action('dcat_export')(context, { 'id': name_or_id })
-        
-        exported_url = result.get('url')
-        redirect(exported_url)
-        return
+        result =  _get_action('dcat_export')(context, { 'id': name_or_id })
+
+        response.headers['Content-Type'] = content_types['xml']
+        return [result]
 
     def dataset_import(self):
         
