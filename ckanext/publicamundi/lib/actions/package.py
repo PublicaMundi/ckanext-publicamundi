@@ -80,11 +80,9 @@ def dcat_export(context, data_dict):
         xser = xml_serializer_for(obj)
         xser.target_namespace = config.get('ckan.site_url')
         # Get the XML
-        tmp_xml = xser.dumps()
+        tmp_dom = xser.to_xml()
         # Transform using XSLT
         from lxml import etree
-
-        tmp_dom = etree.fromstring(tmp_xml)
         xsl_file = reference_data.get_path('xsl/iso-19139-to-dcat-ap.xsl')
 
         with open(xsl_file, 'r') as fp:
