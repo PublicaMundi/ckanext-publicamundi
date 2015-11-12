@@ -147,7 +147,16 @@ class Controller(BaseController):
         exported_url = result.get('url')
         redirect(exported_url)
         return
-    
+ 
+    def dcat_export(self, name_or_id):
+        
+        context = self._make_context() 
+        result = _get_action('dcat_export')(context, { 'id': name_or_id })
+        
+        exported_url = result.get('url')
+        redirect(exported_url)
+        return
+
     def dataset_import(self):
         
         post = request.params
