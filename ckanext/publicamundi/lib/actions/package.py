@@ -14,6 +14,7 @@ import ckan.plugins.toolkit as toolkit
 from ckan.lib.plugins import lookup_package_plugin
 from ckan.lib.uploader import get_storage_path
 
+from ckanext.publicamundi import reference_data
 from ckanext.publicamundi.cache_manager import get_cache
 from ckanext.publicamundi.lib.actions import (
     NameConflict, IdentifierConflict, Invalid)
@@ -82,12 +83,16 @@ def dcat_export(context, data_dict):
         tmp_xml = xser.dumps()
         # Transform using XSLT
         from lxml import etree
+
         tmp_dom = etree.fromstring(tmp_xml)
-        xsl_filename = 'iso-19139-to-dcat-ap.xsl'
-        dcat_xslt = etree.parse(xsl_filename)
-        dcat_transform = etree.XSLT(dcat_xslt)
-        tmp_newdom = dcat_transform(tmp_dom)
-        result = etree.tostring(tmp_newdom, pretty_print=True))
+
+        xsl_file = reference_data.get_path('xsl/isotc211.org-2005/iso-19139-to-dcat-ap.xsl')
+        with open(xsl_file, 'r') as fp:
+            dcat_xslt = etree.parse(fp)
+
+            dcat_transform = etree.XSLT(dcat_xslt)
+            tmp_newdom = dcat_transform(tmp_dom)
+            result = etree.tostring(tmp_newdom, pretty_print=True)
 
     return result
 
