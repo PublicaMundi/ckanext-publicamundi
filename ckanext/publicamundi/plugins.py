@@ -159,6 +159,10 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             m.connect(
                 '/api/publicamundi/dataset/export/{name_or_id}', 
                 action='dataset_export')
+
+            m.connect(
+                '/api/publicamundi/dataset/dcat/{name_or_id}',
+                action='dcat_export')
         
             m.connect(
                 '/api/publicamundi/dataset/import', 
@@ -548,6 +552,12 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
                         action='dataset_export',
                         name_or_id=pkg_name),
                     'weight': 5,
+                    'format': 'xml',
+                },
+                {
+                    'title': 'GeoDCAT',
+                    'url': url_for('/api/publicamundi/dataset/dcat', name_or_id=pkg_name),
+                    'weight': 7,
                     'format': 'xml',
                 },
             ])

@@ -60,6 +60,38 @@ def dataset_export(context, data_dict):
     
     return result
 
+@logic.side_effect_free
+def dcat_export(context, data_dict):
+    '''Export a dataset to RDF XML using GeoDCAT XSLT.
+
+    :param id: the name or id of the dataset to be exported.
+    :type id: string
+
+    rtype: string
+    '''
+
+    pkg = _get_action('package_show')(context, data_dict)
+    dtype = pkg.get('dataset_type')
+    obj = pkg.get(dtype) if dtype else None
+    result = None
+    if obj:
+        # Get a proper serializer
+        xser = xml_serializer_for(obj)
+        xser.target_namespace = config.get('ckan.site_url')
+        # Get the XML
+        tmp_xml = xser.dumps()
+        # Transform using XSLT
+        from lxml import etree
+        tmp_dom = etree.fromstring(tmp_xml)
+        xsl_filename = 'iso-19139-to-dcat-ap.xsl'
+        dcat_xslt = etree.parse(xsl_filename)
+        dcat_transform = etree.XSLT(dcat_xslt)
+        tmp_newdom = dcat_transform(tmp_dom)
+        result = etree.tostring(tmp_newdom, pretty_print=True))
+
+    return result
+
+
 def dataset_import(context, data_dict):
     '''Import a dataset from a given XML source.
 
