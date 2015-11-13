@@ -89,9 +89,8 @@ def dataset_export_dcat(context, data_dict):
             dcat_xslt = etree.parse(fp)
             dcat_transform = etree.XSLT(dcat_xslt)
             result = dcat_transform(tmp_dom)
-
-    return result
-
+    
+    return unicode(result).encode('utf-8')
 
 def dataset_import(context, data_dict):
     '''Import a dataset from a given XML source.
