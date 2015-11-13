@@ -14,7 +14,7 @@ def filtered_list(l, key, value, op='eq'):
     '''
 
     if not l:
-        return None
+        return l
     
     op_map = {
         'ne': operator.ne,
