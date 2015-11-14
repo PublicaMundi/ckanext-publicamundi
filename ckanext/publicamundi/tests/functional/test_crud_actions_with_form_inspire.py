@@ -3,17 +3,16 @@
 import json
 import webtest
 import nose.tools
+from nose.plugins.skip import SkipTest
 import inflection
 import datadiff
 import logging
-
 from datadiff.tools import assert_equal
 
 from ckan.tests import CreateTestData
 from ckan.tests import TestController as BaseTestController
 
 from ckanext.publicamundi.lib import dictization
-from ckanext.publicamundi.lib.metadata import dataset_types, Object
 
 log1 = logging.getLogger(__name__)
 
@@ -48,38 +47,45 @@ class TestController(BaseTestController):
     
     # Note: webtest 1.4.3 (pulled from CKAN requirments) will fail to parse a 
     # form with <select multiple> fields. So, following tests are disabled.
-    
-    @nose.tools.nottest
+    _skip_message = u'webtest fails to parse form with <select multiple/>'
+
+    @nose.tools.istest
     def test_1_create_package(self):
-            
+        raise SkipTest(self._skip_message)    
+        
         yield self._create_package, 'hello-inspire-1'
     
-    @nose.tools.nottest
+    @nose.tools.istest
     def test_2_update_package(self):
+        raise SkipTest(self._skip_message)    
     
         yield self._update_package, 'hello-inspire-1', '0..1'
         #yield self._update_package, 'hello-foo-1', '1..2'
      
-    @nose.tools.nottest
+    @nose.tools.istest
     def test_3_create_resource(self):
+        raise SkipTest(self._skip_message)    
     
         yield self._create_resource, 'hello-inspire-1', 'resource-1'
         #yield self._create_resource, 'hello-foo-1', 'resource-2'
      
-    @nose.tools.nottest
+    @nose.tools.istest
     def test_4_update_resource(self):
+        raise SkipTest(self._skip_message)    
     
         yield self._update_resource, 'hello-inspire-1', 'resource-1', '0..1'
         #yield self._update_resource, 'hello-foo-1', 'resource-2', '0..1'
 
-    @nose.tools.nottest
+    @nose.tools.istest
     def test_5_delete_resource(self):
+        raise SkipTest(self._skip_message)    
     
         yield self._delete_resource, 'hello-inspire-1', 'resource-1'
         pass
 
-    @nose.tools.nottest
+    @nose.tools.istest
     def test_6_delete_package(self):
+        raise SkipTest(self._skip_message)    
     
         #yield self._delete_package, 'hello-inspire-1'
         pass
@@ -92,9 +98,7 @@ class TestController(BaseTestController):
         res1 = self.app.get('/dataset/new', status='*')
         assert res1.status == 200
         
-        dt = pkg_dict['dataset_type']
-        dt_spec = dataset_types[dt]
-        key_prefix = dt_spec.get('key_prefix', dt)
+        key_prefix = dt = pkg_dict['dataset_type']
 
         # 1st stage
     
@@ -177,9 +181,7 @@ class TestController(BaseTestController):
         res1 = self.app.get('/dataset/edit/%s' % pkg_name)
         assert res1.status == 200
         
-        dt = package_fixtures[fixture_name]['0']['dataset_type']
-        dt_spec = dataset_types[dt]
-        key_prefix = dt_spec.get('key_prefix', dt)
+        key_prefix = dt = package_fixtures[fixture_name]['0']['dataset_type']
 
         # Edit core metadata
         
@@ -218,9 +220,7 @@ class TestController(BaseTestController):
         res1 = self.app.get('/dataset/delete/%s' % pkg_name)
         assert res1.status == 200
 
-        dt = package_fixtures[fixture_name]['0']['dataset_type']
-        dt_spec = dataset_types[dt]
-        key_prefix = dt_spec.get('key_prefix', dt)
+        key_prefix = dt = package_fixtures[fixture_name]['0']['dataset_type']
 
         form1 = res1.forms[1]
         

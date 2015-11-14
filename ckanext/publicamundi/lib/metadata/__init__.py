@@ -2,52 +2,60 @@ import zope.interface
 import zope.interface.adapter
 import zope.schema
 
-from ckan.plugins import toolkit 
-
 adapter_registry = zope.interface.adapter.AdapterRegistry()
 
-# Import basic metadata-related functionality
+# Import basic interfaces
 
-from ckanext.publicamundi.lib.metadata.ibase import (
+from .ibase import (
     ISerializer, 
-    IXmlSerializer, 
+    IXmlSerializer,
     IFormatter, 
+    IIntrospective,
     IObject)
 
-from ckanext.publicamundi.lib.metadata.formatters import (
+# Import core functionality: base types, formatters, serializers
+
+from .formatters import (
     field_format_adapter, 
     field_format_multiadapter, 
     formatter_for_field,
     FieldFormatter)
 
-from ckanext.publicamundi.lib.metadata.serializers import (
+from .serializers import (
     serializer_for_field, 
     serializer_for_key_tuple)
 
-from ckanext.publicamundi.lib.metadata.base import (
+from .base import (
     Object, 
     FieldContext, 
     ErrorDict, 
     object_null_adapter,
-    get_object_factory,
+    factory_for_object,
+    class_for_object,
     object_serialize_adapter,
     serializer_for_object,
     object_format_adapter,
     formatter_for_object,
     ObjectFormatter)
 
-from ckanext.publicamundi.lib.metadata.xml_serializers import (
+from .xml_serializers import (
     object_xml_serialize_adapter,
     xml_serializer_for_object)
 
-from ckanext.publicamundi.lib.metadata.widgets import (
-    markup_for_field,
-    markup_for_object,
-    markup_for,
-    widget_for_field,
-    widget_for_object)
+from .schemata import IMetadata
+
+from .types import (
+    Metadata,
+    deduce,
+    dataset_type,
+    factory_for_metadata,
+    class_for_metadata)
 
 # Provide aliases for common functions
+
+factory_for = factory_for_object
+
+class_for = class_for_object
 
 formatter_for = formatter_for_object
 
@@ -55,67 +63,62 @@ serializer_for = serializer_for_object
 
 xml_serializer_for = xml_serializer_for_object
 
-# Import common schemata/types
+# Import widgets
 
-from ckanext.publicamundi.lib.metadata.schemata import (
-    IFooMetadata, IBazMetadata, ICkanMetadata, IInspireMetadata)
+from .widgets import (
+    markup_for_field,
+    markup_for_object,
+    markup_for,
+    widget_for_field,
+    widget_for_object)
 
-from ckanext.publicamundi.lib.metadata.types import (
-    FooMetadata, BazMetadata, CkanMetadata, InspireMetadata)
+# Utilities
 
-# Declare dataset types (i.e. metadata formats).
+def iter_dataset_types():
+    '''Iterate on all known (i.e. registered) dataset types'''
+    for name, cls in adapter_registry.lookupAll([], IMetadata):
+        if not name:
+            continue # omit unnamed adapters, are meaningless for dataset types
+        yield name
 
-# Note If, for a certain dataset-type, a "class" value is not given,
-# then a suitable class will be lookup-up in the adapter registry.
+def iter_dataset_type_map():
+    '''Iterate on all known (i.e. registered) dataset types mapped to a class'''
+    for name, cls in adapter_registry.lookupAll([], IMetadata):
+        if not name:
+            continue # omit unnamed adapters, are meaningless for dataset types
+        yield name, cls
 
-dataset_types = {
-    'ckan': {
-        'title': 'CKAN',
-        'description': u'Provide core CKAN metadata',
-        'schema': ICkanMetadata,
-        'class': CkanMetadata,
-    },
-    'inspire': {
-        'title': 'INSPIRE',
-        'description': u'Provide metadata according to the INSPIRE EU directive',
-        'schema': IInspireMetadata,
-        'class': InspireMetadata,
-        'key_prefix': 'inspire', 
-    },
-    'foo': {
-        'title': 'Foo',
-        'description': u'Provide metadata according to an arbitrary "foo" schema',
-        'schema': IFooMetadata,
-        'class': FooMetadata,
-        'key_prefix': 'foo', 
-    },
-    'baz': { 
-        'title': 'Baz',
-        'description': u'Provide metadata according to an arbitrary "baz" schema',
-        'schema': IBazMetadata,
-        'class': BazMetadata,
-        'key_prefix': 'baz', 
-    },
-}
+def get_dataset_types():
+    '''List known dataset types'''
+    return set(iter_dataset_types())
 
-def make_metadata_object(dataset_type, pkg_dict=None):
+def make_metadata(dtype, pkg_dict=None):
     '''Create a metadata object according to the given dataset-type.
     
     If param `pkg_dict` is given, we attempt to load the newly created metadata
     object from a flattened dict with serialized key/values.
     '''
-    assert dataset_type in dataset_types
     
-    factory = dataset_types[dataset_type]['class']
-    obj = factory()
-
+    obj = factory_for_metadata(dtype)()
     if pkg_dict:
-        dictz_opts = {
+        opts = {
             'unserialize-keys': True,
-            'key-prefix': dataset_type,
+            'key-prefix': dtype,
             'unserialize-values': 'default',
         }
-        obj.from_dict(pkg_dict, is_flat=True, opts=dictz_opts)
-
+        obj.from_dict(pkg_dict, is_flat=True, opts=opts)
     return obj
+
+# Export a (snapshot) of registered dataset types
+
+dataset_types = {}
+
+# Setup (when ready)
+
+def setup():
+    '''Gather registered dataset types, cache in exported module-global variable.
+    '''
+
+    global dataset_types
+    dataset_types = get_dataset_types()
 

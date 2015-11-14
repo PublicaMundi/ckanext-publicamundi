@@ -14,7 +14,6 @@ from ckan.tests import CreateTestData
 from ckan.tests import TestController as BaseTestController
 
 from ckanext.publicamundi.lib.dictization import flatten
-from ckanext.publicamundi.lib.metadata import dataset_types, Object
 
 log1 = logging.getLogger(__name__)
 
@@ -91,9 +90,7 @@ class TestController(BaseTestController):
         res1 = self.app.get('/dataset/new', status='*')
         assert res1.status == 200
         
-        dt = pkg_dict['dataset_type']
-        dt_spec = dataset_types[dt]
-        key_prefix = dt_spec.get('key_prefix', dt)
+        key_prefix = dt = pkg_dict['dataset_type']
 
         # 1st stage
     
@@ -176,9 +173,7 @@ class TestController(BaseTestController):
         res1 = self.app.get('/dataset/new', status='*')
         assert res1.status == 200
         
-        dt = pkg_dict['dataset_type']
-        dt_spec = dataset_types[dt]
-        key_prefix = dt_spec.get('key_prefix', dt)
+        key_prefix = dt = pkg_dict['dataset_type']
 
         # 1st stage
     
@@ -292,9 +287,7 @@ class TestController(BaseTestController):
         res1 = self.app.get('/dataset/edit/%s' % pkg_name)
         assert res1.status == 200
         
-        dt = package_fixtures[fixture_name]['0']['dataset_type']
-        dt_spec = dataset_types[dt]
-        key_prefix = dt_spec.get('key_prefix', dt)
+        key_prefix = dt = package_fixtures[fixture_name]['0']['dataset_type']
 
         # Edit core metadata
         
@@ -332,9 +325,7 @@ class TestController(BaseTestController):
         res1 = self.app.get('/dataset/edit/%s' % pkg_name)
         assert res1.status == 200
         
-        dt = package_fixtures[fixture_name]['0']['dataset_type']
-        dt_spec = dataset_types[dt]
-        key_prefix = dt_spec.get('key_prefix', dt)
+        key_prefix = dt = package_fixtures[fixture_name]['0']['dataset_type']
 
         # Edit core metadata
         
@@ -395,9 +386,7 @@ class TestController(BaseTestController):
         res1 = self.app.get('/dataset/delete/%s' % pkg_name)
         assert res1.status == 200
 
-        dt = package_fixtures[fixture_name]['0']['dataset_type']
-        dt_spec = dataset_types[dt]
-        key_prefix = dt_spec.get('key_prefix', dt)
+        key_prefix = dt = package_fixtures[fixture_name]['0']['dataset_type']
 
         form1 = res1.forms[1]
         

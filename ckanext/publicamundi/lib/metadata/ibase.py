@@ -95,21 +95,13 @@ class IFormatter(zope.interface.Interface):
         from it's context.
         '''
 
-class IObject(zope.interface.Interface):
+class IIntrospective(zope.interface.Interface):
 
     def get_schema():
-        '''Return the schema interface (InterfaceClass) this object is supposed to
+        '''Return the schema interface (InterfaceClass) this object is declared to
         conform to.
         '''
-
-    def get_field(k):
-        '''Return a bound zope.schema.Field instance that corresponds to key k.
-
-        This method should regard k as:
-            * an attribute k, if k is a string.
-            * a path of attributes/keys, if k is a tuple
-        '''
-    
+   
     def get_field_names(order=False):
         '''Return a list of field names.
 
@@ -128,7 +120,17 @@ class IObject(zope.interface.Interface):
     def get_flattened_fields(opts={}):
         '''Return a flat map of fields.
         '''
-    
+
+class IObject(IIntrospective):
+
+    def get_field(k):
+        '''Return a bound zope.schema.Field instance that corresponds to key k.
+
+        This method should regard k as:
+            * an attribute k, if k is a string.
+            * a path of attributes/keys, if k is a tuple
+        '''
+        
     def validate(dictize_errors=False):
         '''Invoke all validators and return errors. 
         The invariants are checked only if schema validation (field-based) succeeds. 

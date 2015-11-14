@@ -9,7 +9,7 @@ from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata.fields import (
     build_adaptee, check_multiadapter_ifaces)
 from ckanext.publicamundi.lib.metadata import (
-    adapter_registry, get_object_factory, IObject, Object, FieldContext)
+    adapter_registry, factory_for, IObject, Object, FieldContext)
 
 from ckanext.publicamundi.lib.metadata.widgets.ibase import (
     IQualAction, ILookupContext, 

@@ -5,7 +5,8 @@ from unidecode import unidecode
 from ckan.lib.munge import (munge_name, munge_title_to_name) 
 
 from ckanext.publicamundi.lib.metadata import adapter_registry
-from ckanext.publicamundi.lib.metadata.base import Object, object_null_adapter
+from ckanext.publicamundi.lib.metadata.base import (
+    Object, object_null_adapter, factory_for_object, class_for_object)
 from ckanext.publicamundi.lib.metadata.schemata import *
 
 
@@ -38,7 +39,6 @@ class BaseMetadata_Type(type):
             field_names = getattr(f, 'deduce', None)
             if field_names:
                 cls._deduce_[f] = set(field_names)
-
 
 class BaseMetadata(Object):
     __metaclass__ = BaseMetadata_Type    
@@ -150,6 +150,27 @@ class Metadata(BaseMetadata):
             'title': self.title,
             'name': munge_title_to_name(transliterated_title),
         }
+
+def factory_for_metadata(name):
+    if not name:
+        raise ValueError('Expected a non-empty name for a dataset-type')
+    return factory_for_object(IMetadata, name)
+
+def class_for_metadata(name):
+    if not name:
+        raise ValueError('Expected a non-empty name for a dataset-type')
+    return class_for_object(IMetadata, name)
+
+# Provide the means to register a dataset-type 
+
+def dataset_type(name):
+    assert name, 'A dataset-type needs a non-empty name'
+    def decorate(cls):
+        assert issubclass(cls, Metadata)
+        adapter_registry.register([], IMetadata, name, cls)
+        cls.__dataset_type = name
+        return cls 
+    return decorate 
 
 # Import types into our namespace
 

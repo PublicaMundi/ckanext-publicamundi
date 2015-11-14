@@ -12,7 +12,7 @@ import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 
 from ckanext.publicamundi.lib.metadata import (
-    make_metadata_object, xml_serializer_for)
+    make_metadata, xml_serializer_for)
 
 log1 = logging.getLogger(__name__)
 
@@ -114,7 +114,7 @@ def make_record(pkg_dict, repo=None):
 
     pkg_id = pkg_dict['id']
     pkg_dtype = pkg_dict.get('dataset_type')
-    obj = make_metadata_object(pkg_dtype, pkg_dict)
+    obj = make_metadata(pkg_dtype, pkg_dict)
     
     # Generate an XML dump for current pkg-dict
 

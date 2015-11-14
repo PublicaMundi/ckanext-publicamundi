@@ -73,5 +73,3 @@ class ThesaurusTerms(Object):
     
     __iter__ = iter_terms
 
-
-

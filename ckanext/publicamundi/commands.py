@@ -374,7 +374,7 @@ class Command(CommandDispatcher):
             pass
 
         session = session_factory()
-        for prefix in (s.get('key-prefix', k) for k, s in dataset_types.items()):
+        for prefix in dataset_types:
             for M in (PackageExtra, PackageExtraRevision):
                 q = session.query(M).filter(M.key.like(prefix + '.%'))
                 self.logger.info('About to convert values for %s.* keys in %s' % (prefix, M))

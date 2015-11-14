@@ -6,10 +6,10 @@ from ckanext.publicamundi.lib.metadata.base import (
 from ckanext.publicamundi.lib.metadata import xml_serializers 
 from ckanext.publicamundi.lib.metadata.schemata import IFooMetadata
 
-from . import Metadata
-from . import deduce
+from . import Metadata, deduce, dataset_type
 from ._common import *
 
+@dataset_type('foo')
 @object_null_adapter()
 class FooMetadata(Metadata):
 

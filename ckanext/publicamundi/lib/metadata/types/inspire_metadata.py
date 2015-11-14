@@ -17,12 +17,11 @@ from ckanext.publicamundi import reference_data
 from ckanext.publicamundi.lib import vocabularies
 from ckanext.publicamundi.lib import languages
 from ckanext.publicamundi.lib.metadata.base import Object, object_null_adapter
-from ckanext.publicamundi.lib.metadata.schemata.inspire_metadata import IInspireMetadata
+from ckanext.publicamundi.lib.metadata.schemata import IInspireMetadata
 from ckanext.publicamundi.lib.metadata import xml_serializers
 from ckanext.publicamundi.lib.metadata.xml_serializers import object_xml_serialize_adapter
 
-from . import Metadata
-from . import deduce
+from . import Metadata, deduce, dataset_type
 from ._common import *
 from .thesaurus import Thesaurus, ThesaurusTerms
 
@@ -57,6 +56,7 @@ class ConformityFactory(object):
     def __call__(self):
         return [Conformity(title=None, degree=None)]
 
+@dataset_type('inspire')
 @object_null_adapter()
 class InspireMetadata(Metadata):
     

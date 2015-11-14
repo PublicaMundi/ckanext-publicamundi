@@ -4,16 +4,15 @@ import nose.tools
 import json
 import collections
 import copy
-import ckan.tests
-import pprint
 
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
+import ckan.tests
 
 from ckanext.publicamundi.lib import logger
 from ckanext.publicamundi.lib import dictization
+from ckanext.publicamundi.lib.metadata import factory_for_metadata
 from ckanext.publicamundi.lib.metadata import types
-from ckanext.publicamundi.lib.metadata import dataset_types, Object
 from ckanext.publicamundi.tests.functional import with_request_context
 from ckanext.publicamundi.tests import fixtures
 
@@ -137,12 +136,8 @@ class TestController(ckan.tests.TestController):
         pass
 
     def _check_result_for_edit(self, data, result):
-        dt = result.get('dataset_type')
-        dt_spec = dataset_types.get(dt)
-        assert dt_spec
-
-        dt_prefix = dt_spec.get('key_prefix', dt)
-        obj_factory = dt_spec.get('class')
+        key_prefix = dtype = result.get('dataset_type')
+        obj_factory = factory_for_metadata(dtype)
 
         keys = data.keys()
         core_keys = set(keys) & self.core_keys
@@ -154,15 +149,15 @@ class TestController(ckan.tests.TestController):
             result_tags = set(map(lambda t: t['name'], result['tags']))
             assert tags == result_tags
 
-        dt_keys = filter(lambda t: t.startswith(dt_prefix + '.'), keys)
+        dt_keys = filter(lambda t: t.startswith(key_prefix + '.'), keys)
         
         # Note The input data may be in either flat or nested format
 
         expected_obj = obj_factory()
-        if dt_prefix in data:
+        if key_prefix in data:
             # Load from nested input data
             expected_obj.from_dict(
-                data[dt_prefix], is_flat=0, 
+                data[key_prefix], is_flat=0, 
                 opts={'unserialize-values': 'default'})
         else:
             # Load from flattened input data
@@ -170,11 +165,11 @@ class TestController(ckan.tests.TestController):
                 data, is_flat=1, 
                 opts={
                     'unserialize-keys': True,
-                    'key-prefix': dt_prefix,
+                    'key-prefix': key_prefix,
                     'unserialize-values': 'default'
                 })
             
-        result_obj = result[dt_prefix]
+        result_obj = result[key_prefix]
         assert result_obj == expected_obj
         pass
 

@@ -12,9 +12,7 @@ from ckan.lib.navl.dictization_functions import missing, StopOnError, Invalid
 from ckanext.publicamundi.lib import logger
 from ckanext.publicamundi.lib import dictization
 from ckanext.publicamundi.lib.util import find_all_duplicates
-from ckanext.publicamundi.lib.metadata import (
-    dataset_types, Object, ErrorDict,
-    serializer_for_object, serializer_for_field, serializer_for_key_tuple)
+import ckanext.publicamundi.lib.metadata as ext_metadata
 
 _ = toolkit._
 aslist = toolkit.aslist
@@ -46,7 +44,7 @@ def objectify(factory, data, key_prefix):
         }
         obj.from_dict(obj_dict, is_flat=True, opts=dictz_opts)
 
-    assert not obj or isinstance(obj, Object)
+    assert not obj or isinstance(obj, ext_metadata.Metadata)
     return obj
 
 def dictize_for_extras(obj, key_prefix):
@@ -54,7 +52,7 @@ def dictize_for_extras(obj, key_prefix):
     under package_extra KV pairs.
     '''
 
-    assert isinstance(obj, Object)
+    assert isinstance(obj, ext_metadata.Metadata)
     
     dictz_opts = {
         'serialize-keys': True, 
@@ -78,7 +76,7 @@ def must_validate(context, data):
 #
 
 def is_dataset_type(value, context):
-    if not value in dataset_types:
+    if not value in ext_metadata.dataset_types:
         raise Invalid('Unknown dataset-type (%s)' %(value))
     return value
 
@@ -136,16 +134,13 @@ def postprocess_dataset_for_edit(key, data, errors, context):
     if is_new and not requested_with_api:
         return # only core metadata are expected
 
-    dt = data[('dataset_type',)]
-    dt_spec = dataset_types.get(dt)
-    if not dt_spec:
-        raise Invalid('Unknown dataset-type: %s' %(dt))
-    
-    key_prefix = dt_spec.get('key_prefix', dt)
+    key_prefix = dtype = data[('dataset_type',)]
+    if not dtype in ext_metadata.dataset_types:
+        raise Invalid('Unknown dataset-type: %s' %(dtype))
     
     # 1. Objectify from flattened fields
     
-    obj_factory = dt_spec.get('class')
+    obj_factory = ext_metadata.factory_for_metadata(dtype)
     obj = objectify(obj_factory, data, key_prefix)
 
     if not obj:
@@ -168,7 +163,7 @@ def postprocess_dataset_for_edit(key, data, errors, context):
         extras_list.append({ 'key': key, 'value': val })
     assert not find_all_duplicates(map(lambda t: t['key'], extras_list))
     
-    #debug('About to save %d %s-related fields in extras' % (len(extras_dict), dt))
+    #debug('About to save %d %s-related fields in extras' % (len(extras_dict), dtype))
     
     # 4. Compute next state
     
@@ -204,11 +199,10 @@ def preprocess_dataset_for_edit(key, data, errors, context):
     # not restricted to api requests (it is possible to be used even by form-based
     # requests).
     
-    dt = received_data.get(('dataset_type',))
-    r = unexpected_data.get(dt) if dt else None
-    if isinstance(r, dict) and dataset_types.has_key(dt):
+    key_prefix = dtype = received_data.get(('dataset_type',))
+    r = unexpected_data.get(dtype) if dtype else None
+    if isinstance(r, dict) and (dtype in ext_metadata.dataset_types):
         # Looks like a nested dict keyed at key_prefix
-        key_prefix = dataset_types[dt]['key_prefix']
         debug('Trying to flatten input at %s' %(key_prefix))
         if any([ k[0].startswith(key_prefix) for k in received_data ]):
             raise Invalid('Not supported: Found both nested/flat dicts')
@@ -234,7 +228,7 @@ def get_field_edit_processor(field):
         value = data.get(key)
         #logger.debug('Processing field %s for editing (%r)', key[0], value)
          
-        ser = serializer_for_field(field)
+        ser = ext_metadata.serializer_for_field(field)
 
         # Not supposed to handle missing inputs here
         
@@ -309,24 +303,23 @@ def guess_language(key, data, errors, context):
     assert key[0] == '__after', (
         'This converter can only be invoked in the __after stage')
     
-    extras_list = data[('extras',)]
-    dt = data[('dataset_type',)]
-    key_prefix = dataset_types[dt].get('key_prefix', dt)
+    key_prefix = dtype = data[('dataset_type',)]
 
-    obj = data.get((key_prefix,))
-    if not obj:
+    md = data.get((key_prefix,))
+    if not md:
         return # not created yet (at 1st stage ?)
     
     # First, try to deduce from metadata
-    lang = obj.deduce_fields('language').get('language')
+    lang = md.deduce_fields('language').get('language')
     
     # If not deduced, guess is current request's language
     if not lang:
         req_lang = pylons.i18n.get_lang()
         lang = req_lang[0] if req_lang else 'en'
     
+    extras_list = data[('extras',)]
     if lang:
-        extras_list.append({ 'key': 'language', 'value': lang })
+        extras_list.append({'key': 'language', 'value': lang})
     return
 
 #

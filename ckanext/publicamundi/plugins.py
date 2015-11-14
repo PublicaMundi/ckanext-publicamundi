@@ -22,8 +22,7 @@ import ckanext.publicamundi.lib.actions as ext_actions
 import ckanext.publicamundi.lib.template_helpers as ext_template_helpers
 import ckanext.publicamundi.lib.pycsw_sync as ext_pycsw_sync
 
-from ckanext.publicamundi.lib.util import (to_json, random_name, Breakpoint)
-from ckanext.publicamundi.lib.metadata import dataset_types
+from ckanext.publicamundi.lib.util import (to_json, random_name)
 
 _ = toolkit._
 asbool = toolkit.asbool
@@ -62,8 +61,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     @classmethod
     def dataset_type_options(cls):
         '''Provide options for dataset-type (needed for selects)'''
-        for k, spec in cls._dataset_types.items():
-            yield { 'value': k, 'text': spec['title'] }
+        for name in cls._dataset_types:
+            yield {'value': name, 'text': name.upper()}
 
     ## ITemplateHelpers interface ##
 
@@ -79,7 +78,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'dataset_types': self.dataset_types,
             'dataset_type_options': self.dataset_type_options,
             'organization_objects': ext_template_helpers.get_organization_objects,
-            'make_metadata_object': ext_metadata.make_metadata_object,
+            'make_metadata': ext_metadata.make_metadata,
             'markup_for_field': ext_metadata.markup_for_field,
             'markup_for_object': ext_metadata.markup_for_object,
             'markup_for': ext_metadata.markup_for,
@@ -115,10 +114,15 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         cls._debug = asbool(config['global_conf']['debug'])
         
         # Set supported dataset types
+        
+        known_dtypes = set(aslist(config['ckanext.publicamundi.dataset_types']))
+        
+        # Todo Load external schemata/classes if provided
+        
+        ext_metadata.setup()
+        registered_dtypes = ext_metadata.dataset_types
 
-        type_keys = aslist(config['ckanext.publicamundi.dataset_types'])
-        cls._dataset_types = { k: spec
-            for k, spec in dataset_types.items() if k in type_keys }
+        cls._dataset_types = known_dtypes & registered_dtypes
 
         # Set extra (not included in supported schemata) fields
 
@@ -291,16 +295,13 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         get_field_processor = ext_validators.get_field_edit_processor
         
-        for dt, dt_spec in self._dataset_types.items():
-            flattened_fields = dt_spec.get('class').get_flattened_fields(opts={
-                'serialize-keys': True,
-                'key-prefix': dt_spec.get('key_prefix', dt)
-            })
-            for field_name, field in flattened_fields.items():
+        for dtype in self._dataset_types:
+            cls1 = ext_metadata.class_for_metadata(dtype)  
+            opts1 = {'serialize-keys': True, 'key-prefix': dtype}
+            for field_name, field in cls1.get_flattened_fields(opts=opts1).items():
                 # Build chain of processors for field
-                schema[field_name] = [ 
-                    ignore_missing, get_field_processor(field),
-                ]
+                schema[field_name] = [
+                    ignore_missing, get_field_processor(field)]
         
         # Add before/after package-level processors
 
@@ -360,15 +361,12 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         
         get_field_processor = ext_validators.get_field_read_processor
 
-        for dt, dt_spec in self._dataset_types.items():
-            flattened_fields = dt_spec.get('class').get_flattened_fields(opts={
-                'serialize-keys': True,
-                'key-prefix': dt_spec.get('key_prefix', dt)
-            })
-            for field_name, field in flattened_fields.items():
-                schema[field_name] = [ 
-                    convert_from_extras, ignore_missing, get_field_processor(field)
-                ]
+        for dtype in self._dataset_types:
+            cls1 = ext_metadata.class_for_metadata(dtype)  
+            opts1 = {'serialize-keys': True, 'key-prefix': dtype}
+            for field_name, field in cls1.get_flattened_fields(opts=opts1).items():
+                schema[field_name] = [
+                    convert_from_extras, ignore_missing, get_field_processor(field)]
           
         # Add before/after package-level processors
         
@@ -463,38 +461,34 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         # Determine dataset_type-related parameters for this package
         
-        dt = pkg_dict.get('dataset_type')
-        if not dt:
+        key_prefix = dtype = pkg_dict.get('dataset_type')
+        if not dtype:
             return # noop: cannot recognize dataset-type (pkg_dict has raw extras?)
-
-        dt_spec = self._dataset_types[dt]
-        key_prefix = dt_spec.get('key_prefix', dt)
-        key_prefix_1 = key_prefix + '.' # actual prefix for keys in pkg_dict
-        
+ 
         # Note If we attempt to pop() flat keys here (e.g. to replace them by a 
         # nested structure), resource forms will clear all extra fields !!
 
         # Objectify 
         
-        obj_factory = dt_spec.get('class')
-        obj = obj_factory().from_dict(pkg_dict, is_flat=True, opts={
+        md = ext_metadata.factory_for_metadata(dtype)()
+        md.from_dict(pkg_dict, is_flat=True, opts={
             'key-prefix': key_prefix,
             'unserialize-keys': True,
             'unserialize-values': 'default',
         })
-        pkg_dict[key_prefix] = obj
+        pkg_dict[key_prefix] = md
         
         # Note Use this bit of hack when package shown directly from action api
         r = toolkit.c.environ['pylons.routes_dict'] if toolkit.c.environ else None
         if (r and r['controller'] == 'api' and r.get('action') == 'action' and 
                 r.get('logic_function') in DatasetForm.after_show._api_actions):
             # Remove flat field values (won't be needed anymore)
+            key_prefix_1 = key_prefix + '.'
             for k in (y for y in pkg_dict.keys() if y.startswith(key_prefix_1)):
                 pkg_dict.pop(k)
-            # Dictize obj so that json.dumps can handle it
-            pkg_dict[key_prefix] = obj.to_dict(flat=False, opts={
-                'serialize-values': 'json-s' 
-            })
+            # Dictize md so that json.dumps can handle it
+            pkg_dict[key_prefix] = md.to_dict(flat=False, opts={
+                'serialize-values': 'json-s'})
          
         return pkg_dict
     
@@ -533,25 +527,24 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         log1.debug('before_view: Package %s is prepared for view', pkg_dict.get('name'))
         
-        dt = pkg_dict.get('dataset_type')
-        dtspec = self._dataset_types.get(dt) if dt else None
+        dtype = pkg_dict.get('dataset_type')
         pkg_name, pkg_id = pkg_dict['name'], pkg_dict['id']
         
         # Provide alternative download links for dataset's metadata 
         
-        if dt:
+        if dtype:
             download_links = pkg_dict.get('download_links', []) 
             if not download_links:
                 pkg_dict['download_links'] = download_links
             download_links.extend([
                 {
-                    'title': dtspec['title'],
+                    'title': dtype.upper(),
                     'url': url_for('/api/action/dataset_show', id=pkg_name),
                     'weight': 0,
                     'format': 'json',
                 },
                 {
-                    'title': dtspec['title'],
+                    'title': dtype.upper(),
                     'url': url_for(
                         controller='ckanext.publicamundi.controllers.api:Controller',
                         action='dataset_export',
@@ -721,12 +714,12 @@ class PackageController(p.SingletonPlugin):
         The dictionary returned will be the one sent to the template.
         '''
         
-        dt = pkg_dict.get('dataset_type')
+        dtype = pkg_dict.get('dataset_type')
         pkg_name, pkg_id = pkg_dict['name'], pkg_dict['id']
 
         # Provide CSW-backed download links for dataset's metadata 
        
-        if dt:
+        if dtype:
             download_links = pkg_dict.get('download_links', []) 
             if not download_links:
                 pkg_dict['download_links'] = download_links

@@ -12,7 +12,7 @@ import ckan.plugins.toolkit as toolkit
 
 from ckanext.publicamundi.lib import uploader
 from ckanext.publicamundi.lib import actions as ext_actions
-from ckanext.publicamundi.lib.metadata import dataset_types
+from ckanext.publicamundi.lib import metadata as ext_metadata
 
 log = logging.getLogger(__name__)
 
@@ -48,7 +48,7 @@ class Controller(BaseController):
         redirect_url = _url(**uv)
         
         dtype = post.get('dataset_type')
-        if not dtype in dataset_types:
+        if not dtype in ext_metadata.dataset_types:
             abort(400, 'Unknown metadata schema')
         
         rename_if_conflict = post.get('rename', '') == 'y'

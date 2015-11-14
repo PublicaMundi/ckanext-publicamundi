@@ -7,8 +7,10 @@ from zope.interface.verify import verifyObject
 from datadiff.tools import assert_equal
 
 from ckanext.publicamundi.lib.json_encoder import JsonEncoder
-from ckanext.publicamundi.lib.metadata import Object
+from ckanext.publicamundi.lib.metadata import IObject, IIntrospective, IMetadata
+from ckanext.publicamundi.lib.metadata import Object, Metadata 
 from ckanext.publicamundi.lib.metadata import types
+from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.tests import fixtures
 
 def print_as_dict(obj):
@@ -50,12 +52,16 @@ def _test_convert_to_dict(x):
 def _test_schema(x):
     
     obj = getattr(fixtures, x)
+    cls = type(obj)
     
-    schema = obj.get_schema()
-    verifyObject(schema, obj)    
+    verifyObject(IIntrospective, cls, tentative=1)
+    verifyObject(IObject, obj)
 
     # Test basic schema introspection
 
+    schema = obj.get_schema()
+    verifyObject(schema, obj)    
+    
     fields = obj.get_fields()
     assert set(fields.keys()) == set(zope.schema.getFieldNames(schema))
     print fields
@@ -121,6 +127,8 @@ def test_schema():
     yield _test_schema, 'foo2'
     yield _test_schema, 'thesaurus_gemet_concepts'
     yield _test_schema, 'inspire1'
+    yield _test_schema, 'inspire2'
+    yield _test_schema, 'inspire3'
 
 def test_copying():
     

@@ -19,7 +19,7 @@ from ckanext.publicamundi.cache_manager import get_cache
 from ckanext.publicamundi.lib.actions import (
     NameConflict, IdentifierConflict, Invalid)
 from ckanext.publicamundi.lib.metadata import (
-    dataset_types, make_metadata_object, serializer_for, xml_serializer_for)
+    make_metadata, serializer_for, xml_serializer_for)
 
 log = logging.getLogger(__name__)
 
@@ -165,7 +165,7 @@ def dataset_import(context, data_dict):
 
     # Parse XML data as metadata of `dtype` schema
     
-    obj = make_metadata_object(dtype)
+    obj = make_metadata(dtype)
     try:
         obj = xml_serializer_for(obj).loads(xmldata)
     except AssertionError as ex:

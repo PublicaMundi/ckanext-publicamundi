@@ -202,7 +202,7 @@ def build_adaptee(field, expand_collection=True):
 
     # Load (if not already) the object-factory lookup function. 
     # Note it must be lazily loaded, as is not available at module's load time.
-    from ckanext.publicamundi.lib.metadata import get_object_factory
+    from ckanext.publicamundi.lib.metadata import factory_for
     
     # Build adaptee vector
 
@@ -219,7 +219,7 @@ def build_adaptee(field, expand_collection=True):
     if not (y is field) and IObjectField.providedBy(y):
         # Need a multiadapter for a (probably nested) container of objects:
         # replace field (instance of ObjectField) with a dummy object
-        adaptee[-1] = get_object_factory(y.schema)()
+        adaptee[-1] = factory_for(y.schema)()
 
     return adaptee
 

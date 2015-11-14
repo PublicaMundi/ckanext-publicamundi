@@ -13,16 +13,20 @@ from ckanext.publicamundi.lib.util import (
     stringify_exception, item_setter, attr_setter, not_a_function)
 from ckanext.publicamundi.lib.memoizer import memoize
 from ckanext.publicamundi.lib.json_encoder import JsonEncoder
-from ckanext.publicamundi.lib.metadata import adapter_registry
-from ckanext.publicamundi.lib.metadata.ibase import (
-    IObject, IErrorDict, ISerializer, IFormatter, IFormatSpec)
-from ckanext.publicamundi.lib.metadata.fields import IObjectField
-from ckanext.publicamundi.lib.metadata import formatters
-from ckanext.publicamundi.lib.metadata.formatters import (
+
+from . import adapter_registry
+from .ibase import (
+    IIntrospective, IObject,
+    IErrorDict,
+    ISerializer,
+    IFormatter, IFormatSpec)
+from .fields import IObjectField
+from . import formatters
+from .formatters import (
     formatter_for_field, field_format_adapter, 
     BaseFormatter, BaseFieldFormatter, FormatSpec)
-from ckanext.publicamundi.lib.metadata import serializers
-from ckanext.publicamundi.lib.metadata.serializers import (
+from . import serializers
+from .serializers import (
     serializer_for_field, serializer_for_key_tuple, BaseSerializer)
 
 #
@@ -86,16 +90,18 @@ class FieldContext(object):
 
 class Object(object):
     
+    zope.interface.classProvides(IIntrospective)
+
     zope.interface.implements(IObject)
 
-    ## interface IObject
+    ## interface IObject ##
 
     @classmethod
     @memoize
     def get_schema(cls):
-        '''Get the underlying zope schema for this class.
+        '''Get (i.e. introspect) the underlying zope schema for this class.
         '''
-        return cls._determine_schema()
+        return cls._introspect_schema()
 
     def get_field(self, k):
         '''Return a bound field for a key k.
@@ -388,7 +394,7 @@ class Object(object):
     ## Introspective helpers
 
     @classmethod
-    def _determine_schema(cls):
+    def _introspect_schema(cls):
         schema = None
         for iface in zope.interface.implementedBy(cls):
             if iface.extends(IObject):
@@ -1200,6 +1206,10 @@ class Object(object):
         def default_factory(self):
             return self.target_factory
 
+        @property
+        def default_class(self):
+            return self.target_factory
+        
         def from_dict(self, d, is_flat=False):
             obj = self.target_factory()
             if d:
@@ -1231,7 +1241,7 @@ class ErrorDict(dict):
     global_key = '__after'
 
 #
-# Named adapters (implementers)
+# Named null adapters (aka implementers)
 #
 
 def object_null_adapter(name=''):
@@ -1243,12 +1253,20 @@ def object_null_adapter(name=''):
     return decorate
 
 @memoize
-def _get_object_factory(schema, name):
+def _get_factory_for_object(schema, name):
     factory = Object.Factory(schema, name)
     return factory.default_factory
 
-def get_object_factory(schema, name=''):
-    return _get_object_factory(schema, name)
+@memoize
+def _get_class_for_object(schema, name):
+    factory = Object.Factory(schema, name)
+    return factory.default_class
+
+def factory_for_object(schema, name=''):
+    return _get_factory_for_object(schema, name)
+
+def class_for_object(schema, name=''):
+    return _get_class_for_object(schema, name)
 
 #
 # Serializers
