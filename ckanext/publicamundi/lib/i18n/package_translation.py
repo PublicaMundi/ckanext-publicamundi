@@ -1,8 +1,11 @@
 '''Perform key-based translation for field values.
 '''
+
 import zope.interface
 import sqlalchemy
 import sqlalchemy.orm as orm
+import logging
+import pylons
 
 import ckan.model as model
 
@@ -11,6 +14,8 @@ from ckanext.publicamundi.lib.util import check_uuid
 
 from . import language_codes
 from .ibase import ITranslator, IPackageTranslator
+
+log1 = logging.getLogger(__name__)
 
 class PackageTranslator(object):
     '''Provide a key-based translation mechanism in the scope of a package.
@@ -45,8 +50,9 @@ class PackageTranslator(object):
         if not source_language and isinstance(package, dict): 
             source_language = package.get('language')
         if not source_language:
-            raise ValueError(
-                'source_language: Missing, and cannot deduce it from package')
+            source_language = pylons.config['ckan.locale_default']
+            log1.info('package %s: source-language is missing and cannot be deduced' % (
+                package_id))
         if not source_language in language_codes:
             raise ValueError(
                 'source_language: Expected an iso-639-1 language code')
