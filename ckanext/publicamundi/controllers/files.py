@@ -36,6 +36,9 @@ class Controller(BaseController):
         elif object_type == 'metadata':
             val = get_cache('metadata').get(name_or_id)
             app = fileapp.DataApp(val, content_type='application/xml') 
+        elif object_type == 'metadata-dcat':
+            val = get_cache('metadata-dcat').get(name_or_id)
+            app = fileapp.DataApp(val, content_type='application/xml') 
         else:
             abort(404, 'Unknown object-type')
         

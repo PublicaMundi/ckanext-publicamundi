@@ -79,18 +79,25 @@ def dataset_export_dcat(context, data_dict):
         # Get a proper serializer
         xser = xml_serializer_for(obj)
         xser.target_namespace = config.get('ckan.site_url')
+
+        cached_metadata = get_cache('metadata-dcat') 
+
+        name = '%(name)s@%(revision_id)s' % (pkg)
+
         # Get the XML
         tmp_dom = xser.to_xml()
-        # Transform using XSLT
-        from lxml import etree
-        xsl_file = reference_data.get_path('xsl/iso-19139-to-dcat-ap.xsl')
+        cached = cached_metadata.get(name, createfunc=lambda: _transform_dcat(tmp_dom))
 
-        with open(xsl_file, 'r') as fp:
-            dcat_xslt = etree.parse(fp)
-            dcat_transform = etree.XSLT(dcat_xslt)
-            result = dcat_transform(tmp_dom)
-    
-    return unicode(result).encode('utf-8')
+        link = toolkit.url_for(
+            controller='ckanext.publicamundi.controllers.files:Controller',
+            action='download_file',
+            object_type='metadata-dcat',
+            name_or_id=name,
+            filename=('%(name)s.xml' % (pkg)))
+
+        result = dict(url=link)
+
+    return result
 
 def dataset_import(context, data_dict):
     '''Import a dataset from a given XML source.
@@ -315,4 +322,15 @@ def _find_a_package_name(context, basename, max_num_probes=12):
                 exhausted = True
    
     return name if found else None
+
+def _transform_dcat(xml_dom):
+    from lxml import etree
+    xsl_file = reference_data.get_path('xsl/iso-19139-to-dcat-ap.xsl')
+
+    with open(xsl_file, 'r') as fp:
+        # Transform using XSLT
+        dcat_xslt = etree.parse(fp)
+        dcat_transform = etree.XSLT(dcat_xslt)
+        result = dcat_transform(xml_dom)
+        return unicode(result).encode('utf-8')
 
