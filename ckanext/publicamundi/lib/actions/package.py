@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os
 import errno
 import fcntl
@@ -80,10 +82,9 @@ def dataset_export_dcat(context, data_dict):
         xser = xml_serializer_for(obj)
         xser.target_namespace = config.get('ckan.site_url')
 
-        cached_metadata = get_cache('metadata-dcat') 
+        cached_metadata = get_cache('metadata')
 
-        name = '%(name)s@%(revision_id)s' % (pkg)
-
+        name = '%(name)s@%(revision_id)s.dcat' % (pkg)
         # Get the XML
         tmp_dom = xser.to_xml()
         cached = cached_metadata.get(name, createfunc=lambda: _transform_dcat(tmp_dom))
@@ -91,7 +92,7 @@ def dataset_export_dcat(context, data_dict):
         link = toolkit.url_for(
             controller='ckanext.publicamundi.controllers.files:Controller',
             action='download_file',
-            object_type='metadata-dcat',
+            object_type='metadata',
             name_or_id=name,
             filename=('%(name)s.xml' % (pkg)))
 
@@ -332,5 +333,6 @@ def _transform_dcat(xml_dom):
         dcat_xslt = etree.parse(fp)
         dcat_transform = etree.XSLT(dcat_xslt)
         result = dcat_transform(xml_dom)
+
         return unicode(result).encode('utf-8')
 

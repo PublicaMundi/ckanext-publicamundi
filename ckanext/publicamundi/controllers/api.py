@@ -132,7 +132,7 @@ class Controller(BaseController):
                 'terms': [{'token': t.token, 'value': t.value, 'title': t.title} 
                     for t in vocab['vocabulary']],
             }
-                
+        
         response.headers['Content-Type'] = content_types['json']
         return [to_json(r)]
     
