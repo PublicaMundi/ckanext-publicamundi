@@ -25,8 +25,15 @@ def translate_adapter(name='default'):
 
 def field_translate_adapter(ifield, use='key'):
     assert ifield.extends(IField)
-    assert use in ('key', 'value')
-    itranslator = ITermTranslator if use == 'value' else IPackageTranslator
+    
+    itranslator = None
+    if use == 'value':
+        itranslator = ITermTranslator
+    elif use == 'key':
+        itranslator = IPackageTranslator
+    else:
+        raise ValueError('Unexpected value for `use`: %r' % (use))
+    
     def decorate(f):
         adapter_registry.register(
             [ifield, None, itranslator], ITranslatedField, 'translate', f)
@@ -64,11 +71,10 @@ class MetadataTranslator(object):
 
     def get(self, language):
         
-        obj = self.obj
-        key_prefix = getattr(obj, '__dataset_type', '')
+        key_prefix = getattr(self.obj, '__dataset_type', '')
         field_translators = self.get_translators()
 
-        flattened = obj.to_dict(flat=True)
+        flattened = self.obj.to_dict(flat=True)
         for kp, value in flattened.items():
             yf = self.obj.get_field(kp)
             yf.context.key = (key_prefix,) + kp
@@ -79,13 +85,13 @@ class MetadataTranslator(object):
                         flattened[kp] = yf1.context.value
                         break
         
-        obj1 = type(obj)()
-        obj1.from_dict(flattened, is_flat=True)
-        obj1.source_language = self.source_language
-        obj1.language = language
+        obj = type(self.obj)()
+        obj.from_dict(flattened, is_flat=True)
+        obj.source_language = self.source_language
+        obj.language = language
 
-        alsoProvides(obj1, ITranslatedMetadata)
-        return obj1
+        alsoProvides(obj, ITranslatedMetadata)
+        return obj
 
     def get_translators(self):
         return [

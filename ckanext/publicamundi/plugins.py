@@ -22,7 +22,7 @@ import ckanext.publicamundi.lib.actions as ext_actions
 import ckanext.publicamundi.lib.template_helpers as ext_template_helpers
 import ckanext.publicamundi.lib.pycsw_sync as ext_pycsw_sync
 
-from ckanext.publicamundi.lib.util import (to_json, random_name)
+from ckanext.publicamundi.lib.util import (to_json, once, random_name)
 
 _ = toolkit._
 asbool = toolkit.asbool
@@ -925,20 +925,59 @@ class MultilingualDatasetForm(DatasetForm):
     def after_show(self, context, pkg_dict):
         '''Hook into the validated data dict after the package is ready for display.
         '''
-        from pylons import request
         
+        cls = type(self)
+        dtype = pkg_dict.get('dataset_type')
+        
+        # Determine language context
+
         source_language = pkg_dict.get('language')
 
-        language = request.params.get('lang')    
+        language = pylons.request.params.get('lang')    
         if not language:
             language = pylons.i18n.get_lang()
             language = language[0] if language else 'en'
         
+        # Build metadata object, translate if needed
+
         translated = None    
         if source_language != language:
-            def translated(md):
-                tr = ext_metadata.translator_for(md, source_language)
-                return tr.get(language)
+            translated = cls.TranslatedView(source_language, language)
 
         parent = super(MultilingualDatasetForm, self)
-        return parent.after_show(context, pkg_dict, view=translated)
+        pkg_dict = parent.after_show(context, pkg_dict, view=translated)
+        if not pkg_dict:
+            return # noop, since parent returned prematurely
+        md = pkg_dict[dtype]
+
+        # Apart from structured metadata, translate core CKAN fields
+         
+        from ckanext.publicamundi.lib.metadata.fields import TextField
+        from ckanext.publicamundi.lib.metadata import FieldContext
+        
+        if translated:
+            tr = translated.translator.get_translators()[0]
+            f = TextField()
+            for k in ('title', 'notes'):
+                v = pkg_dict.get(k)
+                if not v:
+                    continue
+                yf = f.bind(FieldContext(key=(k,), value=v))
+                ## Fixme: Requires IFieldTranslator interface
+                #translated_yf = tr.get(yf, language)
+                log1.warn(' * Translate %s using translator %r on field %r', k, tr, yf)
+        
+        return pkg_dict
+    
+    class TranslatedView(object):
+        
+        def __init__(self, source_language, language):
+            self.source_language = source_language
+            self.language = language
+            self.translator = None
+            
+        @once   
+        def __call__(self, md):
+            self.translator = ext_metadata.translator_for(md, self.source_language)
+            return self.translator.get(self.language)
+
