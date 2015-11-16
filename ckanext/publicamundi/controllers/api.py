@@ -122,7 +122,7 @@ class Controller(BaseController):
         name = str(name)
         r = None
         
-        vocab = vocabularies.get_by_name(name) 
+        vocab = vocabularies.by_name(name) 
         if vocab:
             r = {
                 'date_type': vocab.get('date_type'),

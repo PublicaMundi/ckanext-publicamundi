@@ -16,6 +16,7 @@ from ckanext.publicamundi.lib.json_encoder import JsonEncoder
 
 from . import adapter_registry
 from .ibase import (
+    IFieldContext,
     IIntrospective, IObject,
     IErrorDict,
     ISerializer,
@@ -76,17 +77,16 @@ def flatten_field(field):
 
 class FieldContext(object):
 
+    zope.interface.implements(IFieldContext)
+
     __slots__ = ('key', 'value', 'title')
 
     def __init__(self, key, value, title=None):
-        self.key = key
-        self.value = value
-        self.title = title
+        self.key, self.value, self.title = key, value, title
     
     def __repr__(self):
         return u'%s(key=%r, value=%r, title=%r)' % (
-            self.__class__.__name__,
-            self.key, self.value, self.title)
+            self.__class__.__name__, self.key, self.value, self.title)
 
 class Object(object):
     

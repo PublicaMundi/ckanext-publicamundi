@@ -1,6 +1,8 @@
 import zope.interface
 import zope.schema
 
+from .fields import IField
+
 class ISerializer(zope.interface.Interface):
 
     def loads(s):
@@ -94,6 +96,16 @@ class IFormatter(zope.interface.Interface):
         If no value is supplied, the formatter should try a meaningfull guess
         from it's context.
         '''
+
+class IFieldContext(zope.interface.Interface):
+
+    value = zope.schema.Field(required=False)
+    
+    key = zope.schema.Field(required=False) # key or key-path
+
+class IFieldWithContext(IField):
+
+    context = zope.schema.Object(IFieldContext)
 
 class IIntrospective(zope.interface.Interface):
 

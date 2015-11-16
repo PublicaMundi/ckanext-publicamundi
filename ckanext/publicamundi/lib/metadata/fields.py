@@ -49,6 +49,7 @@ __all__ = [
     
     # Export field classes
     
+    'Field',
     'TextField',
     'TextLineField',
     'NativeStringField',
@@ -131,6 +132,7 @@ from z3c.schema.email.interfaces import (
     IRFC822MailAddress as IEmailAddressField,)
 
 from zope.schema import (
+    Field,
     Text as TextField,
     TextLine as TextLineField,
     NativeString as NativeStringField,

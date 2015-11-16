@@ -331,7 +331,7 @@ class InspireMetadataXmlSerializer(xml_serializers.BaseObjectSerializer):
         reference_system = None
         if md.referencesystem:
             code = md.referencesystem.code
-            reference_systems = vocabularies.get_by_name('reference-systems').get('vocabulary')
+            reference_systems = vocabularies.by_name('reference-systems').get('vocabulary')
             if code in reference_systems:
                 # Check whether the URI is provided 
                 reference_system = ReferenceSystem(code = code)

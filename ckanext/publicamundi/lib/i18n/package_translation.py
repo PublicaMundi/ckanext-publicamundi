@@ -70,7 +70,7 @@ class PackageTranslator(object):
         '''Return a translation for the given pair (key, language).
         '''
         
-        key = '.'.join(key) if isinstance(key, (tuple, list)) else str(key)
+        key = '.'.join(map(str, key)) if isinstance(key, (tuple, list)) else str(key)
         if not key:
             raise ValueError('key: Expected a non-empty key path')
 
@@ -103,7 +103,7 @@ class PackageTranslator(object):
         '''Add or update translation for a given pair (key, language).
         '''
         
-        key = '.'.join(key) if isinstance(key, (tuple, list)) else str(key)
+        key = '.'.join(map(str, key)) if isinstance(key, (tuple, list)) else str(key)
         if not key:
             raise ValueError('key: Expected a non-empty key path')
 
@@ -149,7 +149,7 @@ class PackageTranslator(object):
         )
 
         if key:
-            key = '.'.join(key) if isinstance(key, (tuple, list)) else str(key)
+            key = '.'.join(map(str, key)) if isinstance(key, (tuple, list)) else str(key)
             cond['key'] = key
         
         if language:

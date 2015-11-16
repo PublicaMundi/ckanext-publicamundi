@@ -38,6 +38,17 @@ def get_by_title(title):
 def get_by_name(name):
     return vocabularies.get(name)
 
+
+# Aliases
+
+names = get_names
+
+titles = get_titles
+
+by_name = get_by_name
+
+by_title = get_by_title
+
 # Initialize - Load common vocabularies
 
 from ckanext.publicamundi import reference_data

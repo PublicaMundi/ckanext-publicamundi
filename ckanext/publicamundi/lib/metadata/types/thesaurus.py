@@ -22,7 +22,7 @@ class Thesaurus(Object):
 
     @property
     def vocabulary(self):
-        vocab = vocabularies.get_by_name(self.name)
+        vocab = vocabularies.by_name(self.name)
         return vocab.get('vocabulary') if vocab else None
 
     # Factory for Thesaurus
@@ -41,7 +41,7 @@ class Thesaurus(Object):
             name = vocabularies.normalize_thesaurus_title(title, for_keywords)
         
         if name:
-            vocab = vocabularies.get_by_name(name)
+            vocab = vocabularies.by_name(name)
         else:
             raise ValueError('Expected a name/title lookup')
 

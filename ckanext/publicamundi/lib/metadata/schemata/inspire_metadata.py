@@ -38,7 +38,7 @@ class IInspireMetadata(IMetadata):
 
     languagecode = zope.schema.Choice(
         title = _(u'Metadata Language'),
-        vocabulary = vocabularies.get_by_name('languages-iso-639-2').get('vocabulary'),
+        vocabulary = vocabularies.by_name('languages-iso-639-2').get('vocabulary'),
         description = _(u'This is the language in which the metadata elements are expressed. The value domain of this metadata element is limited to the official languages of the Community expressed in conformity with ISO 639-2.'),
         required = True,
         default = 'eng')
@@ -55,6 +55,7 @@ class IInspireMetadata(IMetadata):
         title = _(u'Resource Title'),
         description = _(u'This a characteristic (and often unique) name by which the resource is known.'),
         required = True)
+    title.setTaggedValue('translatable', True)
 
     identifier = zope.schema.NativeStringLine(
         title = _(u'Identifier'),
@@ -65,6 +66,7 @@ class IInspireMetadata(IMetadata):
         title = _(u'Resource Abstract'),
         description = _(u'This is a brief narrative summary of the contents of this dataset.'),
         required = True)
+    abstract.setTaggedValue('translatable', True)
 
     locator = zope.schema.List(
         title = _(u'Resource Locator'),
@@ -83,7 +85,7 @@ class IInspireMetadata(IMetadata):
         max_length = 5,
         value_type = zope.schema.Choice(
             title = _(u'Resource Language'),
-            vocabulary = vocabularies.get_by_name('languages-iso-639-2').get('vocabulary'),))
+            vocabulary = vocabularies.by_name('languages-iso-639-2').get('vocabulary'),))
 
     # Classification 
 
@@ -95,8 +97,8 @@ class IInspireMetadata(IMetadata):
         max_length = 6,
         value_type = zope.schema.Choice(
             title = _(u'Topic Category'),
-            vocabulary = vocabularies.get_by_name('topic-category').get('vocabulary'),))
-    topic_category.setTaggedValue('format:markup', { 'descend-if-dictized': False })
+            vocabulary = vocabularies.by_name('topic-category').get('vocabulary'),))
+    topic_category.setTaggedValue('format:markup', {'descend-if-dictized': False})
 
     # Keywords
 
@@ -107,12 +109,12 @@ class IInspireMetadata(IMetadata):
         min_length = 1,
         key_type = zope.schema.Choice(
             vocabulary = SimpleVocabulary(
-                tuple(SimpleTerm(k, k, vocabularies.get_by_name(k).get('title'))
+                tuple(SimpleTerm(k, k, vocabularies.by_name(k).get('title'))
                     for k in keyword_thesaurus_names)), 
             title = _(u'Keyword Thesaurus')),
         value_type = zope.schema.Object(IThesaurusTerms, 
             title = _(u'Keywords')))
-    keywords.setTaggedValue('format:markup', { 'descend-if-dictized': False })
+    keywords.setTaggedValue('format:markup', {'descend-if-dictized': False})
 
     @zope.interface.invariant
     def check_keywords(obj):
@@ -128,7 +130,7 @@ class IInspireMetadata(IMetadata):
             max_length = 20,
             value_type = zope.schema.Object(IFreeKeyword,
                 title = _(u'Free Keyword')))
-    free_keywords.setTaggedValue('format:markup', { 'descend-if-dictized': False })
+    free_keywords.setTaggedValue('format:markup', {'descend-if-dictized': False})
 
     # Geographic
 
@@ -140,7 +142,7 @@ class IInspireMetadata(IMetadata):
         max_length = 4,
         value_type = zope.schema.Object(IGeographicBoundingBox,
             title = _(u'Bounding Box')))
-    bounding_box.setTaggedValue('format:markup', { 'descend-if-dictized': True })
+    bounding_box.setTaggedValue('format:markup', {'descend-if-dictized': True})
 
     # Temporal 
 
@@ -209,7 +211,7 @@ class IInspireMetadata(IMetadata):
         title = _(u'Coordinate Reference System'),
         description = _(u'Coordinate Reference System'),
         required = False)
-    reference_system.setTaggedValue('format:markup', { 'descend-if-dictized': False })
+    reference_system.setTaggedValue('format:markup', {'descend-if-dictized': False})
     
     # Conformity
 

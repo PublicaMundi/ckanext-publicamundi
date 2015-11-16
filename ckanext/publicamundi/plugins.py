@@ -438,7 +438,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         log1.debug('after_update: Package %s is updated', pkg_dict.get('name'))
         pass
 
-    def after_show(self, context, pkg_dict):
+    def after_show(self, context, pkg_dict, view=None):
         '''Hook into the validated data dict after the package is ready for display. 
         
         The main tasks here are:
@@ -476,7 +476,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'unserialize-keys': True,
             'unserialize-values': 'default',
         })
-        pkg_dict[key_prefix] = md
+        pkg_dict[key_prefix] = view(md) if view else md
         
         # Note Use this bit of hack when package shown directly from action api
         r = toolkit.c.environ['pylons.routes_dict'] if toolkit.c.environ else None
@@ -925,30 +925,20 @@ class MultilingualDatasetForm(DatasetForm):
     def after_show(self, context, pkg_dict):
         '''Hook into the validated data dict after the package is ready for display.
         '''
-        pkg_dict = super(MultilingualDatasetForm, self).after_show(context, pkg_dict)
-        if not pkg_dict:
-            return # noop
-        # Todo: Provide a localized view of this dataset
-        
         from pylons import request
-        from ckanext.publicamundi.lib.i18n.package_translation import PackageTranslator
         
-        # Example: Translate a given key e.g. inspire.abstract
-        
+        source_language = pkg_dict.get('language')
+
         language = request.params.get('lang')    
         if not language:
             language = pylons.i18n.get_lang()
             language = language[0] if language else 'en'
-
-        tr = PackageTranslator(pkg_dict)
         
-        md = pkg_dict.get('foo')
-        if md:
-            key = ('inspire', 'abstract')
-            if language != tr.source_language:
-                abstract_translated = tr.get(key, language)
-                if abstract_translated:
-                    md.abstract = abstract_translated
+        translated = None    
+        if source_language != language:
+            def translated(md):
+                tr = ext_metadata.translator_for(md, source_language)
+                return tr.get(language)
 
-        return pkg_dict
-
+        parent = super(MultilingualDatasetForm, self)
+        return parent.after_show(context, pkg_dict, view=translated)

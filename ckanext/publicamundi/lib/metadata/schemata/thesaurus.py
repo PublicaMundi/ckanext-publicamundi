@@ -20,7 +20,7 @@ class IThesaurus(IObject):
 
     date_type = zope.schema.Choice(
         title = _(u'Date Type'),
-        vocabulary = vocabularies.get_by_name('date-types').get('vocabulary'),
+        vocabulary = vocabularies.by_name('date-types').get('vocabulary'),
         required = True)
 
     version = zope.schema.NativeString(

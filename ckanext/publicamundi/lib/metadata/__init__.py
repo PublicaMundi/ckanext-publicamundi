@@ -51,6 +51,8 @@ from .types import (
     factory_for_metadata,
     class_for_metadata)
 
+from .i18n import translator_for
+
 # Provide aliases for common functions
 
 factory_for = factory_for_object

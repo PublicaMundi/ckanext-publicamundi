@@ -4,6 +4,8 @@ import zope.schema
 from ckanext.publicamundi.lib import vocabularies
 from ckanext.publicamundi.lib.util import check_uuid
 
+__all__ = ['ITermTranslator', 'IPackageTranslator']
+
 class ITranslator(zope.interface.Interface):
     '''A generic interface for both key-based and term-based translation mechanisms.
     '''
@@ -33,7 +35,7 @@ class ITranslator(zope.interface.Interface):
         '''
 
     source_language = zope.schema.Choice(
-        vocabulary = vocabularies.get_by_name('languages-iso-639-1').get('vocabulary'),
+        vocabulary = vocabularies.by_name('languages-iso-639-1').get('vocabulary'),
         required = True)
 
 class ITermTranslator(ITranslator):
