@@ -132,7 +132,7 @@ class Controller(BaseController):
                 'terms': [{'token': t.token, 'value': t.value, 'title': t.title} 
                     for t in vocab['vocabulary']],
             }
-                
+        
         response.headers['Content-Type'] = content_types['json']
         return [to_json(r)]
     
@@ -154,8 +154,9 @@ class Controller(BaseController):
         context = self._make_context() 
         result =  _get_action('dataset_export_dcat')(context, { 'id': name_or_id })
 
-        response.headers['Content-Type'] = content_types['xml']
-        return [result]
+        exported_url = result.get('url')
+        redirect(exported_url)
+        return
 
     def dataset_import(self):
         
