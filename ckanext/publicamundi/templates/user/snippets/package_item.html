@@ -7,8 +7,12 @@
 {% block package_item_resources %}
   <ul class="resources unstyled">
       {% for resource in package.resources %}
-      {% set task_result = h.resource_ingestion_result(resource.id) %}
+      {% if resource.vectorstorer_resource or resource.rasterstorer_resource %}
+        {% set task_result = h.resource_ingestion_result(resource.id) %}
         {% snippet 'user/snippets/resource_item.html', pkg=package, res=resource, task=task_result, parent=parent %}
+     {% else %}
+        {% snippet 'user/snippets/resource_item.html', pkg=package, res=resource, task=None, parent=parent %}
+      {% endif %}
   {% endfor %} {# resource #}
   </ul>
 {% endblock %}
