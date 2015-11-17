@@ -326,13 +326,14 @@ def _find_a_package_name(context, basename, max_num_probes=12):
 
 def _transform_dcat(xml_dom):
     from lxml import etree
-    xsl_file = reference_data.get_path('xsl/iso-19139-to-dcat-ap.xsl')
 
+    xsl_file = reference_data.get_path('xsl/iso-19139-to-dcat-ap.xsl')
+    result = None
     with open(xsl_file, 'r') as fp:
         # Transform using XSLT
         dcat_xslt = etree.parse(fp)
         dcat_transform = etree.XSLT(dcat_xslt)
         result = dcat_transform(xml_dom)
+        result = unicode(result).encode('utf-8')
 
-        return unicode(result).encode('utf-8')
-
+    return result
