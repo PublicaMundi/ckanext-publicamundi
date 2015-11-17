@@ -31,24 +31,39 @@ def get_all(table='iso-639-1'):
     
     return {r[key]: r['name_en'] for r in _data}
 
-def get_by_code(code):
+def get_by_code(code, table=None):
     '''Search the name of a language by iso-639-[12] code
     '''
     
     key = None
-    if _re_alpha2.match(code):
-        key = 'alpha2'
-    elif _re_alpha3b.match(code):
-        key = 'alpha3b'
+    if not table:
+        if _re_alpha2.match(code):
+            key = 'alpha2'
+        elif _re_alpha3b.match(code):
+            key = 'alpha3b'
+        else:
+            raise ValueError('Unexpected language code: %s' % (code))
     else:
-        raise ValueError('Unknown language code: %s' % (code))
-
+        if table == 'iso-639-1':
+            key = 'alpha2' 
+        elif table == 'iso-639-2':
+            key = 'alpha3b'
+        else:
+            raise ValueError('Unexpected language code table: %s' % (table))
+            
     res = None
     try: 
         i = map(lambda r: r[key], _data).index(code)
     except:
         pass
     else:
-        res = _data[i]
-    
+        res = _data[i]    
     return res
+
+def check(code, table='iso-639-1'):
+    if not code:
+        raise ValueError('Missing or empty')
+    if not get_by_code(code, table):
+        raise ValueError('Unknown language code for %s: %r' % (table, code))
+    return code
+

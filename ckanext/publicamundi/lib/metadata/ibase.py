@@ -1,9 +1,11 @@
+import re
 import zope.interface
 import zope.schema
+from zope.interface import Interface
 
 from .fields import IField
 
-class ISerializer(zope.interface.Interface):
+class ISerializer(Interface):
 
     def loads(s):
         '''Load (unserialize) and return an object from a string.
@@ -66,7 +68,7 @@ class IXmlSerializer(ISerializer):
         '''Load and return an object from an XML tree e.
         '''
 
-class ISerializable(zope.interface.Interface):
+class ISerializable(Interface):
 
     def loads(s):
         '''Load (unserialize) this object from a string.
@@ -76,7 +78,7 @@ class ISerializable(zope.interface.Interface):
         '''Dump (serialize) this object as a string.
         '''
 
-class IFormatSpec(zope.interface.Interface):
+class IFormatSpec(Interface):
 
     name = zope.schema.NativeString(required=True)
 
@@ -87,7 +89,7 @@ class IFormatSpec(zope.interface.Interface):
     def parse(s):
         '''Parse this format-spec as a string'''
 
-class IFormatter(zope.interface.Interface):
+class IFormatter(Interface):
     
     requested_name = zope.schema.NativeString(required=True)
     
@@ -97,17 +99,26 @@ class IFormatter(zope.interface.Interface):
         from it's context.
         '''
 
-class IFieldContext(zope.interface.Interface):
+def check_key(k):
+    s = k
+    if isinstance(k, tuple):
+        s = '.'.join(map(str, k)) 
+    elif isinstance(k, int):
+        s = str(k)
+    return check_key._re1.match(s)
+check_key._re1 = re.compile('^[_a-zA-Z0-9]+(\.[_a-zA-Z0-9]+)*$')
 
-    value = zope.schema.Field(required=False)
+class IFieldContext(Interface):
+
+    value = zope.schema.Field(required=True)
     
-    key = zope.schema.Field(required=False) # key or key-path
+    key = zope.schema.Field(required=True, constraint=check_key) # base key or key path
 
 class IFieldWithContext(IField):
 
     context = zope.schema.Object(IFieldContext)
 
-class IIntrospective(zope.interface.Interface):
+class IIntrospective(Interface):
 
     def get_schema():
         '''Return the schema interface (InterfaceClass) this object is declared to
@@ -177,7 +188,7 @@ class IObject(IIntrospective):
         determine if input should be considered as flattened/nested.
         '''
 
-class IErrorDict(zope.interface.Interface):
+class IErrorDict(Interface):
 
     global_key = zope.schema.NativeString(
         required = True,

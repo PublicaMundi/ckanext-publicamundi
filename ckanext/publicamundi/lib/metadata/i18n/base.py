@@ -4,15 +4,17 @@ from zope.interface import implements, alsoProvides
 from zope.interface.verify import verifyObject
 
 from ckanext.publicamundi.lib import logger
-from ckanext.publicamundi.lib.i18n import (
-    IPackageTranslator, ITermTranslator, PackageTranslator, TermTranslator)
 from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata import (IMetadata, Metadata)
 from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata.base import (IFieldContext, FieldContext)
 
-from . import language_codes
-from .ibase import (ITranslatedField, ITranslatedMetadata, IMetadataTranslator)
+from .ibase import (
+    IFieldTranslator, IValueBasedFieldTranslator, IKeyBasedFieldTranslator)
+from .ibase import (
+    ITranslatedField, ITranslatedMetadata, IMetadataTranslator)
+from . import package_translation
+from . import term_translation
 
 ## Decorators for adaptation
 
@@ -25,19 +27,16 @@ def translate_adapter(name='default'):
 
 def field_translate_adapter(ifield, use='key'):
     assert ifield.extends(IField)
-    
-    itranslator = None
+    assert use in {'key', 'value'}
+
+    itranslator = IKeyBasedFieldTranslator
     if use == 'value':
-        itranslator = ITermTranslator
-    elif use == 'key':
-        itranslator = IPackageTranslator
-    else:
-        raise ValueError('Unexpected value for `use`: %r' % (use))
-    
-    def decorate(f):
+        itranslator = IValueBasedFieldTranslator
+     
+    def decorate(factory):
         adapter_registry.register(
-            [ifield, None, itranslator], ITranslatedField, 'translate', f)
-        return f
+            [ifield, None, itranslator], ITranslatedField, 'translate', factory)
+        return factory
     return decorate
 
 ## Utility
@@ -53,6 +52,9 @@ def translated_field(field, language, field_translator):
     verifyObject(IFieldContext, field.context)
     yfield = adapter_registry.queryMultiAdapter(
         [field, language, field_translator], ITranslatedField, 'translate')
+    if yfield:
+        # If adapted, declare that directly provides ITranslatedField
+        alsoProvides(yfield, ITranslatedField)
     return yfield
 
 ## Base 
@@ -72,7 +74,9 @@ class MetadataTranslator(object):
     def get(self, language):
         
         key_prefix = getattr(self.obj, '__dataset_type', '')
-        field_translators = self.get_translators()
+        field_translators = self.get_field_translators()
+
+        # Find all available translations 
 
         flattened = self.obj.to_dict(flat=True)
         for kp, value in flattened.items():
@@ -85,6 +89,8 @@ class MetadataTranslator(object):
                         flattened[kp] = yf1.context.value
                         break
         
+        # Build a translated object
+
         obj = type(self.obj)()
         obj.from_dict(flattened, is_flat=True)
         obj.source_language = self.source_language
@@ -93,33 +99,21 @@ class MetadataTranslator(object):
         alsoProvides(obj, ITranslatedMetadata)
         return obj
 
-    def get_translators(self):
+    def get_field_translators(self):
         return [
-            PackageTranslator(self.obj.identifier, self.source_language),
+            package_translation.FieldTranslator(
+                self.obj.identifier, self.source_language),
         ]
 
-## Translate adapters for fields 
+## Register translate adapters for fields
 
 @field_translate_adapter(ITextLineField, 'key')
 @field_translate_adapter(ITextField, 'key')
 def translated_text_field(field, language, translator):
-    key = field.context.key
-    if not field.context.value:
-        return None
-    translated_value = translator.get(key, language, 'active')
-    if translated_value:
-        return field.bind(FieldContext(key=key, value=translated_value))
-    return None
+    return translator.get(field, language)
 
 @field_translate_adapter(ITextLineField, 'value')
 @field_translate_adapter(ITextField, 'value')
 def translated_text_field(field, language, translator):
-    key = field.context.key
-    value = field.context.value
-    if not value:
-        return None
-    translated_value = translator.get(value, language, 'active')
-    if translated_value:
-        return field.bind(FieldContext(key=key, value=translated_value))
-    return None
-
+    return translator.get(field, language)
+   

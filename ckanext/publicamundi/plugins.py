@@ -22,7 +22,7 @@ import ckanext.publicamundi.lib.actions as ext_actions
 import ckanext.publicamundi.lib.template_helpers as ext_template_helpers
 import ckanext.publicamundi.lib.pycsw_sync as ext_pycsw_sync
 
-from ckanext.publicamundi.lib.util import (to_json, once, random_name)
+from ckanext.publicamundi.lib.util import (to_json, random_name)
 
 _ = toolkit._
 asbool = toolkit.asbool
@@ -933,7 +933,7 @@ class MultilingualDatasetForm(DatasetForm):
 
         source_language = pkg_dict.get('language')
 
-        language = pylons.request.params.get('lang')    
+        language = toolkit.request.params.get('lang')    
         if not language:
             language = pylons.i18n.get_lang()
             language = language[0] if language else 'en'
@@ -947,7 +947,7 @@ class MultilingualDatasetForm(DatasetForm):
         parent = super(MultilingualDatasetForm, self)
         pkg_dict = parent.after_show(context, pkg_dict, view=translated)
         if not pkg_dict:
-            return # noop, since parent returned prematurely
+            return # noop: parent returned prematurely
         md = pkg_dict[dtype]
 
         # Apart from structured metadata, translate core CKAN fields
@@ -956,16 +956,16 @@ class MultilingualDatasetForm(DatasetForm):
         from ckanext.publicamundi.lib.metadata import FieldContext
         
         if translated:
-            tr = translated.translator.get_translators()[0]
-            f = TextField()
+            tr = translated.translator.get_field_translators()[0]
+            uf = TextField()
             for k in ('title', 'notes'):
                 v = pkg_dict.get(k)
                 if not v:
                     continue
-                yf = f.bind(FieldContext(key=(k,), value=v))
-                ## Fixme: Requires IFieldTranslator interface
-                #translated_yf = tr.get(yf, language)
-                log1.warn(' * Translate %s using translator %r on field %r', k, tr, yf)
+                yf = uf.bind(FieldContext(key=(k,), value=v))
+                translated_yf = tr.get(yf, language)
+                if translated_yf:
+                    pkg_dict[k] = translated_yf.context.value
         
         return pkg_dict
     
@@ -976,8 +976,8 @@ class MultilingualDatasetForm(DatasetForm):
             self.language = language
             self.translator = None
             
-        @once   
         def __call__(self, md):
+            assert self.translator is None, 'Expected to be called once!'
             self.translator = ext_metadata.translator_for(md, self.source_language)
             return self.translator.get(self.language)
 

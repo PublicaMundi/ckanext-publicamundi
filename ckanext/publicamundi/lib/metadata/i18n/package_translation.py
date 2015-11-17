@@ -1,7 +1,8 @@
-'''Perform key-based translation for field values.
+'''Perform package-scoped, key-based translation for fields.
 '''
 
 import zope.interface
+from zope.interface.verify import verifyObject
 import sqlalchemy
 import sqlalchemy.orm as orm
 import logging
@@ -11,28 +12,24 @@ import ckan.model as model
 
 import ckanext.publicamundi.model as ext_model
 from ckanext.publicamundi.lib.util import check_uuid
+from ckanext.publicamundi.lib.metadata.fields import Field, IField
+from ckanext.publicamundi.lib.metadata.base import FieldContext, IFieldContext
 
-from . import language_codes
-from .ibase import ITranslator, IPackageTranslator
+from . import language_codes, check_language
+from .ibase import (IFieldTranslator, IKeyBasedFieldTranslator)
+
+__all__ = []
 
 log1 = logging.getLogger(__name__)
 
-class PackageTranslator(object):
-    '''Provide a key-based translation mechanism in the scope of a package.
+class FieldTranslator(object):
+    '''Provide a key-based field translation mechanism in the scope of a package.
 
-    Use main database as a persistence layer.
+    Use main database as persistence layer.
     '''
 
-    zope.interface.implements(IPackageTranslator)
-
-    @property
-    def package_id(self):
-        return self._package_id
+    zope.interface.implements(IKeyBasedFieldTranslator)
     
-    @property
-    def source_language(self):
-        return self._source_language
-
     def defer_commit(self, flag=True):
         self._defer_commit = flag
 
@@ -61,24 +58,43 @@ class PackageTranslator(object):
         self._defer_commit = False
 
     def __str__(self):
-        return '<%s package=%s language=%s>' % (
-            self.__class__.__name__, self.package_id, self.source_language)
+        return '<FieldTranslator ns=%s source=%s>' % (
+            self.namespace, self.source_language)
     
-    ## ITranslator interface ## 
-
-    def get(self, key, language, state='active'):
-        '''Return a translation for the given pair (key, language).
+    @classmethod
+    def _key(cls, field):
+        '''Return a string regarded as a key for a (bound) field.
         '''
-        
-        key = '.'.join(map(str, key)) if isinstance(key, (tuple, list)) else str(key)
-        if not key:
-            raise ValueError('key: Expected a non-empty key path')
 
-        if not language:
-            raise ValueError('language: Missing')
-        if not language in language_codes:
-            raise ValueError('language: Expected an iso-639-1 language code')
-     
+        key = field.context.key
+        if isinstance(key, tuple):
+            key = '.'.join(map(str, key))
+        else:
+            key = str(key)
+        
+        if not key:
+            raise ValueError('field: Expected non-empty key path at context.key')
+        return key
+    
+    ## IFieldTranslator interface ## 
+    
+    @property
+    def source_language(self):
+        return self._source_language
+
+    @property
+    def namespace(self):
+        return 'package:%s' % (self._package_id)
+    
+    def get(self, field, language, state='active'):
+        '''Return a translation for the given pair (field, language).
+        '''
+        assert isinstance(field, Field)
+        verifyObject(IFieldContext, field.context)
+
+        key = type(self)._key(field)
+        language = check_language(language)
+
         # Lookup for a translation on this key
         
         cond = dict(
@@ -97,21 +113,19 @@ class PackageTranslator(object):
         else:
             value = r1.value
         
-        return value
+        if value:
+            return field.bind(FieldContext(key=field.context.key, value=value))
+        return None
 
-    def translate(self, key, value, language, state='active'):
-        '''Add or update translation for a given pair (key, language).
+    def translate(self, field, value, language, state='active'):
+        '''Add or update translation for a given pair (field, language).
         '''
+        assert isinstance(field, Field)
+        verifyObject(IFieldContext, field.context)
         
-        key = '.'.join(map(str, key)) if isinstance(key, (tuple, list)) else str(key)
-        if not key:
-            raise ValueError('key: Expected a non-empty key path')
+        key = type(self)._key(field)
+        language = check_language(language)
 
-        if not language:
-            raise ValueError('language: Missing')
-        if not language in language_codes:
-            raise ValueError('language: Expected an iso-639-1 language code')
-       
         value = unicode(value)
         if not value:
             raise ValueError('value: Missing')
@@ -139,7 +153,7 @@ class PackageTranslator(object):
             model.Session.commit()
         return
 
-    def discard(self, key=None, language=None):
+    def discard(self, field=None, language=None):
         '''Discard existing translations.
         '''
         
@@ -148,11 +162,14 @@ class PackageTranslator(object):
             source_language = self._source_language,
         )
 
-        if key:
-            key = '.'.join(map(str, key)) if isinstance(key, (tuple, list)) else str(key)
+        if field:
+            assert isinstance(field, Field)
+            verifyObject(IFieldContext, field.context)
+            key = type(self)._key(field)
             cond['key'] = key
         
         if language:
+            language = check_language(language)
             cond['language'] = str(language)
         
         q = model.Session.query(ext_model.PackageTranslation).filter_by(**cond)
@@ -162,3 +179,9 @@ class PackageTranslator(object):
             model.Session.commit()
         return n
 
+    ## IKeyBasedFieldTranslator interface ##
+
+    @property
+    def package_id(self):
+        return self._package_id
+ 
