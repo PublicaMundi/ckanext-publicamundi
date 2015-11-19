@@ -69,6 +69,7 @@ class IFooMetadata(IMetadata):
         required = False,
         title = u'Notes',
         description = u'Add your notes')
+    description.setTaggedValue('translatable', True)
 
     contacts = zope.schema.Dict(
         title = u'Contacts',

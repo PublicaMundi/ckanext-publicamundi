@@ -66,8 +66,6 @@ def postprocess_dataset_for_edit(key, data, errors, context):
      
     def debug(msg):
         logger.debug('Post-processing dataset for editing: %s' %(msg))
- 
-    #debug('context=%r' %(context.keys()))
     
     # The state we are moving to
     state = data.get(('state',), '') 
@@ -87,9 +85,9 @@ def postprocess_dataset_for_edit(key, data, errors, context):
         raise Invalid('Unknown dataset-type: %s' %(dtype))
     
     # 1. Build metadata object
-    
+
     cls = ext_metadata.class_for_metadata(dtype)
-    md = cls.from_converted_data(data)
+    md = cls.from_converted_data(data, for_edit=True)
 
     if not md:
         return # failed to create (in resources form ?)
@@ -100,7 +98,7 @@ def postprocess_dataset_for_edit(key, data, errors, context):
 
     if not 'skip_validation' in context:
         validation_errors = md.validate(dictize_errors=True)
-        # Todo Map validation_errors to errors
+        # Fixme Map validation_errors to errors
         #assert not validation_errors
    
     # 3. Convert fields to extras
@@ -133,7 +131,7 @@ def preprocess_dataset_for_edit(key, data, errors, context):
     #debug('Received data: %r' %(received_data))
     #debug('Received (but unexpected) data: %r' %(unexpected_data))
     
-    # Figure-out if a nested dict is supplied (instead of a flat one).
+    # Figure out if a nested dict is supplied (instead of a flat one).
     
     # Note This "nested" input format is intended to be used by the action api,
     # as it is far more natural to the JSON format. Still, this format option is

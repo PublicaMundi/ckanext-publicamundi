@@ -10,4 +10,4 @@ from nose.plugins.skip import SkipTest
 from ckanext.publicamundi.lib.metadata.i18n import *
 
 def test_1():
-    assert False, 'Todo: Write your tests!'
+    raise SkipTest('Todo')

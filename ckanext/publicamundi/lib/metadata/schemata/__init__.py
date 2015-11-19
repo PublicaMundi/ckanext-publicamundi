@@ -7,12 +7,15 @@ from ckanext.publicamundi.lib.metadata.ibase import IIntrospective, IObject
 
 class IFromConvertedData(zope.interface.Interface):
     
-    def from_converted_data(data):
+    def from_converted_data(data, for_edit=False):
         '''Build object from converter/validator data.
 
-        The term "converted" denotes the format that CKAN user when passes
-        data in converters/validators used inside {create/update/read}_package
-        IDatasetForm hooks. 
+        The term "converted" denotes the format that CKAN uses when passing package
+        data to converters/validators inside {create/update/show}_package IDatasetForm
+        hooks.
+
+        This "converted" data format differs slightly depending on the context, so use
+        `for_edit` to indicate the undergoing operation.
         '''
 
 class IIntrospectiveWithLinkedFields(IIntrospective):
@@ -58,6 +61,7 @@ class IMetadata(IBaseMetadata):
     title = zope.schema.TextLine(
         title=u'Title', required=True, min_length=5)    
     title.setTaggedValue('links-to', 'title')
+    title.setTaggedValue('translatable', True)
 
     identifier = zope.schema.NativeStringLine(
         title=u'Identifier', required=True, min_length=3)

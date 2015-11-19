@@ -11,6 +11,8 @@ from ckanext.publicamundi.lib.metadata import IObject, IIntrospective, IMetadata
 from ckanext.publicamundi.lib.metadata import Object, Metadata 
 from ckanext.publicamundi.lib.metadata import types
 from ckanext.publicamundi.lib.metadata import schemata
+from ckanext.publicamundi.lib.metadata.schemata import (
+    IFromConvertedData, IIntrospectiveWithLinkedFields)
 from ckanext.publicamundi.tests import fixtures
 
 def print_as_dict(obj):
@@ -49,7 +51,18 @@ def _test_convert_to_dict(x):
     s2 = json.dumps(obj2.to_dict(), cls=JsonEncoder)
     assert s == s2
 
-def _test_schema(x):
+def _test_schema_for_metadata(x):
+    
+    _test_schema_for_object(x)
+
+    md = getattr(fixtures, x)
+    cls = type(md)
+   
+    verifyObject(IIntrospectiveWithLinkedFields, cls, tentative=1)
+    verifyObject(IFromConvertedData, cls, tentative=1)
+    verifyObject(IMetadata, md)
+
+def _test_schema_for_object(x):
     
     obj = getattr(fixtures, x)
     cls = type(obj)
@@ -59,10 +72,10 @@ def _test_schema(x):
 
     # Test basic schema introspection
 
-    schema = obj.get_schema()
-    verifyObject(schema, obj)    
+    schema = cls.get_schema()
+    verifyObject(schema, obj)
     
-    fields = obj.get_fields()
+    fields = cls.get_fields()
     assert set(fields.keys()) == set(zope.schema.getFieldNames(schema))
     print fields
 
@@ -76,7 +89,7 @@ def _test_schema(x):
     ]
 
     for opts in opt_variations:
-        flattened_fields = obj.get_flattened_fields(opts=opts)
+        flattened_fields = cls.get_flattened_fields(opts=opts)
         print flattened_fields
         d = obj.to_dict(flat=True, opts=opts) 
         for k in set(d.keys()) - set(flattened_fields.keys()):
@@ -121,14 +134,15 @@ def test_dict_converters():
 
 def test_schema():
     
-    yield _test_schema, 'bbox1'
-    yield _test_schema, 'contact1'
-    yield _test_schema, 'foo1'
-    yield _test_schema, 'foo2'
-    yield _test_schema, 'thesaurus_gemet_concepts'
-    yield _test_schema, 'inspire1'
-    yield _test_schema, 'inspire2'
-    yield _test_schema, 'inspire3'
+    yield _test_schema_for_object, 'bbox1'
+    yield _test_schema_for_object, 'contact1'
+    yield _test_schema_for_object, 'thesaurus_gemet_concepts'
+    
+    yield _test_schema_for_metadata, 'foo1'
+    yield _test_schema_for_metadata, 'foo2'
+    yield _test_schema_for_metadata, 'inspire1'
+    yield _test_schema_for_metadata, 'inspire2'
+    yield _test_schema_for_metadata, 'inspire3'
 
 def test_copying():
     
@@ -239,15 +253,11 @@ def _test_deduce_fields_foo(x):
     
     data = foo.deduce_fields('id')
     assert set(data) == {'id'}
-    assert data['id'] == foo.url
+    assert data['id'] == foo.identifier
 
     data = foo.deduce_fields('notes')
     assert set(data) == {'notes'}
     assert data['notes'] == foo.description
-
-def test_deduce_fields():
-    
-    pass
 
 def test_deduce_fields_foo():
     
@@ -258,20 +268,25 @@ if __name__  == '__main__':
      
     x = fixtures.foo1
     
-    field1 = x.get_schema().get('contact_info')
+    #field1 = x.get_schema().get('contact_info')
 
-    fc1 = x.get_field_factory(key='contact_info')
-    fc2 = x.get_field_factory(field=field1)
-    
-    fc3 = x.get_field_factory('contact_info')
-    fc4 = x.get_field_factory(field=field1)
+    #fc1 = x.get_field_factory(key='contact_info')
+    #fc2 = x.get_field_factory(field=field1)
+    #fc3 = x.get_field_factory('contact_info')
+    #fc4 = x.get_field_factory(field=field1)
 
-    _test_schema('foo1')
-    
-    _test_equality('foo1')
-    
-    _test_inequality('foo1', 'foo2')
+    #_test_schema_for_metadata('foo1')
+    #_test_equality('foo1')
+    #_test_inequality('foo1', 'foo2')
+    #test_field_accessors_with_ifoo()
+    #_test_deduce_fields_foo('foo1')
 
-    test_field_accessors_with_ifoo()
-    
-    _test_deduce_fields_foo('foo1')
+
+    from ckanext.publicamundi.lib.metadata import (
+        class_for, class_for_object, class_for_metadata)
+    cls1 = class_for_metadata('foo')
+    #d1 = {'title': u'Byeee Foo'}
+    d1 = {}
+    foo1 = cls1()
+    foo1.from_dict(d1, is_flat=0)
+

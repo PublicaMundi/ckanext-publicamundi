@@ -69,6 +69,7 @@ spatialres2 = SpatialResolution(denominator=1000)
 # Foo
 
 foo1 = FooMetadata(
+    identifier = '71adc2bf-b8fd-481e-bd52-2ca86e93df35',
     baz = u'Bazzz',
     title = u'Αβαβούα',
     tags = [ u'alpha', u'beta', u'gamma'],
@@ -97,6 +98,7 @@ foo1 = FooMetadata(
 )
 
 foo2 = FooMetadata(
+    identifier = '71adc2bf-b8fd-481e-bd52-2ca86e93df35',
     baz = u'Baobab',
     title = u'Αβαβούα',
     tags = [ u'alpha', u'beta', u'gamma',],

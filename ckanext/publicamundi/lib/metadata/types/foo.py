@@ -11,12 +11,11 @@ from ._common import *
 
 @dataset_type('foo')
 @object_null_adapter()
+@zope.interface.implementer(IFooMetadata)
 class FooMetadata(Metadata):
 
-    zope.interface.implements(IFooMetadata)
-
     ## Factories for fields ## 
-
+    
     title = None
     url = None
     thematic_category = None

@@ -314,7 +314,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             schema['__after'] = []
         schema['__after'].append(postprocess_dataset)
         
-        # Add extra top-level fields (i.e. not under a schema)
+        # Add extra top-level fields (i.e. not bound to a schema)
         
         for field_name in self._extra_fields:
             schema[field_name] = [ignore_empty, convert_to_extras]
@@ -453,7 +453,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         is_validated = context.get('validate', True)
         for_view = context.get('for_view', False)
         
-        log1.debug('DatasetForm.after_show: Package %s is shown: view=%s validated=%s api=%s', 
+        log1.debug(
+            'Package %s is shown: for-view=%s validated=%s api=%s', 
             pkg_dict.get('name'), for_view, is_validated, context.get('api_version'))
         
         if not is_validated:
@@ -465,19 +466,28 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         if not dtype:
             return # noop: cannot recognize dataset-type (pkg_dict has raw extras?)
  
-        # Note If we attempt to pop() flat keys here (e.g. to replace them by a 
-        # nested structure), resource forms will clear all extra fields !!
+        # Note Do not attempt to pop() flat keys here (e.g. to replace them by a 
+        # nested structure), because resource forms will clear all extra fields !!
 
         # Objectify 
         
-        md = ext_metadata.factory_for_metadata(dtype)()
-        md.from_dict(pkg_dict, is_flat=True, opts={
-            'key-prefix': key_prefix,
-            'unserialize-keys': True,
-            'unserialize-values': 'default',
-        })
-        pkg_dict[key_prefix] = view(md) if view else md
+        md_cls = ext_metadata.class_for_metadata(dtype)
+        md = md_cls.from_converted_data(pkg_dict)
         
+        # Provide a view
+        
+        if view and callable(view):
+            try:
+                md = view(md)
+            except Exception as ex:
+                log1.warn('Cannot build view %r for package %r: %s',
+                    view, pkg_dict.get('name'), str(ex))
+                pass # keep the original view
+        
+        pkg_dict[key_prefix] = md
+        
+        # Fix for JSON API results
+
         # Note Use this bit of hack when package shown directly from action api
         r = toolkit.c.environ['pylons.routes_dict'] if toolkit.c.environ else None
         if (r and r['controller'] == 'api' and r.get('action') == 'action' and 
@@ -486,7 +496,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             key_prefix_1 = key_prefix + '.'
             for k in (y for y in pkg_dict.keys() if y.startswith(key_prefix_1)):
                 pkg_dict.pop(k)
-            # Dictize md so that json.dumps can handle it
+            # Dictize object for json.dumps to handle it
             pkg_dict[key_prefix] = md.to_dict(flat=False, opts={
                 'serialize-values': 'json-s'})
          
@@ -955,7 +965,7 @@ class MultilingualDatasetForm(DatasetForm):
         from ckanext.publicamundi.lib.metadata.fields import TextField
         from ckanext.publicamundi.lib.metadata import FieldContext
         
-        if translated:
+        if translated and translated.translator:
             tr = translated.translator.get_field_translators()[0]
             uf = TextField()
             for k in ('title', 'notes'):
@@ -979,5 +989,9 @@ class MultilingualDatasetForm(DatasetForm):
         def __call__(self, md):
             assert self.translator is None, 'Expected to be called once!'
             self.translator = ext_metadata.translator_for(md, self.source_language)
-            return self.translator.get(self.language)
-
+            try:
+                result = self.translator.get(self.language)
+            except Exception as ex:
+                self.translator = False # is unusable
+                raise
+            return result

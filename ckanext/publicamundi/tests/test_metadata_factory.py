@@ -156,6 +156,7 @@ def _test_tofrom_dicts(fixture_name, schema):
 def test_from_serialized():
     
     d = {
+        "identifier": "71adc2bf-b8fd-481e-bd52-2ca86e93df35",
         "tags.2": u"gamma",
         "tags.1": u"beta",
         "tags.0": u"alpha",

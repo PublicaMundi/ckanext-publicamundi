@@ -75,9 +75,8 @@ def flatten_field(field):
 # Base implementation  
 #
 
+@zope.interface.implementer(IFieldContext)
 class FieldContext(object):
-
-    zope.interface.implements(IFieldContext)
 
     __slots__ = ('key', 'value', 'title')
 
@@ -85,14 +84,12 @@ class FieldContext(object):
         self.key, self.value, self.title = key, value, title
     
     def __repr__(self):
-        return u'%s(key=%r, value=%r, title=%r)' % (
-            self.__class__.__name__, self.key, self.value, self.title)
+        return u'%s(key=%r, value=%r)' % (
+            self.__class__.__name__, self.key, self.value)
 
+@zope.interface.provider(IIntrospective)
+@zope.interface.implementer(IObject)
 class Object(object):
-    
-    zope.interface.classProvides(IIntrospective)
-
-    zope.interface.implements(IObject)
 
     ## interface IObject ##
 
@@ -1232,11 +1229,10 @@ class Object(object):
         cls = type(self)
         return cls.Loader(self, opts).load(d)
 
+@zope.interface.implementer(IErrorDict)
 class ErrorDict(dict):
     '''Provide a simple dict for validation errors.
     '''
-    
-    zope.interface.implements(IErrorDict)
 
     global_key = '__after'
 

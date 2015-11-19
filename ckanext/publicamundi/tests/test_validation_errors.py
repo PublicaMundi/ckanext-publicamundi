@@ -39,6 +39,7 @@ poly3 = Polygon(name = u'P3', points=[
 # Fixtures x1*: schema validation errors
 
 x11 = FooMetadata(
+    identifier = '71adc2bf-b8fd-481e-bd52-2ca86e93df35',
     baz = u'Bazzz',
     title = u'Ababoua Ababoua',
     tags = [ u'alpha', u'beta', u'gamma', 42, 'aaa'],
@@ -74,6 +75,7 @@ x14.url = 'ftp://foo.example.com'
 # Fixtures x2*: invariant errors
 
 x21 = FooMetadata(
+    identifier = '71adc2bf-b8fd-481e-bd52-2ca86e93df35',
     baz = u'Bazzz',
     title = u'Ababoua Ababoua',
     tags = [ u'alpha', u'beta', u'gamma', u'alpha'], # duplicate 

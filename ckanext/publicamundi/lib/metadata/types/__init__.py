@@ -1,6 +1,6 @@
 import zope.interface
 import zope.schema
-import functools
+from functools import wraps
 from unidecode import unidecode
 
 from ckan.lib.munge import (munge_name, munge_title_to_name) 
@@ -13,9 +13,8 @@ from ckanext.publicamundi.lib.metadata.schemata import *
 
 
 def deduce(key0, *rkeys):
-    scalar_types = (basestring, int, long, float, bool,)
     def decorate(method):
-        @functools.wraps(method)
+        @wraps(method)
         def wrap_method(o):
             result = method(o)
             # Fix returning type
@@ -50,50 +49,18 @@ class BaseMetadata(Object):
     ## IBaseMetadata interface ##
     
     @classmethod
-    def from_converted_data(cls, data):
+    def from_converted_data(cls, data, for_edit=False):
         '''Build an object from received converter/validator data.
         '''
-        md = None
-
-        key_prefix = cls._dataset_type_
-        
-        prefix = key_prefix + '.'
-        is_key = lambda k: k and len(k) < 2 and k[0].startswith(prefix)
-        md_dict = {k[0]: data[k] for k in data if is_key(k)}
-        
-        if not md_dict:
-            return md
-        
-        # Load object from converted data
-
-        md = cls()
-        dictz_opts = {
-            'unserialize-keys': True, 
-            'key-prefix': key_prefix, 
-            'unserialize-values': 'default', 
-        }
-        md.from_dict(md_dict, is_flat=True, opts=dictz_opts)
-        
-        # Try to deduce empty fields from their linked core fields
-
-        updates = {}
-        for kp, uf, link in md.iter_linked_fields():
-            v = data.get((link,))
-            if not v:
-                continue
-            yf = md.get_field(kp)
-            if yf.context.value == yf.missing_value:
-                updates[kp] = yf.fromUnicode(v)
-        if updates:
-            md.from_dict(updates, is_flat=True, opts={'update': 'deep'})
-
-        return md
+        if for_edit:
+            return cls._from_converted_data_for_edit(data)
+        else:
+            return cls._from_converted_data_for_show(data)
     
     def to_extras(self):
         '''Dictize self in a proper way so that it's fields can be stored under
         package_extra KV pairs (aka extras).
         '''
-    
         key_prefix = self._dataset_type_
         
         opts = {
@@ -118,7 +85,58 @@ class BaseMetadata(Object):
     def deduce_fields(self, *keys):
         return self._deduce_fields(*keys, inherit=True, include_native=True)
    
-    # Implementation for deduce_fields #
+    # Implementation: from_converted_data #
+    
+    @classmethod
+    def _from_converted_data_for_show(cls, data):
+        md, factory = None, cls
+        key_prefix = cls._dataset_type_
+        
+        md = factory()
+        opts = {
+            'key-prefix': key_prefix,
+            'unserialize-keys': True,
+            'unserialize-values': 'default',
+        }
+        md.from_dict(data, is_flat=True, opts=opts)
+        
+        return md
+
+    @classmethod
+    def _from_converted_data_for_edit(cls, data):
+        md, factory = None, cls
+        key_prefix = cls._dataset_type_
+        
+        prefix = key_prefix + '.'
+        is_key = lambda k: k and len(k) < 2 and k[0].startswith(prefix)
+        d = {k[0]: data[k] for k in data if is_key(k)}
+        
+        # Load object from converted data
+
+        md = factory()
+        opts = {
+            'key-prefix': key_prefix, 
+            'unserialize-keys': True, 
+            'unserialize-values': 'default', 
+        }
+        md.from_dict(d, is_flat=True, opts=opts)
+        
+        # Try to deduce empty fields from their linked core fields
+
+        updates = {}
+        for kp, uf, link in md.iter_linked_fields():
+            v = data.get((link,))
+            if not v:
+                continue
+            yf = md.get_field(kp)
+            if yf.context.value == yf.missing_value:
+                updates[kp] = yf.fromUnicode(v)
+        if updates:
+            md.from_dict(updates, is_flat=True, opts={'update': 'deep'})
+
+        return md
+
+    # Implementation: deduce_fields #
     
     def _deduce_fields(self, *keys, **opts):
         
