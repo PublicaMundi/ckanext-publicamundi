@@ -37,19 +37,17 @@ class FooMetadata(Metadata):
 
     ## Deduce methods ##
 
-    @deduce('url', 'id')
-    def _deduce_ids(self): 
-        return dict(url=self.url, id=self.url)
+    @deduce('url')
+    def _deduce_url(self): 
+        return self.url
 
     @deduce('notes')
     def _deduce_notes(self): 
         return self.description
     
-    ## Properties ##
-
-    @property
-    def identifier(self):
-        return self.url
+    @deduce('id')
+    def _deduce_id(self): 
+        return self.identifier
 
 @xml_serializers.object_xml_serialize_adapter(IFooMetadata)
 class FooXmlSerializer(xml_serializers.ObjectSerializer):

@@ -4,11 +4,12 @@ import zope.schema
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
 from ckanext.publicamundi.lib.metadata.ibase import IObject
-from ckanext.publicamundi.lib.metadata.schemata import IBaseMetadata
-from ckanext.publicamundi.lib.metadata.schemata._common import *
-from ckanext.publicamundi.lib.metadata.schemata.thesaurus import IThesaurusTerms
 
-class IBazMetadata(IBaseMetadata):
+from . import IMetadata
+from ._common import *
+from .thesaurus import IThesaurusTerms
+
+class IBazMetadata(IMetadata):
     
     zope.interface.taggedValue('recurse-on-invariants', True)
 

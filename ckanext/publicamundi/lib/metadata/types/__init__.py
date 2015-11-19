@@ -1,9 +1,11 @@
 import zope.interface
+import zope.schema
 import functools
 from unidecode import unidecode
 
 from ckan.lib.munge import (munge_name, munge_title_to_name) 
 
+from ckanext.publicamundi.lib.memoizer import memoize
 from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.base import (
     Object, object_null_adapter, factory_for_object, class_for_object)
@@ -40,17 +42,83 @@ class BaseMetadata_Type(type):
             if field_names:
                 cls._deduce_[f] = set(field_names)
 
+@zope.interface.implementer(IBaseMetadata)
+@zope.interface.provider(IFromConvertedData, IIntrospectiveWithLinkedFields)
 class BaseMetadata(Object):
     __metaclass__ = BaseMetadata_Type    
     
-    zope.interface.implements(IBaseMetadata)
-    
     ## IBaseMetadata interface ##
+    
+    @classmethod
+    def from_converted_data(cls, data):
+        '''Build an object from received converter/validator data.
+        '''
+        md = None
+
+        key_prefix = cls._dataset_type_
+        
+        prefix = key_prefix + '.'
+        is_key = lambda k: k and len(k) < 2 and k[0].startswith(prefix)
+        md_dict = {k[0]: data[k] for k in data if is_key(k)}
+        
+        if not md_dict:
+            return md
+        
+        # Load object from converted data
+
+        md = cls()
+        dictz_opts = {
+            'unserialize-keys': True, 
+            'key-prefix': key_prefix, 
+            'unserialize-values': 'default', 
+        }
+        md.from_dict(md_dict, is_flat=True, opts=dictz_opts)
+        
+        # Try to deduce empty fields from their linked core fields
+
+        updates = {}
+        for kp, uf, link in md.iter_linked_fields():
+            v = data.get((link,))
+            if not v:
+                continue
+            yf = md.get_field(kp)
+            if yf.context.value == yf.missing_value:
+                updates[kp] = yf.fromUnicode(v)
+        if updates:
+            md.from_dict(updates, is_flat=True, opts={'update': 'deep'})
+
+        return md
+    
+    def to_extras(self):
+        '''Dictize self in a proper way so that it's fields can be stored under
+        package_extra KV pairs (aka extras).
+        '''
+    
+        key_prefix = self._dataset_type_
+        
+        opts = {
+            'serialize-keys': True, 
+            'serialize-values': 'default',
+            'key-prefix': key_prefix,
+        }
+        
+        flattened = self.to_dict(flat=True, opts=opts)
+        for k, v in flattened.iteritems():
+            if not v is None:
+                yield k, v
+
+    @classmethod
+    def iter_linked_fields(cls):
+        flattened_fields = cls.get_flattened_fields()
+        for kp, uf in flattened_fields.iteritems():
+            link = uf.queryTaggedValue('links-to')
+            if link: 
+                yield kp, uf, link
 
     def deduce_fields(self, *keys):
         return self._deduce_fields(*keys, inherit=True, include_native=True)
    
-    ## Implementation for deduce_fields ##
+    # Implementation for deduce_fields #
     
     def _deduce_fields(self, *keys, **opts):
         
@@ -137,10 +205,10 @@ class BaseMetadata(Object):
  
         return res
 
+@zope.interface.implementer(IMetadata)
 class Metadata(BaseMetadata):
     
-    zope.interface.implements(IMetadata)
-    
+    identifier = None
     title = None
     
     @deduce('title', 'name')
@@ -168,11 +236,11 @@ def dataset_type(name):
     def decorate(cls):
         assert issubclass(cls, Metadata)
         adapter_registry.register([], IMetadata, name, cls)
-        cls.__dataset_type = name
+        cls._dataset_type_ = name
         return cls 
     return decorate 
 
-# Import types into our namespace
+# Import types
 
 from ._common import *
 from .thesaurus import Thesaurus, ThesaurusTerms

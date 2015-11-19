@@ -18,58 +18,6 @@ _ = toolkit._
 aslist = toolkit.aslist
 asbool = toolkit.asbool
 
-#
-# Helpers
-#
-
-def objectify(factory, data, key_prefix):
-    '''Build an object from received converter/validator data. 
-    '''
-
-    prefix = key_prefix + '.'
-    
-    def is_field_key(k):
-        if not k or len(k) > 1:
-            return False
-        return k[0].startswith(prefix)
-    
-    obj = None
-    obj_dict = {k[0]: data[k] for k in data if is_field_key(k)}
-    if obj_dict:
-        obj = factory()
-        dictz_opts = {
-            'unserialize-keys': True, 
-            'key-prefix': key_prefix, 
-            'unserialize-values': 'default', 
-        }
-        obj.from_dict(obj_dict, is_flat=True, opts=dictz_opts)
-
-    assert not obj or isinstance(obj, ext_metadata.Metadata)
-    return obj
-
-def dictize_for_extras(obj, key_prefix):
-    '''Dictize an object in proper way so that it's fields can be stored 
-    under package_extra KV pairs.
-    '''
-
-    assert isinstance(obj, ext_metadata.Metadata)
-    
-    dictz_opts = {
-        'serialize-keys': True, 
-        'serialize-values': 'default',
-        'key-prefix': key_prefix,
-    }
-    res = obj.to_dict(flat=True, opts=dictz_opts)
-    res = {k: v for k, v in res.iteritems() if v is not None}
-    return res
-
-def must_validate(context, data):
-    '''Indicate whether an object (or a particular field of it) should be validated
-    under the given context.
-    '''
-    return not (
-        ('skip_validation' in context) or 
-        (data.get(('state',), '') == 'invalid'))
 
 #
 # Validators/Converters for package
@@ -138,32 +86,27 @@ def postprocess_dataset_for_edit(key, data, errors, context):
     if not dtype in ext_metadata.dataset_types:
         raise Invalid('Unknown dataset-type: %s' %(dtype))
     
-    # 1. Objectify from flattened fields
+    # 1. Build metadata object
     
-    obj_factory = ext_metadata.factory_for_metadata(dtype)
-    obj = objectify(obj_factory, data, key_prefix)
+    cls = ext_metadata.class_for_metadata(dtype)
+    md = cls.from_converted_data(data)
 
-    if not obj:
-        return # failed to create one (resources form ?)
+    if not md:
+        return # failed to create (in resources form ?)
 
-    data[(key_prefix,)] = obj
+    data[(key_prefix,)] = md
     
     # 2. Validate as an object
 
     if not 'skip_validation' in context:
-        validation_errors = obj.validate(dictize_errors=True)
-        # Todo Map `validation_errors` to `errors`
+        validation_errors = md.validate(dictize_errors=True)
+        # Todo Map validation_errors to errors
         #assert not validation_errors
    
     # 3. Convert fields to extras
     
     extras_list = data[('extras',)]
-    extras_dict = dictize_for_extras(obj, key_prefix)
-    for key, val in extras_dict.iteritems():
-        extras_list.append({ 'key': key, 'value': val })
-    assert not find_all_duplicates(map(lambda t: t['key'], extras_list))
-    
-    #debug('About to save %d %s-related fields in extras' % (len(extras_dict), dtype))
+    extras_list.extend(({'key': k, 'value': v} for k, v in md.to_extras()))
     
     # 4. Compute next state
     
@@ -183,8 +126,6 @@ def preprocess_dataset_for_edit(key, data, errors, context):
     
     def debug(msg):
         logger.debug('Pre-processing dataset for editing: %s' %(msg))
-    
-    #debug('context=%r' %(context.keys()))
     
     received_data = { k:v for k,v in data.iteritems() if not (v is missing) }
     unexpected_data = received_data.get(('__extras',), {})
@@ -354,3 +295,16 @@ def guess_resource_type_if_empty(key, data, errors, context):
 
     data[key] = value
     return
+
+#
+# Helpers
+#
+
+def _must_validate(context, data):
+    '''Indicate whether an object (or a particular field of it) should be validated
+    under the given context.
+    '''
+    return not (
+        ('skip_validation' in context) or 
+        (data.get(('state',), '') == 'invalid'))
+

@@ -61,12 +61,14 @@ class IInspireMetadata(IMetadata):
         title = _(u'Identifier'),
         description = _(u'A value uniquely identifying the dataset. The value domain of this metadata element is a mandatory character string code, generally assigned by the data owner, and a character string namespace uniquely identifying the context of the identifier code (for example, the data owner).'),
         required = True)
+    identifier.setTaggedValue('links-to', 'id')
 
     abstract = zope.schema.Text(
         title = _(u'Resource Abstract'),
         description = _(u'This is a brief narrative summary of the contents of this dataset.'),
         required = True)
     abstract.setTaggedValue('translatable', True)
+    abstract.setTaggedValue('links-to', 'notes')
 
     locator = zope.schema.List(
         title = _(u'Resource Locator'),

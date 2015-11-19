@@ -73,7 +73,7 @@ class MetadataTranslator(object):
 
     def get(self, language):
         
-        key_prefix = getattr(self.obj, '__dataset_type', '')
+        key_prefix = getattr(self.obj, '_dataset_type_', '')
         field_translators = self.get_field_translators()
 
         # Find all available translations 
