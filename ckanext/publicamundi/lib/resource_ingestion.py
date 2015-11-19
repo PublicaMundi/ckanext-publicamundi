@@ -12,7 +12,6 @@ def get_result(resource_id):
 
     This combines both identification and ingestion status.
     '''
-
     result = {}
 
     res_identify_query = ckan.model.Session.query(ResourceIngest).filter(
