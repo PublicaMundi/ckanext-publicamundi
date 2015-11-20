@@ -53,9 +53,8 @@ class BaseMetadata(Object):
         '''Build an object from received converter/validator data.
         '''
         if for_edit:
-            return cls._from_converted_data_for_edit(data)
-        else:
-            return cls._from_converted_data_for_show(data)
+            data = {k[0]: data[k] for k in data if (k and len(k) < 2)}
+        return cls._from_converted_data(data)
     
     def to_extras(self):
         '''Dictize self in a proper way so that it's fields can be stored under
@@ -86,30 +85,11 @@ class BaseMetadata(Object):
         return self._deduce_fields(*keys, inherit=True, include_native=True)
    
     # Implementation: from_converted_data #
-    
-    @classmethod
-    def _from_converted_data_for_show(cls, data):
-        md, factory = None, cls
-        key_prefix = cls._dataset_type_
-        
-        md = factory()
-        opts = {
-            'key-prefix': key_prefix,
-            'unserialize-keys': True,
-            'unserialize-values': 'default',
-        }
-        md.from_dict(data, is_flat=True, opts=opts)
-        
-        return md
 
     @classmethod
-    def _from_converted_data_for_edit(cls, data):
+    def _from_converted_data(cls, data):
         md, factory = None, cls
         key_prefix = cls._dataset_type_
-        
-        prefix = key_prefix + '.'
-        is_key = lambda k: k and len(k) < 2 and k[0].startswith(prefix)
-        d = {k[0]: data[k] for k in data if is_key(k)}
         
         # Load object from converted data
 
@@ -119,18 +99,17 @@ class BaseMetadata(Object):
             'unserialize-keys': True, 
             'unserialize-values': 'default', 
         }
-        md.from_dict(d, is_flat=True, opts=opts)
+        md.from_dict(data, is_flat=True, opts=opts)
         
         # Try to deduce empty fields from their linked core fields
 
         updates = {}
         for kp, uf, link in md.iter_linked_fields():
-            v = data.get((link,))
-            if not v:
-                continue
-            yf = md.get_field(kp)
-            if yf.context.value == yf.missing_value:
-                updates[kp] = yf.fromUnicode(v)
+            v = data.get(link)
+            if v:
+                yf = md.get_field(kp)
+                if yf.context.value == yf.missing_value:
+                    updates[kp] = yf.fromUnicode(v)
         if updates:
             md.from_dict(updates, is_flat=True, opts={'update': 'deep'})
 

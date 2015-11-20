@@ -335,13 +335,26 @@ span.space-x3 { padding: 0px 12px }
  */
 
 h1 > .label.package-state {
-    vertical-align: super;
+    vertical-align: text-bottom;
+    padding: 3px;
 }
 
 .label.state-active { }
 .label.state-draft { }
 .label.state-deleted { }
 .label.state-invalid { }
+
+/*
+ * Package header info
+ */
+
+h1 > .info {
+    padding: 4px 0px;
+    font-size: 14px; /* base font-size */
+    font-weight: normal;
+    font-style: oblique;
+    color: #999;
+}
 
 /*
  * Resources (Search)

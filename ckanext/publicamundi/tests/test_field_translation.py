@@ -10,56 +10,33 @@ from nose.tools import istest, nottest, raises
 from nose.plugins.skip import SkipTest
 
 import ckan
-import ckan.model as model
 from ckan.plugins import toolkit
 from ckan.tests import CreateTestData 
 
 from ckanext.publicamundi.lib.metadata import FieldContext
 from ckanext.publicamundi.lib.metadata.i18n import *
 
+from . import MockTmplContext, MockRequest
+from . import fixtures
+from .helpers import make_api_context
+
 create_action = toolkit.get_action('package_create')
+
+toolkit.c = MockTmplContext()
+toolkit.request = MockRequest()
 
 class TestController(ckan.tests.TestController):
 
-    packages = []
-
-    class MockTmplContext(object):
-        def __init__(self):
-            self.environ = {}
-
-    class MockRequest(object):
-        def __init__(self):
-            self.params = {}
+    packages = fixtures.packages['ckan']
 
     @classmethod
     def setup_class(cls):
         
         # Note Testing package-scoped translation requires some existing datasets
-        
-        toolkit.c = cls.MockTmplContext()
-        toolkit.request = cls.MockRequest()
-
-        # Import some test data
-        
-        from ckan.lib.create_test_data import gov_items as gov_packages
-        for pkg in gov_packages:
-            pkg1 = copy.deepcopy(pkg)
-            pkg1.update({
-                'dataset_type': 'ckan',
-                'tags': [{'name': 'gov-data', 'display_name': 'Government Data'}],
-                'extras': [],
-                'language': 'en',
-            })
-            cls.packages.append(pkg1) 
-        
-        # Create packages
 
         CreateTestData.create_user('tester', about='A tester', password='tester')
         for pkg in cls.packages:
-            ctx = {
-                'model': model,
-                'session': model.Session,
-                'user': 'tester'}
+            ctx = make_api_context('tester')
             pkg_result = create_action(ctx, pkg)
             pkg.update({'id': pkg_result['id']})
         

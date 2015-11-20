@@ -4,6 +4,7 @@ import zope.schema
 import zope.schema.interfaces
 import itertools
 from collections import Counter
+from operator import attrgetter, itemgetter
 
 import pylons
 import ckan.plugins.toolkit as toolkit
@@ -11,7 +12,6 @@ from ckan.lib.navl.dictization_functions import missing, StopOnError, Invalid
 
 from ckanext.publicamundi.lib import logger
 from ckanext.publicamundi.lib import dictization
-from ckanext.publicamundi.lib.util import find_all_duplicates
 import ckanext.publicamundi.lib.metadata as ext_metadata
 
 _ = toolkit._
@@ -242,23 +242,39 @@ def guess_language(key, data, errors, context):
     assert key[0] == '__after', (
         'This converter can only be invoked in the __after stage')
     
+    lang = None
+    extras_list = data[('extras',)]
+   
+    # Check if language present in extras
+    
+    lang_item = None
+    try:
+        i = map(itemgetter('key'), extras_list).index('language')
+    except:
+        pass
+    else:
+        lang_item = extras_list[i]
+    
+    # Try to deduce from metadata
+    # Note At 1st stage of create form, md will be not available
     key_prefix = dtype = data[('dataset_type',)]
-
     md = data.get((key_prefix,))
-    if not md:
-        return # not created yet (at 1st stage ?)
-    
-    # First, try to deduce from metadata
-    lang = md.deduce_fields('language').get('language')
-    
-    # If not deduced, guess is current request's language
-    if not lang:
+    if md:
+        lang = md.deduce_fields('language').get('language')
+        
+    # If not deduced and not present, guess is active language
+    if not lang and not lang_item:
         req_lang = pylons.i18n.get_lang()
         lang = req_lang[0] if req_lang else 'en'
     
-    extras_list = data[('extras',)]
+    # Create/Update extras item with our guessed value
     if lang:
-        extras_list.append({'key': 'language', 'value': lang})
+        if not lang_item:
+            extras_list.append({'key': 'language', 'value': lang})
+        else:
+            lang_item['value'] = lang
+    else:
+        assert lang_item
     return
 
 #

@@ -6,8 +6,6 @@ import logging
 import string
 import urllib
 import geoalchemy
-from itertools import chain, ifilter
-from routes.mapper import SubMapper
 import pylons
 
 import ckan.model as model
@@ -20,6 +18,7 @@ import ckanext.publicamundi.lib.metadata as ext_metadata
 import ckanext.publicamundi.lib.metadata.validators as ext_validators
 import ckanext.publicamundi.lib.actions as ext_actions
 import ckanext.publicamundi.lib.template_helpers as ext_template_helpers
+import ckanext.publicamundi.lib.languages as ext_languages
 import ckanext.publicamundi.lib.pycsw_sync as ext_pycsw_sync
 
 from ckanext.publicamundi.lib.util import (to_json, random_name)
@@ -73,6 +72,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
 
         return {
             'debug': lambda: self._debug,
+            'is_multilingual_dataset': False,
             'random_name': random_name,
             'filtered_list': ext_template_helpers.filtered_list,
             'dataset_types': self.dataset_types,
@@ -147,6 +147,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     def before_map(self, mapper):
         '''Setup routes before CKAN defines core routes.'''
 
+        from routes.mapper import SubMapper
+        
         api_controller = 'ckanext.publicamundi.controllers.api:Controller'
   
         with SubMapper(mapper, controller=api_controller) as m:
@@ -394,9 +396,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         '''
         
         super(DatasetForm, self).setup_template_variables(context, data_dict)
-
+        
         c = toolkit.c
-        c.publicamundi_magic_number = 99
         
         if c.search_facets:
             # Provide label functions for certain facets
@@ -449,16 +450,25 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         schema items declared at read_package_schema() should not be removed (though their 
         values can be changed!).
         '''
+        c = toolkit.c
+        rr = c.environ['pylons.routes_dict'] if c.environ else {}
 
         is_validated = context.get('validate', True)
-        for_view = context.get('for_view', False)
-        
-        log1.debug(
-            'Package %s is shown: for-view=%s validated=%s api=%s', 
-            pkg_dict.get('name'), for_view, is_validated, context.get('api_version'))
-        
         if not is_validated:
             return # noop: extras are not yet promoted to 1st-level fields
+    
+        for_view = context.get('for_view', False)
+        for_edit = (
+            (rr.get('controller') == 'package' and rr.get('action') == 'edit') or
+            (rr.get('controller') == 'api' and rr.get('action') == 'action' and
+                rr.get('logic_function') in DatasetForm.after_show._api_edit_actions))
+        for_action = (
+            rr.get('controller') == 'api' and rr.get('action') == 'action' and
+                rr.get('logic_function') in DatasetForm.after_show._api_actions)
+
+        log1.info(
+            'Package %s is shown: for-view=%s for-edit=%s api=%s', 
+            pkg_dict.get('name'), for_view, for_edit, context.get('api_version'))
 
         # Determine dataset_type-related parameters for this package
         
@@ -469,14 +479,16 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         # Note Do not attempt to pop() flat keys here (e.g. to replace them by a 
         # nested structure), because resource forms will clear all extra fields !!
 
-        # Objectify 
+        # Turn to an object
         
         md_cls = ext_metadata.class_for_metadata(dtype)
         md = md_cls.from_converted_data(pkg_dict)
         
-        # Provide a view
+        # Todo: What if md.identifier is missing ??
+
+        # Provide a different view, if not editing
         
-        if view and callable(view):
+        if (not for_edit) and view and callable(view):
             try:
                 md = view(md)
             except Exception as ex:
@@ -488,24 +500,27 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         
         # Fix for JSON API results
 
-        # Note Use this bit of hack when package shown directly from action api
-        r = toolkit.c.environ['pylons.routes_dict'] if toolkit.c.environ else None
-        if (r and r['controller'] == 'api' and r.get('action') == 'action' and 
-                r.get('logic_function') in DatasetForm.after_show._api_actions):
+        if for_action:
             # Remove flat field values (won't be needed anymore)
             key_prefix_1 = key_prefix + '.'
             for k in (y for y in pkg_dict.keys() if y.startswith(key_prefix_1)):
                 pkg_dict.pop(k)
             # Dictize object for json.dumps to handle it
+            # Todo: Use to_json method
             pkg_dict[key_prefix] = md.to_dict(flat=False, opts={
                 'serialize-values': 'json-s'})
          
         return pkg_dict
     
+    after_show._api_show_actions = {
+        'package_show', 'dataset_show', 'user_show'
+    }
+    after_show._api_edit_actions = {
+        'package_create', 'package_update', 'dataset_create', 'dataset_update',
+    }
     after_show._api_actions = {
-        'package_show', 'package_create', 'package_update',
-        'dataset_show', 'dataset_create', 'dataset_update',
-        'user_show'
+        'package_create', 'package_update', 'dataset_create', 'dataset_update',
+        'package_show', 'dataset_show', 'user_show' 
     }
 
     def before_search(self, search_params):
@@ -892,6 +907,11 @@ class MultilingualDatasetForm(DatasetForm):
     
     ## IDatasetForm interface ## 
 
+    def setup_template_variables(self, context, data_dict):
+        super(MultilingualDatasetForm, self).setup_template_variables(context, data_dict)
+        c = toolkit.c
+        c.target_language = self.target_language()
+
     def create_package_schema(self):
         schema = super(MultilingualDatasetForm, self).create_package_schema()
         return self.__modify_package_schema(schema)
@@ -936,48 +956,65 @@ class MultilingualDatasetForm(DatasetForm):
         '''Hook into the validated data dict after the package is ready for display.
         '''
         
-        cls = type(self)
+        from ckanext.publicamundi.lib.metadata import fields
+        
         dtype = pkg_dict.get('dataset_type')
         
         # Determine language context
 
         source_language = pkg_dict.get('language')
-
-        language = toolkit.request.params.get('lang')    
-        if not language:
-            language = pylons.i18n.get_lang()
-            language = language[0] if language else 'en'
+        language = self.target_language()
         
         # Build metadata object, translate if needed
 
         translated = None    
-        if source_language != language:
-            translated = cls.TranslatedView(source_language, language)
+        if source_language and (source_language != language):
+            translated = self.TranslatedView(source_language, language)
 
         parent = super(MultilingualDatasetForm, self)
         pkg_dict = parent.after_show(context, pkg_dict, view=translated)
         if not pkg_dict:
-            return # noop: parent returned prematurely
+            return # noop: super method returned prematurely
         md = pkg_dict[dtype]
 
-        # Apart from structured metadata, translate core CKAN fields
-         
-        from ckanext.publicamundi.lib.metadata.fields import TextField
-        from ckanext.publicamundi.lib.metadata import FieldContext
+        if not translated or not translated.translator:
+            # Nothing more to do (either not needed or translation not working)
+            return pkg_dict
+ 
+        pkg_dict['translated_to_language'] = language
         
-        if translated and translated.translator:
-            tr = translated.translator.get_field_translators()[0]
-            uf = TextField()
-            for k in ('title', 'notes'):
-                v = pkg_dict.get(k)
-                if not v:
-                    continue
-                yf = uf.bind(FieldContext(key=(k,), value=v))
+        # Apart from structured package metadata, try to translate:
+        #  * core (CKAN) package metadata
+        #  * core (CKAN) resource metadata
+        
+        tr = translated.translator.get_field_translators()[0]
+        uf = fields.TextField()
+        
+        # Translate core package metadata
+        for k in ('title', 'notes'):
+            v = pkg_dict.get(k)
+            if v:
+                yf = uf.bind(ext_metadata.FieldContext(key=(k,), value=v))
                 translated_yf = tr.get(yf, language)
                 if translated_yf:
                     pkg_dict[k] = translated_yf.context.value
         
+        # Translate core resource metadata
+        # Todo
+        
         return pkg_dict
+    
+    ## ITemplateHelpers interface ##
+    
+    def get_helpers(self):
+        helpers = super(MultilingualDatasetForm, self).get_helpers()
+        helpers.update({
+            'is_multilingual_dataset': True,
+            'language_name': lambda code: ext_languages.by_code(code).get('name_en'),
+        })
+        return helpers
+    
+    ## Helpers ##
     
     class TranslatedView(object):
         
@@ -995,3 +1032,22 @@ class MultilingualDatasetForm(DatasetForm):
                 self.translator = False # is unusable
                 raise
             return result
+    
+    def target_language(self):
+        '''Determine the target language for metadata.
+        '''
+        
+        # A GET/POST request parameter always comes first
+        try:
+            params = toolkit.request.params
+        except:
+            params = None
+        language = params.get('lang') if params else None
+        
+        # If absent, pick current language for this request
+        if not language:
+            language = pylons.i18n.get_lang()
+            language = language[0] if language else 'en'
+
+        return language
+

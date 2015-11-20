@@ -48,6 +48,11 @@
                 'value': h.link_to(pkg_dict.url, pkg_dict.url, rel='foaf:homepage', target='_blank') if pkg_dict.url else none, 
                 'attrs': { 'property': 'foaf:homepage' },  
             },
+            {
+                'title': _('Source Language'), 
+                'value': h.language_name(pkg_dict.language) if (h.is_multilingual_dataset and pkg_dict.language) else none, 
+                'attrs': {},  
+            },
             { 
                 'title': _('Author'), 
                 'value': pkg_dict.author, 

@@ -3,9 +3,60 @@
 import datetime
 import copy
 
+from ckan.lib import create_test_data as _test_data
 from ckanext.publicamundi.lib.metadata.types import *
 
-## Initialize objects ##
+## Basic CKAN packages ##
+
+packages = {
+    'ckan': [],
+    'foo': []
+}
+
+for pkg in _test_data.gov_items:
+    pkg1 = copy.deepcopy(pkg)
+    pkg1.update({
+        'dataset_type': 'ckan',
+        'tags': [{'name': 'gov-data', 'display_name': 'Government Data'}],
+        'extras': [],
+        'language': 'en',
+    })
+    packages['ckan'].append(pkg1) 
+
+packages['foo'].append({
+    'title': u'Καλημέρα Foo (1)',
+    'name': 'hello-foo-1',
+    'notes': u'Τρα λαλα λαλλαλαλαλα!',
+    'author': u'Κανένας',
+    'license_id': 'notspecified',
+    'version': '1.0.1b',
+    'maintainer': u'Nowhere Man',
+    'author_email': 'nowhere-man@example.com',
+    'maintainer_email': 'nowhere-man@example.com',
+    'tags': [ 
+        { 'name': 'hello-world', 'display_name': 'Hello World', }, 
+        { 'name': u'test', 'display_name': 'Test' }, 
+        { 'name': 'foo', 'display_name': 'Foo' }, 
+    ],
+    'dataset_type': 'foo',
+    'language': 'el',
+    'foo': {
+        'baz': u'BaoBab',
+        'description': u'Τριαλαριλαρο',
+        'rating': 9,
+        'grade': 5.12,
+        'reviewed': False,
+        'created': u'2014-09-13T17:00:00',
+        'temporal_extent': { 
+            'start': '2012-01-01',
+            'end': '2013-01-01',
+        },
+        'thematic_category': 'health',
+    },
+    'resources': []
+})
+
+## Auxiliary objects ##
 
 pt1 = Point(x=0.76, y=0.23)
 

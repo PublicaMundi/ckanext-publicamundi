@@ -60,6 +60,8 @@ def get_by_code(code, table=None):
         res = _data[i]    
     return res
 
+by_code = get_by_code
+
 def check(code, table='iso-639-1'):
     if not code:
         raise ValueError('Missing or empty')

@@ -18,7 +18,26 @@ then itself be extended to add/remove blocks of functionality. #}
   {% block errors %}
   {# Note CKAN is using error_summary here (?) #}
   {{ markup_helpers.error_messages(errors) }}
-  {% endblock %}
+  {% endblock %} {# errors #}
+  
+  {% if h.is_multilingual_dataset %}
+  <input type="hidden" name="language" value="{{ data.language|default('') }}" />
+  <div style="color: magenta"><strong>Language:</strong> {{ data.language|default('N/A')|upper }}</div>
+  {% endif %}
+
+  {% block warnings %}
+  {% if h.is_multilingual_dataset and data.language and (c.target_language != data.language) %}
+  <div class="alert">
+    {% with translate_url = h.url_for(controller='package', action='read', id=data.id, locale=data.language) %} {# Todo #}
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Warning!</strong><br/>
+    <span>You are about to edit metadata given in a source language ({{data.language|upper}}) different
+    than your active language ({{c.target_language|upper}}).
+    If instead, you just want to translate, go <a href="{{translate_url}}">here</a>.</span>
+    {% endwith %}
+  </div>
+  {% endif %}
+  {% endblock %} {# warnings #}
 
   {% block package_fields_autofill %}
   {% if h.debug() %}{% snippet 'package/snippets/form-autofiller.html', form_id='package-form' %}{% endif %}
