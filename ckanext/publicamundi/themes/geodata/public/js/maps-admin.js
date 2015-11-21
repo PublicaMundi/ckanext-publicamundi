@@ -71,7 +71,6 @@ jQuery(document).ready(function ($, _) {
            
             $(".fancytree-folder").droppable(dropOptions);
 
-
             // Handle listeners
            
             // left side
@@ -618,6 +617,7 @@ jQuery(document).ready(function ($, _) {
             //$('<td>active</td>').appendTo('#map-options-activate');
             //$('<td>export</td>').appendTo('#map-options-export');
             
+            var default_found = false;
             for (var idx in fields){
                 var field = fields[idx];
                 if (field.type !== 'geometry'){
@@ -627,22 +627,19 @@ jQuery(document).ready(function ($, _) {
                         disabled = 'disabled';
                     }
                         
-                    /*
                     $('<td><input type="radio" name="default" value="' + field.name +'" ' + disabled + '></input></td>').appendTo('#map-options-default');
                     disabled = '';
                     if (field.type !== 'varchar'){
                         disabled = 'disabled';
                     }
-                    */
 
                     $('<td><input type="checkbox" name="activate" value="' + field.name + '" ' + disabled + '></input></td>').appendTo('#map-options-activate');
                     $('<td><input type="checkbox" name="export" value="' + field.name +'"></input></td>').appendTo('#map-options-export');
 
-                /*
                 if (field.default){
+                    default_found = true;
                     $("#map-options-default input[value='"+ field.name +"']").prop('checked',true);
                 }
-                */
                 if (field.active){ 
                     $("#map-options-activate input[value='"+ field.name +"']").prop('checked',true);
                 }
@@ -651,8 +648,26 @@ jQuery(document).ready(function ($, _) {
                 }
                 }
             };
+
+            // if no default set select the first acceptable one
+            if (!default_found && fields.length){
+                for (var idx in fields){
+                    var field = fields[idx];
+                    if (field.type == 'varchar'){
+                   $("#map-options-default input[value='"+ field.name +"']").prop('checked',true);
+                
+                   var title = active.title;
+                    if (title.indexOf(" (*)") == -1){
+                        active.setTitle(active.title+" (*)");
+                    }
+
+                    field.default = true;
+                    resources_fields[active.data.id] = fields;
+                    break;
+                    }
+                }
+            }
             
-            /*
             $('#map-options-default input[type="radio"]').on('change', function(e){
                 console.log("DEFAULT CHANGED");
                 console.log(e);
@@ -673,7 +688,6 @@ jQuery(document).ready(function ($, _) {
                     resources_fields[active.data.id] = fields;
                 }
             });
-            */
 
             $('#map-options-template-input').on('input',function(e){
             
@@ -767,8 +781,8 @@ jQuery(document).ready(function ($, _) {
                     
                }
                 $('#map-fields-table thead').empty();
-                //$('#map-options-default').empty();
-                
+
+                $('#map-options-default td:not(:first)').remove();
                 $('#map-options-activate td:not(:first)').remove();
                 $('#map-options-export td:not(:first)').remove();
                 

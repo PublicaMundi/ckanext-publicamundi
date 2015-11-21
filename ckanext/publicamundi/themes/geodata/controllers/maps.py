@@ -17,10 +17,11 @@ class Controller(BaseController):
     def __init__(self):
         self.mapsdb = get_maps_db()
         self.resources = self.mapsdb.get_resources_with_packages_organizations()
+        #self.resources = self.mapsdb.get_resources()
 
     def show_dashboard_maps(self):
-        user_dict = self._check_access()
-        self._setup_template_variables(user_dict)
+        #user_dict = self._check_access()
+        self._setup_template_variables({})
         return render('user/dashboard_maps.html')
 
     def get_maps_configuration(self):
@@ -65,6 +66,7 @@ class Controller(BaseController):
                 for child in tree.get("children"):
                     if find_tree_node_by_key(child, key):
                         return find_tree_node_by_key(child, key)
+
         def get_index(item):
             if item.get("data"):
                 if item.get("data").get("index"):
@@ -72,7 +74,8 @@ class Controller(BaseController):
                 elif item.get("data").get("tree_node_index"):
                     return item.get("data").get("tree_node_index")
 
-        user_dict = self._check_access()
+        #user_dict = self._check_access()
+        #self._setup_template_variables({})
 
         source = {
                 "children": [],
@@ -92,8 +95,8 @@ class Controller(BaseController):
                     xnode.get("children").append(new_tree_node(xnode, node))
                     #xnode.update({"children": sorted(xnode.get("children"), key=get_index)})
                 else:
+                    #TODO: fix raise no text
                     raise 'oops something went wrong, tree node not found for visible node'
-
         for res in self.resources:
             if res.get("visible") == True:
                 xnode = find_tree_node_by_key(source, res.get("tree_node_id"))
@@ -103,6 +106,7 @@ class Controller(BaseController):
                     xnode.update({"children": sorted(xnode.get("children"), key=get_index)})
 
                 else:
+                    #TODO: fix raise no text
                     raise 'oops something went wrong, tree node not found for visible layer'
 
         if tree_nodes:
@@ -181,10 +185,9 @@ class Controller(BaseController):
         return
 
     def get_resource_queryable(self):
-        user_dict = self._check_access()
+        #user_dict = self._check_access()
 
         resource_id = request.params.get("id")
-
         if not resource_id:
             return
 
@@ -193,7 +196,6 @@ class Controller(BaseController):
             return
 
         fields = queryable.get('fields')
-
         return json.dumps({'fields':fields, 'queryable':queryable})
 
     def _check_access(self):
@@ -218,6 +220,6 @@ class Controller(BaseController):
     def _setup_template_variables(self, user_dict):
 
         c.is_sysadmin = new_authz.is_sysadmin(c.user)
-        c.user_dict = user_dict
-        c.is_myself = user_dict['name'] == c.user
+        #c.user_dict = user_dict
+        #c.is_myself = user_dict['name'] == c.user
         c.resources = self.resources
