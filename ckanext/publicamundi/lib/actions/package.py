@@ -22,12 +22,16 @@ from ckanext.publicamundi.lib.actions import (
     NameConflict, IdentifierConflict, Invalid)
 from ckanext.publicamundi.lib.metadata import (
     make_metadata, serializer_for, xml_serializer_for)
+from ckanext.publicamundi.lib.languages import check as check_language
+from ckanext.publicamundi.lib.metadata.i18n import package_translation
 
 log = logging.getLogger(__name__)
 
 _ = toolkit._
 _get_action = toolkit.get_action
 _check_access = toolkit.check_access
+
+## Action API ##
 
 @logic.side_effect_free
 def dataset_export(context, data_dict):
@@ -36,7 +40,7 @@ def dataset_export(context, data_dict):
     :param id: the name or id of the dataset to be exported.
     :type id: string
 
-    rtype: string
+    rtype: dict
     '''
 
     pkg = _get_action('package_show')(context, data_dict)
@@ -70,7 +74,7 @@ def dataset_export_dcat(context, data_dict):
     :param id: the name or id of the dataset to be exported.
     :type id: string
 
-    rtype: string
+    rtype: dict
     '''
 
     pkg = _get_action('package_show')(context, data_dict)
@@ -85,9 +89,7 @@ def dataset_export_dcat(context, data_dict):
         cached_metadata = get_cache('metadata')
 
         name = '%(name)s@%(revision_id)s.dcat' % (pkg)
-        # Get the XML
-        tmp_dom = xser.to_xml()
-        cached = cached_metadata.get(name, createfunc=lambda: _transform_dcat(tmp_dom))
+        cached = cached_metadata.get(name, createfunc=lambda: _transform_dcat(xser.to_xml()))
 
         link = toolkit.url_for(
             controller='ckanext.publicamundi.controllers.files:Controller',
@@ -263,6 +265,180 @@ def dataset_import(context, data_dict):
             'errors': validation_errors,
         },
     }
+
+@logic.side_effect_free
+def package_translation_show(context, data_dict):
+    '''Return transations for fields inside a package, for a given language.
+    If no key is specified, return all available translations.
+
+    :param id: the name or id of the package.
+    :type id: string
+    
+    :param lang: the target language
+    :type lang: string
+    
+    :param key: represents a key path, and can be given either as a string (a dotted path)
+        or as a tuple of string parts.
+    :type key: string or null
+  
+    rtype: dict
+    '''
+
+    from ckanext.publicamundi.lib.metadata import fields, bound_field
+    
+    try:
+        lang = check_language(data_dict.get('lang'))
+    except ValueError as ex:
+        raise Invalid({'lang': str(ex)}) 
+    
+    pkg = _get_action('package_show')(context, {'id': data_dict['id']})
+
+    result = []
+
+    translator = package_translation.FieldTranslator(pkg)
+    key = data_dict.get('key')
+    if key:
+        if not isinstance(key, basestring):
+            key = '.'.join(map(str, key))
+        else:
+            key = str(key)
+        uf = fields.TextField()
+        yf = translator.get(bound_field(uf, key, None), lang, state='active')
+        if yf:
+            result.append(
+                {'key': key, 'lang': lang, 'value': yf.context.value})
+    else:
+        for state, yf in translator.iter_fields(lang, state='active'):
+            result.append(
+                {'key': yf.context.key, 'lang': lang, 'value': yf.context.value})
+            
+    return result
+
+def package_translation_update(context, data_dict):
+    '''Translate a package field for a given language.
+    
+    :param id: the name or id of the package
+    :type id: string
+
+    :param lang: the target language
+    :type lang: string
+
+    :param key: represents a key path, and can be given either as a string (a dotted path)
+        or as a tuple of string parts.
+    :type key: string
+    
+    :param value: the translated (text) value
+    :type value: string
+
+    rtype: dict
+    '''
+    from ckanext.publicamundi.lib.metadata import fields, bound_field
+    
+    try:
+        lang = check_language(data_dict.get('lang'))
+    except ValueError as ex:
+        raise Invalid({'lang': str(ex)}) 
+  
+    pkg = _get_action('package_show')(context, {'id': data_dict['id']})
+    
+    if lang == pkg['language']:
+        raise Invalid({'lang': _('Cannot translate to source language!')})
+
+    key = data_dict.get('key')
+    if not key:
+        raise Invalid({'key': _('The field key is missing')})
+    if not isinstance(key, basestring):
+        key = '.'.join(map(str, key))
+    else:
+        key = str(key)
+    
+    value = data_dict.get('value')
+    if not value:
+        raise Invalid({'key': _('The field value is missing')})
+    value = unicode(value)
+
+    _check_access('package_translation_update', context, {'org': pkg['owner_org']})
+    
+    translator = package_translation.FieldTranslator(pkg)
+    uf = fields.TextField()
+    yf = bound_field(uf, key, None)
+    translator.translate(yf, value, lang, state='active') 
+    
+    return
+
+def package_translation_update_many(context, data_dict):
+    '''Translate many package fields for a given language.
+    
+    :param id: the name or id of the package.
+    :type id: string
+   
+    :param lang: the target language
+    :type lang: string
+    
+    :param updates: a dict: keys mapped to translated values; both keys and values should be 
+        as described at `package_translation_update'.
+    :type update: dict
+
+    rtype: dict
+    '''
+    from ckanext.publicamundi.lib.metadata import fields, bound_field
+    
+    try:
+        lang = check_language(data_dict.get('lang'))
+    except ValueError as ex:
+        raise Invalid({'lang': str(ex)}) 
+  
+    pkg = _get_action('package_show')(context, {'id': data_dict['id']})
+    
+    if lang == pkg['language']:
+        raise Invalid({'lang': _('Cannot translate to source language!')})
+    
+    updates = data_dict.get('updates')
+    if not isinstance(updates, dict):
+        raise Invalid({'updates': _('Expected a dict of updates')}) 
+    
+    _check_access('package_translation_update', context, {'org': pkg['owner_org']})
+    
+    db_session = context['session']
+
+    translator = package_translation.FieldTranslator(pkg)
+    translator.defer_commit(True)
+    uf = fields.TextField()
+
+    for key, value in updates.items():
+        if not isinstance(key, basestring):
+            k = '.'.join(map(str, key))
+        else:
+            k = str(key)
+        yf = bound_field(uf, k, None)
+        translator.translate(yf, unicode(value), lang, state='active') 
+
+    db_session.commit()
+    return
+
+def package_translation_check_authorized(context, data_dict):
+    '''Check if authorized to translate fields for a given package.
+    '''
+    from operator import itemgetter    
+
+    userobj = context['auth_user_obj']
+    
+    # Todo Maybe more granular authorization (a translator role ?)
+    
+    q = {
+        'id': data_dict['org'], 
+        'object_type': 'user', 
+        'capacity': 'editor'
+    }
+    a = _get_action('member_list')
+    editors = map(itemgetter(0), a(context, q))
+    success = userobj.id in editors
+    if not success:
+        return {'success': False, 'msg': _('Not an editor for this organization')}
+    else:
+        return {'success': True}
+
+## Helpers ##
 
 def _make_context(context, **opts):
     '''Make a new context for an action, based on an initial context.

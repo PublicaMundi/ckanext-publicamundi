@@ -87,6 +87,9 @@ class FieldContext(object):
         return u'%s(key=%r, value=%r)' % (
             self.__class__.__name__, self.key, self.value)
 
+def bound_field(field, key, value, title=None):
+    return field.bind(FieldContext(key=key, value=value, title=title))
+
 @zope.interface.provider(IIntrospective)
 @zope.interface.implementer(IObject)
 class Object(object):

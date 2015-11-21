@@ -25,9 +25,12 @@ class IFieldTranslator(Interface):
     def get(field, language, state='active'):
         '''Return a translated bound field for the given pair (field, language).
         
-        This method should always return unicode text, or None if no translation exists.
+        This method should always return a bound field, or None if no translation exists.
+        The  translated value (found at .context.value) should be unicode text.
+        
+        *Note* Maybe return just unicode text (avoid wrapping to a field) ?
 
-        The `field` parameter is expected to be a bound Field, with a proper (key, value) 
+        The `field` parameter is expected to be a bound field, with a proper (key, value) 
         context (i.e. field.context should provide IFieldContext).
         
         The `language` parameter should be a valid language code (iso-639-1).

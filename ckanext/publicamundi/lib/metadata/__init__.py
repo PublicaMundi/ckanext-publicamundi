@@ -27,8 +27,9 @@ from .serializers import (
 
 from .base import (
     Object, 
-    FieldContext, 
-    ErrorDict, 
+    FieldContext,
+    bound_field,
+    ErrorDict,
     object_null_adapter,
     factory_for_object,
     class_for_object,

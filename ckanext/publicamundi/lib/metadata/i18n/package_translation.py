@@ -12,7 +12,7 @@ import ckan.model as model
 
 import ckanext.publicamundi.model as ext_model
 from ckanext.publicamundi.lib.util import check_uuid
-from ckanext.publicamundi.lib.metadata.fields import Field, IField
+from ckanext.publicamundi.lib.metadata.fields import Field, IField, TextField
 from ckanext.publicamundi.lib.metadata.base import FieldContext, IFieldContext
 
 from . import language_codes, check_language
@@ -184,4 +184,25 @@ class FieldTranslator(object):
     @property
     def package_id(self):
         return self._package_id
- 
+    
+    ## Helpers ##
+
+    def iter_fields(self, language, state='active'):
+        '''Iterate on field translations for a given language.
+       
+        Generate tuples of (<state>, <bound-field>)
+        ''' 
+        
+        cond = {
+            'package_id': self._package_id, 
+            'source_language': self._source_language,
+            'language': check_language(language),
+        }
+        if state and (state != '*'):
+            cond['state'] = state 
+        
+        uf = TextField()       
+        q = model.Session.query(ext_model.PackageTranslation).filter_by(**cond)
+        for r in q.all():
+            yield r.state, uf.bind(FieldContext(key=r.key, value=r.value))
+         

@@ -905,6 +905,8 @@ class MultilingualDatasetForm(DatasetForm):
     
     '''
     
+    p.implements(p.IAuthFunctions)
+
     ## IDatasetForm interface ## 
 
     def setup_template_variables(self, context, data_dict):
@@ -987,7 +989,7 @@ class MultilingualDatasetForm(DatasetForm):
         #  * core (CKAN) package metadata
         #  * core (CKAN) resource metadata
         
-        tr = translated.translator.get_field_translators()[0]
+        ftr = translated.translator.get_field_translators()[0]
         uf = fields.TextField()
         
         # Translate core package metadata
@@ -995,7 +997,7 @@ class MultilingualDatasetForm(DatasetForm):
             v = pkg_dict.get(k)
             if v:
                 yf = uf.bind(ext_metadata.FieldContext(key=(k,), value=v))
-                translated_yf = tr.get(yf, language)
+                translated_yf = ftr.get(yf, language)
                 if translated_yf:
                     pkg_dict[k] = translated_yf.context.value
         
@@ -1013,6 +1015,31 @@ class MultilingualDatasetForm(DatasetForm):
             'language_name': lambda code: ext_languages.by_code(code).get('name_en'),
         })
         return helpers
+    
+    ## IAuthFunctions interface ##
+    
+    def get_auth_functions(self):
+        funcs = {
+            'package_translation_update': 
+                ext_actions.package.package_translation_check_authorized,
+            'package_translation_update_many': 
+                ext_actions.package.package_translation_check_authorized,
+        }
+        return funcs
+    
+    ## IActions interface ##
+
+    def get_actions(self):
+        actions = super(MultilingualDatasetForm, self).get_actions()
+        actions.update({
+            'package_translation_update': 
+                ext_actions.package.package_translation_update,
+            'package_translation_update_many': 
+                ext_actions.package.package_translation_update_many,
+            'package_translation_show': 
+                ext_actions.package.package_translation_show,
+        })
+        return actions
     
     ## Helpers ##
     
