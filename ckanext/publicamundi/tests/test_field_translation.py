@@ -35,7 +35,7 @@ class TestController(ckan.tests.TestController):
         # Note Testing package-scoped translation requires some existing datasets
 
         CreateTestData.create_user('tester', about='A tester', password='tester')
-        for pkg in cls.packages:
+        for pkg_name, pkg in cls.packages.items():
             ctx = make_api_context('tester')
             pkg_result = create_action(ctx, pkg)
             pkg.update({'id': pkg_result['id']})
@@ -68,12 +68,12 @@ class TestController(ckan.tests.TestController):
 
     def test_package_translation(self):
         
-        for i, pkg in enumerate(self.packages):
-            yield self._test_package_translation, i, 'el'
+        for pkg_name in self.packages:
+            yield self._test_package_translation, pkg_name, 'el'
 
-    def _test_package_translation(self, i, language):
+    def _test_package_translation(self, pkg_name, language):
         
-        pkg = self.packages[i]
+        pkg = self.packages[pkg_name]
         tr = package_translation.FieldTranslator(pkg['id'], pkg['language'])
         
         # Discard existing translations for this package

@@ -9,8 +9,8 @@ from ckanext.publicamundi.lib.metadata.types import *
 ## Basic CKAN packages ##
 
 packages = {
-    'ckan': [],
-    'foo': []
+    'ckan': {},
+    'foo': {}
 }
 
 for pkg in _test_data.gov_items:
@@ -21,9 +21,9 @@ for pkg in _test_data.gov_items:
         'extras': [],
         'language': 'en',
     })
-    packages['ckan'].append(pkg1) 
+    packages['ckan'][pkg1['name']] = pkg1 
 
-packages['foo'].append({
+packages['foo']['hello-foo-1'] = {
     'title': u'Καλημέρα Foo (1)',
     'name': 'hello-foo-1',
     'notes': u'Τρα λαλα λαλλαλαλαλα!',
@@ -54,7 +54,7 @@ packages['foo'].append({
         'thematic_category': 'health',
     },
     'resources': []
-})
+}
 
 ## Auxiliary objects ##
 

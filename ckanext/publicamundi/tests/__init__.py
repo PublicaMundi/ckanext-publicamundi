@@ -4,6 +4,7 @@ class MockTmplContext(object):
         self.environ = {
             'pylons.routes_dict': {'controller': 'package'}
         }
+        self.user = 'tester'
 
 class MockRequest(object):
     def __init__(self):
