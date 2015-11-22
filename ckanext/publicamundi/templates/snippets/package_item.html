@@ -34,6 +34,9 @@ truncate_title - The length to truncate the title to (default: 80).
         {% if package.tracking_summary %}
         {{ h.popular('recent views', package.tracking_summary.recent, min=10) }}
         {% endif %} {# package.tracking_summary #}
+        {% if h.is_multilingual_dataset and package.language and package.translated_to_language %}
+        <strong class="muted"><small>[{{package.language|upper}}]</small></strong>
+        {% endif %} {# multilingual #}
       </h3>
       {% endblock %} {# package_item_heading #}
       

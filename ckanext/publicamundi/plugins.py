@@ -944,6 +944,37 @@ class MultilingualDatasetForm(DatasetForm):
 
     ## IPackageController interface ##
 
+    def after_search(self, search_results, search_params):
+        '''Try to replace displayed fields with their translations (if any).
+        '''
+        
+        from ckanext.publicamundi.lib.metadata import fields, FieldContext
+        from ckanext.publicamundi.lib.metadata import class_for_metadata, translator_for
+        
+        uf = fields.TextField()
+        lang = self.target_language()
+
+        for pkg in search_results['results']:
+            source_lang = pkg.get('language')
+            if not source_lang or (source_lang == lang):
+                continue # no need to translate
+            dtype = pkg['dataset_type']
+            md = class_for_metadata(dtype)(identifier=pkg['id']) 
+            tr = translator_for(md, source_lang).get_field_translators()[0]
+            # Lookup translations in the context of this package
+            translated = False
+            for k in ['title', 'notes']:
+                yf = uf.bind(FieldContext(key=(k,), value=pkg[k]))
+                translated_yf = tr.get(yf, lang) 
+                if translated_yf:
+                    pkg[k] = translated_yf.context.value
+                    translated = True
+            # If at least one translation was found, mark as translated
+            if translated:
+                pkg['translated_to_language'] = lang
+        
+        return search_results
+
     def after_update(self, context, pkg_dict):
         log1.info('Discard translations for modified keys of package %s', pkg_dict['name'])
         # Todo: Discard translations for modified keys 
@@ -969,8 +1000,9 @@ class MultilingualDatasetForm(DatasetForm):
         
         # Build metadata object, translate if needed
 
+        must_translate = context.get('translate', True)
         translated = None    
-        if source_language and (source_language != language):
+        if source_language and must_translate and (source_language != language):
             translated = self.TranslatedView(source_language, language)
 
         parent = super(MultilingualDatasetForm, self)
@@ -980,7 +1012,7 @@ class MultilingualDatasetForm(DatasetForm):
         md = pkg_dict[dtype]
 
         if not translated or not translated.translator:
-            # Nothing more to do (either not needed or translation not working)
+            # Nothing more to do (either translation not needed or not working)
             return pkg_dict
  
         pkg_dict['translated_to_language'] = language

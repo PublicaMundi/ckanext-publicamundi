@@ -5,7 +5,7 @@
      read_url = h.url_for(controller='package', action='read', id=pkg.name, locale=source_lang)%}
 <div class="info multilingual-info">
     <i class="icon-info-sign"></i>&nbsp;
-    This dataset is translated to {{h.language_name(target_lang)}} ({{target_lang|upper}}).
-    The original version in {{h.language_name(source_lang)}} ({{source_lang|upper}}) is <a href="{{read_url}}">here</a>
+    This dataset is translated from {{h.language_name(source_lang)}} ({{source_lang|upper}}) to {{h.language_name(target_lang)}} ({{target_lang|upper}}).
+    The original version is <a href="{{read_url}}">here</a>.
 </div>
 {% endwith %}
