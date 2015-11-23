@@ -1,4 +1,3 @@
-from ckanext.publicamundi.analytics.controllers.configmanager import ConfigManager
 from ckanext.publicamundi.analytics.controllers.parsers.habboxaccessparser import HABboxAccessParser
 from ckanext.publicamundi.analytics.controllers.parsers.hacoverageaccessparser import HACoverageAccessParser
 from ckanext.publicamundi.analytics.controllers.parsers.hacoveragebandparser import HACoverageBandParser
