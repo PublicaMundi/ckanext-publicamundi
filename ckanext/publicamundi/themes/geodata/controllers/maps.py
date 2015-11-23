@@ -16,12 +16,11 @@ NotAuthorized = toolkit.NotAuthorized
 class Controller(BaseController):
     def __init__(self):
         self.mapsdb = get_maps_db()
-        self.resources = self.mapsdb.get_resources_with_packages_organizations()
-        #self.resources = self.mapsdb.get_resources()
 
     def show_dashboard_maps(self):
-        #user_dict = self._check_access()
-        self._setup_template_variables({})
+        c.is_sysadmin = new_authz.is_sysadmin(c.user)
+        c.resources = self.mapsdb.get_resources_with_packages_organizations()
+
         return render('user/dashboard_maps.html')
 
     def get_maps_configuration(self):
@@ -74,9 +73,6 @@ class Controller(BaseController):
                 elif item.get("data").get("tree_node_index"):
                     return item.get("data").get("tree_node_index")
 
-        #user_dict = self._check_access()
-        #self._setup_template_variables({})
-
         source = {
                 "children": [],
                 "expanded": True,
@@ -97,7 +93,9 @@ class Controller(BaseController):
                 else:
                     #TODO: fix raise no text
                     raise 'oops something went wrong, tree node not found for visible node'
-        for res in self.resources:
+        
+        resources = self.mapsdb.get_resources_with_packages_organizations()
+        for res in resources:
             if res.get("visible") == True:
                 xnode = find_tree_node_by_key(source, res.get("tree_node_id"))
                 if xnode:
@@ -117,7 +115,10 @@ class Controller(BaseController):
         return json.dumps({'source': source, 'tree_node_id': next_tree_node_id})
 
     def save_maps_configuration(self):
-        user_dict = self._check_access()
+        sysadmin = new_authz.is_sysadmin(c.user)
+        if not sysadmin:
+            #raise toolkit.NotAuthorized('Not authorized for this action')
+            return 'Not authorized for this action'
 
         # read request parameters
 
@@ -185,8 +186,6 @@ class Controller(BaseController):
         return
 
     def get_resource_queryable(self):
-        #user_dict = self._check_access()
-
         resource_id = request.params.get("id")
         if not resource_id:
             return
@@ -197,29 +196,3 @@ class Controller(BaseController):
 
         fields = queryable.get('fields')
         return json.dumps({'fields':fields, 'queryable':queryable})
-
-    def _check_access(self):
-        context, data_dict = self._get_context()
-        try:
-            user_dict = toolkit.get_action('user_show')(context, data_dict)
-            return user_dict
-        except NotFound:
-            abort(404, _('User not found'))
-        except NotAuthorized:
-            abort(401, _('Not authorized to see this page'))
-
-    def _get_context(self):
-        context = {
-            'for_view': True,
-            'user': c.user or c.author,
-            'auth_user_obj': c.userobj
-        }
-        data_dict = {'user_obj': c.userobj}
-        return context, data_dict
-
-    def _setup_template_variables(self, user_dict):
-
-        c.is_sysadmin = new_authz.is_sysadmin(c.user)
-        #c.user_dict = user_dict
-        #c.is_myself = user_dict['name'] == c.user
-        c.resources = self.resources
