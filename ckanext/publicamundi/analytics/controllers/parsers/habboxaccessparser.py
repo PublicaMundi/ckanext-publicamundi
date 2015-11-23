@@ -10,12 +10,12 @@ class HABboxAccessParser(HAParser):
     """
     __author__ = "<a href='mailto:merticariu@rasdaman.com'>Vlad Merticariu</a>"
 
-    def __init__(self, log_file_path):
+    def __init__(self):
         """
         Class constructor.
         :param <string> log_file_path: the path to the log file.
         """
-        HAParser.__init__(self, log_file_path)
+        HAParser.__init__(self)
 
     def extract_wms_bbox(self, line):
         """
@@ -72,12 +72,13 @@ class HABboxAccessParser(HAParser):
         :return: <[HABoxAccessInfo]>: the list of bounding boxes addressed in the log file.
         """
         bbox_list = []
-        with file(self.log_file_path) as f:
-            for line in f.readlines():
-                validated_line = self.validate_line(line)
-                bbox = self.parse_line(validated_line)
-                if bbox is not None:
-                    bbox_list.append(bbox)
+        for filename in self.log_files:
+            with file(filename) as f:
+                for line in f.readlines():
+                    validated_line = self.validate_line(line)
+                    bbox = self.parse_line(validated_line)
+                    if bbox is not None:
+                        bbox_list.append(bbox)
         return self.merge_info_list(bbox_list, HABboxAccessInfo.bbox_property_key)
 
     """

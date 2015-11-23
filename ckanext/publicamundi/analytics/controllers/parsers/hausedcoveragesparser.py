@@ -9,12 +9,12 @@ class HAUsedCoveragesParser(HAParser):
     """
     __author__ = "<a href='mailto:merticariu@rasdaman.com'>Vlad Merticariu</a>"
 
-    def __init__(self, log_file_path):
+    def __init__(self):
         """
         Class constructor
         :param <string> log_file_path: the path to the log file
         """
-        HAParser.__init__(self, log_file_path)
+        HAParser.__init__(self)
 
     def extract_coverage_names(self, separator, line):
         """
@@ -68,10 +68,11 @@ class HAUsedCoveragesParser(HAParser):
         descending order by number of accesses.
         """
         result = []
-        with file(self.log_file_path) as f:
-            for line in f.readlines():
-                validated_line = self.validate_line(line)
-                result += self.parse_line(validated_line)
+        for filename in self.log_files:
+            with file(filename) as f:
+                for line in f.readlines():
+                    validated_line = self.validate_line(line)
+                    result += self.parse_line(validated_line)
         result = self.merge_info_list(result, HAUsedCoveragesInfo.coverage_name_property_key)
         # sort the result by access_count
         result.sort(key=lambda x: x.access_count, reverse=True)
