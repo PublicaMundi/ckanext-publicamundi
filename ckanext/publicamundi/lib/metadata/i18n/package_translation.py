@@ -14,22 +14,21 @@ import ckanext.publicamundi.model as ext_model
 from ckanext.publicamundi.lib.util import check_uuid
 from ckanext.publicamundi.lib.metadata.fields import Field, IField, TextField
 from ckanext.publicamundi.lib.metadata.base import FieldContext, IFieldContext
+from ckanext.publicamundi.lib.languages import check as check_language
 
-from . import language_codes, check_language
-from .ibase import (IFieldTranslator, IKeyBasedFieldTranslator)
+from .ibase import (IFieldTranslation, IKeyBasedFieldTranslation)
 
 __all__ = []
 
 log1 = logging.getLogger(__name__)
 
-class FieldTranslator(object):
+@zope.interface.implementer(IKeyBasedFieldTranslation)
+class FieldTranslation(object):
     '''Provide a key-based field translation mechanism in the scope of a package.
 
     Use main database as persistence layer.
     '''
 
-    zope.interface.implements(IKeyBasedFieldTranslator)
-    
     def defer_commit(self, flag=True):
         self._defer_commit = flag
 
@@ -50,15 +49,12 @@ class FieldTranslator(object):
             source_language = pylons.config['ckan.locale_default']
             log1.info('package %s: source-language is missing and cannot be deduced' % (
                 package_id))
-        if not source_language in language_codes:
-            raise ValueError(
-                'source_language: Expected an iso-639-1 language code')
-        self._source_language = source_language
+        self._source_language = check_language(source_language)
         
         self._defer_commit = False
 
     def __str__(self):
-        return '<FieldTranslator ns=%s source=%s>' % (
+        return '<FieldTranslation ns=%s source=%s>' % (
             self.namespace, self.source_language)
     
     @classmethod
@@ -76,7 +72,7 @@ class FieldTranslator(object):
             raise ValueError('field: Expected non-empty key path at context.key')
         return key
     
-    ## IFieldTranslator interface ## 
+    ## IFieldTranslation interface ## 
     
     @property
     def source_language(self):
@@ -117,7 +113,7 @@ class FieldTranslator(object):
             return field.bind(FieldContext(key=field.context.key, value=value))
         return None
 
-    def translate(self, field, value, language, state='active'):
+    def translate(self, field, language, value, state='active'):
         '''Add or update translation for a given pair (field, language).
         '''
         assert isinstance(field, Field)
@@ -151,7 +147,8 @@ class FieldTranslator(object):
         
         if not self._defer_commit:
             model.Session.commit()
-        return
+        
+        return field.bind(FieldContext(key=field.context.key, value=value))
 
     def discard(self, field=None, language=None):
         '''Discard existing translations.
@@ -179,7 +176,7 @@ class FieldTranslator(object):
             model.Session.commit()
         return n
 
-    ## IKeyBasedFieldTranslator interface ##
+    ## IKeyBasedFieldTranslation interface ##
 
     @property
     def package_id(self):

@@ -37,6 +37,15 @@ class Controller(BaseController):
     def brk(self):
         raise Breakpoint()
 
+    def test_translators(self):
+
+        from ckanext.publicamundi.lib.metadata.i18n import translator_for
+        md_1 = fixtures.inspire1
+        tr = translator_for(md_1, 'el')
+        md_2 = tr.get('en')
+
+        assert False, 'Break'
+
     def test_csw_hooks(self, id):
         from ckanext.publicamundi.lib import pycsw_sync
         context = {'model': model, 'session': model.Session, 'api_version': 3}

@@ -12,27 +12,26 @@ import ckan.model as model
 
 from ckanext.publicamundi.lib.metadata.fields import Field, IField
 from ckanext.publicamundi.lib.metadata.base import FieldContext, IFieldContext
+from ckanext.publicamundi.lib.languages import check as check_language
 
-from . import language_codes, check_language
-from .ibase import IFieldTranslator, IValueBasedFieldTranslator
+from .ibase import IFieldTranslation, IValueBasedFieldTranslation
 
 __all__ = []
 
 log1 = logging.getLogger(__name__)
 
-class FieldTranslator(object):
+@zope.interface.implementer(IValueBasedFieldTranslation)
+class FieldTranslation(object):
     '''Provide term-based translation for fields inside a (user-defined) text domain.
 
     Use main database as a persistence layer.
     '''
 
-    zope.interface.implements(IValueBasedFieldTranslator)
-    
     def __init__(self, text_domain=None):
         self._text_domain = str(text_domain)
 
     def __str__(self):
-        return '<FieldTranslator ns=%s>' % (self.namespace)
+        return '<FieldTranslation ns=%s>' % (self.namespace)
     
     @classmethod
     def _key(cls, field):
@@ -40,7 +39,7 @@ class FieldTranslator(object):
         '''
         return str(field.context.value)
 
-    ## IFieldTranslator interface ##
+    ## IFieldTranslation interface ##
     
     @property
     def source_language(self):
@@ -64,7 +63,7 @@ class FieldTranslator(object):
         
         raise NotImplementedError('Todo')
 
-    def translate(self, field, value, language, state='active'):
+    def translate(self, field, language, value, state='active'):
         '''Add or update translation for a given pair (field, language).
         '''
         assert isinstance(field, Field)
@@ -97,7 +96,7 @@ class FieldTranslator(object):
         
         raise NotImplementedError('Todo')
  
-    ## IValueBasedFieldTranslator interface ##
+    ## IValueBasedFieldTranslation interface ##
 
     @property
     def text_domain(self):

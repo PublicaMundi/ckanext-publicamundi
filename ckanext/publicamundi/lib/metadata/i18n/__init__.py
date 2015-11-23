@@ -9,5 +9,3 @@ language_codes = languages.get_all('iso-639-1').keys()
 from .ibase import *
 from .base import translator_for_metadata as translator_for
 from .base import (translate_adapter, field_translate_adapter)
-from .package_translation import *
-from .term_translation import *

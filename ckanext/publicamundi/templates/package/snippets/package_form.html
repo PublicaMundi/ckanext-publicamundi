@@ -22,7 +22,6 @@ then itself be extended to add/remove blocks of functionality. #}
   
   {% if h.is_multilingual_dataset %}
   <input type="hidden" name="language" value="{{ data.language|default('') }}" />
-  <div style="color: magenta"><strong>Language:</strong> {{ data.language|default('N/A')|upper }}</div>
   {% endif %}
 
   {% block warnings %}

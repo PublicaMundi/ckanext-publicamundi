@@ -177,15 +177,22 @@ class IObject(IIntrospective):
         considered a flattened dict (otherwise, will be considered a nested one).
         '''
 
-    def to_json(flat, indent):
+    def to_json(flat, return_string=True, indent=None):
         '''Convert to a (flattened or nested) JSON dump.
+        
         This method should *not* alter the object itself.
+        If return_string is False, then a json-friendly (one that json.dump can handle)
+        dict is returned. 
         '''
 
-    def from_json(s, is_flat):
+    def from_json(dump, is_flat):
         '''Load this object from a (flattened or nested) JSON dump.
+        
         Note that (unlike from_dict()) an explicit flag (is_flat) should be passed to
         determine if input should be considered as flattened/nested.
+
+        If s is a dict (instead of a string), assumes that is json-friendly dict and
+        just loads object from it.
         '''
 
 class IErrorDict(Interface):

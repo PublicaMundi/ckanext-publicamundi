@@ -278,15 +278,10 @@ if __name__  == '__main__':
     #_test_schema_for_metadata('foo1')
     #_test_equality('foo1')
     #_test_inequality('foo1', 'foo2')
-    #test_field_accessors_with_ifoo()
+    test_field_accessors_with_ifoo()
     #_test_deduce_fields_foo('foo1')
-
 
     from ckanext.publicamundi.lib.metadata import (
         class_for, class_for_object, class_for_metadata)
     cls1 = class_for_metadata('foo')
-    #d1 = {'title': u'Byeee Foo'}
-    d1 = {}
-    foo1 = cls1()
-    foo1.from_dict(d1, is_flat=0)
-
+    

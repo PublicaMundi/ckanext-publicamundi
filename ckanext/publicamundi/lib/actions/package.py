@@ -7,8 +7,8 @@ import logging
 import datetime
 import requests
 import urlparse
-
-from pylons import g, config
+import pylons
+from operator import itemgetter, attrgetter
 
 import ckan.model as model
 import ckan.logic as logic
@@ -20,10 +20,12 @@ from ckanext.publicamundi import reference_data
 from ckanext.publicamundi.cache_manager import get_cache
 from ckanext.publicamundi.lib.actions import (
     NameConflict, IdentifierConflict, Invalid)
-from ckanext.publicamundi.lib.metadata import (
-    make_metadata, serializer_for, xml_serializer_for)
 from ckanext.publicamundi.lib.languages import check as check_language
-from ckanext.publicamundi.lib.metadata.i18n import package_translation
+from ckanext.publicamundi.lib.metadata import (
+    Metadata, make_metadata, class_for_metadata,
+    serializer_for, xml_serializer_for,
+    fields, bound_field,
+    translator_for)
 
 log = logging.getLogger(__name__)
 
@@ -53,7 +55,7 @@ def dataset_export(context, data_dict):
     if obj:
         # Get a proper serializer
         xser = xml_serializer_for(obj)
-        xser.target_namespace = config.get('ckan.site_url') 
+        xser.target_namespace = pylons.config.get('ckan.site_url') 
         # Persist exported XML data and wrap into a URL
         name = '%(name)s@%(revision_id)s' % (pkg)
         cached = cached_metadata.get(name, createfunc=xser.dumps)
@@ -84,7 +86,7 @@ def dataset_export_dcat(context, data_dict):
     if obj:
         # Get a proper serializer
         xser = xml_serializer_for(obj)
-        xser.target_namespace = config.get('ckan.site_url')
+        xser.target_namespace = pylons.config.get('ckan.site_url')
 
         cached_metadata = get_cache('metadata')
 
@@ -157,7 +159,7 @@ def dataset_import(context, data_dict):
     if isinstance(source, basestring):
         # Assume source is a URL
         if not source.startswith('http://'):
-            source = config['ckan.site_url'] + source.strip('/')
+            source = pylons.config['ckan.site_url'] + source.strip('/')
         source = urlparse.urlparse(source)
         r1 = requests.get(source.geturl())
         if not r1.ok:
@@ -266,177 +268,113 @@ def dataset_import(context, data_dict):
         },
     }
 
-@logic.side_effect_free
-def package_translation_show(context, data_dict):
-    '''Return transations for fields inside a package, for a given language.
-    If no key is specified, return all available translations.
+def dataset_translation_update(context, data_dict):
+    '''Translate dataset for a the active language.
+    
+    The accepted format data_dict is as the one passed to core `package_update`. 
+    
+    An additional parameter is `translate_to_language` which determines the target
+    language. If not supplied, the active language (from Pylons request) will be used.
+    
+    All non-translatable fields will be ignored. 
+    
+    All fields that are not present (or are empty) in source package, will also be
+    ignored.
 
-    :param id: the name or id of the package.
-    :type id: string
-    
-    :param lang: the target language
-    :type lang: string
-    
-    :param key: represents a key path, and can be given either as a string (a dotted path)
-        or as a tuple of string parts.
-    :type key: string or null
-  
-    rtype: dict
-    '''
-
-    from ckanext.publicamundi.lib.metadata import fields, bound_field
-    
-    try:
-        lang = check_language(data_dict.get('lang'))
-    except ValueError as ex:
-        raise Invalid({'lang': str(ex)}) 
-    
-    pkg = _get_action('package_show')(context, {'id': data_dict['id']})
-
-    result = []
-
-    translator = package_translation.FieldTranslator(pkg)
-    key = data_dict.get('key')
-    if key:
-        if not isinstance(key, basestring):
-            key = '.'.join(map(str, key))
-        else:
-            key = str(key)
-        uf = fields.TextField()
-        yf = translator.get(bound_field(uf, key, None), lang, state='active')
-        if yf:
-            result.append(
-                {'key': key, 'lang': lang, 'value': yf.context.value})
-    else:
-        for state, yf in translator.iter_fields(lang, state='active'):
-            result.append(
-                {'key': yf.context.key, 'lang': lang, 'value': yf.context.value})
-            
-    return result
-
-def package_translation_update(context, data_dict):
-    '''Translate a package field for a given language.
-    
-    :param id: the name or id of the package
-    :type id: string
-
-    :param lang: the target language
-    :type lang: string
-
-    :param key: represents a key path, and can be given either as a string (a dotted path)
-        or as a tuple of string parts.
-    :type key: string
-    
-    :param value: the translated (text) value
-    :type value: string
-
-    rtype: dict
-    '''
-    from ckanext.publicamundi.lib.metadata import fields, bound_field
-    
-    try:
-        lang = check_language(data_dict.get('lang'))
-    except ValueError as ex:
-        raise Invalid({'lang': str(ex)}) 
-  
-    pkg = _get_action('package_show')(context, {'id': data_dict['id']})
-    
-    if lang == pkg['language']:
-        raise Invalid({'lang': _('Cannot translate to source language!')})
-
-    key = data_dict.get('key')
-    if not key:
-        raise Invalid({'key': _('The field key is missing')})
-    if not isinstance(key, basestring):
-        key = '.'.join(map(str, key))
-    else:
-        key = str(key)
-    
-    value = data_dict.get('value')
-    if not value:
-        raise Invalid({'key': _('The field value is missing')})
-    value = unicode(value)
-
-    _check_access('package_translation_update', context, {'org': pkg['owner_org']})
-    
-    translator = package_translation.FieldTranslator(pkg)
-    uf = fields.TextField()
-    yf = bound_field(uf, key, None)
-    translator.translate(yf, value, lang, state='active') 
-    
-    return
-
-def package_translation_update_many(context, data_dict):
-    '''Translate many package fields for a given language.
-    
     :param id: the name or id of the package.
     :type id: string
    
-    :param lang: the target language
+    :param translate_to_language: the target language
     :type lang: string
     
-    :param updates: a dict: keys mapped to translated values; both keys and values should be 
-        as described at `package_translation_update'.
-    :type update: dict
-
     rtype: dict
     '''
-    from ckanext.publicamundi.lib.metadata import fields, bound_field
-    
-    try:
-        lang = check_language(data_dict.get('lang'))
-    except ValueError as ex:
-        raise Invalid({'lang': str(ex)}) 
+     
+    # Determine target language
+
+    lang = data_dict.get('translate_to_language')
+    if not lang:
+        lang = pylons.i18n.get_lang()
+        lang = lang[0] if lang else 'en'
+    else:
+        try:
+            lang = check_language(lang)
+        except ValueError:
+            raise Invalid({
+                'translate_to_language': 'Unknown target language'}) 
   
+    # Fetch package in source language
+
+    context.update({
+        'translate': False,
+        'return_json': True
+    })
     pkg = _get_action('package_show')(context, {'id': data_dict['id']})
-    
-    if lang == pkg['language']:
-        raise Invalid({'lang': _('Cannot translate to source language!')})
-    
-    updates = data_dict.get('updates')
-    if not isinstance(updates, dict):
-        raise Invalid({'updates': _('Expected a dict of updates')}) 
-    
-    _check_access('package_translation_update', context, {'org': pkg['owner_org']})
-    
-    db_session = context['session']
+    dtype = pkg['dataset_type']
 
-    translator = package_translation.FieldTranslator(pkg)
-    translator.defer_commit(True)
+    source_lang = pkg['language']
+    if lang == source_lang:
+        raise Invalid({
+            'translate_to_language': 'The target language same as source language'})
+ 
+    md = class_for_metadata(dtype)()
+    md.from_json(pkg[dtype])
+    assert isinstance(md, Metadata)
+   
+    # Check authorization
+
+    _check_access(
+        'package_translation_update', context, {'org': pkg['owner_org']})
+    
+    # Translate structured metadata
+    
+    translator = translator_for(md, source_lang)
+    md = translator.translate(lang, data_dict[dtype])
+    
+    pkg[dtype] = md.to_json(return_string=False)
+
+    # Translate core CKAN metadata
+
+    field_translator = translator.get_field_translator
     uf = fields.TextField()
+    for k in ('title', 'notes'):
+        v = data_dict.get(k)
+        if not (v and pkg.get(k)):
+            continue # nothing to translate
+        tr = field_translator(bound_field(uf, (k,), pkg[k]))
+        if not tr:
+            continue 
+        yf = tr.translate(lang, v)
+        pkg[k] = v
 
-    for key, value in updates.items():
-        if not isinstance(key, basestring):
-            k = '.'.join(map(str, key))
-        else:
-            k = str(key)
-        yf = bound_field(uf, k, None)
-        translator.translate(yf, unicode(value), lang, state='active') 
+    # Return translated view of this package
 
-    db_session.commit()
-    return
+    pkg['translated_to_language'] = lang
+    return pkg
 
-def package_translation_check_authorized(context, data_dict):
+def dataset_translation_check_authorized(context, data_dict):
     '''Check if authorized to translate fields for a given package.
     '''
-    from operator import itemgetter    
-
     userobj = context['auth_user_obj']
-    
+
     # Todo Maybe more granular authorization (a translator role ?)
-    
+     
     q = {
         'id': data_dict['org'], 
         'object_type': 'user', 
-        'capacity': 'editor'
     }
-    a = _get_action('member_list')
-    editors = map(itemgetter(0), a(context, q))
-    success = userobj.id in editors
-    if not success:
-        return {'success': False, 'msg': _('Not an editor for this organization')}
-    else:
+
+    q['capacity'] = 'admin'
+    admins = map(itemgetter(0), _get_action('member_list')(context, q))
+    if userobj.id in admins:
         return {'success': True}
+    
+    q['capacity'] = 'editor'
+    editors = map(itemgetter(0), _get_action('member_list')(context, q))
+    if userobj.id in editors:
+        return {'success': True}
+
+    return {'success': False, 'msg': _('Not an editor for this organization')}
 
 ## Helpers ##
 

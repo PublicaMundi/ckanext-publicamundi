@@ -308,18 +308,22 @@ class Object(object):
         # Allow method chaining
         return self
 
-    def to_json(self, flat=False, indent=None):
-        cls = type(self)
+    def to_json(self, flat=False, return_string=True, indent=None):
         opts = {
             'serialize-keys': flat,
             'serialize-values': 'json-s',
         }
         d = self.to_dict(flat, opts)
-        return json.dumps(d, indent=indent)
+        if return_string:
+            return json.dumps(d, indent=indent)
+        else:
+            return d
 
-    def from_json(self, s, is_flat=False):
-        cls = type(self)
-        d = json.loads(s)
+    def from_json(self, dump, is_flat=False):
+        if isinstance(dump, basestring):
+            d = json.loads(dump)
+        else:
+            d = dict(dump)
         opts = {
             'unserialize-keys': is_flat,
             'unserialize-values': 'json-s',

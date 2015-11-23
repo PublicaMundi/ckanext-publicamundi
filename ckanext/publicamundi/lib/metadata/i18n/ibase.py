@@ -7,23 +7,22 @@ from ckanext.publicamundi.lib.util import check_uuid
 from ckanext.publicamundi.lib.metadata import IMetadata
 from ckanext.publicamundi.lib.metadata.ibase import IFieldWithContext
 
-language_code_vocabulary = vocabularies.by_name('languages-iso-639-1').get('vocabulary')
+language_vocabulary = vocabularies.by_name('languages-iso-639-1').get('vocabulary')
 
 __all__ = [
-    'IFieldTranslator',
-    'IKeyBasedFieldTranslator',
-    'IValueBasedFieldTranslator',
+    'IFieldTranslation',
+    'IKeyBasedFieldTranslation',
+    'IValueBasedFieldTranslation',
     'ITranslatedField',
-    'IMetadataTranslator',
     'ITranslatedMetadata',
+    'ITranslator',
+    'IMetadataTranslator',
 ]
 
-class IFieldTranslator(Interface):
-    '''A generic interface for field translation.
-    '''
+class IFieldTranslation(Interface):
     
     def get(field, language, state='active'):
-        '''Return a translated bound field for the given pair (field, language).
+        '''Return a bound field translated for the given pair (field, language).
         
         This method should always return a bound field, or None if no translation exists.
         The  translated value (found at .context.value) should be unicode text.
@@ -36,7 +35,7 @@ class IFieldTranslator(Interface):
         The `language` parameter should be a valid language code (iso-639-1).
         '''
 
-    def translate(field, value, language, state='active'):
+    def translate(field, language, value, state='active'):
         '''Add or update translation for a given pair (field, language).
 
         The `field`, `language` parameters are exactly the same as in get() method.
@@ -53,41 +52,47 @@ class IFieldTranslator(Interface):
         Return number of discarded translations.
         '''
 
-    source_language = zope.schema.Choice(vocabulary=language_code_vocabulary, required=True)
+    source_language = zope.schema.Choice(vocabulary=language_vocabulary, required=True)
 
     namespace = zope.schema.NativeStringLine(required=True)
 
-class IValueBasedFieldTranslator(IFieldTranslator):
+class IValueBasedFieldTranslation(IFieldTranslation):
 
     text_domain = zope.schema.NativeStringLine(default=None) 
 
-class IKeyBasedFieldTranslator(IFieldTranslator):
+class IKeyBasedFieldTranslation(IFieldTranslation):
 
     package_id = zope.schema.NativeStringLine(required=True, constraint=check_uuid)
 
-class ITranslatedField(IFieldWithContext):
-    
-    pass
+class ITranslatedField(IFieldWithContext): pass
 
 class ITranslatedMetadata(IMetadata):
 
-    source_language = zope.schema.Choice(vocabulary=language_code_vocabulary, required=True)
+    source_language = zope.schema.Choice(vocabulary=language_vocabulary, required=True)
     
-    language = zope.schema.Choice(vocabulary=language_code_vocabulary, required=True)
+    translation_language = zope.schema.Choice(vocabulary=language_vocabulary, required=True)
  
-class IMetadataTranslator(zope.interface.Interface):
-
-    source_language = zope.schema.Choice(vocabulary=language_code_vocabulary, required=True)
+class ITranslator(Interface):
 
     def get(language):
-        '''Fetch available translations and return an ITranslatedMetadata object.
+        '''Return a translated view for given language
         '''
-
-    def get_field_translators():
-        '''Get suitable translators for a metadata object.
+    
+    def translate(language, translated):
+        '''Translate to language, draw translations from translated.
         
-        This method returns a list of field translators (providing IFieldTranslator),
-        which should be tried (in this order) to manipulate translations for fields.
+        Return the translated view. 
         '''
+    
+    source_language = zope.schema.Choice(vocabulary=language_vocabulary, required=True)
 
-  
+class IMetadataTranslator(ITranslator):
+
+    def get_field_translator(field):
+        '''Get a suitable field translator for a bound field (as if this field was 
+        part of a metadata object).
+        
+        The main use for this is to enable translation of fields not embeded in the 
+        schema of a metadata object (like core metadata fields, or other top-level
+        scalar fields added by 3rd-party extensions).
+        '''

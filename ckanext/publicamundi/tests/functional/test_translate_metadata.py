@@ -1,10 +1,12 @@
 # -*- encoding: utf-8 -*-
 
+import os
 import zope.interface
 import dictdiffer
 import copy
 import json
 import pylons
+import dictdiffer
 
 from nose.tools import istest, nottest, raises
 from nose.plugins.skip import SkipTest
@@ -90,7 +92,33 @@ class TestController(ckan.tests.TestController):
             # Todo
         ],
     }
-
+    
+    translated_parts = {
+        'foo': {
+            # Translated parts keyed on (<package-name>, <target-language>)
+            ('hello-foo-1', 'en'): {
+                'title': u'Hello Foo (1)',
+                'notes': u'Yupi Ya (1)!',
+                'foo': {
+                    'baz': u'Another BaoBab', # should be ignored, not translatable
+                    'title': u'Hello Foo (1)',
+                    'description': u'Yupi Ya Ya, yupi yupi ya (x2) (1)',
+                }
+            },
+            ('hello-foo-2', 'el'): {
+                'title': u'Καλημέρα Φου (2)',
+                'notes': u'Τρα λα λα (2)!',
+                'foo': {
+                    'title': u'Καλημέρα Φου (2)',
+                    'description': u'Τρα λαλλαλαλα λαλαλαλλαλαλαλα (x2) (1)',
+                }
+            },
+        }
+    }
+    
+    # Note
+    # Do not edit class attributes below: to be computed at setup_class()
+    
     translatable_fields = {
         'foo': [],
         'inspire': []
@@ -100,7 +128,18 @@ class TestController(ckan.tests.TestController):
 
     @classmethod
     def setup_class(cls):
+        
         CreateTestData.create_user('tester', about='A tester', password='tester')
+        
+        CreateTestData.create_groups([
+            {
+                'name': 'acme',
+                'title':  u'Acme',
+                'description': u'A fictional organization',
+                'type': 'organization',
+                'is_organization': True,
+            }], admin_user_name='tester')
+
         cls.find_translatable_fields()
         cls.default_lang = pylons.config['ckan.locale_default']
 
@@ -123,13 +162,25 @@ class TestController(ckan.tests.TestController):
             for i, (source_lang, langs, name, pkg) in enumerate(packages):
                 yield self._test_1, dtype, i, name, source_lang, langs
     
-    @staticmethod
-    def _check_if_changed(d1, d2, expected_keys={}):
+    @classmethod
+    def _check_if_changed(cls, d1, d2, expected_keys={}):
         d1f = dictization.flatten(d1)
-        d2f = dictization.flatten(d1)
+        d2f = dictization.flatten(d2)
         for k in (set(d1f.keys()) - set(expected_keys)):
             assert d1f[k] == d2f[k], 'Expected not to be changed!'
     
+    @classmethod
+    def _check_if_result_translated(cls, dtype, translated, result):
+        for k in cls.translatable_fields[dtype]:
+            translated_value = dot_lookup(translated[dtype], k)
+            result_value = dot_lookup(result[dtype], k)
+            assert not translated_value or (translated_value == result_value)
+        # Check core CKAN metadata are also translated
+        for k in ['title', 'notes']:
+            translated_value = translated.get(k)
+            result_value = result.get(k)
+            assert not translated_value or (translated_value == result_value)
+
     def _test_1(self, dtype, i, name, source_lang, langs):
         data = self.packages[dtype][i][-1]
 
@@ -145,16 +196,20 @@ class TestController(ckan.tests.TestController):
         
         data1 = copy.deepcopy(data)
         data1['name'] = data1['name'] + "-" + source_lang
+        data1['owner_org'] = 'acme'
         data1['language'] = source_lang
        
         data2 = copy.deepcopy(data)
         data2['name'] = data2['name'] + "-xx" 
+        data2['owner_org'] = 'acme'
         data2.pop('language', None)
 
         for source_lang_expected, dat in [
                 (source_lang, data1), 
                 (self.default_lang, data2)
             ]:
+            
+            foreign_langs = (langs | {source_lang}) - {source_lang_expected} 
 
             # Create 
 
@@ -167,20 +222,26 @@ class TestController(ckan.tests.TestController):
 
             # Read in (expected) source language
 
-            q = {'id': dat['name'], 'lang': source_lang_expected}
-            resp = self.app.get('/api/action/dataset_show', q, **req_opts)
-            assert resp and (resp.status in [200, 201]) and resp.json
-            assert resp.json.get('success') and resp.json.get('result')
-            assert resp.json['result']['language'] == source_lang_expected 
-            assert not 'translated_to_language' in resp.json['result'], 'no need to translate!'
-            assert 'identifier' in resp.json['result'][dtype]
-            self._check_if_changed(dat[dtype], resp.json['result'][dtype])
+            for t in [
+                    {'lang': source_lang_expected, 'qs': {}}, # request in source language
+                    {'lang': '', 'qs': {'translate': 'no'}}   # request to explicitly not translate 
+                ]:
+                qs = dict(t['qs'].items() + [('id', dat['name'])])
+                req_url = '/' + os.path.join(t['lang'] ,'api/action/dataset_show')
+                resp = self.app.get(req_url, qs, **req_opts)
+                assert resp and (resp.status in [200, 201]) and resp.json
+                assert resp.json.get('success') and resp.json.get('result')
+                assert resp.json['result']['language'] == source_lang_expected 
+                assert not 'translated_to_language' in resp.json['result'], 'no need to translate!'
+                assert 'identifier' in resp.json['result'][dtype]
+                self._check_if_changed(dat[dtype], resp.json['result'][dtype])
 
-            # Read in other languages
+            # Read in foreign languages 
 
-            for lang in ((langs | {source_lang}) - {source_lang_expected}):
-                q = {'id': dat['name'], 'lang': lang}
-                resp = self.app.get('/api/action/dataset_show', q, **req_opts)
+            for lang in foreign_langs:
+                qs = {'id': dat['name']}
+                req_url = '/' + os.path.join(lang ,'api/action/dataset_show')
+                resp = self.app.get(req_url, qs, **req_opts)
                 assert resp and (resp.status in [200, 201]) and resp.json
                 assert resp.json.get('success') and resp.json.get('result')
                 assert resp.json['result']['language'] == source_lang_expected
@@ -188,16 +249,54 @@ class TestController(ckan.tests.TestController):
                 assert 'identifier' in resp.json['result'][dtype]
                 self._check_if_changed(dat[dtype], resp.json['result'][dtype])
             
-            # Now, translate a few textual fields
+            
+        # Now, translate textual fields
 
-            # Todo
+        for lang in langs:
+            translated = self.translated_parts[dtype].get((name, lang))
+            translated = copy.deepcopy(translated)
+            translated['id'] = data1['name']
+            req_url = '/' + os.path.join(lang ,'api/action/dataset_translation_update')
+            resp = self.app.post(req_url, json.dumps(translated), **req_opts)
+            assert resp and (resp.status in [200, 201]) and resp.json
+            assert resp.json.get('success') and resp.json.get('result')
+            assert resp.json['result']['language'] == source_lang
+            assert resp.json['result']['translated_to_language'] == lang
+            assert 'identifier' in resp.json['result'][dtype]
+            print 'Translated package %s to %s' %(data1['name'], lang.upper())
+            self._check_if_changed(data1[dtype], resp.json['result'][dtype],
+                expected_keys=self.translatable_fields[dtype])
+            self._check_if_result_translated(dtype, translated, resp.json['result'])
 
-            # Re-read in (expected) source language
+        # Re-read in source language
 
-            # Todo
+        req_url = '/' + os.path.join(source_lang ,'api/action/dataset_show')
+        resp = self.app.get(req_url, {'id': data1['name']}, **req_opts)
+        assert resp and (resp.status in [200, 201]) and resp.json
+        assert resp.json.get('success') and resp.json.get('result')
+        assert resp.json['result']['language'] == source_lang
+        assert not 'translated_to_language' in resp.json['result'], 'no need to translate!'
+        assert 'identifier' in resp.json['result'][dtype]
+        self._check_if_changed(data1[dtype], resp.json['result'][dtype])
 
-            # Re-read in other languages
+        # Re-read in foreign languages
 
-            # Todo
-
-
+        for lang in langs:
+            translated = self.translated_parts[dtype].get((name, lang))
+            req_url = '/' + os.path.join(lang ,'api/action/dataset_show')
+            resp = self.app.get(req_url, {'id': data1['name']}, **req_opts)
+            assert resp and (resp.status in [200, 201]) and resp.json
+            assert resp.json.get('success') and resp.json.get('result')
+            assert resp.json['result']['language'] == source_lang
+            assert resp.json['result']['translated_to_language'] == lang
+            assert 'identifier' in resp.json['result'][dtype]
+            self._check_if_changed(data1[dtype], resp.json['result'][dtype],
+                expected_keys=self.translatable_fields[dtype])
+            self._check_if_result_translated(dtype, translated, resp.json['result'])
+           
+def dot_lookup(d, kp):
+    try:
+        v = dictdiffer.dot_lookup(d, list(kp))
+    except:
+        v = None
+    return v

@@ -120,14 +120,15 @@ class TestController(ckan.tests.TestController):
 
         # Tranlate a few fields
         
-        field_translator = translator.get_field_translators()[0]
-        
         translations = {} 
         for key in self.translatable_fields[dtype]:
             yf = md.get_field(key)
             translations[key] = ' ** TRANSLATE ** ' + yf.context.value
             yf.context.key = (dtype,) + key
-            field_translator.translate(yf, translations[key], lang)            
+            tr = translator.get_field_translator(yf)
+            yf1 = tr.translate(lang, translations[key])
+            assert yf1 and yf1.context.value
+            assert yf1.context.value == translations[key]
 
         # Re-read a translated view
         
