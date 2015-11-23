@@ -161,7 +161,7 @@ class InspireMetadata(Metadata):
     def _deduce_language(self):
         # Convert from ISO 639-2 to an ISO 639-1 language code
         if self.languagecode:
-            return languages.get_by_code(self.languagecode).get('alpha2')
+            return languages.by_code(self.languagecode).alpha2
         return None
 
 # XML serialization

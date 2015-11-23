@@ -1044,7 +1044,7 @@ class MultilingualDatasetForm(DatasetForm):
         helpers = super(MultilingualDatasetForm, self).get_helpers()
         helpers.update({
             'is_multilingual_dataset': True,
-            'language_name': lambda code: ext_languages.by_code(code).get('name_en'),
+            'language_name': lambda code: ext_languages.by_code(code).name,
         })
         return helpers
     
