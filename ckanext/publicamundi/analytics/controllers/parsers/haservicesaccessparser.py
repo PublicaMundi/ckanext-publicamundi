@@ -8,12 +8,12 @@ class HAServicesAccessParser(HAParser):
     """
     __author__ = "<a href='mailto:merticariu@rasdaman.com'>Vlad Merticariu</a>"
 
-    def __init__(self, log_file_path):
+    def __init__(self):
         """
         Class constructor.
         :param <string> log_file_path: the path to the log file.
         """
-        HAParser.__init__(self, log_file_path)
+        HAParser.__init__(self)
 
     def parse_service_info_line(self, line=""):
         """
@@ -42,12 +42,13 @@ class HAServicesAccessParser(HAParser):
         :return <[HAServiceInfo]> a list of objects representing the total services access counts for each different date.
         """
         services_info_list = []
-        with file(self.log_file_path) as f:
-           for line in f.readlines():
-                # only consider valid lines.
-               validated_line = self.validate_line(line)
-               if validated_line:
-                   services_info_list.append(self.parse_service_info_line(validated_line))
+        for filename in self.log_files:
+            with file(filename) as f:
+                for line in f.readlines():
+                        # only consider valid lines.
+                    validated_line = self.validate_line(line)
+                    if validated_line:
+                        services_info_list.append(self.parse_service_info_line(validated_line))
         # merge the results and return
         return self.merge_info_list(services_info_list)
 

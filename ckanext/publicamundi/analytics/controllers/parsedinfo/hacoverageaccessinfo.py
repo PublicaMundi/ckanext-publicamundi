@@ -1,5 +1,4 @@
-from ckanext.publicamundi.analytics.controllers.configmanager import ConfigManager
-
+from pylons import config
 
 class HACoverageAccessInfo:
     """
@@ -25,7 +24,7 @@ class HACoverageAccessInfo:
         Handles the way the object is printed. The current format is json.
         """
         output = "{"
-        output += self.date_key + ":\"" + self.date.strftime(ConfigManager.export_date_format) + "\","
+        output += self.date_key + ":\"" + self.date.strftime(config.get('ckanext.publicamundi.analytics.export_date_format')) + "\","
         output += self.access_count_key + ":" + str(self.access_count)
         output += "}"
         return output

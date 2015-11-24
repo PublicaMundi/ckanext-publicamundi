@@ -8,13 +8,13 @@ class HACoverageAccessParser(HAParser):
     """
     __author__ = "<a href='mailto:merticariu@rasdaman.com'>Vlad Merticariu</a>"
 
-    def __init__(self, log_file_path, coverage_name):
+    def __init__(self, coverage_name):
         """
         Class constructor.
         :param <string> log_file_path: the path to the log file
         :param <string> coverage_name: the name of the coverage to be searched for.
         """
-        HAParser.__init__(self, log_file_path)
+        HAParser.__init__(self)
         self.coverage_name = coverage_name.lower()
 
     def parse_coverage_access_line(self, line):
@@ -33,10 +33,11 @@ class HACoverageAccessParser(HAParser):
         one for each unique date.
         """
         access_info_list = []
-        with file(self.log_file_path) as f:
-            # simply check how many requests contain the coverage or layer name
-            for line in f.readlines():
-                validated_line = self.validate_line(line)
-                if self.coverage_name in validated_line:
-                    access_info_list.append(self.parse_coverage_access_line(validated_line))
+        for filename in self.log_files:
+            with file(filename) as f:
+                # simply check how many requests contain the coverage or layer name
+                for line in f.readlines():
+                    validated_line = self.validate_line(line)
+                    if self.coverage_name in validated_line:
+                        access_info_list.append(self.parse_coverage_access_line(validated_line))
         return self.merge_info_list(access_info_list)

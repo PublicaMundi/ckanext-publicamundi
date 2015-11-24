@@ -1,5 +1,13 @@
 {% extends "page.html" %}
+
+{% block breadcrumb_content %}
+  <li class="active"><a href="{{ h.url_for(controller='ckanext.publicamundi.analytics.controllers.analyticscontroller:AnalyticsController', action='analytics') }}">{{ _('Analytics') }}</a></li>
+{% endblock %}
+
+
+
 {% block main_content %}
+{% if c.is_sysadmin %}
    <div id="servcies-access-graph-container">
       <h1> Services access statistics </h1>
       <div id="services-access-graph" class="amcharts-graph">
@@ -27,15 +35,23 @@
       <h1> Most requested coverages / layers </h1>
       <div id="coverage-access-table">
         <img src="/loading.gif"/>
-      </div>
+    </div>
+      <h2 id="coverage-access-date-title"></h2>
       <div id="coverage-access-graph" class="amcharts-graph">
         <img src="/loading.gif"/>
-      </div>
+    </div>
+        <button href="#" class="scroll-up-button btn"><span class="icon-arrow-up"></span></button>
+      <h2 id="coverage-access-band-title"></h2>
       <div id="coverage-band-access-graph" class="amcharts-graph">
         <img src="/loading.gif"/>
       </div>
+        <button href="#" class="scroll-up-button btn"><span class="icon-arrow-up"></span></button>
    </div>   
    {% resource 'ckanext-publicamundi-analytics/styles' %}
    {% resource 'ckanext-publicamundi-analytics/libs' %}
    {% resource 'ckanext-publicamundi-analytics/src'  %}
+{% else %}
+    {{ _('Not authorized to see this page') }} 
+{% endif %}
+
 {% endblock  %}
