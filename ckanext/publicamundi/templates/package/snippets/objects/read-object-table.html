@@ -3,7 +3,7 @@
     <table class="table table-bordered metadata-table" 
         data-module="table-collapsible-rows"
         data-module-numcols="{{ num_cols|int }}"
-        data-module-state="more"
+        data-module-state="{{'more' if (more is defined) else 'less'}}"
       >
         <colgroup>
         {% if num_cols > 3 %}

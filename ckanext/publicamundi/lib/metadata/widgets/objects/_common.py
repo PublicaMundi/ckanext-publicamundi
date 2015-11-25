@@ -1,6 +1,7 @@
 import itertools
 import zope.interface
 from collections import OrderedDict
+from operator import itemgetter, attrgetter
 
 from ckan.plugins import toolkit
 
@@ -19,37 +20,41 @@ _ = toolkit._
 #
 
 @object_widget_adapter(schemata.IObject, qualifiers=['table'])
-class TableObjectReadWidget(ReadObjectWidget):
+class TableReadWidget(ReadObjectWidget):
 
     max_depth = 2
     
+    markup_qualifier = 'td'
+
     def get_template(self):
         return 'package/snippets/objects/read-object-table.html'
     
     def get_field_order(self):
         '''Explicitly define the order at which fields are listed in rows
         ''' 
-        cls = TableObjectReadWidget
+        cls = TableReadWidget
         return super(cls, self).get_field_qualifiers().keys()
 
     def prepare_template_vars(self, name_prefix, data):
         
-        cls = TableObjectReadWidget
+        cls = TableReadWidget
         Td, Th, Tr = cls._Td, cls._Th, cls._Tr
         
         tpl_vars = super(cls, self).prepare_template_vars(name_prefix, data)
 
         # Dictize self.obj, format leafs as markup
-        
-        max_depth = data.get('max_depth', 0) or self.max_depth
 
-        dictz_opts = {'max-depth': max_depth, 'format-values': 'markup:q=td'}
+        dictz_opts = {
+            'max-depth': data.get('max_depth', 0) or self.max_depth, 
+            'format-values': 'markup:q=%s' % (self.markup_qualifier)
+        }
         obj_dict = self.obj.to_dict(flat=False, opts=dictz_opts)
 
         # Re-order according to this widget's field ordering
         
-        ordered_fields = self.get_field_order()
-        od = OrderedDict(((k, obj_dict[k]) for k in self.get_field_order()))
+        od = OrderedDict((
+            (k, obj_dict[k]) for k in self.get_field_order()
+        ))
         
         # Preprocess ordered obj_dict to be displayed as table rows
                 
@@ -64,17 +69,15 @@ class TableObjectReadWidget(ReadObjectWidget):
                 th.title = _(field.context.title) or _(field.title)
         
         # Prepend extra rows if needed
-
-        for extra in reversed(data.get('extras', [])):
-            if extra['value']:
-                td = Td(
-                    data=extra['value'], 
-                    colspan=(num_cols - 1), 
-                    attrs=extra.get('attrs'))
-                th = Th(data=extra['title'])
-                row = Tr([th, td])
-                row.display = True
-                rows.insert(0, row)
+        
+        extras = filter(itemgetter('value'), data.get('extras', []))
+        for extra in reversed(extras):
+            td = Td(extra['value'], attrs=extra.get('attrs'))
+            td.colspan = num_cols - 1
+            th = Th(extra['title'])
+            row = Tr([th, td])
+            row.display = True
+            rows.insert(0, row)
         
         # Provide vars to template
 

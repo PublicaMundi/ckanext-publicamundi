@@ -18,7 +18,7 @@ from ckanext.publicamundi.lib.metadata.widgets.base import (
     ListFieldWidgetTraits,
     DictFieldWidgetTraits)
 
-from ._common import TableObjectReadWidget
+from . import _common
 
 _ = toolkit._
 
@@ -201,7 +201,7 @@ class InspireReadWidget(ReadObjectWidget):
         return None # use glue template
 
 @object_widget_adapter(schemata.IInspireMetadata, qualifiers=['table'])
-class TableInspireReadWidget(TableObjectReadWidget):
+class TableReadWidget(_common.TableReadWidget):
 
     def get_field_order(self):
         return [

@@ -22,7 +22,8 @@ from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata import types
 from ckanext.publicamundi.lib.metadata.types import Object
 from ckanext.publicamundi.lib.metadata.widgets import (
-    markup_for_field, markup_for_object, widget_for_object, widget_for_field)
+    markup_for_field, markup_for_object, markup_for, 
+    widget_for_object, widget_for_field)
 from ckanext.publicamundi.tests import fixtures
 
 log1 = logging.getLogger(__name__)
@@ -36,15 +37,6 @@ class Controller(BaseController):
 
     def brk(self):
         raise Breakpoint()
-
-    def test_translators(self):
-
-        from ckanext.publicamundi.lib.metadata.i18n import translator_for
-        md_1 = fixtures.inspire1
-        tr = translator_for(md_1, 'el')
-        md_2 = tr.get('en')
-
-        assert False, 'Break'
 
     def test_csw_hooks(self, id):
         from ckanext.publicamundi.lib import pycsw_sync
@@ -346,7 +338,7 @@ class Controller(BaseController):
 
         return render('tests/page.html')
     
-    def show_dataset(self, id):
+    def show_metadata(self, id):
         '''Show dataset's metadata formatted as a table'''
         
         context = { 'model': model, 'session': model.Session }
@@ -355,16 +347,19 @@ class Controller(BaseController):
         except toolkit.ObjectNotFound as ex:  
             abort(404)
         
-        k = pkg_dict['dataset_type']
-        obj = pkg_dict[k]
-        
-        #raise Breakpoint('Break')
+        dtype = pkg_dict['dataset_type']
+        obj = pkg_dict[dtype]
 
-        data = { 'title': u'%s: Metadata' % (pkg_dict['title']) }
-        c.markup = markup_for_object('read:table', obj, name_prefix=k, data=data)
+        data = {
+            'title': u'%s: Metadata' % (pkg_dict['title']),
+        }
+        
+        q = str(toolkit.request.params.get('q', ''))
+        qa = 'read:table.%s' %(q) if q else 'read:table' 
+        c.markup = markup_for(qa, obj, name_prefix=dtype, data=data)
 
         return render('tests/page.html')
-        
+    
     def test_template(self):
         '''A test tube for jinja2 templates ''' 
         return render('tests/test.html')
