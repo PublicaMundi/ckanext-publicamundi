@@ -199,6 +199,7 @@ class IInspireMetadata(IMetadata):
         title = _(u'Lineage'),
         description = _(u'This is a statement on process history and/or overall quality of the spatial data set. Where appropriate it may include a statement whether the data set has been validated or quality assured, whether it is the official version (if multiple versions exist), and whether it has legal validity. The value domain of this metadata element is free text.'),
         required = False)
+    lineage.setTaggedValue('translatable', True)
 
     spatial_resolution = zope.schema.List(
         title = _(u'Spatial Resolution'),

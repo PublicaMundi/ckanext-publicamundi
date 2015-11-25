@@ -1,17 +1,25 @@
-<div class="{{ classes|join(' ') }}">     
-    {%- if title %}<h3>{{ title }}</h3>{% endif -%}
-    <table class="table table-bordered metadata-table" 
-        data-module="table-collapsible-rows"
-        data-module-numcols="{{ num_cols|int }}"
+
+{% if not extra_table_classes is defined -%}
+{% set extra_table_classes = [] %}
+{% endif %}
+
+{% if not table_classes is defined -%}
+{% set table_classes = ['table', 'table-bordered', 'metadata-table'] + extra_table_classes %}
+{% endif %}
+
+<div class="{{classes|join(' ')}}">     
+    {%- if title %}<h3>{{title}}</h3>{% endif -%}
+    <table class="{{table_classes|join(' ')}}" data-module="table-collapsible-rows"
+        data-module-numcols="{{num_cols|int}}"
         data-module-state="{{'more' if (more is defined) else 'less'}}"
       >
         <colgroup>
         {% if num_cols > 3 %}
         {% with wl = 1.8, col_width = 100.0 / (num_cols + (wl - 1)) %}
             {%- for j in range(1, num_cols) -%}
-            <col style="width:{{ '%.1f'|format(col_width) }}%"/>
+            <col style="width:{{'%.1f'|format(col_width)}}%"/>
             {%- endfor -%}
-            <col style="width:{{ '%.1f'|format(col_width * wl) }}%"/>
+            <col style="width:{{'%.1f'|format(col_width * wl)}}%"/>
         {% endwith %}
         {% elif num_cols == 3 %}
             <col style="width: 30%"/>
@@ -36,9 +44,11 @@
                     }
                 -%}
                 {%- if r.tag == 'th' -%}
-                <th {{ attrs|xmlattr }}>{{ r.title or r.data }}</th>
+                <th {{attrs|xmlattr}} data-qname="{{r.qname}}">
+                    {{r.title or r.data}}
+                </th>
                 {% else %}
-                <td {{ attrs|xmlattr }}>{{ r.data|safe }}</td>
+                <td {{attrs|xmlattr}}>{{r.data|safe}}</td>
                 {%- endif -%}
                 {%- endwith -%} {# attrs #}
                 {%- endfor -%} {# for r in row #}

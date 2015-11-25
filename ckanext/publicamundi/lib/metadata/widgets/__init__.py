@@ -11,7 +11,7 @@ from ckanext.publicamundi.lib.metadata.fields import (
 from ckanext.publicamundi.lib.metadata import (
     adapter_registry, factory_for, IObject, Object, FieldContext)
 
-from ckanext.publicamundi.lib.metadata.widgets.ibase import (
+from .ibase import (
     IQualAction, ILookupContext, 
     IWidget, IFieldWidget, IObjectWidget)
 
@@ -224,11 +224,11 @@ markup_for = markup_for_object
 
 # Import actual widgets
 
-from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
-from ckanext.publicamundi.lib.metadata.widgets import fields as field_widgets
-from ckanext.publicamundi.lib.metadata.widgets import objects as object_widgets
+from . import base
+from . import fields
+from . import objects
 
 # Import markup formatters (bridge with IFormatter)
 
-from ckanext.publicamundi.lib.metadata.widgets import markup_formatters
+from . import markup_formatters
 

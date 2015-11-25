@@ -1053,10 +1053,16 @@ class MultilingualDatasetForm(DatasetForm):
     
     def get_helpers(self):
         helpers = super(MultilingualDatasetForm, self).get_helpers()
+        
         helpers.update({
             'is_multilingual_dataset': True,
-            'language_name': lambda code: ext_languages.by_code(code).name,
+            'target_language': self.target_language,
+            'language_name': 
+                lambda code: ext_languages.by_code(code).name,
+            'markup_for_translatable_text': 
+                ext_template_helpers.markup_for_translatable_text,
         })
+        
         return helpers
     
     ## IAuthFunctions interface ##
@@ -1080,6 +1086,19 @@ class MultilingualDatasetForm(DatasetForm):
         })
         return actions
     
+    ## IRoutes interface ##
+
+    def before_map(self, mapper):
+        mapper = super(MultilingualDatasetForm, self).before_map(mapper)
+        
+        mapper.connect(
+            'dataset_translate',
+            '/dataset/translate/{name_or_id}',
+            controller = 'ckanext.publicamundi.controllers.package:Controller',
+            action = 'translate_metadata')
+
+        return mapper
+
     ## Helpers ##
     
     class TranslatedView(object):
@@ -1110,7 +1129,7 @@ class MultilingualDatasetForm(DatasetForm):
             params = None
         language = params.get('lang') if params else None
         
-        # If absent, pick current language for this request
+        # If absent, pick active language
         if not language:
             language = pylons.i18n.get_lang()
             language = language[0] if language else 'en'

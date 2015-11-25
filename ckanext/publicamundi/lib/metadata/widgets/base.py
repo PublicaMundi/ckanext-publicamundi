@@ -4,18 +4,16 @@ import zope.schema.vocabulary
 import copy
 from collections import OrderedDict
 
-import ckan.plugins.toolkit as toolkit
-
 from ckanext.publicamundi.lib import logger
+from ckanext.publicamundi.lib import toolkit
 from ckanext.publicamundi.lib.util import raise_for_stub_method
 from ckanext.publicamundi.lib.metadata import adapter_registry
 from ckanext.publicamundi.lib.metadata.ibase import IObject
 from ckanext.publicamundi.lib.metadata.base import Object, FieldContext
-from ckanext.publicamundi.lib.metadata.widgets.ibase import (
-    IWidget, IFieldWidget, IObjectWidget)
-from ckanext.publicamundi.lib.metadata.widgets import (
-    QualAction, LookupContext, markup_for_object, markup_for_field)
-from ckanext.publicamundi.lib.metadata.widgets.util import to_c14n_markup
+
+from .ibase import (IWidget, IFieldWidget, IObjectWidget)
+from . import (QualAction, LookupContext, markup_for_object, markup_for_field)
+from .util import to_c14n_markup
 
 #
 # Base
@@ -92,6 +90,7 @@ class FieldWidget(Widget):
             'title': self.field.title,
             'description': self.field.description,
             'readonly': self.field.readonly,
+            'linked_to': self.field.queryTaggedValue('links-to'),
             'attrs': {},
             'classes': [],
         }

@@ -14,6 +14,8 @@ from ckanext.publicamundi.lib import uploader
 from ckanext.publicamundi.lib import actions as ext_actions
 from ckanext.publicamundi.lib import metadata as ext_metadata
 
+from ._helpers import authenticated
+
 log = logging.getLogger(__name__)
 
 _ = toolkit._
@@ -136,7 +138,8 @@ class Controller(BaseController):
         # Done
         return redirect_url
     
-    def import_metadata(self):
+    @authenticated
+    def import_metadata(self, **kwargs):
         if request.method == 'POST':
             redirect_url = self._import_metadata(request.params)
             redirect(redirect_url)
@@ -146,4 +149,28 @@ class Controller(BaseController):
             c.errors = session.pop('errors', None)
             c.result = session.pop('result', None)
             return render('package/import_metadata.html')
-    
+   
+    @authenticated
+    def translate_metadata(self, name_or_id, **kwargs):
+        
+        from ckanext.publicamundi.lib.metadata import widgets
+        
+        context = { 
+            'model': model, 
+            'session': model.Session, 
+            'api_version': 3,
+            'translate': False
+        }
+      
+        pkg = _get_action('package_show')(context, {'id': name_or_id})
+
+        # Check authorization
+
+        _check_access(
+            'package_translation_update', context, {'org': pkg['owner_org']})
+        
+        # Render
+
+        c.pkg_dict = pkg
+
+        return render('package/translate_metadata.html')

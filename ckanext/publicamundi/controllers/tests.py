@@ -17,9 +17,11 @@ import ckan.logic as logic
 import ckan.lib.helpers as h
 
 from ckanext.publicamundi.lib.dictization import unflatten
+from ckanext.publicamundi.lib.languages import Language
 from ckanext.publicamundi.lib.util import to_json, Breakpoint
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata import types
+from ckanext.publicamundi.lib.metadata import bound_field
 from ckanext.publicamundi.lib.metadata.types import Object
 from ckanext.publicamundi.lib.metadata.widgets import (
     markup_for_field, markup_for_object, markup_for, 
@@ -27,6 +29,8 @@ from ckanext.publicamundi.lib.metadata.widgets import (
 from ckanext.publicamundi.tests import fixtures
 
 log1 = logging.getLogger(__name__)
+
+_ = toolkit._
 
 content_types = {
     'json': 'application/json; charset=utf8',
@@ -341,6 +345,9 @@ class Controller(BaseController):
     def show_metadata(self, id):
         '''Show dataset's metadata formatted as a table'''
         
+        from ckanext.publicamundi.lib.metadata import formatter_for_field
+        from ckanext.publicamundi.lib.metadata import fields, bound_field
+        
         context = { 'model': model, 'session': model.Session }
         try:
             pkg_dict = toolkit.get_action('package_show')(context, { 'id': id })
@@ -350,11 +357,26 @@ class Controller(BaseController):
         dtype = pkg_dict['dataset_type']
         obj = pkg_dict[dtype]
 
+        q = str(toolkit.request.params.get('q', ''))
+        title_field = bound_field(fields.TextField(), 'title', pkg_dict['title'])
         data = {
             'title': u'%s: Metadata' % (pkg_dict['title']),
+            'max_depth': 1,
+            'extras': [
+                {
+                    'key': 'language',
+                    'title': _('Source Language'), 
+                    'value': Language(pkg_dict['language']).name, 
+                },
+                {
+                    'key': 'title',
+                    'title': _('Title'),
+                    'value': markup_for_field('read:dd%s' % (('.' + q) if q else ''),
+                        title_field, name_prefix='', data={'translatable': True})
+                }
+            ],
         }
         
-        q = str(toolkit.request.params.get('q', ''))
         qa = 'read:table.%s' %(q) if q else 'read:table' 
         c.markup = markup_for(qa, obj, name_prefix=dtype, data=data)
 

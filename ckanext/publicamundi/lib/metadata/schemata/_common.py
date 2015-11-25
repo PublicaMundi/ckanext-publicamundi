@@ -64,6 +64,7 @@ class IResponsibleParty(IObject):
         title = _(u'Organization Name'),
         required = True,
         min_length = 2)
+    organization.setTaggedValue('translatable', True)   
 
     email = z3c.schema.email.RFC822MailAddress(
         title = _(u'Email'),

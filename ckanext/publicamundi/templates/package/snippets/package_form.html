@@ -27,13 +27,8 @@ then itself be extended to add/remove blocks of functionality. #}
   {% block warnings %}
   {% if h.is_multilingual_dataset and data.language and (c.target_language != data.language) %}
   <div class="alert">
-    {% with translate_url = h.url_for(controller='package', action='read', id=data.id, locale=data.language) %} {# Todo #}
     <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <strong>Warning!</strong><br/>
-    <span>You are about to edit metadata given in a source language ({{data.language|upper}}) different
-    than your active language ({{c.target_language|upper}}).
-    If instead, you just want to translate, go <a href="{{translate_url}}">here</a>.</span>
-    {% endwith %}
+    You are about to edit in a language ({{data.language|upper}}) different than your active language ({{c.target_language|upper}}).
   </div>
   {% endif %}
   {% endblock %} {# warnings #}

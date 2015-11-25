@@ -3,8 +3,7 @@ import zope.interface
 from collections import OrderedDict
 from operator import itemgetter, attrgetter
 
-from ckan.plugins import toolkit
-
+from ckanext.publicamundi.lib import toolkit
 from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata.widgets import (
@@ -13,10 +12,10 @@ from ckanext.publicamundi.lib.metadata.widgets.base import (
     ReadObjectWidget, EditObjectWidget, ReadFieldWidget, EditFieldWidget,
     ListFieldWidgetTraits, DictFieldWidgetTraits)
 
-_ = toolkit._
+_ = toolkit._ 
 
 #
-# IObject - Table/Dl views
+# IObject - table/dl views
 #
 
 @object_widget_adapter(schemata.IObject, qualifiers=['table'])
@@ -60,21 +59,23 @@ class TableReadWidget(ReadObjectWidget):
                 
         num_rows, num_cols, rows = cls._tabulate(od)
        
-        # Provide human-friendly names for TH elements 
+        # Scan TH elements and 
+        #  * provide human-friendly titles
+        #  * assign qnames (qualified names) for fields
         
         for row in rows:
             for th in filter(lambda t: t.tag == 'th', row):
                 kp = th.key_path()
                 field = self.obj.get_field(kp)
                 th.title = _(field.context.title) or _(field.title)
+                th.qname = '.'.join(map(str, (name_prefix,) + kp))
         
         # Prepend extra rows if needed
         
         extras = filter(itemgetter('value'), data.get('extras', []))
-        for extra in reversed(extras):
-            td = Td(extra['value'], attrs=extra.get('attrs'))
-            td.colspan = num_cols - 1
-            th = Th(extra['title'])
+        for r in reversed(extras):
+            th = Th(r['key'], title=r.get('title'))
+            td = Td(r['value'], colspan=(num_cols - 1), attrs=r.get('attrs'))
             row = Tr([th, td])
             row.display = True
             rows.insert(0, row)
@@ -115,13 +116,14 @@ class TableReadWidget(ReadObjectWidget):
         
     class _Th(_Td):
         
-        __slots__ = ('title',)
+        __slots__ = ('title', 'qname')
 
         tag = 'th'
         
-        def  __init__(self, data, rowspan=1, colspan=1, attrs=None):
+        def  __init__(self, data, title=None, rowspan=1, colspan=1, attrs=None):
             super(type(self), self).__init__(data, rowspan, colspan, attrs)
-            self.title = self.data
+            self.title = title or self.data
+            self.qname = self.data
 
         def key(self):
             return self.data
@@ -186,7 +188,7 @@ class TableReadWidget(ReadObjectWidget):
 class DlObjectReadWidget(ReadObjectWidget):
     
     def get_field_qualifiers(self):
-        qualifiers = super(ReadObjectWidget, self).get_field_qualifiers()
+        qualifiers = super(DlObjectReadWidget, self).get_field_qualifiers()
         for key in qualifiers:
             qualifiers[key] = 'dd'
         return qualifiers
@@ -198,7 +200,7 @@ class DlObjectReadWidget(ReadObjectWidget):
 class TdObjectReadWidget(ReadObjectWidget):
     
     def get_field_qualifiers(self):
-        qualifiers = super(ReadObjectWidget, self).get_field_qualifiers()
+        qualifiers = super(TdObjectReadWidget, self).get_field_qualifiers()
         for key in qualifiers:
             qualifiers[key] = 'dd'
         return qualifiers
@@ -526,8 +528,8 @@ class GeographicBoundingBoxReadWidget(ReadObjectWidget):
 class ListOfGeographicBoundingBoxReadWidget(ReadFieldWidget, ListFieldWidgetTraits):
 
     def prepare_template_vars(self, name_prefix, data):
-        cls = type(self)
-        tpl_vars = super(cls, self).prepare_template_vars(name_prefix, data)
+        parent = super(ListOfGeographicBoundingBoxReadWidget, self)
+        tpl_vars = parent.prepare_template_vars(name_prefix, data)
         tpl_vars.update({
             'title': None,
             'description': None,

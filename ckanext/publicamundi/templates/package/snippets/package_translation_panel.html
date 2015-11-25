@@ -1,0 +1,56 @@
+<section class="metadata-translation-panel">
+
+{% with 
+    source_language = pkg_dict.language, target_language = h.target_language()
+%}
+<form class="form-inline" 
+        data-module="package-translation-panel"
+        data-module-source-language="{{h.dump_json({'code': source_language, 'name': h.language_name(source_language)})}}"
+        data-module-package-identifier="{{pkg_dict.id}}"
+        data-module-package-name="{{pkg_dict.name}}"
+    >
+  
+  <span>
+    <label for="input-language" class="control-lable">{{ _('Translation Language') }}</label>
+    <select id="input-language" name="language" data-module="autocomplete" class="input-large">
+      {% for locale in h.get_available_locales() %}
+          {% if not locale == pkg_dict.language %}
+          <option value="{{locale}}" 
+              data-name="{{h.language_name(locale)}}"
+              {% if locale == target_language %}selected="selected"{% endif %}
+            >
+          {{- locale.display_name or locale.english_name -}}
+          </option>
+          {% endif %}
+      {% endfor %}
+    </select>
+  </span>
+  
+  <span class="pull-right">
+    <label for="toggle-translated" class="control-label"> {{_('Show translated')}}</label> 
+    <input id="toggle-translated" type="checkbox" 
+      data-toggle="toggle" data-size="mini" data-width="null" data-height="null" 
+      data-on="{{_('On')}}" data-off="{{_('Off')}}"
+      />
+  </span>
+
+</form>
+{% endwith %} {# source_language, target_language #}
+
+<div class="legend">
+    <span class="title">Legend:</span>
+    <span class="samples">
+        <span class="color sample translatable-text translation-status-clean"></span>
+        <span class="description" title="{{ _('A translatable field, not touched during this session')}}">{{_('Clean')}}</span>
+        
+        <span class="color sample translatable-text translation-status-dirty"></span>
+        <span class="description" title="{{_('The field is edited, but not saved yet')}}">{{_('Changed')}}</span>
+        
+        <span class="color sample translatable-text translation-status-saved"></span>
+        <span class="description" title="{{_('Saved')}}">{{_('Saved')}}</span>
+    </span>
+</div>
+
+{% resource 'ckanext-publicamundi/bootstrap-toggle' %}
+
+</section>
