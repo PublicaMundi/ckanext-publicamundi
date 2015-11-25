@@ -1075,6 +1075,8 @@ class MultilingualDatasetForm(DatasetForm):
         actions.update({
             'dataset_translation_update': 
                 ext_actions.package.dataset_translation_update,
+            'dataset_translation_update_field':
+                ext_actions.package.dataset_translation_update_field,
         })
         return actions
     

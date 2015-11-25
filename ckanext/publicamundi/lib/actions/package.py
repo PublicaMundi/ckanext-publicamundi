@@ -268,8 +268,92 @@ def dataset_import(context, data_dict):
         },
     }
 
+def dataset_translation_update_field(context, data_dict):
+    '''Translate a dataset field for the active language.
+
+    This is similar to `dataset_translation_update` but only updates a field per
+    call. It's purpose is to be used when fields are updated individually.
+
+    :param id: the name or id of the package.
+    :type id: string
+
+    :param translate_to_language: the target language
+    :type translate_to_language: string
+     
+    :param key: the field's key path (as dotted path or as a tuple)
+    :type : string or tuple
+    
+    :param value: the translated text value
+    :type value: string
+    '''
+    
+    # Determine target language
+    
+    lang = _target_language(data_dict)
+
+    # Fetch package in source language
+
+    context.update({'translate': False})
+    pkg = _get_action('package_show')(context, {'id': data_dict['id']})
+    dtype = pkg['dataset_type']
+
+    source_lang = pkg['language']
+    if lang == source_lang:
+        msg = 'The target language same as source language (%s)' % (lang)
+        raise Invalid({'translate_to_language': msg})
+    
+    key = data_dict.get('key')
+    if not key:
+        raise Invalid({'key': 'Missing'})
+    if isinstance(key, basestring):
+        key = tuple(key.split('.'))
+    else:
+        key = tuple(key)
+
+    value = data_dict.get('value')
+    if not value:
+        raise Invalid({'value': 'Missing'})
+    value = unicode(value)
+
+    # Check authorization
+
+    _check_access(
+        'package_translation_update', context, {'org': pkg['owner_org']})
+    
+    # Update translation for field
+
+    md = pkg[dtype]
+    translator = translator_for(md, source_lang)
+    
+    yf = None
+    if len(key) < 2: 
+        # Translate a top-level field
+        if key[0] in ['title', 'notes']:
+            # A core CKAN translatable field
+            uf = fields.TextField() 
+            yf = bound_field(uf, key, pkg[key[0]])
+    else:
+        # Translate a field from structured metadata
+        if key[0] == dtype:
+            try:
+                yf = md.get_field(key[1:])
+            except:
+                yf = None # not found
+            if yf and not yf.queryTaggedValue('translatable'):
+                yf = None # not translatable
+            if yf:
+                yf.context.key = key
+    
+    tr = None
+    if yf and yf.context.value and (yf.context.value != value):
+        tr = translator.get_field_translator(yf)
+        if tr:
+            tr.translate(lang, value)
+
+    return {'updated': bool(tr)}
+
 def dataset_translation_update(context, data_dict):
-    '''Translate dataset for a the active language.
+    '''Translate dataset for the active language.
     
     The accepted format data_dict is as the one passed to core `package_update`. 
     
@@ -285,24 +369,15 @@ def dataset_translation_update(context, data_dict):
     :type id: string
    
     :param translate_to_language: the target language
-    :type lang: string
+    :type translate_to_language: string
     
     rtype: dict
     '''
      
     # Determine target language
+    
+    lang = _target_language(data_dict)
 
-    lang = data_dict.get('translate_to_language')
-    if not lang:
-        lang = pylons.i18n.get_lang()
-        lang = lang[0] if lang else 'en'
-    else:
-        try:
-            lang = check_language(lang)
-        except ValueError:
-            raise Invalid({
-                'translate_to_language': 'Unknown target language'}) 
-  
     # Fetch package in source language
 
     context.update({
@@ -314,12 +389,11 @@ def dataset_translation_update(context, data_dict):
 
     source_lang = pkg['language']
     if lang == source_lang:
-        raise Invalid({
-            'translate_to_language': 'The target language same as source language'})
+        msg = 'The target language same as source language (%s)' % (lang)
+        raise Invalid({'translate_to_language': msg})
  
     md = class_for_metadata(dtype)()
     md.from_json(pkg[dtype])
-    assert isinstance(md, Metadata)
    
     # Check authorization
 
@@ -377,6 +451,19 @@ def dataset_translation_check_authorized(context, data_dict):
     return {'success': False, 'msg': _('Not an editor for this organization')}
 
 ## Helpers ##
+
+def _target_language(data_dict):
+    lang = data_dict.get('translate_to_language')
+    if not lang:
+        lang = pylons.i18n.get_lang()
+        lang = lang[0] if lang else 'en'
+    else:
+        try:
+            lang = check_language(lang)
+        except ValueError:
+            msg = 'Unknown target language (%s)' % (lang)
+            raise Invalid({'translate_to_language': msg}) 
+    return lang
 
 def _make_context(context, **opts):
     '''Make a new context for an action, based on an initial context.
