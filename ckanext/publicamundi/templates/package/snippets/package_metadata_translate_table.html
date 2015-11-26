@@ -1,0 +1,10 @@
+  {%- with 
+      obj = pkg_dict.get(pkg_dict.dataset_type),
+      dtspec = h.dataset_types().get(pkg_dict.dataset_type)
+  -%}
+  {%- if obj -%}
+
+    {{ h.markup_for('read:table-translate', obj, errors=none, name_prefix='') }}
+
+  {%- endif -%} {# if obj #}
+  {%- endwith -%} {# obj, dtspec #}

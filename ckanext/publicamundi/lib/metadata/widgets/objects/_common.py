@@ -179,6 +179,14 @@ class TableObjectReadWidget(ReadObjectWidget):
         
         return res
 
+@object_widget_adapter(schemata.IObject, qualifiers=['table-translate'])
+class TableObjectReadTranslateWidget(TableObjectReadWidget):
+
+    max_depth = 2
+    
+    def get_template(self):
+        return 'package/snippets/objects/read-object-table-translate.html'
+
 @object_widget_adapter(schemata.IObject, qualifiers=['dl'])
 class DlObjectReadWidget(ReadObjectWidget):
     

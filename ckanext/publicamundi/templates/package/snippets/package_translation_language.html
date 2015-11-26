@@ -1,0 +1,14 @@
+{% set current_url = request.environ.CKAN_CURRENT_URL %}
+{% set current_lang = request.environ.CKAN_LANG %}
+<form class="form-inline pull-right">
+  <label for="field-lang-select">{{ _('Translation language') }}</label>
+  <select id="field-lang-select" name="url" data-module="autocomplete package-translation-change-lang" >
+    {% for locale in h.get_available_locales() %}
+        {% if not locale == pkg.language %}
+        <option value="{{locale}}" {% if locale == current_lang %}selected="selected"{% endif %}>
+        {{ locale.display_name or locale.english_name }}
+        </option>
+        {% endif %}
+    {% endfor %}
+  </select>
+</form>

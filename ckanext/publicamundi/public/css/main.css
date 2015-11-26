@@ -39,6 +39,7 @@ header > h6.inline {
 .modal {
     border-radius: 2px;
 }
+
 .select2-chosen{
     font-size: 15px;
 }
@@ -58,6 +59,24 @@ header > h6.inline {
     margin-left: 2px;
 }
 
+.btn-translation{
+    position: absolute;
+    right: 30px;
+    margin-top: -4px;
+    color: #C6B489;
+    background: #fff;
+    border: 2px #C6B489 solid;
+}
+.btn-translation:hover{
+    color: #fff;
+    background: #C6B489;
+    border: 2px #C6B489 solid;
+}
+.btn-translation:focus {
+    color: #fff;
+    background: #C6B489;
+    border: 2px #C6B489 solid;
+}
 .btn-right-fix{
     margin-left: -5px;
 }
@@ -82,6 +101,20 @@ div.accordion-group {
     border-radius: 1px;
 }
 
+/* Package translation */
+
+.modal-package-translation{
+    width: auto;
+    padding: 0 10px;
+}
+.toggle label:after{
+    content: "";
+}
+
+.form-inline .toggle .btn{
+    margin-left: 0;
+}
+
 /* workaround for dropdown-menu buttons croped inside 
  * accordion bodies */
 div.accordion-body .pull-right > .btn-group > ul.dropdown-menu {
@@ -93,6 +126,10 @@ span.label.not-available {
     margin: 0px 7px;
     font-size: 11px;
     font-family: monospace;
+}
+
+textarea{
+    width: auto;
 }
 
 select,

@@ -1,0 +1,19 @@
+{% extends 'package/edit.html' %}
+
+{# Note: The parent template has aliased c.pkg_dict as pkg #}
+{% set pkg = c.pkg_dict %}
+{% block primary_content_inner %}
+<div>
+    <input id="field-package-name" class="hidden" hidden value="{{pkg.name}}"></input>
+        {% snippet "package/snippets/package_translation_language.html", pkg=pkg %}
+        {% snippet "package/snippets/package_translation_toggle.html" %}
+</div>
+{% snippet "package/snippets/package_metadata_translate_table.html", pkg_dict=pkg %}
+
+{% resource 'ckanext-publicamundi/package-translation-toggle' %}
+{% resource 'ckanext-publicamundi/package-translation-change-lang' %}
+{% resource 'ckanext-publicamundi/toggle' %}
+{% endblock %}
+
+
+

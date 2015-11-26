@@ -213,6 +213,10 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
                 conditions=dict(method=['POST']))
         
         package_controller = 'ckanext.publicamundi.controllers.package:Controller'
+        mapper.connect('dataset_translate_metadata',
+            '/dataset/translate/{name_or_id}',
+            controller=package_controller,
+            action='translate_metadata')
 
         mapper.connect(
             '/dataset/import_metadata',

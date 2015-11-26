@@ -146,4 +146,17 @@ class Controller(BaseController):
             c.errors = session.pop('errors', None)
             c.result = session.pop('result', None)
             return render('package/import_metadata.html')
-    
+   
+    def translate_metadata(self, name_or_id):
+        context = { 
+            'model': model, 
+            'session': model.Session, 
+            'api_version': 3,
+            'translate': False
+        }
+
+        pkg = toolkit.get_action('package_show')(context, {'id':name_or_id})
+
+        c.pkg_dict = pkg
+        return render('package/translate_metadata.html')
+     

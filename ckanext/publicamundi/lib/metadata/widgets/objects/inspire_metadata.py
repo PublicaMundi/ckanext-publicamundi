@@ -18,7 +18,7 @@ from ckanext.publicamundi.lib.metadata.widgets.base import (
     ListFieldWidgetTraits,
     DictFieldWidgetTraits)
 
-from ._common import TableObjectReadWidget
+from ._common import TableObjectReadWidget, TableObjectReadTranslateWidget
 
 _ = toolkit._
 
@@ -240,3 +240,42 @@ class TableInspireReadWidget(TableObjectReadWidget):
            'responsible_party',
         ]
 
+@object_widget_adapter(schemata.IInspireMetadata, qualifiers=['table-translate'])
+class TableInspireReadTranslateWidget(TableObjectReadTranslateWidget):
+
+    def get_field_order(self):
+        return [
+           # Identification
+           'identifier',
+           'title',
+           'abstract',
+           'locator',
+           'resource_language',
+           # Metadata on metadata
+           'contact',
+           'languagecode',
+           'datestamp',
+           # Classification
+           'topic_category',
+           # Keywords
+           'free_keywords',
+           'keywords',
+           # Geographic
+           'bounding_box',
+           # Temporal
+           'temporal_extent',
+           'creation_date',
+           'publication_date',
+           'revision_date',
+           # Quality - Validity 
+           'lineage',
+           'reference_system',
+           'spatial_resolution',
+           # Conformity
+           'conformity',
+           # Contraints
+           'access_constraints',
+           'limitations',
+           # Responsible Party
+           'responsible_party',
+        ]
