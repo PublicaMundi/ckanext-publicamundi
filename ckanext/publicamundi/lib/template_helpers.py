@@ -6,6 +6,7 @@ import urllib
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 from ckanext.publicamundi.lib import resource_ingestion
+from ckanext.publicamundi.lib.metadata import vocabularies
 
 def filtered_list(l, key, value, op='eq'):
     '''Filter list items based on their value in a specific key/attr.
@@ -108,3 +109,13 @@ def get_ingested_vector(package,resource):
                 if resb.get('vectorstorer_resource') and resb.get('parent_resource_id')==resa.get('id'):
                     ing_resources.append(resb)
     return ing_resources
+
+def transform_to_iso_639_2(langcode_iso_639_1):
+    
+    languages_iso_639_1 = vocabularies.get_by_name('languages-iso-639-1')
+    languages_iso_639_2 = vocabularies.get_by_name('languages-iso-639-2')
+  
+    token = languages_iso_639_1.get('vocabulary').by_value.get(langcode_iso_639_1).title
+    value = languages_iso_639_2.get('vocabulary').by_token.get(token).value
+    
+    return value
