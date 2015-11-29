@@ -2,15 +2,11 @@
 from ckanext.publicamundi.lib.metadata.fields import IField
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata import (
-    field_format_adapter,
-    object_format_adapter,
-    FieldContext, 
-    IObject,
-    FieldFormatter,
-    ObjectFormatter)
+    field_format_adapter, object_format_adapter,
+    FieldContext, IObject,
+    FieldFormatter,ObjectFormatter)
 
-from ckanext.publicamundi.lib.metadata.widgets import (
-    markup_for_field, markup_for_object)
+from . import (markup_for_field, markup_for_object)
 
 @field_format_adapter(IField, name='markup')
 class MarkupFieldFormatter(FieldFormatter):
@@ -18,7 +14,7 @@ class MarkupFieldFormatter(FieldFormatter):
     def _format(self, value, opts):
         field = self.field
         if not field.context:
-            field = field.bind(FieldContext(key=field.__name__, value=value))
+            field = field.bind(FieldContext(key='FORMATTED_FIELD', value=value))
         qualifier = opts.get('q')
         qual_action = 'read:%s' % (qualifier) if qualifier else 'read'
         return markup_for_field(qual_action, field, name_prefix='')

@@ -2,8 +2,7 @@ import re
 import tidylib
 from lxml import etree
 
-
-import ckan.plugins.toolkit as toolkit
+from ckan.plugins import toolkit
 
 def to_c14n_markup(markup, with_comments=True, pretty=False):
     if not isinstance(markup, basestring):

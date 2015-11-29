@@ -3,7 +3,7 @@ import zope.interface
 import zope.schema
 from zope.schema.vocabulary import SimpleVocabulary
 
-from ckanext.publicamundi.lib.metadata import vocabularies
+from ckanext.publicamundi.lib import vocabularies
 from ckanext.publicamundi.lib.metadata.base import Object, object_null_adapter
 from ckanext.publicamundi.lib.metadata.schemata.thesaurus import (
     IThesaurusTerms, IThesaurus)
@@ -22,7 +22,7 @@ class Thesaurus(Object):
 
     @property
     def vocabulary(self):
-        vocab = vocabularies.get_by_name(self.name)
+        vocab = vocabularies.by_name(self.name)
         return vocab.get('vocabulary') if vocab else None
 
     # Factory for Thesaurus
@@ -41,7 +41,7 @@ class Thesaurus(Object):
             name = vocabularies.normalize_thesaurus_title(title, for_keywords)
         
         if name:
-            vocab = vocabularies.get_by_name(name)
+            vocab = vocabularies.by_name(name)
         else:
             raise ValueError('Expected a name/title lookup')
 
@@ -72,6 +72,4 @@ class ThesaurusTerms(Object):
             yield vocabulary.get(t)
     
     __iter__ = iter_terms
-
-
 

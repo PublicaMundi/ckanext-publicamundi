@@ -11,25 +11,29 @@
   {% elif pkg.get('state', '').startswith('invalid') %}
   <span class="label package-state label-important state-invalid">{{ _('Invalid') }}</span>
   {% endif %} {# state #}
-    
-{% endblock %}
+  
+  {% block page_heading_info %}
+  {% if h.is_multilingual_dataset and pkg.language and pkg.translated_to_language %}
+  {% snippet "package/snippets/multilingual_info.html", pkg=pkg %}
+  {% endif %}
+  {% endblock %} {# page_heading_info #}
+
+{% endblock %} {# page_heading #}
 
 {% block package_notes %}
-      {% if c.pkg_notes_formatted %}
-        <div class="notes embedded-content">
-          {{ c.pkg_notes_formatted }}
-      </div>
-      {% else %}
-      <div class="notes embedded-content">
-          <i>{{_('No description')}}</i>
-      </div>
-      {% endif %}
-    {% endblock %}
-
+   {% if c.pkg_notes_formatted %}
+   <div class="notes embedded-content">
+      {{ c.pkg_notes_formatted }}
+   </div>
+   {% else %}
+   <div class="notes embedded-content">
+       <i>{{_('No description')}}</i>
+   </div>
+   {% endif %}
+{% endblock %} {# package_notes #}
 
 {% block package_additional_info %}
-  {# This is a replacement for additional_info.html -#}
-  {#{% snippet "package/snippets/additional_info.html", pkg_dict=pkg %}#}
+  {# This is a replacement for "package/snippets/additional_info.html" -#}
   {% snippet "package/snippets/package_metadata_table.html", pkg_dict=pkg %}
 {% endblock %}
 
@@ -39,7 +43,7 @@
   {% if pkg.spatial %}
   {% snippet "spatial/snippets/dataset_map_sidebar.html", extent=pkg.spatial %}
   {% endif %}
-  {% endblock %}
+{% endblock %}
 
 {% block scripts %}
 {{ super() }}

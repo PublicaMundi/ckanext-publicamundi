@@ -13,16 +13,21 @@ from ckanext.publicamundi.lib.util import (
     stringify_exception, item_setter, attr_setter, not_a_function)
 from ckanext.publicamundi.lib.memoizer import memoize
 from ckanext.publicamundi.lib.json_encoder import JsonEncoder
-from ckanext.publicamundi.lib.metadata import adapter_registry
-from ckanext.publicamundi.lib.metadata.ibase import (
-    IObject, IErrorDict, ISerializer, IFormatter, IFormatSpec)
-from ckanext.publicamundi.lib.metadata.fields import IObjectField
-from ckanext.publicamundi.lib.metadata import formatters
-from ckanext.publicamundi.lib.metadata.formatters import (
+
+from . import adapter_registry
+from .ibase import (
+    IFieldContext,
+    IIntrospective, IObject,
+    IErrorDict,
+    ISerializer,
+    IFormatter, IFormatSpec)
+from .fields import IObjectField
+from . import formatters
+from .formatters import (
     formatter_for_field, field_format_adapter, 
     BaseFormatter, BaseFieldFormatter, FormatSpec)
-from ckanext.publicamundi.lib.metadata import serializers
-from ckanext.publicamundi.lib.metadata.serializers import (
+from . import serializers
+from .serializers import (
     serializer_for_field, serializer_for_key_tuple, BaseSerializer)
 
 #
@@ -70,32 +75,33 @@ def flatten_field(field):
 # Base implementation  
 #
 
+@zope.interface.implementer(IFieldContext)
 class FieldContext(object):
 
     __slots__ = ('key', 'value', 'title')
 
     def __init__(self, key, value, title=None):
-        self.key = key
-        self.value = value
-        self.title = title
+        self.key, self.value, self.title = key, value, title
     
     def __repr__(self):
-        return u'%s(key=%r, value=%r, title=%r)' % (
-            self.__class__.__name__,
-            self.key, self.value, self.title)
+        return u'%s(key=%r, value=%r)' % (
+            self.__class__.__name__, self.key, self.value)
 
+def bound_field(field, key, value, title=None):
+    return field.bind(FieldContext(key=key, value=value, title=title))
+
+@zope.interface.provider(IIntrospective)
+@zope.interface.implementer(IObject)
 class Object(object):
-    
-    zope.interface.implements(IObject)
 
-    ## interface IObject
+    ## interface IObject ##
 
     @classmethod
     @memoize
     def get_schema(cls):
-        '''Get the underlying zope schema for this class.
+        '''Get (i.e. introspect) the underlying zope schema for this class.
         '''
-        return cls._determine_schema()
+        return cls._introspect_schema()
 
     def get_field(self, k):
         '''Return a bound field for a key k.
@@ -302,18 +308,22 @@ class Object(object):
         # Allow method chaining
         return self
 
-    def to_json(self, flat=False, indent=None):
-        cls = type(self)
+    def to_json(self, flat=False, return_string=True, indent=None):
         opts = {
             'serialize-keys': flat,
             'serialize-values': 'json-s',
         }
         d = self.to_dict(flat, opts)
-        return json.dumps(d, indent=indent)
+        if return_string:
+            return json.dumps(d, indent=indent)
+        else:
+            return d
 
-    def from_json(self, s, is_flat=False):
-        cls = type(self)
-        d = json.loads(s)
+    def from_json(self, dump, is_flat=False):
+        if isinstance(dump, basestring):
+            d = json.loads(dump)
+        else:
+            d = dict(dump)
         opts = {
             'unserialize-keys': is_flat,
             'unserialize-values': 'json-s',
@@ -388,7 +398,7 @@ class Object(object):
     ## Introspective helpers
 
     @classmethod
-    def _determine_schema(cls):
+    def _introspect_schema(cls):
         schema = None
         for iface in zope.interface.implementedBy(cls):
             if iface.extends(IObject):
@@ -827,7 +837,7 @@ class Object(object):
             assert max_depth > 0
             
             res = {}
-            for k, field in obj.iter_fields(exclude_properties=True):
+            for k, field in obj.iter_fields(exclude_properties=False):
                 f = field.get(obj)
                 res[k] = self._dictize_field(f, field, max_depth -1)
             
@@ -1200,6 +1210,10 @@ class Object(object):
         def default_factory(self):
             return self.target_factory
 
+        @property
+        def default_class(self):
+            return self.target_factory
+        
         def from_dict(self, d, is_flat=False):
             obj = self.target_factory()
             if d:
@@ -1222,16 +1236,15 @@ class Object(object):
         cls = type(self)
         return cls.Loader(self, opts).load(d)
 
+@zope.interface.implementer(IErrorDict)
 class ErrorDict(dict):
     '''Provide a simple dict for validation errors.
     '''
-    
-    zope.interface.implements(IErrorDict)
 
     global_key = '__after'
 
 #
-# Named adapters (implementers)
+# Named null adapters (aka implementers)
 #
 
 def object_null_adapter(name=''):
@@ -1243,12 +1256,20 @@ def object_null_adapter(name=''):
     return decorate
 
 @memoize
-def _get_object_factory(schema, name):
+def _get_factory_for_object(schema, name):
     factory = Object.Factory(schema, name)
     return factory.default_factory
 
-def get_object_factory(schema, name=''):
-    return _get_object_factory(schema, name)
+@memoize
+def _get_class_for_object(schema, name):
+    factory = Object.Factory(schema, name)
+    return factory.default_class
+
+def factory_for_object(schema, name=''):
+    return _get_factory_for_object(schema, name)
+
+def class_for_object(schema, name=''):
+    return _get_class_for_object(schema, name)
 
 #
 # Serializers

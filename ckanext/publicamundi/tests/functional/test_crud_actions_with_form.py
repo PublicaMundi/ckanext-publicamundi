@@ -14,7 +14,6 @@ from ckan.tests import CreateTestData
 from ckan.tests import TestController as BaseTestController
 
 from ckanext.publicamundi.lib.dictization import flatten
-from ckanext.publicamundi.lib.metadata import dataset_types, Object
 
 log1 = logging.getLogger(__name__)
 
@@ -81,6 +80,7 @@ class TestController(BaseTestController):
     def test_6_delete_package(self):
     
         yield self._delete_package, 'hello-foo-1'
+        yield self._delete_package, 'hello-foo-2'
 
     def _create_package(self, fixture_name):
         
@@ -90,9 +90,7 @@ class TestController(BaseTestController):
         res1 = self.app.get('/dataset/new', status='*')
         assert res1.status == 200
         
-        dt = pkg_dict['dataset_type']
-        dt_spec = dataset_types[dt]
-        key_prefix = dt_spec.get('key_prefix', dt)
+        key_prefix = dt = pkg_dict['dataset_type']
 
         # 1st stage
     
@@ -128,7 +126,7 @@ class TestController(BaseTestController):
         res3 = res2s.follow()
         
         form3 = res3.forms['package-form']
-        for k in ['version', 'url', 'author', 'author_email', 'maintainer', 'maintainer_email']:
+        for k in ['version', 'author', 'author_email', 'maintainer', 'maintainer_email']:
             v = pkg_dict.get(k)
             v = v.encode('utf-8') if isinstance(v, unicode) else v
             form3.set(k, v)
@@ -158,7 +156,7 @@ class TestController(BaseTestController):
         assert res_dict['dataset_type'] == dt
 
         for k in (self.basic_fields & set(res_dict.keys())):
-            assert res_dict[k] == pkg_dict[k]
+            assert (not k in pkg_dict) or res_dict[k] == pkg_dict[k]
         pkg_dt_dict = flatten(pkg_dict.get(dt))
         res_dt_dict = flatten(res_dict.get(dt))
         for k in pkg_dt_dict.keys():
@@ -175,9 +173,7 @@ class TestController(BaseTestController):
         res1 = self.app.get('/dataset/new', status='*')
         assert res1.status == 200
         
-        dt = pkg_dict['dataset_type']
-        dt_spec = dataset_types[dt]
-        key_prefix = dt_spec.get('key_prefix', dt)
+        key_prefix = dt = pkg_dict['dataset_type']
 
         # 1st stage
     
@@ -213,7 +209,7 @@ class TestController(BaseTestController):
         res3 = res2s.follow()
         
         form3 = res3.forms['package-form']
-        for k in ['version', 'url', 'author', 'author_email', 'maintainer', 'maintainer_email']:
+        for k in ['version', 'author', 'author_email', 'maintainer', 'maintainer_email']:
             v = pkg_dict.get(k)
             v = v.encode('utf-8') if isinstance(v, unicode) else v
             form3.set(k, v)
@@ -244,7 +240,7 @@ class TestController(BaseTestController):
         
         form4 = res3s.forms['package-form']
         
-        for k in ['version', 'url', 'author', 'author_email', 'maintainer', 'maintainer_email']:
+        for k in ['version', 'author', 'author_email', 'maintainer', 'maintainer_email']:
             v = pkg_dict.get(k)
             v = v.encode('utf-8') if isinstance(v, unicode) else v
             form4.set(k, v)
@@ -291,9 +287,7 @@ class TestController(BaseTestController):
         res1 = self.app.get('/dataset/edit/%s' % pkg_name)
         assert res1.status == 200
         
-        dt = package_fixtures[fixture_name]['0']['dataset_type']
-        dt_spec = dataset_types[dt]
-        key_prefix = dt_spec.get('key_prefix', dt)
+        key_prefix = dt = package_fixtures[fixture_name]['0']['dataset_type']
 
         # Edit core metadata
         
@@ -331,9 +325,7 @@ class TestController(BaseTestController):
         res1 = self.app.get('/dataset/edit/%s' % pkg_name)
         assert res1.status == 200
         
-        dt = package_fixtures[fixture_name]['0']['dataset_type']
-        dt_spec = dataset_types[dt]
-        key_prefix = dt_spec.get('key_prefix', dt)
+        key_prefix = dt = package_fixtures[fixture_name]['0']['dataset_type']
 
         # Edit core metadata
         
@@ -394,9 +386,7 @@ class TestController(BaseTestController):
         res1 = self.app.get('/dataset/delete/%s' % pkg_name)
         assert res1.status == 200
 
-        dt = package_fixtures[fixture_name]['0']['dataset_type']
-        dt_spec = dataset_types[dt]
-        key_prefix = dt_spec.get('key_prefix', dt)
+        key_prefix = dt = package_fixtures[fixture_name]['0']['dataset_type']
 
         form1 = res1.forms[1]
         
@@ -626,12 +616,11 @@ package_fixtures['hello-foo-1'] = {
         'name': 'hello-foo-1',
         'notes': u'I am the first _Foo_ dataset!',
         'author': u'Λαλάκης',
-        'license_id': 'gfdl',
+        'license_id': 'notspecified',
         'version': '1.0.0',
         'maintainer': u'Nowhere Man',
         'author_email': 'lalakis.1999@example.com',
         'maintainer_email': 'nowhere-man@example.com',
-        'url': 'http://example.com/datasets/hello-foo-1',
         'tags': [ 
             { 'name': 'hello-world', 'display_name': 'Hello World', }, 
             { 'name': u'test', 'display_name': 'Test' }, 
@@ -655,7 +644,7 @@ package_fixtures['hello-foo-1'] = {
         ],
     },
     '0..1': {
-        'license_id': 'cc-by',
+        'license_id': 'CC-BY-NC-4.0',
         'version': '1.0.1',
         'foo': {
             'baz': u'Ενα δενδρο BaoBab',
@@ -682,12 +671,11 @@ package_fixtures['hello-foo-2'] = {
         'name': 'hello-foo-2',
         'notes': u'I am the second _Foo_ dataset!',
         'author': u'Λαλάκης',
-        'license_id': 'gfdl',
+        'license_id': 'CC-BY-NC-4.0',
         'version': '1.0.0',
         'maintainer': u'Nowhere Man',
         'author_email': 'lalakis.1999@example.com',
         'maintainer_email': 'nowhere-man@example.com',
-        'url': 'http://example.com/datasets/hello-foo-2',
         'tags': [ 
             { 'name': 'hello-world', 'display_name': 'Hello World', }, 
             { 'name': u'test', 'display_name': 'Test' }, 

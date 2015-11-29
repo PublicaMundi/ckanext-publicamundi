@@ -277,7 +277,7 @@ FlancheJs.defineClass("Analytics.widgets.CoverageAccess", {
     },
 
     internals: {
-        tHead: "<tr><th>Coverage Name</th><th>Access Count</th><th>Operations</th></tr>",
+        tHead: "<tr><th>Coverage Name</th><th>Access Count</th><th style='width:120px'>Operations</th></tr>",
         row: '<tr><td>$name$</td><td>$count$</td><td>' +
                 '<button data-coverageId="$name$" title="View access count by date" type="button" class="$btn-date-class$ btn btn-default btn-lg"> <span class="icon icon-calendar" aria-hidden="true"></span></button>' +
                 '<button data-coverageId="$name$" title="View access count by band" type="button" class="$btn-band-class$ btn btn-default btn-lg"> <span class="icon icon-align-left rotate-90" aria-hidden="true"></span></button>' +

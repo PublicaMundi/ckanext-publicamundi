@@ -1,0 +1,11 @@
+{% ckan_extends %}
+
+{% set pkg = c.pkg_dict %}
+{% set pkg_dict = c.pkg_dict %}
+
+{% block content_primary_nav %}
+    {{ super() }}
+    {{ h.build_nav_icon('dataset_translate', _('Translate'), name_or_id=pkg.name, icon='flag') }}
+{% endblock %}
+
+

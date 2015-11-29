@@ -4,29 +4,30 @@ from zope.interface.verify import verifyObject
 import json
 
 from ckanext.publicamundi.lib.metadata import (
-    Object, get_object_factory, object_null_adapter)
+    IIntrospective, IObject, IMetadata,
+    Object, factory_for, class_for, object_null_adapter,
+    Metadata, dataset_type, factory_for_metadata, class_for_metadata)
 from ckanext.publicamundi.lib.metadata import types
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.tests import fixtures
 
 #
-# Prepare a named null adapter 
+# Define another implementor for IFooMetadata
 #
 
-class Baz(object):
+class BazFactory(object):
 
     def __call__(self):
         return u'Baobab'
 
-baz_factory = Baz()
-
-@object_null_adapter(name='another-foo')
-class AnotherFoo(types.BaseMetadata):
+@dataset_type('foo.1')
+@object_null_adapter('foo-1')
+class AnotherFoo(types.Metadata):
     
-    zope.interface.implements(schemata.IFoo)
+    zope.interface.implements(schemata.IFooMetadata)
     
     title = None
-    baz = baz_factory
+    baz = BazFactory()
     temporal_extent = None
     contact_info = types.ContactInfo
     grade = None
@@ -36,34 +37,95 @@ class AnotherFoo(types.BaseMetadata):
 #
 
 def test_factories():
+    
+    # Test with IFooMetadata
 
-    fc1 = get_object_factory(schemata.IFoo)
-    o1 = fc1()
-    verifyObject(schemata.IFoo, o1)
-    assert isinstance(o1, types.Foo)
+    f1 = factory_for(schemata.IFooMetadata)
+    o1 = f1()
+    verifyObject(schemata.IFooMetadata, o1)
+    assert isinstance(o1, types.FooMetadata)
     
-    fc2 = get_object_factory(schemata.IFoo, name='another-foo')
-    o2 = fc2()
-    verifyObject(schemata.IFoo, o2)
+    f1 = factory_for_metadata('foo')
+    o1 = f1()
+    verifyObject(schemata.IFooMetadata, o1)
+    assert isinstance(o1, types.FooMetadata)
+    
+    c1 = class_for(schemata.IFooMetadata)
+    verifyObject(IIntrospective, c1, tentative=1)
+    o1 = c1()
+    verifyObject(schemata.IFooMetadata, o1)
+    assert c1 is types.FooMetadata
+
+    c1 = class_for_metadata('foo')
+    verifyObject(IIntrospective, c1, tentative=1)
+    o1 = c1()
+    verifyObject(schemata.IFooMetadata, o1)
+    assert c1 is types.FooMetadata
+    
+    # Test with AnotherFoo
+    
+    def check_foo1_after_init(o):
+        return (
+            o.baz == u'Baobab' and 
+            o.temporal_extent is None and
+            isinstance(o.contact_info, types.ContactInfo))
+       
+    f2 = factory_for(schemata.IFooMetadata, name='foo-1')
+    o2 = f2()
+    verifyObject(schemata.IFooMetadata, o2)
     assert isinstance(o2, AnotherFoo)
-    assert (
-        o2.baz == u'Baobab' and 
-        o2.temporal_extent is None and
-        isinstance(o2.contact_info, types.ContactInfo))
-    
+    assert check_foo1_after_init(o2)
+
+    f2 = factory_for_metadata('foo.1')
+    o2 = f2()
+    verifyObject(schemata.IFooMetadata, o2)
+    assert isinstance(o2, AnotherFoo)
+    assert check_foo1_after_init(o2)
+
+    c2 = class_for(schemata.IFooMetadata, 'foo-1')
+    verifyObject(IIntrospective, c2, tentative=1)
+    o2 = c2()
+    verifyObject(schemata.IFooMetadata, o2)
+    assert c2 is AnotherFoo
+    assert check_foo1_after_init(o2)
+
+    c2 = class_for_metadata('foo.1')
+    verifyObject(IIntrospective, c2, tentative=1)
+    o2 = c2()
+    verifyObject(schemata.IFooMetadata, o2)
+    assert c2 is AnotherFoo
+    assert check_foo1_after_init(o2)
+
+    # Test with non-registered names
+
     try:
-        fc3 = get_object_factory(schemata.IFoo, name='a-non-existing-name')
+        f3 = factory_for(schemata.IFooMetadata, name='a-non-existing-name')
     except (ValueError, LookupError) as ex:
         pass
     else:
         assert False, 'This should have failed'
 
+    try:
+        f3 = factory_for_metadata('')
+    except ValueError as ex:
+        pass
+    else:
+        assert False, 'This should have failed (a name is required!)'
+   
+    try:
+        f3 = factory_for_metadata('foo.9')
+    except (ValueError, LookupError) as ex:
+        pass
+    else:
+        assert False, 'This should have failed'
+
+
 def test_tofrom_dicts():
 
     yield _test_tofrom_dicts, 'bbox1', schemata.IGeographicBoundingBox 
-    yield _test_tofrom_dicts, 'foo1', schemata.IFoo
-    yield _test_tofrom_dicts, 'foo2', schemata.IFoo
-    yield _test_tofrom_dicts, 'foo3', schemata.IFoo
+    yield _test_tofrom_dicts, 'foo1', schemata.IFooMetadata
+    yield _test_tofrom_dicts, 'foo2', schemata.IFooMetadata
+    yield _test_tofrom_dicts, 'foo3', schemata.IFooMetadata
 
 def _test_tofrom_dicts(fixture_name, schema):
     
@@ -94,6 +156,7 @@ def _test_tofrom_dicts(fixture_name, schema):
 def test_from_serialized():
     
     d = {
+        "identifier": "71adc2bf-b8fd-481e-bd52-2ca86e93df35",
         "tags.2": u"gamma",
         "tags.1": u"beta",
         "tags.0": u"alpha",
@@ -117,12 +180,12 @@ def test_from_serialized():
         "thematic_category": u"economy",
         "contact_info.address.address": u'Nowhere Land',
         "contacts.personal.address.address": u"North Pole",
-        "notes": u"Hello World",
+        "description": u"Hello World",
         "wakeup_time": u"08:00:00",
         "created": "1997-09-01T00:00:00",
     }
      
-    factory = Object.Factory(schemata.IFoo, opts={
+    factory = Object.Factory(schemata.IFooMetadata, opts={
         'unserialize-keys': True,
         'unserialize-values': True,
     })
@@ -138,7 +201,7 @@ if __name__ == '__main__':
     
     test_factories()
 
-    _test_tofrom_dicts('foo1', schemata.IFoo)
+    _test_tofrom_dicts('foo1', schemata.IFooMetadata)
     
     test_from_serialized()
 

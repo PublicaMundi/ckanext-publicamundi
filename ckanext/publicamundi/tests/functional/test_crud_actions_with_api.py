@@ -7,7 +7,7 @@ import copy
 
 import ckan.tests
 
-from ckanext.publicamundi.lib.metadata import dataset_types, Object
+from ckanext.publicamundi.lib.metadata import factory_for_metadata
 
 class TestController(ckan.tests.TestController):
     
@@ -59,6 +59,7 @@ class TestController(ckan.tests.TestController):
                 { 'name': 'foo', 'display_name': 'Foo' }, 
             ],
             'dataset_type': 'foo',
+            'foo.description': u'A great foo dataset',
             'foo.baz': u'A second chance',
             'foo.rating': 2,
             'foo.grade': 4.75,
@@ -102,6 +103,7 @@ class TestController(ckan.tests.TestController):
             ],
             'dataset_type': 'foo',
             'foo': {
+                'description': u'Ακομη ενα foo σύνολο δεδομένων!',
                 'baz': u'Baobab',
                 'reviewed': False,
                 'rating': 5,
@@ -227,12 +229,8 @@ class TestController(ckan.tests.TestController):
     
     def _check_result_for_edit(self, data, result):
         
-        dt = result.get('dataset_type')
-        dt_spec = dataset_types.get(dt)
-        assert dt_spec
-        
-        dt_prefix = dt_spec.get('key_prefix', dt)
-        obj_factory = dt_spec.get('class')
+        key_prefix = dtype = result.get('dataset_type')
+        obj_factory = factory_for_metadata(dtype)
 
         keys = data.keys()
 
@@ -244,16 +242,16 @@ class TestController(ckan.tests.TestController):
         result_tags = set(map(lambda t: t['name'] ,result['tags']))
         assert tags == result_tags
 
-        result_dict = result[dt_prefix]
+        result_dict = result.get(key_prefix, {})
         result_obj = obj_factory().from_dict(result_dict, is_flat=False, opts={ 
             'unserialize-values': 'json-s' 
         })
         result_flattened_dict = result_obj.to_dict(flat=True, opts={
             'serialize-keys': True, 
             'serialize-values': 'json-s', 
-            'key-prefix': dt_prefix 
+            'key-prefix': key_prefix 
         })
-        dt_keys = filter(lambda t: t.startswith(dt_prefix + '.'), keys)
+        dt_keys = filter(lambda t: t.startswith(key_prefix + '.'), keys)
         missing_keys = set(dt_keys) - set(result_flattened_dict.keys())
         assert not missing_keys
         for k in dt_keys:

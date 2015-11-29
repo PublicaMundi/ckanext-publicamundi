@@ -1,16 +1,13 @@
 <section class="additional-info">
   
-  {%- with 
-      obj = pkg_dict.get(pkg_dict.dataset_type),
-      dtspec = h.dataset_types().get(pkg_dict.dataset_type)
-  -%}
-  {%- if obj -%}
+  {%- with md = pkg_dict.get(pkg_dict.dataset_type) -%}
+  {%- if md -%}
   <header>
     <h3 class="inline">{{ _('Metadata') }}</h3>
     
     <div class="download-links pull-right">
       <div class="btn-group">
-        <a class="btn btn-primary" href="{{ h.get_primary_metadata_url(pkg_dict.download_links, dtspec.title) }}"
+        <a class="btn btn-primary" href="{{ h.get_primary_metadata_url(pkg_dict.download_links, (pkg_dict.dataset_type|title)) }}"
           ><i class="icon-download"></i> {{ _('Download') }}</a>
         <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
           <span class="caret"></span>
@@ -27,7 +24,7 @@
         </ul>
       </div>
       <div class="metadata-label pull-left">
-        <span>{{ dtspec.title|title|upper }}</span> <i class="icon-ok-sign"></i>
+        <span>{{ pkg_dict.dataset_type|title|upper }}</span> <i class="icon-ok-sign"></i>
       </div>
     </div>
   </header>
@@ -35,43 +32,58 @@
   {% with 
      data = { 
         'max_depth': 2,
+        'more': true,
         'extras': [
             {
+                'key': 'state',
                 'title': _('State'),
                 'value': pkg_dict.state,
                 'attrs': {},
             },
             {
+                'key': 'license_id',
                 'title': _('License'),
                 'value': h.link_to(pkg_dict.license_title, pkg_dict.license_url, target='_blank') if pkg_dict.license_id else none,
                 'attrs': {},
             },
             {
+                'key': 'url',
                 'title': _('Source'), 
                 'value': h.link_to(pkg_dict.url, pkg_dict.url, rel='foaf:homepage', target='_blank') if pkg_dict.url else none, 
                 'attrs': { 'property': 'foaf:homepage' },  
             },
+            {
+                'key': 'language',
+                'title': _('Source Language'), 
+                'value': h.language_name(pkg_dict.language) if (h.is_multilingual_dataset and pkg_dict.language) else none, 
+                'attrs': {},  
+            },
             { 
+                'key': 'author',
                 'title': _('Author'), 
                 'value': pkg_dict.author, 
                 'attrs': { 'property': 'dc:creator' },  
             },
             {
+                'key': 'author_email',
                 'title': _('Author Email'), 
                 'value': h.mail_to(email_address=pkg_dict.author_email, name=pkg_dict.author_email) if pkg_dict.author_email else none, 
                 'attrs': { 'property': 'dc:creator' },  
             },
             {
+                'key': 'maintainer',
                 'title': _('Maintainer'), 
                 'value': pkg_dict.maintainer, 
                 'attrs': { 'property': 'dc:contributor' },  
             },
             {
+                'key': 'maintainer_email',
                 'title': _('Maintainer Email'), 
                 'value': h.mail_to(email_address=pkg_dict.maintainer_email, name=pkg_dict.maintainer_email) if pkg_dict.maintainer_email else none, 
                 'attrs': { 'property': 'dc:contributor' },  
             },
             {
+                'key': 'version',
                 'title': _('Version'),
                 'value': pkg_dict.version,
                 'attrs': {},  
@@ -79,11 +91,11 @@
         ] 
      } 
   %}
-  {{ h.markup_for('read:table', obj, errors=none, name_prefix='', data=data) }}
-  {% endwith %}
+  {{ h.markup_for('read:table', md, errors=none, name_prefix='', data=data) }}
+  {% endwith %} {# data #}
 
-  {%- endif -%} {# if obj #}
-  {%- endwith -%} {# obj, dtspec #}
+  {%- endif -%} {# md #}
+  {%- endwith -%} {# md #}
 
 </section>
 

@@ -4,16 +4,19 @@ import nose.tools
 import json
 import collections
 import copy
-import ckan.tests
-import pprint
+import dictdiffer
+
+from nose.tools import istest, nottest
 
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
+import ckan.tests
 
 from ckanext.publicamundi.lib import logger
 from ckanext.publicamundi.lib import dictization
+from ckanext.publicamundi.lib.metadata import (
+    factory_for_metadata, class_for_metadata)
 from ckanext.publicamundi.lib.metadata import types
-from ckanext.publicamundi.lib.metadata import dataset_types, Object
 from ckanext.publicamundi.tests.functional import with_request_context
 from ckanext.publicamundi.tests import fixtures
 
@@ -35,7 +38,7 @@ class TestController(ckan.tests.TestController):
             'api_version': 3,
         }
     
-    @nose.tools.istest
+    @istest
     def test_1_create(self):
        
         yield self._create, 'ckan', 'hello-ckan-i-1'
@@ -43,21 +46,22 @@ class TestController(ckan.tests.TestController):
         yield self._create, 'foo', 'hello-foo-i-1' 
         yield self._create, 'foo', 'hello-foo-i-2' 
         yield self._create, 'foo', 'hello-foo-i-3' 
-        #yield self._create, 'inspire', 'inspire-1'
         yield self._create_invalid, 'foo', 'hello-boo', set(['dataset_type'])
         yield self._create_invalid, 'foo', 'hello-foo-i-4', set(['foo.baz', 'foo.rating'])
         yield self._create_invalid_skip_validation, 'foo', 'hello-foo-i-4', set(['foo.baz', 'foo.rating'])
         pass
 
-    @nose.tools.istest
+    @istest
     def test_2_show(self):
         
         yield self._show, 'ckan', 'hello-ckan-i-1'
         yield self._show, 'ckan', 'hello-ckan-i-2'
         yield self._show, 'foo', 'hello-foo-i-1'
+        yield self._show, 'foo', 'hello-foo-i-2'
+        yield self._show, 'foo', 'hello-foo-i-3'
         pass
 
-    @nose.tools.istest
+    @istest
     def test_3_update(self):
         
         yield self._update, 'ckan', 'hello-ckan-i-1', '0a'
@@ -104,6 +108,8 @@ class TestController(ckan.tests.TestController):
         
         assert pkg and pkg.get('id') and pkg.get('name')
         self._check_result_for_edit(pkg_dict, pkg)
+        
+        assert pkg['id'] == getattr(pkg[dt], 'identifier')
         pass
 
     @with_request_context('publicamundi-tests', 'index')
@@ -137,12 +143,8 @@ class TestController(ckan.tests.TestController):
         pass
 
     def _check_result_for_edit(self, data, result):
-        dt = result.get('dataset_type')
-        dt_spec = dataset_types.get(dt)
-        assert dt_spec
-
-        dt_prefix = dt_spec.get('key_prefix', dt)
-        obj_factory = dt_spec.get('class')
+        key_prefix = dtype = result.get('dataset_type')
+        obj_cls = class_for_metadata(dtype)
 
         keys = data.keys()
         core_keys = set(keys) & self.core_keys
@@ -154,15 +156,15 @@ class TestController(ckan.tests.TestController):
             result_tags = set(map(lambda t: t['name'], result['tags']))
             assert tags == result_tags
 
-        dt_keys = filter(lambda t: t.startswith(dt_prefix + '.'), keys)
+        dt_keys = filter(lambda t: t.startswith(key_prefix + '.'), keys)
         
         # Note The input data may be in either flat or nested format
 
-        expected_obj = obj_factory()
-        if dt_prefix in data:
+        expected_obj = obj_cls()
+        if key_prefix in data:
             # Load from nested input data
             expected_obj.from_dict(
-                data[dt_prefix], is_flat=0, 
+                data[key_prefix], is_flat=0, 
                 opts={'unserialize-values': 'default'})
         else:
             # Load from flattened input data
@@ -170,12 +172,23 @@ class TestController(ckan.tests.TestController):
                 data, is_flat=1, 
                 opts={
                     'unserialize-keys': True,
-                    'key-prefix': dt_prefix,
+                    'key-prefix': key_prefix,
                     'unserialize-values': 'default'
                 })
             
-        result_obj = result[dt_prefix]
-        assert result_obj == expected_obj
+        result_obj = result[key_prefix]
+
+        # Check if expected and result objects differ. The only acceptaple
+        # changes are empty fields linked to (non-empty) core CKAN metadata.
+        linked_fields = {'.'.join(map(str, k)): k1 
+            for k, f, k1 in obj_cls.iter_linked_fields()}
+        for change, key, (initial_value, result_value) in dictdiffer.diff(
+                expected_obj.to_dict(), result_obj.to_dict()):
+            if (key in linked_fields) and (not initial_value) and \
+                    (result_value == result[linked_fields[key]]):
+                pass # is a linked field
+            else:
+                assert False, 'Unexpected change for key %s' % (key)
         pass
 
 #
@@ -329,27 +342,20 @@ foo_fixtures = {
                 'rating': 100, # out of range
                 'grade': 8.2,
                 'thematic_category': 'health',
-                'notes': u'Blah Blah',
+                'description': u'Blah Blah',
                 'wakeup_time': '08:35:00',
             },
         },
     },
 }
 
-#inspire_fixtures = {
-#        'inspire-1':{
-#            '0':{
-#                'title': u'Inspire-test-1',
-#                'name': 'inspire-test-1',
-#                'dataset_type': 'inspire',
-#                'inspire': fixtures.inspire1
-#                }
-#            }
-#        }
+inspire_fixtures = {
+    # Nothing yet
+}
 
 pkg_fixtures = {
     'foo': foo_fixtures,
     'ckan': ckan_fixtures,
-#    'inspire': inspire_fixtures
+    'inspire': inspire_fixtures
 }
 

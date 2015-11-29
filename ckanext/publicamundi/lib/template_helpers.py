@@ -7,6 +7,9 @@ from pylons import config
 
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
+
+from ckanext.publicamundi.lib.metadata import (
+    fields, bound_field, markup_for_field, markup_for)
 from ckanext.publicamundi.lib import resource_ingestion
 
 def filtered_list(l, key, value, op='eq'):
@@ -68,6 +71,14 @@ def get_organization_objects(org_names=[]):
 
 def resource_ingestion_result(resource_id):
     return resource_ingestion.get_result(resource_id)
+
+def markup_for_translatable_text(key, value):
+    uf = markup_for_translatable_text._text_field
+    yf = bound_field(uf, key, value)
+    qa = 'read:dd.translatable'
+    return markup_for_field(qa, yf, name_prefix='')
+markup_for_translatable_text._text_field = fields.TextField()
+markup_for_translatable_text._text_field.setTaggedValue('translatable', True)
 
 _preferable_metadata_format = [
         {'name':'INSPIRE',

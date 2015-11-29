@@ -1,4 +1,3 @@
-from ckanext.publicamundi.analytics.controllers.configmanager import ConfigManager
 from ckanext.publicamundi.analytics.controllers.parsers.habboxaccessparser import HABboxAccessParser
 from ckanext.publicamundi.analytics.controllers.parsers.hacoverageaccessparser import HACoverageAccessParser
 from ckanext.publicamundi.analytics.controllers.parsers.hacoveragebandparser import HACoverageBandParser
@@ -25,14 +24,14 @@ class HAParserController(BaseController):
         """
         Parses information about the access counts of the services (rasdaman, geoserver, w*s).
         """
-        parser = HAServicesAccessParser(ConfigManager.log_file_path)
+        parser = HAServicesAccessParser()
         return parser.print_as_json_array(parser.parse())
 
     def parse_bbox_access_count(self):
         """
         Parses information about the access counts of the accessed bounding boxes.
         """
-        parser = HABboxAccessParser(ConfigManager.log_file_path)
+        parser = HABboxAccessParser()
         return parser.print_as_json_array(parser.parse())
 
     def parse_coverage_access_count(self, coverage_name):
@@ -40,14 +39,14 @@ class HAParserController(BaseController):
         Parses information about the coverage/layer with the passed name.
         :param <string> coverage_name: the coverage/layer name to be analyzed.
         """
-        parser = HACoverageAccessParser(ConfigManager.log_file_path, coverage_name)
+        parser = HACoverageAccessParser(coverage_name)
         return parser.print_as_json_array(parser.parse())
 
     def parse_used_coverages_count(self):
         """
         Parses information about the access counts of all coverages/layers.
         """
-        parser = HAUsedCoveragesParser(ConfigManager.log_file_path)
+        parser = HAUsedCoveragesParser()
         return parser.print_as_json_array(parser.parse())
 
     def parse_band_access_count(self, coverage_name):
@@ -55,5 +54,5 @@ class HAParserController(BaseController):
         Parses information about the access count on bands for the coverage/layer with the passed name.
         :param <string> coverage_name: the coverage/layer name to be analyzed.
         """
-        parser = HACoverageBandParser(ConfigManager.log_file_path, coverage_name)
+        parser = HACoverageBandParser(coverage_name)
         return parser.print_as_json_array(parser.parse())

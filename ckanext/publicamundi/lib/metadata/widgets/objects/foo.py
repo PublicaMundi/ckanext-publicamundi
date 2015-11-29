@@ -1,18 +1,13 @@
 import zope.interface
 
-from ckan.plugins import toolkit
-
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata.widgets import (
     object_widget_adapter, field_widget_adapter, field_widget_multiadapter)
-from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
-from ckanext.publicamundi.lib.metadata.widgets.base import (
+from  ckanext.publicamundi.lib.metadata.widgets.base import (
     EditFieldWidget, EditObjectWidget, 
     ReadFieldWidget, ReadObjectWidget,
     ListFieldWidgetTraits, DictFieldWidgetTraits)
-
-_ = toolkit._
 
 @field_widget_multiadapter([IListField, ITextLineField], qualifiers=['tags.foo'])
 class TagsEditWidget(EditFieldWidget):
@@ -41,7 +36,7 @@ class DictOfContactsEditWidget(EditFieldWidget, DictFieldWidgetTraits):
     def get_template(self):
         return 'package/snippets/fields/edit-dict-contacts-foo.html'
 
-@object_widget_adapter(schemata.IFoo, qualifiers=['datasetform'], is_fallback=True)
+@object_widget_adapter(schemata.IFooMetadata, qualifiers=['datasetform'], is_fallback=True)
 class FooEditWidget(EditObjectWidget):
     
     def prepare_template_vars(self, name_prefix, data):
@@ -74,7 +69,7 @@ class FooEditWidget(EditObjectWidget):
     def get_template(self):
         return None # use glue template
 
-@object_widget_adapter(schemata.IFoo)
+@object_widget_adapter(schemata.IFooMetadata)
 class FooReadWidget(ReadObjectWidget):
     
     def prepare_template_vars(self, name_prefix, data):

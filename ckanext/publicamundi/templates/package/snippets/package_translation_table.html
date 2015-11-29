@@ -1,0 +1,32 @@
+<section class="metadata-translation-table">
+
+{%- with md = pkg_dict.get(pkg_dict.dataset_type) -%}
+{%- if md -%}
+
+{% with 
+    data = { 
+        'max_depth': 2,
+        'extras': [
+            {
+                'key': 'title',
+                'title': _('Title'),
+                'value': h.markup_for_translatable_text('title', pkg_dict.title),
+                'attrs': {},
+            },
+            {
+                'key': 'notes',
+                'title': _('Notes'),
+                'value': h.markup_for_translatable_text('notes', pkg_dict.notes),
+                'attrs': {},
+            },
+        ]
+   },
+   qual_action = 'read:table.translatable'
+%}
+
+{{ h.markup_for(qual_action, md, errors=none, name_prefix=pkg_dict.dataset_type, data=data) }}
+
+{% endwith %} {# data #}
+{%- endif -%} {# md #}
+{%- endwith -%} {# md #}
+</section>

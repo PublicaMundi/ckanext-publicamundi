@@ -3,17 +3,16 @@
 import json
 import webtest
 import nose.tools
+from nose.plugins.skip import SkipTest
 import inflection
 import datadiff
 import logging
-
 from datadiff.tools import assert_equal
 
 from ckan.tests import CreateTestData
 from ckan.tests import TestController as BaseTestController
 
 from ckanext.publicamundi.lib import dictization
-from ckanext.publicamundi.lib.metadata import dataset_types, Object
 
 log1 = logging.getLogger(__name__)
 
@@ -24,7 +23,7 @@ class TestController(BaseTestController):
     basic_fields = set([
         'name', 'title', 'notes', 
         'maintainer', 'maintainer_email', 'author', 'author_email', 
-        'version', 'url', 'license_id',
+        'version', 'license_id',
     ])
  
     request_headers = {}
@@ -46,37 +45,47 @@ class TestController(BaseTestController):
     def teardown_class(cls):
         pass
     
-    @nose.tools.nottest
+    # Note: webtest 1.4.3 (pulled from CKAN requirments) will fail to parse a 
+    # form with <select multiple> fields. So, following tests are disabled.
+    _skip_message = u'webtest fails to parse form with <select multiple/>'
+
+    @nose.tools.istest
     def test_1_create_package(self):
+        raise SkipTest(self._skip_message)    
         
         yield self._create_package, 'hello-inspire-1'
     
-    @nose.tools.nottest
+    @nose.tools.istest
     def test_2_update_package(self):
+        raise SkipTest(self._skip_message)    
     
         yield self._update_package, 'hello-inspire-1', '0..1'
         #yield self._update_package, 'hello-foo-1', '1..2'
      
-    @nose.tools.nottest
+    @nose.tools.istest
     def test_3_create_resource(self):
+        raise SkipTest(self._skip_message)    
     
         yield self._create_resource, 'hello-inspire-1', 'resource-1'
         #yield self._create_resource, 'hello-foo-1', 'resource-2'
      
-    @nose.tools.nottest
+    @nose.tools.istest
     def test_4_update_resource(self):
+        raise SkipTest(self._skip_message)    
     
         yield self._update_resource, 'hello-inspire-1', 'resource-1', '0..1'
         #yield self._update_resource, 'hello-foo-1', 'resource-2', '0..1'
 
-    @nose.tools.nottest
+    @nose.tools.istest
     def test_5_delete_resource(self):
+        raise SkipTest(self._skip_message)    
     
         yield self._delete_resource, 'hello-inspire-1', 'resource-1'
         pass
 
-    @nose.tools.nottest
+    @nose.tools.istest
     def test_6_delete_package(self):
+        raise SkipTest(self._skip_message)    
     
         #yield self._delete_package, 'hello-inspire-1'
         pass
@@ -89,9 +98,7 @@ class TestController(BaseTestController):
         res1 = self.app.get('/dataset/new', status='*')
         assert res1.status == 200
         
-        dt = pkg_dict['dataset_type']
-        dt_spec = dataset_types[dt]
-        key_prefix = dt_spec.get('key_prefix', dt)
+        key_prefix = dt = pkg_dict['dataset_type']
 
         # 1st stage
     
@@ -122,16 +129,17 @@ class TestController(BaseTestController):
         assert res2s.status in [301, 302]
 
         # 3rd stage - core metadata
-
+        
         res3 = res2s.follow()
         
         form3 = res3.forms['package-form']
-        for k in ['version', 'url', 'author', 'author_email', 'maintainer', 'maintainer_email']:
+        for k in ['version', 'author', 'author_email', 'maintainer', 'maintainer_email']:
             v = pkg_dict.get(k)
             v = v.encode('utf-8') if isinstance(v, unicode) else v
             form3.set(k, v)
 
         # 3rd stage - dataset_type-related metadata
+        
         for t, v in dictization.flatten(pkg_dict.get(dt)).items():
 
             k = '.'.join((key_prefix,) + tuple(map(str,t)))
@@ -155,7 +163,7 @@ class TestController(BaseTestController):
         assert res_dict['dataset_type'] == dt
         
         for k in (self.basic_fields & set(res_dict.keys())):
-            assert res_dict[k] == pkg_dict[k]
+            assert (not k in pkg_dict) or res_dict[k] == pkg_dict[k]
         
         pkg_dt_dict = dictization.flatten(pkg_dict.get(dt))
         res_dt_dict = dictization.flatten(res_dict.get(dt))
@@ -173,9 +181,7 @@ class TestController(BaseTestController):
         res1 = self.app.get('/dataset/edit/%s' % pkg_name)
         assert res1.status == 200
         
-        dt = package_fixtures[fixture_name]['0']['dataset_type']
-        dt_spec = dataset_types[dt]
-        key_prefix = dt_spec.get('key_prefix', dt)
+        key_prefix = dt = package_fixtures[fixture_name]['0']['dataset_type']
 
         # Edit core metadata
         
@@ -214,9 +220,7 @@ class TestController(BaseTestController):
         res1 = self.app.get('/dataset/delete/%s' % pkg_name)
         assert res1.status == 200
 
-        dt = package_fixtures[fixture_name]['0']['dataset_type']
-        dt_spec = dataset_types[dt]
-        key_prefix = dt_spec.get('key_prefix', dt)
+        key_prefix = dt = package_fixtures[fixture_name]['0']['dataset_type']
 
         form1 = res1.forms[1]
         
@@ -434,6 +438,7 @@ resource_fixtures['resource-3'] = {
         'description': u'An example API endpoint',
     },
 }
+
 package_fixtures = {}
 
 package_fixtures['hello-inspire-1'] = {
@@ -442,12 +447,11 @@ package_fixtures['hello-inspire-1'] = {
         'name': 'hello-inspire-1',
         'notes': u'I am the first _Inspire_ dataset!',
         'author': u'Λαλάκης',
-        'license_id': 'gfdl',
+        'license_id': 'CC-BY-3.0',
         'version': '1.0.0',
         'maintainer': u'Nowhere Man',
         'author_email': 'lalakis.1999@example.com',
         'maintainer_email': 'nowhere-man@example.com',
-        'url': 'http://example.com/datasets/hello-inspire-1',
         'tags': [
             { 'name': 'hello-world', 'display_name': 'Hello World', }, 
             { 'name': u'test', 'display_name': 'Test' }, 
@@ -455,22 +459,31 @@ package_fixtures['hello-inspire-1'] = {
         ],
         'dataset_type': 'inspire',
         'inspire': {
-         #   'contact': [{
-         #       'organization': u"Org",
-         #       'email':[u"email@asd.gr"],
-         #       'role':"pointofcontact"
-         #       }],
+            'contact': [{
+                "organization": u"Ομάδα geodata.gov.gr",
+                "role": "pointofcontact",
+                "email": "info@geodata.gov.gr"
+            }],
             'datestamp': u'2014-01-01',
             'languagecode': "el",
-         #   'title': u"Title",
-            'identifier': [u"1a2b314df21312a3", u"123sad213531"],
-         #   'abstract': u"This is an abstract description",
-         #   'locator': ["http://publicamundi.eu",
-         #               "http://ipsyp.gr",
-         #               "http://www.example.com"
-         #               ],
-         #   'resource_language': ["el"],
-         #   'topic_category':["biota"],
+            'title': u"A great helloworld dataset",
+            'abstract': u"This is really great",
+            'bounding_box': {
+                "sblat": 33.188516,
+                "wblng": 16.76871,
+                "nblat": 43.339883,
+                "eblng": 30.655429
+            },
+            'locator': [],
+            'resource_language': [],
+            'topic_category':["biota", "economy"],
+            'temporal_extent': {'start': '2012-01-01', 'end': '2013-01-01'},
+            'lineage': u"A lineage description here ...",
+            'access_constraints': [u"A constaint", u"Another strict constraint"],
+            'creation_date': '2012-01-01',
+            'publication_date': '2012-01-30',
+            'revision_date': '2014-01-01',
+            'limitations': [u"Nothin"],
          #   'keywords':[{
          #       'terms':["air", "agriculture", "climate"],
          #       'thesaurus':'TODO'
@@ -479,33 +492,12 @@ package_fixtures['hello-inspire-1'] = {
          #       'terms':["buildings", "addresses"],
          #       'thesaurus': 'TODO'
          #       }],
-         #   'bounding_box':[{
-         #       'nblat':0.0,
-         #       'sblat':0.0,
-         #       'wblng':0.0,
-         #       'eblng':0.0
-         #       }],
-         #   'temporal_extent': { 
-         #       'start': '2012-01-01',
-         #       'end': '2013-01-01',
-         #   },
-         #   'creation_date':'2012,1,1',
-         #   'publication_date':'2012,1,1',
-         #   'revision_date': '2014,1,1',
-         #   'lineage':u"lineaage",
-         #   'denominator':[],
-         #   'spatial_resolution':[{
-         #       'distance':5,
-         #       'uom':u"meters"
-         #       }],
          #   'conformity':[{
          #       'title':u"specifications blabla",
          #       'date':'2014-09-19',
          #       'date_type':"creation",
          #       'degree': "conformant"
          #       }],
-         #   'access_constraints':[u"lalala1", u"lalala2"],
-         #   'limitations':[u"limit1", u"limit2"],
          #   'responsible_party':[{
          #       'organization': u"Org",
          #       'email':[u"email@asd.gr"],
@@ -519,20 +511,16 @@ package_fixtures['hello-inspire-1'] = {
         },
 
     '0..1': {
-        'license_id': 'cc-by',
+        'license_id': 'CC-BY-SA-4.0',
         'version': '1.0.1',
         'inspire': {
-            'languagecode': 'ro'
+            'spatial_resolution': [
+                {
+                    'distance': 5,
+                    'denominator': None,
+                    'uom': "km",
+                }
+            ]
         },
-    },
-    '1..2': {
-        'version': '1.0.2',
-        'foo': {
-            'rating': 7,
-            'temporal_extent': {
-                'start': '2012-09-01',
-                'end': '2013-09-01',
-            }, 
-        }, 
     },
 }

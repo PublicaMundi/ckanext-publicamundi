@@ -7,8 +7,12 @@ from zope.interface.verify import verifyObject
 from datadiff.tools import assert_equal
 
 from ckanext.publicamundi.lib.json_encoder import JsonEncoder
-from ckanext.publicamundi.lib.metadata import Object
+from ckanext.publicamundi.lib.metadata import IObject, IIntrospective, IMetadata
+from ckanext.publicamundi.lib.metadata import Object, Metadata 
 from ckanext.publicamundi.lib.metadata import types
+from ckanext.publicamundi.lib.metadata import schemata
+from ckanext.publicamundi.lib.metadata.schemata import (
+    IFromConvertedData, IIntrospectiveWithLinkedFields)
 from ckanext.publicamundi.tests import fixtures
 
 def print_as_dict(obj):
@@ -47,16 +51,31 @@ def _test_convert_to_dict(x):
     s2 = json.dumps(obj2.to_dict(), cls=JsonEncoder)
     assert s == s2
 
-def _test_schema(x):
+def _test_schema_for_metadata(x):
+    
+    _test_schema_for_object(x)
+
+    md = getattr(fixtures, x)
+    cls = type(md)
+   
+    verifyObject(IIntrospectiveWithLinkedFields, cls, tentative=1)
+    verifyObject(IFromConvertedData, cls, tentative=1)
+    verifyObject(IMetadata, md)
+
+def _test_schema_for_object(x):
     
     obj = getattr(fixtures, x)
+    cls = type(obj)
     
-    schema = obj.get_schema()
-    verifyObject(schema, obj)    
+    verifyObject(IIntrospective, cls, tentative=1)
+    verifyObject(IObject, obj)
 
     # Test basic schema introspection
 
-    fields = obj.get_fields()
+    schema = cls.get_schema()
+    verifyObject(schema, obj)
+    
+    fields = cls.get_fields()
     assert set(fields.keys()) == set(zope.schema.getFieldNames(schema))
     print fields
 
@@ -70,7 +89,7 @@ def _test_schema(x):
     ]
 
     for opts in opt_variations:
-        flattened_fields = obj.get_flattened_fields(opts=opts)
+        flattened_fields = cls.get_flattened_fields(opts=opts)
         print flattened_fields
         d = obj.to_dict(flat=True, opts=opts) 
         for k in set(d.keys()) - set(flattened_fields.keys()):
@@ -115,12 +134,15 @@ def test_dict_converters():
 
 def test_schema():
     
-    yield _test_schema, 'bbox1'
-    yield _test_schema, 'contact1'
-    yield _test_schema, 'foo1'
-    yield _test_schema, 'foo2'
-    yield _test_schema, 'thesaurus_gemet_concepts'
-    yield _test_schema, 'inspire1'
+    yield _test_schema_for_object, 'bbox1'
+    yield _test_schema_for_object, 'contact1'
+    yield _test_schema_for_object, 'thesaurus_gemet_concepts'
+    
+    yield _test_schema_for_metadata, 'foo1'
+    yield _test_schema_for_metadata, 'foo2'
+    yield _test_schema_for_metadata, 'inspire1'
+    yield _test_schema_for_metadata, 'inspire2'
+    yield _test_schema_for_metadata, 'inspire3'
 
 def test_copying():
     
@@ -200,24 +222,66 @@ def test_field_accessors_with_ifoo():
         'format-values': 'default'    
     })
 
+
+def _test_deduce_fields(x):
+
+    x = getattr(fixtures, x)
+
+    data = x.deduce_fields()
+    assert data['title']
+    assert data['name']
+
+    data = x.deduce_fields('i-dont-exist')
+    assert not data
+
+    data = x.deduce_fields('i-dont-exist', 'name', 'nothingness')
+    assert set(data) == {'name'}
+
+def _test_deduce_fields_foo(x):
+    
+    _test_deduce_fields(x)
+
+    foo = getattr(fixtures, x)
+
+    data = foo.deduce_fields()
+    expected_keys = ['name', 'title', 'notes', 'id', 'url']
+    assert all((data[k] for k in expected_keys))
+    
+    data = foo.deduce_fields('title')
+    assert set(data) == {'title'}
+    assert data['title'] == foo.title
+    
+    data = foo.deduce_fields('id')
+    assert set(data) == {'id'}
+    assert data['id'] == foo.identifier
+
+    data = foo.deduce_fields('notes')
+    assert set(data) == {'notes'}
+    assert data['notes'] == foo.description
+
+def test_deduce_fields_foo():
+    
+    yield _test_deduce_fields_foo, 'foo1' 
+    yield _test_deduce_fields_foo, 'foo2' 
+
 if __name__  == '__main__':
      
     x = fixtures.foo1
     
-    field1 = x.get_schema().get('contact_info')
+    #field1 = x.get_schema().get('contact_info')
 
-    fc1 = x.get_field_factory(key='contact_info')
-    fc2 = x.get_field_factory(field=field1)
-    
-    fc3 = x.get_field_factory('contact_info')
-    fc4 = x.get_field_factory(field=field1)
+    #fc1 = x.get_field_factory(key='contact_info')
+    #fc2 = x.get_field_factory(field=field1)
+    #fc3 = x.get_field_factory('contact_info')
+    #fc4 = x.get_field_factory(field=field1)
 
-    _test_schema('foo1')
-    
-    _test_equality('foo1')
-    
-    _test_inequality('foo1', 'foo2')
-
+    #_test_schema_for_metadata('foo1')
+    #_test_equality('foo1')
+    #_test_inequality('foo1', 'foo2')
     test_field_accessors_with_ifoo()
-    
+    #_test_deduce_fields_foo('foo1')
 
+    from ckanext.publicamundi.lib.metadata import (
+        class_for, class_for_object, class_for_metadata)
+    cls1 = class_for_metadata('foo')
+    

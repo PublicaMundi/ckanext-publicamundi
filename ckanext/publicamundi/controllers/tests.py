@@ -17,15 +17,20 @@ import ckan.logic as logic
 import ckan.lib.helpers as h
 
 from ckanext.publicamundi.lib.dictization import unflatten
+from ckanext.publicamundi.lib.languages import Language
 from ckanext.publicamundi.lib.util import to_json, Breakpoint
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata import types
+from ckanext.publicamundi.lib.metadata import bound_field
 from ckanext.publicamundi.lib.metadata.types import Object
 from ckanext.publicamundi.lib.metadata.widgets import (
-    markup_for_field, markup_for_object, widget_for_object, widget_for_field)
+    markup_for_field, markup_for_object, markup_for, 
+    widget_for_object, widget_for_field)
 from ckanext.publicamundi.tests import fixtures
 
 log1 = logging.getLogger(__name__)
+
+_ = toolkit._
 
 content_types = {
     'json': 'application/json; charset=utf8',
@@ -145,7 +150,7 @@ class Controller(BaseController):
             },
             'temporal_extent': { 'title': u'Temporal Extent', },
             'reviewed': { 'title': u'Reviewed', },
-            'notes': { 'description': u'Add a detailed description', },
+            'description': { 'description': u'Add a detailed description', },
             'thematic_category': {},
             'tags': {},
             'created': { 'title': u'Created At', 'placeholder': datetime.datetime.now() },
@@ -282,7 +287,7 @@ class Controller(BaseController):
         '''
 
         obj = getattr(fixtures, id)
-        assert isinstance(obj, types.Foo)
+        assert isinstance(obj, types.FooMetadata)
         
         errors = obj.validate(dictize_errors=True)
 
@@ -291,7 +296,7 @@ class Controller(BaseController):
             # Parse request, filter-out empty values
             d = dict(filter(lambda t: t[1], request.params.items()))
             # Create a factory for this 
-            factory = Object.Factory(schemata.IFoo, opts={
+            factory = Object.Factory(schemata.IFooMetadata, opts={
                 'unserialize-keys': True,
                 'unserialize-values': True,
             })
@@ -324,7 +329,7 @@ class Controller(BaseController):
         '''
         
         obj = getattr(fixtures, id)
-        assert isinstance(obj, types.Foo)
+        assert isinstance(obj, types.FooMetadata)
         
         read_action = 'read'
         f = request.params.get('f')
@@ -337,8 +342,11 @@ class Controller(BaseController):
 
         return render('tests/page.html')
     
-    def show_dataset(self, id):
+    def show_metadata(self, id):
         '''Show dataset's metadata formatted as a table'''
+        
+        from ckanext.publicamundi.lib.metadata import formatter_for_field
+        from ckanext.publicamundi.lib.metadata import fields, bound_field
         
         context = { 'model': model, 'session': model.Session }
         try:
@@ -346,16 +354,34 @@ class Controller(BaseController):
         except toolkit.ObjectNotFound as ex:  
             abort(404)
         
-        k = pkg_dict['dataset_type']
-        obj = pkg_dict[k]
-        
-        #raise Breakpoint('Break')
+        dtype = pkg_dict['dataset_type']
+        obj = pkg_dict[dtype]
 
-        data = { 'title': u'%s: Metadata' % (pkg_dict['title']) }
-        c.markup = markup_for_object('read:table', obj, name_prefix=k, data=data)
+        q = str(toolkit.request.params.get('q', ''))
+        title_field = bound_field(fields.TextField(), 'title', pkg_dict['title'])
+        data = {
+            'title': u'%s: Metadata' % (pkg_dict['title']),
+            'max_depth': 1,
+            'extras': [
+                {
+                    'key': 'language',
+                    'title': _('Source Language'), 
+                    'value': Language(pkg_dict['language']).name, 
+                },
+                {
+                    'key': 'title',
+                    'title': _('Title'),
+                    'value': markup_for_field('read:dd%s' % (('.' + q) if q else ''),
+                        title_field, name_prefix='', data={'translatable': True})
+                }
+            ],
+        }
+        
+        qa = 'read:table.%s' %(q) if q else 'read:table' 
+        c.markup = markup_for(qa, obj, name_prefix=dtype, data=data)
 
         return render('tests/page.html')
-        
+    
     def test_template(self):
         '''A test tube for jinja2 templates ''' 
         return render('tests/test.html')

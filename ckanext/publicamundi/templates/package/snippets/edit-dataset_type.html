@@ -24,15 +24,15 @@
 
 {% else %}
 
-{% with dataset_type = data.get('dataset_type') %}
-<input type="hidden" name="dataset_type" value="{{ dataset_type }}">
+{% with dtype = data.get('dataset_type') %}
+<input type="hidden" name="dataset_type" value="{{ dtype }}">
 <div class="control-group hide">
     <label class="control-label">{{ _('Schema') }}</label>
     <div class="controls ">
-        <div class="display">{{ h.dataset_types().get(dataset_type).get('title') }}</div>
+        <div class="display">{{ dtype|title }}</div>
     </div>
 </div>
-{% endwith %} {# dataset_type #}
+{% endwith %} {# dtype #}
 
 {% endif %} {# if is_new #}
 

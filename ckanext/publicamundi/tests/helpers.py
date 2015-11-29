@@ -4,6 +4,8 @@ import autopep8
 import datadiff.tools
 import dictdiffer
 
+import ckan.model as model
+
 def assert_faulty_keys(x, expected_keys=[], expected_invariants=[]):
     '''Verify that a set of fields (given with their keys) fail to validate'''
 
@@ -35,4 +37,10 @@ def assert_equal(d1, d2):
 def pprint_code(s):
     return autopep8.fix_code(s, options=autopep8.parse_args(['-a', '']))
 
-
+def make_api_context(user='tester'):
+    return {
+        'model': model,
+        'session': model.Session,
+        'user': user,
+        'api_version': 3,
+    }

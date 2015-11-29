@@ -8,7 +8,7 @@ Install
 
     pip install -r requirements.txt
     python setup.py develop
-    paster publicamundi-setup --config /path/to/development.ini
+    paster publicamundi --config /path/to/development.ini setup
 
 
 Update CKAN configuration
@@ -17,8 +17,8 @@ Update CKAN configuration
 Edit your CKAN .ini configuration file (e.g. your `development.ini`) and activate the
 plugins as usual. For now, the supported plugins are:
 
- * `publicamundi_dataset`: Provides validation logic, storage logic and ui controls for metadata described in alternative schemata (e.g. INSPIRE).
- * `publicamundi_dataset_with_spatial`: Extends `publicamundi_dataset` by providing a bridge to `spatial_metadata` plugin: recognizes the `spatial` extra field. 
+ * `publicamundi_dataset`: Provides validation logic, storage logic and ui controls for schema-following metadata (e.g. INSPIRE).
+ * `publicamundi_multilingual_dataset`: Extend `publicamundi_dataset` to support multilingual metadata.
  * `publicamundi_package`: Provides synchronization of package metadata to other databases (e.g. to the integrated CSW service, through pycsw).
  * `publicamundi_vector`: Provide processing and services for vector-based spatial resources. See more at README-vector.md
  * `publicamundi_raster`: Provide processing and services for raster-based spatial resources. See more at README-raster.md 
@@ -34,13 +34,18 @@ The most common settings are:
 
     # Specify which dataset types are enabled
     ckanext.publicamundi.dataset_types = ckan inspire foo
+    ckanext.publicamundi.extra_fields = spatial
     
     # Indicate whether a more relaxed name pattern can be used for dataset names
     ckanext.publicamundi.validation.relax_name_pattern = true 
     
     # Specify a list of formats which should be considered as services (APIs)
     ckanext.publicamundi.api_resource_formats = wms wcs wfs csw
-    
+
+    # Add extra top-level (i.e not contained in schema) metadata fields. This is usually needed to provide 
+    # a bridge to 3rd-party plugins that expect certain fields to be present (e.g. `spatial` from `spatial_metadata`).
+    ckanext.publicamundi.extra_fields = spatial
+
     # Specify a list of pre-existing resource formats to be used as autocomplete suggestions
     ckanext.publicamundi.resource_formats = 
     # raster file formats 
@@ -70,5 +75,16 @@ To get help on a particular subcommand (e.g. `widget-info`):
 Uninstall
 ---------
 
-    paster publicamundi-cleanup --config /path/to/development.ini
+    paster publicamundi --config /path/to/development.ini cleanup
 
+Copying and License
+-------------------
+
+This material is copyright (c) 2013-2016 of the PublicaMundi development team.
+
+It is Free Software and Open Source Software, licensed under the GNU Affero General Public License (AGPL) v3.0
+whose full text may be found at:
+
+http://www.fsf.org/licensing/licenses/agpl-3.0.html
+
+More details at `LICENSE <https://github.com/PublicaMundi/ckanext-publicamundi/blob/master/LICENSE.txt`

@@ -1,9 +1,9 @@
 <span class="{{ classes|join(' ') }} text">
-    {% if value %}
+    {%- if value -%}
     {{- value -}}
     {% elif field.default %}
     {{- field.default -}}
     {% else %}
     <i>{{ _('n/a') }}</i>
-    {% endif %}
+    {%- endif -%}
 </span>

@@ -8,16 +8,16 @@ from ckanext.publicamundi.lib.metadata.types import *
 
 class Foo1(Object):
     
-    zope.interface.implements(IFoo)
+    zope.interface.implements(IFooMetadata)
 
 class Foo2(Object):
     pass
 
-zope.interface.classImplements(Foo2, IFoo)
+zope.interface.classImplements(Foo2, IFooMetadata)
 
 Foo3 = type('Foo3', (Object,), {})
 
-zope.interface.classImplements(Foo3, IFoo)
+zope.interface.classImplements(Foo3, IFooMetadata)
 
 # Tests 
 
@@ -43,7 +43,7 @@ def _test_field_factory(cls_name, k):
         assert not (f is None)
 
 def test_field_factories():
-    for X in [Foo, Foo1, Foo2, Foo3]:
+    for X in [FooMetadata, Foo1, Foo2, Foo3]:
         S = X.get_schema()
         for k in zope.schema.getFieldNames(S):
             yield _test_field_factory, X.__name__, k

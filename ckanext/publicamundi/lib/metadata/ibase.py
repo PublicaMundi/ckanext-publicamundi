@@ -1,7 +1,11 @@
+import re
 import zope.interface
 import zope.schema
+from zope.interface import Interface
 
-class ISerializer(zope.interface.Interface):
+from .fields import IField
+
+class ISerializer(Interface):
 
     def loads(s):
         '''Load (unserialize) and return an object from a string.
@@ -64,7 +68,7 @@ class IXmlSerializer(ISerializer):
         '''Load and return an object from an XML tree e.
         '''
 
-class ISerializable(zope.interface.Interface):
+class ISerializable(Interface):
 
     def loads(s):
         '''Load (unserialize) this object from a string.
@@ -74,7 +78,7 @@ class ISerializable(zope.interface.Interface):
         '''Dump (serialize) this object as a string.
         '''
 
-class IFormatSpec(zope.interface.Interface):
+class IFormatSpec(Interface):
 
     name = zope.schema.NativeString(required=True)
 
@@ -85,7 +89,7 @@ class IFormatSpec(zope.interface.Interface):
     def parse(s):
         '''Parse this format-spec as a string'''
 
-class IFormatter(zope.interface.Interface):
+class IFormatter(Interface):
     
     requested_name = zope.schema.NativeString(required=True)
     
@@ -95,21 +99,32 @@ class IFormatter(zope.interface.Interface):
         from it's context.
         '''
 
-class IObject(zope.interface.Interface):
+def check_key(k):
+    s = k
+    if isinstance(k, tuple):
+        s = '.'.join(map(str, k)) 
+    elif isinstance(k, int):
+        s = str(k)
+    return check_key._re1.match(s)
+check_key._re1 = re.compile('^[_a-zA-Z0-9]+(\.[_a-zA-Z0-9]+)*$')
+
+class IFieldContext(Interface):
+
+    value = zope.schema.Field(required=True)
+    
+    key = zope.schema.Field(required=True, constraint=check_key) # base key or key path
+
+class IFieldWithContext(IField):
+
+    context = zope.schema.Object(IFieldContext)
+
+class IIntrospective(Interface):
 
     def get_schema():
-        '''Return the schema interface (InterfaceClass) this object is supposed to
+        '''Return the schema interface (InterfaceClass) this object is declared to
         conform to.
         '''
-
-    def get_field(k):
-        '''Return a bound zope.schema.Field instance that corresponds to key k.
-
-        This method should regard k as:
-            * an attribute k, if k is a string.
-            * a path of attributes/keys, if k is a tuple
-        '''
-    
+   
     def get_field_names(order=False):
         '''Return a list of field names.
 
@@ -128,7 +143,17 @@ class IObject(zope.interface.Interface):
     def get_flattened_fields(opts={}):
         '''Return a flat map of fields.
         '''
-    
+
+class IObject(IIntrospective):
+
+    def get_field(k):
+        '''Return a bound zope.schema.Field instance that corresponds to key k.
+
+        This method should regard k as:
+            * an attribute k, if k is a string.
+            * a path of attributes/keys, if k is a tuple
+        '''
+        
     def validate(dictize_errors=False):
         '''Invoke all validators and return errors. 
         The invariants are checked only if schema validation (field-based) succeeds. 
@@ -152,18 +177,25 @@ class IObject(zope.interface.Interface):
         considered a flattened dict (otherwise, will be considered a nested one).
         '''
 
-    def to_json(flat, indent):
+    def to_json(flat, return_string=True, indent=None):
         '''Convert to a (flattened or nested) JSON dump.
+        
         This method should *not* alter the object itself.
+        If return_string is False, then a json-friendly (one that json.dump can handle)
+        dict is returned. 
         '''
 
-    def from_json(s, is_flat):
+    def from_json(dump, is_flat):
         '''Load this object from a (flattened or nested) JSON dump.
+        
         Note that (unlike from_dict()) an explicit flag (is_flat) should be passed to
         determine if input should be considered as flattened/nested.
+
+        If s is a dict (instead of a string), assumes that is json-friendly dict and
+        just loads object from it.
         '''
 
-class IErrorDict(zope.interface.Interface):
+class IErrorDict(Interface):
 
     global_key = zope.schema.NativeString(
         required = True,

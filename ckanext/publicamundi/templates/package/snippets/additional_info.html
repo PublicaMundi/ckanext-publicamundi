@@ -67,13 +67,10 @@
     </tbody>
   </table>
 
-  {%- with 
-      obj = pkg_dict.get(pkg_dict.dataset_type),
-      dtspec = h.dataset_types().get(pkg_dict.dataset_type)
-  -%}
+  {%- with obj = pkg_dict.get(pkg_dict.dataset_type) -%}
   {%- if obj -%}
   <header>
-    <h3 class="inline">{{ '%s Metadata'|format(dtspec.title)|title }}</h3>
+    <h3 class="inline">{{ '%s Metadata'|format(pkg_dict.dataset_type)|title }}</h3>
     
     {% with api_controller = 'ckanext.publicamundi.controllers.api:Controller' %}
     <div class="btn-group pull-right">
@@ -95,7 +92,7 @@
 
   {{ h.markup_for('read:table', obj, errors=none, name_prefix='', data={ 'max_depth': 2 }) }}
   
-  {%- endif -%} {# if obj #}
-  {%- endwith -%} {# obj, dtspec #}
+  {%- endif -%} {# obj #}
+  {%- endwith -%} {# obj #}
 
 </section>

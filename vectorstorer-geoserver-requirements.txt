@@ -1,1 +1,1 @@
-geoserver
+gsconfig

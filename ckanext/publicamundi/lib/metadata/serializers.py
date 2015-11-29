@@ -2,7 +2,7 @@
 
 We provide named adapters for ISerializer interface. These adapters are named 
 according to their serialization formats (as "serialize:<name>").
-These serializers are str-based, i.e. they always dump to plain str (not unicode).
+These serializers are unicode-based, i.e. they always dump to unicode strings.
 
 So far, the formats supported are:
 
@@ -21,7 +21,7 @@ context (and maybe values should be left unchanged, see examples below).
 For example, as integers dont need to be serialized to be understood by JSON:
     
     >>> f = zope.schema.Int(title=u'height')
-    >>> ser = serializer_for_field(f, name='json-s')
+    >>> ser = serializer_for_field(f, 'json-s')
     >>> assert ser is None 
 
 Of course, if instead we asked for a `default` serializer, we should get one:
@@ -29,7 +29,7 @@ Of course, if instead we asked for a `default` serializer, we should get one:
     >>> f = zope.schema.Int(title=u'height')
     >>> ser = serializer_for_field(f)
     >>> assert ser
-    >>> assert ser.dumps(5) == '5'
+    >>> assert ser.dumps(5) == u'5'
      
 '''
 
@@ -44,7 +44,8 @@ from itertools import chain
 from ckanext.publicamundi.lib.util import raise_for_stub_method
 from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata import adapter_registry
-from ckanext.publicamundi.lib.metadata.ibase import ISerializer, IKeyTupleSerializer
+from ckanext.publicamundi.lib.metadata.ibase import (
+    IObject, ISerializer, IKeyTupleSerializer)
 
 __all__ = [
     'supported_formats',
@@ -152,35 +153,40 @@ class BaseFieldSerializer(BaseSerializer):
 @field_serialize_adapter(IChoiceField, 'json-s')
 class StringFieldSerializer(BaseFieldSerializer):
     
+    encoding = 'utf-8'
+
     def _to(self, s):
-        assert isinstance(s, basestring)
-        return str(s)
+        assert isinstance(s, str)
+        return s.decode(self.encoding)
 
     def _from(self, s):
-        return str(s)
+        if isinstance(s, unicode):
+            return s.encode(self.encoding)
+        elif isinstance(s, str):
+            return s
+        else:
+            return str(s)
 
 @field_serialize_adapter(ITextField, 'default')
 @field_serialize_adapter(ITextLineField, 'default')
 class UnicodeFieldSerializer(BaseFieldSerializer):
 
-    encoding = 'unicode-escape'
-
-    def _to(self, u):
-        assert isinstance(u, unicode)
-        return u.encode(self.encoding)
+    def _to(self, s):
+        assert isinstance(s, unicode)
+        return s
 
     def _from(self, s):
         if isinstance(s, unicode):
             return s
         else:
-            return str(s).decode(self.encoding)
+            return unicode(s)
 
 @field_serialize_adapter(IIntField, 'default')
 class IntFieldSerializer(BaseFieldSerializer):
 
     def _to(self, n):
         assert isinstance(n, int)
-        return str(n)
+        return unicode(n)
 
     def _from(self, s):
         return int(s)
@@ -190,7 +196,7 @@ class BoolFieldSerializer(BaseFieldSerializer):
 
     def _to(self, y):
         assert isinstance(y, bool)
-        return 'true' if y else 'false'
+        return u'true' if y else u'false'
 
     def _from(self, s):
         if s is None:
@@ -207,7 +213,7 @@ class FloatFieldSerializer(BaseFieldSerializer):
 
     def _to(self, f):
         assert isinstance(f, float)
-        return str(f)
+        return unicode(f)
 
     def _from(self, s):
         return float(s)
@@ -218,7 +224,7 @@ class DatetimeFieldSerializer(BaseFieldSerializer):
    
     def _to(self, t):
         assert isinstance(t, datetime.datetime)
-        return t.isoformat()
+        return unicode(t.isoformat())
 
     def _from(self, s):
         t = None
@@ -236,7 +242,7 @@ class DateFieldSerializer(BaseFieldSerializer):
     
     def _to(self, t):
         assert isinstance(t, datetime.date)
-        return t.isoformat()
+        return unicode(t.isoformat())
 
     def _from(self, s):
         t = None
@@ -255,7 +261,7 @@ class TimeFieldSerializer(BaseFieldSerializer):
 
     def _to(self, t):
         assert isinstance(t, datetime.time)
-        return t.isoformat()
+        return unicode(t.isoformat())
 
     def _from(self, s):
         t = None

@@ -1,7 +1,8 @@
 import sys
-import re
-import os.path
+import os
 import json
+import csv
+import re
 import itertools
 import optparse
 import zope.interface
@@ -9,6 +10,8 @@ import zope.schema
 import logging
 from optparse import make_option 
 from zope.dottedname.resolve import resolve
+from itertools import groupby, ifilter, islice
+from operator import itemgetter, attrgetter
 
 import ckan.model as model
 import ckan.logic as logic
@@ -38,34 +41,48 @@ class Command(CommandDispatcher):
     min_args = 0
     
     options_config = {
-        'greet': [
+        'setup': (
+            make_option('-n', '--dry-run', action='store_true', dest='dry_run', default=False),
+        ),
+        'cleanup': (
+            make_option('-n', '--dry-run', action='store_true', dest='dry_run', default=False),
+        ),
+        'greet': (
             make_option('--name', type='string', dest='name'),
             make_option('--num', type='int', dest='num', default=5),
-        ],
-        'test-create-dataset': [
+        ),
+        'test-create-dataset': (
             make_option('--name', type='string', dest='name', default='hello-world'),
             make_option('--owner', type='string', dest='owner_org', default=None),
             make_option('--title', type='string', dest='title', default=u'Hello World'),
             make_option('--description', type='string', dest='description', default=u'Hello _World_'),
             make_option('--id', type='string', dest='identifier', default=None, 
                 help='e.g. 8a728488-4453-4aef-a0f6-98d088294d5f'), 
-        ],
-        'import-dataset': [
+        ),
+        'import-dataset': (
             make_option('--owner', type='string', dest='owner_org', default=None),
             make_option('--dtype', type='string', dest='dtype', default='inspire'),
             make_option('--allow-rename', action='store_true', dest='allow_rename', default=False,
                 help='Rename dataset if a naming conflict occurs'),
             make_option('--force', action='store_true', dest='force', default=False, 
                 help='Create the dataset even if validation fails'),
-        ],
-        'adapter-registry-info': [
+        ),
+        'adapter-registry-info': (
             make_option('--no-fields', action='store_false', dest='show_fields', default=True),
             make_option('--field-cls', type='string', dest='field_cls', 
                 help='Filter results regarding only this field class (e.g. zope.schema.Date)'),
             make_option('--no-objects', action='store_false', dest='show_objects', default=True),
             make_option('--object-cls', type='string', dest='object_cls', 
                 help='Filter results regarding only this object class'),
-        ],
+        ),
+        'migrate-package-extra': (
+            make_option('--to-str', action='store_false', dest='to_unicode', default=True),
+        ),
+        'import-package-translation': (
+        ),
+        'export-package-translation': (
+            make_option('--output', type=str, dest='outfile', default='package_translations.csv'),
+        ),
     }
     
     def _fake_request_context(self):
@@ -98,16 +115,54 @@ class Command(CommandDispatcher):
 
     # Subcommands
     
-    @subcommand(
-        name='greet', options=options_config['greet'])
+    @subcommand('setup', options=options_config['setup'])
+    def setup_extension(self, opts, *args):    
+        '''Setup publicamundi extension (create tables, populate with initial data).
+        '''
+        
+        import ckan.model.meta as meta
+        import ckanext.publicamundi.model as publicamundi_model
+
+        if opts.dry_run:
+            self.logger.info(' ** DRY-RUN ** ')
+            self.logger.info('Creating tables at %s@%s: \n%s' % (
+                meta.engine.url.database,
+                meta.engine.url.host,
+                ', '.join(publicamundi_model.Base.metadata.tables.keys())))
+        else:
+            publicamundi_model.Base.metadata.create_all(bind=meta.engine)
+            publicamundi_model.post_setup(engine=meta.engine)
+
+        self.logger.info('Setup complete')
+    
+    @subcommand('cleanup', options=options_config['cleanup'])
+    def cleanup_extension(self, opts, *args):    
+        '''Cleanup publicamundi extension.
+        '''
+        
+        import ckan.model.meta as meta
+        import ckanext.publicamundi.model as publicamundi_model
+
+        if opts.dry_run:
+            self.logger.info(' ** DRY-RUN ** ')
+            self.logger.info('Dropping tables at %s@%s: \n%s' % (
+                meta.engine.url.database,
+                meta.engine.url.host,
+                ', '.join(publicamundi_model.Base.metadata.tables.keys())))
+        else:
+            publicamundi_model.pre_cleanup(engine=meta.engine)
+            publicamundi_model.Base.metadata.drop_all(bind=meta.engine)
+
+        self.logger.info('Cleanup complete')
+   
+    @subcommand('greet', options=options_config['greet'])
     def greet(self, opts, *args):
         '''Greet with a helloworld message
         '''
         self.logger.info('Running "greet" with args: %r %r', opts, args)
         print 'Hello %s' %(opts.name)
     
-    @subcommand(
-        name='test-create-dataset', options=options_config['test-create-dataset'])
+    @subcommand('test-create-dataset', options=options_config['test-create-dataset'])
     def test_create_dataset(self, opts, *args):
         '''An example that creates a dataset using the action api.
         '''
@@ -160,8 +215,7 @@ class Command(CommandDispatcher):
         pkg = get_action('package_create')(context, pkg_dict);
         print 'Created dataset with: id=%(id)s name=%(name)s:' %(pkg)
        
-    @subcommand(
-        name='import-dataset', options=options_config['import-dataset'])
+    @subcommand('import-dataset', options=options_config['import-dataset'])
     def import_dataset(self, opts, *args):
         '''Import a dataset from XML metadata
         '''
@@ -199,8 +253,7 @@ class Command(CommandDispatcher):
         self.logger.info('Imported dataset %(id)s (%(name)s)' %(result))
         return
     
-    @subcommand(
-        name='formatter-info', options=options_config['adapter-registry-info'])
+    @subcommand('formatter-info', options=options_config['adapter-registry-info'])
     def print_formatter_info(self, opts, *args):
         '''Print information for registered formatters
         '''
@@ -245,8 +298,7 @@ class Command(CommandDispatcher):
                     for qa, widget_cls in m:
                         print format_result(qa, widget_cls)
 
-    @subcommand(
-        name='widget-info', options=options_config['adapter-registry-info'])
+    @subcommand('widget-info', options=options_config['adapter-registry-info'])
     def print_widget_info(self, opts, *args):
         '''Print information for registered widgets
         '''
@@ -290,104 +342,149 @@ class Command(CommandDispatcher):
                     print '[' + iface.__name__ + ']'
                     for qa, widget_cls in m:
                         print format_result(qa, widget_cls)
+
+    @subcommand('export-package-translation',
+        options=options_config['export-package-translation'])
+    def export_package_translation(self, opts, *args):
+        '''Export (key-based) package translations to a CSV file.
+        '''
+        from ckanext.publicamundi.model import PackageTranslation       
+        
+        outfile = opts.outfile
+        if os.path.isfile(outfile):
+            raise ValueError('The output (%s) allready exists' % outfile)
+        
+        n = 0
+        q = model.Session.query(PackageTranslation)
+        with open(outfile, 'w') as ofp:
+            for r in q.all():
+                n += 1
+                t = (
+                    str(r.package_id),
+                    str(r.source_language),
+                    str(r.language),
+                    str(r.key),
+                    '"' + re.sub('["]', '\\"', r.value.encode('utf-8')) + '"',
+                    str(r.state)
+                )
+                ofp.write(','.join(t) + '\n');
+            ofp.close()
+        self.logger.info('Exported %d package translations for fields', n)
     
-class Example1(CkanCommand):
-    '''This is an example of a publicamundi-specific paster command:
+    @subcommand('import-package-translation',
+        options=options_config['import-package-translation'])
+    def import_package_translation(self, opts, *args):
+        '''Import (key-based) package translations from a CSV file.
+        
+        Note that the importer will only add/update translations for existing packages. 
+        
+        The CSV input is expected to contain lines of: 
+        (package_id, source_language, language, key, value, state)
+        '''
+        from ckan.plugins import toolkit
+        
+        from ckanext.publicamundi.lib.languages import Language
+        from ckanext.publicamundi.lib.metadata.i18n import package_translation
+        from ckanext.publicamundi.lib.metadata import fields, bound_field
+        
+        infile = args[0]
+        if not os.access(infile, os.R_OK):
+            raise ValueError('The input (%s) is not readable', infile)
+        
+        def get_package(pkg_id):
+            context = {
+                'model': model,
+                'session': model.Session,
+                'ignore_auth': True,
+                'api_version': '3',
+                'validate': False,
+                'translate': False,
+            }
+            return toolkit.get_action('package_show')(context, {'id': pkg_id})
 
-    >>> paster [PASTER-OPTS] publicamundi-example1 --config=FILE [COMMAND-OPTS]
-    '''
+        uf = fields.TextField()
+        cnt_processed_packages, cnt_skipped_packages = 0, 0
+        with open(infile, 'r') as ifp:
+            reader = csv.DictReader(ifp)
+            for pkg_id, records in groupby(reader, itemgetter('package_id')):
+                try:
+                    pkg = get_package(pkg_id)
+                except toolkit.ObjectNotFound:
+                    pkg = None
+                if not pkg:
+                    cnt_skipped_packages += 1
+                    continue
+                cnt_processed_packages += 1
+                cnt_failed_fields, cnt_updated_fields = 0, 0;
+                for r in records:
+                    tr = package_translation.FieldTranslation(pkg_id, r['source_language'])
+                    yf = bound_field(uf, r['key'], '')
+                    try:
+                        tr.translate(yf, r['language'], r['value'].decode('utf-8'))
+                    except Exception as ex:
+                        cnt_failed_fields += 1
+                        self.logger.warn('Failed to update key "%s" for package %s: %s', 
+                            r['key'], pkg_id, str(ex))
+                    else:    
+                        cnt_updated_fields += 1
+                self.logger.info('Updated translations for %d fields for package: %s', 
+                    cnt_updated_fields, pkg_id)
 
-    summary = 'This is an example of a publicamundi-specific paster command'
-    usage = __doc__
-    group_name = 'ckanext-publicamundi'
-    max_args = 10
-    min_args = 0
-
-    def __init__(self, name):
-        CkanCommand.__init__(self, name)
-        # Configure options parser
-        self.parser.add_option('--group', dest='group', help='Specify target group', type=str)
-
-    def command(self):
-        self._load_config()
-        self.log = logging.getLogger(__name__)
-
-        # Create a context for action api calls
-        context = {
-            'model': model,
-            'session': model.Session,
-            'ignore_auth': True,
-            'user': self.site_user.get('name'),
-            'allow_partial_update': True,
-            'api_version': '3' 
-        }
-
-        pkg_dict = {
-            'id': "8a728488-4453-4aef-a0f6-98d088294d5f",
-            'title': u'Hellooooo World',
-            'name': 'hello-world-1',
-            'notes': u'I say _hello_, you say _goodbye_',
-            'license_id': 'cc-zero',
-            'dataset_type': u'ckan',
-            'owner_org': 'acme',
-        }
-
-        pkg = get_action('package_create')(context, pkg_dict);
-        print 'Created dataset id=%(id)s name=%(name)s:' %(pkg_dict)
-
-class Setup(CkanCommand):
-    '''Setup publicamundi extension (create tables, populate with initial data).
+        self.logger.info(
+            'Imported translations for %d packages. Skipped %d non-existing packages',
+            cnt_processed_packages, cnt_skipped_packages);
+        return
     
-    >>> paster [PASTER-OPTS] publicamundi-setup --config=FILE [COMMAND-OPTS]
-    '''
+    @subcommand('migrate-package-extra', options=options_config['migrate-package-extra'])
+    def migrate_db_to_unicode(self, opts, *args):
+        '''Migrate package_extra database tables to be used with {unicode/str}-based serializers
+        
+        We cannot use ckan.model as we are not going to create new revisions for
+        objects. So, we use reflected tables (without their vdm supplement).
+        '''
+     
+        import pylons
+        
+        import sqlalchemy
+        from sqlalchemy.engine import reflection
+        from sqlalchemy.ext.declarative import declarative_base
 
-    summary = 'Setup publicamundi extension'
-    usage = __doc__
-    group_name = 'ckanext-publicamundi'
-    max_args = 10
-    min_args = 0
+        from ckanext.publicamundi.lib.metadata import dataset_types
+        
+        engine = sqlalchemy.create_engine(pylons.config['sqlalchemy.url'])
+        session_factory = sqlalchemy.orm.sessionmaker(bind=engine)
+        base = declarative_base()
+        refl = reflection.Inspector.from_engine(engine)
+        
+        package_extra_table = sqlalchemy.Table('package_extra', base.metadata)
+        refl.reflecttable(package_extra_table, None)
+        PackageExtra = type('PackageExtra', (base,),
+            dict(__table__=package_extra_table))
+        
+        package_extra_revision_table = sqlalchemy.Table('package_extra_revision', base.metadata)
+        refl.reflecttable(package_extra_revision_table, None)
+        PackageExtraRevision = type('PackageExtraRevision', (base,), 
+            dict(__table__=package_extra_revision_table))
+        
+        convert = None
+        if opts.to_unicode:
+            convert = lambda x: str(x).decode('unicode-escape')
+        else:
+            convert = lambda x: x.encode('unicode-escape') 
+            pass
 
-    def __init__(self, name):
-        CkanCommand.__init__(self, name)
-
-    def command(self):
-        self._load_config()
-        self.log = logging.getLogger(__name__)
-
-        import ckan.model.meta as meta
-        import ckanext.publicamundi.model as publicamundi_model
-
-        publicamundi_model.Base.metadata.create_all(bind=meta.engine)
-        publicamundi_model.post_setup(engine=meta.engine)
-
-        self.log.info('Setup complete')
-
-class Cleanup(CkanCommand):
-    '''Cleanup publicamundi extension.
-
-    >>> paster [PASTER-OPTS] publicamundi-cleanup --config=FILE [COMMAND-OPTS]
-    '''
-
-    summary = 'Cleanup publicamundi extension'
-    usage = __doc__
-    group_name = 'ckanext-publicamundi'
-    max_args = 10
-    min_args = 0
-
-    def __init__(self, name):
-        CkanCommand.__init__(self, name)
-
-    def command(self):
-        self._load_config()
-        self.log = logging.getLogger(__name__)
-
-        import ckan.model.meta as meta
-        import ckanext.publicamundi.model as publicamundi_model
-
-        publicamundi_model.pre_cleanup(engine=meta.engine)
-        publicamundi_model.Base.metadata.drop_all(bind=meta.engine)
-
-        self.log.info('Cleanup complete')
+        session = session_factory()
+        for prefix in dataset_types:
+            for M in (PackageExtra, PackageExtraRevision):
+                q = session.query(M).filter(M.key.like(prefix + '.%'))
+                self.logger.info('About to convert values for %s.* keys in %s' % (prefix, M))
+                i = -1
+                for i, extra in enumerate(q.all()):
+                    extra.value = convert(extra.value)
+                self.logger.info('Converted %d records in %s' % (i + 1, M))
+        self.logger.info('Flushing %d records to database...' % (len(session.dirty)))
+        session.commit()
+        return
 
 #
 # Helpers
