@@ -14,7 +14,7 @@ class TilingOrchestrator:
 
     __DESCRIBE_COVERAGE_REQUEST = "?service=WCS&version=2.0.1&request=DescribeCoverage&coverageId="
 
-    __PYRAMIDS_REQUEST = "?service=WMS&version=1.3.0&request=GeneratePyramidLayers&layer="
+    __GENERATE_PYRAMIDS = "?service=WMS&version=1.3.0&request=GeneratePyramidLayers&layer={layer}&levels={levels}"
 
     __RETILING_METHOD = "areaofinterest"
 
@@ -28,34 +28,48 @@ class TilingOrchestrator:
         bboxes = map(lambda x: x['bbox'][0][0] + x['bbox'][0][2], json.loads(response))
         return bboxes
 
-    def adjust(self):
-        self.retile_coverages()
+    def adjust_description(self, coverage_name):
+        try:
+            return json.dumps({"error": False, "info": self.describe_retiling(coverage_name)})
+        except:
+            return json.dumps({"error": True})
 
-    def adjust_description(self):
-        return json.dumps(self.retile_coverages(True))
+    def adjust_pyramids(self, layer, levels):
+        error = False
+        try:
+            request = (self.rasdaman_endpoint + self.__GENERATE_PYRAMIDS).replace("{layer}", layer).replace("{levels}",
+                                                                                                            levels)
+            urllib.urlopen(request).read()
+        except:
+            error = True
+        return json.dumps({"error": error})
 
-    def adjust_pyramids(self, layer):
-        request = self.rasdaman_endpoint + self.__PYRAMIDS_REQUEST + layer
-        return urllib.urlopen(request).read()
-
-    def retile_coverages(self, describe=False):
+    def describe_retiling(self, coverage_name):
         bboxes = self.determine_bbox()
-        coverages = self.get_coverages()
-        description_contents = []
+        coverage = self.get_coverage(coverage_name)
+        description = {"name": coverage["name"], "coverage_bbox": coverage["bbox"], "bbox": []}
         for bbox in bboxes:
-            for coverage in coverages:
-                if self.bbox_contains(coverage['bbox'], bbox):
-                    if describe:
-                        description_contents.append({"name": coverage['name'], "bbox": str(bbox)})
-                    else:
-                        self.execute_tiling_request(coverage['name'], self.__RETILING_METHOD, str(bbox))
-        if describe:
-            return description_contents
+            if self.bbox_contains(coverage["bbox"], bbox):
+                description["bbox"].append(bbox)
+        return description
+
+    def retile_coverage(self, coverage_name):
+        coverage = self.get_coverage(coverage_name)
+        description = self.describe_retiling(coverage_name)
+        error = False
+        try:
+            self.execute_tiling_request(coverage['name'], self.__RETILING_METHOD, str(description['bbox'][0]))
+        except:
+            error = True
+        return json.dumps({"error": error, "bbox": description['bbox'][0]})
 
     def bbox_contains(self, bbox1, bbox2):
-        if bbox1[0] < bbox2[0] and bbox1[1] < bbox2[1] and bbox1[2] > bbox2[2] and bbox1[3] > bbox1[3]:
+        if bbox1[0] < bbox2[0] and bbox1[1] < bbox2[1] and bbox1[2] > bbox2[2] and bbox1[3] > bbox2[3]:
             return True
         return False
+
+    def get_coverage(self, name):
+        return self.get_coverage_description(name)
 
     def get_coverages(self):
         if self.coverages is None:
@@ -70,18 +84,22 @@ class TilingOrchestrator:
         root = etree.fromstring(xmlstr)
         geo_low = map(lambda x: float(x),
                       root.xpath("//gml:Envelope/gml:lowerCorner", namespaces=self._get_ns())[0].text.strip().split(
-                          " "))
+                          " "))[:2]
         geo_high = map(lambda x: float(x),
                        root.xpath("//gml:Envelope/gml:upperCorner", namespaces=self._get_ns())[0].text.strip().split(
-                           " "))
+                           " "))[:2]
         return {"name": coverage, "bbox": geo_low + geo_high}
 
     def execute_tiling_request(self, coverage_id, tiling_strategy, tiling_subset):
-        request = self.rasdaman_endpoint + "?" + self.__RETILE_REQUEST.replace("{coverageId}", coverage_id) \
-            .replace("{tilingStrategy}", tiling_strategy) \
-            .replace("{tilingSubset}", tiling_subset)
-        response = urllib.urlopen(request).read()
-        return response
+        error = False
+        try:
+            request = self.rasdaman_endpoint + "?" + self.__RETILE_REQUEST.replace("{coverageId}", coverage_id) \
+                .replace("{tilingStrategy}", tiling_strategy) \
+                .replace("{tilingSubset}", tiling_subset)
+            urllib.urlopen(request).read()
+        except:
+            error = True
+        return error
 
     @staticmethod
     def _get_ns():

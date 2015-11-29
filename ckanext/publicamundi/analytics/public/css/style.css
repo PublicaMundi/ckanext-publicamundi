@@ -8,3 +8,15 @@
 .amcharts-graph, .bboxes-map {
   height: 500px;
 }
+
+.scroll-up-button{
+    float:right;
+}
+
+.bot30{
+    margin-bottom: 20px;
+}
+
+.up30{
+    margin-top: 20px;
+}

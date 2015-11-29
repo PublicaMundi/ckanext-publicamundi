@@ -1,5 +1,6 @@
-from ckanext.publicamundi.analytics.controllers.parsedinfo.hacoveragebandinfo import HACoverageBandInfo
+from ckanext.publicamundi.analytics.controllers.parsedinfo.hacoveragebandsinfo import HACoverageBandsInfo
 from ckanext.publicamundi.analytics.controllers.parsers.haparser import HAParser
+from ckanext.publicamundi.analytics.controllers.parsers.hausedcoveragesparser import HAUsedCoveragesParser
 
 
 class HACoverageBandParser(HAParser):
@@ -8,16 +9,16 @@ class HACoverageBandParser(HAParser):
     """
     __author__ = "<a href='mailto:merticariu@rasdaman.com'>Vlad Merticariu</a>"
 
-    def __init__(self, log_file_path, coverage_name):
+    def __init__(self, log_lines):
         """
         Class constructor.
-        :param <string> log_file_path: the path to the log file.
+        :param list[str] log_lines: the lines of the log
         :param <string> coverage_name: the coverage for which the information is parsed.
         """
-        HAParser.__init__(self, log_file_path)
-        self.coverage_name = coverage_name.lower()
+        HAParser.__init__(self, log_lines)
+        self.coverage_names = HAUsedCoveragesParser(log_lines).parse_accessed_coverages()
 
-    def parse_coverage_band_line(self, line):
+    def parse_coverage_band_line(self, coverage_name, line):
         """
         Parses a line in the log file which already contains the coverage.
         :param <string> line: a log line in which the searched coverage is addressed.
@@ -42,8 +43,9 @@ class HACoverageBandParser(HAParser):
             else:
                 bands = [focus]
             # add all the bands to the result
+            date = HAParser.parse_date(line)
             for band in bands:
-                ret.append(HACoverageBandInfo(band, 1))
+                ret.append(HACoverageBandsInfo(date, coverage_name, band, 1))
         return ret
 
     def assign_colors_to_bands(self, band_info_list):
@@ -61,15 +63,17 @@ class HACoverageBandParser(HAParser):
         Parses the current log file and returns information about the bands that have been accessed.
         :return: <[HACoverageBandInfo]> a list of objects describing the bands accessed.
         """
-        band_info_list = []
-        with file(self.log_file_path) as f:
-            for line in f.readlines():
+        result = []
+        for coverage_name in self.coverage_names:
+            band_info_list = []
+            for line in self.log_lines:
                 validated_line = self.validate_line(line)
-                if self.coverage_name in validated_line:
-                    band_info_list += self.parse_coverage_band_line(validated_line)
-        merged_list = self.merge_info_list(band_info_list, HACoverageBandInfo.band_property_key)
-        self.assign_colors_to_bands(merged_list)
-        return merged_list
+                if coverage_name.lower() in validated_line:
+                    band_info_list += self.parse_coverage_band_line(coverage_name, validated_line)
+            merged_list = self.merge_info_list(band_info_list, HACoverageBandsInfo.band_property_key)
+            self.assign_colors_to_bands(merged_list)
+            result += merged_list
+        return result
 
     """
     Key definitions, to know what to look for in the log file.
