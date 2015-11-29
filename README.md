@@ -34,6 +34,7 @@ The most common settings are:
 
     # Specify which dataset types are enabled
     ckanext.publicamundi.dataset_types = ckan inspire foo
+    ckanext.publicamundi.extra_fields = spatial
     
     # Indicate whether a more relaxed name pattern can be used for dataset names
     ckanext.publicamundi.validation.relax_name_pattern = true 
@@ -76,3 +77,14 @@ Uninstall
 
     paster publicamundi --config /path/to/development.ini cleanup
 
+Copying and License
+-------------------
+
+This material is copyright (c) 2013-2016 of the PublicaMundi development team.
+
+It is Free Software and Open Source Software, licensed under the GNU Affero General Public License (AGPL) v3.0
+whose full text may be found at:
+
+http://www.fsf.org/licensing/licenses/agpl-3.0.html
+
+More details at `LICENSE <https://github.com/PublicaMundi/ckanext-publicamundi/blob/master/LICENSE.txt`
