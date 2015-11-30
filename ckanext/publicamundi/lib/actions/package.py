@@ -325,6 +325,7 @@ def dataset_translation_update_field(context, data_dict):
     md = pkg[dtype]
     translator = translator_for(md, source_lang)
     
+    msg = None
     yf = None
     if len(key) < 2: 
         # Translate a top-level field
@@ -338,19 +339,25 @@ def dataset_translation_update_field(context, data_dict):
             try:
                 yf = md.get_field(key[1:])
             except:
-                yf = None # not found
+                yf = None
+                msg = 'No such field'
             if yf and not yf.queryTaggedValue('translatable'):
-                yf = None # not translatable
+                yf = None 
+                msg = 'Not translatable'
             if yf:
                 yf.context.key = key
     
     tr = None
-    if yf and yf.context.value and (yf.context.value != value):
+    if yf and yf.context.value:
         tr = translator.get_field_translator(yf)
         if tr:
             tr.translate(lang, value)
 
-    return {'updated': bool(tr)}
+    res = {'updated': bool(tr)}
+    if msg:
+        res['message'] = msg;
+
+    return res
 
 def dataset_translation_update(context, data_dict):
     '''Translate dataset for the active language.
