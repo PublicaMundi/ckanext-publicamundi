@@ -9,7 +9,7 @@ import ckan.plugins.toolkit as toolkit
 from ckanext.publicamundi.lib.metadata import (
     fields, bound_field, markup_for_field, markup_for)
 from ckanext.publicamundi.lib import resource_ingestion
-from ckanext.publicamundi.lib.metadata import vocabularies
+from ckanext.publicamundi.lib.languages import Language
 
 def filtered_list(l, key, value, op='eq'):
     '''Filter list items based on their value in a specific key/attr.
@@ -123,10 +123,4 @@ def get_ingested_vector(package,resource):
 
 def transform_to_iso_639_2(langcode_iso_639_1):
     
-    languages_iso_639_1 = vocabularies.get_by_name('languages-iso-639-1')
-    languages_iso_639_2 = vocabularies.get_by_name('languages-iso-639-2')
-  
-    token = languages_iso_639_1.get('vocabulary').by_value.get(langcode_iso_639_1).title
-    value = languages_iso_639_2.get('vocabulary').by_token.get(token).value
-    
-    return value
+    return Language(langcode_iso_639_1).alpha3b
