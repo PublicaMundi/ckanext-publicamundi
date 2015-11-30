@@ -1,7 +1,8 @@
 import sys
-import re
 import os
 import json
+import csv
+import re
 import itertools
 import optparse
 import zope.interface
@@ -9,6 +10,8 @@ import zope.schema
 import logging
 from optparse import make_option 
 from zope.dottedname.resolve import resolve
+from itertools import groupby, ifilter, islice
+from operator import itemgetter, attrgetter
 
 import ckan.model as model
 import ckan.logic as logic
@@ -74,6 +77,11 @@ class Command(CommandDispatcher):
         ),
         'migrate-package-extra': (
             make_option('--to-str', action='store_false', dest='to_unicode', default=True),
+        ),
+        'import-package-translation': (
+        ),
+        'export-package-translation': (
+            make_option('--output', type=str, dest='outfile', default='package_translations.csv'),
         ),
     }
     
@@ -335,6 +343,98 @@ class Command(CommandDispatcher):
                     for qa, widget_cls in m:
                         print format_result(qa, widget_cls)
 
+    @subcommand('export-package-translation',
+        options=options_config['export-package-translation'])
+    def export_package_translation(self, opts, *args):
+        '''Export (key-based) package translations to a CSV file.
+        '''
+        from ckanext.publicamundi.model import PackageTranslation       
+        
+        outfile = opts.outfile
+        if os.path.isfile(outfile):
+            raise ValueError('The output (%s) allready exists' % outfile)
+        
+        n = 0
+        q = model.Session.query(PackageTranslation)
+        with open(outfile, 'w') as ofp:
+            for r in q.all():
+                n += 1
+                t = (
+                    str(r.package_id),
+                    str(r.source_language),
+                    str(r.language),
+                    str(r.key),
+                    '"' + re.sub('["]', '\\"', r.value.encode('utf-8')) + '"',
+                    str(r.state)
+                )
+                ofp.write(','.join(t) + '\n');
+            ofp.close()
+        self.logger.info('Exported %d package translations for fields', n)
+    
+    @subcommand('import-package-translation',
+        options=options_config['import-package-translation'])
+    def import_package_translation(self, opts, *args):
+        '''Import (key-based) package translations from a CSV file.
+        
+        Note that the importer will only add/update translations for existing packages. 
+        
+        The CSV input is expected to contain lines of: 
+        (package_id, source_language, language, key, value, state)
+        '''
+        from ckan.plugins import toolkit
+        
+        from ckanext.publicamundi.lib.languages import Language
+        from ckanext.publicamundi.lib.metadata.i18n import package_translation
+        from ckanext.publicamundi.lib.metadata import fields, bound_field
+        
+        infile = args[0]
+        if not os.access(infile, os.R_OK):
+            raise ValueError('The input (%s) is not readable', infile)
+        
+        def get_package(pkg_id):
+            context = {
+                'model': model,
+                'session': model.Session,
+                'ignore_auth': True,
+                'api_version': '3',
+                'validate': False,
+                'translate': False,
+            }
+            return toolkit.get_action('package_show')(context, {'id': pkg_id})
+
+        uf = fields.TextField()
+        cnt_processed_packages, cnt_skipped_packages = 0, 0
+        with open(infile, 'r') as ifp:
+            reader = csv.DictReader(ifp)
+            for pkg_id, records in groupby(reader, itemgetter('package_id')):
+                try:
+                    pkg = get_package(pkg_id)
+                except toolkit.ObjectNotFound:
+                    pkg = None
+                if not pkg:
+                    cnt_skipped_packages += 1
+                    continue
+                cnt_processed_packages += 1
+                cnt_failed_fields, cnt_updated_fields = 0, 0;
+                for r in records:
+                    tr = package_translation.FieldTranslation(pkg_id, r['source_language'])
+                    yf = bound_field(uf, r['key'], '')
+                    try:
+                        tr.translate(yf, r['language'], r['value'].decode('utf-8'))
+                    except Exception as ex:
+                        cnt_failed_fields += 1
+                        self.logger.warn('Failed to update key "%s" for package %s: %s', 
+                            r['key'], pkg_id, str(ex))
+                    else:    
+                        cnt_updated_fields += 1
+                self.logger.info('Updated translations for %d fields for package: %s', 
+                    cnt_updated_fields, pkg_id)
+
+        self.logger.info(
+            'Imported translations for %d packages. Skipped %d non-existing packages',
+            cnt_processed_packages, cnt_skipped_packages);
+        return
+    
     @subcommand('migrate-package-extra', options=options_config['migrate-package-extra'])
     def migrate_db_to_unicode(self, opts, *args):
         '''Migrate package_extra database tables to be used with {unicode/str}-based serializers
