@@ -8,12 +8,12 @@
     <ul class="dropdown-menu">
       {% block resource_item_ingest_links %}
       <li>
-        <a class="btn-link btn-small" href="{{ ingest_render_url }}" 
+        <a class="btn-link" href="{{ ingest_render_url }}" 
             data-module="ingest-dialog" data-module-template="{{ ingest_render_url }}" data-loading-text="{{ _('Loading...') }}"
             ><i class="icon-cog icon-fixed-width"></i>&nbsp;&nbsp;{{ _('Ingest resource') }}</a>
       </li>
       <li>
-	    <a class="btn-link btn-small" href="{{ reject_url }}" 
+	    <a class="btn-link" href="{{ reject_url }}" 
             ><i class="icon-check icon-fixed-width"></i>&nbsp;&nbsp;{{ _('Ignore') }}</a>
       </li>
       {% endblock %} {# resource_item_ingest_links #}
