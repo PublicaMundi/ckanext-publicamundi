@@ -1,18 +1,19 @@
-# Translations template for ckanext-publicamundi.
+# Greek translations for ckanext-publicamundi.
 # Copyright (C) 2015 ORGANIZATION
-# This file is distributed under the same license as the ckanext-publicamundi
+# This file is distributed under the same license as the
+# ckanext-publicamundi
 # project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-publicamundi 1.4dev\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2015-11-30 23:14+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2015-11-30 23:20+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language-Team: el <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -25,50 +26,52 @@ msgstr ""
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:4
 msgid ""
 "COMMISSION REGULATION (EC) No 1205/2008 of 3 December 2008 implementing "
-"Directive 2007/2/EC of the European Parliament and of the Council as regards "
-"metadata;2008-12-04"
+"Directive 2007/2/EC of the European Parliament and of the Council as "
+"regards metadata;2008-12-04"
 msgstr ""
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:5
 msgid ""
-"Corrigendum to INSPIRE Metadata Regulation published in the Official Journal "
-"of the European Union, L 328, page 83;2009-12-15"
+"Corrigendum to INSPIRE Metadata Regulation published in the Official "
+"Journal of the European Union, L 328, page 83;2009-12-15"
 msgstr ""
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:6
 msgid ""
 "Commission Regulation (EU) No 1089/2010 of 23 November 2010 implementing "
-"Directive 2007/2/EC of the European Parliament and of the Council as regards "
-"interoperability of spatial data sets and services;2010-12-08"
+"Directive 2007/2/EC of the European Parliament and of the Council as "
+"regards interoperability of spatial data sets and services;2010-12-08"
 msgstr ""
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:7
 msgid ""
 "COMMISSION REGULATION (EU) No 1088/2010 of 23 November 2010 amending "
-"Regulation (EC) No 976/2009 as regards download services and transformation "
-"services;2010-12-08"
+"Regulation (EC) No 976/2009 as regards download services and "
+"transformation services;2010-12-08"
 msgstr ""
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:8
 msgid ""
 "COMMISSION REGULATION (EC) No 976/2009 of 19 October 2009 implementing "
-"Directive 2007/2/EC of the European Parliament and of the Council as regards "
-"the Network Services;2009-10-20"
+"Directive 2007/2/EC of the European Parliament and of the Council as "
+"regards the Network Services;2009-10-20"
 msgstr ""
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:9
 msgid ""
 "COMMISSION REGULATION (EU) No 268/2010 of 29 March 2010 implementing "
-"Directive 2007/2/EC of the European Parliament and of the Council as regards "
-"the access to spatial data sets and services of the Member States by "
-"Community institutions and bodies under harmonised conditions;2010-03-30"
+"Directive 2007/2/EC of the European Parliament and of the Council as "
+"regards the access to spatial data sets and services of the Member States"
+" by Community institutions and bodies under harmonised "
+"conditions;2010-03-30"
 msgstr ""
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:10
 msgid ""
-"Commission Decision of 5 June 2009 implementing Directive 2007/2/EC of the "
-"European Parliament and of the Council as regards monitoring and reporting "
-"(notified under document number C(2009) 4199) (2009/442/EC);2009-06-11"
+"Commission Decision of 5 June 2009 implementing Directive 2007/2/EC of "
+"the European Parliament and of the Council as regards monitoring and "
+"reporting (notified under document number C(2009) 4199) "
+"(2009/442/EC);2009-06-11"
 msgstr ""
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:13
@@ -125,8 +128,8 @@ msgstr ""
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:30
 msgid ""
-"(a) the confidentiality of the proceedings of public authorities, where such "
-"confidentiality is provided for by law"
+"(a) the confidentiality of the proceedings of public authorities, where "
+"such confidentiality is provided for by law"
 msgstr ""
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:31
@@ -135,17 +138,17 @@ msgstr ""
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:32
 msgid ""
-"(c) the course of justice, the ability of any person to receive a fair trial "
-"or the ability of a public authority to conduct an enquiry of a criminal or "
-"disciplinary nature"
+"(c) the course of justice, the ability of any person to receive a fair "
+"trial or the ability of a public authority to conduct an enquiry of a "
+"criminal or disciplinary nature"
 msgstr ""
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:33
 msgid ""
-"(d) the confidentiality of commercial or industrial information, where such "
-"confidentiality is provided for by national or Community law to protect a "
-"legitimate economic interest, including the public interest in maintaining "
-"statistical confidentiality and tax secrecy"
+"(d) the confidentiality of commercial or industrial information, where "
+"such confidentiality is provided for by national or Community law to "
+"protect a legitimate economic interest, including the public interest in "
+"maintaining statistical confidentiality and tax secrecy"
 msgstr ""
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:34
@@ -154,24 +157,24 @@ msgstr ""
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:35
 msgid ""
-"(f) the confidentiality of personal data and/or files relating to a natural "
-"person where that person has not consented to the disclosure of the "
-"information to the public, where such confidentiality is provided for by "
-"national or Community law"
+"(f) the confidentiality of personal data and/or files relating to a "
+"natural person where that person has not consented to the disclosure of "
+"the information to the public, where such confidentiality is provided for"
+" by national or Community law"
 msgstr ""
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:36
 msgid ""
-"(g) the interests or protection of any person who supplied the information "
-"requested on a voluntary basis without being under, or capable of being put "
-"under, a legal obligation to do so, unless that person has consented to the "
-"release of the information concerned"
+"(g) the interests or protection of any person who supplied the "
+"information requested on a voluntary basis without being under, or "
+"capable of being put under, a legal obligation to do so, unless that "
+"person has consented to the release of the information concerned"
 msgstr ""
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:37
 msgid ""
-"(h) the protection of the environment to which such information relates, such"
-" as the location of rare species."
+"(h) the protection of the environment to which such information relates, "
+"such as the location of rare species."
 msgstr ""
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:40
