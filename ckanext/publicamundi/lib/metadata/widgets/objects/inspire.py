@@ -1,24 +1,18 @@
 import zope.interface
 from collections import OrderedDict
 
-from ckan.plugins import toolkit
-
+from ckanext.publicamundi.lib import toolkit
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata.widgets import (
-    object_widget_adapter,
-    field_widget_adapter,
-    field_widget_multiadapter)
-from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
-from ckanext.publicamundi.lib.metadata.widgets.base import (
-    EditFieldWidget,
-    EditObjectWidget, 
-    ReadFieldWidget,
-    ReadObjectWidget,
-    ListFieldWidgetTraits,
-    DictFieldWidgetTraits)
+    object_widget_adapter, field_widget_adapter, field_widget_multiadapter)
 
-from ._common import TableObjectReadWidget
+from ckanext.publicamundi.lib.metadata.widgets.base import (
+    EditFieldWidget, EditObjectWidget, 
+    ReadFieldWidget, ReadObjectWidget,
+    ListFieldWidgetTraits, DictFieldWidgetTraits)
+
+from . import _common
 
 _ = toolkit._
 
@@ -187,7 +181,8 @@ class InspireEditWidget(EditObjectWidget):
 class InspireReadWidget(ReadObjectWidget):
     
     def prepare_template_vars(self, name_prefix, data):
-        tpl_vars = super(InspireReadWidget, self).prepare_template_vars(name_prefix, data)
+        parent = super(InspireReadWidget, self)
+        tpl_vars = parent.prepare_template_vars(name_prefix, data)
         # Add variables
         return tpl_vars
      
@@ -201,7 +196,7 @@ class InspireReadWidget(ReadObjectWidget):
         return None # use glue template
 
 @object_widget_adapter(schemata.IInspireMetadata, qualifiers=['table'])
-class TableInspireReadWidget(TableObjectReadWidget):
+class TableReadWidget(_common.TableReadWidget):
 
     def get_field_order(self):
         return [

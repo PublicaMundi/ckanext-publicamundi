@@ -1,3 +1,4 @@
+from functools import wraps
 
 # Note Not sure if _cache is thread-safe. 
 # At least for CPython, it is supposed to be safe as of GIL, see:
@@ -6,8 +7,8 @@
 _cache = dict()
 
 def memoize(fn):
-    #print 'Creating memoize wrapper for %r ...' % (fn)
     cached_results = _cache[fn] = dict()
+    @wraps(fn)
     def wrapped(*args):
         cid = args
         if cid in cached_results:

@@ -8,7 +8,7 @@ vocabularies = {}
 
 # Import loader
 
-from ckanext.publicamundi.lib.metadata.vocabularies.json_loader import (
+from .json_loader import (
     make_vocabularies, normalize_keyword, normalize_thesaurus_title)
 
 def _update(data_file, name_prefix='', overwrite=False):
@@ -38,11 +38,26 @@ def get_by_title(title):
 def get_by_name(name):
     return vocabularies.get(name)
 
+
+# Aliases
+
+names = get_names
+
+titles = get_titles
+
+by_name = get_by_name
+
+by_title = get_by_title
+
 # Initialize - Load common vocabularies
 
 from ckanext.publicamundi import reference_data
 
 _update(
     reference_data.get_path('inspire-vocabularies.json'), 
+    name_prefix='')
+
+_update(
+    reference_data.get_path('language-codes.json'), 
     name_prefix='')
 

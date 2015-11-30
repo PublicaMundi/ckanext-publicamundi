@@ -36,6 +36,6 @@ class Invalid(toolkit.ValidationError):
      
 # Import action modules
 
-from ckanext.publicamundi.lib.actions import package
-from ckanext.publicamundi.lib.actions import autocomplete
+from . import package
+from . import autocomplete
 

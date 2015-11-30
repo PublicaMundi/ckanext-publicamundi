@@ -6,16 +6,43 @@
 {% block resources_list %}
     {% snippet "package/snippets/resources_simplified.html", pkg=pkg, active=res.id %}
 {% endblock %}
+{% block resource_read_url %}
+{{ super() }}
+{% if (res.vectorstorer_resource or res.rasterstorer_resource) and res.format == 'wms' %}
+<p><span class="muted ellipsis">{{ _('Layer Name')}}:</span> {{ res.wms_layer }}</p>
+{% elif (res.vectorstorer_resource and res.format == 'wfs') %}
+<p><span class="muted ellipsis">{{ _('Layer Name')}}:</span> {{ res.wfs_layer }}</p>
+{% endif %}
+{% endblock %}
 
 {% block resource_item_service %}
-{% if (res.vectorstorer_resource or res.rasterstorer_resource) and res.format == 'wms' %}
+ {% if (res.vectorstorer_resource or res.rasterstorer_resource) and res.format == 'wms' %}
     <li>
     <a class="btn" href={{ h.get_maps_url(package_id=pkg.id, resource_id=res.id)}} >
-            <i class="icon-medium icon-globe"></i>{{ _('Map')}}
+            <i class="icon-medium icon-globe"></i> {{ _('Map')}}
     </a>
     </li>
-    {% endif %}
-{{ super() }}
+    <li>
+    <a class="btn" data-toggle="modal" data-target="#endpoint_wms_dialog">
+        <i class="icon-beaker"></i> {{ _('Endpoint') }}
+    </a>
+    </li>
+
+{% elif (res.vectorstorer_resource) and res.format == 'wfs' %}
+    <li>
+    <a class="btn" data-toggle="modal" data-target="#endpoint_wfs_dialog">
+        <i class="icon-beaker"></i> {{ _('Endpoint') }}
+    </a>
+    </li>
+{% else %}
+    <li>
+    <a class="btn" data-toggle="modal" href="{{res.url}}">
+        <i class="icon-beaker"></i> {{ _('Endpoint') }}
+    </a>
+    </li>
+
+{% endif %}
+
 {% endblock %}
 
 {% block resource_item_file %}
@@ -63,4 +90,9 @@
     {{ h.preview_resource_or_ingested(pkg, res) }}
 {% endblock %}
 
+{% block page %}
+{{ super() }}
+{% snippet 'package/snippets/endpoint_wms_dialog.html', pkg=pkg, res=res %}
+{% snippet 'package/snippets/endpoint_wfs_dialog.html', pkg=pkg, res=res %}
+{% endblock %}
 

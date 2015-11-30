@@ -4,3 +4,4 @@ autopep8
 datadiff
 docopt
 -e git+https://github.com/ckan/ckanapi#egg=ckanapi
+-e git+https://github.com/drmalex07/nose-htmloutput.git@jinja2.6#egg=nose-htmloutput

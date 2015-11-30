@@ -1,0 +1,11 @@
+{% extends 'package/edit.html' %}
+
+{% block primary_content_inner %}
+
+{% snippet "package/snippets/package_translation_panel.html", pkg_dict=c.pkg_dict %}
+
+{% snippet "package/snippets/package_translation_table.html", pkg_dict=c.pkg_dict %}
+
+{% resource 'ckanext-publicamundi/package-translation' %}
+
+{% endblock %} {# primary_content_inner #}

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os
 import errno
 import fcntl
@@ -5,8 +7,8 @@ import logging
 import datetime
 import requests
 import urlparse
-
-from pylons import g, config
+import pylons
+from operator import itemgetter, attrgetter
 
 import ckan.model as model
 import ckan.logic as logic
@@ -14,17 +16,24 @@ import ckan.plugins.toolkit as toolkit
 from ckan.lib.plugins import lookup_package_plugin
 from ckan.lib.uploader import get_storage_path
 
+from ckanext.publicamundi import reference_data
 from ckanext.publicamundi.cache_manager import get_cache
 from ckanext.publicamundi.lib.actions import (
     NameConflict, IdentifierConflict, Invalid)
+from ckanext.publicamundi.lib.languages import check as check_language
 from ckanext.publicamundi.lib.metadata import (
-    dataset_types, make_metadata_object, serializer_for, xml_serializer_for)
+    Metadata, make_metadata, class_for_metadata,
+    serializer_for, xml_serializer_for,
+    fields, bound_field,
+    translator_for)
 
 log = logging.getLogger(__name__)
 
 _ = toolkit._
 _get_action = toolkit.get_action
 _check_access = toolkit.check_access
+
+## Action API ##
 
 @logic.side_effect_free
 def dataset_export(context, data_dict):
@@ -33,7 +42,7 @@ def dataset_export(context, data_dict):
     :param id: the name or id of the dataset to be exported.
     :type id: string
 
-    rtype: string
+    rtype: dict
     '''
 
     pkg = _get_action('package_show')(context, data_dict)
@@ -46,7 +55,7 @@ def dataset_export(context, data_dict):
     if obj:
         # Get a proper serializer
         xser = xml_serializer_for(obj)
-        xser.target_namespace = config.get('ckan.site_url') 
+        xser.target_namespace = pylons.config.get('ckan.site_url') 
         # Persist exported XML data and wrap into a URL
         name = '%(name)s@%(revision_id)s' % (pkg)
         cached = cached_metadata.get(name, createfunc=xser.dumps)
@@ -58,6 +67,41 @@ def dataset_export(context, data_dict):
             filename=('%(name)s.xml' % (pkg)))
         result = dict(url=link)
     
+    return result
+
+@logic.side_effect_free
+def dataset_export_dcat(context, data_dict):
+    '''Export a dataset to RDF XML using GeoDCAT XSLT.
+
+    :param id: the name or id of the dataset to be exported.
+    :type id: string
+
+    rtype: dict
+    '''
+
+    pkg = _get_action('package_show')(context, data_dict)
+    dtype = pkg.get('dataset_type')
+    obj = pkg.get(dtype) if dtype else None
+    result = None
+    if obj:
+        # Get a proper serializer
+        xser = xml_serializer_for(obj)
+        xser.target_namespace = pylons.config.get('ckan.site_url')
+
+        cached_metadata = get_cache('metadata')
+
+        name = '%(name)s@%(revision_id)s.dcat' % (pkg)
+        cached = cached_metadata.get(name, createfunc=lambda: _transform_dcat(xser.to_xml()))
+
+        link = toolkit.url_for(
+            controller='ckanext.publicamundi.controllers.files:Controller',
+            action='download_file',
+            object_type='metadata',
+            name_or_id=name,
+            filename=('%(name)s.xml' % (pkg)))
+
+        result = dict(url=link)
+
     return result
 
 def dataset_import(context, data_dict):
@@ -115,7 +159,7 @@ def dataset_import(context, data_dict):
     if isinstance(source, basestring):
         # Assume source is a URL
         if not source.startswith('http://'):
-            source = config['ckan.site_url'] + source.strip('/')
+            source = pylons.config['ckan.site_url'] + source.strip('/')
         source = urlparse.urlparse(source)
         r1 = requests.get(source.geturl())
         if not r1.ok:
@@ -133,7 +177,7 @@ def dataset_import(context, data_dict):
 
     # Parse XML data as metadata of `dtype` schema
     
-    obj = make_metadata_object(dtype)
+    obj = make_metadata(dtype)
     try:
         obj = xml_serializer_for(obj).loads(xmldata)
     except AssertionError as ex:
@@ -144,9 +188,9 @@ def dataset_import(context, data_dict):
         raise Invalid({'source': _('The given XML file is malformed: %s') % (ex)})
 
     # Prepare package dict
-    
+
     pkg_dict = {'version': '1.0'}
-    pkg_dict.update(obj.deduce_basic_fields())
+    pkg_dict.update(obj.deduce_fields())
     pkg_dict.update({ 
         'owner_org': owner_org,
         'type': 'dataset',
@@ -224,6 +268,210 @@ def dataset_import(context, data_dict):
         },
     }
 
+def dataset_translation_update_field(context, data_dict):
+    '''Translate a dataset field for the active language.
+
+    This is similar to `dataset_translation_update` but only updates a field per
+    call. It's purpose is to be used when fields are updated individually.
+
+    :param id: the name or id of the package.
+    :type id: string
+
+    :param translate_to_language: the target language
+    :type translate_to_language: string
+     
+    :param key: the field's key path (as dotted path or as a tuple)
+    :type : string or tuple
+    
+    :param value: the translated text value
+    :type value: string
+    '''
+    
+    # Determine target language
+    
+    lang = _target_language(data_dict)
+
+    # Fetch package in source language
+
+    context.update({'translate': False})
+    pkg = _get_action('package_show')(context, {'id': data_dict['id']})
+    dtype = pkg['dataset_type']
+
+    source_lang = pkg['language']
+    if lang == source_lang:
+        msg = 'The target language same as source language (%s)' % (lang)
+        raise Invalid({'translate_to_language': msg})
+    
+    key = data_dict.get('key')
+    if not key:
+        raise Invalid({'key': 'Missing'})
+    if isinstance(key, basestring):
+        key = tuple(key.split('.'))
+    else:
+        key = tuple(key)
+
+    value = data_dict.get('value')
+    if not value:
+        raise Invalid({'value': 'Missing'})
+    value = unicode(value)
+
+    # Check authorization
+
+    _check_access(
+        'package_translation_update', context, {'org': pkg['owner_org']})
+    
+    # Update translation for field
+
+    md = pkg[dtype]
+    translator = translator_for(md, source_lang)
+    
+    msg = None
+    yf = None
+    if len(key) < 2: 
+        # Translate a top-level field
+        if key[0] in ['title', 'notes']:
+            # A core CKAN translatable field
+            uf = fields.TextField() 
+            yf = bound_field(uf, key, pkg[key[0]])
+    else:
+        # Translate a field from structured metadata
+        if key[0] == dtype:
+            try:
+                yf = md.get_field(key[1:])
+            except:
+                yf = None
+                msg = 'No such field'
+            if yf and not yf.queryTaggedValue('translatable'):
+                yf = None 
+                msg = 'Not translatable'
+            if yf:
+                yf.context.key = key
+    
+    tr = None
+    if yf and yf.context.value:
+        tr = translator.get_field_translator(yf)
+        if tr:
+            tr.translate(lang, value)
+
+    res = {'updated': bool(tr)}
+    if msg:
+        res['message'] = msg;
+
+    return res
+
+def dataset_translation_update(context, data_dict):
+    '''Translate dataset for the active language.
+    
+    The accepted format data_dict is as the one passed to core `package_update`. 
+    
+    An additional parameter is `translate_to_language` which determines the target
+    language. If not supplied, the active language (from Pylons request) will be used.
+    
+    All non-translatable fields will be ignored. 
+    
+    All fields that are not present (or are empty) in source package, will also be
+    ignored.
+
+    :param id: the name or id of the package.
+    :type id: string
+   
+    :param translate_to_language: the target language
+    :type translate_to_language: string
+    
+    rtype: dict
+    '''
+     
+    # Determine target language
+    
+    lang = _target_language(data_dict)
+
+    # Fetch package in source language
+
+    context.update({
+        'translate': False,
+        'return_json': True
+    })
+    pkg = _get_action('package_show')(context, {'id': data_dict['id']})
+    dtype = pkg['dataset_type']
+
+    source_lang = pkg['language']
+    if lang == source_lang:
+        msg = 'The target language same as source language (%s)' % (lang)
+        raise Invalid({'translate_to_language': msg})
+ 
+    md = class_for_metadata(dtype)()
+    md.from_json(pkg[dtype])
+   
+    # Check authorization
+
+    _check_access(
+        'package_translation_update', context, {'org': pkg['owner_org']})
+    
+    # Translate structured metadata
+    
+    translator = translator_for(md, source_lang)
+    md = translator.translate(lang, data_dict[dtype])
+    
+    pkg[dtype] = md.to_json(return_string=False)
+
+    # Translate core CKAN metadata
+
+    field_translator = translator.get_field_translator
+    uf = fields.TextField()
+    for k in ('title', 'notes'):
+        v = data_dict.get(k)
+        if not (v and pkg.get(k)):
+            continue # nothing to translate
+        tr = field_translator(bound_field(uf, (k,), pkg[k]))
+        if not tr:
+            continue 
+        yf = tr.translate(lang, v)
+        pkg[k] = v
+
+    # Return translated view of this package
+
+    pkg['translated_to_language'] = lang
+    return pkg
+
+def dataset_translation_check_authorized(context, data_dict):
+    '''Check if authorized to translate fields for a given package.
+    '''
+    userobj = context['auth_user_obj']
+
+    # Todo Maybe more granular authorization (a translator role ?)
+     
+    q = {
+        'id': data_dict['org'], 
+        'object_type': 'user', 
+    }
+
+    q['capacity'] = 'admin'
+    admins = map(itemgetter(0), _get_action('member_list')(context, q))
+    if userobj.id in admins:
+        return {'success': True}
+    
+    q['capacity'] = 'editor'
+    editors = map(itemgetter(0), _get_action('member_list')(context, q))
+    if userobj.id in editors:
+        return {'success': True}
+
+    return {'success': False, 'msg': _('Not an editor for this organization')}
+
+## Helpers ##
+
+def _target_language(data_dict):
+    lang = data_dict.get('translate_to_language')
+    if not lang:
+        lang = pylons.i18n.get_lang()
+        lang = lang[0] if lang else 'en'
+    else:
+        try:
+            lang = check_language(lang)
+        except ValueError:
+            msg = 'Unknown target language (%s)' % (lang)
+            raise Invalid({'translate_to_language': msg}) 
+    return lang
+
 def _make_context(context, **opts):
     '''Make a new context for an action, based on an initial context.
     
@@ -284,3 +532,16 @@ def _find_a_package_name(context, basename, max_num_probes=12):
    
     return name if found else None
 
+def _transform_dcat(xml_dom):
+    from lxml import etree
+
+    xsl_file = reference_data.get_path('xsl/iso-19139-to-dcat-ap.xsl')
+    result = None
+    with open(xsl_file, 'r') as fp:
+        # Transform using XSLT
+        dcat_xslt = etree.parse(fp)
+        dcat_transform = etree.XSLT(dcat_xslt)
+        result = dcat_transform(xml_dom)
+        result = unicode(result).encode('utf-8')
+
+    return result

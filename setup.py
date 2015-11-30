@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import sys, os
 
-version = '1.3dev'
+version = '1.4dev'
 
 setup(
     name='ckanext-publicamundi',
@@ -29,8 +29,8 @@ setup(
         [ckan.plugins]
 
         publicamundi_dataset = ckanext.publicamundi.plugins:DatasetForm
-
-        publicamundi_dataset_with_spatial = ckanext.publicamundi.plugins:SpatialDatasetForm
+        
+        publicamundi_multilingual_dataset = ckanext.publicamundi.plugins:MultilingualDatasetForm
         
         publicamundi_package = ckanext.publicamundi.plugins:PackageController
 
@@ -46,17 +46,13 @@ setup(
 
         [paste.paster_command]
         
-        publicamundi-setup = ckanext.publicamundi.commands:Setup
-
-        publicamundi-cleanup = ckanext.publicamundi.commands:Cleanup
-        
         publicamundi = ckanext.publicamundi.commands:Command
         
         #publicamundi-example1 = ckanext.publicamundi.commands:Example1
 
         [babel.extractors]
         
-        publicamundi_extract_json = ckanext.publicamundi.lib.metadata.vocabularies.babel_extractors:extract_json
+        publicamundi_extract_json = ckanext.publicamundi.lib.vocabularies.babel_extractors:extract_json
         
         [fanstatic.libraries]
         
@@ -71,8 +67,8 @@ setup(
     # ckan's setup.py (from where message extraction is invoked).
     message_extractors = {
         'ckanext/publicamundi': [
-            #('publicamundi/lib/metadata/vocabularies/inspire_vocabularies.json', 'publicamundi_extract_json', None),
-            #('publicamundi/lib/metadata/schemata/inspire.py', 'publicamundi_extract_schema_info', None),
+            ('reference_data/inspire-vocabularies.json', 'publicamundi_extract_json', None),
+            ('reference_data/language-codes.json', 'publicamundi_extract_json', None),
             ('**.py', 'python', None),
             ('**.html', 'ckan', None),
             #('multilingual/solr/*.txt', 'ignore', None),

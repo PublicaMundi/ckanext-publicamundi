@@ -1,11 +1,11 @@
 import zope.interface
 
 from ckanext.publicamundi.lib.metadata.base import Object, object_null_adapter
-from ckanext.publicamundi.lib.metadata.schemata import IBaz
+from ckanext.publicamundi.lib.metadata.schemata import IBazMetadata
 
-from ckanext.publicamundi.lib.metadata.types import BaseMetadata
-from ckanext.publicamundi.lib.metadata.types import Thesaurus, ThesaurusTerms
-from ckanext.publicamundi.lib.metadata.types._common import *
+from . import Metadata, deduce, dataset_type 
+from ._common import *
+from .thesaurus import Thesaurus, ThesaurusTerms
 
 thesaurus_gemet_themes = Thesaurus.lookup('keywords-gemet-themes')
 
@@ -17,15 +17,18 @@ class KeywordsFactory(object):
     def __call__(self):
         return ThesaurusTerms(terms=[], thesaurus=self.thesaurus)
 
+@dataset_type('baz')
 @object_null_adapter()
-class Baz(BaseMetadata):
+class BazMetadata(Metadata):
 
-    zope.interface.implements(IBaz)
+    zope.interface.implements(IBazMetadata)
 
+    @property
+    def identifier(self):
+        return self.url
+    
     url = None
-    
     contacts = list
-    
     keywords = KeywordsFactory(thesaurus_gemet_themes)
-    
     bbox = GeographicBoundingBox
+

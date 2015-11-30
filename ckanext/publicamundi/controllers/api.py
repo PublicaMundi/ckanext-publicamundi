@@ -2,6 +2,7 @@ import logging
 import json
 import time
 import datetime
+
 from itertools import ifilter, islice
 from pylons import g, config
 
@@ -12,7 +13,7 @@ import ckan.logic as logic
 
 from ckanext.publicamundi.lib.util import to_json
 from ckanext.publicamundi.lib import uploader
-from ckanext.publicamundi.lib.metadata import vocabularies
+from ckanext.publicamundi.lib import vocabularies
 
 log = logging.getLogger(__name__)
 
@@ -121,7 +122,7 @@ class Controller(BaseController):
         name = str(name)
         r = None
         
-        vocab = vocabularies.get_by_name(name) 
+        vocab = vocabularies.by_name(name) 
         if vocab:
             r = {
                 'date_type': vocab.get('date_type'),
@@ -131,7 +132,7 @@ class Controller(BaseController):
                 'terms': [{'token': t.token, 'value': t.value, 'title': t.title} 
                     for t in vocab['vocabulary']],
             }
-                
+        
         response.headers['Content-Type'] = content_types['json']
         return [to_json(r)]
     
@@ -147,7 +148,16 @@ class Controller(BaseController):
         exported_url = result.get('url')
         redirect(exported_url)
         return
-    
+ 
+    def dataset_export_dcat(self, name_or_id):
+        
+        context = self._make_context() 
+        result =  _get_action('dataset_export_dcat')(context, { 'id': name_or_id })
+
+        exported_url = result.get('url')
+        redirect(exported_url)
+        return
+
     def dataset_import(self):
         
         post = request.params

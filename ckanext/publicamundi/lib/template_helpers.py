@@ -5,14 +5,18 @@ import urllib
 
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
+
+from ckanext.publicamundi.lib.metadata import (
+    fields, bound_field, markup_for_field, markup_for)
 from ckanext.publicamundi.lib import resource_ingestion
+from ckanext.publicamundi.lib.languages import Language
 
 def filtered_list(l, key, value, op='eq'):
     '''Filter list items based on their value in a specific key/attr.
     '''
 
     if not l:
-        return None
+        return l
     
     op_map = {
         'ne': operator.ne,
@@ -67,6 +71,14 @@ def get_organization_objects(org_names=[]):
 def resource_ingestion_result(resource_id):
     return resource_ingestion.get_result(resource_id)
 
+def markup_for_translatable_text(key, value):
+    uf = markup_for_translatable_text._text_field
+    yf = bound_field(uf, key, value)
+    qa = 'read:dd.translatable'
+    return markup_for_field(qa, yf, name_prefix='')
+markup_for_translatable_text._text_field = fields.TextField()
+markup_for_translatable_text._text_field.setTaggedValue('translatable', True)
+
 _preferable_metadata_format = [
         {'name':'INSPIRE',
          'format':'xml'},
@@ -108,3 +120,7 @@ def get_ingested_vector(package,resource):
                 if resb.get('vectorstorer_resource') and resb.get('parent_resource_id')==resa.get('id'):
                     ing_resources.append(resb)
     return ing_resources
+
+def transform_to_iso_639_2(langcode_iso_639_1):
+    
+    return Language(langcode_iso_639_1).alpha3b

@@ -8,10 +8,13 @@ import zope.schema
 from zope.interface.verify import verifyObject
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 
-from ckanext.publicamundi.lib.metadata import (
-    adapter_registry, FieldContext, Object)
-from ckanext.publicamundi.lib.metadata import IFormatter
-from ckanext.publicamundi.lib.metadata import formatters
+from ckan.plugins import toolkit
+
+# Mock translator before importing our modules!
+toolkit._ = lambda s: s
+
+from ckanext.publicamundi.lib.metadata import FieldContext, Object
+from ckanext.publicamundi.lib.metadata import IFormatter, formatters
 from ckanext.publicamundi.lib.metadata.formatters import formatter_for_field
 from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata import types
@@ -107,7 +110,7 @@ def test_field_float():
 
 def test_field_datetime():
 
-    f = schemata.IFoo.get('created')
+    f = schemata.IFooMetadata.get('created')
     
     v = datetime.datetime.now()
     
@@ -126,7 +129,7 @@ def test_field_datetime():
  
 def test_field_choice():
 
-    f = schemata.IFoo.get('thematic_category')
+    f = schemata.IFooMetadata.get('thematic_category')
     
     v = 'health'
     f.validate(v)
@@ -178,7 +181,7 @@ def test_field_dicts():
    
     # [Dict, *]
     
-    f = schemata.IFoo.get('contacts') 
+    f = schemata.IFooMetadata.get('contacts') 
     v = {
         'personal': fixtures.contact1,
         'office': fixtures.contact2,

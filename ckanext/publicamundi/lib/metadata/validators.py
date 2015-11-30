@@ -4,81 +4,27 @@ import zope.schema
 import zope.schema.interfaces
 import itertools
 from collections import Counter
+from operator import attrgetter, itemgetter
 
-from pylons import config
+import pylons
 import ckan.plugins.toolkit as toolkit
 from ckan.lib.navl.dictization_functions import missing, StopOnError, Invalid
 
 from ckanext.publicamundi.lib import logger
 from ckanext.publicamundi.lib import dictization
-from ckanext.publicamundi.lib.util import find_all_duplicates
-from ckanext.publicamundi.lib.metadata import (
-    dataset_types, Object, ErrorDict,
-    serializer_for_object, serializer_for_field, serializer_for_key_tuple)
+import ckanext.publicamundi.lib.metadata as ext_metadata
 
 _ = toolkit._
 aslist = toolkit.aslist
 asbool = toolkit.asbool
 
-#
-# Helpers
-#
-
-# Todo Rewrite as BaseMetadata method
-def objectify(factory, data, key_prefix):
-    '''Build an object from received converter/validator data. 
-    '''
-
-    prefix = key_prefix + '.'
-    
-    def is_field_key(k):
-        if not k or len(k) > 1:
-            return False
-        return k[0].startswith(prefix)
-    
-    obj = None
-    obj_dict = { k[0]: data[k] for k in data if is_field_key(k) }
-    if obj_dict:
-        obj = factory().from_dict(obj_dict, is_flat=True, opts={
-            'unserialize-keys': True, 
-            'key-prefix': key_prefix, 
-            'unserialize-values': 'default', 
-        })
-
-    assert not obj or isinstance(obj, Object)
-    return obj
-
-# Todo Rewrite as BaseMetadata method
-def dictize_for_extras(obj, key_prefix):
-    '''Dictize an object in proper way so that it's fields can be stored 
-    under package_extra KV pairs.
-    '''
-
-    assert isinstance(obj, Object)
-    
-    dictz_opts = {
-        'serialize-keys': True, 
-        'serialize-values': 'default',
-        'key-prefix': key_prefix,
-    }
-    res = obj.to_dict(flat=True, opts=dictz_opts)
-    res = { k: v for k, v in res.iteritems() if v is not None }
-    return res
-
-def must_validate(context, data):
-    '''Indicate whether an object (or a particular field of it) should be validated
-    under the given context.
-    '''
-    return not (
-        ('skip_validation' in context) or 
-        (data.get(('state',), '') == 'invalid'))
 
 #
 # Validators/Converters for package
 #
 
 def is_dataset_type(value, context):
-    if not value in dataset_types:
+    if not value in ext_metadata.dataset_types:
         raise Invalid('Unknown dataset-type (%s)' %(value))
     return value
 
@@ -120,8 +66,6 @@ def postprocess_dataset_for_edit(key, data, errors, context):
      
     def debug(msg):
         logger.debug('Post-processing dataset for editing: %s' %(msg))
- 
-    #debug('context=%r' %(context.keys()))
     
     # The state we are moving to
     state = data.get(('state',), '') 
@@ -134,41 +78,33 @@ def postprocess_dataset_for_edit(key, data, errors, context):
     is_new = not pkg
 
     if is_new and not requested_with_api:
-        return # noop: only core metadata expected
+        return # only core metadata are expected
 
-    dt = data[('dataset_type',)]
-    dt_spec = dataset_types.get(dt)
-    if not dt_spec:
-        raise Invalid('Unknown dataset-type: %s' %(dt))
+    key_prefix = dtype = data[('dataset_type',)]
+    if not dtype in ext_metadata.dataset_types:
+        raise Invalid('Unknown dataset-type: %s' %(dtype))
     
-    key_prefix = dt_spec.get('key_prefix', dt)
-    
-    # 1. Objectify from flattened fields
-    
-    obj = objectify(dt_spec.get('class'), data, key_prefix)
+    # 1. Build metadata object
 
-    if not obj:
-        # Failed to create one (maybe at resources form (?))
-        return 
+    cls = ext_metadata.class_for_metadata(dtype)
+    md = cls.from_converted_data(data, for_edit=True)
 
-    data[(key_prefix,)] = obj
+    if not md:
+        return # failed to create (in resources form ?)
+
+    data[(key_prefix,)] = md
     
     # 2. Validate as an object
 
     if not 'skip_validation' in context:
-        validation_errors = obj.validate(dictize_errors=True)
-        # Todo Map `validation_errors` to `errors`
+        validation_errors = md.validate(dictize_errors=True)
+        # Fixme Map validation_errors to errors
         #assert not validation_errors
    
     # 3. Convert fields to extras
     
     extras_list = data[('extras',)]
-    extras_dict = dictize_for_extras(obj, key_prefix)
-    for key, val in extras_dict.iteritems():
-        extras_list.append({ 'key': key, 'value': val })
-    assert not find_all_duplicates(map(lambda t: t['key'], extras_list))
-    
-    #debug('About to save %d %s-related fields in extras' % (len(extras_dict), dt))
+    extras_list.extend(({'key': k, 'value': v} for k, v in md.to_extras()))
     
     # 4. Compute next state
     
@@ -189,26 +125,23 @@ def preprocess_dataset_for_edit(key, data, errors, context):
     def debug(msg):
         logger.debug('Pre-processing dataset for editing: %s' %(msg))
     
-    #debug('context=%r' %(context.keys()))
-    
     received_data = { k:v for k,v in data.iteritems() if not (v is missing) }
     unexpected_data = received_data.get(('__extras',), {})
     
     #debug('Received data: %r' %(received_data))
     #debug('Received (but unexpected) data: %r' %(unexpected_data))
     
-    # Figure-out if a nested dict is supplied (instead of a flat one).
+    # Figure out if a nested dict is supplied (instead of a flat one).
     
     # Note This "nested" input format is intended to be used by the action api,
     # as it is far more natural to the JSON format. Still, this format option is
     # not restricted to api requests (it is possible to be used even by form-based
     # requests).
     
-    dt = received_data.get(('dataset_type',))
-    r = unexpected_data.get(dt) if dt else None
-    if isinstance(r, dict) and dataset_types.has_key(dt):
+    key_prefix = dtype = received_data.get(('dataset_type',))
+    r = unexpected_data.get(dtype) if dtype else None
+    if isinstance(r, dict) and (dtype in ext_metadata.dataset_types):
         # Looks like a nested dict keyed at key_prefix
-        key_prefix = dataset_types[dt]['key_prefix']
         debug('Trying to flatten input at %s' %(key_prefix))
         if any([ k[0].startswith(key_prefix) for k in received_data ]):
             raise Invalid('Not supported: Found both nested/flat dicts')
@@ -234,7 +167,7 @@ def get_field_edit_processor(field):
         value = data.get(key)
         #logger.debug('Processing field %s for editing (%r)', key[0], value)
          
-        ser = serializer_for_field(field)
+        ser = ext_metadata.serializer_for_field(field)
 
         # Not supposed to handle missing inputs here
         
@@ -305,6 +238,45 @@ def get_field_read_processor(field):
 
     return convert
 
+def guess_language(key, data, errors, context):
+    assert key[0] == '__after', (
+        'This converter can only be invoked in the __after stage')
+    
+    lang = None
+    extras_list = data[('extras',)]
+   
+    # Check if language present in extras
+    
+    lang_item = None
+    try:
+        i = map(itemgetter('key'), extras_list).index('language')
+    except:
+        pass
+    else:
+        lang_item = extras_list[i]
+    
+    # Try to deduce from metadata
+    # Note At 1st stage of create form, md will be not available
+    key_prefix = dtype = data[('dataset_type',)]
+    md = data.get((key_prefix,))
+    if md:
+        lang = md.deduce_fields('language').get('language')
+        
+    # If not deduced and not present, guess is active language
+    if not lang and not lang_item:
+        req_lang = pylons.i18n.get_lang()
+        lang = req_lang[0] if req_lang else 'en'
+    
+    # Create/Update extras item with our guessed value
+    if lang:
+        if not lang_item:
+            extras_list.append({'key': 'language', 'value': lang})
+        else:
+            lang_item['value'] = lang
+    else:
+        assert lang_item
+    return
+
 #
 # Validators/Converters for resources
 #
@@ -329,7 +301,7 @@ def guess_resource_type_if_empty(key, data, errors, context):
     resource_format = resource_format.encode('ascii').lower()
     
     api_formats = aslist(
-        config.get('ckanext.publicamundi.api_resource_formats'))
+        pylons.config.get('ckanext.publicamundi.api_resource_formats'))
     if resource_format in api_formats:
         value = 'api'
     else:
@@ -337,3 +309,16 @@ def guess_resource_type_if_empty(key, data, errors, context):
 
     data[key] = value
     return
+
+#
+# Helpers
+#
+
+def _must_validate(context, data):
+    '''Indicate whether an object (or a particular field of it) should be validated
+    under the given context.
+    '''
+    return not (
+        ('skip_validation' in context) or 
+        (data.get(('state',), '') == 'invalid'))
+

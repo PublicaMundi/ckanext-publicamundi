@@ -3,9 +3,60 @@
 import datetime
 import copy
 
+from ckan.lib import create_test_data as _test_data
 from ckanext.publicamundi.lib.metadata.types import *
 
-## Initialize objects ##
+## Basic CKAN packages ##
+
+packages = {
+    'ckan': {},
+    'foo': {}
+}
+
+for pkg in _test_data.gov_items:
+    pkg1 = copy.deepcopy(pkg)
+    pkg1.update({
+        'dataset_type': 'ckan',
+        'tags': [{'name': 'gov-data', 'display_name': 'Government Data'}],
+        'extras': [],
+        'language': 'en',
+    })
+    packages['ckan'][pkg1['name']] = pkg1 
+
+packages['foo']['hello-foo-1'] = {
+    'title': u'Καλημέρα Foo (1)',
+    'name': 'hello-foo-1',
+    'notes': u'Τρα λαλα λαλλαλαλαλα!',
+    'author': u'Κανένας',
+    'license_id': 'notspecified',
+    'version': '1.0.1b',
+    'maintainer': u'Nowhere Man',
+    'author_email': 'nowhere-man@example.com',
+    'maintainer_email': 'nowhere-man@example.com',
+    'tags': [ 
+        { 'name': 'hello-world', 'display_name': 'Hello World', }, 
+        { 'name': u'test', 'display_name': 'Test' }, 
+        { 'name': 'foo', 'display_name': 'Foo' }, 
+    ],
+    'dataset_type': 'foo',
+    'language': 'el',
+    'foo': {
+        'baz': u'BaoBab',
+        'description': u'Τριαλαριλαρο',
+        'rating': 9,
+        'grade': 5.12,
+        'reviewed': False,
+        'created': u'2014-09-13T17:00:00',
+        'temporal_extent': { 
+            'start': '2012-01-01',
+            'end': '2013-01-01',
+        },
+        'thematic_category': 'health',
+    },
+    'resources': []
+}
+
+## Auxiliary objects ##
 
 pt1 = Point(x=0.76, y=0.23)
 
@@ -68,7 +119,8 @@ spatialres2 = SpatialResolution(denominator=1000)
 
 # Foo
 
-foo1 = Foo(
+foo1 = FooMetadata(
+    identifier = '71adc2bf-b8fd-481e-bd52-2ca86e93df35',
     baz = u'Bazzz',
     title = u'Αβαβούα',
     tags = [ u'alpha', u'beta', u'gamma'],
@@ -88,7 +140,7 @@ foo1 = Foo(
     reviewed = False,
     created = datetime.datetime(2014, 06, 11),
     wakeup_time = datetime.time(8, 0, 0),
-    notes = u'Hello World',
+    description = u'Hello World',
     thematic_category = 'economy',
     temporal_extent = dt1,
     rating = 0,
@@ -96,11 +148,13 @@ foo1 = Foo(
     password = u'secret',
 )
 
-foo2 = Foo(
+foo2 = FooMetadata(
+    identifier = '71adc2bf-b8fd-481e-bd52-2ca86e93df35',
     baz = u'Baobab',
     title = u'Αβαβούα',
     tags = [ u'alpha', u'beta', u'gamma',],
     url = 'ftp://example.com/res/2',
+    description = u'Καλημέρα κόσμος',
     contact_info = ContactInfo(
         email=u'nomad@somewhere.com', 
         address=PostalAddress(address=u'Sahara', postalcode=u'12329')),
@@ -148,9 +202,9 @@ thesaurus_gemet_themes = Thesaurus.lookup('keywords-gemet-themes')
 
 thesaurus_gemet_inspire_data_themes = Thesaurus.lookup('keywords-gemet-inspire-themes')
 
-# Baz 
+# BazMetadata 
 
-baz1 = Baz(
+baz1 = BazMetadata(
     url = 'http://baz.example.com',
     contacts = [contact1, contact2, contact3],
     keywords = ThesaurusTerms(

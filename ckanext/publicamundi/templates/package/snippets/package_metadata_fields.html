@@ -96,7 +96,7 @@
 
 {% set dt = data.get('dataset_type') -%}
 {% set dt_prefix = dt -%}
-{% set obj = data.get(dt_prefix) or h.make_metadata_object(dt) -%}
+{% set obj = data.get(dt_prefix) or h.make_metadata(dt) -%}
 
 {# A workaround for bug #36 #}
 {% if is_draft -%}

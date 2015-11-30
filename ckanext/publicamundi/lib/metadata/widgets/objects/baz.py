@@ -5,7 +5,6 @@ from ckanext.publicamundi.lib.metadata import schemata
 from ckanext.publicamundi.lib.metadata.fields import *
 from ckanext.publicamundi.lib.metadata.widgets import (
     object_widget_adapter, field_widget_adapter, field_widget_multiadapter)
-from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
 from ckanext.publicamundi.lib.metadata.widgets.base import (
     EditFieldWidget, EditObjectWidget, 
     ReadFieldWidget, ReadObjectWidget,
@@ -18,7 +17,7 @@ class ListOfContactsEditWidget(EditFieldWidget, ListFieldWidgetTraits):
     def get_template(self):
         return 'package/snippets/fields/edit-list-contacts-baz.html'
 
-@object_widget_adapter(schemata.IBaz, qualifiers=['datasetform'], is_fallback=True)
+@object_widget_adapter(schemata.IBazMetadata, qualifiers=['datasetform'], is_fallback=True)
 class BazEditWidget(EditObjectWidget):
     
     def get_field_template_vars(self):
@@ -39,7 +38,7 @@ class BazEditWidget(EditObjectWidget):
     def get_template(self):
         return None # use glue template
 
-@object_widget_adapter(schemata.IBaz)
+@object_widget_adapter(schemata.IBazMetadata)
 class BazReadWidget(ReadObjectWidget):
    
     def get_field_qualifiers(self):

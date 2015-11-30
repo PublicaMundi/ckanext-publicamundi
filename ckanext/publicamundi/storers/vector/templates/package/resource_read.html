@@ -15,6 +15,7 @@
       storer/ingestor that generated this particular resource.
     
     #}
+    {% if h.check_access('package_update', {'id':pkg.id }) %}
 
     {% if res.vectorstorer_resource and res.format == 'data_table' %}
         {% set export_dialog_url = h.url_for('vector_export',  action='export',operation='index', id=pkg.name, resource_id=res.id) %} 
@@ -30,6 +31,7 @@
         data-module="api-info" data-module-template="{{ style_dialog_url }}" data-loading-text="{{ loading_text }}"
         ><i class="icon-cloud-download"></i> {{ _('Edit Style') }}</a>
         {% resource 'ckanext-publicamundi-vector/dialog' %}
-    {% endif %}
+        {% endif %}
 
+    {% endif %}
 {% endblock %}

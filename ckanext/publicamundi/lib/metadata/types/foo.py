@@ -3,16 +3,19 @@ import zope.interface
 from ckanext.publicamundi.lib.metadata.base import (
     Object, object_null_adapter,
     object_format_adapter, ObjectFormatter)
-from ckanext.publicamundi.lib.metadata.schemata import IFoo
-from ckanext.publicamundi.lib.metadata.types import BaseMetadata
-from ckanext.publicamundi.lib.metadata.types._common import *
 from ckanext.publicamundi.lib.metadata import xml_serializers 
+from ckanext.publicamundi.lib.metadata.schemata import IFooMetadata
 
+from . import Metadata, deduce, dataset_type
+from ._common import *
+
+@dataset_type('foo')
 @object_null_adapter()
-class Foo(BaseMetadata):
+@zope.interface.implementer(IFooMetadata)
+class FooMetadata(Metadata):
 
-    zope.interface.implements(IFoo)
-
+    ## Factories for fields ## 
+    
     title = None
     url = None
     thematic_category = None
@@ -23,7 +26,7 @@ class Foo(BaseMetadata):
     geometry = list
     rating = None
     grade = None
-    notes = None
+    description = None
     temporal_extent = None
     reviewed = None
     created = None
@@ -31,10 +34,24 @@ class Foo(BaseMetadata):
     password = None
     wakeup_time = None
 
-@xml_serializers.object_xml_serialize_adapter(IFoo)
+    ## Deduce methods ##
+
+    @deduce('url')
+    def _deduce_url(self): 
+        return self.url
+
+    @deduce('notes')
+    def _deduce_notes(self): 
+        return self.description
+    
+    @deduce('id')
+    def _deduce_id(self): 
+        return self.identifier
+
+@xml_serializers.object_xml_serialize_adapter(IFooMetadata)
 class FooXmlSerializer(xml_serializers.ObjectSerializer):
     pass
 
-@object_format_adapter(IFoo)
+@object_format_adapter(IFooMetadata)
 class FooFormatter(ObjectFormatter):
     pass

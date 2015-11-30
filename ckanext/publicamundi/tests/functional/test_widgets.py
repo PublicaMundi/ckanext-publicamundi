@@ -145,7 +145,7 @@ class TestController(BaseTestController):
         '''Generate markup for reading fields'''
         for fixture_name in ['foo1', 'foo2']:
             for k in [
-                    'title', 'reviewed', 'notes', 'thematic_category', 'wakeup_time', 
+                    'title', 'reviewed', 'description', 'thematic_category', 'wakeup_time', 
                     'created', 'rating', 'grade', 'url', 'contacts', 'contact_info',
                     'tags']:
                 yield self._test_markup_for_field, fixture_name, k, 'read'
@@ -156,7 +156,7 @@ class TestController(BaseTestController):
         '''Generate markup for editing fields'''
         for fixture_name in ['foo1', 'foo2']:
             for k in [
-                    'title', 'reviewed', 'notes', 'thematic_category', 'wakeup_time', 
+                    'title', 'reviewed', 'description', 'thematic_category', 'wakeup_time', 
                     'created', 'rating', 'grade', 'url', 'contacts', 'contact_info']:
                 yield self._test_markup_for_field, fixture_name, k, 'edit'
                 yield self._test_markup_for_field, fixture_name, k, 'edit', { 'title': u'Another Title' }

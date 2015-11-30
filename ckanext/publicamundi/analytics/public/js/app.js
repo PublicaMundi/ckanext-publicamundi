@@ -85,14 +85,32 @@ var makeCoverageAccessTable = function(coveragesUrl, coverageAccessCountUrl, ban
       var dataSource = eval(response);
       var table = new Analytics.widgets.CoverageAccess("coverage-access-table", dataSource, "id", "accessCount");
       table.render();
+
+        // inititialize coverage graphs with first layer
+        var firstCoverageId = $('.coverage-access-date-graph-button').first().data('coverageid');
+        makeCoverageAccessCountChart(firstCoverageId, coverageAccessCountUrl);
+        makeBandAccessCountChart(firstCoverageId, bandAccessCount);
+        $('#coverage-access-date-title').html(firstCoverageId);
+        $('#coverage-access-band-title').html(firstCoverageId);
+
       jQuery("." + table.getButtonDateGraphClass()).click(function(){
         makeCoverageAccessCountChart(this.dataset.coverageid, coverageAccessCountUrl);
+        $('#coverage-access-date-title').html(this.dataset.coverageid);
+         $('html, body').animate({
+            scrollTop: $("#coverage-access-date-title").offset().top
+        }, 1000);
       }) 
       jQuery("." + table.getButtonBandGraphClass()).click(function () {        
         makeBandAccessCountChart(this.dataset.coverageid, bandAccessCount);
+
+        $('#coverage-access-band-title').html(this.dataset.coverageid);
+        $('html, body').animate({
+            scrollTop: $("#coverage-access-band-title").offset().top
+        }, 1000);
+
       })
-      jQuery("." + table.getButtonDateGraphClass()).first().click()
-      jQuery("." + table.getButtonBandGraphClass()).first().click()
+      //jQuery("." + table.getButtonDateGraphClass()).first().click()
+      //jQuery("." + table.getButtonBandGraphClass()).first().click()
     })
 }
 
@@ -113,3 +131,9 @@ makeGeoserverChart(servicesUrl);
 makeServicesChart(servicesUrl);
 makeCoverageAccessTable(coveragesUrl, coverageAccessCountUrl, bandAccessCount);
 makeBoundingBoxesMap(boundingBoxesUrl);
+
+$(".scroll-up-button").click(function(){
+    $('html, body').animate({
+            scrollTop: $("#coverage-access-table-container").offset().top
+        }, 1000);
+});

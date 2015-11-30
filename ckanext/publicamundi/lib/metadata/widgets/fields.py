@@ -2,14 +2,13 @@ import zope.interface
 import zope.schema
 import z3c.schema.email
 
-from ckan.plugins import toolkit
-
-from ckanext.publicamundi.lib.metadata.fields import *
-from ckanext.publicamundi.lib.metadata.widgets import base as base_widgets
-from ckanext.publicamundi.lib.metadata.widgets import field_widget_adapter
-from ckanext.publicamundi.lib.metadata.widgets import field_widget_multiadapter
-
 from ckanext.publicamundi.lib import logger
+from ckanext.publicamundi.lib import toolkit
+from ckanext.publicamundi.lib.metadata.fields import *
+
+from . import base as base_widgets
+from . import (field_widget_adapter, field_widget_multiadapter)
+
 
 # Todo: Provide readers/editors for:
 #  - IBytes (upload?)

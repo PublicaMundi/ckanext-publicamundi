@@ -1,0 +1,19 @@
+
+{% with enable_translation = (translatable) and (not linked_to) and (value|length > 0) %}
+<span class="{{ classes|join(' ') }} text{% if enable_translation %} translatable-text{% endif %}"
+        {#- Note: If a translatable field is linked to core metadata, skip it -#}
+        {%- if enable_translation -%}
+        data-module="package-translatable-field" data-module-qname="{{qname}}"
+        {%- endif -%}
+    >
+    {%- if value -%}
+    {{- value -}}
+    {% elif field.default %}
+    {{- field.default -}}
+    {% else %}
+    <i>{{ _('n/a') }}</i>
+    {%- endif -%}
+</span>
+{% endwith %} {# enable_translation #}
+
+{%- resource 'ckanext-publicamundi/package-translatable-field' -%}

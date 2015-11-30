@@ -18,7 +18,20 @@ then itself be extended to add/remove blocks of functionality. #}
   {% block errors %}
   {# Note CKAN is using error_summary here (?) #}
   {{ markup_helpers.error_messages(errors) }}
-  {% endblock %}
+  {% endblock %} {# errors #}
+  
+  {% if h.is_multilingual_dataset %}
+  <input type="hidden" name="language" value="{{ data.language|default('') }}" />
+  {% endif %}
+
+  {% block warnings %}
+  {% if h.is_multilingual_dataset and data.language and (c.target_language != data.language) %}
+  <div class="alert">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    You are about to edit in a language ({{data.language|upper}}) different than your active language ({{c.target_language|upper}}).
+  </div>
+  {% endif %}
+  {% endblock %} {# warnings #}
 
   {% block package_fields_autofill %}
   {% if h.debug() %}{% snippet 'package/snippets/form-autofiller.html', form_id='package-form' %}{% endif %}
