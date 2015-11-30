@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-publicamundi 1.2dev\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-11-30 23:13+0200\n"
+"POT-Creation-Date: 2015-12-01 00:26+0200\n"
 "PO-Revision-Date: 2015-04-06 02:11+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: el <LL@li.org>\n"
@@ -2184,7 +2184,14 @@ msgstr ""
 "Ελέγξτε τους ορισμούς της άδειας στο <a "
 "href=\"http://opendefinition.org/licenses/\">opendefinition.org</a>"
 
-#: ckanext/publicamundi/templates/package/snippets/package_form.html:54
+#: ckanext/publicamundi/templates/package/snippets/package_form.html:33
+#, python-format
+msgid ""
+" You are about to edit in a language (%(data_language)s) different than "
+"your active language (%(target_language)s). "
+msgstr "Eίστε έτοιμος να επεξεργαστείτε σε μια γλώσσα (%(data_language)s) διαφορετική από την ενεργή σας γλώσσα (%(target_language)s)."
+
+#: ckanext/publicamundi/templates/package/snippets/package_form.html:58
 msgid ""
 "Important: By submitting content, you agree to release your contributions"
 " under the Open Database License."
@@ -2192,17 +2199,17 @@ msgstr ""
 "Σημαντικό: Με την υποβολή περιεχομένου, συμφωνείτε να κυκλοφορήσετε τις "
 "συνεισφορές σας στο πλαίσιο της Ανοιχτής Άδειας Βάσης Δεδομένων (ODL)."
 
-#: ckanext/publicamundi/templates/package/snippets/package_form.html:62
+#: ckanext/publicamundi/templates/package/snippets/package_form.html:66
 msgid "Are you sure you want to delete this dataset?"
 msgstr "Είστε σίγουροι ότι θέλετε να διαγράψετε αυτό το σύνολο δεδομένων;"
 
-#: ckanext/publicamundi/templates/package/snippets/package_form.html:66
+#: ckanext/publicamundi/templates/package/snippets/package_form.html:70
 #: ckanext/publicamundi/templates/package/snippets/resource_form.html:118
 #: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:61
 msgid "Delete"
 msgstr "Διαγραφή"
 
-#: ckanext/publicamundi/templates/package/snippets/package_form.html:69
+#: ckanext/publicamundi/templates/package/snippets/package_form.html:73
 msgid "Next: Add Data"
 msgstr "Επόμενο: Προσθήκη Δεδομένων"
 
@@ -3746,3 +3753,4 @@ msgid ""
 msgstr ""
 " Το προφίλ σας επιτρέπει σε άλλους χρήστες του Geodata.gov.gr να "
 "γνωρίζουν ποιος είστε και με τι ασχολείστε. "
+

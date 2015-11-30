@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-publicamundi 1.4dev\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-11-30 23:13+0200\n"
+"POT-Creation-Date: 2015-12-01 00:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2157,23 +2157,30 @@ msgid ""
 "href=\"http://opendefinition.org/licenses/\">opendefinition.org</a>"
 msgstr ""
 
-#: ckanext/publicamundi/templates/package/snippets/package_form.html:54
+#: ckanext/publicamundi/templates/package/snippets/package_form.html:33
+#, python-format
+msgid ""
+" You are about to edit in a language (%(data_language)s) different than your "
+"active language (%(target_language)s). "
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/package_form.html:58
 msgid ""
 "Important: By submitting content, you agree to release your contributions "
 "under the Open Database License."
 msgstr ""
 
-#: ckanext/publicamundi/templates/package/snippets/package_form.html:62
+#: ckanext/publicamundi/templates/package/snippets/package_form.html:66
 msgid "Are you sure you want to delete this dataset?"
 msgstr ""
 
-#: ckanext/publicamundi/templates/package/snippets/package_form.html:66
+#: ckanext/publicamundi/templates/package/snippets/package_form.html:70
 #: ckanext/publicamundi/templates/package/snippets/resource_form.html:118
 #: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:61
 msgid "Delete"
 msgstr ""
 
-#: ckanext/publicamundi/templates/package/snippets/package_form.html:69
+#: ckanext/publicamundi/templates/package/snippets/package_form.html:73
 msgid "Next: Add Data"
 msgstr ""
 
