@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-publicamundi 1.2dev\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-12-01 00:26+0200\n"
+"POT-Creation-Date: 2015-12-01 00:56+0200\n"
 "PO-Revision-Date: 2015-04-06 02:11+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: el <LL@li.org>\n"
@@ -2189,7 +2189,9 @@ msgstr ""
 msgid ""
 " You are about to edit in a language (%(data_language)s) different than "
 "your active language (%(target_language)s). "
-msgstr "Eίστε έτοιμος να επεξεργαστείτε σε μια γλώσσα (%(data_language)s) διαφορετική από την ενεργή σας γλώσσα (%(target_language)s)."
+msgstr ""
+"Eίστε έτοιμος να επεξεργαστείτε σε μια γλώσσα (%(data_language)s) "
+"διαφορετική από την ενεργή σας γλώσσα (%(target_language)s)."
 
 #: ckanext/publicamundi/templates/package/snippets/package_form.html:58
 msgid ""
@@ -2266,6 +2268,10 @@ msgstr "Ναι"
 #: ckanext/publicamundi/templates/package/snippets/package_translation_panel.html:33
 msgid "Off"
 msgstr "Όχι"
+
+#: ckanext/publicamundi/templates/package/snippets/package_translation_panel.html:41
+msgid "Legend"
+msgstr "Λεζάντα"
 
 #: ckanext/publicamundi/templates/package/snippets/package_translation_panel.html:44
 msgid "A translatable field, not touched during this session"
