@@ -87,6 +87,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'get_primary_metadata_url': ext_template_helpers.get_primary_metadata_url,
             'get_ingested_raster': ext_template_helpers.get_ingested_raster,
             'get_ingested_vector': ext_template_helpers.get_ingested_vector,
+            'transform_to_iso_639_2': ext_template_helpers.transform_to_iso_639_2
         }
 
     ## IConfigurer interface ##

@@ -1,6 +1,6 @@
 {% import 'macros/markup_helpers.html' as markup_helpers -%}
 
-{%- set resource_languages = ['eng'] %}
+{%- set resource_languages = ['gre'] %}
 
 {%- for r in pkg_dict.resources -%}
 {%- if r.language is defined and r.language not in resource_languages %}
@@ -12,9 +12,10 @@
     <label class="control-label">{{ title }}</label>
     <div class="controls">
         {%- for langcode in resource_languages %}
+        {% set langcode_iso_639_2 = h.transform_to_iso_639_2(langcode) %}
         <input type="text" id="{{ 'input-' ~ qname }}"  name="{{ qname }}"
             class="{{ input_classes|join(" ") }}"
-            value="{{ field.value_type.vocabulary.by_value[langcode].title }} ({{ langcode }})" 
+             value="{{ field.value_type.vocabulary.by_value[langcode_iso_639_2].title }} ({{ langcode_iso_639_2 }})"
             disabled="disabled"
         />
         {% endfor -%}
