@@ -2190,7 +2190,7 @@ msgid ""
 " You are about to edit in a language (%(data_language)s) different than "
 "your active language (%(target_language)s). "
 msgstr ""
-"Eίστε έτοιμος να επεξεργαστείτε σε μια γλώσσα (%(data_language)s) "
+"Η επεξεργασία θα γίνει σε γλώσσα (%(data_language)s) "
 "διαφορετική από την ενεργή σας γλώσσα (%(target_language)s)."
 
 #: ckanext/publicamundi/templates/package/snippets/package_form.html:58
@@ -2259,7 +2259,7 @@ msgstr "Γλώσσα Μετάφρασης"
 
 #: ckanext/publicamundi/templates/package/snippets/package_translation_panel.html:30
 msgid "Show translated"
-msgstr "Δείτε μεταφρασμένα"
+msgstr "Εμφάνιση μεταφράσεων"
 
 #: ckanext/publicamundi/templates/package/snippets/package_translation_panel.html:33
 msgid "On"
@@ -2271,7 +2271,7 @@ msgstr "Όχι"
 
 #: ckanext/publicamundi/templates/package/snippets/package_translation_panel.html:41
 msgid "Legend"
-msgstr "Λεζάντα"
+msgstr "Υπόμνημα"
 
 #: ckanext/publicamundi/templates/package/snippets/package_translation_panel.html:44
 msgid "A translatable field, not touched during this session"
@@ -2283,7 +2283,7 @@ msgstr "Καθαρό"
 
 #: ckanext/publicamundi/templates/package/snippets/package_translation_panel.html:47
 msgid "The field is edited, but not saved yet"
-msgstr "Το πεδίο έχει υποστεί επεξεργασία, αλλά δεν έχει ακόμα σωθεί"
+msgstr "Το πεδίο έχει υποστεί επεξεργασία, αλλά δεν έχει ακόμα αποθηκευθεί"
 
 #: ckanext/publicamundi/templates/package/snippets/package_translation_panel.html:47
 msgid "Changed"
@@ -2291,7 +2291,7 @@ msgstr "Επεξεργασμένο"
 
 #: ckanext/publicamundi/templates/package/snippets/package_translation_panel.html:50
 msgid "Saved"
-msgstr "Σωσμένο"
+msgstr "Αποθηκευμένο"
 
 #: ckanext/publicamundi/templates/package/snippets/package_translation_table.html:18
 msgid "Notes"

@@ -1,11 +1,8 @@
 from abc import abstractmethod
 import urllib
 import re
-import datetime
-#from os import listdir, extsep
-import os
 
-from pylons import config
+from ckanext.publicamundi.analytics.controllers.util import util
 
 
 class HAParser:
@@ -17,19 +14,12 @@ class HAParser:
     """
     __author__ = "<a href='mailto:merticariu@rasdaman.com'>Vlad Merticariu</a>"
 
-    def __init__(self):
+    def __init__(self, log_lines):
         """
         Class constructor.
+        :param list[str] log_lines: a list of log lines
         """
-        logs_file_dir = config.get('ckanext.publicamundi.analytics.cache_dir')
-        allowed_extensions = config.get('ckanext.publicamundi.analytics.allowed_extensions')
-
-        log_files = []
-        for filename in os.listdir(logs_file_dir):
-            name, extension = filename.split(os.extsep, 1)
-            if extension in allowed_extensions:
-                log_files.append(os.path.join(logs_file_dir,filename))
-        self.log_files = log_files
+        self.log_lines = log_lines
 
     @staticmethod
     def parse_date(line=""):
@@ -38,12 +28,8 @@ class HAParser:
         :param <string> line: the line to be parsed.
         :return: <datetime> object representing the parsed date.
         """
-        # split after spaces
-        lines = line.split(" ")
-        # first is month, second is day, add current year
-        date_string = lines[0] + lines[1] + str(datetime.datetime.now().year)
-        date = datetime.datetime.strptime(date_string, config.get('ckanext.publicamundi.analytics.ha_proxy_date_format'))
-        return date
+        date = util.parse_ha_date_from_line(line)
+        return date.date()
 
     @staticmethod
     def validate_line(line=""):

@@ -8,12 +8,12 @@ class HAServicesAccessParser(HAParser):
     """
     __author__ = "<a href='mailto:merticariu@rasdaman.com'>Vlad Merticariu</a>"
 
-    def __init__(self):
+    def __init__(self, log_lines):
         """
         Class constructor.
-        :param <string> log_file_path: the path to the log file.
+        :param list[str] log_lines: a list of log lines
         """
-        HAParser.__init__(self)
+        HAParser.__init__(self, log_lines)
 
     def parse_service_info_line(self, line=""):
         """
@@ -27,11 +27,11 @@ class HAServicesAccessParser(HAParser):
         if self.rasdaman_key in line:
             haservice_info.rasdaman = 1
         if self.wcs_key in line:
-            haservice_info.rasdaman_wcs = 1
+            haservice_info.wcs = 1
         if self.wcps_key in line:
-            haservice_info.rasdaman_wcps = 1
+            haservice_info.wcps = 1
         if self.wms_key in line:
-            haservice_info.rasdaman_wms = 1
+            haservice_info.wms = 1
         if self.geoserver_key in line:
             haservice_info.geoserver = 1
         return haservice_info
@@ -42,13 +42,11 @@ class HAServicesAccessParser(HAParser):
         :return <[HAServiceInfo]> a list of objects representing the total services access counts for each different date.
         """
         services_info_list = []
-        for filename in self.log_files:
-            with file(filename) as f:
-                for line in f.readlines():
-                        # only consider valid lines.
-                    validated_line = self.validate_line(line)
-                    if validated_line:
-                        services_info_list.append(self.parse_service_info_line(validated_line))
+        for line in self.log_lines:
+            # only consider valid lines.
+            validated_line = self.validate_line(line)
+            if validated_line:
+                services_info_list.append(self.parse_service_info_line(validated_line))
         # merge the results and return
         return self.merge_info_list(services_info_list)
 
