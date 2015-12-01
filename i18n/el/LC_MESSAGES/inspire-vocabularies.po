@@ -464,584 +464,584 @@ msgstr ""
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:125
 msgid "accident"
-msgstr ""
+msgstr "ατυχήματα"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:126
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:332
 msgid "administration"
-msgstr ""
+msgstr "διοίκηση"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:127
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:333
 msgid "agriculture"
-msgstr ""
+msgstr "γεωργία"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:128
 msgid "analysis"
-msgstr ""
+msgstr "ανάλυση"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:129
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:335
 msgid "animal husbandry"
-msgstr ""
+msgstr "ζωοτεχνία"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:130
 msgid "atmosphere"
-msgstr ""
+msgstr "ατμόσφαιρα"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:131
 msgid "biochemical process"
-msgstr ""
+msgstr "βιοχημικές αλληλεπιδράσεις"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:132
 msgid "biosphere"
-msgstr ""
+msgstr "βιόσφαιρα"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:133
 msgid "border"
-msgstr ""
+msgstr "ανάχωμα"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:134
 msgid "built environment"
-msgstr ""
+msgstr "δομημένο περιβάλλον"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:135
 msgid "business"
-msgstr ""
+msgstr "επιχείρηση"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:136
 msgid "chemical"
-msgstr ""
+msgstr "χημική ουσία"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:137
 msgid "chemical element"
-msgstr ""
+msgstr "χημικά στοιχεία"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:138
 msgid "chemical process"
-msgstr ""
+msgstr "χημική διεργασία"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:139
 msgid "chemical property"
-msgstr ""
+msgstr "χημικές ιδιότητες"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:140
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:339
 msgid "climate"
-msgstr ""
+msgstr "κλίμα"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:141
 msgid "craft"
-msgstr ""
+msgstr "σκάφος"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:142
 msgid "culture (society)"
-msgstr ""
+msgstr "πολιτισμός"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:143
 msgid "demography"
-msgstr ""
+msgstr "δημογραφία"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:144
 msgid "disaster"
-msgstr ""
+msgstr "καταστροφές (θεομηνίες)"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:145
 msgid "disease"
-msgstr ""
+msgstr "νοσήματα (παθήσεις)"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:146
 msgid "economy"
-msgstr ""
+msgstr "οικονομία"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:147
 msgid "education"
-msgstr ""
+msgstr "εκπαίδευση"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:148
 msgid "effect"
-msgstr ""
+msgstr "επιπτώσεις"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:149
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:342
 msgid "energy"
-msgstr ""
+msgstr "ενέργεια"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:150
 msgid "environment"
-msgstr ""
+msgstr "περιβάλλον"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:151
 msgid "environmental assessment"
-msgstr ""
+msgstr "περιβαλλοντική αξιολόγηση"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:152
 msgid "environmental awareness"
-msgstr ""
+msgstr "περιβαλλοντική συνείδηση"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:153
 msgid "environmental control"
-msgstr ""
+msgstr "περιβαλλοντικός έλεγχος"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:154
 msgid "environmental data"
-msgstr ""
+msgstr "περιβαλλοντικά στοιχεία (δεδομένα)"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:155
 msgid "environmental economy issue"
-msgstr ""
+msgstr "ζητήματα (θέματα) περιβαλλοντικής οικονομίας"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:156
 msgid "environmental impact"
-msgstr ""
+msgstr "περιβαλλοντικές επιπτώσεις"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:157
 msgid "environmental management"
-msgstr ""
+msgstr "περιβαλλοντική διαχείριση"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:158
 msgid "environmental planning"
-msgstr ""
+msgstr "περιβαλλοντικός σχεδιασμός"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:159
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:343
 msgid "environmental policy"
-msgstr ""
+msgstr "περιβαλλοντική πολιτική"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:160
 msgid "environmental problem solving"
-msgstr ""
+msgstr "επίλυση περιβαλλοντικών προβλημάτων"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:161
 msgid "environmental protection"
-msgstr ""
+msgstr "προστασία του περιβάλλοντος"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:162
 msgid "equipment"
-msgstr ""
+msgstr "εξοπλισμός"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:163
 msgid "evaluation"
-msgstr ""
+msgstr "αξιολόγηση"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:164
 msgid "experiment"
-msgstr ""
+msgstr "πείραμα"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:165
 msgid "finances"
-msgstr ""
+msgstr "οικονομικά"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:166
 msgid "firm"
-msgstr ""
+msgstr "επιχειρήσεις"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:167
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:344
 msgid "fishery"
-msgstr ""
+msgstr "αλιεία"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:168
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:346
 msgid "forestry"
-msgstr ""
+msgstr "δασοπονία"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:169
 msgid "geological process"
-msgstr ""
+msgstr "γεωλογικές διαδικασίες"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:170
 msgid "hazard"
-msgstr ""
+msgstr "κίνδυνοι"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:171
 msgid "health"
-msgstr ""
+msgstr "υγεία"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:172
 msgid "health-environment relationship"
-msgstr ""
+msgstr "σχέσεις υγείας-περιβάλλοντος"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:173
 msgid "hydrosphere"
-msgstr ""
+msgstr "υδρόσφαιρα"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:174
 msgid "impact source"
-msgstr ""
+msgstr "πηγές προέλευσης των επιπτώσεων"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:175
 msgid "industrial process"
-msgstr ""
+msgstr "βιομηχανικές διαδικασίες (μέθοδοι)"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:176
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:350
 msgid "industry"
-msgstr ""
+msgstr "βιομηχανία"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:177
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:351
 msgid "information"
-msgstr ""
+msgstr "πληροφορία(ίες)"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:178
 msgid "institutional structure"
-msgstr ""
+msgstr "θεσμική δομή"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:179
 msgid "international relations"
-msgstr ""
+msgstr "διεθνείς σχέσεις"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:180
 msgid "justice"
-msgstr ""
+msgstr "δικαιοσύνη"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:181
 msgid "labour"
-msgstr ""
+msgstr "εργασία"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:182
 msgid "land"
-msgstr ""
+msgstr "γη"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:183
 msgid "land setup"
-msgstr ""
+msgstr "διάταξη γαιών (του εδάφους)"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:184
 msgid "law (corpus of rules)"
-msgstr ""
+msgstr "δίκαιο (σύνολο κανόνων δικαίου)"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:185
 msgid "law (individual)"
-msgstr ""
+msgstr "ατομικές διοικητικές πράξεις"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:186
 msgid "legal form of organisations"
-msgstr ""
+msgstr "νομική μορφή (των) οργανισμών"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:187
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:352
 msgid "legislation"
-msgstr ""
+msgstr "νομοθεσία"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:188
 msgid "lithosphere"
-msgstr ""
+msgstr "λιθόσφαιρα"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:189
 msgid "management"
-msgstr ""
+msgstr "διαχείριση"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:190
 msgid "material"
-msgstr ""
+msgstr "υλικά"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:191
 msgid "medicine (practice)"
-msgstr ""
+msgstr "ιατρική"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:192
 msgid "methodology"
-msgstr ""
+msgstr "μεθοδολογίες"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:193
 msgid "military activities"
-msgstr ""
+msgstr "στρατιωτικές δραστηριότητες"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:194
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:354
 msgid "military aspects"
-msgstr ""
+msgstr "Στρατιωτικά ζητήματα"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:195
 msgid "monitoring"
-msgstr ""
+msgstr "παρακολούθηση"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:196
 msgid "nutrition"
-msgstr ""
+msgstr "διατροφή"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:197
 msgid "organisation of the legal system"
-msgstr ""
+msgstr "οργάνωση του νομικού συστήματος"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:198
 msgid "overburden"
-msgstr ""
+msgstr "επικάλυψη"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:199
 msgid "parameter"
-msgstr ""
+msgstr "παράμετροι"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:200
 msgid "pedosphere"
-msgstr ""
+msgstr "πεδόσφαιρα"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:201
 msgid "physical process"
-msgstr ""
+msgstr "φυσικές διαδικασίες"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:202
 msgid "physical property"
-msgstr ""
+msgstr "φυσικές ιδιότητες"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:203
 msgid "physicochemical process"
-msgstr ""
+msgstr "φυσικοχημικές διαδικασίες (αλληλεπιδράσεις)"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:204
 msgid "planning"
-msgstr ""
+msgstr "σχεδιασμός"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:205
 msgid "policy"
-msgstr ""
+msgstr "πολιτική"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:206
 msgid "politics"
-msgstr ""
+msgstr "πολιτική (επιστήμη)"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:207
 msgid "pollutant"
-msgstr ""
+msgstr "ρύποι"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:208
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:359
 msgid "pollution"
-msgstr ""
+msgstr "ρύπανση"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:209
 msgid "product"
-msgstr ""
+msgstr "προϊόντα"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:210
 msgid "radiation"
-msgstr ""
+msgstr "ακτινοβολία"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:211
 msgid "recreation"
-msgstr ""
+msgstr "αναψυχή"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:212
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:361
 msgid "research"
-msgstr ""
+msgstr "έρευνα"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:213
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:1028
 msgid "resource"
-msgstr ""
+msgstr "πόροι"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:214
 msgid "resource utilisation"
-msgstr ""
+msgstr "χρήση πόρων"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:215
 msgid "risk"
-msgstr ""
+msgstr "κίνδυνοι"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:216
 msgid "safety"
-msgstr ""
+msgstr "ασφάλεια"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:217
 msgid "science"
-msgstr ""
+msgstr "επιστήμη"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:218
 msgid "services"
-msgstr ""
+msgstr "υπηρεσίες"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:219
 msgid "society"
-msgstr ""
+msgstr "κοινωνία"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:220
 msgid "space (interplanetary)"
-msgstr ""
+msgstr "διάστημα (διαπλανητικός χώρος)"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:221
 msgid "state of matter"
-msgstr ""
+msgstr "κατάσταση της ύλης"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:222
 msgid "statistics"
-msgstr ""
+msgstr "στατιστική"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:223
 msgid "subject"
-msgstr ""
+msgstr "θέμα"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:224
 msgid "technical regulation"
-msgstr ""
+msgstr "τεχνικοί κανόνες"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:225
 msgid "technology"
-msgstr ""
+msgstr "τεχνολογία"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:226
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:366
 msgid "tourism"
-msgstr ""
+msgstr "τουρισμός"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:227
 msgid "trade (services)"
-msgstr ""
+msgstr "εμπόριο (υπηρεσίες)"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:228
 msgid "trade activity"
-msgstr ""
+msgstr "εμπορική δραστηριότητα"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:229
 msgid "traffic"
-msgstr ""
+msgstr "(οδική) κυκλοφορία"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:230
 msgid "transportation"
-msgstr ""
+msgstr "μεταφορές"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:231
 msgid "transportation mean"
-msgstr ""
+msgstr "μέσο μεταφοράς"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:232
 msgid "vibration"
-msgstr ""
+msgstr "δονήσεις"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:233
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:370
 msgid "waste"
-msgstr ""
+msgstr "υπολείμματα"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:241
 msgid "ADMINISTRATION, MANAGEMENT, POLICY, POLITICS, INSTITUTIONS, PLANNING"
-msgstr ""
+msgstr "ΔΙΟΙΚΗΣΗ, ΔΙΑΧΕΙΡΙΣΗ, ΠΟΛΙΤΙΚΕΣ, ΠΟΛΙΤΙΚΗ, ΘΕΣΜΟΙ, ΣΧΕΔΙΑΣΜΟΣ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:242
 msgid "AGRICULTURE, FORESTRY; ANIMAL HUSBANDRY; FISHERY"
-msgstr ""
+msgstr "ΓΕΩΡΓΙΑ, ΔΑΣΟΠΟΝΙΑ, ΚΤΗΝΟΤΡΟΦΙΑ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:243
 msgid "ANTHROPOSPHERE (built environment, human settlements, land setup)"
-msgstr ""
+msgstr "ΑΝΘΡΩΠΟΣΦΑΙΡΑ (δομημένο περιβάλλον, ανθρώπινοι οικισμοί, χρήσεις γης)"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:244
 msgid "ATMOSPHERE (air, climate)"
-msgstr ""
+msgstr "ΑΤΜΟΣΦΑΙΡΑ (αέρας, κλίμα)"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:245
 msgid "BIOSPHERE (organisms, ecosystems)"
-msgstr ""
+msgstr "ΒΙΟΣΦΑΙΡΑ (οργανισμοί, οικοσυστήματα)"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:246
 msgid "CHEMISTRY, SUBSTANCES, PROCESSES"
-msgstr ""
+msgstr "ΧΗΜΕΙΑ, ΟΥΣΙΕΣ, ΔΙΕΡΓΑΣΙΕΣ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:247
 msgid "ECONOMICS, FINANCE"
-msgstr ""
+msgstr "ΟΙΚΟΝΟΜΙΑ, ΧΡΗΜΑΤΟΠΙΣΤΩΤΙΚΟ ΣΥΣΤΗΜΑ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:248
 msgid "EFFECTS, IMPACTS"
-msgstr ""
+msgstr "ΑΠΟΤΕΛΕΣΜΑΤΑ, ΕΠΙΠΤΩΣΕΙΣ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:249
 msgid "ENERGY"
-msgstr ""
+msgstr "ΕΝΕΡΓΕΙΑ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:250
 msgid "ENVIRONMENT (natural environment, anthropic environment)"
-msgstr ""
+msgstr "ΠΕΡΙΒΑΛΛΟΝ (φυσικό περιβάλλον, ανθρωπογενές περιβάλλον)"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:251
 msgid "ENVIRONMENTAL POLICY"
-msgstr ""
+msgstr "ΠΕΡΙΒΑΛΛΟΝΤΙΚΗ ΠΟΛΙΤΙΚΗ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:252
 msgid "FUNCTIONAL TERMS"
-msgstr ""
+msgstr "ΛΕΙΤΟΥΡΓΙΚΟΙ ΟΡΟΙ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:253
 msgid "GENERAL TERMS"
-msgstr ""
+msgstr "ΓΕΝΙΚΟΙ ΟΡΟΙ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:254
 msgid "HEALTH, NUTRITION"
-msgstr ""
+msgstr "ΥΓΕΙΑ, ΔΙΑΤΡΟΦΗ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:255
 msgid "HYDROSPHERE (freshwater, marine water, waters)"
-msgstr ""
+msgstr "ΥΔΡΟΣΦΑΙΡΑ (γλυκά νερα, θαλασσινά νερά, νερά)"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:256
 msgid "INDUSTRY, CRAFTS; TECHNOLOGY; EQUIPMENTS"
-msgstr ""
+msgstr "ΒΙΟΜΗΧΑΝΙΑ, ΒΙΟΤΕΧΝΙΑ, ΤΕΧΝΟΛΟΓΙΑ, ΤΕΧΝΟΛΟΓΙΙΚΟΣ ΕΞΟΠΛΙΣΜΟΣ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:257
 msgid "INFORMATION, EDUCATION, CULTURE, ENVIRONMENTAL AWARENESS"
-msgstr ""
+msgstr "ΕΝΗΜΕΡΩΣΗ, ΕΚΠΑΙΔΕΥΣΗ, ΠΟΛΙΤΙΣΜΟΣ, ΠΕΡΙΒΑΛΛΟΝΤΙΚΗ ΣΥΝΕΙΔΗΣΗ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:258
 msgid "LAND (landscape, geography)"
-msgstr ""
+msgstr "ΠΕΡΙΟΧΗ (τοπίο, γεωγραφία)"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:259
 msgid "LEGISLATION, NORMS, CONVENTIONS"
-msgstr ""
+msgstr "ΝΟΜΟΘΕΣΙΑ, ΠΡΟΤΥΠΑ, ΣΥΜΒΑΣΕΙΣ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:260
 msgid "LITHOSPHERE (soil, geological processes)"
-msgstr ""
+msgstr "ΛΙΘΟΣΦΑΙΡΑ (έδαφος, γεωλογικές διεργασίες)"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:261
 msgid "PHYSICAL ASPECTS, NOISE, VIBRATIONS, RADIATIONS"
-msgstr ""
+msgstr "ΦΥΣΙΚΕΣ ΙΔΙΟΤΗΤΕΣ, ΘΟΡΥΒΟΣ, ΚΡΑΔΑΣΜΟΙ, ΑΚΤΙΝΟΒΟΛΙΕΣ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:262
 msgid "PRODUCTS, MATERIALS"
-msgstr ""
+msgstr "ΠΡΟΪΟΝΤΑ, ΥΛΙΚΑ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:263
 msgid "RECREATION, TOURISM"
-msgstr ""
+msgstr "ΑΝΑΨΥΧΗ, ΤΟΘΡΙΣΜΟΣ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:264
 msgid "RESEARCH, SCIENCES"
-msgstr ""
+msgstr "ΕΡΕΥΝΑ, ΕΠΙΣΤΗΜΕΣ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:265
 msgid "RESOURCES (utilisation of resources)"
-msgstr ""
+msgstr "ΠΟΡΟΙ (χρήση πόρων)"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:266
 msgid "RISKS, SAFETY"
-msgstr ""
+msgstr "ΚΙΝΔΥΝΟΙ, ΑΣΦΑΛΕΙΑ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:267
 msgid "SOCIETY"
-msgstr ""
+msgstr "ΚΟΙΝΩΝΙΚΑ ΖΗΤΗΜΑΤΑ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:268
 msgid "SPACE"
-msgstr ""
+msgstr "ΧΩΡΟΣ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:269
 msgid "TIME (chronology)"
-msgstr ""
+msgstr "ΧΡΟΝΟΣ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:270
 msgid "TRADE, SERVICES"
-msgstr ""
+msgstr "ΕΜΠΟΡΙΟ, ΥΠΗΡΕΣΙΕΣ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:271
 msgid "TRAFFIC, TRANSPORTATION"
-msgstr ""
+msgstr "ΚΥΚΛΟΦΟΡΙΑ, ΜΕΤΑΦΟΡΕΣ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:272
 msgid "WASTES, POLLUTANTS, POLLUTION"
-msgstr ""
+msgstr "ΑΠΟΒΛΗΤΑ, ΡΥΠΟΙ, ΡΥΠΑΝΣΗ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:280
 msgid "Addresses"
@@ -1183,115 +1183,115 @@ msgstr ""
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:321
 msgid "ACCESSORY LISTS"
-msgstr ""
+msgstr "ΚΑΤΑΛΟΓΟΙ ΕΞΑΡΤΗΜΑΤΩΝ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:322
 msgid "HUMAN ACTIVITIES AND PRODUCTS, EFFECTS ON THE ENVIRONMENT"
-msgstr ""
+msgstr "ΑΝΘΡΩΠΙΝΕΣ ΔΡΑΣΤΗΡΙΟΤΗΤΕΣ ΚΑΙ ΠΡΟΪΟΝΤΑ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:323
 msgid "NATURAL ENVIRONMENT, ANTHROPIC ENVIRONMENT"
-msgstr ""
+msgstr "ΦΥΣΙΚΟ ΠΕΡΙΒΑΛΛΟΝ, ΑΝΘΡΩΠΟΓΕΝΕΣ ΠΕΡΙΒΑΛΛΟΝ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:324
 msgid "SOCIAL ASPECTS, ENVIRONMENTAL POLICY MEASURES"
-msgstr ""
+msgstr "ΚΟΙΝΩΝΙΚΑ ΖΗΤΗΜΑΤΑ, ΜΕΤΡΑ ΠΕΡΙΒΑΛΛΟΝΤΙΚΗΣ ΠΟΛΙΤΙΚΗΣ"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:334
 msgid "air"
-msgstr ""
+msgstr "αέρας"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:336
 msgid "biology"
-msgstr ""
+msgstr "βιολογία"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:337
 msgid "building"
-msgstr ""
+msgstr "κτήριο"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:338
 msgid "chemistry"
-msgstr ""
+msgstr "χημεία"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:340
 msgid "disasters, accidents, risk"
-msgstr ""
+msgstr "καταστροφές, ατυχήματα, κίνδυνοι"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:341
 msgid "economics"
-msgstr ""
+msgstr "οικονομικά"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:345
 msgid "food, drinking water"
-msgstr ""
+msgstr "είδη διατροφής, πόσιμο νερό"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:347
 msgid "general"
-msgstr ""
+msgstr "γενικές υποθέσεις"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:348
 msgid "geography"
-msgstr ""
+msgstr "γεωγραφία"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:349
 msgid "human health"
-msgstr ""
+msgstr "υγεία του ανθρώπου"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:353
 msgid "materials"
-msgstr ""
+msgstr "υλικά"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:355
 msgid "natural areas, landscape, ecosystems"
-msgstr ""
+msgstr "φυσικές περιοχές, τοπίο, οικοσυστήματα"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:356
 msgid "natural dynamics"
-msgstr ""
+msgstr "φυσική δυναμική"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:357
 msgid "noise, vibrations"
-msgstr ""
+msgstr "θόρυβος, κραδασμοί"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:358
 msgid "physics"
-msgstr ""
+msgstr "φυσική"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:360
 msgid "radiations"
-msgstr ""
+msgstr "ακτινοβολίες"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:362
 msgid "resources"
-msgstr ""
+msgstr "πόροι"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:363
 msgid "social aspects, population"
-msgstr ""
+msgstr "κοινωνικά ζητήματα, πληθυσμός"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:364
 msgid "soil"
-msgstr ""
+msgstr "έδαφος"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:365
 msgid "space"
-msgstr ""
+msgstr "χώρος"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:367
 msgid "trade, services"
-msgstr ""
+msgstr "εμπόριο, υπηρεσίες"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:368
 msgid "transport"
-msgstr ""
+msgstr "μεταφορές"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:369
 msgid "urban environment, urban stress"
-msgstr ""
+msgstr "αστικό περιβάλλον, αστικές πιέσεις"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:371
 msgid "water"
-msgstr ""
+msgstr "νερό"
 
 #: ckanext/publicamundi/reference_data/inspire-vocabularies.json:379
 msgid "AEROSOLS"
