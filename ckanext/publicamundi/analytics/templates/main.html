@@ -1,57 +1,118 @@
 {% extends "page.html" %}
 
 {% block breadcrumb_content %}
-  <li class="active"><a href="{{ h.url_for(controller='ckanext.publicamundi.analytics.controllers.analyticscontroller:AnalyticsController', action='analytics') }}">{{ _('Analytics') }}</a></li>
+<li class="active"><a
+        href="{{ h.url_for(controller='ckanext.publicamundi.analytics.controllers.analyticscontroller:AnalyticsController', action='analytics') }}">{{
+    _('Analytics') }}</a></li>
 {% endblock %}
-
 
 
 {% block main_content %}
 {% if c.is_sysadmin %}
-   <div id="servcies-access-graph-container">
-      <h1> Services access statistics </h1>
-      <div id="services-access-graph" class="amcharts-graph">
-        <img src="/loading.gif"/>
-      </div>
-   </div>
-   <div id="rasdaman-access-graph-container">
-      <h1> rasdaman access statistics </h1>
-      <div id="rasdaman-access-graph" class="amcharts-graph">
-        <img src="/loading.gif"/>
-      </div>
-   </div>
-   <div id="geoserver-access-graph-container">
-      <h1> Geoserver access statistics </h1>
-      <div id="geoserver-access-graph" class="amcharts-graph">
-        <img src="/loading.gif"/>
-      </div>
-   </div> 
-   <div id="bounding-boxes-map-container">
-      <h1> Most requested areas </h1>	
-      <div id="bounding-boxes-map" class="bboxes-map">
-      </div>
-   </div>    
-   <div id="coverage-access-table-container">
-      <h1> Most requested coverages / layers </h1>
-      <div id="coverage-access-table">
+<div id="date-picker-container">
+    <h1> Analytics period</h1>
+
+    <div class="span6">
+        <form class="form-inline">
+
+                <div class="bot30">
+                    <label>Predefined period</label>
+                    <select id="predefined-period" class="span2 form-control">
+                        <option value="day">Day</option>
+                        <option selected value="week">Week</option>
+                        <option value="month">Month</option>
+                        <option value="year">Year</option>
+                    </select>
+                </div>
+                <label>From</label>
+
+                <div class="input-append date" id="from-date-input" data-date="2015-11-01"
+                     data-date-format="yyyy-mm-dd">
+                    <input class="span2" size="16" type="text" value="2015-11-01">
+                    <span class="add-on"><i class="icon-th"></i></span>
+                </div>
+                <label>To</label>
+
+                <div class="input-append date" id="to-date-input" data-date="2015-11-31" data-date-format="yyyy-mm-dd">
+                    <input class="span2" size="16" type="text" value="2015-11-31">
+                    <span class="add-on"><i class="icon-th"></i></span>
+                </div>
+
+                <button id="analytics-refresh" type="submit" class="btn up30">Refresh</button>
+
+        </form>
+    </div>
+</div>
+<div class="row"></div>
+
+<div id="servcies-access-graph-container">
+    <h1> Services access statistics </h1>
+
+    <div id="services-access-graph" class="amcharts-graph">
         <img src="/loading.gif"/>
     </div>
-      <h2 id="coverage-access-date-title"></h2>
-      <div id="coverage-access-graph" class="amcharts-graph">
+</div>
+<div id="rasdaman-access-graph-container">
+    <h1> rasdaman access statistics </h1>
+
+    <div id="rasdaman-access-graph" class="amcharts-graph">
         <img src="/loading.gif"/>
     </div>
-        <button href="#" class="scroll-up-button btn"><span class="icon-arrow-up"></span></button>
-      <h2 id="coverage-access-band-title"></h2>
-      <div id="coverage-band-access-graph" class="amcharts-graph">
+</div>
+<div id="geoserver-access-graph-container">
+    <h1> Geoserver access statistics </h1>
+
+    <div id="geoserver-access-graph" class="amcharts-graph">
         <img src="/loading.gif"/>
+    </div>
+</div>
+<div id="bounding-boxes-map-container">
+    <h1> Most requested areas </h1>
+
+    <div id="bounding-boxes-map" class="bboxes-map">
+    </div>
+</div>
+<div id="coverage-access-table-container">
+    <h1> Most requested coverages / layers </h1>
+
+    <div id="coverage-access-table">
+        <img src="/loading.gif"/>
+    </div>
+    <h2 id="coverage-access-date-title"></h2>
+
+    <div id="coverage-access-graph" class="amcharts-graph">
+        <img src="/loading.gif"/>
+    </div>
+    <button href="#" class="scroll-up-button btn"><span class="icon-arrow-up"></span></button>
+    <h2 id="coverage-access-band-title"></h2>
+
+    <div id="coverage-band-access-graph" class="amcharts-graph">
+        <img src="/loading.gif"/>
+    </div>
+    <button href="#" class="scroll-up-button btn"><span class="icon-arrow-up"></span></button>
+</div>
+
+<div id="analytics-modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Modal title</h4>
       </div>
-        <button href="#" class="scroll-up-button btn"><span class="icon-arrow-up"></span></button>
-   </div>   
-   {% resource 'ckanext-publicamundi-analytics/styles' %}
-   {% resource 'ckanext-publicamundi-analytics/libs' %}
-   {% resource 'ckanext-publicamundi-analytics/src'  %}
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="save" class="btn btn-primary">Perform Action</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+{% resource 'ckanext-publicamundi-analytics/styles' %}
+{% resource 'ckanext-publicamundi-analytics/libs' %}
+{% resource 'ckanext-publicamundi-analytics/src'  %}
 {% else %}
-    {{ _('Not authorized to see this page') }} 
+{{ _('Not authorized to see this page') }}
 {% endif %}
 
 {% endblock  %}

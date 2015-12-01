@@ -9,12 +9,12 @@ class HAUsedCoveragesParser(HAParser):
     """
     __author__ = "<a href='mailto:merticariu@rasdaman.com'>Vlad Merticariu</a>"
 
-    def __init__(self):
+    def __init__(self, log_lines):
         """
-        Class constructor
-        :param <string> log_file_path: the path to the log file
+        Class constructor.
+        :param list[str] log_lines: a list of log lines
         """
-        HAParser.__init__(self)
+        HAParser.__init__(self, log_lines)
 
     def extract_coverage_names(self, separator, line):
         """
@@ -41,13 +41,19 @@ class HAUsedCoveragesParser(HAParser):
                 coverage_names = [coverage_names_container]
         return coverage_names
 
-    def parse_line(self, line):
+    def parse_line(self, line, accessed_coverages):
         """
         Parses a log line, extracting information about the coverages accessed in the line.
          :param <string> line: the log line to be parsed.
          :return: <[HAUsedCoveragesInfo]> a list of objects describing the coverages accessed in this line.
         """
         ret = []
+        for coverage_name in accessed_coverages:
+            if coverage_name.lower() in line:
+                ret.append(HAUsedCoveragesInfo(HAParser.parse_date(line), coverage_name, 1))
+        return ret
+
+    def parse_accessed_coverages_line(self, line):
         accessed_coverages = []
         # look for a coverage or a layer in the line
         if self.wcs_coverage_access_key in line:
@@ -56,9 +62,7 @@ class HAUsedCoveragesParser(HAParser):
             accessed_coverages += self.extract_coverage_names(self.wms_layers_access_key, line)
         if self.wms_layer_access_key in line:
             accessed_coverages += self.extract_coverage_names(self.wms_layer_access_key, line)
-        for coverage_name in accessed_coverages:
-            ret.append(HAUsedCoveragesInfo(coverage_name, 1))
-        return ret
+        return accessed_coverages
 
     def parse(self):
         """
@@ -68,15 +72,25 @@ class HAUsedCoveragesParser(HAParser):
         descending order by number of accesses.
         """
         result = []
-        for filename in self.log_files:
-            with file(filename) as f:
-                for line in f.readlines():
-                    validated_line = self.validate_line(line)
-                    result += self.parse_line(validated_line)
+        accessed_coverages = self.parse_accessed_coverages()
+        for line in self.log_lines:
+            validated_line = self.validate_line(line)
+            result += self.parse_line(validated_line, accessed_coverages)
         result = self.merge_info_list(result, HAUsedCoveragesInfo.coverage_name_property_key)
         # sort the result by access_count
         result.sort(key=lambda x: x.access_count, reverse=True)
         return result
+
+    def parse_accessed_coverages(self):
+        result = []
+        for line in self.log_lines:
+            result += self.parse_accessed_coverages_line(line)
+        coverages = set()
+        for cov in result:
+            stripped_cov = cov.strip(' \t\n\r')
+            if stripped_cov != "":
+                coverages.add(stripped_cov)
+        return list(coverages)
 
     """
     Key definitions, to know what to look for in the log file.
