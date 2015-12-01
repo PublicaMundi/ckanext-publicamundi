@@ -1,5 +1,4 @@
-from ckanext.publicamundi.analytics.controllers.configmanager import Base, database_engine
-
+from ckanext.publicamundi.analytics.controllers import configmanager
 
 class DbManager:
     def __init__(self):
@@ -7,8 +6,12 @@ class DbManager:
 
     @staticmethod
     def create_schema():
-        Base.metadata.create_all(database_engine)
+        Base = configmanager.Base
+        engine = configmanager.database_engine
+        Base.metadata.create_all(engine)
 
     @staticmethod
     def drop_all_tables():
-        Base.metadata.drop_all(database_engine)
+        Base = configmanager.Base
+        engine = configmanager.database_engine
+        Base.metadata.drop_all(engine)

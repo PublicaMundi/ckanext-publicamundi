@@ -8,6 +8,8 @@ import optparse
 import zope.interface
 import zope.schema
 import logging
+from datetime import datetime, timedelta, date
+from dateutil.parser import parse as parse_date
 from optparse import make_option 
 from zope.dottedname.resolve import resolve
 from itertools import groupby, ifilter, islice
@@ -82,6 +84,10 @@ class Command(CommandDispatcher):
         ),
         'export-package-translation': (
             make_option('--output', type=str, dest='outfile', default='package_translations.csv'),
+        ),
+        'analyze-logs': (
+            make_option('--from', type=str, dest='from_date'),
+            make_option('--to', type=str, dest='to_date'),
         ),
     }
     
@@ -483,6 +489,83 @@ class Command(CommandDispatcher):
                     extra.value = convert(extra.value)
                 self.logger.info('Converted %d records in %s' % (i + 1, M))
         self.logger.info('Flushing %d records to database...' % (len(session.dirty)))
+        session.commit()
+        return
+
+    @subcommand('analyze-logs', options=options_config['analyze-logs'])
+    def analyze_logs(self, opts, *args):
+        '''Analyze access logs from HAProxy backends
+        '''
+       
+        from sqlalchemy.orm.exc import NoResultFound
+        from ckanext.publicamundi.analytics.controllers import configmanager
+        from ckanext.publicamundi.analytics.controllers.dbservice import (DbReader, DbManager)
+        from ckanext.publicamundi.analytics.controllers.util.system import SystemInfo
+        from ckanext.publicamundi.analytics.controllers.log_trimmer import LogTrimmer
+        from ckanext.publicamundi.analytics.controllers.parsers.habboxaccessparser import HABboxAccessParser
+        from ckanext.publicamundi.analytics.controllers.parsers.hacoveragebandparser import HACoverageBandParser
+        from ckanext.publicamundi.analytics.controllers.parsers.hausedcoveragesparser import HAUsedCoveragesParser
+        from ckanext.publicamundi.analytics.controllers.parsers.haparser import HAParser
+        from ckanext.publicamundi.analytics.controllers.parsers.haservicesaccessparser import HAServicesAccessParser
+
+        session = configmanager.session
+
+        # Helpers
+
+        def get_latest_parse_date():
+            try:
+                latest_date_str = DbReader.read_system_info().value
+                return parse_date(latest_date_str)
+            except:
+                return datetime.fromordinal(date.today().toordinal() - 1)
+
+        def update_latest_parse_date(latest_date):
+            info = None
+            try:
+                info = session.query(SystemInfo).filter(
+                    SystemInfo.key == SystemInfo.LATEST_DATE_KEY).one()
+                info.value = str(latest_date)
+            except NoResultFound:
+                info = SystemInfo(SystemInfo.LATEST_DATE_KEY, str(latest_date))
+                session.add(info)
+            return
+        
+        def parse_all(log_lines):
+            for parser in [
+                    HAUsedCoveragesParser, HAServicesAccessParser, 
+                    HACoverageBandParser, HABboxAccessParser]:
+                persist_info_list(parser(log_lines).parse())
+
+        def persist_info_list(info_list):
+            for info in info_list:
+                session.add(info)
+
+        # Parse requested range
+
+        DbManager.create_schema()
+        
+        start_date, end_date = None, None
+        if opts.from_date and opts.to_date:
+            try:
+                start_date = parse_date(opts.from_date)
+                end_date = parse_date(opts.to_date)
+            except:
+                self.logger.error("Cannot parse the given interval")        
+        else:
+            start_date = get_latest_parse_date()
+            end_date = datetime.now()
+
+        current_date = start_date.date()
+        finish_date = end_date.date()
+        
+        while current_date < finish_date:
+            self.logger.info("Parsing from {0}".format(current_date))
+            trimmer = LogTrimmer(configmanager.logfile_pattern, current_date)
+            log_lines = trimmer.trim()
+            update_latest_parse_date(current_date)
+            parse_all(log_lines)
+            current_date = current_date + timedelta(days=1)
+
         session.commit()
         return
 

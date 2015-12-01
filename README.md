@@ -22,6 +22,7 @@ plugins as usual. For now, the supported plugins are:
  * `publicamundi_package`: Provides synchronization of package metadata to other databases (e.g. to the integrated CSW service, through pycsw).
  * `publicamundi_vector`: Provide processing and services for vector-based spatial resources. See more at README-vector.md
  * `publicamundi_raster`: Provide processing and services for raster-based spatial resources. See more at README-raster.md 
+ * `publicamundi_analytics`: Process backend logs to extract information on user requests. See more at README-analytics.md 
 
 
 Configure

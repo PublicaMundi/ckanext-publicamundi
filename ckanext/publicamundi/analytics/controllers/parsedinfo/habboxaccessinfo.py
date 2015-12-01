@@ -49,8 +49,11 @@ class HABboxAccessInfo(Base):
         :param <HABboxAccessInfo> another: an object to be merged with the current one.
         :return: <HABboxAccessInfo>: the merged object.
         """
-        ret = HABboxAccessInfo(self.date, HABbox(self.bbox.min_x, self.bbox.min_y, self.bbox.max_x, self.bbox.max_y),
-                               self.access_count + another.access_count, self.crs)
+        ret = HABboxAccessInfo(
+            self.date, 
+            HABbox(
+                self.bbox.min_x, self.bbox.min_y, self.bbox.max_x, self.bbox.max_y),
+            self.access_count + another.access_count, self.crs)
         return ret
 
     """
