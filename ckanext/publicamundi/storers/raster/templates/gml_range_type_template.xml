@@ -1,7 +1,0 @@
-<swe:field name="$VarFieldName">
-    <swe:Quantity definition="$VarFieldDefinition">
-        <swe:description>$VarFieldDescription</swe:description>
-        $VarNillValues
-        <swe:uom code="$VarUomCode"/>
-    </swe:Quantity>
-</swe:field>
