@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Date
-from ckanext.publicamundi.analytics.controllers.configmanager import Base, ConfigManager
+from ckanext.publicamundi.analytics.controllers import configmanager
 
+Base = configmanager.Base
 
 class HAUsedCoveragesInfo(Base):
     """
@@ -29,7 +30,8 @@ class HAUsedCoveragesInfo(Base):
         Handles the way the object is printed. The current format is json.
         """
         output = "{"
-        output += '"' + self.date_key + '"' + ":\"" + self.date.strftime(ConfigManager.export_date_format) + "\","
+        output += '"' + self.date_key + '"' + ":\"" +\
+            self.date.strftime(configmanager.export_date_format) + "\","
         output += '"' + self.coverage_name_key + '"' + ":\"" + self.coverage_name + "\","
         output += '"' + self.access_count_key + '"' + ":" + str(self.access_count)
         output += "}"

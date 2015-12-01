@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, Date
-from ckanext.publicamundi.analytics.controllers.configmanager import ConfigManager, Base
+from ckanext.publicamundi.analytics.controllers import configmanager
 
+Base = configmanager.Base
 
 class HAServiceAccessInfo(Base):
     """
@@ -46,7 +47,8 @@ class HAServiceAccessInfo(Base):
         Handles the way the object is printed. The current format is json.
         """
         output = "{"
-        output += '"' + self.date_key + '"' + ":\"" + self.date.strftime(ConfigManager.export_date_format) + "\","
+        output += '"' + self.date_key + '"' + ":\"" +\
+            self.date.strftime(configmanager.export_date_format) + "\","
         output += '"' + self.rasdaman_key + '"' + ":" + str(self.rasdaman) + ","
         output += '"' + self.wcs_key + '"' + ":" + str(self.wcs) + ","
         output += '"' + self.wcps_key + '"' + ":" + str(self.wcps) + ","

@@ -1,8 +1,10 @@
 import glob
+import logging
 from datetime import datetime, date, timedelta
-from ckanext.publicamundi.analytics.controllers.configmanager import ConfigManager
+from ckanext.publicamundi.analytics.controllers import configmanager
 from ckanext.publicamundi.analytics.controllers.util import util
 
+log1 = logging.getLogger(__name__)
 
 class LogTrimmer:
     def __init__(self, log_pattern, exact_date):
@@ -20,9 +22,10 @@ class LogTrimmer:
         Returns the list of lines on the specified date
         :rtype: list[str]
         """
-        logpaths = glob.glob(ConfigManager.log_file_patterns)
+        logpaths = glob.glob(configmanager.logfile_pattern)
         line_list = []
         for logpath in logpaths:
+            log1.info('Scanning logfile: %s', logpath)
             with file(logpath) as f:
                 for line in f.readlines():
                     if self.line_has_correct_date(line, self.exact_date):
