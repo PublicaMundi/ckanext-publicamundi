@@ -37,7 +37,6 @@ def rasterstorer_import(context):
     """
     log = rasterstorer_import.get_logger()
     try:
-        log.info("[Raster_Import]Ingesting resource %s..." % context["resource_dict"]["id"])
         setup_rasterstorer_in_task_context(context)
         util = RasterUtil(context, log)
         util.insert_coverage()

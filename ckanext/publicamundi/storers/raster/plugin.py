@@ -20,7 +20,7 @@ class RasterStorer(plugins.SingletonPlugin):
     plugins.implements(plugins.IDomainObjectModification, inherit=True)
     plugins.implements(plugins.IResourceUrlChange)
 
-    SUPPORTED_FROMATS = "geotiff png jpeg"
+    SUPPORTED_FROMATS = "geotiff png jpeg zip raster"
 
     def before_map(self, map):
         """
