@@ -8,8 +8,10 @@ log = logging.getLogger(__name__)
 
 
 class AnalyticsPlugin(p.SingletonPlugin):
+    
     p.implements(p.IRoutes, inherit=True)
     p.implements(p.IConfigurer, inherit=True)
+    p.implements(p.IConfigurable, inherit=True)
 
     def before_map(self, map):
         """
@@ -62,7 +64,17 @@ class AnalyticsPlugin(p.SingletonPlugin):
         map.connect("analytics", "/analytics", controller=analytics_controller, action='analytics')
         return map
 
-    # IConfigurer
+    ## IConfigurable interface ##
+    
+    def configure(self, config):
+
+        # Setup analytics
+        from ckanext.publicamundi.analytics.controllers import configmanager
+        configmanager.setup(config)
+
+        return
+
+    ## IConfigurer interface ##
 
     def update_config(self, config):
         # Configure static resources
