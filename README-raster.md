@@ -14,7 +14,7 @@ Example:
 `ckanext.publicamundi.rasterstorer.wms_base_url=http://myRasdamanMachine/rasdaman/ows/wms13`
 `ckanext.publicamundi.rasterstorer.temp_dir = %(cache_dir)s/rasterstorer`
 `ckanext.publicamundi.rasterstorer.gdal_folder = /usr/lib/python2.7/dist-packages`
-
+`ckanext.publicamundi.rasterstorer.wcst_import_url = http://myRasdamanMachine:42000`
 
 
 ## Dependencies
