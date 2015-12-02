@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-publicamundi 1.4dev\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-12-01 00:56+0200\n"
+"POT-Creation-Date: 2015-12-02 18:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
 
-#: ckanext/publicamundi/analytics/templates/main.html:4
+#: ckanext/publicamundi/analytics/templates/main.html:6
 msgid "Analytics"
 msgstr ""
 
-#: ckanext/publicamundi/analytics/templates/main.html:54
+#: ckanext/publicamundi/analytics/templates/main.html:115
 #: ckanext/publicamundi/controllers/user.py:47
 #: ckanext/publicamundi/themes/geodata/controllers/package.py:34
 #: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:140
@@ -287,7 +287,7 @@ msgid "Reference System version"
 msgstr ""
 
 #: ckanext/publicamundi/lib/metadata/schemata/_common.py:214
-#: ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:226
+#: ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:227
 #: ckanext/publicamundi/lib/metadata/widgets/objects/_common.py:555
 msgid "Specification"
 msgstr ""
@@ -561,11 +561,22 @@ msgstr ""
 msgid "Conformity"
 msgstr ""
 
-#: ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:233
-msgid "Access Constraints"
+#: ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:223
+msgid ""
+"This is a citation of the implementing rules adopted under Article 7(1) of "
+"Directive 2007/2/EC or other specification to which a particular resource "
+"conforms. A resource may conform to more than one implementing rules adopted "
+"under Article 7(1) of Directive 2007/2/EC or other specification. This "
+"citation shall include at least the title and a reference date (date of "
+"publication, date of last revision or of creation) of the implementing rules "
+"adopted under Article 7(1) of Directive 2007/2/EC or of the specification."
 msgstr ""
 
 #: ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:234
+msgid "Access Constraints"
+msgstr ""
+
+#: ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:235
 msgid ""
 "Define the conditions for access and use of spatial data sets and services, "
 "and where applicable, corresponding fees as required by Article 5(2)(b) and "
@@ -578,15 +589,15 @@ msgid ""
 "information on fees is available."
 msgstr ""
 
-#: ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:238
+#: ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:239
 msgid "Condition"
 msgstr ""
 
-#: ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:241
+#: ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:242
 msgid "Limitations"
 msgstr ""
 
-#: ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:242
+#: ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:243
 msgid ""
 "When member states limit public access to spatial data sets and spatial data "
 "services under Article 13 of Directive 2007/2/EC, this metadata element shall"
@@ -595,23 +606,23 @@ msgid ""
 "that fact. The value domain of this metadata element is free text."
 msgstr ""
 
-#: ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:246
+#: ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:247
 msgid "Limitation"
 msgstr ""
 
-#: ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:251
+#: ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:252
 #: ckanext/publicamundi/templates/package/snippets/objects/glue-edit-inspire-datasetform.html:179
 msgid "Responsible Party"
 msgstr ""
 
-#: ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:252
+#: ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:253
 msgid ""
 "The responsible party names the organisation responsible for the "
 "establishment, management, maintenance and distribution of resources "
 "contained in this dataset."
 msgstr ""
 
-#: ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:257
+#: ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:258
 msgid "Party"
 msgstr ""
 
@@ -2364,6 +2375,7 @@ msgstr ""
 
 #: ckanext/publicamundi/templates/package/snippets/fields/edit-list-bounding_box-inspire.html:18
 #: ckanext/publicamundi/templates/package/snippets/fields/edit-list-conformity-inspire.html:6
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-contacts-inspire.html:5
 #: ckanext/publicamundi/templates/package/snippets/fields/edit-list-spatial_resolution-inspire.html:7
 #: ckanext/publicamundi/templates/package/snippets/fields/edit-list-temporal_extent-inspire.html:6
 msgid "Clear all"
@@ -2402,6 +2414,42 @@ msgstr ""
 
 #: ckanext/publicamundi/templates/package/snippets/fields/edit-list-conformity-inspire.html:10
 msgid "Are you sure you want to clear all ({{num}}) statements?"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-contacts-baz.html:4
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-contacts-inspire.html:3
+msgid "New"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-contacts-baz.html:5
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-contacts-inspire.html:4
+msgid "Add another contact"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-contacts-inspire.html:6
+msgid "Clear all contacts!"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-contacts-inspire.html:7
+msgid "Reorder"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-contacts-inspire.html:8
+msgid "Reorder the following contacts"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-contacts-inspire.html:10
+msgid "You cannot add more than {{maxlength}} contacts"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-contacts-inspire.html:11
+msgid "Are you sure you want to clear all ({{num}}) contacts ?"
+msgstr ""
+
+#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-resource_language-inspire.html:23
+msgid ""
+"The resource language information is automatically extracted from resource "
+"metadata and is not to be supplied here."
 msgstr ""
 
 #: ckanext/publicamundi/templates/package/snippets/fields/edit-list-spatial_resolution-inspire.html:5
