@@ -35,7 +35,7 @@ class HAUsedCoveragesParser(HAParser):
             if self.coverage_separator_standard in coverage_names_container:
                 coverage_names = coverage_names_container.split(self.coverage_separator_standard)
             elif self.coverage_separator_geoserver in coverage_names_container:
-                coverage_names = [coverage_names_container.split(self.coverage_separator_geoserver)[1]]
+                coverage_names = coverage_names_container.split(self.coverage_separator_geoserver)
             else:
                 # single coverage given
                 coverage_names = [coverage_names_container]
