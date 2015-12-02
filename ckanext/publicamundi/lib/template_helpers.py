@@ -80,25 +80,26 @@ markup_for_translatable_text._text_field = fields.TextField()
 markup_for_translatable_text._text_field.setTaggedValue('translatable', True)
 
 _preferable_metadata_format = [
-        {'name':'INSPIRE',
-         'format':'xml'},
-        {'name': 'CKAN',
-        'format': 'json'}]
+    {'name':'inspire', 'format':'xml'},
+    {'name': 'ckan', 'format': 'json'}
+]
 
 _default_metadata_format = 'xml'
 
-# Returns the most suitable primary download format for each schema
-# based on _preferable_metadata_format list of dictionaries
-def get_primary_metadata_url(links, metadata_type):
-    pformat = _default_metadata_format
+def get_primary_metadata_url(links, dtype):
+    '''Returns the most suitable primary download format for each schema
+    based on _preferable_metadata_format
+    '''
+    dtype = dtype.lower()
 
-    for mtype in _preferable_metadata_format:
-        if mtype.get('name') == metadata_type:
-            pformat = mtype.get('format')
-
+    pref_format = _default_metadata_format
+    for pref in _preferable_metadata_format:
+        if pref.get('name', '').lower() == dtype:
+            pref_format = pref.get('format')
+            break
     url = ''
     for link in links:
-        if link.get('title') == metadata_type and link.get('format') == pformat:
+        if link.get('title', '').lower() == dtype and link.get('format') == pref_format:
             url = link.get('url')
             break
     return url
