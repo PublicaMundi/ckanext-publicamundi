@@ -68,7 +68,7 @@ class IInspireMetadata(IMetadata):
         description = _(u'This is a brief narrative summary of the contents of this dataset.'),
         required = True)
     abstract.setTaggedValue('translatable', True)
-    abstract.setTaggedValue('links-to', 'notes')
+    #abstract.setTaggedValue('links-to', 'notes')
 
     locator = zope.schema.List(
         title = _(u'Resource Locator'),
