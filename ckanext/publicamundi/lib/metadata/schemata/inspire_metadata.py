@@ -220,6 +220,7 @@ class IInspireMetadata(IMetadata):
 
     conformity = zope.schema.List(
         title = _(u'Conformity'),
+        description = _(u'''This is a citation of the implementing rules adopted under Article 7(1) of Directive 2007/2/EC or other specification to which a particular resource conforms. A resource may conform to more than one implementing rules adopted under Article 7(1) of Directive 2007/2/EC or other specification. This citation shall include at least the title and a reference date (date of publication, date of last revision or of creation) of the implementing rules adopted under Article 7(1) of Directive 2007/2/EC or of the specification.'''),
         required = False,
         max_length = 4,
         value_type = zope.schema.Object(IConformity,
