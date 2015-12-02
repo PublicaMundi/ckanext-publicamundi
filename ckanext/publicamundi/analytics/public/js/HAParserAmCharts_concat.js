@@ -280,12 +280,18 @@ FlancheJs.defineClass("Analytics.widgets.CoverageAccess", {
             this._makeTableHtml();
             var element = document.getElementById(this.getSelector());
             element.innerHTML = this.getTableHtml();
+            $(".coverage-name").each(function () {
+                var $this = $(this);
+                $.get("/api/3/action/resource_show?id=" + $this.text(), function (data) {
+                    $this.text(data.result.name)
+                })
+            })            
         }
     },
 
     internals: {
         tHead: "<tr><th>Coverage Name</th><th>Access Count</th><th style='width:160px'>Operations</th></tr>",
-        row: '<tr><td>$name$</td><td>$count$</td><td>' +
+        row: '<tr><td class="coverage-name">$name$</td><td>$count$</td><td>' +
         '<button data-coverageId="$name$" title="View access count by date" type="button" class="$btn-date-class$ btn btn-default btn-lg"> <span class="icon icon-calendar" aria-hidden="true"></span></button>' +
         '<button data-coverageId="$name$" title="View access count by band" type="button" class="$btn-band-class$ btn btn-default btn-lg"> <span class="icon icon-align-left rotate-90" aria-hidden="true"></span></button>' +
         '<button data-coverageId="$name$" title="Generate pyramids" type="button" class="generate-pyramids $btn-band-class$ btn btn-default btn-lg"> <span class="icon icon-adjust rotate-90" aria-hidden="true"></span></button>' +
