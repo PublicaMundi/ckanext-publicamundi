@@ -1,4 +1,4 @@
-ckan.module('contact-form-send', function ($, _) {
+ckan.module('contact-form', function ($, _) {
       return {
           options: {
             },
@@ -6,12 +6,12 @@ ckan.module('contact-form-send', function ($, _) {
             },
             initialize: function () {
                 $.proxyAll(this, /_on/);
-                this._generateCaptcha();
-                this.el.on('submit', this._onSubmit); 
+                this.el.on('click', this._onClick);
+                //this.el.on('submit', this._onSubmit); 
                 //this.el.on('hidden.bs.modal', this._onHidden);
                 //$("#contact-form-modal-send").on('click', this._onSubmit);
-                $("#contact-form-modal-reload").on('click', this._onReload);
             },
+            _modalReceived: false,
             _generateCaptcha: function() {
                 var url = '/publicamundi/util/generate_captcha';
                 $.ajax({
@@ -24,9 +24,30 @@ ckan.module('contact-form-send', function ($, _) {
                 })
 
             },
+            _onClick: function(e) {
+                if (!this._modalReceived) {
+                    this.sandbox.client.getTemplate('contact_form.html',
+                                            this.options,
+                                            this._onReceiveModal);
+                    this._modalReceived = true;
+                }
+                else{
+                   $('#contact-form-modal').modal('show'); 
+                }
+
+            },
+            _onReceiveModal: function(html) {
+                console.log('modal received');
+                $('body').append(html);
+                $('#contact-form-modal').modal('show');
+                $("#contact-form-modal-reload").on('click', this._onReload);
+                //this._generateCaptcha();
+                //$('#contact-form-modal-send').on('click', function(){ alert('1');});
+                $('#contact-form-modal').on('submit', this._onSubmit);
+            },
             _onReload: function(e) {
                 e.preventDefault();
-                this.el[0].reset();
+                $('#contact-form-modal')[0].reset();
                 this._generateCaptcha();
                 $('#contact-form-modal-loading').addClass('hidden');
                 $('#contact-form-modal-failure').addClass('hidden');
@@ -50,6 +71,9 @@ ckan.module('contact-form-send', function ($, _) {
                     'antispam': $("#contact-form-modal #contact-antispam").val(), 
                     'captcha': $("#contact-form-modal #contact-captcha-txt").val(), 
                 };
+                console.log('data');
+                console.log(data);
+                //console.log($('#contact-form-modal').serializeArray());
                 $.ajax({
                     url: url,
                     type: 'POST',

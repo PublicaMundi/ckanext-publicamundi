@@ -1,7 +1,7 @@
- <form class="modal hide no-fade" id="contact-form-modal" tabindex="-1" aria-hidden="true" method="post" data-module="basic-form contact-form-send" data-toggle="validation">
+ <form class="modal hide no-fade" data-backdrop="static" id="contact-form-modal" tabindex="-1" action="#" aria-hidden="true" method="post" data-module="basic-form" data-toggle="validation">
     <div class="modal-header">
         <a class="close" data-dismiss="modal">&times;</a>
-        <h3><i class="icon-envelope"></i> {% trans %}<span class='contact-term'>Contact</span>{% endtrans %}: {{pkg.title}}</h3>
+        <h3><i class="icon-envelope"></i> {% trans %}<span class='contact-term'>Contact</span>{% endtrans %}:</h3>
     </div>
     
     <div class="modal-body form-horizontal">
@@ -33,7 +33,7 @@
             <br>
             
             <div class="controls hidden">
-                <input type="hidden" name="pkg-name" id="contact-pkg_name" value="{{ pkg.id }}"></input>
+                <input type="hidden" name="pkg-name" id="contact-pkg_name" value=""></input>
             </div>
             
             <div class="controls hidden">
