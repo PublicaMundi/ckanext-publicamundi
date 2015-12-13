@@ -86,6 +86,7 @@ class Command(CommandDispatcher):
             make_option('--output', type=str, dest='outfile', default='package_translations.csv'),
         ),
         'analyze-logs': (
+            make_option('--create', action='store_true', dest='create_tables', default=False),
             make_option('--from', type=str, dest='from_date'),
             make_option('--to', type=str, dest='to_date'),
         ),
@@ -540,9 +541,13 @@ class Command(CommandDispatcher):
             for info in info_list:
                 session.add(info)
 
-        # Parse requested range
-
+        # (Re)create database
+        
+        if opts.create_tables:
+            DbManager.drop_all_tables()
         DbManager.create_schema()
+        
+        # Parse requested range
         
         start_date, end_date = None, None
         if opts.from_date and opts.to_date:
@@ -558,6 +563,8 @@ class Command(CommandDispatcher):
         current_date = start_date.date()
         finish_date = end_date.date()
         
+        # Analyze and store logs
+
         while current_date < finish_date:
             self.logger.info("Parsing from {0}".format(current_date))
             trimmer = LogTrimmer(configmanager.logfile_pattern, current_date)

@@ -41,7 +41,7 @@ def get_contact_point(pkg):
     # If there, INSPIRE metadata take precedence
     
     if pkg.get('dataset_type') == 'inspire':
-        name = pkg.get('inspire.contact.0.organization', '').decode('unicode-escape')
+        name = pkg.get('inspire.contact.0.organization', '')
         email = pkg.get('inspire.contact.0.email')
     
     # If not there, use maintainer or organization info
