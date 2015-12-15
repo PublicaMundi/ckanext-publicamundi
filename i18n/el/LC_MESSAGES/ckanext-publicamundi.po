@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-publicamundi 1.2dev\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-12-02 18:32+0200\n"
+"POT-Creation-Date: 2015-12-15 10:51-0500\n"
 "PO-Revision-Date: 2015-04-06 02:11+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: el <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Analytics"
 msgstr "Αναλυτικά στοιχεία"
 
-#: ckanext/publicamundi/analytics/templates/main.html:115
+#: ckanext/publicamundi/analytics/templates/main.html:117
 #: ckanext/publicamundi/controllers/user.py:47
 #: ckanext/publicamundi/themes/geodata/controllers/package.py:34
 #: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:140
@@ -655,7 +655,16 @@ msgid ""
 "reference date (date of publication, date of last revision or of "
 "creation) of the implementing rules adopted under Article 7(1) of "
 "Directive 2007/2/EC or of the specification."
-msgstr "Πρόκειται για μνεία των εκτελεστικών διατάξεων που θεσπίζονται με το άρθρο 7 παράγραφος 1 της οδηγίας 2007/2/ΕΚ ή άλλης προδιαγραφής την οποία πληροί συγκεκριμένος πόρος. Ο πόρος είναι δυνατόν να πληροί περισσότερες της μιας εκτελεστικές διατάξεις που θεσπίζονται με το άρθρο 7 παράγραφος 1 της οδηγίας 2007/2/ΕΚ ή άλλη προδιαγραφή. Η μνεία αυτή περιλαμβάνει τουλάχιστον τον τίτλο και την ημερομηνία αναφοράς (ημερομηνία δημοσίευσης, ημερομηνία τελευταίας αναθεώρησης ή δημιουργίας) των εκτελεστικών διατάξεων που θεσπίζονται με το άρθρο 7 παράγραφος 1 της οδηγίας 2007/2/ΕΚ ή της προδιαγραφής."
+msgstr ""
+"Πρόκειται για μνεία των εκτελεστικών διατάξεων που θεσπίζονται με το "
+"άρθρο 7 παράγραφος 1 της οδηγίας 2007/2/ΕΚ ή άλλης προδιαγραφής την οποία"
+" πληροί συγκεκριμένος πόρος. Ο πόρος είναι δυνατόν να πληροί περισσότερες"
+" της μιας εκτελεστικές διατάξεις που θεσπίζονται με το άρθρο 7 παράγραφος"
+" 1 της οδηγίας 2007/2/ΕΚ ή άλλη προδιαγραφή. Η μνεία αυτή περιλαμβάνει "
+"τουλάχιστον τον τίτλο και την ημερομηνία αναφοράς (ημερομηνία "
+"δημοσίευσης, ημερομηνία τελευταίας αναθεώρησης ή δημιουργίας) των "
+"εκτελεστικών διατάξεων που θεσπίζονται με το άρθρο 7 παράγραφος 1 της "
+"οδηγίας 2007/2/ΕΚ ή της προδιαγραφής."
 
 #: ckanext/publicamundi/lib/metadata/schemata/inspire_metadata.py:234
 msgid "Access Constraints"
@@ -2027,9 +2036,9 @@ msgstr "Διαχείριση"
 #: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:27
 #: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:34
 #: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:40
-#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:64
-#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:72
-#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:80
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:54
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:62
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:70
 msgid "Endpoint"
 msgstr "Σύνδεσμος"
 
@@ -2553,12 +2562,10 @@ msgstr "Δεν μπορείτε να προσθέσετε πάνω από {{maxl
 msgid "Are you sure you want to clear all ({{num}}) statements?"
 msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε και τις ({{num}}) δηλώσεις;"
 
-#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-contacts-baz.html:4
 #: ckanext/publicamundi/templates/package/snippets/fields/edit-list-contacts-inspire.html:3
 msgid "New"
 msgstr "Νέο"
 
-#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-contacts-baz.html:5
 #: ckanext/publicamundi/templates/package/snippets/fields/edit-list-contacts-inspire.html:4
 msgid "Add another contact"
 msgstr "Προσθήκη νέας επαφής"
@@ -3042,18 +3049,22 @@ msgid "Search..."
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/footer.html:41
+msgid "<span class=\"contact-footer\">Contact</span>"
+msgstr "Επικοινωνία"
+
+#: ckanext/publicamundi/themes/geodata/templates/footer.html:42
 msgid "IMIS"
 msgstr "ΙΠΣΥ"
 
-#: ckanext/publicamundi/themes/geodata/templates/footer.html:42
+#: ckanext/publicamundi/themes/geodata/templates/footer.html:43
 msgid "INSPIRE"
 msgstr ""
 
-#: ckanext/publicamundi/themes/geodata/templates/footer.html:43
+#: ckanext/publicamundi/themes/geodata/templates/footer.html:44
 msgid "EU Open Data Portal"
 msgstr ""
 
-#: ckanext/publicamundi/themes/geodata/templates/footer.html:52
+#: ckanext/publicamundi/themes/geodata/templates/footer.html:53
 msgid "Report issue"
 msgstr "Αναφορά προβλήματος"
 
@@ -3355,13 +3366,13 @@ msgstr "Προγραμματιστές"
 #: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:22
 #: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:56
 #: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:66
-#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:27
-#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:36
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:17
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:26
 msgid "Map"
 msgstr "Χάρτης"
 
 #: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:77
-#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:48
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:38
 msgid "Table"
 msgstr "Πίνακας"
 
@@ -3913,3 +3924,4 @@ msgid ""
 msgstr ""
 " Το προφίλ σας επιτρέπει σε άλλους χρήστες του Geodata.gov.gr να "
 "γνωρίζουν ποιος είστε και με τι ασχολείστε. "
+

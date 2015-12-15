@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-publicamundi 1.4dev\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2015-12-02 18:32+0200\n"
+"POT-Creation-Date: 2015-12-15 10:51-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Analytics"
 msgstr ""
 
-#: ckanext/publicamundi/analytics/templates/main.html:115
+#: ckanext/publicamundi/analytics/templates/main.html:117
 #: ckanext/publicamundi/controllers/user.py:47
 #: ckanext/publicamundi/themes/geodata/controllers/package.py:34
 #: ckanext/publicamundi/themes/geodata/templates/user/dashboard_maps.html:140
@@ -1913,9 +1913,9 @@ msgstr ""
 #: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:27
 #: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:34
 #: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:40
-#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:64
-#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:72
-#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:80
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:54
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:62
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:70
 msgid "Endpoint"
 msgstr ""
 
@@ -2416,12 +2416,10 @@ msgstr ""
 msgid "Are you sure you want to clear all ({{num}}) statements?"
 msgstr ""
 
-#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-contacts-baz.html:4
 #: ckanext/publicamundi/templates/package/snippets/fields/edit-list-contacts-inspire.html:3
 msgid "New"
 msgstr ""
 
-#: ckanext/publicamundi/templates/package/snippets/fields/edit-list-contacts-baz.html:5
 #: ckanext/publicamundi/templates/package/snippets/fields/edit-list-contacts-inspire.html:4
 msgid "Add another contact"
 msgstr ""
@@ -2897,18 +2895,22 @@ msgid "Search..."
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/footer.html:41
-msgid "IMIS"
+msgid "<span class=\"contact-footer\">Contact</span>"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/footer.html:42
-msgid "INSPIRE"
+msgid "IMIS"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/footer.html:43
+msgid "INSPIRE"
+msgstr ""
+
+#: ckanext/publicamundi/themes/geodata/templates/footer.html:44
 msgid "EU Open Data Portal"
 msgstr ""
 
-#: ckanext/publicamundi/themes/geodata/templates/footer.html:52
+#: ckanext/publicamundi/themes/geodata/templates/footer.html:53
 msgid "Report issue"
 msgstr ""
 
@@ -3174,13 +3176,13 @@ msgstr ""
 #: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:22
 #: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:56
 #: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:66
-#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:27
-#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:36
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:17
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:26
 msgid "Map"
 msgstr ""
 
 #: ckanext/publicamundi/themes/geodata/templates/package/resource_read.html:77
-#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:48
+#: ckanext/publicamundi/themes/geodata/templates/package/snippets/resource_item.html:38
 msgid "Table"
 msgstr ""
 
