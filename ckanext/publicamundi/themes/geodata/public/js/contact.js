@@ -7,9 +7,6 @@ ckan.module('contact-form', function ($, _) {
             initialize: function () {
                 $.proxyAll(this, /_on/);
                 this.el.on('click', this._onClick);
-                //this.el.on('submit', this._onSubmit); 
-                //this.el.on('hidden.bs.modal', this._onHidden);
-                //$("#contact-form-modal-send").on('click', this._onSubmit);
             },
             _modalReceived: false,
             _generateCaptcha: function() {
@@ -37,18 +34,17 @@ ckan.module('contact-form', function ($, _) {
 
             },
             _onReceiveModal: function(html) {
-                console.log('modal received');
+                this._generateCaptcha();
                 $('body').append(html);
                 $('#contact-form-modal').modal('show');
                 $("#contact-form-modal-reload").on('click', this._onReload);
-                //this._generateCaptcha();
-                //$('#contact-form-modal-send').on('click', function(){ alert('1');});
                 $('#contact-form-modal').on('submit', this._onSubmit);
             },
             _onReload: function(e) {
                 e.preventDefault();
                 $('#contact-form-modal')[0].reset();
                 this._generateCaptcha();
+                
                 $('#contact-form-modal-loading').addClass('hidden');
                 $('#contact-form-modal-failure').addClass('hidden');
                 $('#contact-form-modal-success').addClass('hidden');
@@ -66,14 +62,11 @@ ckan.module('contact-form', function ($, _) {
                 var data = {
                     'name': $("#contact-form-modal #contact-name").val(),
                     'email': $("#contact-form-modal #contact-email").val(), 
-                    'pkg_name': $("#contact-form-modal #contact-pkg_name").val(), 
+                    'pkg_name': this.options.pkgName,
                     'message': $("#contact-form-modal #contact-msg").val(), 
                     'antispam': $("#contact-form-modal #contact-antispam").val(), 
                     'captcha': $("#contact-form-modal #contact-captcha-txt").val(), 
                 };
-                console.log('data');
-                console.log(data);
-                //console.log($('#contact-form-modal').serializeArray());
                 $.ajax({
                     url: url,
                     type: 'POST',
@@ -92,9 +85,7 @@ ckan.module('contact-form', function ($, _) {
                 $('#contact-form-modal-cancel').addClass('hidden');
             },
             _onSuccess: function(data) {
-                //console.log(data);
                 var response = JSON.parse(data);
-                //console.log(response.success);
                 
                 // Mail sent
                 if (response.success){
@@ -118,6 +109,7 @@ ckan.module('contact-form', function ($, _) {
                 }                
             },
             _onFailure: function(data){
+                console.log('Email failure');
                 console.log(data);
                 $('#contact-form-modal-loading').addClass('hidden');
                 $('#contact-form-modal-items').addClass('hidden');

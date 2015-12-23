@@ -39,7 +39,8 @@ def friendly_date(date_str):
 def get_contact_point(pkg):
     
     # If there, INSPIRE metadata take precedence
-    
+    name = None
+    email = None
     if pkg.get('dataset_type') == 'inspire':
         name = pkg.get('inspire.contact.0.organization', '').decode('unicode-escape')
         email = pkg.get('inspire.contact.0.email')
