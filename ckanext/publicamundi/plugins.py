@@ -256,6 +256,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'dataset_export': ext_actions.package.dataset_export,
             'dataset_import': ext_actions.package.dataset_import,
             'dataset_export_dcat': ext_actions.package.dataset_export_dcat,
+            'group_list_authz': ext_actions.thematic_groups.group_list_authz,
         }
 
     ## IDatasetForm interface ##
@@ -1072,6 +1073,10 @@ class MultilingualDatasetForm(DatasetForm):
         funcs = {
             'dataset_translation_update': 
                 ext_actions.package.dataset_translation_check_authorized,
+            'member_create':
+                ext_actions.thematic_groups.member_create,
+            'member_delete':
+                ext_actions.thematic_groups.member_delete,
         }
         return funcs
     
