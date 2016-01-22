@@ -19,6 +19,7 @@ _ = toolkit._
 _check_access = toolkit.check_access
 _get_action = toolkit.get_action
 
+NotFound = toolkit.ObjectNotFound
 
 class NotVectorStorerDB(Exception):
     pass
