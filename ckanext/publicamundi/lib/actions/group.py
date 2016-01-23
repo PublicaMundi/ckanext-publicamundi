@@ -29,7 +29,7 @@ def group_list_authz(context, data_dict):
 
     :param am_member: if True return only the groups the logged-in user is a
       member of, otherwise return all groups that the user is authorized to
-      edit (for example, sysadmin users are authorized to edit all grouimport ckan.lib.dictization.model_dictize as model_dictizeps)
+      edit (for example, sysadmin users are authorized to edit all groups)
       (optional, default: False)
     :type am-member: boolean
 
