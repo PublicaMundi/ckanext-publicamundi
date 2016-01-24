@@ -38,5 +38,5 @@ class Invalid(toolkit.ValidationError):
 
 from . import package
 from . import autocomplete
-from . import thematic_groups
+from . import group
 

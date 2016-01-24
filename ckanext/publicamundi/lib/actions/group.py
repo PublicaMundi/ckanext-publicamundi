@@ -4,16 +4,14 @@ import sqlalchemy
 import ckan.new_authz as new_authz
 import ckan.model as model
 import ckan.logic.auth as auth
-import ckan.lib.dictization.model_dictize as model_dictize
-
-import ckan.plugins as p
-
 import ckan.logic.auth.create as create_auth
+import ckan.lib.dictization.model_dictize as model_dictize
+import ckan.plugins as p
+import ckan.plugins.toolkit as toolkit
 
 from ckan.common import _
 
 
-import ckan.plugins.toolkit as toolkit
 
 
 _check_access = toolkit.check_access
@@ -21,7 +19,12 @@ _or_ = sqlalchemy.or_
 
 
 def group_list_authz(context, data_dict):
-    '''Return the list of groups that the user is authorized to edit.
+    ''' Return the list of groups that the user is authorized to edit.
+    
+    Action "group_list_authz" ovewrites core "group_list_authz" action.
+    It does so in order to allow users, other than the sysadmin, add/delete 
+    members to/from a thematic group. The only precondition to that right,
+    is the user having at least editor rights for at least one organization.
 
     :param available_only: remove the existing groups in the package
       (optional, default: ``False``)
@@ -47,7 +50,7 @@ def group_list_authz(context, data_dict):
     
     sysadmin = new_authz.is_sysadmin(user)
     
-    roles = new_authz.get_roles_with_permission('manage_group')
+    roles = new_authz.get_roles_with_permission('update_dataset')
     if not roles:
         return []
     user_id = new_authz.get_user_id_for_username(user, allow_none=True)
@@ -69,9 +72,6 @@ def group_list_authz(context, data_dict):
     q = model.Session.query(model.Group) \
         .filter(model.Group.is_organization == False) \
         .filter(model.Group.state == 'active')
-    
-    if not sysadmin or am_member:
-        q = q.filter(_or_(model.Group.id.in_(group_ids), model.Group.is_organization == False))
 
     groups = q.all()
 
@@ -84,7 +84,7 @@ def group_list_authz(context, data_dict):
     return group_list
 
 
-def member_create(context, data_dict):
+def member_create_check_authorized(context, data_dict):
     
     group = p.toolkit.get_action('group_show')(context,
             {
@@ -95,7 +95,7 @@ def member_create(context, data_dict):
         return create_auth.member_create(context, data_dict)
     else:
         user = context.get('user')
-        # Looking for any organizations user, has at least editor rights. If none exists 
+        # Looking for any organization's user, has at least editor rights. If none exists 
         # he cannot edit a thematic group
         organizations = p.toolkit.get_action('organization_list_for_user')(context,
                         {
@@ -108,8 +108,8 @@ def member_create(context, data_dict):
             return {'success': True}    
         
         
-def member_delete(context, data_dict):
-    return member_create(context, data_dict)
+def member_delete_check_authorized(context, data_dict):
+    return member_create_check_authorized(context, data_dict)
     
     
 
