@@ -257,6 +257,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'dataset_export': ext_actions.package.dataset_export,
             'dataset_import': ext_actions.package.dataset_import,
             'dataset_export_dcat': ext_actions.package.dataset_export_dcat,
+            'group_list_authz': ext_actions.group.group_list_authz,
         }
     
     ## IAuthFunctions interface ##
@@ -266,8 +267,8 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
         '''
         funcs = {
             # Relax the required conditions for adding to (thematic) groups    
-            #'member_create': ext_actions.group.member_create_check_authorized,
-            #'member_delete': ext_actions.group.member_delete_check_authorized,
+            'member_create': ext_actions.group.member_create_check_authorized,
+            'member_delete': ext_actions.group.member_delete_check_authorized,
         }
         return funcs
 
