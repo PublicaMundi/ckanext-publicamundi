@@ -1,4 +1,3 @@
-import pprint
 import sqlalchemy
 
 import ckan.new_authz as new_authz
@@ -10,8 +9,6 @@ import ckan.plugins as p
 import ckan.plugins.toolkit as toolkit
 
 from ckan.common import _
-
-
 
 
 _check_access = toolkit.check_access
@@ -68,7 +65,12 @@ def group_list_authz(context, data_dict):
 
         if not group_ids:
             return []
-    
+        
+        if context.get('package'):
+            package_org = context.get('package').owner_org
+            if package_org not in group_ids:
+                return []
+        
     q = model.Session.query(model.Group) \
         .filter(model.Group.is_organization == False) \
         .filter(model.Group.state == 'active')
@@ -85,32 +87,44 @@ def group_list_authz(context, data_dict):
 
 
 def member_create_check_authorized(context, data_dict):
+    ''' It overwrites core authorization function member_create.
+    It only deals with cases where the group is thematic, and the member 
+    a package. The reset are delegated to the core authorization function.
     
-    group = p.toolkit.get_action('group_show')(context,
-            {
-                'id': data_dict.get('id'),
-            })
+    '''
     
-    if group.get('is_organization'):
+    group = p.toolkit.get_action('group_show')(context, {
+        'id': data_dict.get('id'),
+    })
+    
+    if group.get('is_organization') or not context.get('package'):
         return create_auth.member_create(context, data_dict)
     else:
         user = context.get('user')
+        
         # Looking for any organization's user, has at least editor rights. If none exists 
         # he cannot edit a thematic group
-        organizations = p.toolkit.get_action('organization_list_for_user')(context,
-                        {
-                            'permission': 'update_dataset'
-                        })
+        organizations = p.toolkit.get_action('organization_list_for_user')(context, {
+            'permission': 'update_dataset'
+        })
         if not organizations:
             return {'success': False,
-                    'msg': _('User %s not authorized to edit any thematic group')}
+                    'msg': _('User %s is not authorized to edit any thematic group') %
+                            (user)}
+        
+        # Checking that the user has at least editor's rights for the organization in which
+        # the package belongs to.
         else:
-            return {'success': True}    
+            package_org = context.get('package').owner_org
+            package_id = context.get('package').id
+            if package_org not in [x.get('id') for x in organizations]:
+                return {'success': False,
+                        'msg': _('User %s is not authorized to edit package %s') %
+                                (user, package_id)}
+            else:
+                return {'success': True}
         
         
 def member_delete_check_authorized(context, data_dict):
     return member_create_check_authorized(context, data_dict)
-    
-    
-
     
