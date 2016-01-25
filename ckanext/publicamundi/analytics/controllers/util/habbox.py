@@ -1,10 +1,21 @@
 """
 Class representing a 2D bounding box, as it appears in the HAProxy logs.
 """
+from sqlalchemy import Column, Integer, String, ForeignKey
+from ckanext.publicamundi.analytics.controllers.configmanager import Base
+
 __author__ = "<a href='mailto:merticariu@rasdaman.com'>Vlad Merticariu</a>"
 
 
-class HABbox:
+class HABbox(Base):
+    __tablename__ = "bbox"
+
+    id = Column(Integer, primary_key=True)
+    #bbox_access_id = Column(Integer, ForeignKey("bbox_access.id"))
+    min_x = Column(String, nullable=False)
+    min_y = Column(String, nullable=False)
+    max_x = Column(String, nullable=False)
+    max_y = Column(String, nullable=False)
 
     def __init__(self, min_x, min_y, max_x, max_y):
         """

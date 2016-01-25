@@ -11,6 +11,7 @@ import ckan.plugins.toolkit as toolkit
 from ckanext.publicamundi.lib.metadata import (
     fields, bound_field, markup_for_field, markup_for)
 from ckanext.publicamundi.lib import resource_ingestion
+from ckanext.publicamundi.lib.languages import Language
 
 def filtered_list(l, key, value, op='eq'):
     '''Filter list items based on their value in a specific key/attr.
@@ -122,3 +123,7 @@ def get_ingested_vector(package,resource):
                 if resb.get('vectorstorer_resource') and resb.get('parent_resource_id')==resa.get('id'):
                     ing_resources.append(resb)
     return ing_resources
+
+def transform_to_iso_639_2(langcode_iso_639_1):
+    
+    return Language(langcode_iso_639_1).alpha3b

@@ -41,6 +41,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
     p.implements(p.IDatasetForm, inherit=True)
     p.implements(p.IRoutes, inherit=True)
     p.implements(p.IActions, inherit=True)
+    p.implements(p.IAuthFunctions, inherit=True)
     p.implements(p.IPackageController, inherit=True)
     p.implements(p.IResourceController, inherit=True)
     p.implements(p.IFacets, inherit=True)
@@ -87,6 +88,7 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'get_primary_metadata_url': ext_template_helpers.get_primary_metadata_url,
             'get_ingested_raster': ext_template_helpers.get_ingested_raster,
             'get_ingested_vector': ext_template_helpers.get_ingested_vector,
+            'transform_to_iso_639_2': ext_template_helpers.transform_to_iso_639_2
         }
 
     ## IConfigurer interface ##
@@ -255,7 +257,20 @@ class DatasetForm(p.SingletonPlugin, toolkit.DefaultDatasetForm):
             'dataset_export': ext_actions.package.dataset_export,
             'dataset_import': ext_actions.package.dataset_import,
             'dataset_export_dcat': ext_actions.package.dataset_export_dcat,
+            'group_list_authz': ext_actions.group.group_list_authz,
         }
+    
+    ## IAuthFunctions interface ##
+    
+    def get_auth_functions(self):
+        '''Define new authorization checks or replace existing ones
+        '''
+        funcs = {
+            # Relax the required conditions for adding to (thematic) groups    
+            'member_create': ext_actions.group.member_create_check_authorized,
+            'member_delete': ext_actions.group.member_delete_check_authorized,
+        }
+        return funcs
 
     ## IDatasetForm interface ##
 
@@ -900,8 +915,6 @@ class MultilingualDatasetForm(DatasetForm):
       * translate user-supplied values for a certain dataset (web-based)
     
     '''
-    
-    p.implements(p.IAuthFunctions)
 
     ## IDatasetForm interface ## 
 
@@ -1068,10 +1081,11 @@ class MultilingualDatasetForm(DatasetForm):
     ## IAuthFunctions interface ##
     
     def get_auth_functions(self):
-        funcs = {
+        funcs = super(MultilingualDatasetForm, self).get_auth_functions()
+        funcs.update({
             'dataset_translation_update': 
                 ext_actions.package.dataset_translation_check_authorized,
-        }
+        })
         return funcs
     
     ## IActions interface ##

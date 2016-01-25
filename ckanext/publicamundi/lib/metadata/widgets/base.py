@@ -75,6 +75,8 @@ class FieldWidget(Widget):
     
     def prepare_template_vars(self, name_prefix, data):
         '''Prepare template context'''
+        
+        _ = toolkit._ # gettext translator 
 
         # Provide basic variables
         tpl_vars = {
@@ -87,8 +89,8 @@ class FieldWidget(Widget):
             'name': self.name,
             'errors': self.errors,
             'required': self.field.required,
-            'title': self.field.title,
-            'description': self.field.description,
+            'title': _(self.field.title) if self.field.title else u'',
+            'description': _(self.field.description) if self.field.description else u'',
             'readonly': self.field.readonly,
             'linked_to': self.field.queryTaggedValue('links-to'),
             'attrs': {},

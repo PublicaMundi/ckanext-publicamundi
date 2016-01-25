@@ -67,7 +67,7 @@ setup(
     # ckan's setup.py (from where message extraction is invoked).
     message_extractors = {
         'ckanext/publicamundi': [
-            ('reference_data/inspire-vocabularies.json', 'publicamundi_extract_json', None),
+            #('reference_data/inspire-vocabularies.json', 'publicamundi_extract_json', None),
             ('reference_data/language-codes.json', 'publicamundi_extract_json', None),
             ('**.py', 'python', None),
             ('**.html', 'ckan', None),

@@ -1,0 +1,373 @@
+# Translations template for ckanext-publicamundi.
+# Copyright (C) 2015 ORGANIZATION
+# This file is distributed under the same license as the ckanext-publicamundi
+# project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: ckanext-publicamundi 1.4dev\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2015-11-30 23:14+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.6\n"
+
+msgid "ατυχήματα"
+msgstr "accident"
+
+msgid "διοίκηση"
+msgstr "administration"
+
+msgid "γεωργία"
+msgstr "agriculture"
+
+msgid "ανάλυση"
+msgstr "analysis"
+
+msgid "ζωοτεχνία"
+msgstr "animal husbandry"
+
+msgid "ατμόσφαιρα"
+msgstr "atmosphere"
+
+msgid "βιοχημικές αλληλεπιδράσεις"
+msgstr "biochemical process"
+
+msgid "βιόσφαιρα"
+msgstr "biosphere"
+
+msgid "ανάχωμα"
+msgstr "border"
+
+msgid "δομημένο περιβάλλον"
+msgstr "built environment"
+
+msgid "επιχείρηση"
+msgstr "business"
+
+msgid "χημική ουσία"
+msgstr "chemical"
+
+msgid "χημικά στοιχεία"
+msgstr "chemical element"
+
+msgid "χημική διεργασία"
+msgstr "chemical process"
+
+msgid "χημικές ιδιότητες"
+msgstr "chemical property"
+
+msgid "κλίμα"
+msgstr "climate"
+
+msgid "σκάφος"
+msgstr "craft"
+
+msgid "πολιτισμός"
+msgstr "culture (society)"
+
+msgid "δημογραφία"
+msgstr "demography"
+
+msgid "καταστροφές (θεομηνίες)"
+msgstr "disaster"
+
+msgid "νοσήματα (παθήσεις)"
+msgstr "disease"
+
+msgid "οικονομία"
+msgstr "economy"
+
+msgid "εκπαίδευση"
+msgstr "education"
+
+msgid "επιπτώσεις"
+msgstr "effect"
+
+msgid "ενέργεια"
+msgstr "energy"
+
+msgid "περιβάλλον"
+msgstr "environment"
+
+msgid "περιβαλλοντική αξιολόγηση"
+msgstr "environmental assessment"
+
+msgid "περιβαλλοντική συνείδηση"
+msgstr "environmental awareness"
+
+msgid "περιβαλλοντικός έλεγχος"
+msgstr "environmental control"
+
+msgid "περιβαλλοντικά στοιχεία (δεδομένα)"
+msgstr "environmental data"
+
+msgid "ζητήματα (θέματα) περιβαλλοντικής οικονομίας"
+msgstr "environmental economy issue"
+
+msgid "περιβαλλοντικές επιπτώσεις"
+msgstr "environmental impact"
+
+msgid "περιβαλλοντική διαχείριση"
+msgstr "environmental management"
+
+msgid "περιβαλλοντικός σχεδιασμός"
+msgstr "environmental planning"
+
+msgid "περιβαλλοντική πολιτική"
+msgstr "environmental policy"
+
+msgid "επίλυση περιβαλλοντικών προβλημάτων"
+msgstr "environmental problem solving"
+
+msgid "προστασία του περιβάλλοντος"
+msgstr "environmental protection"
+
+msgid "εξοπλισμός"
+msgstr "equipment"
+
+msgid "αξιολόγηση"
+msgstr "evaluation"
+
+msgid "πείραμα"
+msgstr "experiment"
+
+msgid "οικονομικά"
+msgstr "finances"
+
+msgid "επιχειρήσεις"
+msgstr "firm"
+
+msgid "αλιεία"
+msgstr "fishery"
+
+msgid "δασοπονία"
+msgstr "forestry"
+
+msgid "γεωλογικές διαδικασίες"
+msgstr "geological process"
+
+msgid "κίνδυνοι"
+msgstr "hazard"
+
+msgid "υγεία"
+msgstr "health"
+
+msgid "σχέσεις υγείας-περιβάλλοντος"
+msgstr "health-environment relationship"
+
+msgid "υδρόσφαιρα"
+msgstr "hydrosphere"
+
+msgid "πηγές προέλευσης των επιπτώσεων"
+msgstr "impact source"
+
+msgid "βιομηχανικές διαδικασίες (μέθοδοι)"
+msgstr "industrial process"
+
+msgid "βιομηχανία"
+msgstr "industry"
+
+msgid "πληροφορία(ίες)"
+msgstr "information"
+
+msgid "θεσμική δομή"
+msgstr "institutional structure"
+
+msgid "διεθνείς σχέσεις"
+msgstr "international relations"
+
+msgid "δικαιοσύνη"
+msgstr "justice"
+
+msgid "εργασία"
+msgstr "labour"
+
+msgid "γη"
+msgstr "land"
+
+msgid "διάταξη γαιών (του εδάφους)"
+msgstr "land setup"
+
+msgid "δίκαιο (σύνολο κανόνων δικαίου)"
+msgstr "law (corpus of rules)"
+
+msgid "ατομικές διοικητικές πράξεις"
+msgstr "law (individual)"
+
+msgid "νομική μορφή (των) οργανισμών"
+msgstr "legal form of organisations"
+
+msgid "νομοθεσία"
+msgstr "legislation"
+
+msgid "λιθόσφαιρα"
+msgstr "lithosphere"
+
+msgid "διαχείριση"
+msgstr "management"
+
+msgid "υλικά"
+msgstr "material"
+
+msgid "ιατρική"
+msgstr "medicine (practice)"
+
+msgid "μεθοδολογίες"
+msgstr "methodology"
+
+msgid "στρατιωτικές δραστηριότητες"
+msgstr "military activities"
+
+msgid "Στρατιωτικά ζητήματα"
+msgstr "military aspects"
+
+msgid "παρακολούθηση"
+msgstr "monitoring"
+
+msgid "διατροφή"
+msgstr "nutrition"
+
+msgid "οργάνωση του νομικού συστήματος"
+msgstr "organisation of the legal system"
+
+msgid "επικάλυψη"
+msgstr "overburden"
+
+msgid "παράμετροι"
+msgstr "parameter"
+
+msgid "πεδόσφαιρα"
+msgstr "pedosphere"
+
+msgid "φυσικές διαδικασίες"
+msgstr "physical process"
+
+msgid "φυσικές ιδιότητες"
+msgstr "physical property"
+
+msgid "φυσικοχημικές διαδικασίες (αλληλεπιδράσεις)"
+msgstr "physicochemical process"
+
+msgid "σχεδιασμός"
+msgstr "planning"
+
+msgid "πολιτική"
+msgstr "policy"
+
+msgid "πολιτική (επιστήμη)"
+msgstr "politics"
+
+msgid "ρύποι"
+msgstr "pollutant"
+
+msgid "ρύπανση"
+msgstr "pollution"
+
+msgid "προϊόντα"
+msgstr "product"
+
+msgid "ακτινοβολία"
+msgstr "radiation"
+
+msgid "αναψυχή"
+msgstr "recreation"
+
+msgid "έρευνα"
+msgstr "research"
+
+msgid "πόροι"
+msgstr "resource"
+
+msgid "χρήση πόρων"
+msgstr "resource utilisation"
+
+msgid "ασφάλεια"
+msgstr "safety"
+
+msgid "επιστήμη"
+msgstr "science"
+
+msgid "υπηρεσίες"
+msgstr "services"
+
+msgid "κοινωνία"
+msgstr "society"
+
+msgid "διάστημα (διαπλανητικός χώρος)"
+msgstr "space (interplanetary)"
+
+msgid "κατάσταση της ύλης"
+msgstr "state of matter"
+
+msgid "στατιστική"
+msgstr "statistics"
+
+msgid "θέμα"
+msgstr "subject"
+
+msgid "τεχνικοί κανόνες"
+msgstr "technical regulation"
+
+msgid "τεχνολογία"
+msgstr "technology"
+
+msgid "τουρισμός"
+msgstr "tourism"
+
+msgid "εμπόριο (υπηρεσίες)"
+msgstr "trade (services)"
+
+msgid "εμπορική δραστηριότητα"
+msgstr "trade activity"
+
+msgid "(οδική) κυκλοφορία"
+msgstr "traffic"
+
+msgid "μεταφορές"
+msgstr "transportation"
+
+msgid "μέσο μεταφοράς"
+msgstr "transportation mean"
+
+msgid "δονήσεις"
+msgstr "vibration"
+
+msgid "υπολείμματα"
+msgstr "waste"
+
+msgid "αέρας"
+msgstr "air"
+
+msgid "βιολογία"
+msgstr "biology"
+
+msgid "κτήριο"
+msgstr "building"
+
+msgid "χημεία"
+msgstr "chemistry"
+
+msgid "γεωγραφία"
+msgstr "geography"
+
+msgid "υγεία του ανθρώπου"
+msgstr "human health"
+
+msgid "φυσική"
+msgstr "physics"
+
+msgid "έδαφος"
+msgstr "soil"
+
+msgid "νερό"
+msgstr "water"
+
+msgid "χώρος"
+msgstr "space"

@@ -293,11 +293,14 @@ def _get_resource_list_for_deletion(
 def _get_parent_resource(resource_dict, package_resources):
     '''Searches in package resources to find the parent
     resource of the requested one. If not found retuns None'''
+    parent_id = resource_dict.get('parent_resource_id')
+    if not parent_id:
+        return None
     parent_resource = None
-    for resource in package_resources:
-        if (resource['id'] == resource_dict['parent_resource_id'] and
-                resource['state'] == 'active'):
-            parent_resource = resource
+    for r in package_resources:
+        if (r['id'] == parent_id and r['state'] == 'active'):
+            parent_resource = r
+            break
     return parent_resource
 
 def _get_child_resources(parent_resource):

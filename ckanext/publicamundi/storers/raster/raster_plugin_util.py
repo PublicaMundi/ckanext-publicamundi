@@ -1,6 +1,7 @@
 """
 A collection of utility functions needed for the raster plugin
 """
+import base64
 import urllib2
 import urllib
 import json
@@ -10,7 +11,6 @@ import shutil
 import logging
 from resources import WCSResource, WMSResource
 import errno
-
 
 import wcst
 
@@ -28,8 +28,10 @@ class RasterUtil:
     def __init__(self, context, logger):
         self.log = logger
         self.path_to_public_folder = context['temp_folder'].strip(' \t\n\r')
-        self.url = context['url'].strip(' \t\n\r')
         self.wcst_url = context['wcst_base_url'].strip(' \t\n\r')
+        self.wcst_import_url = context['wcst_import_url'].strip(' \t\n\r')
+        if self.wcst_import_url[-1] != "/":
+            self.wcst_import_url += "/"
         self.wms_url = context['wms_base_url'].strip(' \t\n\r')
         self.resource_dict = context['resource_dict']
         self.api_key = context['user_api_key'].strip(' \t\n\r')
@@ -174,22 +176,17 @@ class RasterUtil:
         Inserts a coverage attached to a dataset into the WCST service
         :return the name of the layer / coverage
         """
-        gml_url = self.get_gml_url_from_resource()
-        self.log.info("[Raster_InsertCoverage]Executing WCST request of %s (path %s) to %s" %
-                      (self.gml_url, self.gml_path, self.wcst_url))
         # Execute the wcst insert request
-        request = wcst.WCSTInsertRequest(gml_url)
-        executor = wcst.WCSTExecutor(self.wcst_url)
-        response = executor.execute(request)
+        encoded_url = base64.b64encode(self.resource_dict['url'])
+        self.log.info(
+            "[Raster_InsertCoverage] Executing WCSTImport request to:" + self.wcst_import_url + " with param: " + encoded_url)
+        result = urllib.urlopen(self.wcst_import_url + encoded_url).read()
+        response = json.loads(result)
+        if response["error"]:
+            raise CannotPublishRaster(response["error_message"])
         self.log.info("[Raster_InsertCoverage]Success!")
-
-        # Insert into wms
-        self.log.info("[Raster_InsertCoverage]Executing WMST request of coverage %s to %s" % (response, self.wms_url))
-        wms_request = wcst.WMSFromWCSInsertRequest(response)
-        wms_request.execute(self.wms_url)
-        self.log.info("[Raster_InsertCoverage]Success!")
-
-        return response
+        self.coverage_id = response["coverage_id"]
+        return self.coverage_id
 
     def delete_coverage(self):
         """
@@ -267,7 +264,7 @@ class RasterUtil:
             self.coverage_id,
             self.resource_dict['description'],
             self.resource_dict['id'],
-            self.url,
+            self.wms_url,
             self.coverage_id,
             self.resource_dict['name'])
         created_wms_resource = self.invoke_api_resource_action(wms_resource.as_dict(), 'resource_create')
@@ -281,7 +278,7 @@ class RasterUtil:
             self.coverage_id,
             self.resource_dict['description'],
             self.resource_dict['id'],
-            self.url,
+            self.wcst_url,
             self.coverage_id,
             self.resource_dict['name'])
         created_wcs_resource = self.invoke_api_resource_action(wms_resource.as_dict(), 'resource_create')

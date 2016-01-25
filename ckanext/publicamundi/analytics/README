@@ -1,0 +1,8 @@
+You must set the following properties in order for the plugin to work correctly:
+
+```
+ckanext.publicamundi.analytics.rasdaman_endpoint = http://example.org/rasdaman/ows
+ckanext.publicamundi.analytics.api_endpoint = http://example.org:5000/api/analytics
+ckanext.publicamundi.analytics.log_pattern = /mnt/hgfs/logs/*.log
+ckanext.publicamundi.analytics.database_conn_url = postgresql://pman:pass@localhost/analyticsdb
+```

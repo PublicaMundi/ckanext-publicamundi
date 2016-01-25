@@ -123,6 +123,9 @@ p a{
 .account-masthead .lang-select{
     width: 100px;
 }
+.media-heading{
+    word-break: break-word;
+}
 
 .user-menu {
     text-align: left;

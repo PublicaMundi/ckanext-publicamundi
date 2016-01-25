@@ -10,12 +10,12 @@ class HABboxAccessParser(HAParser):
     """
     __author__ = "<a href='mailto:merticariu@rasdaman.com'>Vlad Merticariu</a>"
 
-    def __init__(self):
+    def __init__(self, log_lines):
         """
         Class constructor.
-        :param <string> log_file_path: the path to the log file.
+        :param list[str] log_lines: a list of log lines
         """
-        HAParser.__init__(self)
+        HAParser.__init__(self, log_lines)
 
     def extract_wms_bbox(self, line):
         """
@@ -30,7 +30,7 @@ class HABboxAccessParser(HAParser):
             focus = split[1].split(" ")[0]
         coordinates = focus.split(self.coordinates_separator)
         # check if the right number of coordinates has been parsed
-        if len(coordinates) != 4:
+        if len(coordinates) <= 4:
             return None
         else:
             return HABbox(coordinates[0], coordinates[1], coordinates[2], coordinates[3])
@@ -60,9 +60,13 @@ class HABboxAccessParser(HAParser):
         :return: <HABox>: the bbox corresponding to the line, None if not all the coordinates are given.
         """
         if self.wcs_bbox_key in line:
-            return HABboxAccessInfo(self.extract_wcs_bbox(line), 1)
+            bbox = self.extract_wcs_bbox(line)
+            if bbox is not None:
+                return HABboxAccessInfo(HAParser.parse_date(line), bbox, 1)
         if self.wms_bbox_key in line:
-            return HABboxAccessInfo(self.extract_wms_bbox(line), 1)
+            bbox = self.extract_wms_bbox(line)
+            if bbox is not None:
+                return HABboxAccessInfo(HAParser.parse_date(line), bbox, 1)
         # in case there is no bbox
         return None
 
@@ -72,19 +76,17 @@ class HABboxAccessParser(HAParser):
         :return: <[HABoxAccessInfo]>: the list of bounding boxes addressed in the log file.
         """
         bbox_list = []
-        for filename in self.log_files:
-            with file(filename) as f:
-                for line in f.readlines():
-                    validated_line = self.validate_line(line)
-                    bbox = self.parse_line(validated_line)
-                    if bbox is not None:
-                        bbox_list.append(bbox)
+        for line in self.log_lines:
+            validated_line = self.validate_line(line)
+            bbox = self.parse_line(validated_line)
+            if bbox is not None:
+                bbox_list.append(bbox)
         return self.merge_info_list(bbox_list, HABboxAccessInfo.bbox_property_key)
 
     """
     Key definitions, to know what to look for in the log file.
     """
-    wms_bbox_key = "bbox="
+    wms_bbox_key = "&bbox="
     wcs_bbox_key = "&subset"
     and_key = "&"
     coordinates_separator = ","
