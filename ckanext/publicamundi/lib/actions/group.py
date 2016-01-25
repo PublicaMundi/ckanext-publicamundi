@@ -1,16 +1,12 @@
 import sqlalchemy
 
 import ckan.new_authz as new_authz
-import ckan.model as model
-import ckan.logic.auth as auth
 import ckan.logic.auth.create as create_auth
 import ckan.lib.dictization.model_dictize as model_dictize
 import ckan.plugins as p
 import ckan.plugins.toolkit as toolkit
 
-from ckan.common import _
-
-
+_ = toolkit._
 _check_access = toolkit.check_access
 _or_ = sqlalchemy.or_
 
@@ -85,12 +81,11 @@ def group_list_authz(context, data_dict):
     group_list = model_dictize.group_list_dictize(groups, context)
     return group_list
 
-
 def member_create_check_authorized(context, data_dict):
-    ''' It overwrites core authorization function member_create.
+    '''Overwrite core authorization logic for member_create.
+
     It only deals with cases where the group is thematic, and the member 
-    a package. The reset are delegated to the core authorization function.
-    
+    a package. The rest are delegated to the core authorization function.
     '''
     
     group = p.toolkit.get_action('group_show')(context, {
@@ -124,7 +119,9 @@ def member_create_check_authorized(context, data_dict):
             else:
                 return {'success': True}
         
-        
 def member_delete_check_authorized(context, data_dict):
+    '''Overwrite core authorization logic for member_delete.
+    '''
+    
     return member_create_check_authorized(context, data_dict)
     
