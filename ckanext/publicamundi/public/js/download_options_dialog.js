@@ -121,14 +121,14 @@ ckan.module('download_options_dialog', function ($, _) {
                 var format = selected.data('resource-format');
                 var srs = this.options.srs;
                 
-                var url = this.options.BASE_URL+'geoserver/wfs/?service='+service+'&version='+version+'&request='+request+'&typeName='+layer_name+'&outputFormat='+format+'&srs='+srs;
+                var url = this.options.BASE_URL+'geoserver/wfs/?service='+service+'&version='+version+'&request='+request+'&typeName='+layer_name+'&outputFormat='+format+'&srsName='+srs;
               /*  qs_params = OrderedDict([
                     ('service', 'WFS'),
                     ('version', '1.0.0'),
                     ('request', 'GetFeature'),
                     ('typeName', str(layer_name)),
                     ('outputFormat', str(output_format)),
-                    ('srs', str(srs)),
+                    ('srsName', str(srs)),
                 ])
                 return service_endpoint + '?' + urllib.urlencode(qs_params) */
 
