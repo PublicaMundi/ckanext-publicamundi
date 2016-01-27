@@ -415,10 +415,11 @@ def _ingest_vector(
             layer_name)
         layer = _vector.get_layer(layer_idx)
 
+        table_name = str(created_db_table_resource['id'].lower())
         _vector.handle_layer(
             layer,
             geom_name,
-            created_db_table_resource['id'].lower(),
+            table_name,
             srs,
             encoding)
 
