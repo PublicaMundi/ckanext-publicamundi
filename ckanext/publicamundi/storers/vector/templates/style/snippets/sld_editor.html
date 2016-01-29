@@ -3,9 +3,9 @@
 {% block sld_editor %}
 
     <div data-module="sld_editor" data-module-post_sld_url="{{post_sld_url}}">
-        <textarea  id="sld_body">{{sld_body}}</textarea>
+        <textarea  id="sld_body" rows="24" columns="48">{{sld_body}}</textarea>
         <br>
-        <button class="btn btn-success" id="submit_style">Change Style</button>
+        <button class="btn btn-success" id="submit_style">{{_('Apply')}}</button>
     </div>
     {% resource 'ckanext-publicamundi-vector/sld_editor' %}
 {% endblock %}

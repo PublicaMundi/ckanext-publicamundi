@@ -668,3 +668,11 @@ section.tags {
     display: none;
 }
 
+/*
+ * Editors
+ */ 
+.modal.editor {
+    /*height: 50%;*/
+    /*width: 60%;*/
+}
+

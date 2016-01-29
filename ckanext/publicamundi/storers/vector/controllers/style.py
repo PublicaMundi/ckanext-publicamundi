@@ -148,11 +148,11 @@ class StyleController(BaseController):
         '''
         from geoserver.catalog import Catalog
 
-        geoserver_url = config['ckanext.publicamundi.vectorstorer.geoserver.url']
+        api_url = config['ckanext.publicamundi.vectorstorer.geoserver.api_url']
         username = config['ckanext.publicamundi.vectorstorer.geoserver.username']
         password = config['ckanext.publicamundi.vectorstorer.geoserver.password']
         catalog1 = Catalog(
-            geoserver_url.rstrip('/') + "/rest", username=username, password=password)
+            api_url.rstrip('/') + "/rest", username=username, password=password)
         return catalog1
 
     def _get_mapfile_layer(self, dataset_name):
