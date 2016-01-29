@@ -143,8 +143,11 @@ class Controller(BaseController):
     def dataset_export(self, name_or_id):
         
         context = self._make_context() 
-        result = _get_action('dataset_export')(context, { 'id': name_or_id })
-        
+        try:
+            result = _get_action('dataset_export')(context, { 'id': name_or_id })
+        except toolkit.ObjectNotFound as ex:
+           abort(404, detail=u'Package "%s" not found' % (name_or_id)) 
+
         exported_url = result.get('url')
         redirect(exported_url)
         return
@@ -152,7 +155,10 @@ class Controller(BaseController):
     def dataset_export_dcat(self, name_or_id):
         
         context = self._make_context() 
-        result =  _get_action('dataset_export_dcat')(context, { 'id': name_or_id })
+        try:
+            result = _get_action('dataset_export_dcat')(context, { 'id': name_or_id })
+        except toolkit.ObjectNotFound as ex:
+           abort(404, detail=u'Package "%s" not found' % (name_or_id)) 
 
         exported_url = result.get('url')
         redirect(exported_url)

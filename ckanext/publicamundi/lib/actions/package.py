@@ -80,26 +80,24 @@ def dataset_export_dcat(context, data_dict):
     '''
 
     pkg = _get_action('package_show')(context, data_dict)
+    
     dtype = pkg.get('dataset_type')
     obj = pkg.get(dtype) if dtype else None
+    
+    cached_metadata = get_cache('metadata')
     result = None
     if obj:
         # Get a proper serializer
         xser = xml_serializer_for(obj)
         xser.target_namespace = pylons.config.get('ckan.site_url')
-
-        cached_metadata = get_cache('metadata')
-
         name = '%(name)s@%(revision_id)s.dcat' % (pkg)
         cached = cached_metadata.get(name, createfunc=lambda: _transform_dcat(xser.to_xml()))
-
         link = toolkit.url_for(
             controller='ckanext.publicamundi.controllers.files:Controller',
             action='download_file',
             object_type='metadata',
             name_or_id=name,
             filename=('%(name)s.xml' % (pkg)))
-
         result = dict(url=link)
 
     return result
