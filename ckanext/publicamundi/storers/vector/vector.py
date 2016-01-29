@@ -83,7 +83,7 @@ class Vector:
     def _get_layer_fields(self, layerDefinition):
         fields = ''
         for i in range(layerDefinition.GetFieldCount()):
-            fname = layerDefinition.GetFieldDefn(i).GetName()
+            fname = '"' + layerDefinition.GetFieldDefn(i).GetName() + '"'
             ftype = layerDefinition.GetFieldDefn(i).GetType()
             if ftype == 0:
                 fields += ',' + (fname + ' ' + 'integer')
@@ -94,9 +94,9 @@ class Vector:
             elif ftype == 3:
                 fields += ',' + (fname + ' ' + 'real[]')
             elif ftype == 4:
-                fields += ',"' + (fname + '" ' + 'varchar')
+                fields += ',' + (fname + ' ' + 'varchar')
             elif ftype == 5:
-                fields += ',"' + (fname + '" ' + 'varchar[]')
+                fields += ',' + (fname + ' ' + 'varchar[]')
             elif ftype == 6:
                 fields += ',' + (fname + ' ' + 'varchar')
             elif ftype == 7:
